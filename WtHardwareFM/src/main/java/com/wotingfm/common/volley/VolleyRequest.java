@@ -1,5 +1,6 @@
 package com.wotingfm.common.volley;
 
+import android.content.Context;
 import android.util.Log;
 
 import com.android.volley.DefaultRetryPolicy;
@@ -11,7 +12,10 @@ import com.android.volley.toolbox.HttpHeaderParser;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.util.CommonUtils;
+import com.wotingfm.util.PhoneMessage;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.UnsupportedEncodingException;
@@ -104,7 +108,7 @@ public class VolleyRequest {
 			protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
 				try {
 					String jsonString = new String(response.data, "UTF-8");
-					if (jsonString != null && jsonString.startsWith("\ufeff")) {
+					if (jsonString.startsWith("\ufeff")) {
 						jsonString = jsonString.substring(1);
 					}
 					JSONObject jsonObject = new JSONObject(jsonString);
@@ -137,7 +141,7 @@ public class VolleyRequest {
 			protected Response<JSONObject> parseNetworkResponse(NetworkResponse response) {
 				try {
 					String jsonString = new String(response.data, "UTF-8");
-					if (jsonString != null && jsonString.startsWith("\ufeff")) {
+					if (jsonString.startsWith("\ufeff")) {
 						jsonString = jsonString.substring(1);
 					}
 					JSONObject jsonObject = new JSONObject(jsonString);
@@ -170,11 +174,30 @@ public class VolleyRequest {
 
 	/**
 	 * 取消自定义标签的网络请求
-	 * @param tag
 	 */
 	public static boolean cancelRequest(String tag){
 		BSApplication.getHttpQueues().cancelAll(tag);
 		Log.w("取消网络请求", "--- > > >" + "\t" + tag);
 		return true;
+	}
+
+	/**
+	 * 获取网络请求公共请求属性
+     */
+	public static JSONObject getJsonObject(Context context){
+		JSONObject jsonObject = new JSONObject();
+		try {
+			jsonObject.put("SessionId", CommonUtils.getSessionId(context));
+			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
+			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
+			jsonObject.put("IMEI", PhoneMessage.imei);
+			PhoneMessage.getGps(context);
+			jsonObject.put("PCDType", GlobalConfig.PCDType);
+			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
+			jsonObject.put("GPS-latitude", PhoneMessage.latitude);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		return jsonObject;
 	}
 }

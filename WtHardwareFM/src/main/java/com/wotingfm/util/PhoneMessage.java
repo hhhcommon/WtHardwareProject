@@ -39,7 +39,7 @@ public class PhoneMessage {
 		Display display = windowManager.getDefaultDisplay();
 		PhoneMessage.ScreenWidth = display.getWidth();
 		PhoneMessage.ScreenHeight = display.getHeight();
-		DisplayMetrics dm  = context.getResources().getDisplayMetrics(); 
+		DisplayMetrics dm  = context.getResources().getDisplayMetrics();
 		PhoneMessage.density = dm.density;
 		PhoneMessage.densityDpi = dm.densityDpi;
 		getSysInfo(context);
@@ -74,7 +74,7 @@ public class PhoneMessage {
 			info = manager.getPackageInfo(context.getApplicationContext().getPackageName(), 0);
 			PhoneMessage.appVersonName = info.versionName;
 			PhoneMessage.versionCode = info.versionCode;
-			//			PhoneConstant.app_version = "0"; 			
+			//			PhoneConstant.app_version = "0";
 		} catch (NameNotFoundException e) {
 			e.printStackTrace();
 		}
@@ -82,7 +82,7 @@ public class PhoneMessage {
 	}
 
 	/**
-	 *   获取gps	
+	 *   获取gps
 	 */
 	public static void  getGps(Context context){
 		//获取精度信息 如果为空 从share里取一下longtitude标记为上一次的信息
@@ -92,7 +92,7 @@ public class PhoneMessage {
 		}else{
 			latitude=CommonUtils.getLatitude(context);
 		}
-		
+
 		if(GlobalConfig.longitude!=null){
 			longitude=GlobalConfig.longitude;
 		}else{
@@ -105,5 +105,4 @@ public class PhoneMessage {
 			longitude="";
 		}
 	}
-
 }

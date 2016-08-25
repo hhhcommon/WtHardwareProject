@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/BaseStyle"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/text_save"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:text="保 存"
+        android:textColor="@color/WHITE"
+        android:textSize="16sp"
+        android:layout_gravity="right"
+        android:gravity="center_vertical"
+        android:layout_marginRight="14dp"/>
+
+    <com.wotingfm.widget.photocut.ClipImageLayout
+        android:id="@+id/id_clipImageLayout"
+        style="@style/MatchParent" />
+
+</LinearLayout>

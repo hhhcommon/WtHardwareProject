@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <string name="back">返回</string>
+    <string name="input_group_type">请输入要创建的群组名称</string>
+
     <!-- Main VLC Interface -->
     <string name="filebrowser_sdfail">Unable to open SD card. Please check it is mounted correctly.</string>
     <string name="filebrowser_root">Root</string>

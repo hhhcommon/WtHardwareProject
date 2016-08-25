@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/BaseStyle">
+
+    <include android:id="@+id/include_title" layout="@layout/base_activity_title"/>
+
+    <LinearLayout
+        style="@style/MatchParent"
+        android:layout_below="@id/include_title"
+        android:background="@color/WHITE"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:id="@+id/relative_create_public"
+            style="@style/CreateGroup">
+
+            <ImageView
+                android:id="@+id/image_public"
+                style="@style/WrapContent"
+                android:src="@mipmap/wt_image_group_public"
+                android:layout_marginLeft="60dp"/>
+
+            <TextView
+                android:id="@+id/text_public"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="公开群"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:layout_toRightOf="@id/image_public"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="25dp"/>
+
+            <TextView
+                android:id="@+id/text_public_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="无需验证加入"
+                android:textSize="18sp"
+                android:layout_alignLeft="@id/text_public"
+                android:layout_alignBottom="@id/image_public"
+                android:layout_marginBottom="10dp"/>
+
+        </RelativeLayout>
+
+        <View style="@style/LineView"/>
+
+        <RelativeLayout
+            android:id="@+id/relative_create_private"
+            style="@style/CreateGroup">
+
+            <ImageView
+                android:id="@+id/image_private"
+                style="@style/WrapContent"
+                android:src="@mipmap/wt_image_group_peivate"
+                android:layout_marginLeft="60dp"/>
+
+            <TextView
+                android:id="@+id/text_private"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="密码群"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:layout_toRightOf="@id/image_private"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="25dp"/>
+
+            <TextView
+                android:id="@+id/text_priavte_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="需输入群密码加入"
+                android:textSize="18sp"
+                android:layout_alignLeft="@id/text_private"
+                android:layout_marginBottom="10dp"
+                android:layout_alignBottom="@id/image_private"/>
+
+        </RelativeLayout>
+
+        <View style="@style/LineView"/>
+
+        <RelativeLayout
+            android:id="@+id/relative_create_verification"
+            style="@style/CreateGroup">
+
+            <ImageView
+                android:id="@+id/image_verification"
+                style="@style/WrapContent"
+                android:src="@mipmap/wt_image_group_verification"
+                android:layout_marginLeft="60dp"/>
+
+            <TextView
+                android:id="@+id/text_verification"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="验证群"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:layout_toRightOf="@id/image_verification"
+                android:layout_marginLeft="25dp"
+                android:layout_marginTop="10dp"/>
+
+            <TextView
+                android:id="@+id/text_verification_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="提交验证信息加入"
+                android:textSize="18sp"
+                android:layout_alignLeft="@id/text_verification"
+                android:layout_alignBottom="@id/image_verification"
+                android:layout_marginBottom="10dp"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>

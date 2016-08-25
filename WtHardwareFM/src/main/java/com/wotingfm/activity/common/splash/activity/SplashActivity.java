@@ -1,7 +1,6 @@
 package com.wotingfm.activity.common.splash.activity;
 
 import android.app.Activity;
-import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -24,8 +23,6 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.BitmapUtils;
-import com.wotingfm.util.CommonUtils;
-import com.wotingfm.util.PhoneMessage;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +35,7 @@ import org.json.JSONObject;
 public class SplashActivity extends Activity {
 	private SharedPreferences sharedPreferences;
 	private String first;
-	private Dialog dialog;
+//	private Dialog dialog;
 	private Bitmap bmp;
 	private String tag = "SPLASH_VOLLEY_REQUEST_CANCEL_TAG";
 	private boolean isCancelRequest;
@@ -73,21 +70,8 @@ public class SplashActivity extends Activity {
 	}
 
 	protected void send() {
-		JSONObject jsonObject = new JSONObject();
-		try {
-			// 公共请求属性
-			jsonObject.put("SessionId", CommonUtils.getSessionId(this));
-			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-			jsonObject.put("PCDType", GlobalConfig.PCDType);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			PhoneMessage.getGps(this);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude", PhoneMessage.latitude);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
+		// 获取请求网络公共属性
+		JSONObject jsonObject = VolleyRequest.getJsonObject(SplashActivity.this);
 		VolleyRequest.RequestPost(GlobalConfig.splashUrl, tag, jsonObject, new VolleyCallback() {
 			private String ReturnType;
 			private String SessionId;
@@ -95,9 +79,6 @@ public class SplashActivity extends Activity {
 
 			@Override
 			protected void requestSuccess(JSONObject result) {
-				if (dialog != null) {
-					dialog.dismiss();
-				}
 				if (isCancelRequest) {
 					return;
 				}
@@ -122,9 +103,7 @@ public class SplashActivity extends Activity {
 						et.putString(StringConstant.IMAGEURBIG, "imageurlbig");
 						et.commit();
 					} else {
-						UserInfo list = new UserInfo();
-						list = new Gson().fromJson(UserInfos, new TypeToken<UserInfo>() {
-						}.getType());
+						UserInfo list = new Gson().fromJson(UserInfos, new TypeToken<UserInfo>() {}.getType());
 						String userid = list.getUserId();
 						String username = list.getUserName();
 						String imageurl = list.getPortraitMini();
@@ -137,9 +116,9 @@ public class SplashActivity extends Activity {
 					}
 				}
 				if (first != null && first.equals("1")) {
-					startActivity(new Intent(SplashActivity.this, MainActivity.class));        //跳转到主页
+					startActivity(new Intent(SplashActivity.this, MainActivity.class));//跳转到主页
 				} else {
-					startActivity(new Intent(SplashActivity.this, MainActivity.class));    //跳转到引导页
+					startActivity(new Intent(SplashActivity.this, MainActivity.class));//跳转到引导页
 				}
 				//				overridePendingTransition(R.anim.wt_fade, R.anim.wt_hold);
 				//				overridePendingTransition(R.anim.wt_zoom_enter, R.anim.wt_zoom_exit);
@@ -148,13 +127,10 @@ public class SplashActivity extends Activity {
 
 			@Override
 			protected void requestError(VolleyError error) {
-				if (dialog != null) {
-					dialog.dismiss();
-				}
 				if (first != null && first.equals("1")) {
-					startActivity(new Intent(SplashActivity.this, MainActivity.class));        //跳转到主页
+					startActivity(new Intent(SplashActivity.this, MainActivity.class));//跳转到主页
 				} else {
-					startActivity(new Intent(SplashActivity.this, MainActivity.class));    //跳转到引导页
+					startActivity(new Intent(SplashActivity.this, MainActivity.class));//跳转到引导页
 				}
 //				overridePendingTransition(R.anim.wt_fade, R.anim.wt_hold);
 //				overridePendingTransition(R.anim.wt_zoom_enter, R.anim.wt_zoom_exit);
@@ -169,7 +145,6 @@ public class SplashActivity extends Activity {
 		isCancelRequest = VolleyRequest.cancelRequest(tag);
 		sharedPreferences = null;
 		first = null;
-		dialog = null;
 		tag = null;
 		imageView.setImageBitmap(null);
 		if (bmp != null && !bmp.isRecycled()) {
@@ -178,8 +153,6 @@ public class SplashActivity extends Activity {
 		}
 		sharedPreferences = null;
 		imageView = null;
-		setContentView(R.layout.activity_null);
+		setContentView(R.layout.activity_null_view);
 	}
-
-
 }
