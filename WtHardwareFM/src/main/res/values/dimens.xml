@@ -2,4 +2,30 @@
     <!-- Default screen margins, per the Android Design guidelines. -->
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_person">16sp</dimen>
+    <dimen name="activity_head_center">18sp</dimen>
+    <dimen name="activity_head_center_s">17sp</dimen>
+    <dimen name="activity_head_right">15sp</dimen>
+    <dimen name="activity_normal_text">18sp</dimen>
+    <dimen name="activity_normal_textone">12sp</dimen>
+    <!-- common -->
+    <dimen name="wt_dinglan_high">48dp</dimen>
+    <dimen name="wt_dinglan_text_center">17sp</dimen>
+    <dimen name="wt_dinglan_text_right">14sp</dimen>
+    <dimen name="wt_edittext_default_text">14sp</dimen>
+    <dimen name="wt_edittext_default_high">40dp</dimen>
+    <dimen name="wt_button_default_text">15sp</dimen>
+    <dimen name="wt_button_default_high">40dp</dimen>
+    <!-- login -->
+    <dimen name="wt_login_default_margin_left">12dp</dimen>
+    <dimen name="wt_login_default_margin_right">12dp</dimen>
+    <dimen name="wt_login_default_margin_top">15dp</dimen>
+    <dimen name="wt_login_third_text">11sp</dimen>
+    <dimen name="wt_login_third_title">12sp</dimen>
+    <dimen name="wt_login_text_wjmm">13sp</dimen>
+    <!-- regist -->
+    <dimen name="wt_regist_text_xieyi">11sp</dimen>
+    <!--  group-->
+    <dimen name="wt_group_main_33">33sp</dimen>
+    <dimen name="wt_group_detail_16">16sp</dimen>
 </resources>

@@ -90,11 +90,14 @@
             android:name=".activity.common.splash.activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
+
+            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            -->
         </activity>
 
         <!--  -->
@@ -111,11 +114,6 @@
                 <data android:scheme="com.wotingfm.htmlcallback" />
             </intent-filter>
         </activity>
-        <!--
- ATTENTION: This was auto-generated to add Google Play services to your project for
-     App Indexing.  See https://g.co/AppIndexing/AndroidStudio for more information.
-        -->
-
 
         <!-- 创建群组主界面 -->
         <activity
@@ -137,6 +135,20 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
+
+        <activity
+            android:name=".activity.common.interphone.groupmanage.groupdetail.GroupDetailAcitivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"/>
+
+        <activity
+            android:name=".activity.common.interphone.groupmanage.transferauthority.TransferAuthority"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar" />
+        <activity android:name=".activity.common.interphone.groupmanage.memberadd.MemberAddActivity" />
+        <activity android:name=".activity.common.interphone.groupmanage.memberdel.MemberDelActivity" />
+        <activity android:name=".activity.common.interphone.groupmanage.allgroupmember.AllGroupMemberActivity" />
+        <activity android:name=".activity.common.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity"/>
 
         <meta-data
             android:name="com.google.android.gms.version"
