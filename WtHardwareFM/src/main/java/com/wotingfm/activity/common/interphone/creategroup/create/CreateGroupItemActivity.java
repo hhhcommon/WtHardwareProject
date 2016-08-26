@@ -239,7 +239,12 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
                     }
                     if (viewSuccess == 1) {
                         dealt(groupRation);
+
                     } else {      // 跳转到群组详情界面
+
+                        Intent pushIntent = new Intent("push_refreshlinkman");
+                        sendBroadcast(pushIntent);
+                        setResult(1);
                         Intent intent = new Intent(CreateGroupItemActivity.this, GroupDetailAcitivity.class);
                         intent.putExtra("GroupId", groupRation.getGroupId());
                         intent.putExtra("ImageUrl", miniUri);
