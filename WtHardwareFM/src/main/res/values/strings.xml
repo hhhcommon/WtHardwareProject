@@ -604,7 +604,6 @@
     <string name="release_to_load">释放立即加载</string>
     <string name="load_succeed">加载成功</string>
     <string name="load_fail">加载失败</string>
-    <string name="back">返回</string>
 
     <item name="tag_groupname" type="id"></item>
     <item name="tag_childname" type="id"></item>

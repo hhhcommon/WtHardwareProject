@@ -1,6 +1,6 @@
 package com.wotingfm.activity.common.interphone.creategroup.model;
 
-public class UserPortaitInSide {
+public class UserPortaitInside {
     private String SessionId;
     private String ReturnType;
     private String success;

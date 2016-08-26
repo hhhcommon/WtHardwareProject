@@ -32,7 +32,7 @@ import com.shenstec.utils.file.FileManager;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.MainActivity;
 import com.wotingfm.activity.common.interphone.creategroup.model.GroupRation;
-import com.wotingfm.activity.common.interphone.creategroup.model.UserPortaitInSide;
+import com.wotingfm.activity.common.interphone.creategroup.model.UserPortaitInside;
 import com.wotingfm.activity.common.interphone.creategroup.photocut.activity.PhotoCutActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.IntegerConstant;
@@ -429,7 +429,7 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
         };
 
         new Thread() {
-            private UserPortaitInSide userPortait;
+            private UserPortaitInside userPortait;
             private String returnType;
 
             @Override
@@ -450,7 +450,7 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
 //                        if(Response != null){
 //                            Response = Response.substring(8, Response.length() - 2);
 //                        }
-                        userPortait = new Gson().fromJson(Response, new TypeToken<UserPortaitInSide>() {}.getType());
+                        userPortait = new Gson().fromJson(Response, new TypeToken<UserPortaitInside>() {}.getType());
                         try {
                             returnType = userPortait.getReturnType();
                         } catch (Exception e1) {
