@@ -5,7 +5,6 @@ import android.os.Bundle;
 
 import com.wotingfm.R;
 
-
 public class TransferAuthority extends Activity {
 
     @Override

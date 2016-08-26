@@ -15,7 +15,6 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_centerHorizontal="true"
-            android:background="@mipmap/wt_image_head_white"
             android:src="@mipmap/wt_image_create_group_default_head"
             android:layout_marginTop="20dp"/>
 

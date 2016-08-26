@@ -56,4 +56,7 @@ public class StringConstant {
 
     // 跳转到图片剪裁界面的类型
     public static final String START_PHOTO_ZOOM_TYPE = "START_PHOTO_ZOOM_TYPE";
+
+    // 标识 图片剪裁界面完成之后返回的图片路径
+    public static final String PHOTO_CUT_RETURN_IMAGE_PATH = "PHOTO_CUT_RETURN_IMAGE_PATH";
 }

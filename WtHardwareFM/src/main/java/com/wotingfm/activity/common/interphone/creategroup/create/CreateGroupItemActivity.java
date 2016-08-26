@@ -30,10 +30,10 @@ import com.google.gson.reflect.TypeToken;
 import com.shenstec.http.MyHttp;
 import com.shenstec.utils.file.FileManager;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.MainActivity;
 import com.wotingfm.activity.common.interphone.creategroup.model.GroupRation;
 import com.wotingfm.activity.common.interphone.creategroup.model.UserPortaitInside;
 import com.wotingfm.activity.common.interphone.creategroup.photocut.activity.PhotoCutActivity;
+import com.wotingfm.activity.common.interphone.groupmanage.groupdetail.GroupDetailAcitivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
@@ -240,12 +240,9 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
                     if (viewSuccess == 1) {
                         dealt(groupRation);
                     } else {      // 跳转到群组详情界面
-                        Intent intent = new Intent(CreateGroupItemActivity.this, MainActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("type", "CreateGroupContentActivity");
-                        bundle.putSerializable("news", groupRation);
-                        bundle.putString("imageurl", miniUri);
-                        intent.putExtras(bundle);
+                        Intent intent = new Intent(CreateGroupItemActivity.this, GroupDetailAcitivity.class);
+                        intent.putExtra("GroupId", groupRation.getGroupId());
+                        intent.putExtra("ImageUrl", miniUri);
                         startActivity(intent);
                         finish();
                     }
@@ -307,6 +304,7 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
                 headDialog.show();
                 break;
             case R.id.btn_commit:       // 确定
+                startActivity(new Intent(CreateGroupItemActivity.this, GroupDetailAcitivity.class));
                 nick = editGroupName.getText().toString().trim();
                 sign = editGroupAutograph.getText().toString().trim();
                 if (nick == null || nick.equals("")) {
@@ -385,7 +383,7 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
             case IntegerConstant.PHOTO_REQUEST_CUT:
                 if (resultCode == 1) {
                     imageNum = 1;
-                    photoCutAfterImagePath = data.getStringExtra("return");
+                    photoCutAfterImagePath = data.getStringExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH);
                     imageGroupHead.setImageURI(Uri.parse(photoCutAfterImagePath));
                     viewSuccess = 1;
                 }else{
@@ -411,13 +409,18 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
                     if (groupRation != null && !groupRation.equals("")) {
 
                         // 跳转到群组详情页面
-                        Intent intent = new Intent(CreateGroupItemActivity.this, MainActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("type", "CreateGroupContentActivity");
-                        bundle.putSerializable("news", groupRation);
-                        bundle.putString("imageurl", miniUri);
-                        intent.putExtras(bundle);
+                        Intent intent = new Intent(CreateGroupItemActivity.this, GroupDetailAcitivity.class);
+                        intent.putExtra("GroupId", groupRation.getGroupId());
+                        intent.putExtra("ImageUrl", miniUri);
                         startActivity(intent);
+
+                        // TODO
+//                        Bundle bundle = new Bundle();
+//                        bundle.putString("type", "CreateGroupContentActivity");
+//                        bundle.putSerializable("news", groupRation);
+//                        bundle.putString("imageurl", miniUri);
+//                        intent.putExtras(bundle);
+//                        startActivity(intent);
                     }
                     finish();
                 } else if (msg.what == 0) {

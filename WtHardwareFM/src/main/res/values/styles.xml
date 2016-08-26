@@ -69,6 +69,13 @@
         <item name="android:gravity">center</item>
     </style>
 
+    <style name="CreateGroupTypeMainText" parent="WrapContent">
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_marginLeft">25dp</item>
+        <item name="android:textSize">26sp</item>
+        <item name="android:layout_marginTop">10dp</item>
+    </style>
+
     <style name="MyDialog" parent="@android:style/Theme.Dialog">
         <item name="android:windowFrame">@null</item>
         <item name="android:windowNoTitle">true</item>

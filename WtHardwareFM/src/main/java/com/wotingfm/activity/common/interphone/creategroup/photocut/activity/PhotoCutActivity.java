@@ -71,7 +71,7 @@ public class PhotoCutActivity extends Activity {
                         out.flush();
                         out.close();
                         Intent intent = new Intent();
-                        intent.putExtra("return", Environment.getExternalStorageDirectory() + "/woting/" + s + ".png");
+                        intent.putExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH, Environment.getExternalStorageDirectory() + "/woting/" + s + ".png");
                         setResult(1, intent);
                         finish();
                     } else {
