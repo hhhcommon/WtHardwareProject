@@ -22,14 +22,9 @@
 
             <TextView
                 android:id="@+id/text_public"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="公开群"
-                android:textSize="26sp"
-                android:textStyle="bold"
                 android:layout_toRightOf="@id/image_public"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="25dp"/>
+                style="@style/CreateGroupTypeMainText"/>
 
             <TextView
                 android:id="@+id/text_public_info"
@@ -57,14 +52,9 @@
 
             <TextView
                 android:id="@+id/text_private"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="密码群"
-                android:textSize="26sp"
-                android:textStyle="bold"
                 android:layout_toRightOf="@id/image_private"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="25dp"/>
+                style="@style/CreateGroupTypeMainText"/>
 
             <TextView
                 android:id="@+id/text_priavte_info"
@@ -92,14 +82,9 @@
 
             <TextView
                 android:id="@+id/text_verification"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:text="验证群"
-                android:textSize="26sp"
-                android:textStyle="bold"
                 android:layout_toRightOf="@id/image_verification"
-                android:layout_marginLeft="25dp"
-                android:layout_marginTop="10dp"/>
+                style="@style/CreateGroupTypeMainText"/>
 
             <TextView
                 android:id="@+id/text_verification_info"

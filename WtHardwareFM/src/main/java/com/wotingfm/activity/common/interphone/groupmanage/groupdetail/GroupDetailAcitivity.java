@@ -15,16 +15,15 @@ import android.widget.Toast;
 
 import com.wotingfm.R;
 import com.wotingfm.activity.common.interphone.groupmanage.allgroupmember.AllGroupMemberActivity;
-import com.wotingfm.activity.common.interphone.groupmanage.memberadd.MemberAddActivity;
 import com.wotingfm.activity.common.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity;
 import com.wotingfm.activity.common.interphone.groupmanage.transferauthority.TransferAuthority;
 
 
 /**
+ * 群组详情界面
  * Created by wz on 2016/8/24 0024.
  */
 public class GroupDetailAcitivity extends Activity implements View.OnClickListener {
-
     private Context context;
     private TextView mback;
     private EditText mgroupname;
@@ -44,7 +43,6 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
     private RelativeLayout rl_addGroup;
     private RelativeLayout rl_vertiygroup;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,8 +51,6 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
         setView();
         handleIntent();
         setListener();
-
-
     }
 
     //处理从通讯录传入的值
@@ -94,7 +90,6 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
         mtv_autoadd=(TextView)findViewById(R.id.auto_add);
         mtv_ewmadd=(TextView)findViewById(R.id.ewm_add);
         mtv_exit=(TextView)findViewById(R.id.tv_exit);
-
     }
 
     @Override
@@ -139,5 +134,4 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                 break;
         }
     }
-
 }

@@ -90,14 +90,11 @@
             android:name=".activity.common.splash.activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
-
-            <!--
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-            -->
         </activity>
 
         <!--  -->
@@ -134,13 +131,19 @@
             android:name=".activity.common.interphone.creategroup.photocut.activity.PhotoCutActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
+
+        <!--消息中心-->
+        <activity
+            android:name=".activity.common.interphone.notify.NotifyNewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.common.interphone.groupmanage.groupdetail.GroupDetailAcitivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"/>
-
+            android:theme="@android:style/Theme.Light.NoTitleBar" />
         <activity
             android:name=".activity.common.interphone.groupmanage.transferauthority.TransferAuthority"
             android:screenOrientation="portrait"
@@ -148,7 +151,7 @@
         <activity android:name=".activity.common.interphone.groupmanage.memberadd.MemberAddActivity" />
         <activity android:name=".activity.common.interphone.groupmanage.memberdel.MemberDelActivity" />
         <activity android:name=".activity.common.interphone.groupmanage.allgroupmember.AllGroupMemberActivity" />
-        <activity android:name=".activity.common.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity"/>
+        <activity android:name=".activity.common.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity" />
 
         <meta-data
             android:name="com.google.android.gms.version"

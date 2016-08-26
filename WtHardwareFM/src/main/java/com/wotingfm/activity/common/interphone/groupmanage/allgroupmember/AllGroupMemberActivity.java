@@ -1,6 +1,5 @@
 package com.wotingfm.activity.common.interphone.groupmanage.allgroupmember;
 
-
 import android.app.Activity;
 import android.os.Bundle;
 

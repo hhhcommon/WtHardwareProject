@@ -1,6 +1,5 @@
 package com.wotingfm.activity.common.interphone.groupmanage.memberadd;
 
-
 import android.app.Activity;
 import android.os.Bundle;
 
@@ -14,7 +13,6 @@ public class MemberAddActivity extends Activity {
         setContentView(R.layout.activity_transfer_authority);
         setview();
         setlistener();
-
     }
 
     private void setlistener() {

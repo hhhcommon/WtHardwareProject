@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/wt_press_background"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp">
+
+    <ImageView
+        android:id="@+id/image_head"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:src="@mipmap/ic_launcher"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="15dp"/>
+
+    <TextView
+        android:id="@+id/text_notify_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="信息标题信息标题信息标题"
+        android:layout_alignTop="@id/image_head"
+        android:layout_toRightOf="@id/image_head"
+        android:layout_marginLeft="10dp"
+        android:textSize="17sp"
+        android:singleLine="true"
+        android:ellipsize="end"
+        android:maxWidth="180dp"/>
+
+    <TextView
+        android:id="@+id/text_notify_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="(99+)"
+        android:layout_alignTop="@id/image_head"
+        android:layout_toRightOf="@id/text_notify_title"
+        android:layout_marginLeft="10dp"
+        android:textSize="17sp"
+        android:singleLine="true"
+        android:layout_marginRight="15dp"/>
+
+    <TextView
+        android:id="@+id/text_notify_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="信息内容展示。。。。。。"
+        android:layout_below="@id/text_notify_title"
+        android:layout_toRightOf="@id/image_head"
+        android:layout_marginLeft="10dp"
+        android:textSize="14sp"
+        android:singleLine="true"
+        android:layout_marginTop="11dp"
+        android:layout_marginRight="15dp"/>
+
+    <TextView
+        android:id="@+id/text_notify_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="15:40"
+        android:layout_alignBottom="@id/image_head"
+        android:layout_toRightOf="@id/image_head"
+        android:layout_marginLeft="10dp"
+        android:textSize="12sp"
+        android:singleLine="true"/>
+
+</RelativeLayout>
