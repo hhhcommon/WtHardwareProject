@@ -92,11 +92,9 @@
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <!--  -->
         <activity
             android:name=".activity.common.MainActivity"
@@ -104,11 +102,9 @@
             android:theme="@android:style/Theme.Light.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
-                <data android:scheme="com.wotingfm.htmlcallback" />
+                <data android:scheme="com.woting.htmlcallback" />
             </intent-filter>
         </activity>
 
@@ -131,32 +127,39 @@
             android:name=".activity.common.interphone.creategroup.photocut.activity.PhotoCutActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
 
-        <!--消息中心-->
         <activity
-            android:name=".activity.common.interphone.notify.NotifyNewActivity"
+            android:name=".activity.common.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
 
-        <activity
-            android:name=".activity.common.interphone.groupmanage.groupdetail.GroupDetailAcitivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
         <activity
             android:name=".activity.common.interphone.groupmanage.transferauthority.TransferAuthority"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" />
-        <activity android:name=".activity.common.interphone.groupmanage.memberadd.MemberAddActivity" />
-        <activity android:name=".activity.common.interphone.groupmanage.memberdel.MemberDelActivity" />
-        <activity android:name=".activity.common.interphone.groupmanage.allgroupmember.AllGroupMemberActivity" />
-        <activity android:name=".activity.common.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity" />
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".activity.common.interphone.groupmanage.memberadd.MemberAddActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".activity.common.interphone.groupmanage.memberdel.MemberDelActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
 
+        <activity android:name=".activity.common.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".activity.common.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-
     </application>
 
 </manifest>

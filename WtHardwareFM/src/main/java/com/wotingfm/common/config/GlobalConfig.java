@@ -1,5 +1,9 @@
 package com.wotingfm.common.config;
 
+import com.wotingfm.activity.common.interphone.groupmanage.allgroupmember.model.UserInfo;
+
+import java.util.List;
+
 /**
  * 保存公共属性
  * 作者：xinlong on 2016/8/23 21:18
@@ -20,6 +24,8 @@ public class GlobalConfig {
     public static String latitude;
     public static String CityName;
     public static String AdCode;
+    //
+    public static List<UserInfo> list_person;
     // 网络情况 1为成功WiFi已连接，2为cmnet，3为cmwap，4为ctwap， -1为网络未连接
     public static final int NETWORK_STATE_IDLE = -1;
     public static final int NETWORK_STATE_WIFI = 1;
@@ -38,14 +44,14 @@ public class GlobalConfig {
     // apk下载默认路径
     public static String apkUrl = "http://182.92.175.134/download/WoTing.apk";
     // socket请求ip
-    public static final String socketUrl = "182.92.175.134";//生产服务器地址
-    // public static final String socketUrl = "123.56.254.75";//测试服务器地址
+    //public static final String socketUrl = "182.92.175.134";//生产服务器地址
+     public static final String socketUrl = "123.56.254.75";//测试服务器地址
     // public static final String socketUrl = "192.168.1.3";//
     // socket请求端口
     public static final int socketport = 15678;
     // http请求总url
-    public static final String baseUrl = "http://182.92.175.134:808/";//生产服务器地址
-    // public static final String baseUrl = "http://123.56.254.75:808/";//测试服务器地址
+    //public static final String baseUrl = "http://182.92.175.134:808/";//生产服务器地址
+     public static final String baseUrl = "http://123.56.254.75:808/";//测试服务器地址
     // public static final String baseUrl = "http://192.168.1.3:808/";//
     // image请求路径前缀
     public static final String imageurl = baseUrl + "wt/";// 服务器
