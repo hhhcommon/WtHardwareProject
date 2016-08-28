@@ -1,11 +1,6 @@
 package com.wotingfm.activity.common.interphone.creategroup.model;
 
-/**
- * 作者：xinlong on 2016/8/26 18:43
- * 邮箱：645700751@qq.com
- */
 public class UserPortaitInSide {
-
     private String SessionId;
     private String ReturnType;
     private String success;
@@ -78,6 +73,4 @@ public class UserPortaitInSide {
     public void setBigUri(String bigUri) {
         BigUri = bigUri;
     }
-
-
 }

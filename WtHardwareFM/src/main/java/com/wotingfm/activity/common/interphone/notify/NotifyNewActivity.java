@@ -2,10 +2,10 @@ package com.wotingfm.activity.common.interphone.notify;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.DialogInterface;
+import android.app.Dialog;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
@@ -28,6 +28,7 @@ public class NotifyNewActivity extends Activity {
     private ListView notifyListView;
     private NotifyListAdapter adapter;
     private List<NotifyNewData> list;
+    private Dialog notifyContentDialog;
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
@@ -68,43 +69,29 @@ public class NotifyNewActivity extends Activity {
         notifyListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
-                // 需要一个Type来判断消息类型
-                if(position % 2 == 0){
-                    // Dialog 样式需自定义  稍后更新
-                    new AlertDialog.Builder(NotifyNewActivity.this)
-                            .setTitle("审核类信息标题")
-                            .setMessage("审核类信息的具体内容审核类信息的具体内容审核类信息的具体内容")
-                            .setNegativeButton("同意", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // 执行"同意"相应的操作并将消息标记为已读
-                                    list.get(position).setNumber("0");
-                                    adapter.notifyDataSetChanged();
-                                }
-                            })
-                            .setPositiveButton("拒绝", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // 执行"拒绝"相应的操作并将消息标记为已读
-                                    list.get(position).setNumber("0");
-                                    adapter.notifyDataSetChanged();
-                                }
-                            })
-                            .show();
-                } else {
-                    new AlertDialog.Builder(NotifyNewActivity.this)
-                            .setTitle("通知类信息标题")
-                            .setMessage("通知类信息的具体内容通知类信息的具体内容通知类信息的具体内容")
-                            .setNegativeButton("关闭", new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    // 将消息标记为已读
-                                    list.get(position).setNumber("0");
-                                    adapter.notifyDataSetChanged();
-                                }
-                            })
-                            .show();
-                }
+                notifyContentDialog(position);
+            }
+        });
+    }
+
+    /**
+     * 显示消息具体内容
+     */
+    private void notifyContentDialog(int position){
+        View dialog = LayoutInflater.from(this).inflate(R.layout.dialog_notify_content, null);
+        TextView textTitle = (TextView) dialog.findViewById(R.id.text_title);
+        textTitle.setText(list.get(position).getTitle());
+        TextView textContent = (TextView) dialog.findViewById(R.id.text_content);
+        textContent.setText(list.get(position).getContent());
+        notifyContentDialog = new Dialog(this, R.style.MyDialog);
+        notifyContentDialog.setContentView(dialog);
+        notifyContentDialog.setCanceledOnTouchOutside(true);
+        notifyContentDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+        notifyContentDialog.show();
+        dialog.findViewById(R.id.btn_close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                notifyContentDialog.dismiss();
             }
         });
     }
