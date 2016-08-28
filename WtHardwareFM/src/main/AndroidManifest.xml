@@ -87,7 +87,7 @@
 
         <!-- 启动时的欢迎界面 -->
         <activity
-            android:name=".activity.common.splash.activity.SplashActivity"
+            android:name=".activity.im.splash.activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
             <intent-filter>
@@ -97,7 +97,7 @@
         </activity>
         <!--  -->
         <activity
-            android:name=".activity.common.MainActivity"
+            android:name=".activity.im.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar">
             <intent-filter>
@@ -110,50 +110,50 @@
 
         <!-- 创建群组主界面 -->
         <activity
-            android:name=".activity.common.interphone.creategroup.main.CreateGroupMainActivity"
+            android:name=".activity.im.interphone.creategroup.main.CreateGroupMainActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
         <!-- 创建群组子界面  即有创建公开群、密码群、验证群 -->
         <activity
-            android:name=".activity.common.interphone.creategroup.create.CreateGroupItemActivity"
+            android:name=".activity.im.interphone.creategroup.create.CreateGroupItemActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
         <!-- 头像剪裁界面 -->
         <activity
-            android:name=".activity.common.interphone.creategroup.photocut.activity.PhotoCutActivity"
+            android:name=".activity.im.interphone.creategroup.photocut.activity.PhotoCutActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <activity
-            android:name=".activity.common.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity"
+            android:name=".activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <activity
-            android:name=".activity.common.interphone.groupmanage.transferauthority.TransferAuthority"
+            android:name=".activity.im.interphone.groupmanage.transferauthority.TransferAuthority"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".activity.common.interphone.groupmanage.memberadd.MemberAddActivity"
+        <activity android:name=".activity.im.interphone.groupmanage.memberadd.MemberAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".activity.common.interphone.groupmanage.memberdel.MemberDelActivity"
+        <activity android:name=".activity.im.interphone.groupmanage.memberdel.MemberDelActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <activity android:name=".activity.common.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity"
+        <activity android:name=".activity.im.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".activity.common.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity"
+        <activity android:name=".activity.im.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>

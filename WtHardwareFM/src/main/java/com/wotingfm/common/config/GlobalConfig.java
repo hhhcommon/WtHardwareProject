@@ -1,6 +1,6 @@
 package com.wotingfm.common.config;
 
-import com.wotingfm.activity.common.interphone.groupmanage.allgroupmember.model.UserInfo;
+import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.model.UserInfo;
 
 import java.util.List;
 
