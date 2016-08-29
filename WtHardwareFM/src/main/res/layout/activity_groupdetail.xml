@@ -158,7 +158,7 @@
             android:paddingTop="15dp"
             android:text="群二维码"
             android:textColor="@color/beijing"
-            android:textSize="@dimen/wt_login_text_wjmm" />
+            android:textSize="14sp" />
             <ImageView
                 android:id="@+id/img_ewm"
                 android:gravity="center"
@@ -189,7 +189,7 @@
         android:paddingTop="15dp"
         android:text="全部成员"
         android:textColor="@color/beijing"
-        android:textSize="@dimen/wt_login_text_wjmm" />
+        android:textSize="14sp" />
 
     <TextView
         android:id="@+id/tv_number"
@@ -284,7 +284,7 @@
             android:paddingTop="15dp"
             android:text="移交管理员权限"
             android:textColor="@color/beijing"
-            android:textSize="@dimen/wt_login_text_wjmm" />
+            android:textSize="14sp" />
 
 
 
@@ -316,7 +316,7 @@
             android:paddingTop="15dp"
             android:text="修改群密码"
             android:textColor="@color/beijing"
-            android:textSize="@dimen/wt_login_text_wjmm" />
+            android:textSize="14sp" />
 
 
 
@@ -348,7 +348,7 @@
             android:paddingTop="15dp"
             android:text="加群消息"
             android:textColor="@color/beijing"
-            android:textSize="@dimen/wt_login_text_wjmm" />
+            android:textSize="14sp" />
 
 
 
@@ -382,7 +382,7 @@
             android:paddingTop="15dp"
             android:text="审核消息"
             android:textColor="@color/beijing"
-            android:textSize="@dimen/wt_login_text_wjmm" />
+            android:textSize="14sp" />
 
 
 
@@ -413,7 +413,7 @@
             android:layout_height="45dp"
             android:text="退出该群"
             android:textColor="@color/WHITE"
-            android:textSize="@dimen/wt_button_default_text"
+            android:textSize="14sp"
             android:background="@drawable/zhuxiao_press"
 
             android:layout_marginLeft="15dp"

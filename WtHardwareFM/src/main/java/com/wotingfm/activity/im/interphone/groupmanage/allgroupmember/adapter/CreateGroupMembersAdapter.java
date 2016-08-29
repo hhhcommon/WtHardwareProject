@@ -1,4 +1,4 @@
-package com.wotingfm.activity.common.interphone.groupmanage.allgroupmember.adapter;
+package com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.adapter;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.shenstec.utils.image.ImageLoader;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.interphone.groupmanage.allgroupmember.model.UserInfo;
+import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.model.UserInfo;
 import com.wotingfm.common.config.GlobalConfig;
 
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.wotingfm.activity.common.interphone.groupmanage.groupdetail.activity;
+package com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -19,16 +19,15 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity;
-import com.wotingfm.activity.common.interphone.groupmanage.allgroupmember.model.UserInfo;
-import com.wotingfm.activity.common.interphone.groupmanage.groupdetail.activity.adapter.GroupTalkAdapter;
-import com.wotingfm.activity.common.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity;
-import com.wotingfm.activity.common.interphone.groupmanage.transferauthority.TransferAuthority;
+import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity;
+import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.model.UserInfo;
+import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.adapter.GroupTalkAdapter;
+import com.wotingfm.activity.im.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity;
+import com.wotingfm.activity.im.interphone.groupmanage.transferauthority.TransferAuthority;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.manager.MyActivityManager;
-import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
 

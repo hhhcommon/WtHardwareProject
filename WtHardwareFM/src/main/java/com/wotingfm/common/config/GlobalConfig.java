@@ -1,6 +1,8 @@
 package com.wotingfm.common.config;
 
-import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.model.UserInfo;
+
+import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
+import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
 
 import java.util.List;
 
@@ -25,7 +27,9 @@ public class GlobalConfig {
     public static String CityName;
     public static String AdCode;
     //
-    public static List<UserInfo> list_person;
+//    public static List<UserInfo> list_person;
+    public static List<TalkGroupInside> list_group;
+    public static List<TalkPersonInside> list_person;
     // 网络情况 1为成功WiFi已连接，2为cmnet，3为cmwap，4为ctwap， -1为网络未连接
     public static final int NETWORK_STATE_IDLE = -1;
     public static final int NETWORK_STATE_WIFI = 1;
@@ -41,6 +45,8 @@ public class GlobalConfig {
     public static boolean istusi = false;
     // PersonClientDevice(个人客户端设备) 终端类型1=app,2=设备，3=pc
     public static int PCDType = 1;
+    // 是否活跃状态，有活跃状态才能播放声音，否则即使收到音频包也不播放
+    public static boolean isactive = false;
     // apk下载默认路径
     public static String apkUrl = "http://182.92.175.134/download/WoTing.apk";
     // socket请求ip

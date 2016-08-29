@@ -87,7 +87,7 @@
 
         <!-- 启动时的欢迎界面 -->
         <activity
-            android:name=".activity.im.splash.activity.SplashActivity"
+            android:name=".activity.common.splash.activity.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
             <intent-filter>
@@ -97,7 +97,7 @@
         </activity>
         <!--  -->
         <activity
-            android:name=".activity.im.MainActivity"
+            android:name=".activity.common.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar">
             <intent-filter>

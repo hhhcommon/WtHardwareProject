@@ -1,4 +1,4 @@
-package com.wotingfm.activity.common.interphone.groupmanage.allgroupmember.model;
+package com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.model;
 
 import java.io.Serializable;
 
