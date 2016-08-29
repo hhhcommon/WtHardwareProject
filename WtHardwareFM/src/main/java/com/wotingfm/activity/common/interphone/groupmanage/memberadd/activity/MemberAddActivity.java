@@ -1,5 +1,4 @@
-package com.wotingfm.activity.common.interphone.groupmanage.allgroupmember.activity;
-
+package com.wotingfm.activity.common.interphone.groupmanage.memberadd.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -16,36 +15,39 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.interphone.groupmanage.allgroupmember.adapter.CreateGroupMembersAdapter;
 import com.wotingfm.activity.common.interphone.groupmanage.allgroupmember.model.UserInfo;
+import com.wotingfm.activity.common.interphone.groupmanage.memberadd.adapter.CreateGroupMembersAddAdapter;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.common.widgetui.SideBar;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.CharacterParser;
-import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.PinyinComparator_a;
 import com.wotingfm.util.ToastUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class AllGroupMemberActivity extends Activity implements View.OnClickListener {
+public class MemberAddActivity extends Activity implements View.OnClickListener{
+
     private Context context;
     private TextView mback;
     private String groupid;
     private CharacterParser characterParser;
     private PinyinComparator_a pinyinComparator;
     private boolean isCancelRequest;
-    private String  tag="GROUP_MEMBERS_VOLLEY_REQUEST_CANCEL_TAG";
+    private String  tag="GROUP_MEMBER_ADD_VOLLEY_REQUEST_CANCEL_TAG";
     private Dialog dialog;
     private TextView tvNofriends;
     private SideBar sideBar;
@@ -55,10 +57,12 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
     private ImageView image_clear;
     private List<UserInfo> userlist;//获取的userlist
     private List<UserInfo> userlist2=new ArrayList<UserInfo>();
-    private CreateGroupMembersAdapter adapter;
+    private int sum=0;// 统计点选的人数
     private TextView tv_head_name;
     private TextView tv_right;
-
+    private CreateGroupMembersAddAdapter adapter;
+    private TextView tv_head_right;
+    private List<String> addlist = new ArrayList<String>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,12 +75,12 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
         setview();// 设置界面
         setlistener();// 设置监听
      /*   if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {*/
-            if(groupid!=null){
-            dialog = DialogUtils.Dialogph(AllGroupMemberActivity.this, "正在获取群成员信息");
+        if(groupid!=null){
+            dialog = DialogUtils.Dialogph(context, "正在获取群成员信息");
             send();
-            }else{
-              ToastUtils.show_allways(context,"获取组ID失败");
-            }
+        }else{
+            ToastUtils.show_allways(context,"获取组ID失败");
+        }
        /* } else {
             ToastUtils.show_allways(context, "网络失败，请检查网络");
         }*/
@@ -85,10 +89,6 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-        //tv_right
-        tv_right=(TextView)findViewById(R.id.tv_head_right);
-        tv_right.setVisibility(View.INVISIBLE);
-        tv_head_name.setText("全部成员("+0+")");
     }
 
     private void send() {
@@ -101,8 +101,7 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
             e.printStackTrace();
         }
 
-        VolleyRequest.RequestPost(GlobalConfig.grouptalkUrl, tag, jsonObject, new VolleyCallback() {
-            //			private String SessionId;
+        VolleyRequest.RequestPost(GlobalConfig.getfriendlist, tag, jsonObject, new VolleyCallback() {
             private String ReturnType;
             private String Message;
 
@@ -118,7 +117,6 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
                 String userlist1 = null;
                 try {
                     ReturnType = result.getString("ReturnType");
-//					SessionId = result.getString("SessionId");
                     userlist1 = result.getString("UserList");
                     Message = result.getString("Message");
                 } catch (JSONException e1) {
@@ -132,12 +130,12 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
                     }
                     int sum = userlist.size();
                     // 给计数项设置值
-                    tv_head_name.setText("全部成员(" + sum + ")");
+
                     userlist2.clear();
                     userlist2.addAll(userlist);
                     filledData(userlist2);
                     Collections.sort(userlist2, pinyinComparator);
-                    adapter = new CreateGroupMembersAdapter(context, userlist2);
+                    adapter = new CreateGroupMembersAddAdapter(context, userlist2);
                     listView.setAdapter(adapter);
                     setinterface();
                 } else if (ReturnType != null && ReturnType.equals("1002")) {
@@ -145,13 +143,12 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
 
                     }else{
                         int sum = userlist.size();
-                        // 给计数项设置值
-                        tv_head_name.setText("全部成员(" + sum + ")");
+
                         userlist2.clear();
                         userlist2.addAll(userlist);
                         filledData(userlist2);
                         Collections.sort(userlist2, pinyinComparator);
-                        adapter = new CreateGroupMembersAdapter(context, userlist2);
+                        adapter = new CreateGroupMembersAddAdapter(context, userlist2);
                         listView.setAdapter(adapter);
                         setinterface();
                     }
@@ -195,6 +192,7 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
     // 处理Intent
     private void handleIntent() {
         groupid= this.getIntent().getStringExtra("GroupId");
+        groupid="81ce725fa1d3";
     }
 
     //设置监听
@@ -214,6 +212,7 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
             @Override
             public void afterTextChanged(Editable s) {
                 String search_name = s.toString();
+                if(userlist2!=null){
                 if (search_name == null || search_name.equals("")|| search_name.trim().equals("")) {
                     image_clear.setVisibility(View.INVISIBLE);
                     tvNofriends.setVisibility(View.GONE);
@@ -226,18 +225,24 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
                         userlist2.addAll(userlist);
                         filledData(userlist2);
                         Collections.sort(userlist2, pinyinComparator);
-                        adapter = new CreateGroupMembersAdapter(context, userlist2);
+                        adapter = new CreateGroupMembersAddAdapter(context, userlist2);
                         listView.setAdapter(adapter);
                         setinterface();
                     }
                 } else {
+                    if(userlist2!=null&&userlist2.size()!=0){
                     userlist2.clear();
                     userlist2.addAll(userlist);
                     image_clear.setVisibility(View.VISIBLE);
                     search(search_name);
+                    }else{
+                        ToastUtils.show_allways(context,"网络异常，没有获取导数据");
+                    }
                 }
+            }else{
+                ToastUtils.show_allways(context,"网络异常，没有获取导数据");
             }
-        });
+        }});
     }
 
     private void search(String search_name) {
@@ -266,51 +271,25 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
     }
 
     private void setinterface() {
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        adapter.setOnListener(new CreateGroupMembersAddAdapter.friendCheck() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-                boolean isfriend = false;
-                if(userlist2.get(position).getUserId().equals(CommonUtils.getUserId(context))){
-                    ToastUtils.show_allways(context, "点击的是本人");
-                }else{
-                    if (GlobalConfig.list_person != null&& GlobalConfig.list_person.size() != 0) {
-                        for (int i = 0; i < GlobalConfig.list_person.size(); i++) {
-                            if (userlist2.get(position).getUserId().equals(GlobalConfig.list_person.get(i).getUserId())) {
-                                isfriend = true;
-                                break;
-                            }
-                        }
-                    } else {
-                        // 不是我的好友
-                        isfriend = false;
-                    }
-                    if (isfriend) {
-                        //是好友 跳转到好友详情界面
-                        UserInfo muserinfo = new UserInfo();
-                        muserinfo.setPortraitBig(userlist2.get(position).getPortraitBig());
-                        muserinfo.setPortraitMini(userlist2.get(position).getPortraitMini());
-                        muserinfo.setUserName(userlist2.get(position).getUserName());
-                        muserinfo.setUserId(userlist2.get(position).getUserId());
-                        muserinfo.setUserAliasName(userlist2.get(position).getUserAliasName());
-                        //Intent intent = new Intent(AllGroupMemberActivity.this,TalkPersonNewsActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("type", "GroupMemers");
-                        bundle.putString("id", groupid);
-                        bundle.putSerializable("data",muserinfo);
-                        //intent.putExtras(bundle);
-                        //startActivity(intent);
-                    } else {
-                        //不是好友 跳转到非好友界面
-                       /* Intent intent = new Intent(context,GroupPersonNewsActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("type", "GroupMemers");
-                        bundle.putString("id", groupid);
-                        bundle.putSerializable("data", userlist2.get(position));
-                        intent.putExtras(bundle);
-                        startActivityForResult(intent, 2);*/
+            public void checkposition(int position) {
+                sum = 0;
+                if (userlist2.get(position).getCheckType() == 1) {
+                    userlist2.get(position).setCheckType(2);
+                } else {
+                    userlist2.get(position).setCheckType(1);
+                }
+                for (int i = 0; i < userlist2.size(); i++) {
+                    if (userlist2.get(i).getCheckType() == 2) {
+                        sum++;
                     }
                 }
-            }});
+                tv_head_right.setText("确定(" + sum + ")");
+                adapter.notifyDataSetChanged();
+            }
+        });
 
         // 设置右侧触摸监听
         sideBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
@@ -336,6 +315,7 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
         et_searh_content = (EditText) findViewById(R.id.et_search);			// 搜索控件
         image_clear = (ImageView) findViewById(R.id.image_clear);
         tv_head_name=(TextView)findViewById(R.id.tv_head_name);
+        tv_head_right=(TextView)findViewById(R.id.tv_head_right);
 
     }
 
@@ -350,6 +330,26 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
                 image_clear.setVisibility(View.INVISIBLE);
                 et_searh_content.setText("");
                 tvNofriends.setVisibility(View.GONE);
+                break;
+            case R.id.tv_head_right:
+                if (userlist2 != null && userlist2.size() > 0) {
+                    for (int i = 0; i < userlist2.size(); i++) {
+                        if (userlist2.get(i).getCheckType() == 2) {
+                            addlist.add(userlist2.get(i).getUserId());
+                        }
+                    }
+                }
+                if (addlist!= null &&addlist.size() > 0) {
+                    // 发送进入组的邀请
+                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                        dialog = DialogUtils.Dialogph(context, "正在发送邀请");
+                        sendGroupInvited();
+                    } else {
+                        ToastUtils.show_allways(context, "网络失败，请检查网络");
+                    }
+                } else {
+                    ToastUtils.show_allways(context, "请您勾选您要邀请的好友");
+                }
                 break;
         }
     }
@@ -367,6 +367,74 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
             }
         }
     }
+    private void sendGroupInvited() {
+        JSONObject jsonObject =VolleyRequest.getJsonObject(context) ;
+
+        // 模块属性
+        try{
+        jsonObject.put("GroupId", groupid);
+        jsonObject.put("UserId","6c310f2884a7");
+            // 对s进行处理 去掉"[]"符号
+            String s = addlist.toString();
+            jsonObject.put("BeInvitedUserIds", s.substring(1, s.length() - 1).replaceAll(" ", ""));
+            // groupid由上一个界面传递而来
+           // jsonObject.put("GroupId", groupid);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        VolleyRequest.RequestPost(GlobalConfig.sendInviteintoGroupUrl, tag, jsonObject, new VolleyCallback() {
+            private String ReturnType;
+            private String Message;
+
+            @Override
+            protected void requestSuccess(JSONObject result) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                if(isCancelRequest){
+                    return ;
+                }
+                try {
+                    ReturnType = result.getString("ReturnType");
+                    Message = result.getString("Message");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (ReturnType != null && ReturnType.equals("1001")) {
+                    ToastUtils.show_allways(context, "组邀请已经发送，请等待对方接受");
+                    setResult(1);
+                    finish();
+                } else if (ReturnType != null && ReturnType.equals("1002")) {
+                    ToastUtils.show_allways(context, "无法获取用户Id");
+                } else if (ReturnType != null && ReturnType.equals("T")) {
+                    ToastUtils.show_allways(context, "异常返回值");
+                } else if (ReturnType != null && ReturnType.equals("200")) {
+                    ToastUtils.show_allways(context, "尚未登录");
+                } else if (ReturnType != null && ReturnType.equals("1003")) {
+                    ToastUtils.show_allways(context, "异常返回值");
+                } else if (ReturnType != null && ReturnType.equals("10031")) {
+                    ToastUtils.show_allways(context, "用户组不是验证群，不能采取这种方式邀请");
+                } else if (ReturnType != null && ReturnType.equals("0000")) {
+                    ToastUtils.show_allways(context, "无法获取用户ID");
+                } else if (ReturnType != null && ReturnType.equals("1004")) {
+                    ToastUtils.show_allways(context, "被邀请人不存在");
+                } else {
+                    if (Message != null && !Message.trim().equals("")) {
+                        ToastUtils.show_allways(context, Message + "");
+                    }
+                }
+            }
+
+            @Override
+            protected void requestError(VolleyError error) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -376,12 +444,13 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
         mback=null;
         pinyinComparator = null;
         characterParser = null;
-        tvNofriends = null;
-        sideBar = null;
-        dialogs = null;
-        listView = null;
+        tvNofriends= null;
+        sideBar= null;
+        dialogs= null;
+        listView= null;
         et_searh_content = null;		// 搜索控件
         image_clear = null;
         tv_head_name = null;
+        tv_head_right= null;
     }
 }

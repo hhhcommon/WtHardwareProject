@@ -33,7 +33,8 @@ import com.wotingfm.R;
 import com.wotingfm.activity.common.interphone.creategroup.model.GroupRation;
 import com.wotingfm.activity.common.interphone.creategroup.model.UserPortaitInside;
 import com.wotingfm.activity.common.interphone.creategroup.photocut.activity.PhotoCutActivity;
-import com.wotingfm.activity.common.interphone.groupmanage.groupdetail.GroupDetailAcitivity;
+
+import com.wotingfm.activity.common.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;

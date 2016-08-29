@@ -22,6 +22,7 @@ import com.wotingfm.R;
 import com.wotingfm.activity.common.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity;
 import com.wotingfm.activity.common.interphone.groupmanage.allgroupmember.model.UserInfo;
 import com.wotingfm.activity.common.interphone.groupmanage.groupdetail.activity.adapter.GroupTalkAdapter;
+import com.wotingfm.activity.common.interphone.groupmanage.joingroup.activity.JoinGroupListActivity;
 import com.wotingfm.activity.common.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity;
 import com.wotingfm.activity.common.interphone.groupmanage.transferauthority.TransferAuthority;
 import com.wotingfm.common.config.GlobalConfig;
@@ -106,8 +107,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
         }
 
         VolleyRequest.RequestPost(GlobalConfig.grouptalkUrl, tag, jsonObject, new VolleyCallback() {
-            private String srclist;
-
+           String srclist;
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) {
@@ -272,9 +272,10 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                 startActivity(new Intent(this, ModifyGroupPasswordActivity.class));
                 break;
             case R.id.rl_addGroup:
-
+                startActivity(new Intent(this, JoinGroupListActivity.class));
                 break;
             case R.id.rl_vertiygroup:
+                startActivity(new Intent(this, JoinGroupListActivity.class));
                 break;
         }
     }

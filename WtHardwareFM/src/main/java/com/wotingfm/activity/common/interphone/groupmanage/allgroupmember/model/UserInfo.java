@@ -21,7 +21,34 @@ public class UserInfo implements Serializable {
 	private String truename;
 	private String pinYinName;
 	private String UserAliasName;
-	
+	private String InvitedUserName;
+	private String InviteUserId;
+	private String BeInviteUserId;
+
+	public String getBeInviteUserId() {
+		return BeInviteUserId;
+	}
+
+	public void setBeInviteUserId(String beInviteUserId) {
+		BeInviteUserId = beInviteUserId;
+	}
+
+	public String getInviteUserId() {
+		return InviteUserId;
+	}
+
+	public void setInviteUserId(String inviteUserId) {
+		InviteUserId = inviteUserId;
+	}
+
+	public String getInvitedUserName() {
+		return InvitedUserName;
+	}
+
+	public void setInvitedUserName(String invitedUserName) {
+		InvitedUserName = invitedUserName;
+	}
+
 	public String getName() {
 		return name;
 	}
