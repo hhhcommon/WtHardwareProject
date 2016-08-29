@@ -2,6 +2,7 @@ package com.wotingfm.common.base;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
@@ -22,6 +23,7 @@ public abstract class BaseActivity extends Activity {
     private TextView textTitle;         // 标题
     private ImageView leftImage;        // 左上角  图标
     private ImageView rightImage;       // 右上角  图标
+    protected Context context;
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
@@ -30,7 +32,7 @@ public abstract class BaseActivity extends Activity {
         setContentView(setViewId());
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
-
+        context = this;
         initView();
     }
 

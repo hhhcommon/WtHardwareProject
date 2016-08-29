@@ -34,6 +34,10 @@ public class DialogUtils {
         return dialog;
     }
 
+    /**
+     * 显示加载对话框
+     * @param context
+     */
     public static void showDialog(Context context) {
         View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog, null);
 //        TextView loadText = (TextView) dialog1.findViewById(R.id.text_wenzi);

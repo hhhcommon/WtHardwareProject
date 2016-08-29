@@ -21,7 +21,7 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.model.UserInfo;
-import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.adapter.GroupTalkAdapter;
+import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity.adapter.GroupTalkAdapter;
 import com.wotingfm.activity.im.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.transferauthority.TransferAuthority;
 import com.wotingfm.common.config.GlobalConfig;
@@ -37,12 +37,11 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-
 /**
+ * 群组详情界面
  * Created by wz on 2016/8/24 0024.
  */
 public class GroupDetailAcitivity extends Activity implements View.OnClickListener {
-
     private Context context;
     private TextView mback;
     private EditText mgroupname;
@@ -68,7 +67,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
     private boolean isCancelRequest;
     private List<UserInfo> list;
     private Intent pushintent;
-    private ArrayList<UserInfo> userlist=new ArrayList<UserInfo>();
+    private ArrayList<UserInfo> userlist=new ArrayList<>();
     private GroupTalkAdapter adapter;
     private Boolean IsCreator=false;
 
@@ -208,6 +207,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
         rl_addGroup.setOnClickListener(this);
         rl_vertiygroup.setOnClickListener(this);
     }
+
     //设置界面
     private void setview() {
         mback=(TextView)findViewById(R.id.wt_back);
@@ -227,15 +227,12 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
         mtv_autoadd=(TextView)findViewById(R.id.auto_add);
         mtv_ewmadd=(TextView)findViewById(R.id.ewm_add);
         mtv_exit=(TextView)findViewById(R.id.tv_exit);
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
     }
-
-
 
     @Override
     public void onClick(View v) {

@@ -122,6 +122,13 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
+        <!-- 消息中心 -->
+        <activity
+            android:name=".activity.im.interphone.notify.NotifyNewActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan" />
+
         <!-- 头像剪裁界面 -->
         <activity
             android:name=".activity.im.interphone.creategroup.photocut.activity.PhotoCutActivity"
