@@ -9,7 +9,6 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -17,7 +16,6 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -34,6 +32,7 @@ import com.wotingfm.activity.im.interphone.creategroup.model.GroupRation;
 import com.wotingfm.activity.im.interphone.creategroup.model.UserPortaitInside;
 import com.wotingfm.activity.im.interphone.creategroup.photocut.activity.PhotoCutActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity;
+import com.wotingfm.common.base.BaseActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
@@ -52,7 +51,7 @@ import java.io.File;
 /**
  * 创建群组子页面  即有创建公开群、密码群、验证群
  */
-public class CreateGroupItemActivity extends Activity implements View.OnClickListener {
+public class CreateGroupItemActivity extends BaseActivity implements View.OnClickListener {
     private Uri outputFileUri;
     private Dialog headDialog;
 
@@ -63,7 +62,6 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
     private EditText editGroupName;             // EditText 群组名称
     private EditText editGroupAutograph;        // EditText 群组签名
     private EditText editGroupPassWord;         // 设置群组密码
-    private TextView textTitle;                 // 标题
     private Button btnCommit;                   // 确定 提交数据
     private ImageView imageGroupHead;
 
@@ -78,27 +76,15 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
     private String tag = "CREATE_GROUP_ITEM_ACTIVITY_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_create_group_item);
-
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
-
-        initViews();
+    protected int setViewId() {
+        return R.layout.activity_create_group_item;
     }
 
-    /*
-     * 初始化视图
-     */
-    private void initViews() {
+    @Override
+    protected void init() {
         setHeadDialog();
         handleIntent();
-
-        TextView leftBack = (TextView) findViewById(R.id.left_back);
-        leftBack.setOnClickListener(this);
 
         imageGroupHead = (ImageView) findViewById(R.id.image_head);
         imageGroupHead.setOnClickListener(this);
@@ -112,27 +98,26 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
         btnCommit = (Button) findViewById(R.id.btn_commit);
         btnCommit.setOnClickListener(this);
 
-        textTitle = (TextView) findViewById(R.id.text_title);
         switch (createGroupType) {
             case IntegerConstant.CREATE_GROUP_PUBLIC:
-                textTitle.setText("创建公开群");
+                setTitle("创建公开群");
                 editGroupPassWord.setVisibility(View.GONE);
                 textGroupPassWord.setVisibility(View.GONE);
                 groupVerification.setVisibility(View.GONE);
                 textGroupVerification.setVisibility(View.GONE);
                 break;
             case IntegerConstant.CREATE_GROUP_PRIVATE:
-                textTitle.setText("创建密码群");
+                setTitle("创建密码群");
                 groupVerification.setVisibility(View.GONE);
                 textGroupVerification.setVisibility(View.GONE);
                 break;
             case IntegerConstant.CREATE_GROUP_VERIFICATION:
-                textTitle.setText("创建验证群");
+                setTitle("创建验证群");
                 editGroupPassWord.setVisibility(View.GONE);
                 textGroupPassWord.setVisibility(View.GONE);
                 break;
             default:
-                textTitle.setText("创建群组");
+                setTitle("创建群组");
                 break;
         }
     }
@@ -151,7 +136,7 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
     private boolean checkEdit() {
         groupPassWord = editGroupPassWord.getText().toString().trim();
         if (groupPassWord.trim().equals("") || groupPassWord.length() < 6) {
-            Toast.makeText(CreateGroupItemActivity.this, "密码为空或输入的密码不足六位，请重新输入!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "密码为空或输入的密码不足六位，请重新输入!", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;
@@ -161,7 +146,7 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
      * 设置群组头像
      */
     private void setHeadDialog() {
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_imageupload, null);
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_imageupload, null);
         dialogView.findViewById(R.id.text_gallery).setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -178,7 +163,7 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
 
             @Override
             public void onClick(View v) {
-                String savePath = FileManager.getImageSaveFilePath(CreateGroupItemActivity.this);
+                String savePath = FileManager.getImageSaveFilePath(context);
                 FileManager.createDirectory(savePath);
                 String fileName = System.currentTimeMillis() + ".jpg";
                 File file = new File(savePath, fileName);
@@ -191,7 +176,7 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
             }
         });
 
-        headDialog = new Dialog(CreateGroupItemActivity.this, R.style.MyDialog);
+        headDialog = new Dialog(context, R.style.MyDialog);
         headDialog.setContentView(dialogView);
         headDialog.setCanceledOnTouchOutside(true);
         headDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
@@ -199,11 +184,11 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
 
     // 判断网络类型 主网络请求模块
     private void sendRequest() {
-        JSONObject jsonObject = VolleyRequest.getJsonObject(CreateGroupItemActivity.this);
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("GroupType", createGroupType);
             jsonObject.put("GroupSignature", sign);
-            jsonObject.put("UserId", CommonUtils.getUserId(CreateGroupItemActivity.this));
+            jsonObject.put("UserId", CommonUtils.getUserId(context));
             jsonObject.put("GroupName", nick);
             if (createGroupType == IntegerConstant.CREATE_GROUP_PRIVATE) {
                 jsonObject.put("GroupPwd", groupPassWord);
@@ -241,11 +226,10 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
                         dealt(groupRation);
 
                     } else {      // 跳转到群组详情界面
-
                         Intent pushIntent = new Intent("push_refreshlinkman");
                         sendBroadcast(pushIntent);
                         setResult(1);
-                        Intent intent = new Intent(CreateGroupItemActivity.this, GroupDetailAcitivity.class);
+                        Intent intent = new Intent(context, GroupDetailAcitivity.class);
                         intent.putExtra("GroupId", groupRation.getGroupId());
                         intent.putExtra("ImageUrl", miniUri);
                         startActivity(intent);
@@ -253,40 +237,40 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
                     }
                 } else {
                     if (returnType != null && returnType.equals("1002")) {
-                        Toast.makeText(CreateGroupItemActivity.this, "未登陆无法创建群组", Toast.LENGTH_SHORT).show();
-                        textTitle.setText("创建失败");
+                        Toast.makeText(context, "未登陆无法创建群组", Toast.LENGTH_SHORT).show();
+                        setTitle("创建失败");
                         btnCommit.setVisibility(View.INVISIBLE);
                     } else if (returnType != null && returnType.equals("1003")) {
-                        Toast.makeText(CreateGroupItemActivity.this, "无法得到用户分类" + message, Toast.LENGTH_SHORT).show();
-                        textTitle.setText("创建失败");
+                        Toast.makeText(context, "无法得到用户分类" + message, Toast.LENGTH_SHORT).show();
+                        setTitle("创建失败");
                         btnCommit.setVisibility(View.INVISIBLE);
                     } else if (returnType != null && returnType.equals("1004")) {
-                        Toast.makeText(CreateGroupItemActivity.this, "无法得到组密码" + message, Toast.LENGTH_SHORT).show();
-                        textTitle.setText("创建失败");
+                        Toast.makeText(context, "无法得到组密码" + message, Toast.LENGTH_SHORT).show();
+                        setTitle("创建失败");
                         btnCommit.setVisibility(View.INVISIBLE);
                     } else if (returnType != null && returnType.equals("1005")) {
-                        Toast.makeText(CreateGroupItemActivity.this, "无法得到组员信息" + message, Toast.LENGTH_SHORT).show();
-                        textTitle.setText("创建失败");
+                        Toast.makeText(context, "无法得到组员信息" + message, Toast.LENGTH_SHORT).show();
+                        setTitle("创建失败");
                         btnCommit.setVisibility(View.INVISIBLE);
                     } else if (returnType != null && returnType.equals("1006")) {
-                        Toast.makeText(CreateGroupItemActivity.this, "给定的组员信息不存在" + message, Toast.LENGTH_SHORT).show();
-                        textTitle.setText("创建失败");
+                        Toast.makeText(context, "给定的组员信息不存在" + message, Toast.LENGTH_SHORT).show();
+                        setTitle("创建失败");
                         btnCommit.setVisibility(View.INVISIBLE);
                     } else if (returnType != null && returnType.equals("1007")) {
-                        Toast.makeText(CreateGroupItemActivity.this, "只有一个有效成员，无法构建用户组" + message, Toast.LENGTH_SHORT).show();
-                        textTitle.setText("创建失败");
+                        Toast.makeText(context, "只有一个有效成员，无法构建用户组" + message, Toast.LENGTH_SHORT).show();
+                        setTitle("创建失败");
                         btnCommit.setVisibility(View.INVISIBLE);
                     } else if (returnType != null && returnType.equals("1008")) {
-                        Toast.makeText(CreateGroupItemActivity.this, "您所创建的组已达50个，不能再创建了" + message, Toast.LENGTH_SHORT).show();
-                        textTitle.setText("创建失败");
+                        Toast.makeText(context, "您所创建的组已达50个，不能再创建了" + message, Toast.LENGTH_SHORT).show();
+                        setTitle("创建失败");
                         btnCommit.setVisibility(View.INVISIBLE);
                     } else if (returnType != null && returnType.equals("1009")) {
-                        Toast.makeText(CreateGroupItemActivity.this, "20分钟内创建组不能超过5个" + message, Toast.LENGTH_SHORT).show();
-                        textTitle.setText("创建失败");
+                        Toast.makeText(context, "20分钟内创建组不能超过5个" + message, Toast.LENGTH_SHORT).show();
+                        setTitle("创建失败");
                         btnCommit.setVisibility(View.INVISIBLE);
                     } else {
                         if (message != null && !message.trim().equals("")) {
-                            Toast.makeText(CreateGroupItemActivity.this, message, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                         }
                     }
                 }
@@ -302,22 +286,19 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.left_back:        // 返回  关闭当前界面
-                finish();
-                break;
             case R.id.image_head:       // 设置群头像
                 headDialog.show();
                 break;
             case R.id.btn_commit:       // 确定
-                startActivity(new Intent(CreateGroupItemActivity.this, GroupDetailAcitivity.class));
+                startActivity(new Intent(context, GroupDetailAcitivity.class));
                 nick = editGroupName.getText().toString().trim();
                 sign = editGroupAutograph.getText().toString().trim();
                 if (nick == null || nick.equals("")) {
-                    Toast.makeText(CreateGroupItemActivity.this, "请输入群名", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "请输入群名", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (sign == null || sign.equals("")) {
-                    Toast.makeText(CreateGroupItemActivity.this, "请输入群签名", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "请输入群签名", Toast.LENGTH_SHORT).show();
                     return;
                 }
                 if (createGroupType == IntegerConstant.CREATE_GROUP_PRIVATE) {
@@ -325,13 +306,13 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
                         return ;
                     }
                 }
-                DialogUtils.showDialog(CreateGroupItemActivity.this);
+                DialogUtils.showDialog(context);
                 sendRequest();
 //                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-//                        DialogUtils.showDialog(CreateGroupItemActivity.this);
+//                        DialogUtils.showDialog(context);
 //                        sendRequest();
 //                    } else {
-//                        Toast.makeText(CreateGroupItemActivity.this, "网络失败，请检查网络", Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(context, "网络失败，请检查网络", Toast.LENGTH_SHORT).show();
 //                    }
                 break;
         }
@@ -363,7 +344,7 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
                         L.e("path:", imagePath);
 
                         // path_above19:/storage/emulated/0/girl.jpg 这里才是获取的图片的真实路径
-                        imagePath = getPathAbove19(CreateGroupItemActivity.this, uri);
+                        imagePath = getPathAbove19(context, uri);
 
                         L.v("path_above19:", imagePath);
 
@@ -392,7 +373,7 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
                     imageGroupHead.setImageURI(Uri.parse(photoCutAfterImagePath));
                     viewSuccess = 1;
                 }else{
-                    Toast.makeText(CreateGroupItemActivity.this, "用户退出上传图片", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "用户退出上传图片", Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -410,28 +391,19 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
                     Intent pushIntent = new Intent("push_refreshlinkman");
                     sendBroadcast(pushIntent);
                     setResult(1);
-                    Toast.makeText(CreateGroupItemActivity.this, "创建成功", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "创建成功", Toast.LENGTH_SHORT).show();
                     if (groupRation != null && !groupRation.equals("")) {
-
                         // 跳转到群组详情页面
-                        Intent intent = new Intent(CreateGroupItemActivity.this, GroupDetailAcitivity.class);
+                        Intent intent = new Intent(context, GroupDetailAcitivity.class);
                         intent.putExtra("GroupId", groupRation.getGroupId());
                         intent.putExtra("ImageUrl", miniUri);
                         startActivity(intent);
-
-                        // TODO
-//                        Bundle bundle = new Bundle();
-//                        bundle.putString("type", "CreateGroupContentActivity");
-//                        bundle.putSerializable("news", groupRation);
-//                        bundle.putString("imageurl", miniUri);
-//                        intent.putExtras(bundle);
-//                        startActivity(intent);
                     }
                     finish();
                 } else if (msg.what == 0) {
-                    Toast.makeText(CreateGroupItemActivity.this, "头像保存失败，请稍后再试", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "头像保存失败，请稍后再试", Toast.LENGTH_SHORT).show();
                 } else if (msg.what == -1) {
-                    Toast.makeText(CreateGroupItemActivity.this, "头像保存异常，图片未上传成功，请重新发布", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(context, "头像保存异常，图片未上传成功，请重新发布", Toast.LENGTH_SHORT).show();
                 }
             }
         };
@@ -503,7 +475,7 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
      * 图片裁剪
      */
     private void startPhotoZoom(Uri uri) {
-        Intent intent = new Intent(CreateGroupItemActivity.this, PhotoCutActivity.class);
+        Intent intent = new Intent(context, PhotoCutActivity.class);
         intent.putExtra(StringConstant.START_PHOTO_ZOOM_URI, uri.toString());
         intent.putExtra(StringConstant.START_PHOTO_ZOOM_TYPE, 1);
         startActivityForResult(intent, IntegerConstant.PHOTO_REQUEST_CUT);
@@ -634,6 +606,5 @@ public class CreateGroupItemActivity extends Activity implements View.OnClickLis
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
-        setContentView(R.layout.activity_null_view);
     }
 }

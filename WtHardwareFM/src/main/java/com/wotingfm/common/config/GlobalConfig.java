@@ -56,7 +56,6 @@ public class GlobalConfig {
     // image请求路径前缀
     public static final String imageurl = baseUrl + "wt/";// 服务器
 
-
     /**
      * 公共部分
      */

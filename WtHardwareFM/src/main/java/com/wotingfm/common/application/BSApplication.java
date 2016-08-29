@@ -12,7 +12,7 @@ public class BSApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        instance=this;
+        instance = this;
         queues = Volley.newRequestQueue(this);
 
     }
@@ -24,5 +24,4 @@ public class BSApplication extends Application {
     public static RequestQueue getHttpQueues() {
         return queues;
     }
-
 }
