@@ -16,6 +16,7 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -32,8 +33,10 @@ import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.PinyinComparator_a;
 import com.wotingfm.util.ToastUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -45,7 +48,7 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
     private CharacterParser characterParser;
     private PinyinComparator_a pinyinComparator;
     private boolean isCancelRequest;
-    private String  tag="GROUP_MEMBERS_VOLLEY_REQUEST_CANCEL_TAG";
+    private String tag = "GROUP_MEMBERS_VOLLEY_REQUEST_CANCEL_TAG";
     private Dialog dialog;
     private TextView tvNofriends;
     private SideBar sideBar;
@@ -54,29 +57,28 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
     private EditText et_searh_content;
     private ImageView image_clear;
     private List<UserInfo> userlist;//获取的userlist
-    private List<UserInfo> userlist2=new ArrayList<UserInfo>();
+    private List<UserInfo> userlist2 = new ArrayList<>();
     private CreateGroupMembersAdapter adapter;
     private TextView tv_head_name;
     private TextView tv_right;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transfer_authority);
-        context=this;
+        context = this;
         InitActivity();// 初始化透明状态栏，统一回收的方法
         InitcharacterParser();//初始化汉字转拼音类
         handleIntent();// 处理其他页面传入的数据
         setview();// 设置界面
         setlistener();// 设置监听
      /*   if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {*/
-            if(groupid!=null){
+        if (groupid != null) {
             dialog = DialogUtils.Dialogph(AllGroupMemberActivity.this, "正在获取群成员信息");
             send();
-            }else{
-              ToastUtils.show_allways(context,"获取组ID失败");
-            }
+        } else {
+            ToastUtils.show_allways(context, "获取组ID失败");
+        }
        /* } else {
             ToastUtils.show_allways(context, "网络失败，请检查网络");
         }*/
@@ -86,9 +88,9 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
     protected void onResume() {
         super.onResume();
         //tv_right
-        tv_right=(TextView)findViewById(R.id.tv_right);
+        tv_right = (TextView) findViewById(R.id.tv_right);
         tv_right.setVisibility(View.INVISIBLE);
-        tv_head_name.setText("全部成员("+0+")");
+        tv_head_name.setText("全部成员(" + 0 + ")");
     }
 
     private void send() {
@@ -96,7 +98,7 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
         try {
             // 模块属性
             jsonObject.put("GroupId", groupid);
-            jsonObject.put("UserId","6c310f2884a7");
+            jsonObject.put("UserId", "6c310f2884a7");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -111,9 +113,9 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
                 if (dialog != null) {
                     dialog.dismiss();
                 }
-                Log.e("获取群成员返回值",""+result.toString());
-                if(isCancelRequest){
-                    return ;
+                Log.e("获取群成员返回值", "" + result.toString());
+                if (isCancelRequest) {
+                    return;
                 }
                 String userlist1 = null;
                 try {
@@ -126,7 +128,8 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
-                        userlist = new Gson().fromJson(userlist1,new TypeToken<List<UserInfo>>() {}.getType());
+                        userlist = new Gson().fromJson(userlist1, new TypeToken<List<UserInfo>>() {
+                        }.getType());
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
@@ -141,9 +144,9 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
                     listView.setAdapter(adapter);
                     setinterface();
                 } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    if(userlist==null||userlist.size()==0){
+                    if (userlist == null || userlist.size() == 0) {
 
-                    }else{
+                    } else {
                         int sum = userlist.size();
                         // 给计数项设置值
                         tv_head_name.setText("全部成员(" + sum + ")");
@@ -180,21 +183,21 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
 
     // 实例化汉字转拼音类
     private void InitcharacterParser() {
-        characterParser = CharacterParser.getInstance();	// 实例化汉字转拼音类
+        characterParser = CharacterParser.getInstance();    // 实例化汉字转拼音类
         pinyinComparator = new PinyinComparator_a();
     }
 
     // 初始化界面
     private void InitActivity() {
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		//透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	//透明导航栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        //透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    //透明导航栏
         MyActivityManager mam = MyActivityManager.getInstance();
         mam.pushOneActivity(this);
     }
 
     // 处理Intent
     private void handleIntent() {
-        groupid= this.getIntent().getStringExtra("GroupId");
+        groupid = this.getIntent().getStringExtra("GroupId");
     }
 
     //设置监听
@@ -207,14 +210,16 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
             public void onTextChanged(CharSequence s, int start, int before,
                                       int count) {
             }
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count,
                                           int after) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 String search_name = s.toString();
-                if (search_name == null || search_name.equals("")|| search_name.trim().equals("")) {
+                if (search_name == null || search_name.equals("") || search_name.trim().equals("")) {
                     image_clear.setVisibility(View.INVISIBLE);
                     tvNofriends.setVisibility(View.GONE);
                     // 关键词为空
@@ -241,7 +246,7 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
     }
 
     private void search(String search_name) {
-        List<UserInfo> filterDateList = new ArrayList<UserInfo>();
+        List<UserInfo> filterDateList = new ArrayList<>();
         if (TextUtils.isEmpty(search_name)) {
             filterDateList = userlist2;
             tvNofriends.setVisibility(View.GONE);
@@ -268,12 +273,12 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
     private void setinterface() {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 boolean isfriend = false;
-                if(userlist2.get(position).getUserId().equals(CommonUtils.getUserId(context))){
+                if (userlist2.get(position).getUserId().equals(CommonUtils.getUserId(context))) {
                     ToastUtils.show_allways(context, "点击的是本人");
-                }else{
-                    if (GlobalConfig.list_person != null&& GlobalConfig.list_person.size() != 0) {
+                } else {
+                    if (GlobalConfig.list_person != null && GlobalConfig.list_person.size() != 0) {
                         for (int i = 0; i < GlobalConfig.list_person.size(); i++) {
                             if (userlist2.get(position).getUserId().equals(GlobalConfig.list_person.get(i).getUserId())) {
                                 isfriend = true;
@@ -296,7 +301,7 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "GroupMemers");
                         bundle.putString("id", groupid);
-                        bundle.putSerializable("data",muserinfo);
+                        bundle.putSerializable("data", muserinfo);
                         //intent.putExtras(bundle);
                         //startActivity(intent);
                     } else {
@@ -310,7 +315,8 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
                         startActivityForResult(intent, 2);*/
                     }
                 }
-            }});
+            }
+        });
 
         // 设置右侧触摸监听
         sideBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
@@ -325,17 +331,18 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
         });
 
     }
+
     //设置view
     private void setview() {
-        mback=(TextView)findViewById(R.id.wt_back);
+        mback = (TextView) findViewById(R.id.wt_back);
         tvNofriends = (TextView) findViewById(R.id.title_layout_no_friends);
         sideBar = (SideBar) findViewById(R.id.sidebar);
         dialogs = (TextView) findViewById(R.id.dialog);
         sideBar.setTextView(dialogs);
         listView = (ListView) findViewById(R.id.country_lvcountry);
-        et_searh_content = (EditText) findViewById(R.id.et_search);			// 搜索控件
+        et_searh_content = (EditText) findViewById(R.id.et_search);            // 搜索控件
         image_clear = (ImageView) findViewById(R.id.image_clear);
-        tv_head_name=(TextView)findViewById(R.id.tv_head_name);
+        tv_head_name = (TextView) findViewById(R.id.tv_head_name);
 
     }
 
@@ -353,7 +360,8 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
                 break;
         }
     }
-    private  void  filledData(List<UserInfo> person) {
+
+    private void filledData(List<UserInfo> person) {
         for (int i = 0; i < person.size(); i++) {
             person.get(i).setName(person.get(i).getUserName());
             // 汉字转换成拼音
@@ -367,13 +375,14 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
             }
         }
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
         MyActivityManager mam = MyActivityManager.getInstance();
         mam.popOneActivity(this);
-        mback=null;
+        mback = null;
         pinyinComparator = null;
         characterParser = null;
 
