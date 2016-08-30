@@ -9,14 +9,12 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.wotingfm.activity.im.interphone.commom.message.Message;
-import com.wotingfm.activity.im.interphone.commom.message.MessageUtils;
-import com.wotingfm.activity.im.interphone.commom.message.MsgMedia;
-import com.wotingfm.activity.im.interphone.commom.message.MsgNormal;
-import com.wotingfm.activity.im.interphone.commom.service.InterPhoneControl;
-import com.wotingfm.activity.im.interphone.commom.service.VoiceStreamPlayerService;
+import com.wotingfm.activity.im.common.message.Message;
+import com.wotingfm.activity.im.common.message.MessageUtils;
+import com.wotingfm.activity.im.common.message.MsgMedia;
+import com.wotingfm.activity.im.common.message.MsgNormal;
+import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.SocketClientConfig;
 import com.wotingfm.util.JsonEncloseUtils;
@@ -283,7 +281,7 @@ public class SocketService extends Service  {
 							receiveMsg=new ReceiveMsg("接收消息");
 							receiveMsg.start();
 							isRunning=true;
-							InterPhoneControl.sendEntryMessage(context);
+							InterPhoneControlHelper.sendEntryMessage(context);
 							break;//若连接成功了，则结束此进程
 						} else {//未连接成功
 							Log.e("重新连接", "socket连接失败");

@@ -25,7 +25,7 @@ import com.google.gson.reflect.TypeToken;
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
-import com.wotingfm.activity.mine.person.PersonActivity;
+import com.wotingfm.activity.mine.main.MineActivity;
 import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.program.citylist.dao.CityInfoDao;
 import com.wotingfm.activity.music.program.fenlei.model.fenlei;
@@ -222,7 +222,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
         tabHost.addTab(tabHost.newTabSpec("two").setIndicator("two")
                 .setContent(new Intent(this, HomeActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("three").setIndicator("five")
-                .setContent(new Intent(this, PersonActivity.class)));
+                .setContent(new Intent(this, MineActivity.class)));
 
         tabHost.setCurrentTabByTag("one");
     }

@@ -3,6 +3,7 @@ package com.wotingfm.common.config;
 
 import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
+import com.wotingfm.activity.music.player.model.LanguageSearchInside;
 
 import java.util.List;
 
@@ -12,15 +13,7 @@ import java.util.List;
  * 邮箱：645700751@qq.com
  */
 public class GlobalConfig {
-    // 微信
-    public static final String WEIXIN_KEY = "wx99e28b6b8ed44a60";
-    public static final String WEIXIN_SECRET = "a579a0cfe0755b87eb17442e81254857";
-    // QQ
-    public static final String QQ_KEY = "1105341370";
-    public static final String QQ_SECRET = "Hi2ccDP2eAfvjg1E";
-    // 新浪微博
-    public static final String WEIBO_KEY = "2633057288";
-    public static final String WEIBO_SECRET = "95a5b41d6818cecffab50b2f1347fef8";
+
     // 定位信息保存
     public static String longitude;
     public static String latitude;
@@ -30,6 +23,7 @@ public class GlobalConfig {
 //    public static List<UserInfo> list_person;
     public static List<TalkGroupInside> list_group;
     public static List<TalkPersonInside> list_person;
+    public static LanguageSearchInside playerobject;//播放器播放对象
     // 网络情况 1为成功WiFi已连接，2为cmnet，3为cmwap，4为ctwap， -1为网络未连接
     public static final int NETWORK_STATE_IDLE = -1;
     public static final int NETWORK_STATE_WIFI = 1;
@@ -44,7 +38,7 @@ public class GlobalConfig {
     // 是否吐司
     public static boolean istusi = false;
     // PersonClientDevice(个人客户端设备) 终端类型1=app,2=设备，3=pc
-    public static int PCDType = 1;
+    public static int PCDType = 2;
     // 是否活跃状态，有活跃状态才能播放声音，否则即使收到音频包也不播放
     public static boolean isactive = false;
     // apk下载默认路径

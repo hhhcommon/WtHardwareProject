@@ -16,7 +16,7 @@ import com.wotingfm.activity.common.main.MainActivity;
 import com.wotingfm.activity.im.interphone.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.activity.im.interphone.chat.model.DBTalkHistorary;
-import com.wotingfm.activity.im.interphone.commom.service.InterPhoneControl;
+import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.manager.MyActivityManager;
@@ -99,7 +99,7 @@ public class ReceiveAlertActivity extends Activity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.lin_call:
 			SubclassService.isallow=true;
-			InterPhoneControl.PersonTalkAllow(getApplicationContext(), SubclassService.callid, SubclassService.callerId);//接收应答
+			InterPhoneControlHelper.PersonTalkAllow(getApplicationContext(), SubclassService.callid, SubclassService.callerId);//接收应答
 			if(SubclassService.musicPlayer!=null){
 				SubclassService.musicPlayer.stop();
 				SubclassService.musicPlayer = null;
@@ -113,7 +113,7 @@ public class ReceiveAlertActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.lin_guaduan:
 			SubclassService.isallow=true;
-			InterPhoneControl.PersonTalkOver(getApplicationContext(), SubclassService.callid, SubclassService.callerId);//拒绝应答
+			InterPhoneControlHelper.PersonTalkOver(getApplicationContext(), SubclassService.callid, SubclassService.callerId);//拒绝应答
 			if(SubclassService.musicPlayer!=null){
 				SubclassService.musicPlayer.stop();
 				SubclassService.musicPlayer = null;
@@ -145,7 +145,7 @@ public class ReceiveAlertActivity extends Activity implements OnClickListener {
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN&& KeyEvent.KEYCODE_BACK == keyCode) {
 			SubclassService.isallow=true;
-			InterPhoneControl.PersonTalkOver(getApplicationContext(), SubclassService.callid, SubclassService.callerId);//拒绝应答
+			InterPhoneControlHelper.PersonTalkOver(getApplicationContext(), SubclassService.callid, SubclassService.callerId);//拒绝应答
 			if(SubclassService.musicPlayer != null){
 				SubclassService.musicPlayer.stop();
 				SubclassService.musicPlayer = null;

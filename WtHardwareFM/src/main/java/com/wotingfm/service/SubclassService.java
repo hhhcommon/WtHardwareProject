@@ -15,11 +15,11 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.alert.CallAlertActivity;
 import com.wotingfm.activity.im.interphone.alert.ReceiveAlertActivity;
-import com.wotingfm.activity.im.interphone.commom.message.MessageUtils;
-import com.wotingfm.activity.im.interphone.commom.message.MsgNormal;
-import com.wotingfm.activity.im.interphone.commom.message.content.MapContent;
-import com.wotingfm.activity.im.interphone.commom.model.CallerInfo;
-import com.wotingfm.activity.im.interphone.commom.service.InterPhoneControl;
+import com.wotingfm.activity.im.common.message.MessageUtils;
+import com.wotingfm.activity.im.common.message.MsgNormal;
+import com.wotingfm.activity.im.common.message.content.MapContent;
+import com.wotingfm.activity.im.common.model.CallerInfo;
+import com.wotingfm.helper.InterPhoneControlHelper;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -122,7 +122,7 @@ public class SubclassService extends Service {
 									//应答消息：若Data.DialType=1必须要发送回执信息，否则不需要回执
 									//										callid=data.getCallId();
 									callid=data.get("CallId")+"";
-									InterPhoneControl.bdcallid=callid;
+									InterPhoneControlHelper.bdcallid=callid;
 									//										callerId=data.getCallerId();
 									callerId=data.get("CallerId")+"";
 
@@ -141,7 +141,7 @@ public class SubclassService extends Service {
 										if(run!=null){
 											handler.removeCallbacks(run);
 										}
-										InterPhoneControl.PersonTalkHJCDYD(context,callid ,message.getMsgId().trim(),callerId);//呼叫传递应答
+										InterPhoneControlHelper.PersonTalkHJCDYD(context,callid ,message.getMsgId().trim(),callerId);//呼叫传递应答
 										if(CallAlertActivity.instance!=null){
 											CallAlertActivity.instance.finish();
 										}
@@ -155,7 +155,7 @@ public class SubclassService extends Service {
 											public void run() {
 												if(!isallow){
 													//如果60s后没有没有对应答消息进行处理，则发送拒绝应答的消息已经弹出框消失
-													InterPhoneControl.PersonTalkTimeOver(getApplicationContext(), callid,callerId);//拒绝应答
+													InterPhoneControlHelper.PersonTalkTimeOver(getApplicationContext(), callid,callerId);//拒绝应答
 													if(musicPlayer!=null){
 														musicPlayer.stop();
 														musicPlayer=null;

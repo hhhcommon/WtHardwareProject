@@ -21,10 +21,10 @@ import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.activity.im.interphone.chat.model.DBTalkHistorary;
-import com.wotingfm.activity.im.interphone.commom.message.MessageUtils;
-import com.wotingfm.activity.im.interphone.commom.message.MsgNormal;
-import com.wotingfm.activity.im.interphone.commom.message.content.MapContent;
-import com.wotingfm.activity.im.interphone.commom.service.InterPhoneControl;
+import com.wotingfm.activity.im.common.message.MessageUtils;
+import com.wotingfm.activity.im.common.message.MsgNormal;
+import com.wotingfm.activity.im.common.message.content.MapContent;
+import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.manager.MyActivityManager;
@@ -93,7 +93,7 @@ public class CallAlertActivity extends Activity implements OnClickListener{
 		lin_call.setOnClickListener(this);
 		lin_guaduan.setOnClickListener(this);
 		iscall = true;
-		InterPhoneControl.PersonTalkPress(instance, id);//拨号
+		InterPhoneControlHelper.PersonTalkPress(instance, id);//拨号
 		musicPlayer = MediaPlayer.create(instance, R.raw.ringback);  
 		musicPlayer.start();  
 
@@ -127,7 +127,7 @@ public class CallAlertActivity extends Activity implements OnClickListener{
 			lin_call.setVisibility(View.GONE);
 			lin_guaduan.setVisibility(View.VISIBLE);
 			iscall = true;
-			InterPhoneControl.PersonTalkPress(instance, id);		//拨号
+			InterPhoneControlHelper.PersonTalkPress(instance, id);		//拨号
 			musicPlayer = MediaPlayer.create(instance, R.raw.ringback);  
 			musicPlayer.start();  
 
@@ -149,7 +149,7 @@ public class CallAlertActivity extends Activity implements OnClickListener{
 			lin_call.setVisibility(View.VISIBLE);
 			lin_guaduan.setVisibility(View.GONE);
 			iscall=false;
-			InterPhoneControl.PersonTalkHangUp(instance, InterPhoneControl.bdcallid);
+			InterPhoneControlHelper.PersonTalkHangUp(instance, InterPhoneControlHelper.bdcallid);
 			if(musicPlayer!=null){
 				musicPlayer.stop();
 				musicPlayer=null;
@@ -361,7 +361,7 @@ public class CallAlertActivity extends Activity implements OnClickListener{
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
 			if (iscall) {
-				InterPhoneControl.PersonTalkHangUp(instance, InterPhoneControl.bdcallid);
+				InterPhoneControlHelper.PersonTalkHangUp(instance, InterPhoneControlHelper.bdcallid);
 				finish();
 			} else {
 				finish();

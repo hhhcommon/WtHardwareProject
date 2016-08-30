@@ -34,7 +34,7 @@ import com.shenstec.activity.login.LoginActivity;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.alert.CallAlertActivity;
 import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
-import com.wotingfm.activity.im.interphone.commom.service.InterPhoneControl;
+import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.activity.im.interphone.linkman.adapter.SortGroupMemberAdapter;
 import com.wotingfm.activity.im.interphone.linkman.adapter.TalkGroupAdapter;
 import com.wotingfm.activity.im.interphone.linkman.adapter.TalkPersonNoAdapter;
@@ -315,7 +315,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			@Override
 			public void onClick(View v) {
 				if(type == 1){
-					InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
+					InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
 					ChatFragment.iscalling = false;
 					ChatFragment.lin_notalk.setVisibility(View.VISIBLE);
 					ChatFragment.lin_personhead.setVisibility(View.GONE);
@@ -324,7 +324,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 					call(id);
 					confirmdialog.dismiss();
 				}else{
-					InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
+					InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
 					ChatFragment.iscalling = false;
 					ChatFragment.lin_notalk.setVisibility(View.VISIBLE);
 					ChatFragment.lin_personhead.setVisibility(View.GONE);

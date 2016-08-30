@@ -43,12 +43,12 @@ import com.wotingfm.activity.im.interphone.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.activity.im.interphone.chat.model.DBTalkHistorary;
 import com.wotingfm.activity.im.interphone.chat.model.GroupTalkInside;
 import com.wotingfm.activity.im.interphone.chat.model.TalkListGP;
-import com.wotingfm.activity.im.interphone.commom.message.MessageUtils;
-import com.wotingfm.activity.im.interphone.commom.message.MsgNormal;
-import com.wotingfm.activity.im.interphone.commom.message.content.MapContent;
-import com.wotingfm.activity.im.interphone.commom.model.ListInfo;
-import com.wotingfm.activity.im.interphone.commom.service.InterPhoneControl;
-import com.wotingfm.activity.im.interphone.commom.service.VoiceStreamRecordService;
+import com.wotingfm.activity.im.common.message.MessageUtils;
+import com.wotingfm.activity.im.common.message.MsgNormal;
+import com.wotingfm.activity.im.common.message.content.MapContent;
+import com.wotingfm.activity.im.common.model.ListInfo;
+import com.wotingfm.helper.InterPhoneControlHelper;
+import com.wotingfm.service.VoiceStreamRecordService;
 import com.wotingfm.activity.im.interphone.linkman.model.LinkMan;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
 import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
@@ -286,7 +286,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		if(interphonetype.equals("user")){
 			//挂断电话
 			iscalling=false;
-			InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
+			InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
 			historydatabaselist = dbdao.queryHistory();//得到数据库里边数据
 			getlist();		
 			if(alllist.size()==0){
@@ -314,7 +314,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 			gridView_person.setVisibility(View.GONE);
 			gridView_tv.setVisibility(View.GONE);
 		}else{
-			InterPhoneControl.Quit(context, interphoneid);//退出小组
+			InterPhoneControlHelper.Quit(context, interphoneid);//退出小组
 			historydatabaselist = dbdao.queryHistory();//得到数据库里边数据
 			getlist();					
 			if(alllist.size()==0){
@@ -472,7 +472,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		groupid=groupids;
 		tv_num.setText("1");
 		listinfo=null;
-		InterPhoneControl.Enter(context, groupids);//发送进入组的数据，socket
+		InterPhoneControlHelper.Enter(context, groupids);//发送进入组的数据，socket
 		getgridViewperson(groupids);//获取群成员
 	}
 
@@ -487,7 +487,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		groupid=talkGroupInside.getGroupId();
 		tv_num.setText("1");
 		listinfo=null;
-		InterPhoneControl.Enter(context, talkGroupInside.getGroupId());//发送进入组的数据，socket
+		InterPhoneControlHelper.Enter(context, talkGroupInside.getGroupId());//发送进入组的数据，socket
 		getgridViewperson(talkGroupInside.getGroupId());//获取群成员
 	}
 
@@ -502,7 +502,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		groupid=talkGroupInside.getGroupId();
 		tv_num.setText("1");
 		listinfo=null;
-		InterPhoneControl.Enter(context, talkGroupInside.getGroupId());//发送进入组的数据，socket
+		InterPhoneControlHelper.Enter(context, talkGroupInside.getGroupId());//发送进入组的数据，socket
 		getgridViewperson(talkGroupInside.getGroupId());//获取群成员
 	}
 
@@ -533,7 +533,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 						}
 						confirmdialog.show();
 					}else{
-						InterPhoneControl.Quit(context, interphoneid);//退出小组
+						InterPhoneControlHelper.Quit(context, interphoneid);//退出小组
 						String interphonetypes = alllist.get(position).getTyPe();
 						if(interphonetypes!=null&&!interphonetypes.equals("")&&interphonetypes.equals("user")){
 							call(alllist.get(position).getId());
@@ -909,9 +909,9 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		tv_confirm.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
+				InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
 				if(dialogtype==1){
-					InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
+					InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
 					iscalling=false;
 					lin_notalk.setVisibility(View.VISIBLE);
 					lin_personhead.setVisibility(View.GONE);
@@ -921,7 +921,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 					call(phoneid);
 					confirmdialog.dismiss();
 				}else{
-					InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
+					InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
 					iscalling=false;
 					lin_notalk.setVisibility(View.VISIBLE);
 					lin_personhead.setVisibility(View.GONE);
@@ -1086,7 +1086,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 										iscalling=true;
 										ToastUtils.show_short(context, "进入组—成功");
 										if(entergrouptype==2){
-											InterPhoneControl.Quit(context, interphoneid);//退出小组
+											InterPhoneControlHelper.Quit(context, interphoneid);//退出小组
 											String id = groupid;//对讲组：groupid
 											dbdao.deleteHistory(id);
 											addgroup(id);//加入到数据库
@@ -1112,7 +1112,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 										//用户已在组
 										iscalling=true;
 										if(entergrouptype==2){
-											InterPhoneControl.Quit(context, interphoneid);//退出小组
+											InterPhoneControlHelper.Quit(context, interphoneid);//退出小组
 											String id = groupid;//对讲组：groupid
 											dbdao.deleteHistory(id);
 											addgroup(id);//加入到数据库
@@ -1424,7 +1424,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 					public void run() {
 						VoiceStreamRecordService.stop();
 						image_button.setBackgroundDrawable(context.getResources().getDrawable(R.mipmap.talknormal));
-						InterPhoneControl.Loosen(context, interphoneid);//发送取消说话控制
+						InterPhoneControlHelper.Loosen(context, interphoneid);//发送取消说话控制
 						if (draw.isRunning()) { 
 							draw.stop(); 
 						} 
@@ -1433,7 +1433,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 				}, 300);
 			}else{//此处处理个人对讲的逻辑
 				VoiceStreamRecordService.stop();
-				InterPhoneControl.PersonTalkPressStop(context, interphoneid);//发送取消说话控制
+				InterPhoneControlHelper.PersonTalkPressStop(context, interphoneid);//发送取消说话控制
 				image_button.setBackgroundDrawable(context.getResources().getDrawable(R.mipmap.talknormal));
 				if (draw.isRunning()) { 
 					draw.stop(); 
@@ -1447,12 +1447,12 @@ public class ChatFragment extends Fragment implements OnClickListener{
 	protected void press() {
 		// 按下的动作
 		if(interphonetype.equals("group")){
-			InterPhoneControl.Press(context, interphoneid);
+			InterPhoneControlHelper.Press(context, interphoneid);
 			VoiceStreamRecordService.stop();
 			VoiceStreamRecordService.start(context, interphoneid,"group");
 		}else{
 			//此处处理个人对讲的逻辑
-			InterPhoneControl.PersonTalkPressStart(context, interphoneid);
+			InterPhoneControlHelper.PersonTalkPressStart(context, interphoneid);
 			VoiceStreamRecordService.stop();
 			VoiceStreamRecordService.start(context, interphoneid,"person");
 		}
