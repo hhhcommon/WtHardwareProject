@@ -21,7 +21,7 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.model.UserInfo;
-import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity.adapter.GroupTalkAdapter;
+import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.adapter.GroupTalkAdapter;
 import com.wotingfm.activity.im.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.transferauthority.TransferAuthority;
 import com.wotingfm.common.config.GlobalConfig;

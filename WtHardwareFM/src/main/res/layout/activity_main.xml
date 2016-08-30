@@ -18,18 +18,6 @@
             android:background="@color/app_bg"
             android:orientation="vertical" >
 
-            <Button
-                android:id="@+id/btn_create_group"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="创建群组"/>
-
-            <Button
-                android:id="@+id/btn_notify"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="消息中心"/>
-
             <FrameLayout
                 android:id="@android:id/tabcontent"
                 android:layout_width="match_parent"

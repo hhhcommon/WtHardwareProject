@@ -1,4 +1,4 @@
-package com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity.adapter;
+package com.wotingfm.activity.im.interphone.groupmanage.groupdetail.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;

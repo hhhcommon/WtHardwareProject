@@ -137,6 +137,24 @@
             android:windowSoftInputMode="adjustPan"/>
 
         <activity
+            android:name=".activity.im.interphone.alert.CallAlertActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity
+            android:name=".activity.im.interphone.alert.ReceiveAlertActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity
+            android:name=".activity.im.interphone.main.DuiJiangActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity
             android:name=".activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"

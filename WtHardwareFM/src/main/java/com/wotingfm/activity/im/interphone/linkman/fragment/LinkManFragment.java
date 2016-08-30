@@ -185,8 +185,8 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 		lin_news_message.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(context, NewsActivity.class);
-				startActivity(intent);				
+//				Intent intent = new Intent(context, NewsActivity.class);
+//				startActivity(intent);
 			}
 		});
 	}
@@ -705,16 +705,16 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 				// 跳转到详细信息界面
-				Intent intent = new Intent(context,TalkPersonNewsActivity.class);
-				Bundle bundle = new Bundle();
-				bundle.putString("type", "talkpersonfragment");
-				if(headviewshow){
-					bundle.putSerializable("data", srclist_p.get(position-1));
-				}else{
-					bundle.putSerializable("data", srclist_p.get(position));
-				}
-				intent.putExtras(bundle);
-				startActivity(intent);
+//				Intent intent = new Intent(context,TalkPersonNewsActivity.class);
+//				Bundle bundle = new Bundle();
+//				bundle.putString("type", "talkpersonfragment");
+//				if(headviewshow){
+//					bundle.putSerializable("data", srclist_p.get(position-1));
+//				}else{
+//					bundle.putSerializable("data", srclist_p.get(position));
+//				}
+//				intent.putExtras(bundle);
+//				startActivity(intent);
 			}
 		});
 
@@ -763,12 +763,12 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 				// 跳转到群组详情页面
-				Intent intent = new Intent(context, TalkGroupNewsActivity.class);
-				Bundle bundle = new Bundle();
-				bundle.putString("type", "talkpersonfragment");
-				bundle.putSerializable("data", grouplist.get(position));
-				intent.putExtras(bundle);
-				startActivity(intent);
+//				Intent intent = new Intent(context, TalkGroupNewsActivity.class);
+//				Bundle bundle = new Bundle();
+//				bundle.putString("type", "talkpersonfragment");
+//				bundle.putSerializable("data", grouplist.get(position));
+//				intent.putExtras(bundle);
+//				startActivity(intent);
 			}
 		});
 	}

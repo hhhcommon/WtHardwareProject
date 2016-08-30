@@ -655,7 +655,7 @@ public  class NotificationService   extends  Service{
 		notification.defaults=Notification.DEFAULT_LIGHTS;//点亮屏幕
 		PendingIntent in = PendingIntent.getBroadcast(ctx, 2, pushaintent,PendingIntent.FLAG_UPDATE_CURRENT);
 		notification.flags = notification.flags | Notification.FLAG_AUTO_CANCEL;
-		notification.setLatestEventInfo(ctx,title , msg, in);
+//		notification.setLatestEventInfo(ctx,title , msg, in);
 		nm.notify(0, notification);
 	}
 
