@@ -36,7 +36,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shenstec.activity.login.LoginActivity;
 import com.wotingfm.R;
-import com.wotingfm.activity.im.interphone.alert.CallAlertActivity;
+
 import com.wotingfm.activity.im.interphone.chat.adapter.ChatListAdapter;
 import com.wotingfm.activity.im.interphone.chat.adapter.GroupPersonAdapter;
 import com.wotingfm.activity.im.interphone.chat.dao.SearchTalkHistoryDao;
@@ -46,7 +46,6 @@ import com.wotingfm.activity.im.interphone.chat.model.TalkListGP;
 import com.wotingfm.activity.im.interphone.commom.message.MessageUtils;
 import com.wotingfm.activity.im.interphone.commom.message.MsgNormal;
 import com.wotingfm.activity.im.interphone.commom.message.content.MapContent;
-import com.wotingfm.activity.im.interphone.commom.model.ListInfo;
 import com.wotingfm.activity.im.interphone.commom.service.InterPhoneControl;
 import com.wotingfm.activity.im.interphone.commom.service.VoiceStreamRecordService;
 import com.wotingfm.activity.im.interphone.linkman.model.LinkMan;
@@ -79,7 +78,11 @@ import java.util.Map;
  * 2016年1月18日
  */
 public class ChatFragment extends Fragment implements OnClickListener{
-	public static FragmentActivity context;
+	@Override
+	public void onClick(View v) {
+
+	}
+/*	public static FragmentActivity context;
 	private static ChatListAdapter adapter;
 	private static ListView mlistView;
 	private  MessageReceiver Receiver;
@@ -460,10 +463,10 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		}
 	}
 
-	/**
+	*//**
 	 * 设置对讲组为激活状态
 	 * @param groupids
-	 */
+	 *//*
 	public static void zhidinggroupss(String groupids ) {
 		Intent intent = new Intent();
 		intent.setAction(DuiJiangActivity.UPDATA_GROUP);
@@ -476,9 +479,9 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		getgridViewperson(groupids);//获取群成员
 	}
 
-	/**
+	*//**
 	 * 设置对讲组为激活状态
-	 */
+	 *//*
 	public static void zhidinggroup(TalkGroupInside talkGroupInside) {
 		Intent intent = new Intent();
 		intent.setAction(DuiJiangActivity.UPDATA_GROUP);
@@ -491,9 +494,9 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		getgridViewperson(talkGroupInside.getGroupId());//获取群成员
 	}
 
-	/**
+	*//**
 	 * 设置对讲组2为激活状态
-	 */
+	 *//*
 	public static void zhidinggroups(TalkGroupInside talkGroupInside) {
 		Intent intent = new Intent();
 		intent.setAction(DuiJiangActivity.UPDATA_GROUP);
@@ -506,9 +509,9 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		getgridViewperson(talkGroupInside.getGroupId());//获取群成员
 	}
 
-	/**
+	*//**
 	 * 设置个人为激活状态/设置第一条为激活状态
-	 */
+	 *//*
 	public static  void zhidingperson(DBTalkHistorary talkdb) {
 		historydatabaselist = dbdao.queryHistory();//得到数据库里边数据
 		getlist();
@@ -651,9 +654,9 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		}
 	}
 
-	/*
+	*//*
 	 * 第一次进入该界面
-	 */
+	 *//*
 	private void update(Context context){
 		//得到数据库里边数据
 		historydatabaselist = dbdao.queryHistory();
@@ -1466,5 +1469,5 @@ public class ChatFragment extends Fragment implements OnClickListener{
 			context.unregisterReceiver(Receiver);
 			Receiver=null;
 		}
-	}
+	}*/
 }

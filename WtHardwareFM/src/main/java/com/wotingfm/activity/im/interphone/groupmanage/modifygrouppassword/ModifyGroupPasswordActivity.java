@@ -1,4 +1,4 @@
-package com.wotingfm.activity.common.interphone.groupmanage.modifygrouppassword;
+package com.wotingfm.activity.im.interphone.groupmanage.modifygrouppassword;
 
 import android.app.Activity;
 import android.app.Dialog;

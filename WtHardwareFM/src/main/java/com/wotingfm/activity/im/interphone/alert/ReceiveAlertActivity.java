@@ -23,11 +23,7 @@ import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.service.SubclassService;
 import com.wotingfm.util.CommonUtils;
 
-/**
- * 来电话弹出框
- * @author 辛龙
- *2016年3月7日
- */
+
 public class ReceiveAlertActivity extends Activity implements OnClickListener {
 	public static ReceiveAlertActivity instance;
 	private ImageView imageview;
@@ -86,10 +82,7 @@ public class ReceiveAlertActivity extends Activity implements OnClickListener {
 		lin_guaduan.setOnClickListener(this);
 		initDao();		//初始化数据库
 	}
-	
-	/**
-	 * 初始化数据库
-	 */
+
 	private void initDao() {
 		dbdao = new SearchTalkHistoryDao(instance);
 	}
@@ -104,7 +97,7 @@ public class ReceiveAlertActivity extends Activity implements OnClickListener {
 				SubclassService.musicPlayer.stop();
 				SubclassService.musicPlayer = null;
 			}
-			ChatFragment.iscalling=true;
+			/*ChatFragment.iscalling=true;*/
 //			Intent intent = new Intent(getApplicationContext(),MainActivity.class);
 //			//intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_SINGLE_TOP);
 //			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
@@ -132,7 +125,7 @@ public class ReceiveAlertActivity extends Activity implements OnClickListener {
 		DBTalkHistorary history = new DBTalkHistorary( bjuserid,  "user",  id, addtime);
 		dbdao.addTalkHistory(history);
 		DBTalkHistorary talkdb = dbdao.queryHistory().get(0);//得到数据库里边数据
-		ChatFragment.zhidingperson(talkdb);
+/*		ChatFragment.zhidingperson(talkdb);*/
 		MyActivityManager mam = MyActivityManager.getInstance();
 		mam.finishAllActivity();
 		//对讲主页界面更新

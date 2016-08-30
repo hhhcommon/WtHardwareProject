@@ -1,9 +1,9 @@
 package com.wotingfm.activity.im.interphone.linkman.view;
 
-
-import com.wotingfm.activity.music.program.fenlei.model.fenleiname;
+import com.wotingfm.activity.im.interphone.linkman.model.fenleiname;
 
 import java.util.Comparator;
+
 
 public class PinyinComparator_d implements Comparator<fenleiname> {
 

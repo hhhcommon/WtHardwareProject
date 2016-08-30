@@ -1,4 +1,4 @@
-package com.wotingfm.activity.common.interphone.groupmanage.groupdetail.activity;
+package com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -9,7 +9,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.media.Image;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,15 +26,16 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity;
-import com.wotingfm.activity.common.interphone.groupmanage.allgroupmember.model.UserInfo;
-import com.wotingfm.activity.common.interphone.groupmanage.groupdetail.activity.adapter.GroupTalkAdapter;
-import com.wotingfm.activity.common.interphone.groupmanage.handlegroupapply.activity.HandleGroupApplyActivity;
-import com.wotingfm.activity.common.interphone.groupmanage.joingroup.activity.JoinGroupListActivity;
-import com.wotingfm.activity.common.interphone.groupmanage.memberadd.activity.MemberAddActivity;
-import com.wotingfm.activity.common.interphone.groupmanage.memberdel.MemberDelActivity;
-import com.wotingfm.activity.common.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity;
-import com.wotingfm.activity.common.interphone.groupmanage.transferauthority.TransferAuthority;
+
+import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.adapter.GroupTalkAdapter;
+import com.wotingfm.activity.im.interphone.groupmanage.memberdel.MemberDelActivity;
+import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
+import com.wotingfm.activity.im.interphone.groupmanage.handlegroupapply.HandleGroupApplyActivity;
+import com.wotingfm.activity.im.interphone.groupmanage.joingrouplist.activity.JoinGroupListActivity;
+import com.wotingfm.activity.im.interphone.groupmanage.memberadd.activity.MemberAddActivity;
+import com.wotingfm.activity.im.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity;
+import com.wotingfm.activity.im.interphone.groupmanage.transferauthority.TransferAuthority;
+import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.activity.*;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
@@ -49,7 +49,6 @@ import com.wotingfm.util.ToastUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.security.acl.Group;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -85,12 +84,14 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
     private List<UserInfo> list;
     private Intent pushintent;
     private ArrayList<UserInfo> userlist=new ArrayList<UserInfo>();
-    private GroupTalkAdapter adapter;
+
     private Boolean IsCreator=false;
     private Dialog confirmdialog;
     private ImageView mimg_update;
     private boolean IsUpadate=false;
     private MessageReceivers Receiver;
+    private GroupTalkAdapter adapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -367,7 +368,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                 Toast.makeText(context,"R.id.starttalk",Toast.LENGTH_LONG).show();
                 break;
             case R.id.rl_allperson:
-                Intent intent=new Intent(this, AllGroupMemberActivity.class);
+                Intent intent=new Intent(this,AllGroupMemberActivity.class);
                 //此处测试
                 intent.putExtra("GroupId","81ce725fa1d3");
                 startActivity(intent);

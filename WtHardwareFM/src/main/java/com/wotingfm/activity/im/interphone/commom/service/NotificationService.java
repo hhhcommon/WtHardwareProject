@@ -21,11 +21,7 @@ import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.commom.message.MessageUtils;
 import com.wotingfm.activity.im.interphone.commom.message.MsgNormal;
 import com.wotingfm.activity.im.interphone.commom.message.content.MapContent;
-import com.wotingfm.activity.im.interphone.commom.model.ApplyUserInfo;
-import com.wotingfm.activity.im.interphone.commom.model.BeInvitedUserInfo;
-import com.wotingfm.activity.im.interphone.commom.model.GroupInfo;
-import com.wotingfm.activity.im.interphone.commom.model.InviteUserInfo;
-import com.wotingfm.activity.im.interphone.commom.model.UserInfo;
+import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.im.interphone.linkman.dao.NotifyHistoryDao;
 import com.wotingfm.activity.im.interphone.linkman.model.DBNotifyHistorary;
 import com.wotingfm.common.config.GlobalConfig;
@@ -112,7 +108,7 @@ public  class NotificationService   extends  Service{
 									JSONObject arg1 = (JSONObject) jsonParser.nextValue();
 									String inviteuserinfo= arg1.getString("InviteUserInfo");
 
-									InviteUserInfo userinfo   = new Gson().fromJson(inviteuserinfo, new TypeToken<InviteUserInfo>() {}.getType());
+									UserInfo userinfo   = new Gson().fromJson(inviteuserinfo, new TypeToken<UserInfo>() {}.getType());
 									dealtime = data.get("InviteTime")+"";
 									String name = userinfo.getUserName();
 									imageurl = userinfo.getPortraitMini();
@@ -148,7 +144,7 @@ public  class NotificationService   extends  Service{
 									JSONObject arg1 = (JSONObject) jsonParser.nextValue();
 									String beinviteduserinfo= arg1.getString("BeInvitedUserInfo");
 
-									BeInvitedUserInfo userinfo    = new Gson().fromJson(beinviteduserinfo, new TypeToken<BeInvitedUserInfo>() {}.getType());
+									UserInfo userinfo    = new Gson().fromJson(beinviteduserinfo, new TypeToken<UserInfo>() {}.getType());
 									dealtime= data.get("DealTime")+"";
 									dealtype= data.get("DealType")+"";
 									String name = userinfo.getUserName();
@@ -217,7 +213,7 @@ public  class NotificationService   extends  Service{
 									JSONObject arg1 = (JSONObject) jsonParser.nextValue();
 									String grouiInfo= arg1.getString("GroupInfo");
 
-									GroupInfo userinfo    = new Gson().fromJson(grouiInfo, new TypeToken<GroupInfo>() {}.getType());
+									UserInfo userinfo    = new Gson().fromJson(grouiInfo, new TypeToken<UserInfo>() {}.getType());
 									dealtime = data.get("InviteTime")+"";
 									String name = userinfo.getGroupName();
 									if(friendname==null||friendname.trim().equals("")){
@@ -261,8 +257,8 @@ public  class NotificationService   extends  Service{
 									String grouiInfo= arg1.getString("GroupInfo");
 									String applyuserinfos= arg1.getString("ApplyUserInfo");
 
-									ApplyUserInfo applyuserinfo    = new Gson().fromJson(applyuserinfos, new TypeToken<ApplyUserInfo>() {}.getType());
-									GroupInfo userinfo    = new Gson().fromJson(grouiInfo, new TypeToken<GroupInfo>() {}.getType());
+									UserInfo applyuserinfo    = new Gson().fromJson(applyuserinfos, new TypeToken<UserInfo>() {}.getType());
+									UserInfo userinfo    = new Gson().fromJson(grouiInfo, new TypeToken<UserInfo>() {}.getType());
 
 									username= applyuserinfo.getUserName();
 									imageurl = applyuserinfo.getPortraitMini();
@@ -302,7 +298,7 @@ public  class NotificationService   extends  Service{
 									JSONObject arg1 = (JSONObject) jsonParser.nextValue();
 									String grouiInfo= arg1.getString("GroupInfo");
 
-									GroupInfo userinfo    = new Gson().fromJson(grouiInfo, new TypeToken<GroupInfo>() {}.getType());
+									UserInfo userinfo    = new Gson().fromJson(grouiInfo, new TypeToken<UserInfo>() {}.getType());
 
 									dealtime =  data.get("ApplyTime")+"";
 									String dealtype  =  data.get("DealType")+"";
@@ -491,7 +487,7 @@ public  class NotificationService   extends  Service{
 									String grouiInfo= arg1.getString("GroupInfo");
 									String newadminInfo= arg1.getString("NewAdminInfo");
 
-									GroupInfo groupinfo    = new Gson().fromJson(grouiInfo, new TypeToken<GroupInfo>() {}.getType());
+									UserInfo groupinfo    = new Gson().fromJson(grouiInfo, new TypeToken<UserInfo>() {}.getType());
 									UserInfo userinfo    = new Gson().fromJson(newadminInfo, new TypeToken<UserInfo>() {}.getType());
 									groupid =  groupinfo.getGroupId();
 
@@ -552,9 +548,8 @@ public  class NotificationService   extends  Service{
 									//									UserInfo inviteuserinfo    = new Gson().fromJson(inviteuserinfos, new TypeToken<UserInfo>() {}.getType());
 									UserInfo beinviteuserinfo    = new Gson().fromJson(beinviteuserinfos, new TypeToken<UserInfo>() {}.getType());
 
-									GroupInfo userinfo    = new Gson().fromJson(grouiInfo, new TypeToken<GroupInfo>() {}.getType());
+									UserInfo userinfo    = new Gson().fromJson(grouiInfo, new TypeToken<UserInfo>() {}.getType());
 									groupid =  userinfo.getGroupId();
-
 									if(groupid!=null&&!groupid.trim().equals("")&&GlobalConfig.list_group!=null&&GlobalConfig.list_group.size()>0){
 										for(int i=0;i<GlobalConfig.list_group.size();i++){
 											if(GlobalConfig.list_group.get(i).getGroupId().equals(groupid)){
@@ -562,6 +557,7 @@ public  class NotificationService   extends  Service{
 												groupurl=GlobalConfig.list_group.get(i).getGroupImg();
 											}
 										}
+
 									}
 									String name = beinviteuserinfo.getLoginName();
 
@@ -598,7 +594,7 @@ public  class NotificationService   extends  Service{
 									JSONObject arg1 = (JSONObject) jsonParser.nextValue();
 									String grouiInfo= arg1.getString("GroupInfo");
 
-									GroupInfo userinfo    = new Gson().fromJson(grouiInfo, new TypeToken<GroupInfo>() {}.getType());
+									UserInfo userinfo    = new Gson().fromJson(grouiInfo, new TypeToken<UserInfo>() {}.getType());
 									groupid =  userinfo.getGroupId();
 
 									if(groupid!=null&&!groupid.trim().equals("")&&GlobalConfig.list_group!=null&&GlobalConfig.list_group.size()>0){
@@ -655,7 +651,7 @@ public  class NotificationService   extends  Service{
 		notification.defaults=Notification.DEFAULT_LIGHTS;//点亮屏幕
 		PendingIntent in = PendingIntent.getBroadcast(ctx, 2, pushaintent,PendingIntent.FLAG_UPDATE_CURRENT);
 		notification.flags = notification.flags | Notification.FLAG_AUTO_CANCEL;
-		notification.setLatestEventInfo(ctx,title , msg, in);
+		/*notification.setLatestEventInfo(ctx,title , msg, in);*/
 		nm.notify(0, notification);
 	}
 

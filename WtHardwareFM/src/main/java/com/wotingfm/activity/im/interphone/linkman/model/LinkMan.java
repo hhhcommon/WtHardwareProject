@@ -1,12 +1,15 @@
 package com.wotingfm.activity.im.interphone.linkman.model;
 
+
+
+
 import java.io.Serializable;
 
 public class LinkMan implements Serializable{
 	private String SessionId;
 	private TalkPerson FriendList;
 	private TalkGroup GroupList;
-	
+
 	public String getSessionId() {
 		return SessionId;
 	}

@@ -1,6 +1,4 @@
 package com.wotingfm.common.config;
-
-
 import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
 
@@ -27,7 +25,6 @@ public class GlobalConfig {
     public static String CityName;
     public static String AdCode;
     //
-//    public static List<UserInfo> list_person;
     public static List<TalkGroupInside> list_group;
     public static List<TalkPersonInside> list_person;
     // 网络情况 1为成功WiFi已连接，2为cmnet，3为cmwap，4为ctwap， -1为网络未连接

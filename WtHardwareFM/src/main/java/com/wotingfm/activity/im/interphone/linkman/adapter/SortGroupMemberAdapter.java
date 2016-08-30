@@ -10,6 +10,8 @@ import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 import com.wotingfm.R;
+
+import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.helper.ImageLoader;
@@ -114,7 +116,7 @@ public class SortGroupMemberAdapter extends BaseAdapter implements SectionIndexe
 	}
 	
 	public interface OnListeners {
-		public void add(int position);
+		void add(int position);
 	}
 
 	final static class ViewHolder {

@@ -3,13 +3,11 @@ package com.wotingfm.activity.common;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
-
 import com.wotingfm.R;
-import com.wotingfm.activity.common.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity;
-import com.wotingfm.activity.common.interphone.groupmanage.memberadd.activity.MemberAddActivity;
+import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity;
+import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
 
 /**
  * 主页
@@ -23,11 +21,11 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        create_group=(Button)findViewById(R.id.create_group);
+        create_group=(Button)findViewById(R.id.btn_create_group);
         create_group.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this,GroupDetailAcitivity.class));
+                startActivity(new Intent(MainActivity.this,DuiJiangActivity.class));
             }
         });
 

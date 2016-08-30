@@ -1,5 +1,6 @@
 package com.wotingfm.activity.im.interphone.linkman.adapter;
 
+import java.util.List;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -9,12 +10,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.helper.ImageLoader;
-
-import java.util.List;
 
 /**
  * 群组适配器
@@ -97,12 +97,12 @@ public class TalkGroupAdapter extends BaseAdapter{
 			public void onClick(View v) {
 				onListener.add(position);
 			}
-		});	
+		});
 		return convertView;
 	}
 
 	public interface OnListener {
-		public void add(int position);
+		void add(int position);
 	}
 
 	class ViewHolder{

@@ -1,4 +1,4 @@
-package com.wotingfm.activity.common.interphone.groupmanage.allgroupmember.model;
+package com.wotingfm.activity.im.interphone.groupmanage.model;
 
 import java.io.Serializable;
 
@@ -25,8 +25,146 @@ public class UserInfo implements Serializable {
 	private String InviteUserId;
 	private String BeInviteUserId;
     private String InviteCount;
+	private String GroupCreator;
+	private String GroupImg;
+	private String GroupName;
+	private String GroupId;
+	private String GroupNum;
 	private String InviteTime;
+	private String GroupMyAlias;
+	private String LoginName;
+	private String GroupSignature;
+	private String GroupType;
+	private String GroupCount;
+	private String GroupManager;
 
+
+	public void setGroupCount(String groupCount) {
+		GroupCount = groupCount;
+	}
+
+	public void setGroupManager(String groupManager) {
+		GroupManager = groupManager;
+	}
+
+	public void setGroupSignature(String groupSignature) {
+		GroupSignature = groupSignature;
+	}
+
+	public String getGroupCount() {
+		return GroupCount;
+	}
+
+	public String getGroupManager() {
+		return GroupManager;
+	}
+
+	public String getGroupSignature() {
+		return GroupSignature;
+	}
+
+	public String getLoginName() {
+		return LoginName;
+	}
+
+	public void setLoginName(String loginName) {
+		LoginName = loginName;
+	}
+
+	public String getGroupMyAlias() {
+		return GroupMyAlias;
+	}
+
+	public void setGroupMyAlias(String groupMyAlias) {
+		GroupMyAlias = groupMyAlias;
+	}
+
+	public String getInnerPhoneNum() {
+		return InnerPhoneNum;
+	}
+
+	public void setInnerPhoneNum(String innerPhoneNum) {
+		InnerPhoneNum = innerPhoneNum;
+	}
+
+	public String getUserName() {
+		return UserName;
+	}
+
+	public void setUserName(String userName) {
+		UserName = userName;
+	}
+
+	public String getUserId() {
+		return UserId;
+	}
+
+	public void setUserId(String userId) {
+		UserId = userId;
+	}
+
+	public String getEmail() {
+		return Email;
+	}
+
+	public void setEmail(String email) {
+		Email = email;
+	}
+
+
+	public String getPhoneNum() {
+		return PhoneNum;
+	}
+
+	public void setPhoneNum(String phoneNum) {
+		PhoneNum = phoneNum;
+	}
+	public String getGroupName() {
+		return GroupName;
+	}
+
+	public void setGroupName(String groupName) {
+		GroupName = groupName;
+	}
+
+	public String getGroupCreator() {
+		return GroupCreator;
+	}
+
+	public void setGroupCreator(String groupCreator) {
+		GroupCreator = groupCreator;
+	}
+
+	public String getGroupId() {
+		return GroupId;
+	}
+
+	public void setGroupId(String groupId) {
+		GroupId = groupId;
+	}
+
+	public String getGroupType() {
+		return GroupType;
+	}
+
+	public void setGroupType(String groupType) {
+		GroupType = groupType;
+	}
+
+	public String getGroupImg() {
+		return GroupImg;
+	}
+
+	public void setGroupImg(String groupImg) {
+		GroupImg = groupImg;
+	}
+
+	public String getGroupNum() {
+		return GroupNum;
+	}
+	public void setGroupNum(String groupNum) {
+		GroupNum = groupNum;
+	}
 
 	public String getInviteCount() {
 		return InviteCount;
@@ -140,47 +278,4 @@ public class UserInfo implements Serializable {
 	public void setType(int type) {
 		Type = type;
 	}
-
-	public String getInnerPhoneNum() {
-		return InnerPhoneNum;
-	}
-
-	public void setInnerPhoneNum(String innerPhoneNum) {
-		InnerPhoneNum = innerPhoneNum;
-	}
-
-	public String getUserName() {
-		return UserName;
-	}
-
-	public void setUserName(String userName) {
-		UserName = userName;
-	}
-
-	public String getUserId() {
-		return UserId;
-	}
-
-	public void setUserId(String userId) {
-		UserId = userId;
-	}
-
-	public String getEmail() {
-		return Email;
-	}
-
-	public void setEmail(String email) {
-		Email = email;
-	}
-
-
-	public String getPhoneNum() {
-		return PhoneNum;
-	}
-
-	public void setPhoneNum(String phoneNum) {
-		PhoneNum = phoneNum;
-	}
-
-
 }
