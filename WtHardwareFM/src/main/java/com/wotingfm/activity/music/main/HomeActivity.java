@@ -15,7 +15,7 @@ import android.widget.TextView;
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.adapter.MyFragmentPagerAdapter;
-import com.wotingfm.activity.music.player.fragment.PlayerFragment;
+//import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.program.main.ProgramFragment;
 import com.wotingfm.activity.music.search.activity.SearchLikeAcitvity;
 import com.wotingfm.util.ToastUtils;
@@ -72,13 +72,13 @@ public class HomeActivity extends FragmentActivity {
 			if (index == 0) {
 				view1.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
 				view2.setTextColor(context.getResources().getColor(R.color.white));
-				view1.setBackground(context.getResources().getDrawable(	R.drawable.color_wt_circle_home_white));
-				view2.setBackground(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
+				view1.setBackgroundDrawable(context.getResources().getDrawable(	R.drawable.color_wt_circle_home_white));
+				view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
 			} else if (index == 1) {
 				view1.setTextColor(context.getResources().getColor(R.color.white));
 				view2.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-				view1.setBackground(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
-				view2.setBackground(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
+				view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
+				view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
 			}
 		}
 	}
@@ -90,9 +90,9 @@ public class HomeActivity extends FragmentActivity {
 		mPager = (ViewPager) findViewById(R.id.viewpager);
 		mPager.setOffscreenPageLimit(1);
 		ArrayList<Fragment> fragmentList = new ArrayList<Fragment>();
-		PlayerFragment playfragment = new PlayerFragment();
+//		PlayerFragment playfragment = new PlayerFragment();
 		ProgramFragment newsfragment = new ProgramFragment();
-		fragmentList.add(playfragment);
+//		fragmentList.add(playfragment);
 		fragmentList.add(newsfragment);
 		// mPager.setAdapter(new MyFragmentChildPagerAdapter(getChildFragmentManager(), fragmentList));
 		mPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList));
@@ -112,13 +112,13 @@ public class HomeActivity extends FragmentActivity {
 			if (arg0 == 0) {
 				view1.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
 				view2.setTextColor(context.getResources().getColor(R.color.white));
-				view1.setBackground(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
-				view2.setBackground(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
+				view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
+				view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
 			} else if (arg0 == 1) {
 				view1.setTextColor(context.getResources().getColor(R.color.white));
 				view2.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-				view1.setBackground(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
-				view2.setBackground(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
+				view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
+				view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
 			}
 		}
 	}
@@ -127,8 +127,8 @@ public class HomeActivity extends FragmentActivity {
 		mPager.setCurrentItem(0);// 设置当前显示标签页为第一页mPager
 		view1.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
 		view2.setTextColor(context.getResources().getColor(R.color.white));
-		view1.setBackground(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
-		view2.setBackground(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
+		view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
+		view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
 	}
 
 
