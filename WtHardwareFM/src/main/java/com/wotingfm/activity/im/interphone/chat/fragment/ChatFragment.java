@@ -401,20 +401,20 @@ public class ChatFragment extends Fragment implements OnClickListener{
 						isfriend=false;
 					}
 					if(isfriend){
-						Intent intent = new Intent(context,TalkPersonNewsActivity.class);
-						Bundle bundle = new Bundle();
-						bundle.putString("type", "talkoldlistfragment_p");
-						bundle.putSerializable("data", grouppersonlists.get(position));
-						intent.putExtras(bundle);
-						startActivity(intent);
+//						Intent intent = new Intent(context,TalkPersonNewsActivity.class);
+//						Bundle bundle = new Bundle();
+//						bundle.putString("type", "talkoldlistfragment_p");
+//						bundle.putSerializable("data", grouppersonlists.get(position));
+//						intent.putExtras(bundle);
+//						startActivity(intent);
 					}else{
-						Intent intent = new Intent(context,GroupPersonNewsActivity.class);
-						Bundle bundle = new Bundle();
-						bundle.putString("type", "talkoldlistfragment_p");
-						bundle.putString("id", interphoneid);
-						bundle.putSerializable("data", grouppersonlists.get(position));
-						intent.putExtras(bundle);
-						startActivityForResult(intent, 1);
+//						Intent intent = new Intent(context,GroupPersonNewsActivity.class);
+//						Bundle bundle = new Bundle();
+//						bundle.putString("type", "talkoldlistfragment_p");
+//						bundle.putString("id", interphoneid);
+//						bundle.putSerializable("data", grouppersonlists.get(position));
+//						intent.putExtras(bundle);
+//						startActivityForResult(intent, 1);
 					}
 				}
 			});
@@ -562,21 +562,21 @@ public class ChatFragment extends Fragment implements OnClickListener{
 				String type = alllist.get(position).getTyPe();
 				if(type!=null&&type.equals("group")){
 					//跳转到群组详情页面
-					Intent intent=new Intent(context,TalkGroupNewsActivity.class);
-					Bundle bundle=new Bundle();
-					bundle.putString("type", "talkoldlistfragment");
-					bundle.putString("activationid",interphoneid);
-					bundle.putSerializable("data",alllist.get(position));
-					intent.putExtras(bundle);
-					context.startActivity(intent);
+//					Intent intent=new Intent(context,TalkGroupNewsActivity.class);
+//					Bundle bundle=new Bundle();
+//					bundle.putString("type", "talkoldlistfragment");
+//					bundle.putString("activationid",interphoneid);
+//					bundle.putSerializable("data",alllist.get(position));
+//					intent.putExtras(bundle);
+//					context.startActivity(intent);
 				}else{
 					// 跳转到详细信息界面
-					Intent intent = new Intent(context,TalkPersonNewsActivity.class);
-					Bundle bundle = new Bundle();
-					bundle.putString("type", "talkoldlistfragment");
-					bundle.putSerializable("data", alllist.get(position));
-					intent.putExtras(bundle);
-					context.startActivity(intent);
+//					Intent intent = new Intent(context,TalkPersonNewsActivity.class);
+//					Bundle bundle = new Bundle();
+//					bundle.putString("type", "talkoldlistfragment");
+//					bundle.putSerializable("data", alllist.get(position));
+//					intent.putExtras(bundle);
+//					context.startActivity(intent);
 				}
 			}
 		});
