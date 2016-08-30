@@ -26,14 +26,13 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shenstec.activity.login.LoginActivity;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.alert.CallAlertActivity;
-import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
-import com.wotingfm.activity.im.interphone.commom.service.InterPhoneControl;
 import com.wotingfm.activity.im.interphone.linkman.adapter.SortGroupMemberAdapter;
 import com.wotingfm.activity.im.interphone.linkman.adapter.TalkGroupAdapter;
 import com.wotingfm.activity.im.interphone.linkman.adapter.TalkPersonNoAdapter;
@@ -48,15 +47,13 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.util.CommonUtils;
+import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.HeightListView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -272,7 +269,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			@Override
 			public void onClick(View v) {
 				if(type == 1){
-					InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
+					InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
 			/*		ChatFragment.iscalling = false;
 					ChatFragment.lin_notalk.setVisibility(View.VISIBLE);
 					ChatFragment.lin_personhead.setVisibility(View.GONE);
@@ -281,7 +278,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 					call(id);
 					confirmdialog.dismiss();
 				}else{
-					InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
+					InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
 				/*	ChatFragment.iscalling = false;
 					ChatFragment.lin_notalk.setVisibility(View.VISIBLE);
 					ChatFragment.lin_personhead.setVisibility(View.GONE);
