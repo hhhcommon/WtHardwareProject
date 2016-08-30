@@ -197,6 +197,7 @@ public class MemberAddActivity extends Activity implements View.OnClickListener{
 
     //设置监听
     private void setlistener() {
+        tv_head_right.setOnClickListener(this);
         mback.setOnClickListener(this);
         image_clear.setOnClickListener(this);
         // 当输入框输入过汉字，且回复0后就要调用使用userlist2的原表数据
@@ -316,7 +317,6 @@ public class MemberAddActivity extends Activity implements View.OnClickListener{
         image_clear = (ImageView) findViewById(R.id.image_clear);
         tv_head_name=(TextView)findViewById(R.id.tv_head_name);
         tv_head_right=(TextView)findViewById(R.id.tv_head_right);
-
     }
 
     //设置onclick监听
@@ -341,18 +341,18 @@ public class MemberAddActivity extends Activity implements View.OnClickListener{
                 }
                 if (addlist!= null &&addlist.size() > 0) {
                     // 发送进入组的邀请
-                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                        dialog = DialogUtils.Dialogph(context, "正在发送邀请");
+                 /*   if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                        dialog = DialogUtils.Dialogph(context, "正在发送邀请");*/
                         sendGroupInvited();
-                    } else {
+              /*      } else {
                         ToastUtils.show_allways(context, "网络失败，请检查网络");
                     }
                 } else {
                     ToastUtils.show_allways(context, "请您勾选您要邀请的好友");
-                }
+                }*/
                 break;
         }
-    }
+    }}
     private  void  filledData(List<UserInfo> person) {
         for (int i = 0; i < person.size(); i++) {
             person.get(i).setName(person.get(i).getUserName());

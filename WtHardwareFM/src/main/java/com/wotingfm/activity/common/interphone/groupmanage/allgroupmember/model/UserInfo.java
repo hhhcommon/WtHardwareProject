@@ -24,6 +24,25 @@ public class UserInfo implements Serializable {
 	private String InvitedUserName;
 	private String InviteUserId;
 	private String BeInviteUserId;
+    private String InviteCount;
+	private String InviteTime;
+
+
+	public String getInviteCount() {
+		return InviteCount;
+	}
+
+	public void setInviteCount(String inviteCount) {
+		InviteCount = inviteCount;
+	}
+
+	public String getInviteTime() {
+		return InviteTime;
+	}
+
+	public void setInviteTime(String inviteTime) {
+		InviteTime = inviteTime;
+	}
 
 	public String getBeInviteUserId() {
 		return BeInviteUserId;

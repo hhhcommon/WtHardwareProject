@@ -336,7 +336,6 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
         et_searh_content = (EditText) findViewById(R.id.et_search);			// 搜索控件
         image_clear = (ImageView) findViewById(R.id.image_clear);
         tv_head_name=(TextView)findViewById(R.id.tv_head_name);
-
     }
 
     //设置onclick监听

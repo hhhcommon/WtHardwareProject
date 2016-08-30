@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.wotingfm.R;
+import com.wotingfm.activity.common.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity;
 import com.wotingfm.activity.common.interphone.groupmanage.memberadd.activity.MemberAddActivity;
 
 /**
@@ -26,7 +27,7 @@ public class MainActivity extends Activity {
         create_group.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, MemberAddActivity.class));
+                startActivity(new Intent(MainActivity.this,GroupDetailAcitivity.class));
             }
         });
 

@@ -187,7 +187,8 @@ public class VolleyRequest {
 	public static JSONObject getJsonObject(Context context){
 		JSONObject jsonObject = new JSONObject();
 		try {
-			jsonObject.put("SessionId", CommonUtils.getSessionId(context));
+		//	jsonObject.put("SessionId", CommonUtils.getSessionId(context));
+			jsonObject.put("SessionId", "6c310f2884a7");
 			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
 			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
 		/*	jsonObject.put("IMEI", PhoneMessage.imei);*/

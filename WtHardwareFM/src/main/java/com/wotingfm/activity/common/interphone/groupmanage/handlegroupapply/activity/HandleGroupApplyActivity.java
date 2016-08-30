@@ -8,6 +8,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -51,8 +52,7 @@ public class HandleGroupApplyActivity extends Activity implements OnClickListene
     private int delposition;
     private String tag = "HANDLE_GROUP_APPLY_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
-    private ArrayList<UserInfo> list;
-    private TextView tv_head_right;
+   /* private ArrayList<UserInfo> list;*/
     private TextView mback;
 
     @Override
@@ -67,23 +67,23 @@ public class HandleGroupApplyActivity extends Activity implements OnClickListene
         handleIntent();
         setview();
         setlistener();
-        if (groupid != null && !groupid.equals("")) {
+      /*  if (groupid != null && !groupid.equals("")) {
             if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                dialog = DialogUtils.Dialogph(context, "正在获取群成员信息");
+                dialog = DialogUtils.Dialogph(context, "正在获取群成员信息");*/
                 send();
-            } else {
+         /*   } else {
                 ToastUtils.show_allways(context, "网络失败，请检查网络");
             }
         } else {
             ToastUtils.show_allways(context, "获取groupid失败，请返回上一级界面重试");
-        }
+        }*/
         DelDialog();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        tv_head_right.setVisibility(View.INVISIBLE);
+
     }
 
     private void DelDialog() {
@@ -106,34 +106,34 @@ public class HandleGroupApplyActivity extends Activity implements OnClickListene
         tv_confirm.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    DelDialog.dismiss();
-                    dealtype=2;
-                    sendrequest();
-                } else {
+              /*  if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {*/
+                DelDialog.dismiss();
+                dealtype = 2;
+                sendrequest();
+        /*        } else {
                     ToastUtils.show_allways(context, "网络失败，请检查网络");
                 }
-            }
-        });
+            }*/
+            }});
     }
 
     private void handleIntent() {
         Intent intent = context.getIntent();
-        Bundle bundle = intent.getExtras();
-        groupid = bundle.getString("GroupId");
-        list = (ArrayList<UserInfo>) bundle.getSerializable("userlist");
+        groupid= this.getIntent().getStringExtra("GroupId");
+        groupid="cf4e42f02b39";
     }
 
     private void send() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
+           /* jsonObject.put("UserId", CommonUtils.getUserId(context));*/
+            jsonObject.put("UserId", "6c310f2884a7");
             jsonObject.put("GroupId", groupid);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        VolleyRequest.RequestPost(GlobalConfig.checkVertifyUrl, tag, jsonObject, new VolleyCallback() {
+        VolleyRequest.RequestPost(GlobalConfig.JoinGroupListUrl, tag, jsonObject, new VolleyCallback() {
             //			private String SessionId;
             private String ReturnType;
             private String Message;
@@ -143,6 +143,7 @@ public class HandleGroupApplyActivity extends Activity implements OnClickListene
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                Log.e("获取审核消息列表",""+result.toString());
                 if(isCancelRequest){
                     return ;
                 }
@@ -150,7 +151,7 @@ public class HandleGroupApplyActivity extends Activity implements OnClickListene
                 try {
                     ReturnType = result.getString("ReturnType");
 //					SessionId = result.getString("SessionId");
-                    userlist1 = result.getString("InviteUserList");
+                    userlist1 = result.getString("UserList");
                     Message = result.getString("Message");
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -162,14 +163,7 @@ public class HandleGroupApplyActivity extends Activity implements OnClickListene
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
-                    //userlist未包含用户名信息，此时从上一个页面中获取
-                    for(int i=0;i<userlist.size();i++){
-                        for(int j=0;j<list.size();j++){
-                            if(userlist.get(i).getInviteUserId()!=null&&userlist.get(i).getInviteUserId().equals(list.get(j).getUserId())){
-                                userlist.get(i).setInvitedUserName(list.get(j).getUserName());
-                            }
-                        }
-                    }
+
                     adapter = new joingrouplistadapter(context, userlist,context);
                     lv_jiaqun.setAdapter(adapter);
                     lv_jiaqun.setOnItemLongClickListener(new OnItemLongClickListener() {
@@ -209,7 +203,6 @@ public class HandleGroupApplyActivity extends Activity implements OnClickListene
 
     private void setview() {
         lv_jiaqun = (ListView) findViewById(R.id.lv_jiaqun);
-        tv_head_right=(TextView)findViewById(R.id.tv_head_right);
         mback=(TextView)findViewById(R.id.wt_back);
     }
 
@@ -223,33 +216,22 @@ public class HandleGroupApplyActivity extends Activity implements OnClickListene
     }
 
     private void sendrequest() {
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            // 公共请求属性
-            jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-            jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-            jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-            jsonObject.put("IMEI", PhoneMessage.imei);
-            PhoneMessage.getGps(context);
-            jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-            jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-            jsonObject.put("PCDType", GlobalConfig.PCDType);
-            // 模块属性
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
+
+            jsonObject.put("UserId", "6c310f2884a7");
             jsonObject.put("DealType", dealtype);
             if(dealtype==1){
-                jsonObject.put("InviteUserId", userlist.get(onclicktv).getInviteUserId());
-                jsonObject.put("BeInvitedUserId", userlist.get(onclicktv).getBeInviteUserId());
+                jsonObject.put("ApplyUserId", userlist.get(onclicktv).getUserId());
             }else{
-                jsonObject.put("InviteUserId", userlist.get(delposition).getInviteUserId());
-                jsonObject.put("BeInvitedUserId", userlist.get(delposition).getBeInviteUserId());
+                jsonObject.put("ApplyUserId", userlist.get(delposition).getUserId());
             }
             jsonObject.put("GroupId", groupid);			// groupid由上一个界面传递而来
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        VolleyRequest.RequestPost(GlobalConfig.checkDealUrl, tag, jsonObject, new VolleyCallback() {
+        VolleyRequest.RequestPost(GlobalConfig.applyDealUrl, tag, jsonObject, new VolleyCallback() {
             private String ReturnType;
             private String Message;
 //			private String SessionId;
@@ -270,13 +252,14 @@ public class HandleGroupApplyActivity extends Activity implements OnClickListene
                     e.printStackTrace();
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
-                    if(dealtype == 1){
+                    if(dealtype==1){
                         userlist.get(onclicktv).setCheckType(2);
                     }else{
                         userlist.remove(delposition);
                     }
                     adapter.notifyDataSetChanged();
-                    dealtype = 1;
+                    dealtype=1;
+                    setResult(1);
                 } else if (ReturnType != null && ReturnType.equals("1002")) {
                     ToastUtils.show_allways(context, "无法获取用户Id");
                 } else if (ReturnType != null && ReturnType.equals("T")) {
@@ -328,7 +311,6 @@ public class HandleGroupApplyActivity extends Activity implements OnClickListene
         MyActivityManager mam = MyActivityManager.getInstance();
         mam.popOneActivity(context);
         userlist = null;
-        list = null;
         adapter = null;
         lv_jiaqun = null;
         lin_left = null;

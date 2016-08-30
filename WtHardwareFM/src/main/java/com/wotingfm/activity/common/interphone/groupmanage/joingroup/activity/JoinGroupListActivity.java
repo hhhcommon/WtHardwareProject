@@ -30,7 +30,6 @@ import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 
 import java.util.ArrayList;
@@ -56,8 +55,8 @@ public class JoinGroupListActivity extends Activity implements OnClickListener, 
     private String tag = "JOIN_GROUP_LIST_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
     private ArrayList<UserInfo> list;
-    private TextView tv_head_right;
     private TextView mback;
+    private TextView tv_head_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,23 +70,24 @@ public class JoinGroupListActivity extends Activity implements OnClickListener, 
         handleIntent();
         setview();
         setlistener();
-        if (groupid != null && !groupid.equals("")) {
+      /*  if (groupid != null && !groupid.equals("")) {
             if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 dialog = DialogUtils.Dialogph(context, "正在获取群成员信息");
                 send();
-            } else {
-                ToastUtils.show_allways(context, "网络失败，请检查网络");
-            }
+         } else {
+               ToastUtils.show_allways(context, "网络失败，请检查网络");
+           }
         } else {
             ToastUtils.show_allways(context, "获取groupid失败，请返回上一级界面重试");
-        }
+        }*/
+        send();
         DelDialog();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        tv_head_right.setVisibility(View.INVISIBLE);
+        tv_head_name.setText("审核消息");
     }
 
     private void DelDialog() {
@@ -106,7 +106,6 @@ public class JoinGroupListActivity extends Activity implements OnClickListener, 
                 DelDialog.dismiss();
             }
         });
-
         tv_confirm.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -122,16 +121,14 @@ public class JoinGroupListActivity extends Activity implements OnClickListener, 
     }
 
     private void handleIntent() {
-        Intent intent = context.getIntent();
-        Bundle bundle = intent.getExtras();
-        groupid = bundle.getString("GroupId");
-        list = (ArrayList<UserInfo>) bundle.getSerializable("userlist");
+        groupid= this.getIntent().getStringExtra("GroupId");
+        groupid="cf4e42f02b39";
     }
 
     private void send() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
+            jsonObject.put("UserId", "6c310f2884a7");
             jsonObject.put("GroupId", groupid);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -213,8 +210,8 @@ public class JoinGroupListActivity extends Activity implements OnClickListener, 
 
     private void setview() {
         lv_jiaqun = (ListView) findViewById(R.id.lv_jiaqun);
-        tv_head_right=(TextView)findViewById(R.id.tv_head_right);
         mback=(TextView)findViewById(R.id.wt_back);
+        tv_head_name=(TextView)findViewById(R.id.tv_head_name);
     }
 
     @Override
@@ -227,19 +224,10 @@ public class JoinGroupListActivity extends Activity implements OnClickListener, 
     }
 
     private void sendrequest() {
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            // 公共请求属性
-            jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-            jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-            jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-            jsonObject.put("IMEI", PhoneMessage.imei);
-            PhoneMessage.getGps(context);
-            jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-            jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-            jsonObject.put("PCDType", GlobalConfig.PCDType);
             // 模块属性
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
+            jsonObject.put("UserId", "6c310f2884a7");
             jsonObject.put("DealType", dealtype);
             if(dealtype==1){
                 jsonObject.put("InviteUserId", userlist.get(onclicktv).getInviteUserId());

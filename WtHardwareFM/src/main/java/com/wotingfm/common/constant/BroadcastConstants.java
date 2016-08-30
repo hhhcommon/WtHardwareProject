@@ -16,4 +16,6 @@ public class BroadcastConstants {
 	public static final String ACTION_FINISHED = "ACTION_FINISHED";
 	//城市更改
 	public static final String CITY_CHANGE="CITYCHANGE";
+	//刷新组信息
+	public static final String REFRESH_GROUP="REFRESH_GROUP";
 }

@@ -2,18 +2,14 @@ package com.wotingfm.activity.common.interphone.groupmanage.modifygrouppassword;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Intent;
-import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
@@ -55,9 +51,10 @@ public class ModifyGroupPasswordActivity extends Activity {
         setListener();
     }
     private void handleIntent() {
-        Intent intent = context.getIntent();
-        Bundle bundle = intent.getExtras();
-        groupid = bundle.getString("GroupId");
+        groupid= this.getIntent().getStringExtra("GroupId");
+        groupid="81ce725fa1d3";
+        /*Bundle bundle = intent.getExtras();
+        groupid = bundle.getString("GroupId");*/
     }
 
     private void setView() {
@@ -74,16 +71,16 @@ public class ModifyGroupPasswordActivity extends Activity {
             public void onClick(View v) {
                 Boolean result = checkData();
                 if (result == true) {
-                    if (groupid != null && !groupid.equals("")) {
-                        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                  /*  if (groupid != null && !groupid.equals("")) {
+                        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {*/
                             send();
 							/* ToastUtil.show_short(context, "接口尚未完成"); */
-                        } else {
+                    /*    } else {
                             ToastUtils.show_allways(ModifyGroupPasswordActivity.this, "网络连接失败，请稍后重试");
                         }
                     } else {
                         ToastUtils.show_allways(context, "获取groupid失败，请返回上一级界面重试");
-                    }
+                    }*/
                 }
 
             }
@@ -123,7 +120,7 @@ public class ModifyGroupPasswordActivity extends Activity {
             return flag;
         }
         if (!newpassword.equals(passwordconfirm)) {
-            new AlertDialog.Builder(this).setMessage("两次输入的密码不一致").setPositiveButton("确定", null).show();
+            Toast.makeText(this, "两次输入的密码不一致", Toast.LENGTH_LONG).show();
             flag = false;
             return flag;
         }

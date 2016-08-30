@@ -9,10 +9,10 @@ import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import com.shenstec.utils.image.ImageLoader;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.interphone.groupmanage.allgroupmember.model.UserInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.helper.ImageLoader;
 
 import java.util.List;
 
@@ -68,7 +68,6 @@ public class CreateGroupMembersAdapter extends BaseAdapter implements SectionInd
 		// 根据position获取分类的首字母的Char ascii值
 		int section = getSectionForPosition(position);
 		// 如果当前位置等于该分类首字母的Char的位置 ，则认为是第一次出现
-		// 如果当前位置等于该分类首字母的Char的位置 ，则认为是第一次出现
 		if (position == getPositionForSection(section)) {
 			holder.indexLayut.setVisibility(View.VISIBLE);
 			holder.indexTv.setText(list.get(position).getSortLetters());  
@@ -100,16 +99,13 @@ public class CreateGroupMembersAdapter extends BaseAdapter implements SectionInd
 			}else{
 				url = GlobalConfig.imageurl+lists.getPortraitMini();
 			}
-			//og.e("url==================", url);
-			imageLoader.DisplayImage(url.replace( "\\/", "/"), holder.image, false, false,null);
+			imageLoader.DisplayImage(url.replace( "\\/", "/"), holder.image, false, false,null,null);
 		}
 		return convertView;
 	}
 
 	class ViewHolder{
 		public ImageView image;
-		public TextView tv_b_name;
-		public LinearLayout lin_add;
 		public LinearLayout contactLayut;
 		public TextView indexTv;
 		public LinearLayout indexLayut;
