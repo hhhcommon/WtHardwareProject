@@ -97,13 +97,14 @@
         </activity>
         <!--  -->
         <activity
-            android:name=".activity.common.main.MainActivity"
+            android:name=".activity.common.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
+
                 <data android:scheme="com.woting.htmlcallback" />
             </intent-filter>
         </activity>
@@ -122,16 +123,26 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
-        <!-- 消息中心 -->
-        <activity
-            android:name=".activity.im.interphone.notify.NotifyNewActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
-
         <!-- 头像剪裁界面 -->
         <activity
             android:name=".activity.im.interphone.creategroup.photocut.activity.PhotoCutActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.im.interphone.alert.CallAlertActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity
+            android:name=".activity.im.interphone.alert.ReceiveAlertActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity
+            android:name=".activity.im.interphone.main.DuiJiangActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -140,33 +151,50 @@
             android:name=".activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.im.interphone.groupmanage.transferauthority.TransferAuthority"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".activity.im.interphone.groupmanage.memberadd.MemberAddActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.im.interphone.groupmanage.memberadd.activity.MemberAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".activity.im.interphone.groupmanage.memberdel.MemberDelActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.im.interphone.groupmanage.memberdel.MemberDelActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <activity android:name=".activity.im.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.im.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".activity.im.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.im.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.im.interphone.main.DuiJiangActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <activity android:name=".activity.im.interphone.groupmanage.joingrouplist.activity.JoinGroupListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".activity.im.interphone.groupmanage.handlegroupapply.HandleGroupApplyActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"  />
+
     </application>
 
 </manifest>

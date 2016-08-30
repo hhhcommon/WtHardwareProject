@@ -1,8 +1,11 @@
 package com.wotingfm.activity.im.interphone.linkman.view;
 
-import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.model.UserInfo;
+import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 
 import java.util.Comparator;
+
+
+
 
 public class PinyinComparator_b implements Comparator<UserInfo> {
 

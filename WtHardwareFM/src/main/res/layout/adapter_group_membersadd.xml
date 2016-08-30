@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:id="@+id/index"
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/group_head_background"
         android:orientation="vertical"
@@ -39,18 +39,18 @@
             <RelativeLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="19dp">>
+               android:layout_marginLeft="19dp">>
 
                 <ImageView
                     android:id="@+id/image"
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                   	android:layout_width="40dp"
+                	android:layout_height="40dp"
                     android:layout_centerInParent="true"
                     android:scaleType="centerCrop" />
 
                 <ImageView
                     android:layout_width="40dp"
-                    android:layout_height="40dp"
+                	android:layout_height="40dp"
                     android:layout_centerInParent="true"
                     android:src="@mipmap/wt_6_b_y_b" />
             </RelativeLayout>
@@ -78,9 +78,17 @@
                         android:singleLine="true"
                         android:text="朋友"
                         android:textColor="@color/dinglan_orange"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/wt_button_default_text" />
                 </LinearLayout>
-            </LinearLayout>
+
+            <ImageView
+                android:id="@+id/img_check"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginRight="30dp"
+                android:src="@mipmap/image_not_all_check" />
+        </LinearLayout>
         </LinearLayout>
 
         <TextView

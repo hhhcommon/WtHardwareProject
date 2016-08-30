@@ -36,19 +36,18 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shenstec.activity.login.LoginActivity;
 import com.wotingfm.R;
-import com.wotingfm.activity.im.interphone.alert.CallAlertActivity;
+
 import com.wotingfm.activity.im.interphone.chat.adapter.ChatListAdapter;
 import com.wotingfm.activity.im.interphone.chat.adapter.GroupPersonAdapter;
 import com.wotingfm.activity.im.interphone.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.activity.im.interphone.chat.model.DBTalkHistorary;
 import com.wotingfm.activity.im.interphone.chat.model.GroupTalkInside;
 import com.wotingfm.activity.im.interphone.chat.model.TalkListGP;
-import com.wotingfm.activity.im.common.message.MessageUtils;
-import com.wotingfm.activity.im.common.message.MsgNormal;
-import com.wotingfm.activity.im.common.message.content.MapContent;
-import com.wotingfm.activity.im.common.model.ListInfo;
-import com.wotingfm.helper.InterPhoneControlHelper;
-import com.wotingfm.service.VoiceStreamRecordService;
+import com.wotingfm.activity.im.interphone.commom.message.MessageUtils;
+import com.wotingfm.activity.im.interphone.commom.message.MsgNormal;
+import com.wotingfm.activity.im.interphone.commom.message.content.MapContent;
+import com.wotingfm.activity.im.interphone.commom.service.InterPhoneControl;
+import com.wotingfm.activity.im.interphone.commom.service.VoiceStreamRecordService;
 import com.wotingfm.activity.im.interphone.linkman.model.LinkMan;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
 import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
@@ -79,7 +78,11 @@ import java.util.Map;
  * 2016年1月18日
  */
 public class ChatFragment extends Fragment implements OnClickListener{
-	public static FragmentActivity context;
+	@Override
+	public void onClick(View v) {
+
+	}
+/*	public static FragmentActivity context;
 	private static ChatListAdapter adapter;
 	private static ListView mlistView;
 	private  MessageReceiver Receiver;
@@ -286,7 +289,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		if(interphonetype.equals("user")){
 			//挂断电话
 			iscalling=false;
-			InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
+			InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
 			historydatabaselist = dbdao.queryHistory();//得到数据库里边数据
 			getlist();		
 			if(alllist.size()==0){
@@ -314,7 +317,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 			gridView_person.setVisibility(View.GONE);
 			gridView_tv.setVisibility(View.GONE);
 		}else{
-			InterPhoneControlHelper.Quit(context, interphoneid);//退出小组
+			InterPhoneControl.Quit(context, interphoneid);//退出小组
 			historydatabaselist = dbdao.queryHistory();//得到数据库里边数据
 			getlist();					
 			if(alllist.size()==0){
@@ -398,20 +401,20 @@ public class ChatFragment extends Fragment implements OnClickListener{
 						isfriend=false;
 					}
 					if(isfriend){
-						Intent intent = new Intent(context,TalkPersonNewsActivity.class);
-						Bundle bundle = new Bundle();
-						bundle.putString("type", "talkoldlistfragment_p");
-						bundle.putSerializable("data", grouppersonlists.get(position));
-						intent.putExtras(bundle);
-						startActivity(intent);
+//						Intent intent = new Intent(context,TalkPersonNewsActivity.class);
+//						Bundle bundle = new Bundle();
+//						bundle.putString("type", "talkoldlistfragment_p");
+//						bundle.putSerializable("data", grouppersonlists.get(position));
+//						intent.putExtras(bundle);
+//						startActivity(intent);
 					}else{
-						Intent intent = new Intent(context,GroupPersonNewsActivity.class);
-						Bundle bundle = new Bundle();
-						bundle.putString("type", "talkoldlistfragment_p");
-						bundle.putString("id", interphoneid);
-						bundle.putSerializable("data", grouppersonlists.get(position));
-						intent.putExtras(bundle);
-						startActivityForResult(intent, 1);
+//						Intent intent = new Intent(context,GroupPersonNewsActivity.class);
+//						Bundle bundle = new Bundle();
+//						bundle.putString("type", "talkoldlistfragment_p");
+//						bundle.putString("id", interphoneid);
+//						bundle.putSerializable("data", grouppersonlists.get(position));
+//						intent.putExtras(bundle);
+//						startActivityForResult(intent, 1);
 					}
 				}
 			});
@@ -460,10 +463,10 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		}
 	}
 
-	/**
+	*//**
 	 * 设置对讲组为激活状态
 	 * @param groupids
-	 */
+	 *//*
 	public static void zhidinggroupss(String groupids ) {
 		Intent intent = new Intent();
 		intent.setAction(DuiJiangActivity.UPDATA_GROUP);
@@ -472,13 +475,13 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		groupid=groupids;
 		tv_num.setText("1");
 		listinfo=null;
-		InterPhoneControlHelper.Enter(context, groupids);//发送进入组的数据，socket
+		InterPhoneControl.Enter(context, groupids);//发送进入组的数据，socket
 		getgridViewperson(groupids);//获取群成员
 	}
 
-	/**
+	*//**
 	 * 设置对讲组为激活状态
-	 */
+	 *//*
 	public static void zhidinggroup(TalkGroupInside talkGroupInside) {
 		Intent intent = new Intent();
 		intent.setAction(DuiJiangActivity.UPDATA_GROUP);
@@ -487,13 +490,13 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		groupid=talkGroupInside.getGroupId();
 		tv_num.setText("1");
 		listinfo=null;
-		InterPhoneControlHelper.Enter(context, talkGroupInside.getGroupId());//发送进入组的数据，socket
+		InterPhoneControl.Enter(context, talkGroupInside.getGroupId());//发送进入组的数据，socket
 		getgridViewperson(talkGroupInside.getGroupId());//获取群成员
 	}
 
-	/**
+	*//**
 	 * 设置对讲组2为激活状态
-	 */
+	 *//*
 	public static void zhidinggroups(TalkGroupInside talkGroupInside) {
 		Intent intent = new Intent();
 		intent.setAction(DuiJiangActivity.UPDATA_GROUP);
@@ -502,13 +505,13 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		groupid=talkGroupInside.getGroupId();
 		tv_num.setText("1");
 		listinfo=null;
-		InterPhoneControlHelper.Enter(context, talkGroupInside.getGroupId());//发送进入组的数据，socket
+		InterPhoneControl.Enter(context, talkGroupInside.getGroupId());//发送进入组的数据，socket
 		getgridViewperson(talkGroupInside.getGroupId());//获取群成员
 	}
 
-	/**
+	*//**
 	 * 设置个人为激活状态/设置第一条为激活状态
-	 */
+	 *//*
 	public static  void zhidingperson(DBTalkHistorary talkdb) {
 		historydatabaselist = dbdao.queryHistory();//得到数据库里边数据
 		getlist();
@@ -533,7 +536,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 						}
 						confirmdialog.show();
 					}else{
-						InterPhoneControlHelper.Quit(context, interphoneid);//退出小组
+						InterPhoneControl.Quit(context, interphoneid);//退出小组
 						String interphonetypes = alllist.get(position).getTyPe();
 						if(interphonetypes!=null&&!interphonetypes.equals("")&&interphonetypes.equals("user")){
 							call(alllist.get(position).getId());
@@ -559,21 +562,21 @@ public class ChatFragment extends Fragment implements OnClickListener{
 				String type = alllist.get(position).getTyPe();
 				if(type!=null&&type.equals("group")){
 					//跳转到群组详情页面
-					Intent intent=new Intent(context,TalkGroupNewsActivity.class);
-					Bundle bundle=new Bundle();
-					bundle.putString("type", "talkoldlistfragment");
-					bundle.putString("activationid",interphoneid);
-					bundle.putSerializable("data",alllist.get(position));
-					intent.putExtras(bundle);
-					context.startActivity(intent);
+//					Intent intent=new Intent(context,TalkGroupNewsActivity.class);
+//					Bundle bundle=new Bundle();
+//					bundle.putString("type", "talkoldlistfragment");
+//					bundle.putString("activationid",interphoneid);
+//					bundle.putSerializable("data",alllist.get(position));
+//					intent.putExtras(bundle);
+//					context.startActivity(intent);
 				}else{
 					// 跳转到详细信息界面
-					Intent intent = new Intent(context,TalkPersonNewsActivity.class);
-					Bundle bundle = new Bundle();
-					bundle.putString("type", "talkoldlistfragment");
-					bundle.putSerializable("data", alllist.get(position));
-					intent.putExtras(bundle);
-					context.startActivity(intent);
+//					Intent intent = new Intent(context,TalkPersonNewsActivity.class);
+//					Bundle bundle = new Bundle();
+//					bundle.putString("type", "talkoldlistfragment");
+//					bundle.putSerializable("data", alllist.get(position));
+//					intent.putExtras(bundle);
+//					context.startActivity(intent);
 				}
 			}
 		});
@@ -651,9 +654,9 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		}
 	}
 
-	/*
+	*//*
 	 * 第一次进入该界面
-	 */
+	 *//*
 	private void update(Context context){
 		//得到数据库里边数据
 		historydatabaselist = dbdao.queryHistory();
@@ -909,9 +912,9 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		tv_confirm.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
+				InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
 				if(dialogtype==1){
-					InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
+					InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
 					iscalling=false;
 					lin_notalk.setVisibility(View.VISIBLE);
 					lin_personhead.setVisibility(View.GONE);
@@ -921,7 +924,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 					call(phoneid);
 					confirmdialog.dismiss();
 				}else{
-					InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
+					InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
 					iscalling=false;
 					lin_notalk.setVisibility(View.VISIBLE);
 					lin_personhead.setVisibility(View.GONE);
@@ -1086,7 +1089,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 										iscalling=true;
 										ToastUtils.show_short(context, "进入组—成功");
 										if(entergrouptype==2){
-											InterPhoneControlHelper.Quit(context, interphoneid);//退出小组
+											InterPhoneControl.Quit(context, interphoneid);//退出小组
 											String id = groupid;//对讲组：groupid
 											dbdao.deleteHistory(id);
 											addgroup(id);//加入到数据库
@@ -1112,7 +1115,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 										//用户已在组
 										iscalling=true;
 										if(entergrouptype==2){
-											InterPhoneControlHelper.Quit(context, interphoneid);//退出小组
+											InterPhoneControl.Quit(context, interphoneid);//退出小组
 											String id = groupid;//对讲组：groupid
 											dbdao.deleteHistory(id);
 											addgroup(id);//加入到数据库
@@ -1424,7 +1427,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 					public void run() {
 						VoiceStreamRecordService.stop();
 						image_button.setBackgroundDrawable(context.getResources().getDrawable(R.mipmap.talknormal));
-						InterPhoneControlHelper.Loosen(context, interphoneid);//发送取消说话控制
+						InterPhoneControl.Loosen(context, interphoneid);//发送取消说话控制
 						if (draw.isRunning()) { 
 							draw.stop(); 
 						} 
@@ -1433,7 +1436,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 				}, 300);
 			}else{//此处处理个人对讲的逻辑
 				VoiceStreamRecordService.stop();
-				InterPhoneControlHelper.PersonTalkPressStop(context, interphoneid);//发送取消说话控制
+				InterPhoneControl.PersonTalkPressStop(context, interphoneid);//发送取消说话控制
 				image_button.setBackgroundDrawable(context.getResources().getDrawable(R.mipmap.talknormal));
 				if (draw.isRunning()) { 
 					draw.stop(); 
@@ -1447,12 +1450,12 @@ public class ChatFragment extends Fragment implements OnClickListener{
 	protected void press() {
 		// 按下的动作
 		if(interphonetype.equals("group")){
-			InterPhoneControlHelper.Press(context, interphoneid);
+			InterPhoneControl.Press(context, interphoneid);
 			VoiceStreamRecordService.stop();
 			VoiceStreamRecordService.start(context, interphoneid,"group");
 		}else{
 			//此处处理个人对讲的逻辑
-			InterPhoneControlHelper.PersonTalkPressStart(context, interphoneid);
+			InterPhoneControl.PersonTalkPressStart(context, interphoneid);
 			VoiceStreamRecordService.stop();
 			VoiceStreamRecordService.start(context, interphoneid,"person");
 		}
@@ -1466,5 +1469,5 @@ public class ChatFragment extends Fragment implements OnClickListener{
 			context.unregisterReceiver(Receiver);
 			Receiver=null;
 		}
-	}
+	}*/
 }

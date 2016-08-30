@@ -1,76 +1,79 @@
-package com.wotingfm.activity.im.interphone.linkman.adapter;
+package com.wotingfm.activity.im.interphone.groupmanage.memberadd.adapter;
+
+import java.util.List;
 
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
+
+import com.shenstec.utils.image.ImageLoader;
 import com.wotingfm.R;
-
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
-import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.helper.ImageLoader;
 
-import java.util.List;
 
-public class SortGroupMemberAdapter extends BaseAdapter implements SectionIndexer {
-	private List<TalkPersonInside> list = null;
-	private Context mContext;
-	private TalkPersonInside lists;
+public class CreateGroupMembersAddAdapter extends BaseAdapter  implements SectionIndexer{
+	private List<UserInfo> list;
+	private Context context;
 	private ImageLoader imageLoader;
-	private OnListeners onListeners;
+	private UserInfo lists;
 	private String url;
+	private friendCheck friendcheck;
 
-	public SortGroupMemberAdapter(Context mContext, List<TalkPersonInside> list) {
-		this.mContext = mContext;
+	public CreateGroupMembersAddAdapter(Context context, List<UserInfo> list) {
+		super();
 		this.list = list;
-		imageLoader=new ImageLoader(mContext);
-	}
-	
-	public void setOnListeners(OnListeners onListener) {
-		this.onListeners = onListener;
+		this.context = context;
+		imageLoader = new ImageLoader(context);
 	}
 
-	/**
-	 * 当ListView数据发生变化时,调用此方法来更新ListView
-	 */
-	public void updateListView(List<TalkPersonInside> list) {
+	public void ChangeDate(List<UserInfo> list) {
 		this.list = list;
-		notifyDataSetChanged();
+		this.notifyDataSetChanged();
 	}
 
+	public void setOnListener(friendCheck friendcheck) {
+		this.friendcheck = friendcheck;
+	}
+
+	@Override
 	public int getCount() {
-		return this.list.size();
+		return list.size();
 	}
 
+	@Override
 	public Object getItem(int position) {
 		return list.get(position);
 	}
 
+	@Override
 	public long getItemId(int position) {
 		return position;
 	}
 
-	public View getView(final int position, View convertView, ViewGroup arg2) {
+	@Override
+	public View getView(final int position, View convertView, ViewGroup parent) {
 		ViewHolder holder = null;
 		if (convertView == null) {
-			convertView=LayoutInflater.from(mContext).inflate(R.layout.adapter_talk_person, null);
 			holder = new ViewHolder();
-			holder.tv_name = (TextView)convertView.findViewById(R.id.tv_name);//名
-			holder.tv_b_name = (TextView)convertView.findViewById(R.id.tv_b_name);//名
-			holder.imageView_touxiang=(ImageView)convertView.findViewById(R.id.image);
+			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_group_membersadd, null);
+			holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);// 名
+			holder.imageView_touxiang = (ImageView) convertView.findViewById(R.id.image);
+			holder.imageView_check = (ImageView) convertView.findViewById(R.id.img_check);
+			/*holder.lin_onclick = (LinearLayout) convertView.findViewById(R.id.lin_check);*/
 			holder.indexLayut=(LinearLayout)convertView.findViewById(R.id.index);
-			holder.lin_add=(LinearLayout)convertView.findViewById(R.id.lin_add);
 			holder.contactLayut=(LinearLayout)convertView.findViewById(R.id.contactLayut);
 			holder.indexTv = (TextView) convertView.findViewById(R.id.indexTv); 
 			convertView.setTag(holder);
-		}else{
-			holder=(ViewHolder) convertView.getTag();
+		} else {
+			holder = (ViewHolder) convertView.getTag();
 		}
 		lists=list.get(position);
 		// 根据position获取分类的首字母的Char ascii值
@@ -83,52 +86,58 @@ public class SortGroupMemberAdapter extends BaseAdapter implements SectionIndexe
 		} else {
 			holder.indexLayut.setVisibility(View.GONE);
 		}
-			
-			if(lists.getUserName()==null||lists.getUserName().equals("")){
-				holder.tv_name.setText("未知");//名
-			}else{
-				holder.tv_name.setText(lists.getUserName());//名
-			}
-			if(lists.getUserAliasName()==null||lists.getUserAliasName().equals("")){
-				holder.tv_b_name.setVisibility(View.GONE);
-			}else{
-				holder.tv_b_name.setVisibility(View.VISIBLE);
-				holder.tv_b_name.setText(lists.getUserAliasName());//名
-			}
-			
-			if(lists.getPortraitMini()==null||lists.getPortraitMini().equals("")||lists.getPortraitMini().equals("null")||lists.getPortraitMini().trim().equals("")){
-				holder.imageView_touxiang.setImageResource(R.mipmap.wt_image_tx_hy);
-			}else{
-				if(lists.getPortraitMini().startsWith("http:")){
-					url=lists.getPortraitMini();
-				}else{
-					url = GlobalConfig.imageurl+lists.getPortraitMini();
-				}
-				imageLoader.DisplayImage(url.replace( "\\/", "/"), holder.imageView_touxiang, false, false,null, null);
-			}
 		
-		holder.lin_add.setOnClickListener(new View.OnClickListener() {
-			public void onClick(View v) {
-				onListeners.add(position);
+			if (lists.getUserName() == null || lists.getUserName().equals("")) {
+				holder.tv_name.setText("未知");// 名
+			} else {
+				holder.tv_name.setText(lists.getUserName());// 名
 			}
-		});	
+			if (lists.getPortraitMini() == null
+					|| lists.getPortraitMini().equals("")
+					|| lists.getPortraitMini().equals("null")
+					|| lists.getPortraitMini().trim().equals("")) {
+				holder.imageView_touxiang
+						.setImageResource(R.mipmap.wt_image_tx_hy);
+			} else {
+				if(lists.getPortraitMini().startsWith("http:")){
+					 url=lists.getPortraitMini();
+				}else{
+					 url = GlobalConfig.imageurl+lists.getPortraitMini();
+				}
+				imageLoader.DisplayImage(url.replace("\\/", "/"),
+						holder.imageView_touxiang, false, false, null);
+			}
+			if (lists.getCheckType() == 2) {
+				holder.imageView_check
+						.setImageResource(R.mipmap.image_all_check);
+			} else {
+				holder.imageView_check
+						.setImageResource(R.mipmap.image_not_all_check);
+			}
+			holder.imageView_check.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					friendcheck.checkposition(position);
+				}
+			});
+
 		return convertView;
 	}
-	
-	public interface OnListeners {
-		void add(int position);
+
+	public interface friendCheck {
+		void checkposition(int position);
 	}
 
-	final static class ViewHolder {
-		public TextView tv_b_name;
-		public LinearLayout lin_add;
-		public LinearLayout contactLayut;
+	class ViewHolder {
 		public TextView indexTv;
+		public LinearLayout contactLayut;
 		public LinearLayout indexLayut;
 		public ImageView imageView_touxiang;
 		public TextView tv_name;
+		/*public LinearLayout lin_onclick;*/
+		public ImageView imageView_check;
 	}
-
+	
 	/**
 	 * 根据ListView的当前位置获取分类的首字母的Char ascii值
 	 */
@@ -166,10 +175,8 @@ public class SortGroupMemberAdapter extends BaseAdapter implements SectionIndexe
 			return "#";
 		}
 	}
-
 	@Override
 	public Object[] getSections() {
 		return null;
 	}
-
 }

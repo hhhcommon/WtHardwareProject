@@ -1,6 +1,4 @@
 package com.wotingfm.common.config;
-
-
 import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
 import com.wotingfm.activity.music.player.model.LanguageSearchInside;
@@ -20,7 +18,6 @@ public class GlobalConfig {
     public static String CityName;
     public static String AdCode;
     //
-//    public static List<UserInfo> list_person;
     public static List<TalkGroupInside> list_group;
     public static List<TalkPersonInside> list_person;
     public static LanguageSearchInside playerobject;//播放器播放对象

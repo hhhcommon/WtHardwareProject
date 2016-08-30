@@ -1,9 +1,8 @@
-package com.wotingfm.activity.im.interphone.groupmanage.memberdel;
+package com.wotingfm.activity.im.interphone.groupmanage.memberadd.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -23,13 +22,11 @@ import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.im.interphone.groupmanage.memberadd.adapter.CreateGroupMembersAddAdapter;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.common.widgetui.SideBar;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.CharacterParser;
-import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.PinyinComparator_a;
 import com.wotingfm.util.ToastUtils;
@@ -41,7 +38,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class MemberDelActivity extends Activity implements View.OnClickListener{
+public class MemberAddActivity extends Activity implements View.OnClickListener{
 
     private Context context;
     private TextView mback;
@@ -49,7 +46,7 @@ public class MemberDelActivity extends Activity implements View.OnClickListener{
     private CharacterParser characterParser;
     private PinyinComparator_a pinyinComparator;
     private boolean isCancelRequest;
-    private String  tag="GROUP_MEMBER_DEL_VOLLEY_REQUEST_CANCEL_TAG";
+    private String  tag="GROUP_MEMBER_ADD_VOLLEY_REQUEST_CANCEL_TAG";
     private Dialog dialog;
     private TextView tvNofriends;
     private SideBar sideBar;
@@ -103,7 +100,7 @@ public class MemberDelActivity extends Activity implements View.OnClickListener{
             e.printStackTrace();
         }
 
-        VolleyRequest.RequestPost(GlobalConfig.grouptalkUrl, tag, jsonObject, new VolleyCallback() {
+        VolleyRequest.RequestPost(GlobalConfig.getfriendlist, tag, jsonObject, new VolleyCallback() {
             private String ReturnType;
             private String Message;
 
@@ -131,6 +128,8 @@ public class MemberDelActivity extends Activity implements View.OnClickListener{
                         e1.printStackTrace();
                     }
                     int sum = userlist.size();
+                    // 给计数项设置值
+
                     userlist2.clear();
                     userlist2.addAll(userlist);
                     filledData(userlist2);
@@ -143,6 +142,7 @@ public class MemberDelActivity extends Activity implements View.OnClickListener{
 
                     }else{
                         int sum = userlist.size();
+
                         userlist2.clear();
                         userlist2.addAll(userlist);
                         filledData(userlist2);
@@ -213,36 +213,36 @@ public class MemberDelActivity extends Activity implements View.OnClickListener{
             public void afterTextChanged(Editable s) {
                 String search_name = s.toString();
                 if(userlist2!=null){
-                    if (search_name == null || search_name.equals("")|| search_name.trim().equals("")) {
-                        image_clear.setVisibility(View.INVISIBLE);
-                        tvNofriends.setVisibility(View.GONE);
-                        // 关键词为空
-                        if (userlist == null || userlist.size() == 0) {
-                            listView.setVisibility(View.GONE);
-                        } else {
-                            listView.setVisibility(View.VISIBLE);
-                            userlist2.clear();
-                            userlist2.addAll(userlist);
-                            filledData(userlist2);
-                            Collections.sort(userlist2, pinyinComparator);
-                            adapter = new CreateGroupMembersAddAdapter(context, userlist2);
-                            listView.setAdapter(adapter);
-                            setinterface();
-                        }
+                if (search_name == null || search_name.equals("")|| search_name.trim().equals("")) {
+                    image_clear.setVisibility(View.INVISIBLE);
+                    tvNofriends.setVisibility(View.GONE);
+                    // 关键词为空
+                    if (userlist == null || userlist.size() == 0) {
+                        listView.setVisibility(View.GONE);
                     } else {
-                        if(userlist2!=null&&userlist2.size()!=0){
-                            userlist2.clear();
-                            userlist2.addAll(userlist);
-                            image_clear.setVisibility(View.VISIBLE);
-                            search(search_name);
-                        }else{
-                            ToastUtils.show_allways(context,"网络异常，没有获取导数据");
-                        }
+                        listView.setVisibility(View.VISIBLE);
+                        userlist2.clear();
+                        userlist2.addAll(userlist);
+                        filledData(userlist2);
+                        Collections.sort(userlist2, pinyinComparator);
+                        adapter = new CreateGroupMembersAddAdapter(context, userlist2);
+                        listView.setAdapter(adapter);
+                        setinterface();
                     }
-                }else{
-                    ToastUtils.show_allways(context,"网络异常，没有获取导数据");
+                } else {
+                    if(userlist2!=null&&userlist2.size()!=0){
+                    userlist2.clear();
+                    userlist2.addAll(userlist);
+                    image_clear.setVisibility(View.VISIBLE);
+                    search(search_name);
+                    }else{
+                        ToastUtils.show_allways(context,"网络异常，没有获取导数据");
+                    }
                 }
-            }});
+            }else{
+                ToastUtils.show_allways(context,"网络异常，没有获取导数据");
+            }
+        }});
     }
 
     private void search(String search_name) {
@@ -316,7 +316,6 @@ public class MemberDelActivity extends Activity implements View.OnClickListener{
         image_clear = (ImageView) findViewById(R.id.image_clear);
         tv_head_name=(TextView)findViewById(R.id.tv_head_name);
         tv_head_right=(TextView)findViewById(R.id.tv_head_right);
-
     }
 
     //设置onclick监听
@@ -341,10 +340,10 @@ public class MemberDelActivity extends Activity implements View.OnClickListener{
                 }
                 if (addlist!= null &&addlist.size() > 0) {
                     // 发送进入组的邀请
-                    /*if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                 /*   if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                         dialog = DialogUtils.Dialogph(context, "正在发送邀请");*/
-                        sendMemberDelete();
-                   /* } else {
+                        sendGroupInvited();
+              /*      } else {
                         ToastUtils.show_allways(context, "网络失败，请检查网络");
                     }
                 } else {
@@ -367,24 +366,25 @@ public class MemberDelActivity extends Activity implements View.OnClickListener{
             }
         }
     }
-    private void sendMemberDelete() {
-        JSONObject jsonObject = VolleyRequest.getJsonObject(this);
-        try {
-            // 模块属性
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
+    private void sendGroupInvited() {
+        JSONObject jsonObject =VolleyRequest.getJsonObject(context) ;
+
+        // 模块属性
+        try{
+        jsonObject.put("GroupId", groupid);
+        jsonObject.put("UserId","6c310f2884a7");
             // 对s进行处理 去掉"[]"符号
-            String s = userlist2.toString().replaceAll(" ", "");
-            jsonObject.put("UserIds", s.substring(1, s.length() - 1));
+            String s = addlist.toString();
+            jsonObject.put("BeInvitedUserIds", s.substring(1, s.length() - 1).replaceAll(" ", ""));
             // groupid由上一个界面传递而来
-            jsonObject.put("GroupId", groupid);
+           // jsonObject.put("GroupId", groupid);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        VolleyRequest.RequestPost(GlobalConfig.KickOutMembersUrl, tag, jsonObject, new VolleyCallback() {
+        VolleyRequest.RequestPost(GlobalConfig.sendInviteintoGroupUrl, tag, jsonObject, new VolleyCallback() {
             private String ReturnType;
             private String Message;
-//			private String SessionId;
 
             @Override
             protected void requestSuccess(JSONObject result) {
@@ -395,17 +395,16 @@ public class MemberDelActivity extends Activity implements View.OnClickListener{
                     return ;
                 }
                 try {
-//					SessionId = result.getString("SessionId");
                     ReturnType = result.getString("ReturnType");
                     Message = result.getString("Message");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
-                    ToastUtils.show_allways(context, "群成员已经成功删除");
-                    sendBroadcast(new Intent(BroadcastConstants.REFRESH_GROUP));
+                    ToastUtils.show_allways(context, "组邀请已经发送，请等待对方接受");
+                    setResult(1);
                     finish();
-                }else if (ReturnType != null && ReturnType.equals("1002")) {
+                } else if (ReturnType != null && ReturnType.equals("1002")) {
                     ToastUtils.show_allways(context, "无法获取用户Id");
                 } else if (ReturnType != null && ReturnType.equals("T")) {
                     ToastUtils.show_allways(context, "异常返回值");
@@ -413,12 +412,12 @@ public class MemberDelActivity extends Activity implements View.OnClickListener{
                     ToastUtils.show_allways(context, "尚未登录");
                 } else if (ReturnType != null && ReturnType.equals("1003")) {
                     ToastUtils.show_allways(context, "异常返回值");
-                } else if (ReturnType != null && ReturnType.equals("10021")) {
-                    ToastUtils.show_allways(context, "用户不是该组的管理员");
+                } else if (ReturnType != null && ReturnType.equals("10031")) {
+                    ToastUtils.show_allways(context, "用户组不是验证群，不能采取这种方式邀请");
                 } else if (ReturnType != null && ReturnType.equals("0000")) {
-                    ToastUtils.show_allways(context, "无法获取相关的参数");
+                    ToastUtils.show_allways(context, "无法获取用户ID");
                 } else if (ReturnType != null && ReturnType.equals("1004")) {
-                    ToastUtils.show_allways(context, "无法获取被踢出用户Id");
+                    ToastUtils.show_allways(context, "被邀请人不存在");
                 } else {
                     if (Message != null && !Message.trim().equals("")) {
                         ToastUtils.show_allways(context, Message + "");
@@ -434,7 +433,6 @@ public class MemberDelActivity extends Activity implements View.OnClickListener{
             }
         });
     }
-
 
     @Override
     protected void onDestroy() {

@@ -1,6 +1,5 @@
 package com.wotingfm.activity.im.interphone.linkman.view;
 
-
 import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
 
 import java.util.Comparator;

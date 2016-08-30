@@ -1,5 +1,17 @@
 package com.wotingfm.helper;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Collections;
+import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,20 +24,6 @@ import com.shenstec.utils.file.AbstractFileCache;
 import com.shenstec.utils.file.FileCache;
 import com.shenstec.utils.image.ImageUtils;
 import com.shenstec.utils.image.MemoryCache;
-import com.wotingfm.R;
-import com.wotingfm.util.BitmapUtils;
-
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Collections;
-import java.util.Map;
-import java.util.WeakHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 /**
  * 图片异步加载处理
@@ -42,13 +40,11 @@ public class ImageLoader {
 			.synchronizedMap(new WeakHashMap<ProgressBar, String>());
 	// 线程池
 	private ExecutorService executorService;
-	private Context Context;
 	/**
 	 * 
 	 * @param context
 	 */
 	public ImageLoader(Context context) {
-		Context=context;
 		fileCache = new FileCache(context);
 		executorService = Executors.newFixedThreadPool(5);
 	}
@@ -131,6 +127,8 @@ public class ImageLoader {
 		}
 	}
 
+
+
 	// Task for the queue
 	private class PhotoToLoad {
 		public String url;
@@ -176,9 +174,7 @@ public class ImageLoader {
 	 */
 	boolean imageViewReused(PhotoToLoad photoToLoad) {
 		String tag = imageViews.get(photoToLoad.imageView);
-		if (tag == null || !tag.equals(photoToLoad.url))
-			return true;
-		return false;
+		return tag == null || !tag.equals(photoToLoad.url);
 	}
 
 	// 用于在UI线程中更新界面
@@ -202,13 +198,12 @@ public class ImageLoader {
 				}else{
 
 				}
+
 				if(loadListener!=null)
 					loadListener.complete();
-			}else{
-				//设置默认图片
-				bitmap = BitmapUtils.readBitMap(Context, R.mipmap.wt_linkman_news);
-				photoToLoad.imageView.setImageBitmap(bitmap);
 			}
+
+
 		}
 	}
 
@@ -249,6 +244,6 @@ public class ImageLoader {
 	}
 
 	public interface ImageLoadListener{
-		public void complete();
+		void complete();
 	}
 }

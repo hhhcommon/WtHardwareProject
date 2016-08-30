@@ -32,11 +32,7 @@ import com.wotingfm.util.CommonUtils;
 
 import java.util.Arrays;
 
-/**
- * 呼叫弹出框
- * @author 辛龙
- * 2016年3月7日
- */
+
 public class CallAlertActivity extends Activity implements OnClickListener{
 	public static CallAlertActivity instance;
 	private TextView tv_news;
@@ -44,7 +40,7 @@ public class CallAlertActivity extends Activity implements OnClickListener{
 	private LinearLayout lin_call;
 	private LinearLayout lin_guaduan;
 	private MediaPlayer musicPlayer;
-	private SearchTalkHistoryDao dbdao;
+	//private SearchTalkHistoryDao dbdao;
 	private String id;
 	private MessageReceiver Receiver;
 	private String image;
@@ -52,6 +48,7 @@ public class CallAlertActivity extends Activity implements OnClickListener{
 	private ImageLoader imageLoader;
 	private ImageView imageview;
 	private boolean iscall;
+	private SearchTalkHistoryDao dbdao;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -97,9 +94,7 @@ public class CallAlertActivity extends Activity implements OnClickListener{
 		musicPlayer = MediaPlayer.create(instance, R.raw.ringback);  
 		musicPlayer.start();  
 
-		/**
-		 * 监听音频播放完的代码，实现音频的自动循环播放  
-		 */
+
 		musicPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {  
 			@Override 
 			public void onCompletion(MediaPlayer arg0) {  
@@ -112,9 +107,7 @@ public class CallAlertActivity extends Activity implements OnClickListener{
 		initDao();
 	}
 
-	/*
-	 * 初始化数据库
-	 */
+
 	private void initDao() {
 		dbdao = new SearchTalkHistoryDao(instance);
 	}
@@ -131,9 +124,6 @@ public class CallAlertActivity extends Activity implements OnClickListener{
 			musicPlayer = MediaPlayer.create(instance, R.raw.ringback);  
 			musicPlayer.start();  
 
-			/*
-			 * 监听音频播放完的代码，实现音频的自动循环播放  
-			 */
 			musicPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {  
 				@Override 
 				public void onCompletion(MediaPlayer arg0) {  
@@ -165,16 +155,14 @@ public class CallAlertActivity extends Activity implements OnClickListener{
 		DBTalkHistorary history = new DBTalkHistorary( bjuserid,  "user",  id, addtime);
 		dbdao.addTalkHistory(history);
 		DBTalkHistorary talkdb = dbdao.queryHistory().get(0);		//得到数据库里边数据
-		ChatFragment.zhidingperson(talkdb);
+		//ChatFragment.zhidingperson(talkdb);
 		DuiJiangActivity.update();									//对讲主页界面更新
 		MyActivityManager mam = MyActivityManager.getInstance();
 		mam.finishAllActivity();
 		finish();
 	}
 
-	/*
-	 * 接收socket的数据进行处理
-	 */
+
 	class MessageReceiver extends BroadcastReceiver{
 		@Override
 		public void onReceive(Context context, Intent intent) {

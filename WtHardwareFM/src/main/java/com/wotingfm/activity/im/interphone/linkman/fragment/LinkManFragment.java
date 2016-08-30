@@ -26,7 +26,6 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
-
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -34,7 +33,7 @@ import com.shenstec.activity.login.LoginActivity;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.alert.CallAlertActivity;
 import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
-import com.wotingfm.helper.InterPhoneControlHelper;
+import com.wotingfm.activity.im.interphone.commom.service.InterPhoneControl;
 import com.wotingfm.activity.im.interphone.linkman.adapter.SortGroupMemberAdapter;
 import com.wotingfm.activity.im.interphone.linkman.adapter.TalkGroupAdapter;
 import com.wotingfm.activity.im.interphone.linkman.adapter.TalkPersonNoAdapter;
@@ -57,6 +56,7 @@ import com.wotingfm.widget.HeightListView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -108,9 +108,6 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 	private TextView tvdialog;
 	private String tag = "FRIENDS_VOLLEY_REQUEST_CANCEL_TAG";
 	private boolean isCancelRequest;
-	private LinearLayout lin_news_message;
-	private TextView tv_newpersons;
-	private LinearLayout lin_grouplist;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -123,7 +120,6 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			Receiver = new MessageReceiver();
 			IntentFilter filter = new IntentFilter();
 			filter.addAction("push_refreshlinkman");
-			filter.addAction("push_newperson");
 			context.registerReceiver(Receiver, filter);
 		}
 		Dialog();
@@ -140,27 +136,29 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 	}
 
 	/**
-	 * 1.判断是否登录 
+	 * 1.判断是否登录
 	 * 2.登录了若personrefresh为"true",则刷新数据，否则不处理
 	 * 3.若未登录，则隐藏listview界面，展示咖啡的界面
 	 */
 	@Override
 	public void onResume() {
 		super.onResume();
-		sharedPreferences = getActivity().getSharedPreferences("wotingfm", context.MODE_PRIVATE);
+		sharedPreferences = getActivity().getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
 		islogin = sharedPreferences.getString(StringConstant.ISLOGIN, "false");
-		if (islogin.equals("true")) {
+	/*	if (islogin.equals("true")) {
 			lin_second.setVisibility(View.GONE);
 			relative.setVisibility(View.VISIBLE);
-			if (firstentry) {
+			if (firstentry) {*/
 				send();
-				firstentry = false;
-			} 
+		lin_second.setVisibility(View.GONE);
+		relative.setVisibility(View.VISIBLE);
+			/*	firstentry = false;
+			}
 		} else {
 			firstentry = false;
 			lin_second.setVisibility(View.VISIBLE);
 			relative.setVisibility(View.GONE);
-		}
+		}*/
 	}
 
 	/**
@@ -174,50 +172,18 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 		tvdialog = (TextView) rootView.findViewById(R.id.dialog);
 		sideBar.setTextView(tvdialog);
 		headview = LayoutInflater.from(context).inflate(R.layout.head_talk_person, null);// 头部view
-		lin_news_message = (LinearLayout) headview.findViewById(R.id.news_message);
-		lin_grouplist = (LinearLayout) headview.findViewById(R.id.lin_grouplist);
-		tv_newpersons = (TextView) headview.findViewById(R.id.tv_newpersons);
 		listView_group = (ListView) headview.findViewById(R.id.listView_group);
 		sortListView = (ListView)rootView.findViewById(R.id.country_lvcountry);
 		et_search = (EditText) rootView.findViewById(R.id.et_search);
 		image_clear = (ImageView) rootView.findViewById(R.id.image_clear);
-		sortListView.addHeaderView(headview);// 添加头部view
-		lin_news_message.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(context, NewsActivity.class);
-				startActivity(intent);				
-			}
-		});
 	}
 
 	/**
 	 * 为ListView填充数据
-	 * @param person
+	 * @param
 	 */
 	private  void  filledData(List<TalkPersonInside> person) {
-		//		String py,headChar;
-		//		int i=0,j=0;
-		//		TalkPersonInside oneElement1,oneElement2;
-		//		for(;i<person.size();i++){
-		//			oneElement1=person.get(i);
-		//			if(oneElement1.getSortLetters()==null||oneElement1.getSortLetters().trim().length()==0){
-		//				py = characterParser.getSelling(oneElement1.getUserName());
-		//				headChar = py.substring(0, 1).toUpperCase();
-		//				oneElement1.setPinYinName(py);
-		//				oneElement1.setSortLetters(headChar.matches("[A-Z]")?headChar:"#");
-		//			}
-		//			for(j=i+1;j<person.size();j++){
-		//				oneElement2=person.get(i);
-		//				if(oneElement2.getSortLetters()==null||oneElement2.getSortLetters().trim().length()==0){
-		//					py = characterParser.getSelling(oneElement2.getUserName());
-		//					headChar = py.substring(0, 1).toUpperCase();
-		//					oneElement2.setPinYinName(py);
-		//					oneElement2.setSortLetters(headChar.matches("[A-Z]")?headChar:"#");
-		//				
-		//				}
-		//			}
-		//		}
+
 		for (int i = 0; i < person.size(); i++) {
 			person.get(i).setName(person.get(i).getUserName());
 			// 汉字转换成拼音
@@ -277,21 +243,12 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 	}
 
 	class MessageReceiver extends BroadcastReceiver{
-		private String message;
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
 			if(action.equals("push_refreshlinkman")){
 				send();
-				ToastUtils.show_allways(context, "重新获取了新数据");
-			}else if(action.equals("push_newperson")){
-				String messages = intent.getStringExtra("outmessage");
-				if(messages!=null&&!messages.equals("")){
-					message=messages;
-				}else{
-					message="新的朋友";
-				}
-				tv_newpersons.setText(message);
+				ToastUtils.show_short(context, "重新获取了新数据");
 			}
 		}
 	}
@@ -315,22 +272,22 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			@Override
 			public void onClick(View v) {
 				if(type == 1){
-					InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
-					ChatFragment.iscalling = false;
+					InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
+			/*		ChatFragment.iscalling = false;
 					ChatFragment.lin_notalk.setVisibility(View.VISIBLE);
 					ChatFragment.lin_personhead.setVisibility(View.GONE);
 					ChatFragment.lin_head.setVisibility(View.GONE);
-					ChatFragment.lin_foot.setVisibility(View.GONE);
+					ChatFragment.lin_foot.setVisibility(View.GONE);*/
 					call(id);
 					confirmdialog.dismiss();
 				}else{
-					InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
-					ChatFragment.iscalling = false;
+					InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
+				/*	ChatFragment.iscalling = false;
 					ChatFragment.lin_notalk.setVisibility(View.VISIBLE);
 					ChatFragment.lin_personhead.setVisibility(View.GONE);
 					ChatFragment.lin_head.setVisibility(View.GONE);
 					ChatFragment.lin_foot.setVisibility(View.GONE);
-					ChatFragment.zhidinggroup(group);
+					ChatFragment.zhidinggroup(group);*/
 					//对讲主页界面更新
 					DuiJiangActivity.update();
 					confirmdialog.dismiss();
@@ -348,7 +305,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 		Bundle bundle = new Bundle();
 		bundle.putString("id", id);
 		it.putExtras(bundle);
-		//		it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//		it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		startActivity(it);
 	}
 
@@ -358,24 +315,15 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			if(!isVisible()){
 				dialogs = DialogUtils.Dialogph(context, "正在获取数据");
 			}
-			JSONObject jsonObject = new JSONObject();
+			JSONObject jsonObject =VolleyRequest.getJsonObject(context);
 			try {
-				jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-				jsonObject.put("MobileClass", PhoneMessage.model+"::" + PhoneMessage.productor);
-				jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-				jsonObject.put("PCDType", "1");
-				jsonObject.put("IMEI", PhoneMessage.imei);
-				jsonObject.put("PCDType", "1");
-				PhoneMessage.getGps(context);
-				jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-				jsonObject.put("GPS-latitude", PhoneMessage.latitude);
-				// 模块属性
-				jsonObject.put("UserId", CommonUtils.getUserId(context));
+				jsonObject.put("UserId", "6c310f2884a7");
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
 
 			VolleyRequest.RequestPost(GlobalConfig.gettalkpersonsurl, tag, jsonObject, new VolleyCallback() {
+
 				@Override
 				protected void requestSuccess(JSONObject result) {
 					if (dialogs != null) {
@@ -412,18 +360,16 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 									new HeightListView(context).setListViewHeightBasedOnChildren(listView_group);
 								}
 								setGroupListViewListener();
-								lin_grouplist.setVisibility(View.VISIBLE);
-								//								if(headviewshow){
-								//								}else{
-								////									sortListView.addHeaderView(headview);// 添加头部view
-								//									headviewshow=true;
-								//								}
+								if(headviewshow){
+								}else{
+									sortListView.addHeaderView(headview);// 添加头部view
+									headviewshow=true;
+								}
 							} else {
-								lin_grouplist.setVisibility(View.GONE);
-								//								if(headviewshow){
-								////									sortListView.removeHeaderView(headview);
-								//									headviewshow=false;
-								//								}
+								if(headviewshow){
+									sortListView.removeHeaderView(headview);
+									headviewshow=false;
+								}
 							}
 							if (srclist_p == null || srclist_p.size() == 0) {
 								TalkPersonNoAdapter adapters = new TalkPersonNoAdapter(context);
@@ -457,20 +403,20 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.lin_second:
-			if (islogin.equals("true")) {
-				send();
-			} else {
-				// 可以直接用startActivity方法，不需要返回处理，因为已经存在onresume
-				Intent intent = new Intent(context, LoginActivity.class);
-				startActivityForResult(intent, 1);
-			}		
-			break;
-		case R.id.image_clear:
-			image_clear.setVisibility(View.INVISIBLE);
-			et_search.setText("");
-			break;
-		}		
+			case R.id.lin_second:
+				if (islogin.equals("true")) {
+					send();
+				} else {
+					// 可以直接用startActivity方法，不需要返回处理，因为已经存在onresume
+					Intent intent = new Intent(context, LoginActivity.class);
+					startActivityForResult(intent, 1);
+				}
+				break;
+			case R.id.image_clear:
+				image_clear.setVisibility(View.INVISIBLE);
+				et_search.setText("");
+				break;
+		}
 	}
 
 	/**
@@ -490,7 +436,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 					if (srclist_g != null && srclist_g.size() != 0) {
 						grouplist.clear();
 						grouplist.addAll(srclist_g);
-						//						List<TalkGroupInside> grouplists = grouplist;
+//						List<TalkGroupInside> grouplists = grouplist;
 						if(adapter_group == null){
 							adapter_group = new TalkGroupAdapter(context,grouplist);
 							listView_group.setAdapter(adapter_group);
@@ -499,20 +445,16 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 						}
 						new HeightListView(context).setListViewHeightBasedOnChildren(listView_group);
 						setGroupListViewListener();
-						lin_grouplist.setVisibility(View.VISIBLE);
-						//						if(headviewshow){
-						//						}else{
-						////							sortListView.addHeaderView(headview);// 添加头部view
-						//							lin_grouplist.setVisibility(View.VISIBLE);
-						//							headviewshow = true;
-						//						}
+						if(headviewshow){
+						}else{
+							sortListView.addHeaderView(headview);// 添加头部view
+							headviewshow = true;
+						}
 					} else {
-						lin_grouplist.setVisibility(View.GONE);
-						//						if(headviewshow){
-						////							sortListView.removeHeaderView(headview);
-						//							lin_grouplist.setVisibility(View.GONE);
-						//							headviewshow = false;
-						//						}
+						if(headviewshow){
+							sortListView.removeHeaderView(headview);
+							headviewshow = false;
+						}
 					}
 					if (srclist_p == null || srclist_p.size() == 0) {
 						TalkPersonNoAdapter adapters = new TalkPersonNoAdapter(context);
@@ -551,49 +493,48 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 				super.handleMessage(msg);
 				int iiii = msg.what;
 				switch (iiii) {
-				case 0:			// 此时没有数据
-					tvNofriends.setVisibility(View.VISIBLE);
-					sortListView.setVisibility(View.GONE);
-					break;
-				case 1:			// 此时个人有数据
-					tvNofriends.setVisibility(View.GONE);
-					sortListView.setVisibility(View.VISIBLE);
-					//					sortListView.removeHeaderView(headview);
-					lin_grouplist.setVisibility(View.GONE);
-					headviewshow=false;
-					if(adapter==null){
+					case 0:			// 此时没有数据
+						tvNofriends.setVisibility(View.VISIBLE);
+						sortListView.setVisibility(View.GONE);
+						break;
+					case 1:			// 此时个人有数据
+						tvNofriends.setVisibility(View.GONE);
+						sortListView.setVisibility(View.VISIBLE);
+						sortListView.removeHeaderView(headview);
+						headviewshow=false;
+						if(adapter==null){
+							adapter = new SortGroupMemberAdapter(context, list);
+							sortListView.setAdapter(adapter);
+						}else{
+							adapter.updateListView(list);
+						}
+						break;
+					case 2:			// 此时群组有数据
+						tvNofriends.setVisibility(View.GONE);
+						sortListView.setVisibility(View.VISIBLE);
+						if(adapter_group==null){
+							adapter_group = new TalkGroupAdapter(context,grouplist);
+							listView_group.setAdapter(adapter_group);
+						}else{
+							adapter_group.notifyDataSetChanged();
+						}
+						new HeightListView(context).setListViewHeightBasedOnChildren(listView_group);
+						TalkPersonNoAdapter adapters = new TalkPersonNoAdapter(context);
+						sortListView.setAdapter(adapters);
+						break;
+					case 3:			// 此时群组、个人都有数据
+						tvNofriends.setVisibility(View.GONE);
+						sortListView.setVisibility(View.VISIBLE);
+						if(adapter_group==null){
+							adapter_group = new TalkGroupAdapter(context,grouplist);
+							listView_group.setAdapter(adapter_group);
+						}else{
+							adapter_group.notifyDataSetChanged();
+						}
+						new HeightListView(context).setListViewHeightBasedOnChildren(listView_group);
 						adapter = new SortGroupMemberAdapter(context, list);
 						sortListView.setAdapter(adapter);
-					}else{
-						adapter.updateListView(list);
-					}
-					break;
-				case 2:			// 此时群组有数据
-					tvNofriends.setVisibility(View.GONE);
-					sortListView.setVisibility(View.VISIBLE);
-					if(adapter_group==null){
-						adapter_group = new TalkGroupAdapter(context,grouplist);
-						listView_group.setAdapter(adapter_group);
-					}else{
-						adapter_group.notifyDataSetChanged();
-					}
-					new HeightListView(context).setListViewHeightBasedOnChildren(listView_group);
-					TalkPersonNoAdapter adapters = new TalkPersonNoAdapter(context);
-					sortListView.setAdapter(adapters);
-					break;
-				case 3:			// 此时群组、个人都有数据
-					tvNofriends.setVisibility(View.GONE);
-					sortListView.setVisibility(View.VISIBLE);
-					if(adapter_group==null){
-						adapter_group = new TalkGroupAdapter(context,grouplist);
-						listView_group.setAdapter(adapter_group);
-					}else{
-						adapter_group.notifyDataSetChanged();
-					}
-					new HeightListView(context).setListViewHeightBasedOnChildren(listView_group);
-					adapter = new SortGroupMemberAdapter(context, list);
-					sortListView.setAdapter(adapter);
-					break;
+						break;
 				}
 			}
 		};
@@ -685,10 +626,11 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 	 */
 	private void setListViewListener() {
 		adapter.setOnListeners(new SortGroupMemberAdapter.OnListeners() {
+			@Override
 			public void add(int position) {
 				id = ((TalkPersonInside) adapter.getItem(position)).getUserId();
 				//此时的对讲状态
-				if(ChatFragment.iscalling){
+				/*if(ChatFragment.iscalling){
 					if(ChatFragment.interphonetype.equals("user")){
 						type = 1;
 						confirmdialog.show();
@@ -697,7 +639,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 					}
 				}else{
 					call(id);
-				}
+				}*/
 			}
 		});
 
@@ -705,7 +647,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 				// 跳转到详细信息界面
-				Intent intent = new Intent(context,TalkPersonNewsActivity.class);
+			/*	Intent intent = new Intent(context,TalkPersonNewsActivity.class);*/
 				Bundle bundle = new Bundle();
 				bundle.putString("type", "talkpersonfragment");
 				if(headviewshow){
@@ -713,8 +655,8 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 				}else{
 					bundle.putSerializable("data", srclist_p.get(position));
 				}
-				intent.putExtras(bundle);
-				startActivity(intent);
+				/*intent.putExtras(bundle);
+				startActivity(intent);*/
 			}
 		});
 
@@ -722,6 +664,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 		 * 设置右侧触摸监听
 		 */
 		sideBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
+			@Override
 			public void onTouchingLetterChanged(String s) {
 				// 该字母首次出现的位置
 				int position = adapter.getPositionForSection(s.charAt(0));
@@ -741,7 +684,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			public void add(int position) {
 				group=grouplist.get(position);
 				Log.e("组名称", group.getGroupName());
-				if(ChatFragment.iscalling){
+				/*if(ChatFragment.iscalling){
 					if(ChatFragment.interphonetype.equals("user")){
 						type=2;
 						confirmdialog.show();
@@ -755,7 +698,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 					ChatFragment.zhidinggroup(group);
 					//对讲主页界面更新
 					DuiJiangActivity.update();
-				}
+				}*/
 			}
 		});
 
@@ -763,12 +706,12 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 				// 跳转到群组详情页面
-				Intent intent = new Intent(context, TalkGroupNewsActivity.class);
+			/*	Intent intent = new Intent(context, TalkGroupNewsActivity.class);
 				Bundle bundle = new Bundle();
 				bundle.putString("type", "talkpersonfragment");
 				bundle.putSerializable("data", grouplist.get(position));
 				intent.putExtras(bundle);
-				startActivity(intent);
+				startActivity(intent);*/
 			}
 		});
 	}
