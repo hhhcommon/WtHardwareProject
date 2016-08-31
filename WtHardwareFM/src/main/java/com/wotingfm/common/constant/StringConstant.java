@@ -69,5 +69,5 @@ public class StringConstant {
     // 标识 查找类型为个人
     public static final String FIND_TYPE_PERSON = "FIND_TYPE_PERSON";
 
-    public static final String FIND_CONTENT_TO_RESULT = "FIND_CONTENT_TO_RESULT";
+    public static final String FIND_CONTENT_TO_RESULT = "searchstr";
 }

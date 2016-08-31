@@ -45,17 +45,18 @@ public class GroupAddActivity extends BaseActivity implements OnClickListener {
     private TextView tv_id;
     private String GroupType;        // 验证群0；公开群1[原来的号码群]；密码群2
     private LinearLayout lin_mm;
-    private LinearLayout lin_yzxx;
     private EditText et_news;
     private String news;
     private EditText et_password;
     private FindGroupNews contact;
     private String psd = null;        // 密码
-    private LinearLayout lin_delete;
     private GroupAddActivity context;
     private TextView tv_sign;
     private String tag = "GROUP_ADD_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
+    private View linearVerification;
+
+    private ImageView clearImage;
 
     @Override
     protected int setViewId() {
@@ -84,6 +85,8 @@ public class GroupAddActivity extends BaseActivity implements OnClickListener {
         tv_sign = (TextView) findViewById(R.id.tv_sign);
         tv_add = (TextView) findViewById(R.id.tv_add);
         lin_mm = (LinearLayout) findViewById(R.id.lin_mm);
+        clearImage = (ImageView) findViewById(R.id.clear_image);
+        linearVerification = findViewById(R.id.linear_item);
     }
 
     private void setvalue(FindGroupNews contact) {
@@ -95,16 +98,16 @@ public class GroupAddActivity extends BaseActivity implements OnClickListener {
                 // 验证群，暂不做
                 tv_add.setText("申请入群");
                 lin_mm.setVisibility(View.GONE);
-                lin_yzxx.setVisibility(View.VISIBLE);
+                linearVerification.setVisibility(View.VISIBLE);
             } else if (GroupType.equals("2")) {
                 // 密码群
                 tv_add.setText("申请入群");
                 lin_mm.setVisibility(View.VISIBLE);
-                lin_yzxx.setVisibility(View.GONE);
+                linearVerification.setVisibility(View.GONE);
             } else {
                 // 公开群
                 lin_mm.setVisibility(View.GONE);
-                lin_yzxx.setVisibility(View.GONE);
+                linearVerification.setVisibility(View.GONE);
                 tv_add.setText("加入群组");
             }
         }
@@ -145,7 +148,7 @@ public class GroupAddActivity extends BaseActivity implements OnClickListener {
     private void setListener() {
         imageLoader = new ImageLoader(this);
         tv_add.setOnClickListener(this);
-        lin_delete.setOnClickListener(new OnClickListener() {
+        clearImage.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 et_news.setText("");
@@ -360,8 +363,8 @@ public class GroupAddActivity extends BaseActivity implements OnClickListener {
         tv_sign = null;
         tv_add = null;
         lin_mm = null;
-        lin_yzxx = null;
-        lin_delete = null;
+        linearVerification = null;
+        clearImage = null;
         sharedPreferences = null;
         context = null;
         username = null;

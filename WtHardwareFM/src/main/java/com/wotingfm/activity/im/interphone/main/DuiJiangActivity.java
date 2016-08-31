@@ -21,8 +21,12 @@ import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.adapter.MyFragmentPagerAdapter;
 import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
+import com.wotingfm.activity.im.interphone.creategroup.main.CreateGroupMainActivity;
+import com.wotingfm.activity.im.interphone.find.FindActivity;
 import com.wotingfm.activity.im.interphone.linkman.fragment.LinkManFragment;
-import com.wotingfm.activity.im.interphone.notify.NotifyNewActivity;
+import com.wotingfm.activity.im.interphone.notify.activity.NotifyNewActivity;
+import com.wotingfm.activity.im.interphone.scanning.activity.CaptureActivity;
+import com.wotingfm.activity.person.login.activity.LoginActivity;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.ToastUtils;
 
@@ -93,12 +97,19 @@ public class DuiJiangActivity extends FragmentActivity {
 				if (login != null && !login.trim().equals("") && login.equals("true")) {
 //					Intent Intent = new Intent(context, FindActivity.class);
 //					Bundle bundle = new Bundle();
-//					bundle.putString("type", "friend");
+//					bundle.putString(StringConstant.FIND_TYPE, StringConstant.FIND_TYPE_PERSON);
 //					Intent.putExtras(bundle);
 //					startActivity(Intent);
 				} else {
 //					startActivity(new Intent(context, LoginActivity.class));
 				}
+
+				Intent Intent = new Intent(context, FindActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putString(StringConstant.FIND_TYPE, StringConstant.FIND_TYPE_PERSON);
+				Intent.putExtras(bundle);
+				startActivity(Intent);
+
 				adddialog.dismiss();
 			}
 		});
@@ -113,12 +124,19 @@ public class DuiJiangActivity extends FragmentActivity {
 				if (login != null && !login.trim().equals("") && login.equals("true")) {
 //					Intent Intent = new Intent(context, FindActivity.class);
 //					Bundle bundle = new Bundle();
-//					bundle.putString("type", "group");
+//					bundle.putString(StringConstant.FIND_TYPE, StringConstant.FIND_TYPE_PERSON);
 //					Intent.putExtras(bundle);
 //					startActivity(Intent);
 				} else {
 //					startActivity(new Intent(context, LoginActivity.class));
 				}
+
+				Intent Intent = new Intent(context, FindActivity.class);
+				Bundle bundle = new Bundle();
+				bundle.putString(StringConstant.FIND_TYPE, StringConstant.FIND_TYPE_GROUP);
+				Intent.putExtras(bundle);
+				startActivity(Intent);
+
 				adddialog.dismiss();
 			}
 		});
@@ -131,10 +149,10 @@ public class DuiJiangActivity extends FragmentActivity {
 			public void onClick(View v) {
 				String login = sharedPreferences.getString(StringConstant.ISLOGIN, "false");// 是否登录
 				if (login != null && !login.trim().equals("") && login.equals("true")) {
-//					Intent intent = new Intent(context, CreateGroupMainActivity.class);
-//					startActivity(intent);
+					Intent intent = new Intent(context, CreateGroupMainActivity.class);
+					startActivity(intent);
 				} else {
-//					startActivity(new Intent(context, LoginActivity.class));
+					startActivity(new Intent(context, LoginActivity.class));
 				}
 				adddialog.dismiss();
 			}
@@ -148,9 +166,9 @@ public class DuiJiangActivity extends FragmentActivity {
 			public void onClick(View v) {
 				String login = sharedPreferences.getString(StringConstant.ISLOGIN, "false");// 是否登录
 				if (login != null && !login.trim().equals("") && login.equals("true")) {
-//					startActivity(new Intent(context, CaptureActivity.class));
+					startActivity(new Intent(context, CaptureActivity.class));
 				} else {
-//					startActivity(new Intent(context, LoginActivity.class));
+					startActivity(new Intent(context, LoginActivity.class));
 				}
 				adddialog.dismiss();
 			}

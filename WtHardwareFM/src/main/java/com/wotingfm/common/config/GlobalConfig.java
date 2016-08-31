@@ -1,6 +1,8 @@
 package com.wotingfm.common.config;
 
-import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.model.UserInfo;
+import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
+import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
+import com.wotingfm.activity.music.player.model.LanguageSearchInside;
 
 import java.util.List;
 

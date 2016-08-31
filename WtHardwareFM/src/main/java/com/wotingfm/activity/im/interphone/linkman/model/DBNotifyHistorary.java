@@ -10,6 +10,9 @@ public class DBNotifyHistorary implements Serializable{
 	private String Content;//内容
 	private String DealTime;//服务段处理时间
 	private String AddTime;//添加时间
+	public DBNotifyHistorary(){
+
+	}
 	public DBNotifyHistorary(String bjuserid, String type, 
 			String imageurl,String content, String title, String dealtime,String addtime) {
 		super();

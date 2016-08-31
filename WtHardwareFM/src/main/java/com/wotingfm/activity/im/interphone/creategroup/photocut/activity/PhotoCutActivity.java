@@ -111,6 +111,6 @@ public class PhotoCutActivity extends Activity {
             mClipImageLayout = null;
         }
         textSave = null;
-        setContentView(R.layout.activity_null_view);
+        setContentView(R.layout.activity_null);
     }
 }

@@ -278,20 +278,20 @@ public class MineActivity extends Activity implements OnClickListener {
 			startActivity(new Intent(context,UpdatePersonActivity.class));
 			break;
 		case R.id.imageView_ewm:		// 展示二维码
-			UserInviteMeInside news = new UserInviteMeInside();
-			news.setPortraitMini(imagurl);
-			news.setUserId(userid);
-			news.setUserName(username);
-			Intent intent = new Intent(context,EWMShowActivity.class);
-			Bundle bundle =  new Bundle();
-			bundle.putString("type", "1"); 
-			bundle.putString("id", userid);
-			bundle.putString("image", url);
-			bundle.putString("news","");
-			bundle.putString("name", username);
-			bundle.putSerializable("person", news);
-			intent.putExtras(bundle);
-			startActivity(intent);		
+//			UserInviteMeInside news = new UserInviteMeInside();
+//			news.setPortraitMini(imagurl);
+//			news.setUserId(userid);
+//			news.setUserName(username);
+//			Intent intent = new Intent(context,EWMShowActivity.class);
+//			Bundle bundle =  new Bundle();
+//			bundle.putString("type", "1");
+//			bundle.putString("id", userid);
+//			bundle.putString("image", url);
+//			bundle.putString("news","");
+//			bundle.putString("name", username);
+//			bundle.putSerializable("person", news);
+//			intent.putExtras(bundle);
+//			startActivity(intent);
 			break;
 		case R.id.lin_like:				// 我喜欢的
 			startActivity(new Intent(context,FavoriteActivity.class));
@@ -319,10 +319,10 @@ public class MineActivity extends Activity implements OnClickListener {
 				//imagurl=http://182.92.175.134:808/wt/imageurl
 				imgloader.DisplayImage(url.replace("\\", "/"),imgview_touxiang, false, false, null, null);
 			}
-			UserInviteMeInside news = new UserInviteMeInside();
-			news.setPortraitMini(imagurl);
-			news.setUserId(userid);
-			news.setUserName(username);
+//			UserInviteMeInside news = new UserInviteMeInside();
+//			news.setPortraitMini(imagurl);
+//			news.setUserId(userid);
+//			news.setUserName(username);
 			/*
 			Bitmap bmp = CreatQRImageUtil.createQRImage( 1, null,news,300, 300);
 			if(bmp!=null){

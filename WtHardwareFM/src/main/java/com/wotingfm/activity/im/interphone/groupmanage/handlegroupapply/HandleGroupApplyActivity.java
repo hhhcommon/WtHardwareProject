@@ -1,9 +1,6 @@
 package com.wotingfm.activity.im.interphone.groupmanage.handlegroupapply;
 
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
@@ -23,14 +20,17 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.activity.im.interphone.groupmanage.model.*;
 import com.wotingfm.activity.im.interphone.groupmanage.joingrouplist.adapter.joingrouplistadapter;
+import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.List;
 

@@ -22,8 +22,8 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
 import com.wotingfm.activity.mine.about.AboutActivity;
-import com.wotingfm.activity.mine.contactus.activity.ContactUsActivity;
-import com.wotingfm.activity.mine.downloadposition.activity.DownloadPositionActivity;
+import com.wotingfm.activity.mine.contactus.ContactUsActivity;
+import com.wotingfm.activity.mine.downloadposition.DownloadPositionActivity;
 import com.wotingfm.activity.mine.feedback.activity.FeedbackActivity;
 import com.wotingfm.activity.mine.help.HelpActivity;
 import com.wotingfm.common.config.GlobalConfig;
@@ -363,8 +363,8 @@ public class SetActivity extends Activity implements OnClickListener {
 					e.printStackTrace();
 				}
 				if(ReturnType != null && ReturnType.equals("1001")){
-					String MastUpdate = null;
-					String ResultList = null;
+					String MastUpdate;
+					String ResultList;
 					try {
 						GlobalConfig.apkUrl = result.getString("DownLoadUrl");
 						MastUpdate = result.getString("MastUpdate");
@@ -393,17 +393,8 @@ public class SetActivity extends Activity implements OnClickListener {
 
 	//检查更新请求服务器提交参数
 	private JSONObject setUpdataParam(){
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
-			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x"
-					+ PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			jsonObject.put("PCDType",GlobalConfig.PCDType);
-			PhoneMessage.getGps(this);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-			jsonObject.put("SessionId", CommonUtils.getSessionId(this));
 			jsonObject.put("Version", PhoneMessage.appVersonName);
 		} catch (JSONException e) {
 			e.printStackTrace();

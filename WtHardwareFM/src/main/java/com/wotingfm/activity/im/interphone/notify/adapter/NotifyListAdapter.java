@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.im.interphone.notify.model.DBNotifyHistory;
+import com.wotingfm.activity.im.interphone.linkman.model.DBNotifyHistorary;
 
 import java.util.List;
 
@@ -18,9 +18,9 @@ import java.util.List;
  */
 public class NotifyListAdapter extends BaseAdapter {
     private Context context;
-    private List<DBNotifyHistory> list;
+    private List<DBNotifyHistorary> list;
 
-    public NotifyListAdapter(Context context, List<DBNotifyHistory> list){
+    public NotifyListAdapter(Context context, List<DBNotifyHistorary> list){
         this.context = context;
         this.list = list;
     }
@@ -53,7 +53,7 @@ public class NotifyListAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        DBNotifyHistory notifyNewData = list.get(position);
+        DBNotifyHistorary notifyNewData = list.get(position);
         viewHolder.textTitle.setText(notifyNewData.getTitle());
         viewHolder.textContent.setText(notifyNewData.getContent());
         viewHolder.textTime.setText(notifyNewData.getAddTime());

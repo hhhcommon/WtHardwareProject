@@ -1,76 +1,8 @@
 package com.wotingfm.activity.im.interphone.chat.fragment;
 
-import android.app.Dialog;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
-import android.graphics.Color;
-import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import com.android.volley.VolleyError;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.shenstec.activity.login.LoginActivity;
-import com.wotingfm.R;
-
-import com.wotingfm.activity.im.interphone.chat.adapter.ChatListAdapter;
-import com.wotingfm.activity.im.interphone.chat.adapter.GroupPersonAdapter;
-import com.wotingfm.activity.im.interphone.chat.dao.SearchTalkHistoryDao;
-import com.wotingfm.activity.im.interphone.chat.model.DBTalkHistorary;
-import com.wotingfm.activity.im.interphone.chat.model.GroupTalkInside;
-import com.wotingfm.activity.im.interphone.chat.model.TalkListGP;
-import com.wotingfm.activity.im.interphone.commom.message.MessageUtils;
-import com.wotingfm.activity.im.interphone.commom.message.MsgNormal;
-import com.wotingfm.activity.im.interphone.commom.message.content.MapContent;
-import com.wotingfm.activity.im.interphone.commom.service.InterPhoneControl;
-import com.wotingfm.activity.im.interphone.commom.service.VoiceStreamRecordService;
-import com.wotingfm.activity.im.interphone.linkman.model.LinkMan;
-import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
-import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
-import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.common.volley.VolleyCallback;
-import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.helper.ImageLoader;
-import com.wotingfm.util.CommonUtils;
-import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.PhoneMessage;
-import com.wotingfm.util.ToastUtils;
-import com.wotingfm.util.VibratorUtils;
-import com.wotingfm.widget.MyLinearLayout;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 
 /**
  * 对讲机-获取联系列表，包括群组跟个人

@@ -1,16 +1,30 @@
 package com.wotingfm.activity.im.interphone.find.result;
 
+import android.app.Dialog;
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
+import com.wotingfm.activity.im.interphone.find.add.FriendAddActivity;
+import com.wotingfm.activity.im.interphone.find.add.GroupAddActivity;
 import com.wotingfm.activity.im.interphone.find.result.adapter.FindFriendResultAdapter;
 import com.wotingfm.activity.im.interphone.find.result.adapter.FindGroupResultAdapter;
 import com.wotingfm.activity.im.interphone.find.result.model.FindGroupNews;
 import com.wotingfm.activity.im.interphone.find.result.model.UserInviteMeInside;
 import com.wotingfm.common.base.BaseActivity;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
+import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.xlistview.XListView;
 import com.wotingfm.widget.xlistview.XListView.IXListViewListener;
@@ -19,16 +33,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 搜索结果页面
- *
  * @author 辛龙
- *         2016年1月20日
+ *  2016年1月20日
  */
-public class FindNewsResultActivity extends BaseActivity {
-    private XListView mXListView;
-    private int RefreshType;        // 1，下拉刷新 2，加载更多
+public class FindNewsResultActivity extends BaseActivity implements OnClickListener {
+    private XListView mxlistview;
+    private int RefreshType;		// 1，下拉刷新 2，加载更多
+    private Dialog dialog;
     private String searchstr;
     private ArrayList<UserInviteMeInside> UserList;
     private ArrayList<FindGroupNews> GroupList;
@@ -36,8 +51,7 @@ public class FindNewsResultActivity extends BaseActivity {
     private int PageNum;
     private FindFriendResultAdapter adapter;
     private FindGroupResultAdapter adapters;
-    private FindNewsResultActivity context;
-    private String tag = "FIND_NEWS_RESULT_VOLLEY_REQUEST_CANCEL_TAG";
+    private String tag = "FINDNEWS_RESULT_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
 
     @Override
@@ -47,35 +61,78 @@ public class FindNewsResultActivity extends BaseActivity {
 
     @Override
     protected void init() {
-        mXListView = (XListView) findViewById(R.id.listview_querycontact);
+        setTitle("搜搜结果");
+        setview();
+        setlistener();
+        searchstr = this.getIntent().getStringExtra(StringConstant.FIND_CONTENT_TO_RESULT);
+        type = this.getIntent().getStringExtra(StringConstant.FIND_TYPE);
+        if (!type.trim().equals("")) {
+            if (type.equals(StringConstant.FIND_TYPE_PERSON)) {
+                // 搜索好友
+                if (!searchstr.trim().equals("")) {
+                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                        dialog = DialogUtils.Dialogph(FindNewsResultActivity.this,"正在获取数据");
+                        PageNum = 1;
+                        RefreshType = 1;
+                        getfriend();
+                    } else {
+                        ToastUtils.show_allways(FindNewsResultActivity.this,"网络连接失败，请稍后重试");
+                    }
+                } else {
+                    // 如果当前界面没有接收到数据就给以友好提示
+                    ToastUtils.show_allways(FindNewsResultActivity.this,"网络连接失败，请稍后重试");
+                }
+            } else if (type.equals(StringConstant.FIND_TYPE_GROUP)) {
+                // 搜索群组
+                if (!searchstr.trim().equals("")) {
+                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                        dialog = DialogUtils.Dialogph(FindNewsResultActivity.this,"正在获取数据");
+                        PageNum = 1;
+                        RefreshType = 1;
+                        getgroup();
+                    } else {
+                        ToastUtils.show_allways(FindNewsResultActivity.this,"网络连接失败，请稍后重试");
+                    }
+                } else {
+                    // 如果当前界面没有接收到数据就给以友好提示
+                    ToastUtils.show_allways(FindNewsResultActivity.this,"网络连接失败，请稍后重试");
+                }
+            }
+        } else {
+            // 如果当前界面没有接收到搜索类型数据就给以友好提示
+            ToastUtils.show_allways(FindNewsResultActivity.this, "网络连接失败，请稍后重试");
+        }
     }
 
-    // 设置对应的点击事件
-    private void setListener() {
-        mXListView.setPullRefreshEnable(false);
-        mXListView.setPullLoadEnable(false);
-        mXListView.setXListViewListener(new IXListViewListener() {
+    private void setview() {
+        mxlistview = (XListView) findViewById(R.id.listview_querycontact);
+    }
+
+    private void setlistener() {// 设置对应的点击事件
+        mxlistview.setPullRefreshEnable(false);
+        mxlistview.setPullLoadEnable(false);
+        mxlistview.setXListViewListener(new IXListViewListener() {
             @Override
             public void onRefresh() {
                 // 数据请求
-                if (!type.trim().equals("")) {
-                    if (type.equals("friend")) {
+                if (type.trim() != null && !type.trim().equals("")) {
+                    if (type.equals(StringConstant.FIND_TYPE_PERSON)) {
                         // 获取刷新好友数据
                         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                             RefreshType = 1;
                             PageNum = 1;
-                            getFriend();
+                            getfriend();
                         } else {
-                            ToastUtils.show_allways(FindNewsResultActivity.this, "网络连接失败，请稍后重试");
+                            ToastUtils.show_allways(FindNewsResultActivity.this,"网络连接失败，请稍后重试");
                         }
-                    } else if (type.equals("group")) {
+                    } else if (type.equals(StringConstant.FIND_TYPE_GROUP)) {
                         // 获取刷新群组数据
                         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                             RefreshType = 1;
                             PageNum = 1;
-                            getGroup();
+                            getgroup();
                         } else {
-                            ToastUtils.show_allways(FindNewsResultActivity.this, "网络连接失败，请稍后重试");
+                            ToastUtils.show_allways(FindNewsResultActivity.this,"网络连接失败，请稍后重试");
                         }
                     }
                 }
@@ -84,23 +141,23 @@ public class FindNewsResultActivity extends BaseActivity {
             @Override
             public void onLoadMore() {
                 if (!type.trim().equals("")) {
-                    if (type.equals("friend")) {
+                    if (type.equals(StringConstant.FIND_TYPE_PERSON)) {
                         // 获取加载更多好友数据
                         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                             RefreshType = 2;
                             PageNum = PageNum + 1;
-                            getFriend();
+                            getfriend();
                         } else {
-                            ToastUtils.show_allways(FindNewsResultActivity.this, "网络连接失败，请稍后重试");
+                            ToastUtils.show_allways(FindNewsResultActivity.this,"网络连接失败，请稍后重试");
                         }
-                    } else if (type.equals("group")) {
+                    } else if (type.equals(StringConstant.FIND_TYPE_GROUP)) {
                         // 获取加载更多群组数据
                         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                             RefreshType = 2;
                             PageNum = PageNum + 1;
-                            getGroup();
+                            getgroup();
                         } else {
-                            ToastUtils.show_allways(FindNewsResultActivity.this, "网络连接失败，请稍后重试");
+                            ToastUtils.show_allways(FindNewsResultActivity.this,"网络连接失败，请稍后重试");
                         }
                     }
                 }
@@ -108,10 +165,63 @@ public class FindNewsResultActivity extends BaseActivity {
         });
     }
 
+    private void setitemlistener() {// 设置item对应的点击事件
+        mxlistview.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                if (!type.trim().equals("")) {
+                    if (type.equals(StringConstant.FIND_TYPE_PERSON)) {
+                        if (position > 0) {
+                            if (UserList != null&& UserList.size() > 0) {
+                                Intent intent = new Intent(FindNewsResultActivity.this,FriendAddActivity.class);
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("contact",UserList.get(position - 1));
+                                intent.putExtras(bundle);
+                                startActivity(intent);
+                            } else {
+                                ToastUtils.show_allways(FindNewsResultActivity.this, "获取数据异常");
+                            }
+                        }
+                    } else if (type.equals(StringConstant.FIND_TYPE_GROUP)) {
+                        if (position > 0) {
+                            if (GroupList != null && GroupList.size() > 0) {
+                                if (GroupList.get(position - 1).getGroupCreator().equals(CommonUtils.getUserId(context))) {
+//                                    Intent intent = new Intent(FindNewsResultActivity.this,TalkGroupNewsActivity.class);
+//                                    Bundle bundle = new Bundle();
+//                                    bundle.putSerializable("contact",GroupList.get(position - 1));
+//                                    bundle.putString("type", "FindNewsResultActivity");
+//                                    intent.putExtras(bundle);
+//                                    startActivity(intent);
+                                } else {
+                                    Intent intent = new Intent(FindNewsResultActivity.this,GroupAddActivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("contact",GroupList.get(position - 1));
+                                    intent.putExtras(bundle);
+                                    startActivity(intent);
+                                }
+                            } else {
+                                ToastUtils.show_allways(FindNewsResultActivity.this, "获取数据异常");
+                            }
+                        }
+                    }
+                }
+            }
+        });
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.head_left_btn:
+                finish();
+                break;
+        }
+    }
+
     /*
      * 获取好友数据
      */
-    protected void getFriend() {
+    protected void getfriend() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("UserId", CommonUtils.getUserId(this));
@@ -129,8 +239,11 @@ public class FindNewsResultActivity extends BaseActivity {
 
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (isCancelRequest) {
-                    return;
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                if(isCancelRequest){
+                    return ;
                 }
                 try {
                     ReturnType = result.getString("ReturnType");
@@ -145,13 +258,51 @@ public class FindNewsResultActivity extends BaseActivity {
                     e1.printStackTrace();
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
-
+                    UserList = new Gson().fromJson(ContactMeString, new TypeToken<List<UserInviteMeInside>>() {}.getType());
+                    if (UserList != null && UserList.size() > 0) {
+                        if (RefreshType == 1) {
+                            adapter = new FindFriendResultAdapter(FindNewsResultActivity.this, UserList);
+                            mxlistview.setAdapter(adapter);
+                            mxlistview.stopRefresh();
+                        } else {
+                            adapter.ChangeData(UserList);
+                            mxlistview.stopLoadMore();
+                        }
+                        setitemlistener();	// 设置item的点击事件
+                    } else {
+                        ToastUtils.show_allways(FindNewsResultActivity.this,"数据获取失败，请稍候再试");	// json解析失败
+                    }
+                } else if (ReturnType != null && ReturnType.equals("1002")) {
+                    if (RefreshType == 1) {
+                        mxlistview.stopRefresh();
+                    } else {
+                        mxlistview.stopLoadMore();
+                    }
+                    // 获取数据失败
+                    if (Message != null && !Message.trim().equals("")) {
+                        ToastUtils.show_allways(FindNewsResultActivity.this,Message);
+                    } else {
+                        ToastUtils.show_allways(FindNewsResultActivity.this,"数据获取失败，请稍候再试");
+                    }
+                } else {
+                    if (RefreshType == 1) {
+                        mxlistview.stopRefresh();
+                    } else {
+                        mxlistview.stopLoadMore();
+                    }
+                    if (Message != null && !Message.trim().equals("")) {
+                        ToastUtils.show_allways(FindNewsResultActivity.this,Message);
+                    } else {
+                        ToastUtils.show_allways(FindNewsResultActivity.this,"数据获取失败，请稍候再试");
+                    }
                 }
             }
 
             @Override
             protected void requestError(VolleyError error) {
-
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
             }
         });
     }
@@ -159,7 +310,7 @@ public class FindNewsResultActivity extends BaseActivity {
     /*
      * 获取群组数据
      */
-    protected void getGroup() {
+    protected void getgroup() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("UserId", CommonUtils.getUserId(this));
@@ -177,8 +328,11 @@ public class FindNewsResultActivity extends BaseActivity {
 
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (isCancelRequest) {
-                    return;
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                if(isCancelRequest){
+                    return ;
                 }
                 try {
                     ReturnType = result.getString("ReturnType");
@@ -193,24 +347,37 @@ public class FindNewsResultActivity extends BaseActivity {
                     e1.printStackTrace();
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
-
+                    GroupList = new Gson().fromJson(GroupMeString, new TypeToken<List<FindGroupNews>>() {}.getType());
+                    if (GroupList != null && GroupList.size() > 0) {
+                        if (RefreshType == 1) {
+                            adapters = new FindGroupResultAdapter(FindNewsResultActivity.this, GroupList);
+                            mxlistview.setAdapter(adapters);
+                            mxlistview.stopRefresh();
+                        } else {
+                            adapters.ChangeData(GroupList);
+                            mxlistview.stopLoadMore();
+                        }
+                        setitemlistener();	// 设置item的点击事件
+                    } else {
+                        ToastUtils.show_allways(FindNewsResultActivity.this,"数据获取失败，请稍候再试");	// json解析失败
+                    }
                 } else if (ReturnType != null && ReturnType.equals("1002")) {
                     if (RefreshType == 1) {
-                        mXListView.stopRefresh();
+                        mxlistview.stopRefresh();
                     } else {
-                        mXListView.stopLoadMore();
+                        mxlistview.stopLoadMore();
                     }
                     // 获取数据失败
                     if (Message != null && !Message.trim().equals("")) {
-                        ToastUtils.show_allways(FindNewsResultActivity.this, Message);
+                        ToastUtils.show_allways(FindNewsResultActivity.this,Message);
                     } else {
-                        ToastUtils.show_allways(FindNewsResultActivity.this, "数据获取失败，请稍候再试");
+                        ToastUtils.show_allways(FindNewsResultActivity.this,"数据获取失败，请稍候再试");
                     }
                 } else {
                     if (RefreshType == 1) {
-                        mXListView.stopRefresh();
+                        mxlistview.stopRefresh();
                     } else {
-                        mXListView.stopLoadMore();
+                        mxlistview.stopLoadMore();
                     }
                     if (Message != null && !Message.trim().equals("")) {
                         ToastUtils.show_allways(FindNewsResultActivity.this, Message);
@@ -222,7 +389,9 @@ public class FindNewsResultActivity extends BaseActivity {
 
             @Override
             protected void requestError(VolleyError error) {
-
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
             }
         });
     }
@@ -231,5 +400,16 @@ public class FindNewsResultActivity extends BaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
+        UserList = null;
+        GroupList = null;
+        mxlistview = null;
+        adapter = null;
+        adapters = null;
+        context = null;
+        dialog = null;
+        searchstr = null;
+        type = null;
+        tag = null;
+        setContentView(R.layout.activity_null);
     }
 }

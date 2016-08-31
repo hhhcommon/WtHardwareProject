@@ -104,7 +104,9 @@
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:layout_marginTop="15dp"
-            android:background="@drawable/bg_edittext_normal">
+            android:background="@drawable/bg_edittext_normal"
+            android:gravity="center"
+            android:padding="5dp">
 
             <EditText
                 android:id="@+id/et_news"
@@ -114,6 +116,7 @@
                 android:background="@color/WHITE"
                 android:ellipsize="end"
                 android:ems="10"
+                android:padding="1dp"
                 android:hint="请输入验证信息"
                 android:singleLine="true"
                 android:textColor="@color/beijing"
@@ -122,6 +125,7 @@
                 android:textSize="@dimen/wt_login_text_wjmm" />
 
             <ImageView
+                android:id="@+id/clear_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/wt_image_clearnew" />
@@ -137,15 +141,17 @@
             android:layout_marginTop="15dp"
             android:background="@drawable/bg_edittext_normal"
             android:layout_below="@id/linear_item"
-            android:orientation="horizontal"
-            android:visibility="gone" >
+            android:visibility="gone"
+            android:padding="5dp">
 
             <EditText
                 android:id="@+id/et_password"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:background="@color/WHITE"
                 android:ems="10"
                 android:hint="群密码"
+                android:padding="1dp"
                 android:inputType="textPassword"
                 android:singleLine="true"
                 android:textColor="@color/wt_login_third"

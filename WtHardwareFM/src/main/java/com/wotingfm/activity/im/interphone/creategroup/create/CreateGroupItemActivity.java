@@ -148,7 +148,7 @@ public class CreateGroupItemActivity extends BaseActivity implements View.OnClic
      */
     private void setHeadDialog() {
         View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_imageupload, null);
-        dialogView.findViewById(R.id.text_gallery).setOnClickListener(new View.OnClickListener() {
+        dialogView.findViewById(R.id.tv_gallery).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -160,7 +160,7 @@ public class CreateGroupItemActivity extends BaseActivity implements View.OnClic
             }
         });
 
-        dialogView.findViewById(R.id.text_camera).setOnClickListener(new View.OnClickListener() {
+        dialogView.findViewById(R.id.tv_camera).setOnClickListener(new View.OnClickListener() {
 
             @Override
             public void onClick(View v) {
@@ -291,7 +291,6 @@ public class CreateGroupItemActivity extends BaseActivity implements View.OnClic
                 headDialog.show();
                 break;
             case R.id.btn_commit:       // 确定
-                startActivity(new Intent(context, GroupDetailAcitivity.class));
                 nick = editGroupName.getText().toString().trim();
                 sign = editGroupAutograph.getText().toString().trim();
                 if (nick == null || nick.equals("")) {
@@ -307,14 +306,12 @@ public class CreateGroupItemActivity extends BaseActivity implements View.OnClic
                         return ;
                     }
                 }
-                DialogUtils.showDialog(context);
-                sendRequest();
-//                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-//                        DialogUtils.showDialog(context);
-//                        sendRequest();
-//                    } else {
-//                        Toast.makeText(context, "网络失败，请检查网络", Toast.LENGTH_SHORT).show();
-//                    }
+                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                    DialogUtils.showDialog(context);
+                    sendRequest();
+                } else {
+                    Toast.makeText(context, "网络失败，请检查网络", Toast.LENGTH_SHORT).show();
+                }
                 break;
         }
     }

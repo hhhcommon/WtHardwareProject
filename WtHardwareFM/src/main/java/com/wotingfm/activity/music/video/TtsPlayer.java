@@ -1,12 +1,13 @@
 package com.wotingfm.activity.music.video;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechSynthesizer;
 import com.iflytek.cloud.SynthesizerListener;
-import android.content.Context;
-import android.os.Bundle;
-import android.util.Log;
 
 public class TtsPlayer implements WtAudioPlay {
 	private static TtsPlayer ttsplayer;
@@ -130,7 +131,7 @@ public class TtsPlayer implements WtAudioPlay {
 
 		@Override
 		public void onCompleted(SpeechError arg0) {
-			PlayerFragment.playNext();
+//			PlayerFragment.playNext();
 		}
 
 		@Override

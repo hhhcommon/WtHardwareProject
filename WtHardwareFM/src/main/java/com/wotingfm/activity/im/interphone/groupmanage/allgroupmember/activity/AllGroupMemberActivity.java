@@ -16,24 +16,27 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.adapter.CreateGroupMembersAdapter;
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
+import com.wotingfm.activity.im.interphone.linkman.view.SideBar;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.common.widgetui.SideBar;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.CharacterParser;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.PinyinComparator_a;
 import com.wotingfm.util.ToastUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

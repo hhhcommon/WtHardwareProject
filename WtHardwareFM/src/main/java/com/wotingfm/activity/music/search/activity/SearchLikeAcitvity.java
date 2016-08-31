@@ -1,5 +1,6 @@
 package com.wotingfm.activity.music.search.activity;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.wotingfm.R;
 import com.wotingfm.activity.music.search.adapter.SearchHistoryAdapter;
 import com.wotingfm.activity.music.search.adapter.SearchLikeAdapter;
 import com.wotingfm.activity.music.search.adapter.searchhotkeyadapter;
@@ -30,7 +32,7 @@ import java.util.List;
  * @author 辛龙
  * 2016年4月16日
  */
-public class SearchLikeAcitvity  {
+public class SearchLikeAcitvity  extends Activity {
 	private LinearLayout lin_head_left;
 	private LinearLayout lin_head_right;
 	private GridView gv_topsearch;
@@ -56,9 +58,9 @@ public class SearchLikeAcitvity  {
 //	private SearchPlayerHistoryDao dbdao;
 	private LinearLayout lin_history;
 	private List<History> historydatabaselist;
-	private ArrayList<String> topsearchlist=new ArrayList<String>();
+	private ArrayList<String> topsearchlist=new ArrayList<>();
 	
-	private ArrayList<String> topsearchlist1=new ArrayList<String>();//热门搜索list
+	private ArrayList<String> topsearchlist1=new ArrayList<>();//热门搜索list
 	private SearchLikeAdapter adapter;
 	private searchhotkeyadapter seachhotadapter;
 	private SearchHistoryAdapter adapterhistory;
@@ -95,10 +97,10 @@ public class SearchLikeAcitvity  {
 	private boolean isCancelRequest;
 	private VoiceRecognizer mVoiceRecognizer;
 
-//	@Override
+	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-//		super.onCreate(savedInstanceState);
-//		setContentView(R.layout.activity_searchlike);
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_searchlike);
 //		context = this;
 //		bmp = BitmapUtils.readBitMap(context, R.mipmap.talknormal);
 //		bmppress = BitmapUtils.readBitMap(context, R.mipmap.wt_duijiang_button_pressed);

@@ -12,9 +12,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.activity.im.interphone.linkman.dao.NotifyHistoryDao;
+import com.wotingfm.activity.im.interphone.linkman.model.DBNotifyHistorary;
 import com.wotingfm.activity.im.interphone.notify.adapter.NotifyListAdapter;
-import com.wotingfm.activity.im.interphone.notify.dao.NotifyHistoryDao;
-import com.wotingfm.activity.im.interphone.notify.model.DBNotifyHistory;
 import com.wotingfm.common.base.BaseActivity;
 
 import java.text.SimpleDateFormat;
@@ -27,7 +27,7 @@ import java.util.List;
 public class NotifyNewActivity extends BaseActivity {
     private ListView notifyListView;
     private NotifyListAdapter adapter;
-    private List<DBNotifyHistory> list;
+    private List<DBNotifyHistorary> list;
     private Dialog notifyContentDialog;
     private NotifyHistoryDao dbDao;
     private MessageReceiver receiver;
@@ -49,10 +49,10 @@ public class NotifyNewActivity extends BaseActivity {
         setTitle("消息中心");
 
         notifyListView = (ListView) findViewById(R.id.notify_list_view);// 消息列表
-//        list = getNotifyNew();
-//        adapter = new NotifyListAdapter(context, list);
-//        notifyListView.setAdapter(adapter);
-        getDate();
+        list = getNotifyNew();
+        adapter = new NotifyListAdapter(context, list);
+        notifyListView.setAdapter(adapter);
+//        getDate();
     }
 
     /*
@@ -136,17 +136,18 @@ public class NotifyNewActivity extends BaseActivity {
     /*
      * 获取消息列表
      */
-    private List<DBNotifyHistory> getNotifyNew(){
+    private List<DBNotifyHistorary> getNotifyNew(){
         // 测试数据 -------------------------------------------
-        List<DBNotifyHistory> list = new ArrayList<>();
-        DBNotifyHistory notifyNewData;
+        List<DBNotifyHistorary> list = new ArrayList<>();
+        DBNotifyHistorary notifyNewData;
         for(int i=0; i<100; i++){
-            notifyNewData = new DBNotifyHistory();
+            notifyNewData = new DBNotifyHistorary();
             notifyNewData.setTitle("消息标题_" + i);
             notifyNewData.setContent("测试数据，看到效果就可以删除_" + i);
             notifyNewData.setAddTime(new SimpleDateFormat("hh:mm").format(System.currentTimeMillis()));
             list.add(notifyNewData);
         }
+        setListItemListener();
         // -----------------------------------------------------
         return list;
     }

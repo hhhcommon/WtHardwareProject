@@ -97,8 +97,6 @@ public class SearchPlayerHistoryDao {
 
 	/**
 	 * 查询数据库里的数据，无参查询语句 供特定使用
-	 * @param history
-	 * @return
 	 */
 	public List<PlayerHistory> queryHistory() {
 		List<PlayerHistory> mylist = new ArrayList<PlayerHistory>();
@@ -146,8 +144,6 @@ public class SearchPlayerHistoryDao {
 
 	/**
 	 * 通过url删除数据库表中的数据
-	 * @param history
-	 * @return
 	 */
 	public void deleteHistory(String url) {
 		SQLiteDatabase db = helper.getReadableDatabase();
@@ -157,8 +153,6 @@ public class SearchPlayerHistoryDao {
 	
 	/**
 	 * 根据 contentid 删除数据库表中的数据
-	 * @param history
-	 * @return
 	 */
 	public void deleteHistoryById(String id) {
 		SQLiteDatabase db = helper.getReadableDatabase();

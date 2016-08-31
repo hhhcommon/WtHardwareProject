@@ -28,7 +28,6 @@ public class FavorListAdapter extends BaseAdapter{
 		this.context = context;
 		this.list = list;
 		imageLoader = new ImageLoader(context);
-
 	}
 	
 	@Override

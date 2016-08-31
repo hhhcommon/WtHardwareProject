@@ -12,8 +12,8 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.wotingfm.R;
-import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.service.timeroffservice;
@@ -86,32 +86,32 @@ public class TimerPowerOffActivity extends Activity implements OnClickListener {
 		imageTimeNoStart = (ImageView) findViewById(R.id.image_time_nostart);
 
 		// 判断定时服务中的当前节目播放完后关闭是否显示  当前正在播放的是电台节目、当前没有播放任何节目以及当前播放节目处于暂停状态时隐藏此服务
-		if(GlobalConfig.playerobject != null){
-			if(GlobalConfig.playerobject.getMediaType().equals("RADIO")){
-				lin_playend.setVisibility(View.GONE);
-				linView.setVisibility(View.GONE);
-			}else{
-				if(PlayerFragment.audioplay == null){
-					lin_playend.setVisibility(View.GONE);
-					linView.setVisibility(View.GONE);
-					return ;
-				}
-				if(PlayerFragment.audioplay.isPlaying()){
-					lin_playend.setVisibility(View.VISIBLE);
-					linView.setVisibility(View.VISIBLE);
-				}else{
-					lin_playend.setVisibility(View.GONE);
-					linView.setVisibility(View.GONE);
-				}
-			}
-		}else{
-			lin_playend.setVisibility(View.GONE);
-			linView.setVisibility(View.GONE);
-		}
-
-		if(PlayerFragment.isCurrentPlay){
-			lin_playend.setClickable(false);
-		}
+//		if(GlobalConfig.playerobject != null){
+//			if(GlobalConfig.playerobject.getMediaType().equals("RADIO")){
+//				lin_playend.setVisibility(View.GONE);
+//				linView.setVisibility(View.GONE);
+//			}else{
+//				if(PlayerFragment.audioplay == null){
+//					lin_playend.setVisibility(View.GONE);
+//					linView.setVisibility(View.GONE);
+//					return ;
+//				}
+//				if(PlayerFragment.audioplay.isPlaying()){
+//					lin_playend.setVisibility(View.VISIBLE);
+//					linView.setVisibility(View.VISIBLE);
+//				}else{
+//					lin_playend.setVisibility(View.GONE);
+//					linView.setVisibility(View.GONE);
+//				}
+//			}
+//		}else{
+//			lin_playend.setVisibility(View.GONE);
+//			linView.setVisibility(View.GONE);
+//		}
+//
+//		if(PlayerFragment.isCurrentPlay){
+//			lin_playend.setClickable(false);
+//		}
 	}
 
 	/*
@@ -228,50 +228,50 @@ public class TimerPowerOffActivity extends Activity implements OnClickListener {
 			imageTimeCheck = 10;
 			intent.putExtra("time", 10);
 			startService(intent);
-			PlayerFragment.isCurrentPlay = false;
+//			PlayerFragment.isCurrentPlay = false;
 			lin_playend.setClickable(true);
 			break;
 		case R.id.lin_20:			//二十分钟
 			imageTimeCheck = 20;
 			intent.putExtra("time", 20);
 			startService(intent);
-			PlayerFragment.isCurrentPlay = false;
+//			PlayerFragment.isCurrentPlay = false;
 			lin_playend.setClickable(true);
 			break;
 		case R.id.lin_30:			//三十分钟
 			imageTimeCheck = 30;
 			intent.putExtra("time", 30);
 			startService(intent);
-			PlayerFragment.isCurrentPlay = false;
+//			PlayerFragment.isCurrentPlay = false;
 			lin_playend.setClickable(true);
 			break;
 		case R.id.lin_40:			//四十分钟
 			imageTimeCheck = 40;
 			intent.putExtra("time", 40);
 			startService(intent);
-			PlayerFragment.isCurrentPlay = false;
+//			PlayerFragment.isCurrentPlay = false;
 			lin_playend.setClickable(true);
 			break;
 		case R.id.lin_50:			//五十分钟
 			imageTimeCheck = 50;
 			intent.putExtra("time", 50);
 			startService(intent);
-			PlayerFragment.isCurrentPlay = false;
+//			PlayerFragment.isCurrentPlay = false;
 			lin_playend.setClickable(true);
 			break;
 		case R.id.lin_60:			//六十分钟
 			imageTimeCheck = 60;
 			intent.putExtra("time", 60);
 			startService(intent);
-			PlayerFragment.isCurrentPlay = false;
+//			PlayerFragment.isCurrentPlay = false;
 			lin_playend.setClickable(true);
 			break;
 		case R.id.lin_playend:		//当前节目播放完
 			imageTimeCheck = 100;
-			int time = PlayerFragment.timerService;
-			intent.putExtra("time", time);
+//			int time = PlayerFragment.timerService;
+//			intent.putExtra("time", time);
 			startService(intent);
-			PlayerFragment.isCurrentPlay = true;
+//			PlayerFragment.isCurrentPlay = true;
 			lin_playend.setClickable(false);
 			break;
 		case R.id.lin_nostart:// 不启动
@@ -280,7 +280,7 @@ public class TimerPowerOffActivity extends Activity implements OnClickListener {
 			intent.setAction(BroadcastConstants.TIMER_STOP);
 			startService(intent);
 			tv_time.setText("00:00");
-			PlayerFragment.isCurrentPlay = false;
+//			PlayerFragment.isCurrentPlay = false;
 			lin_playend.setClickable(true);
 			break;
 		}

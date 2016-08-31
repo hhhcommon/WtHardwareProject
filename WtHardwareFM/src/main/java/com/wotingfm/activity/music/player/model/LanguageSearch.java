@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.util.List;
 
 public class LanguageSearch implements Serializable{
-	
 	private String AllCount;
 	private List<LanguageSearchInside> List;
 	public String getAllCount() {
@@ -19,6 +18,4 @@ public class LanguageSearch implements Serializable{
 	public void setList(List<LanguageSearchInside> list) {
 		List = list;
 	}
-	
-
 }

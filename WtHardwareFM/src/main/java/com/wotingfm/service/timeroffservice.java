@@ -1,12 +1,14 @@
 package com.wotingfm.service;
 
-import java.text.SimpleDateFormat;
-import java.util.TimeZone;
-import com.wotingfm.common.constant.BroadcastConstants;
 import android.app.Service;
 import android.content.Intent;
 import android.os.CountDownTimer;
 import android.os.IBinder;
+
+import com.wotingfm.common.constant.BroadcastConstants;
+
+import java.text.SimpleDateFormat;
+import java.util.TimeZone;
 
 /**
  * 定时关闭后台服务
@@ -24,11 +26,11 @@ public class timeroffservice extends Service {
 			int a = intent.getIntExtra("time", 0);
 			final int index = a;
 			long EndTime = 0;
-			if(PlayerFragment.isCurrentPlay){
-				EndTime = a;
-			}else{
-				EndTime = a * 1000 * 60;
-			}
+//			if(PlayerFragment.isCurrentPlay){
+//				EndTime = a;
+//			}else{
+//				EndTime = a * 1000 * 60;
+//			}
 			if (mcountDownTimer != null) {
 				mcountDownTimer.cancel();
 			}
@@ -50,11 +52,11 @@ public class timeroffservice extends Service {
 
 					// 此处需要将此消息已广播形式发送回主activity
 					mintent.putExtra("update", s);
-					if(PlayerFragment.isCurrentPlay){
-						mintent.putExtra("check_image", 100);
-					}else{
-						mintent.putExtra("check_image", index);
-					}
+//					if(PlayerFragment.isCurrentPlay){
+//						mintent.putExtra("check_image", 100);
+//					}else{
+//						mintent.putExtra("check_image", index);
+//					}
 					sendBroadcast(mintent);
 				}
 				@Override

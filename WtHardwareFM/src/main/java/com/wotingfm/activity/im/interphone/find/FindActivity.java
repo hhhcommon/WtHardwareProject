@@ -25,16 +25,17 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.im.scanning.activity.CaptureActivity;
+import com.wotingfm.activity.im.interphone.find.result.FindNewsResultActivity;
+import com.wotingfm.activity.im.interphone.scanning.activity.CaptureActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.ToastUtils;
-import com.wotingfm.widget.MyLinearLayout;
 
 /**
  * 查找好友或查找群组
@@ -50,7 +51,7 @@ public class FindActivity extends Activity implements View.OnClickListener {
     private Bitmap bmp;
     private Bitmap bmpPress;
     private Dialog yuYinDialog;             // 语音搜索对话框
-    private MyLinearLayout linearVoice;
+    private LinearLayout linearVoice;
     private ImageView imageViewVoice;       // 语音搜索
     private TextView textCancel;            // 关闭
     private TextView textSpeakStatus;       // 语音搜索状态
@@ -163,7 +164,7 @@ public class FindActivity extends Activity implements View.OnClickListener {
         //定义dialog view
         bmp = BitmapUtils.readBitMap(FindActivity.this, R.mipmap.wt_image_talk_normal);
         bmpPress = BitmapUtils.readBitMap(FindActivity.this, R.mipmap.wt_duijiang_button_pressed);
-        linearVoice = (MyLinearLayout) dialogView.findViewById(R.id.rl_voice);
+        linearVoice = (LinearLayout) dialogView.findViewById(R.id.rl_voice);
         imageViewVoice = (ImageView) dialogView.findViewById(R.id.imageView_voice);
         imageViewVoice.setImageBitmap(bmp);
         textCancel = (TextView) dialogView.findViewById(R.id.tv_cancle);
@@ -242,7 +243,7 @@ public class FindActivity extends Activity implements View.OnClickListener {
                     return;
                 }
                 // 跳转到搜索结果界面
-                Intent intent = new Intent(FindActivity.this, FindActivity.class);
+                Intent intent = new Intent(FindActivity.this, FindNewsResultActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString(StringConstant.FIND_CONTENT_TO_RESULT, searchString);
                 bundle.putString(StringConstant.FIND_TYPE, type);

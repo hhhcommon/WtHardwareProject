@@ -171,7 +171,7 @@ public abstract class BaseActivity extends Activity {
         textTitle = null;
         leftImage = null;
         rightImage = null;
-        setContentView(R.layout.activity_null_view);
+        setContentView(R.layout.activity_null);
         MyActivityManager mam = MyActivityManager.getInstance();
         mam.popOneActivity(this);
     }

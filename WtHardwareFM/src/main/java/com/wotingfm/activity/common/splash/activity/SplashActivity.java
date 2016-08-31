@@ -153,6 +153,6 @@ public class SplashActivity extends Activity {
 		}
 		sharedPreferences = null;
 		imageView = null;
-		setContentView(R.layout.activity_null_view);
+		setContentView(R.layout.activity_null);
 	}
 }

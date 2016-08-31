@@ -34,6 +34,20 @@ public class DialogUtils {
         return dialog;
     }
 
+    public static Dialog Dialogphnoshow(Context ctx,String str,Dialog dialog){
+        View dialog1=LayoutInflater.from(ctx).inflate(R.layout.dialog, null);
+        //		LinearLayout linear = (LinearLayout)dialog1.findViewById(R.id.main_dialog_layout);
+        TextView text_wenzi = (TextView)dialog1.findViewById(R.id.text_wenzi);
+        text_wenzi.setText("loading");
+        dialog = new Dialog(ctx, R.style.MyDialog1);
+        dialog.setContentView(dialog1);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+//		 android:background="@drawable/dialog_ph"
+        return dialog;
+    }
+
     /**
      * 显示加载对话框
      * @param context
