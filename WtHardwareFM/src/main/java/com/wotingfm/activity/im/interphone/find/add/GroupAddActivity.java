@@ -65,6 +65,7 @@ public class GroupAddActivity extends BaseActivity implements OnClickListener {
 
     @Override
     protected void init() {
+        setTitle("详细资料");
         sharedPreferences = this.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
         username = sharedPreferences.getString(StringConstant.USERNAME, "");            // 当前登录账号的姓名
         contact = (FindGroupNews) getIntent().getSerializableExtra("contact");

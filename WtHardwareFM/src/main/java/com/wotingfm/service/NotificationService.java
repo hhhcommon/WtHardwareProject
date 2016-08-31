@@ -668,7 +668,7 @@ public  class NotificationService   extends  Service{
     private void setNewMessageNotify(Context mContext, String message, String title){
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Intent pushIntent = new Intent("pushnnn");
-//        Intent pushIntent = new Intent(mContext, SetActivity.class);
+//        Intent pushIntent = new Intent(mContext, NotifyNewActivity.class);
 //        PendingIntent in = PendingIntent.getActivity(mContext, 0, pushIntent, 0);
         PendingIntent in = PendingIntent.getBroadcast(mContext, 2, pushIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext);
@@ -720,5 +720,4 @@ public  class NotificationService   extends  Service{
 			Receiver=null;
 		}
 	}
-
 }

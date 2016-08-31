@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/WHITE"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="60dp"
     android:padding="10dp">
 
     <ImageView
@@ -18,29 +18,36 @@
         android:src="@mipmap/wt_6_b_y_b"
         android:layout_marginLeft="7dp"/>
 
-    <TextView
-        android:id="@+id/rank_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:text="朋友"
-        android:textColor="@color/dinglan_orange"
-        android:textSize="@dimen/wt_button_default_text"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_toRightOf="@id/rank_image_url"
-        android:layout_marginLeft="18dp"/>
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+        android:layout_marginLeft="18dp">
 
-    <TextView
-        android:id="@+id/rank_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ellipsize="end"
-        android:singleLine="true"
-        android:text="朋 友"
-        android:textColor="@color/beijing"
-        android:textSize="@dimen/wt_login_text_wjmm"
-        android:layout_toRightOf="@id/rank_image_url"
-        android:layout_marginLeft="18dp"
-        android:layout_alignBottom="@id/rank_image_url"/>
+        <TextView
+            android:id="@+id/rank_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:text="朋友"
+            android:textColor="@color/dinglan_orange"
+            android:textSize="@dimen/wt_button_default_text" />
+
+        <TextView
+            android:id="@+id/rank_content"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:gravity="bottom"
+            android:text="朋 友"
+            android:visibility="visible"
+            android:textColor="@color/beijing"
+            android:textSize="@dimen/wt_login_text_wjmm"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

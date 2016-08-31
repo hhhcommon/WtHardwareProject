@@ -38,7 +38,7 @@
                 android:id="@+id/et_news"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="14dp"
+                android:layout_marginLeft="6dp"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
                 android:ellipsize="end"
@@ -131,6 +131,7 @@
             android:gravity="left|center"
             android:orientation="horizontal"
             android:paddingLeft="18dp"
+            android:paddingRight="13dp"
             android:visibility="gone">
 
             <ImageView
