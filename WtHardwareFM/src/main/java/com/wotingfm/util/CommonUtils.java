@@ -23,7 +23,7 @@ public class CommonUtils {
 	}
 
 	/**
-	 * 获取USERID，没有则返回null
+	 * 获取USERID，没有则返回imei
 	 * @param context
 	 * @return
 	 */
@@ -36,6 +36,24 @@ public class CommonUtils {
 			return UserId;
 		}
 	}
+
+	/**
+	 * =====专门为socket使用=====
+	 * 获取USERID，没有则返回null
+	 * @param context
+	 * @return
+	 */
+	public static String getSocketUserId(Context context){
+		SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
+		String UserId= sp.getString(StringConstant.USERID, "userid");
+		if(UserId==null||UserId.equals("")||UserId.equals("userid")){
+			return null;
+		}else{
+			return UserId;
+		}
+	}
+
+
 	/**
 	 * 获取City 没有返回null
 	 * @param context

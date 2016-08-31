@@ -40,6 +40,7 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.ImageUploadReturnUtil;
 import com.wotingfm.util.L;
 import com.wotingfm.util.PhoneMessage;
 
@@ -427,9 +428,7 @@ public class CreateGroupItemActivity extends BaseActivity implements View.OnClic
                                 + "&IMEI=" + PhoneMessage.imei);
                         L.e("图片上传数据", TestURI + ExtName + "&SessionId=" + CommonUtils.getSessionId(getApplicationContext())
                                 + "&UserId=" + CommonUtils.getUserId(getApplicationContext()) + "&IMEI=" + PhoneMessage.imei);
-//                        if(Response != null){
-//                            Response = Response.substring(8, Response.length() - 2);
-//                        }
+                        Response = ImageUploadReturnUtil.getResPonse(Response);
                         userPortait = new Gson().fromJson(Response, new TypeToken<UserPortaitInside>() {}.getType());
                         try {
                             returnType = userPortait.getReturnType();
