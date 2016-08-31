@@ -27,6 +27,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.manager.MyActivityManager;
+import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
 
@@ -120,13 +121,13 @@ public class JoinGroupListActivity extends Activity implements OnClickListener, 
 
     private void handleIntent() {
         groupid= this.getIntent().getStringExtra("GroupId");
-        groupid="cf4e42f02b39";
+
     }
 
     private void send() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("UserId", "6c310f2884a7");
+            jsonObject.put("UserId", CommonUtils.getUserId(context));
             jsonObject.put("GroupId", groupid);
         } catch (JSONException e) {
             e.printStackTrace();

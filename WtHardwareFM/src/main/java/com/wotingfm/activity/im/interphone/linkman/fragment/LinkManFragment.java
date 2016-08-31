@@ -33,6 +33,8 @@ import com.google.gson.reflect.TypeToken;
 import com.shenstec.activity.login.LoginActivity;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.alert.CallAlertActivity;
+import com.wotingfm.activity.im.interphone.find.add.FriendAddActivity;
+import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity;
 import com.wotingfm.activity.im.interphone.linkman.adapter.SortGroupMemberAdapter;
 import com.wotingfm.activity.im.interphone.linkman.adapter.TalkGroupAdapter;
 import com.wotingfm.activity.im.interphone.linkman.adapter.TalkPersonNoAdapter;
@@ -48,6 +50,7 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.helper.InterPhoneControlHelper;
+import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.HeightListView;
@@ -314,7 +317,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			}
 			JSONObject jsonObject =VolleyRequest.getJsonObject(context);
 			try {
-				jsonObject.put("UserId", "6c310f2884a7");
+				jsonObject.put("UserId", CommonUtils.getUserId(context));
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
@@ -644,7 +647,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 				// 跳转到详细信息界面
-			/*	Intent intent = new Intent(context,TalkPersonNewsActivity.class);*/
+				Intent intent = new Intent(context,FriendAddActivity.class);
 				Bundle bundle = new Bundle();
 				bundle.putString("type", "talkpersonfragment");
 				if(headviewshow){
@@ -652,8 +655,8 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 				}else{
 					bundle.putSerializable("data", srclist_p.get(position));
 				}
-				/*intent.putExtras(bundle);
-				startActivity(intent);*/
+				intent.putExtras(bundle);
+				startActivity(intent);
 			}
 		});
 
@@ -703,12 +706,12 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 				// 跳转到群组详情页面
-			/*	Intent intent = new Intent(context, TalkGroupNewsActivity.class);
+				Intent intent = new Intent(context, GroupDetailAcitivity.class);
 				Bundle bundle = new Bundle();
 				bundle.putString("type", "talkpersonfragment");
 				bundle.putSerializable("data", grouplist.get(position));
 				intent.putExtras(bundle);
-				startActivity(intent);*/
+				startActivity(intent);
 			}
 		});
 	}

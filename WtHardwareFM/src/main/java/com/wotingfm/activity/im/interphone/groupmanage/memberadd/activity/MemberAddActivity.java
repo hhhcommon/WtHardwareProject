@@ -27,6 +27,7 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.CharacterParser;
+import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.PinyinComparator_a;
 import com.wotingfm.util.ToastUtils;
@@ -191,7 +192,6 @@ public class MemberAddActivity extends Activity implements View.OnClickListener{
     // 处理Intent
     private void handleIntent() {
         groupid= this.getIntent().getStringExtra("GroupId");
-        groupid="81ce725fa1d3";
     }
 
     //设置监听
@@ -372,7 +372,7 @@ public class MemberAddActivity extends Activity implements View.OnClickListener{
         // 模块属性
         try{
         jsonObject.put("GroupId", groupid);
-        jsonObject.put("UserId","6c310f2884a7");
+        jsonObject.put("UserId", CommonUtils.getUserId(context));
             // 对s进行处理 去掉"[]"符号
             String s = addlist.toString();
             jsonObject.put("BeInvitedUserIds", s.substring(1, s.length() - 1).replaceAll(" ", ""));

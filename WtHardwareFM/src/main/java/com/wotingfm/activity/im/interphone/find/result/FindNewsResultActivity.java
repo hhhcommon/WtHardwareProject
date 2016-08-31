@@ -18,6 +18,7 @@ import com.wotingfm.activity.im.interphone.find.result.adapter.FindFriendResultA
 import com.wotingfm.activity.im.interphone.find.result.adapter.FindGroupResultAdapter;
 import com.wotingfm.activity.im.interphone.find.result.model.FindGroupNews;
 import com.wotingfm.activity.im.interphone.find.result.model.UserInviteMeInside;
+import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity;
 import com.wotingfm.common.base.BaseActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
@@ -186,12 +187,12 @@ public class FindNewsResultActivity extends BaseActivity implements OnClickListe
                         if (position > 0) {
                             if (GroupList != null && GroupList.size() > 0) {
                                 if (GroupList.get(position - 1).getGroupCreator().equals(CommonUtils.getUserId(context))) {
-//                                    Intent intent = new Intent(FindNewsResultActivity.this,TalkGroupNewsActivity.class);
-//                                    Bundle bundle = new Bundle();
-//                                    bundle.putSerializable("contact",GroupList.get(position - 1));
-//                                    bundle.putString("type", "FindNewsResultActivity");
-//                                    intent.putExtras(bundle);
-//                                    startActivity(intent);
+                                    Intent intent = new Intent(FindNewsResultActivity.this,GroupDetailAcitivity.class);
+                                    Bundle bundle = new Bundle();
+                                    bundle.putSerializable("contact",GroupList.get(position - 1));
+                                   bundle.putString("type", "FindNewsResultActivity");
+                                    intent.putExtras(bundle);
+                                startActivity(intent);
                                 } else {
                                     Intent intent = new Intent(FindNewsResultActivity.this,GroupAddActivity.class);
                                     Bundle bundle = new Bundle();

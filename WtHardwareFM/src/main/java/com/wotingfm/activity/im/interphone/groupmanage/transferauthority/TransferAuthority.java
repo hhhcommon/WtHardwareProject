@@ -100,7 +100,7 @@ public class TransferAuthority extends Activity implements View.OnClickListener{
         try {
             // 模块属性
             jsonObject.put("GroupId", groupid);
-            jsonObject.put("UserId","6c310f2884a7");
+            jsonObject.put("UserId",CommonUtils.getUserId(context));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -193,7 +193,6 @@ public class TransferAuthority extends Activity implements View.OnClickListener{
     // 处理Intent
     private void handleIntent() {
         groupid= this.getIntent().getStringExtra("GroupId");
-        groupid="81ce725fa1d3";
     }
 
     //设置监听

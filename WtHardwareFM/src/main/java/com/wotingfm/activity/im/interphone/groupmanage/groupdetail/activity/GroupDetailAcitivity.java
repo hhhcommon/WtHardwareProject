@@ -27,6 +27,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 
+import com.wotingfm.activity.im.interphone.chat.model.TalkListGP;
+import com.wotingfm.activity.im.interphone.find.add.FriendAddActivity;
+import com.wotingfm.activity.im.interphone.find.result.model.FindGroupNews;
 import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.adapter.GroupTalkAdapter;
 import com.wotingfm.activity.im.interphone.groupmanage.memberdel.MemberDelActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
@@ -36,11 +39,15 @@ import com.wotingfm.activity.im.interphone.groupmanage.memberadd.activity.Member
 import com.wotingfm.activity.im.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.transferauthority.TransferAuthority;
 import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.activity.*;
+import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
+import com.wotingfm.activity.im.interphone.message.model.GroupInfo;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.helper.CreatQRImageHelper;
+import com.wotingfm.helper.ImageLoader;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
@@ -91,6 +98,17 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
     private boolean IsUpadate=false;
     private MessageReceivers Receiver;
     private GroupTalkAdapter adapter;
+    private String type;
+    private String number;
+    private String creator;
+    private String signature;
+    private String myAlias;
+    private String name;
+    private String groupdesc;
+    private String grouptype;
+    private FindGroupNews news;
+    private String url12;
+    private ImageLoader imgloader;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +118,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
         InitActivity();// 初始化透明状态栏，统一回收的方法
         handleIntent();// 处理其他页面传入的数据
         setview();// 设置界面
+        setData();//设置data View
         setlistener();// 设置监听
         InitConfirmDialog();//初始化确认对话框
 
@@ -123,6 +142,86 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
 
     }
 
+    private void setData() {
+
+        if (name == null || name.equals("")) {
+            name = "我听科技";
+            mgroupname.setText(name);
+        } else {
+            mgroupname.setText(name);
+        }
+
+        if (signature == null || signature.equals("")) {
+            mgroupsign.setText(name);
+        } else {
+            mgroupsign.setText(signature);
+        }
+
+        if (imageurl == null || imageurl.equals("") || imageurl.equals("null")	|| imageurl.trim().equals("")) {
+            mImgTouxiang.setImageResource(R.mipmap.wt_image_tx_qz);
+        } else {
+            if(imageurl.startsWith("http:")){
+                url12=imageurl;
+            }else{
+                url12 = GlobalConfig.imageurl+imageurl;
+            }
+            imgloader.DisplayImage(url12.replace("\\/", "/"), mImgTouxiang,false, false, null, null);
+        }
+        news = new FindGroupNews();
+        news.setGroupName(name);
+        news.setGroupType(grouptype);
+        news.setGroupCreator(creator);
+        news.setGroupImg(imageurl);
+        news.setGroupId(groupid);
+        news.setGroupNum(number);
+
+        if (creator != null && !creator.equals("")) {
+            if (creator.equals(CommonUtils.getUserId(context))) {
+                //自己是群主
+                IsCreator=true;
+                if(grouptype!=null&& !grouptype.equals("")){
+                    if(grouptype.equals("0")){
+                        //审核群
+
+                     // 审核消息
+                       // 加群消息 lin_jiaqun
+                        rl_modifygpassword.setVisibility(View.VISIBLE);
+                        rl_addGroup.setVisibility(View.GONE);
+                        rl_transferauthority.setVisibility(View.VISIBLE);
+                        rl_vertiygroup.setVisibility(View.GONE);
+                    }else if(grouptype.equals("2")){
+                        //密码群
+                     	// 加群消息 lin_jiaqun
+                        rl_addGroup.setVisibility(View.GONE);
+                        rl_modifygpassword.setVisibility(View.GONE);
+                        rl_transferauthority.setVisibility(View.VISIBLE);
+                        rl_vertiygroup.setVisibility(View.GONE);
+                    }else{
+                        //公开群
+                        rl_addGroup.setVisibility(View.GONE);
+                        rl_modifygpassword.setVisibility(View.GONE);
+                        rl_transferauthority.setVisibility(View.GONE);
+                        rl_vertiygroup.setVisibility(View.GONE);
+
+                    }
+                }else{
+                        IsCreator=false;
+                		rl_addGroup.setVisibility(View.GONE);
+                        rl_modifygpassword.setVisibility(View.GONE);
+                        rl_transferauthority.setVisibility(View.GONE);
+                        rl_vertiygroup.setVisibility(View.GONE);
+                        mtv_exit.setVisibility(View.GONE);
+                }
+            } else {
+                IsCreator=false;
+                rl_addGroup.setVisibility(View.GONE);
+                rl_modifygpassword.setVisibility(View.GONE);
+                rl_transferauthority.setVisibility(View.GONE);
+                rl_vertiygroup.setVisibility(View.GONE);
+
+            }
+        }
+    }
     private void InitConfirmDialog() {
         final View dialog1 = LayoutInflater.from(this).inflate(R.layout.dialog_exit_confirm, null);
         TextView tv_cancle = (TextView) dialog1.findViewById(R.id.tv_cancle);
@@ -155,8 +254,8 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
     private void send() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("UserId","6c310f2884a7");
-            jsonObject.put("GroupId","81ce725fa1d3");
+            jsonObject.put("UserId",CommonUtils.getUserId(context));
+            jsonObject.put("GroupId",groupid);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -262,13 +361,13 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                             isfriend = false;
                         }
                         if (isfriend) {
-                     /*     Intent intent = new Intent(context, TalkPersonNewsActivity.class);
+                            Intent intent = new Intent(context, FriendAddActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putString("type", "TalkGroupNewsActivity_p");
-                            bundle.putSerializable("data", lists.get(position));
+                            bundle.putSerializable("data", userlist.get(position));
                             bundle.putString("id", groupid);
                             intent.putExtras(bundle);
-                            startActivityForResult(intent, 2);*/
+                            startActivityForResult(intent, 2);
                             ToastUtils.show_allways(context,"是好友，跳转到好友页面");
                         } else {
                            /* Intent intent = new Intent(context, GroupPersonNewsActivity.class);
@@ -297,6 +396,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
     }
 
     private void InitActivity() {
+        imgloader = new ImageLoader(context);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		//透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	//透明导航栏
         MyActivityManager mam = MyActivityManager.getInstance();
@@ -305,10 +405,87 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
 
     //处理从通讯录传入的值
     private void handleIntent() {
-        groupid= this.getIntent().getStringExtra("GroupId");
-        imageurl=this.getIntent().getStringExtra("ImageUrl");
-        //传入的话需要GroupTYPE createorid
-        groupid="81ce725fa1d3";
+        pushintent=new Intent("push_refreshlinkman");
+        type = this.getIntent().getStringExtra("type");
+        if (type == null || type.equals("")) {
+        } else if (type.equals("talkoldlistfragment")) {
+            // 聊天界面传过来
+            TalkListGP data = (TalkListGP) this.getIntent().getSerializableExtra("data");
+            number = data.getGroupNum();
+            name = data.getName();
+            imageurl = data.getPortrait();
+            groupid = data.getId();
+            if(data.getGroupManager()==null||data.getGroupManager().equals("")){
+                creator = data.getGroupCreator();
+            }else{
+                creator = data.getGroupManager();
+            }
+            signature = data.getGroupSignature();
+            groupdesc = data.getGroupDesc();
+            myAlias = data.getGroupMyAlias();
+            grouptype = data.getGroupType();
+        } else if (type.equals("talkpersonfragment")) {
+            // 通讯录界面传过来
+            TalkGroupInside data = (TalkGroupInside) this.getIntent().getSerializableExtra("data");
+            name = data.getGroupName();
+            imageurl = data.getGroupImg();
+            groupid = data.getGroupId();
+            if(data.getGroupManager()==null||data.getGroupManager().equals("")){
+                creator = data.getGroupCreator();
+            }else{
+                creator = data.getGroupManager();
+            }
+            signature = data.getGroupSignature();
+            groupdesc = data.getGroupMyDesc();
+            myAlias = data.getGroupMyAlias();
+            number = data.getGroupNum();
+            grouptype = data.getGroupType();
+        } else if (type.equals("groupaddactivity")) {
+            // 申请加入组成功后进入
+            FindGroupNews data = (FindGroupNews) this.getIntent().getSerializableExtra("data");
+            name = data.getGroupName();
+            imageurl = data.getGroupImg();
+            groupid = data.getGroupId();
+            number = data.getGroupNum();
+            if(data.getGroupManager()==null||data.getGroupManager().equals("")){
+                creator = data.getGroupCreator();
+            }else{
+                creator = data.getGroupManager();
+            }
+            signature = data.getGroupSignature();
+            groupdesc = data.getGroupOriDesc();
+            myAlias = data.getGroupMyAlias();
+            grouptype = data.getGroupType();
+        } else if (type.equals("findActivity")) {
+            // 处理组邀请时进入
+            GroupInfo f = (GroupInfo) this.getIntent().getSerializableExtra("data");
+            name = f.getGroupName();
+            imageurl = f.getGroupImg();
+            groupid = f.getGroupId();
+            number = f.getGroupNum();
+            if(f.getGroupManager()==null||f.getGroupManager().equals("")){
+                creator = f.getGroupCreator();
+            }else{
+                creator = f.getGroupManager();
+            }
+            signature = f.getGroupSignature();
+            grouptype = f.getGroupType();
+			/* myAlias=f.get; */
+        } else if (type.equals("FindNewsResultActivity")) {
+            // 处理组邀请时进入
+            FindGroupNews news = (FindGroupNews) this.getIntent().getSerializableExtra("contact");
+            imageurl = news.getGroupImg();
+            name = news.getGroupName();
+            groupid = news.getGroupId();
+            number = news.getGroupNum();
+            grouptype = news.getGroupType();
+            creator = CommonUtils.getUserId(context);
+            signature = news.getGroupSignature();
+        }
+        // 用于查找群内成员
+        if (groupid == null || groupid.trim().equals("")) {
+            groupid = "00";// 待定，此处为没有获取到groupid
+        }
     }
 
     //设置监听
@@ -370,7 +547,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
             case R.id.rl_allperson:
                 Intent intent=new Intent(this,AllGroupMemberActivity.class);
                 //此处测试
-                intent.putExtra("GroupId","81ce725fa1d3");
+                intent.putExtra("GroupId",groupid);
                 startActivity(intent);
                 break;
             case R.id.lin_ewm:
@@ -386,16 +563,24 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                 confirmdialog.show();
                 break;
             case R.id.rl_transferauthority:
-                startActivity(new Intent(this, TransferAuthority.class));
+                Intent intent1=new Intent(this, TransferAuthority.class);
+                intent1.putExtra("GroupId",groupid);
+                startActivity(intent1);
                 break;
             case R.id.rl_modifygpassword:
-                startActivity(new Intent(this, ModifyGroupPasswordActivity.class));
+                Intent intent2=new Intent(this, ModifyGroupPasswordActivity.class);
+                intent2.putExtra("GroupId",groupid);
+                startActivity(intent2);
                 break;
             case R.id.rl_addGroup:
-                startActivity(new Intent(this, HandleGroupApplyActivity.class));
+                Intent intent3=new Intent(this, HandleGroupApplyActivity.class);
+                intent3.putExtra("GroupId",groupid);
+                startActivity(intent3);
                 break;
             case R.id.rl_vertiygroup:
-                startActivity(new Intent(this, JoinGroupListActivity.class));
+                Intent intent4=new Intent(this, JoinGroupListActivity.class);
+                intent4.putExtra("GroupId",groupid);
+                startActivity(intent4);
                 break;
             case R.id.img_update:
                 if(!IsUpadate){
@@ -456,7 +641,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                 if (ReturnType != null && !ReturnType.equals("")) {
                     if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
 
-                        context.sendBroadcast(pushintent);
+                      sendBroadcast(pushintent);
                     } else {
                         if (ReturnType.equals("0000")) {
                             ToastUtils.show_allways(context,"无法获取相关的参数");
@@ -519,7 +704,6 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                 if (ReturnType != null && !ReturnType.equals("")) {
                     if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
                         ToastUtils.show_allways(context,"已经成功退出该组");
-                        Intent pushintent=new Intent("push_refreshlinkman");
                         sendBroadcast(pushintent);
                         SharedPreferences sp = getSharedPreferences("wotingfm",Context.MODE_PRIVATE);
                             SharedPreferences.Editor et = sp.edit();

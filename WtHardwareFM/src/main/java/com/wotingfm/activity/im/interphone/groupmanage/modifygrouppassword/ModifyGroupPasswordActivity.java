@@ -52,9 +52,6 @@ public class ModifyGroupPasswordActivity extends Activity {
     }
     private void handleIntent() {
         groupid= this.getIntent().getStringExtra("GroupId");
-        groupid="81ce725fa1d3";
-        /*Bundle bundle = intent.getExtras();
-        groupid = bundle.getString("GroupId");*/
     }
 
     private void setView() {
