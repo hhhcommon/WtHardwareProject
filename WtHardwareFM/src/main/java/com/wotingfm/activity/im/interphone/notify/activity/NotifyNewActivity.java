@@ -143,7 +143,7 @@ public class NotifyNewActivity extends BaseActivity {
         for(int i=0; i<100; i++){
             notifyNewData = new DBNotifyHistorary();
             notifyNewData.setTitle("消息标题_" + i);
-            notifyNewData.setContent("测试数据，看到效果就可以删除_" + i);
+            notifyNewData.setContent("测试数据，看到效果就可以删除测试数据，看到效果就可以删除测试数据，看到效果就可以删除_" + i);
             notifyNewData.setAddTime(new SimpleDateFormat("hh:mm").format(System.currentTimeMillis()));
             list.add(notifyNewData);
         }

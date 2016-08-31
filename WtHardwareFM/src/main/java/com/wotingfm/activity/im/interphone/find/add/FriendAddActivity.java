@@ -41,6 +41,7 @@ public class FriendAddActivity extends BaseActivity implements OnClickListener {
     private ImageLoader imageLoader;
     private String tag = "FRIEND_ADD_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
+    private ImageView clearImage;
 
     @Override
     protected int setViewId() {
@@ -49,6 +50,7 @@ public class FriendAddActivity extends BaseActivity implements OnClickListener {
 
     @Override
     protected void init() {
+        setTitle("详细资料");
         imageLoader = new ImageLoader(context);
         sharedPreferences = getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
         username = sharedPreferences.getString(StringConstant.USERNAME, "");            //当前登录账号的姓名
@@ -67,6 +69,7 @@ public class FriendAddActivity extends BaseActivity implements OnClickListener {
         tv_id = (TextView) findViewById(R.id.tv_id);//id号
         tv_sign = (TextView) findViewById(R.id.tv_sign);//
         tv_add = (TextView) findViewById(R.id.tv_add);//添加好友
+        clearImage = (ImageView) findViewById(R.id.clear_image);
     }
 
     private void setvalue() {
@@ -107,6 +110,7 @@ public class FriendAddActivity extends BaseActivity implements OnClickListener {
 
     private void setListener() {
         tv_add.setOnClickListener(this);
+        clearImage.setOnClickListener(this);
     }
 
     @Override
@@ -115,9 +119,9 @@ public class FriendAddActivity extends BaseActivity implements OnClickListener {
             case R.id.head_left_btn:
                 finish();
                 break;
-//		case R.id.lin_delete://验证信息清空
-//			et_news.setText("");
-//			break;
+		case R.id.clear_image://验证信息清空
+			et_news.setText("");
+			break;
             case R.id.tv_add://点击申请添加按钮
                 String news = et_news.getText().toString().trim();
                 if (news.equals("")) {
