@@ -1,6 +1,7 @@
 package com.wotingfm.common.config;
 
 import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.model.UserInfo;
+import com.wotingfm.activity.im.interphone.notify.model.TalkGroupInside;
 
 import java.util.List;
 
@@ -35,6 +36,8 @@ public class GlobalConfig {
     public static int CURRENT_NETWORK_STATE_TYPE = NETWORK_STATE_IDLE;
     // volley请求超时 时间
     public static final int HTTP_CONNECTION_TIMEOUT = 60 * 1000;
+
+    public static List<TalkGroupInside> listGroup;
     // 数据库版本号
     public static final int dbversoncode = 1;
     // 是否吐司

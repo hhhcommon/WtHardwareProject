@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.manager.MyActivityManager;
 
 /**
  * 基类 包含公共标题栏以及一些公共方法供子类调用或重写
@@ -33,6 +34,8 @@ public abstract class BaseActivity extends Activity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         context = this;
+        MyActivityManager mam = MyActivityManager.getInstance();
+        mam.pushOneActivity(this);
         initView();
     }
 
@@ -169,5 +172,7 @@ public abstract class BaseActivity extends Activity {
         leftImage = null;
         rightImage = null;
         setContentView(R.layout.activity_null_view);
+        MyActivityManager mam = MyActivityManager.getInstance();
+        mam.popOneActivity(this);
     }
 }

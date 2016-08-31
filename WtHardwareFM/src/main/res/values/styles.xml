@@ -8,6 +8,11 @@
         <!--<item name="colorAccent">@color/colorAccent</item>-->
     </style>
 
+    <style name="ShareStyle" parent="android:Animation">
+        <item name="@android:windowEnterAnimation">@anim/umeng_socialize_slide_in_from_bottom</item>
+        <item name="@android:windowExitAnimation">@anim/umeng_socialize_slide_out_from_bottom</item>
+    </style>
+
     <style name="BaseStyle" parent="MatchParent">
         <item name="android:background">@color/dinglan_orange</item>
         <item name="android:clipToPadding">true</item>

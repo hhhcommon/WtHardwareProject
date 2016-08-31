@@ -25,8 +25,8 @@ import com.android.volley.VolleyError;
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.UpdateManager;
-import com.wotingfm.activity.im.interphone.creategroup.main.CreateGroupMainActivity;
-import com.wotingfm.activity.im.interphone.notify.NotifyNewActivity;
+import com.wotingfm.activity.im.interphone.find.FindActivity;
+import com.wotingfm.activity.im.interphone.message.activity.NewsActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -95,14 +95,14 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
         findViewById(R.id.btn_create_group).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, CreateGroupMainActivity.class));
+                startActivity(new Intent(MainActivity.this, FindActivity.class));
             }
         });
 
         findViewById(R.id.btn_notify).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, NotifyNewActivity.class));
+                startActivity(new Intent(MainActivity.this, NewsActivity.class));
             }
         });
         // ----------------------------------------------------------------------------------

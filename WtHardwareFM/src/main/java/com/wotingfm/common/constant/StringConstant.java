@@ -59,4 +59,15 @@ public class StringConstant {
 
     // 标识 图片剪裁界面完成之后返回的图片路径
     public static final String PHOTO_CUT_RETURN_IMAGE_PATH = "PHOTO_CUT_RETURN_IMAGE_PATH";
+
+    // 标识 查找类型
+    public static final String FIND_TYPE = "FIND_TYPE";
+
+    // 标识 查找类型为群组
+    public static final String FIND_TYPE_GROUP = "FIND_TYPE_GROUP";
+
+    // 标识 查找类型为个人
+    public static final String FIND_TYPE_PERSON = "FIND_TYPE_PERSON";
+
+    public static final String FIND_CONTENT_TO_RESULT = "FIND_CONTENT_TO_RESULT";
 }

@@ -1,6 +1,10 @@
-package com.wotingfm.activity.im.interphone.notify;
+package com.wotingfm.activity.im.interphone.notify.activity;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -9,22 +13,24 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.notify.adapter.NotifyListAdapter;
-import com.wotingfm.activity.im.interphone.notify.model.NotifyNewData;
+import com.wotingfm.activity.im.interphone.notify.dao.NotifyHistoryDao;
+import com.wotingfm.activity.im.interphone.notify.model.DBNotifyHistory;
 import com.wotingfm.common.base.BaseActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
- * 消息中心
+ * 通知消息
  */
 public class NotifyNewActivity extends BaseActivity {
     private ListView notifyListView;
     private NotifyListAdapter adapter;
-    private List<NotifyNewData> list;
+    private List<DBNotifyHistory> list;
     private Dialog notifyContentDialog;
+    private NotifyHistoryDao dbDao;
+    private MessageReceiver receiver;
 
     @Override
     protected int setViewId() {
@@ -33,16 +39,40 @@ public class NotifyNewActivity extends BaseActivity {
 
     @Override
     protected void init() {
+        if(receiver == null) {		// 注册广播
+            receiver = new MessageReceiver();
+            IntentFilter filter = new IntentFilter();
+            filter.addAction("push_refreshnews");
+            registerReceiver(receiver, filter);
+        }
+        initDao();
         setTitle("消息中心");
 
         notifyListView = (ListView) findViewById(R.id.notify_list_view);// 消息列表
-        list = getNotifyNew();
+//        list = getNotifyNew();
+//        adapter = new NotifyListAdapter(context, list);
+//        notifyListView.setAdapter(adapter);
+        getDate();
+    }
+
+    /*
+	 * 初始化数据库命令执行对象
+	 */
+    private void initDao() {
+        dbDao = new NotifyHistoryDao(context);
+    }
+
+    /*
+	 * 获取数据库的数据
+	 */
+    private void getDate() {
+        list = dbDao.queryHistory();
         adapter = new NotifyListAdapter(context, list);
         notifyListView.setAdapter(adapter);
         setListItemListener();
     }
 
-    /**
+    /*
      * 设置ListView的点击监听
      */
     private void setListItemListener(){
@@ -54,7 +84,7 @@ public class NotifyNewActivity extends BaseActivity {
         });
     }
 
-    /**
+    /*
      * 显示消息具体内容
      */
     private void notifyContentDialog(int position){
@@ -76,24 +106,45 @@ public class NotifyNewActivity extends BaseActivity {
         });
     }
 
-    /**
+    /*
+	 * 广播接收  用于刷新界面
+	 */
+    class MessageReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if(action.equals("push_refreshnews")){
+                getDate();
+            }
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(receiver != null){
+            unregisterReceiver(receiver);
+            receiver = null;
+        }
+        dbDao = null;
+        list = null;
+        adapter = null;
+        notifyListView = null;
+    }
+
+    /*
      * 获取消息列表
      */
-    private List<NotifyNewData> getNotifyNew(){
+    private List<DBNotifyHistory> getNotifyNew(){
         // 测试数据 -------------------------------------------
-        List<NotifyNewData> list = new ArrayList<>();
-        NotifyNewData notifyNewData;
+        List<DBNotifyHistory> list = new ArrayList<>();
+        DBNotifyHistory notifyNewData;
         for(int i=0; i<100; i++){
-            notifyNewData = new NotifyNewData();
+            notifyNewData = new DBNotifyHistory();
             notifyNewData.setTitle("消息标题_" + i);
-            int number = new Random().nextInt(300);
-            if(number > 99){
-                notifyNewData.setNumber("(" + 99 + "+" + ")");
-            } else {
-                notifyNewData.setNumber("(" + number + ")");
-            }
             notifyNewData.setContent("测试数据，看到效果就可以删除_" + i);
-            notifyNewData.setTime(new SimpleDateFormat("hh:mm").format(System.currentTimeMillis()));
+            notifyNewData.setAddTime(new SimpleDateFormat("hh:mm").format(System.currentTimeMillis()));
             list.add(notifyNewData);
         }
         // -----------------------------------------------------

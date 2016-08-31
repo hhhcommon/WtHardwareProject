@@ -18,25 +18,13 @@
         android:id="@+id/text_notify_title"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="信息标题信息标题信息标题"
+        android:text="信息标题信息标题信息标题标题信息标题标题信息标题"
         android:layout_alignTop="@id/image_head"
         android:layout_toRightOf="@id/image_head"
         android:layout_marginLeft="10dp"
         android:textSize="17sp"
         android:singleLine="true"
         android:ellipsize="end"
-        android:maxWidth="180dp"/>
-
-    <TextView
-        android:id="@+id/text_notify_number"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="(99+)"
-        android:layout_alignTop="@id/image_head"
-        android:layout_toRightOf="@id/text_notify_title"
-        android:layout_marginLeft="10dp"
-        android:textSize="17sp"
-        android:singleLine="true"
         android:layout_marginRight="15dp"/>
 
     <TextView

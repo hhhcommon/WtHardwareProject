@@ -8,7 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.im.interphone.notify.model.NotifyNewData;
+import com.wotingfm.activity.im.interphone.notify.model.DBNotifyHistory;
 
 import java.util.List;
 
@@ -18,9 +18,9 @@ import java.util.List;
  */
 public class NotifyListAdapter extends BaseAdapter {
     private Context context;
-    private List<NotifyNewData> list;
+    private List<DBNotifyHistory> list;
 
-    public NotifyListAdapter(Context context, List<NotifyNewData> list){
+    public NotifyListAdapter(Context context, List<DBNotifyHistory> list){
         this.context = context;
         this.list = list;
     }
@@ -45,30 +45,23 @@ public class NotifyListAdapter extends BaseAdapter {
         ViewHolder viewHolder;
         if(convertView == null){
             viewHolder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.item_notify_list, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_notify_list, parent, false);
             viewHolder.textTitle = (TextView) convertView.findViewById(R.id.text_notify_title);
-            viewHolder.textNumber = (TextView) convertView.findViewById(R.id.text_notify_number);
             viewHolder.textContent = (TextView) convertView.findViewById(R.id.text_notify_content);
             viewHolder.textTime = (TextView) convertView.findViewById(R.id.text_notify_time);
             convertView.setTag(viewHolder);
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        NotifyNewData notifyNewData = list.get(position);
+        DBNotifyHistory notifyNewData = list.get(position);
         viewHolder.textTitle.setText(notifyNewData.getTitle());
-        if(notifyNewData.getNumber().equals("0")){
-            viewHolder.textNumber.setVisibility(View.GONE);
-        } else {
-            viewHolder.textNumber.setText(notifyNewData.getNumber());
-        }
         viewHolder.textContent.setText(notifyNewData.getContent());
-        viewHolder.textTime.setText(notifyNewData.getTime());
+        viewHolder.textTime.setText(notifyNewData.getAddTime());
         return convertView;
     }
 
     class ViewHolder{
         TextView textTitle;     // 消息标题
-        TextView textNumber;    // 消息数量
         TextView textContent;   // 消息内容 只能显示开头部分内容
         TextView textTime;      // 接收消息的时间 时间格式 MM月dd日 HH:mm  如果时间就是今天则不显示日期
     }
