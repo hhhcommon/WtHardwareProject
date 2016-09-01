@@ -32,8 +32,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/text_size_medium"
-	                android:text="想使用享讲功能？快去 "
-	                android:textColor="@color/beijing"/>
+                    android:text="想使用享讲功能？快去 "
+                    android:textColor="@color/beijing"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -67,17 +67,17 @@
                     android:layout_marginLeft="13dp"/>
 
                 <EditText
-                  android:id="@+id/et_search"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_weight="1"
-                android:background="@color/WHITE"
-                android:hint="搜索"
-                android:textColor="@color/gray"
-                android:textColorHint="@color/gray"
-                android:textCursorDrawable="@drawable/wt_edittext_cursor"
-                android:textSize="14dp" >
+                    android:id="@+id/et_search"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="@color/WHITE"
+                    android:hint="搜索"
+                    android:textColor="@color/gray"
+                    android:textColorHint="@color/gray"
+                    android:textCursorDrawable="@drawable/wt_edittext_cursor"
+                    android:textSize="14dp" >
                 </EditText>
 
                 <ImageView

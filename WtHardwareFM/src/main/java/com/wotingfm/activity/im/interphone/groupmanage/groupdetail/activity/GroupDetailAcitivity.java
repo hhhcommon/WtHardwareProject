@@ -29,6 +29,7 @@ import com.wotingfm.R;
 
 import com.wotingfm.activity.im.interphone.chat.model.TalkListGP;
 import com.wotingfm.activity.im.interphone.find.add.FriendAddActivity;
+import com.wotingfm.activity.im.interphone.find.add.GroupAddActivity;
 import com.wotingfm.activity.im.interphone.find.result.model.FindGroupNews;
 import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.adapter.GroupTalkAdapter;
 import com.wotingfm.activity.im.interphone.groupmanage.memberdel.MemberDelActivity;
@@ -200,7 +201,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                         //公开群
                         rl_addGroup.setVisibility(View.GONE);
                         rl_modifygpassword.setVisibility(View.GONE);
-                        rl_transferauthority.setVisibility(View.GONE);
+                        rl_transferauthority.setVisibility(View.VISIBLE);
                         rl_vertiygroup.setVisibility(View.GONE);
 
                     }
@@ -370,13 +371,13 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                             startActivityForResult(intent, 2);
                             ToastUtils.show_allways(context,"是好友，跳转到好友页面");
                         } else {
-                           /* Intent intent = new Intent(context, GroupPersonNewsActivity.class);
+                            Intent intent = new Intent(context, GroupAddActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putString("type", "TalkGroupNewsActivity_p");
                             bundle.putString("id", groupid);
-                            bundle.putSerializable("data", lists.get(position));
+                  /*        bundle.putSerializable("data", lists.get(position));*/
                             intent.putExtras(bundle);
-                            startActivityForResult(intent, 2);*/
+                            startActivityForResult(intent, 2);
                             ToastUtils.show_allways(context,"非好友跳转到群陌生人");
                         }
                     }

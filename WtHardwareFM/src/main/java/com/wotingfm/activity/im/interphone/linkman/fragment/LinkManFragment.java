@@ -1,4 +1,11 @@
-package com.wotingfm.activity.im.interphone.linkman.fragment;
+package  com.wotingfm.activity.im.interphone.linkman.fragment;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
@@ -30,9 +37,11 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.shenstec.activity.login.LoginActivity;
+
 import com.wotingfm.R;
+import com.wotingfm.activity.im.common.service.InterPhoneControl;
 import com.wotingfm.activity.im.interphone.alert.CallAlertActivity;
+import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.activity.im.interphone.find.add.FriendAddActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity;
 import com.wotingfm.activity.im.interphone.linkman.adapter.SortGroupMemberAdapter;
@@ -45,28 +54,17 @@ import com.wotingfm.activity.im.interphone.linkman.view.CharacterParser;
 import com.wotingfm.activity.im.interphone.linkman.view.PinyinComparator;
 import com.wotingfm.activity.im.interphone.linkman.view.SideBar;
 import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
+import com.wotingfm.activity.person.login.activity.LoginActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.HeightListView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-/**
- * 最新联系人排序
- * @author 辛龙
- * 2016年5月12日
- */
 public class LinkManFragment extends Fragment implements SectionIndexer,OnClickListener {
 	private ListView sortListView;
 	private SideBar sideBar;
@@ -143,22 +141,20 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 	@Override
 	public void onResume() {
 		super.onResume();
-		sharedPreferences = getActivity().getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
+		sharedPreferences = getActivity().getSharedPreferences("wotingfm", context.MODE_PRIVATE);
 		islogin = sharedPreferences.getString(StringConstant.ISLOGIN, "false");
-	/*	if (islogin.equals("true")) {
+		if (islogin.equals("true")) {
 			lin_second.setVisibility(View.GONE);
 			relative.setVisibility(View.VISIBLE);
-			if (firstentry) {*/
+			if (firstentry) {
 				send();
-		lin_second.setVisibility(View.GONE);
-		relative.setVisibility(View.VISIBLE);
-			/*	firstentry = false;
+				firstentry = false;
 			}
 		} else {
 			firstentry = false;
 			lin_second.setVisibility(View.VISIBLE);
 			relative.setVisibility(View.GONE);
-		}*/
+		}
 	}
 
 	/**
@@ -183,7 +179,28 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 	 * @param
 	 */
 	private  void  filledData(List<TalkPersonInside> person) {
-
+//		String py,headChar;
+//		int i=0,j=0;
+//		TalkPersonInside oneElement1,oneElement2;
+//		for(;i<person.size();i++){
+//			oneElement1=person.get(i);
+//			if(oneElement1.getSortLetters()==null||oneElement1.getSortLetters().trim().length()==0){
+//				py = characterParser.getSelling(oneElement1.getUserName());
+//				headChar = py.substring(0, 1).toUpperCase();
+//				oneElement1.setPinYinName(py);
+//				oneElement1.setSortLetters(headChar.matches("[A-Z]")?headChar:"#");
+//			}
+//			for(j=i+1;j<person.size();j++){
+//				oneElement2=person.get(i);
+//				if(oneElement2.getSortLetters()==null||oneElement2.getSortLetters().trim().length()==0){
+//					py = characterParser.getSelling(oneElement2.getUserName());
+//					headChar = py.substring(0, 1).toUpperCase();
+//					oneElement2.setPinYinName(py);
+//					oneElement2.setSortLetters(headChar.matches("[A-Z]")?headChar:"#");
+//
+//				}
+//			}
+//		}
 		for (int i = 0; i < person.size(); i++) {
 			person.get(i).setName(person.get(i).getUserName());
 			// 汉字转换成拼音
@@ -272,22 +289,22 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			@Override
 			public void onClick(View v) {
 				if(type == 1){
-					InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
-			/*		ChatFragment.iscalling = false;
-					ChatFragment.lin_notalk.setVisibility(View.VISIBLE);
-					ChatFragment.lin_personhead.setVisibility(View.GONE);
-					ChatFragment.lin_head.setVisibility(View.GONE);
-					ChatFragment.lin_foot.setVisibility(View.GONE);*/
-					call(id);
-					confirmdialog.dismiss();
-				}else{
-					InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
-				/*	ChatFragment.iscalling = false;
+					InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
+					ChatFragment.iscalling = false;
 					ChatFragment.lin_notalk.setVisibility(View.VISIBLE);
 					ChatFragment.lin_personhead.setVisibility(View.GONE);
 					ChatFragment.lin_head.setVisibility(View.GONE);
 					ChatFragment.lin_foot.setVisibility(View.GONE);
-					ChatFragment.zhidinggroup(group);*/
+					call(id);
+					confirmdialog.dismiss();
+				}else{
+					InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
+					ChatFragment.iscalling = false;
+					ChatFragment.lin_notalk.setVisibility(View.VISIBLE);
+					ChatFragment.lin_personhead.setVisibility(View.GONE);
+					ChatFragment.lin_head.setVisibility(View.GONE);
+					ChatFragment.lin_foot.setVisibility(View.GONE);
+					ChatFragment.zhidinggroup(group);
 					//对讲主页界面更新
 					DuiJiangActivity.update();
 					confirmdialog.dismiss();
@@ -315,8 +332,9 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			if(!isVisible()){
 				dialogs = DialogUtils.Dialogph(context, "正在获取数据");
 			}
-			JSONObject jsonObject =VolleyRequest.getJsonObject(context);
+			JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 			try {
+				// 模块属性
 				jsonObject.put("UserId", CommonUtils.getUserId(context));
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -630,7 +648,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			public void add(int position) {
 				id = ((TalkPersonInside) adapter.getItem(position)).getUserId();
 				//此时的对讲状态
-				/*if(ChatFragment.iscalling){
+				if(ChatFragment.iscalling){
 					if(ChatFragment.interphonetype.equals("user")){
 						type = 1;
 						confirmdialog.show();
@@ -639,7 +657,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 					}
 				}else{
 					call(id);
-				}*/
+				}
 			}
 		});
 
@@ -684,7 +702,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			public void add(int position) {
 				group=grouplist.get(position);
 				Log.e("组名称", group.getGroupName());
-				/*if(ChatFragment.iscalling){
+				if(ChatFragment.iscalling){
 					if(ChatFragment.interphonetype.equals("user")){
 						type=2;
 						confirmdialog.show();
@@ -698,7 +716,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 					ChatFragment.zhidinggroup(group);
 					//对讲主页界面更新
 					DuiJiangActivity.update();
-				}*/
+				}
 			}
 		});
 
