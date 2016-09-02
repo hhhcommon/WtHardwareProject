@@ -354,17 +354,7 @@
             android:windowSoftInputMode="adjustPan"/>
 
         <activity
-            android:name=".activity.im.interphone.groupmanage.joingrouplist.activity.JoinGroupListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
-        <activity
             android:name=".activity.im.interphone.groupmanage.handlegroupapply.HandleGroupApplyActivity"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity
-            android:name=".activity.im.interphone.groupmanage.handlegroupapply.HandleGroupApplyActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <activity
@@ -399,7 +389,6 @@
         <activity android:name=".activity.im.interphone.groupmanage.groupperson.GroupPersonActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"
             android:windowSoftInputMode="adjustPan"/>
 
         <meta-data
