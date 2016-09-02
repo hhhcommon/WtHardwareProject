@@ -608,4 +608,28 @@
     <item name="tag_groupname" type="id"></item>
     <item name="tag_childname" type="id"></item>
 
+    <!--设备备用频道-->
+    <string-array name="spingar_channel">
+        <item>CH01-409.7500</item>
+        <item>CH02-409.7625</item>
+        <item>CH03-409.7750</item>
+        <item>CH04-409.7875</item>
+        <item>CH05-409.8000</item>
+        <item>CH06-409.8125</item>
+        <item>CH07-409.8250</item>
+        <item>CH08-409.8375</item>
+        <item>CH09-409.8500</item>
+        <item>CH010-409.8625</item>
+        <item>CH011-409.8750</item>
+        <item>CH012-409.8875</item>
+        <item>CH013-409.9000</item>
+        <item>CH014-409.9125</item>
+        <item>CH015-409.9250</item>
+        <item>CH016-409.9375</item>
+        <item>CH017-409.9500</item>
+        <item>CH018-409.9625</item>
+        <item>CH019-409.9750</item>
+        <item>CH020-409.9875</item>
+    </string-array>
+
 </resources>

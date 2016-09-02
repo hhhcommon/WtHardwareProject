@@ -89,7 +89,7 @@ public class HomeActivity extends FragmentActivity {
 	public void InitViewPager() {
 		mPager = (ViewPager) findViewById(R.id.viewpager);
 		mPager.setOffscreenPageLimit(1);
-		ArrayList<Fragment> fragmentList = new ArrayList<Fragment>();
+		ArrayList<Fragment> fragmentList = new ArrayList<>();
 //		PlayerFragment playfragment = new PlayerFragment();
 		ProgramFragment newsfragment = new ProgramFragment();
 //		fragmentList.add(playfragment);

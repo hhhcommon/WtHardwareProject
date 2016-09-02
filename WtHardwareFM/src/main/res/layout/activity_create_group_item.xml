@@ -77,13 +77,53 @@
             android:text="群验证"
             android:layout_below="@id/text_group_password" />
 
+        <TextView
+            android:id="@+id/text_channel1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设备备用频道1  "
+            android:layout_marginTop="17dp"
+            android:textSize="18sp"
+            android:layout_below="@id/text_group_verification"
+            android:layout_alignLeft="@id/text_group_autograph"/>
+
+        <Spinner
+            android:id="@+id/spinner_channel1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/spingar_channel"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/text_group_verification"
+            android:layout_toRightOf="@id/text_channel1"
+            android:layout_marginRight="12dp"/>
+
+        <TextView
+            android:id="@+id/text_channel2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设备备用频道2  "
+            android:layout_marginTop="17dp"
+            android:textSize="18sp"
+            android:layout_below="@id/spinner_channel1"
+            android:layout_alignLeft="@id/text_group_autograph"/>
+
+        <Spinner
+            android:id="@+id/spinner_channel2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:entries="@array/spingar_channel"
+            android:layout_marginTop="10dp"
+            android:layout_below="@id/spinner_channel1"
+            android:layout_toRightOf="@id/text_channel2"
+            android:layout_marginRight="12dp"/>
+
         <Button
             android:id="@+id/btn_commit"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:text="确定"
             android:textSize="18sp"
-            android:layout_below="@id/text_group_verification"
+            android:layout_below="@id/spinner_channel2"
             android:textColor="@color/WHITE"
             android:layout_marginTop="15dp"
             android:layout_marginLeft="12dp"

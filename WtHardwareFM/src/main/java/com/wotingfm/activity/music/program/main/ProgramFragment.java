@@ -19,6 +19,9 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.activity.common.adapter.MyFragmentChildPagerAdapter;
+import com.wotingfm.activity.music.program.diantai.fragment.OnLineFragment;
+import com.wotingfm.activity.music.program.fenlei.fragment.FenLeiFragment;
+import com.wotingfm.activity.music.program.tuijian.fragment.RecommendFragment;
 import com.wotingfm.util.PhoneMessage;
 
 import java.util.ArrayList;
@@ -111,13 +114,13 @@ public class ProgramFragment extends Fragment {
 	public void InitViewPager() {
 		mPager = (ViewPager) rootView.findViewById(R.id.viewpager);
 		mPager.setOffscreenPageLimit(1);
-		ArrayList<Fragment> fragmentList = new ArrayList<Fragment>();
-//		RecommendFragment recomdfragment = new RecommendFragment();
-//		OnLineFragment onlinefragment = new OnLineFragment();
-//		FenLeiFragment fenleifragment = new FenLeiFragment();
-//		fragmentList.add(recomdfragment);
-//		fragmentList.add(onlinefragment);
-//		fragmentList.add(fenleifragment);
+		ArrayList<Fragment> fragmentList = new ArrayList<>();
+		RecommendFragment recomdfragment = new RecommendFragment();
+		OnLineFragment onlinefragment = new OnLineFragment();
+		FenLeiFragment fenleifragment = new FenLeiFragment();
+		fragmentList.add(recomdfragment);
+		fragmentList.add(onlinefragment);
+		fragmentList.add(fenleifragment);
 		mPager.setAdapter(new MyFragmentChildPagerAdapter(getChildFragmentManager(), fragmentList));
 		mPager.setOnPageChangeListener(new MyOnPageChangeListener());// 页面变化时的监听器
 		mPager.setCurrentItem(0);// 设置当前显示标签页为第一页mPager

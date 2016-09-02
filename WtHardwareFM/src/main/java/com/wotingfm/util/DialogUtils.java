@@ -64,8 +64,6 @@ public class DialogUtils {
         loadDialog.show();
     }
 
-
-
     /**
      * 关闭加载对话框
      */

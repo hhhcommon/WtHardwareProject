@@ -67,7 +67,7 @@ public class FriendAddActivity extends BaseActivity implements OnClickListener {
         image_touxiang = (ImageView) findViewById(R.id.image_touxiang);//头像
         tv_name = (TextView) findViewById(R.id.tv_name);//姓名
         tv_id = (TextView) findViewById(R.id.tv_id);//id号
-        tv_sign = (TextView) findViewById(R.id.tv_sign);//
+        tv_sign = (TextView) findViewById(R.id.tv_sign);
         tv_add = (TextView) findViewById(R.id.tv_add);//添加好友
         clearImage = (ImageView) findViewById(R.id.clear_image);
     }
