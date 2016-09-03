@@ -20,9 +20,9 @@
  *****************************************************************************/
 package org.videolan.libvlc;
 
-import java.util.ArrayList;
-
 import android.os.Bundle;
+
+import java.util.ArrayList;
 
 /**
  * Java/JNI wrapper for the libvlc_media_list_t structure.
@@ -102,7 +102,7 @@ public class MediaList {
      * @return -1 if no subitems were found, 0 if subitems were expanded
      */
     public int expandMedia(int position) {
-        ArrayList<String> children = new ArrayList<String>();
+        ArrayList<String> children = new ArrayList<>();
         int ret = expandMedia(mLibVLC, position, children);
         if(ret == 0) {
             mEventHandler.callback(EventHandler.CustomMediaListExpanding, new Bundle());
@@ -117,7 +117,7 @@ public class MediaList {
     private native int expandMedia(LibVLC libvlc_instance, int position, ArrayList<String> children);
 
     public void loadPlaylist(String mrl) {
-        ArrayList<String> items = new ArrayList<String>();
+        ArrayList<String> items = new ArrayList<>();
         loadPlaylist(mLibVLC, mrl, items);
         this.clear();
         for(String item : items) {

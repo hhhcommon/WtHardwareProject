@@ -75,8 +75,7 @@ public class CommonHelper {
 	 * @return MD5校验值（32位字符串）
 	 */
 	public static String getDeviceId(Context mContext) {
-		TelephonyManager TelephonyMgr = (TelephonyManager) mContext
-				.getSystemService(Context.TELEPHONY_SERVICE);
+		TelephonyManager TelephonyMgr = (TelephonyManager) mContext.getSystemService(Context.TELEPHONY_SERVICE);
 		String m_szImei = TelephonyMgr.getDeviceId();
 		if (m_szImei == null || "".equals(m_szImei)) {
 			m_szImei = "0000000000000000";

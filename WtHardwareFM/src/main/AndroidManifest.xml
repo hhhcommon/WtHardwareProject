@@ -92,8 +92,8 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <!--  -->
@@ -103,227 +103,222 @@
             android:name=".activity.common.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 创建群组主界面 -->
         <activity
             android:name=".activity.im.interphone.creategroup.main.CreateGroupMainActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 创建群组子界面  即有创建公开群、密码群、验证群 -->
         <activity
             android:name=".activity.im.interphone.creategroup.create.CreateGroupItemActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 消息中心 -->
         <activity
             android:name=".activity.im.interphone.notify.activity.NotifyNewActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 头像剪裁界面 -->
         <activity
             android:name=".activity.im.interphone.creategroup.photocut.activity.PhotoCutActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- 查找好友、群组界面 -->
         <activity
             android:name=".activity.im.interphone.find.FindActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- 查找好友、群组显示结果界面 -->
         <activity
             android:name=".activity.im.interphone.find.result.FindNewsResultActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- 扫描二维码界面 -->
         <activity
             android:name=".activity.im.interphone.scanning.activity.CaptureActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- 扫描二维码显示结果界面 -->
         <activity
             android:name=".activity.im.interphone.scanning.activity.ResultActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- 添加好友界面 -->
         <activity
             android:name=".activity.im.interphone.find.add.FriendAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- 添加好友界面 -->
         <activity
             android:name=".activity.im.interphone.find.add.GroupAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.im.interphone.alert.CallAlertActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
-        <!--我的界面-->
+        <!-- 我的界面 -->
         <activity
-        android:name=".activity.mine.main.MineActivity"
-        android:screenOrientation="portrait"
-        android:theme="@android:style/Theme.Light.NoTitleBar"
-        android:windowSoftInputMode="adjustPan"/>
+            android:name=".activity.mine.main.MineActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan" />
 
-        <!--关于我们-->
+        <!-- 关于我们 -->
         <activity
             android:name=".activity.mine.about.AboutActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
-        <!--联系我们-->
+        <!-- 联系我们 -->
         <activity
             android:name=".activity.mine.contactus.ContactUsActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
-        <!--下载位置-->
+        <!-- 下载位置 -->
         <activity
             android:name=".activity.mine.downloadposition.DownloadPositionActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
-        <!--意见反馈-->
+        <!-- 意见反馈 -->
         <activity
             android:name=".activity.mine.feedback.activity.FeedbackActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
-        <!--帮助-->
+        <!-- 帮助 -->
         <activity
             android:name=".activity.mine.help.HelpActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
-        <!--设置界面-->
+        <!-- 设置界面 -->
         <activity
             android:name=".activity.mine.set.SetActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
-        <!--修改个人资料-->
+        <!-- 修改个人资料 -->
         <activity
             android:name=".activity.mine.update.activity.UpdatePersonActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
-        <!--我喜欢的界面-->
+        <!-- 我喜欢的界面 -->
         <activity
             android:name=".activity.music.favorite.activity.FavoriteActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.music.main.HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
-        <!--登录-->
+        <!-- 登录 -->
         <activity
             android:name=".activity.person.login.activity.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
-        <!--注册-->
+        <!-- 注册 -->
         <activity
             android:name=".activity.person.register.activity.RegisterActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
-        <!--忘记密码-->
+        <!-- 忘记密码 -->
         <activity
             android:name=".activity.person.forgetpassword.activity.ForgetPasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
         <activity
             android:name=".activity.person.modifypassword.activity.ModifyPasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
-        <!--反馈建议历史-->
+        <!-- 反馈建议历史 -->
         <activity
             android:name=".activity.mine.feedback.feedbacklist.activity.FeedbackListActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
-        <!--修改手机号-->
+        <!-- 修改手机号 -->
         <activity
             android:name=".activity.person.phonecheck.activity.PhoneCheckActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
-        <!--播放历史界面-->
+        <!-- 播放历史界面 -->
         <activity
             android:name=".activity.music.playhistory.activity.PlayHistoryActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
-        <!--定时关闭界面-->
+        <!-- 定时关闭界面 -->
         <activity
             android:name=".activity.music.timeset.activity.TimerPowerOffActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan" />
 
-        <!--搜索界面-->
+        <!-- 搜索界面 -->
         <activity
             android:name=".activity.music.search.activity.SearchLikeAcitvity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.im.interphone.alert.ReceiveAlertActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.im.interphone.groupmanage.transferauthority.TransferAuthority"
             android:screenOrientation="portrait"
@@ -333,35 +328,68 @@
             android:name=".activity.im.interphone.groupmanage.memberadd.activity.MemberAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".activity.im.interphone.groupmanage.memberdel.MemberDelActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.im.interphone.groupmanage.memberdel.MemberDelActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <activity android:name=".activity.im.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.im.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".activity.im.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity"
+            android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.im.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.im.interphone.main.DuiJiangActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+        <activity
+            android:name=".activity.im.interphone.groupmanage.joingrouplist.activity.JoinGroupListActivity"
+            android:windowSoftInputMode="adjustPan"/>
 
-        <activity android:name=".activity.im.interphone.groupmanage.joingrouplist.activity.JoinGroupListActivity"
+        <activity
+            android:name=".activity.im.interphone.groupmanage.handlegroupapply.HandleGroupApplyActivity"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity
+            android:name=".activity.music.program.radiolist.activity.RadioListActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".activity.im.interphone.groupmanage.handlegroupapply.HandleGroupApplyActivity"
+
+        <activity
+            android:name=".activity.music.program.citylist.activity.CityListActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"  />
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity
+            android:name=".activity.music.program.album.activity.AlbumActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity
+            android:name=".activity.music.program.tuijian.activity.RecommendLikeListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity
+            android:name=".activity.music.program.fmlist.activity.FMListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan" />
+        <activity android:name=".activity.im.interphone.groupmanage.groupperson.GroupPersonActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
 
         <meta-data
             android:name="com.google.android.gms.version"

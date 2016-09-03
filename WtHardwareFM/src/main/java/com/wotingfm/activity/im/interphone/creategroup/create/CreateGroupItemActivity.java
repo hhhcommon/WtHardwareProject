@@ -16,9 +16,11 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -65,9 +67,13 @@ public class CreateGroupItemActivity extends BaseActivity implements View.OnClic
     private EditText editGroupPassWord;         // 设置群组密码
     private Button btnCommit;                   // 确定 提交数据
     private ImageView imageGroupHead;
+    private Spinner spinnerChannel1;            // 设备备用频道1
+    private Spinner spinnerChannel2;            // 设备备用频道2
 
+    private String spinnerString1;
+    private String spinnerString2;
     private String outputFilePath;
-//    private String imagePath;
+    //    private String imagePath;
     private String filePath;
     private String photoCutAfterImagePath;
     private String nick;                        // String 群组名称
@@ -98,6 +104,11 @@ public class CreateGroupItemActivity extends BaseActivity implements View.OnClic
         TextView textGroupVerification = (TextView) findViewById(R.id.text_group_verification);
         btnCommit = (Button) findViewById(R.id.btn_commit);
         btnCommit.setOnClickListener(this);
+        spinnerChannel1 = (Spinner) findViewById(R.id.spinner_channel1);
+        spinnerChannel1.setSelection(0);
+        spinnerChannel2 = (Spinner) findViewById(R.id.spinner_channel2);
+        spinnerChannel2.setSelection(1);
+        setSpinnerItemLintener();
 
         switch (createGroupType) {
             case IntegerConstant.CREATE_GROUP_PUBLIC:
@@ -225,7 +236,6 @@ public class CreateGroupItemActivity extends BaseActivity implements View.OnClic
                     }
                     if (viewSuccess == 1) {
                         dealt(groupRation);
-
                     } else {      // 跳转到群组详情界面
                         Intent pushIntent = new Intent("push_refreshlinkman");
                         sendBroadcast(pushIntent);
@@ -284,6 +294,35 @@ public class CreateGroupItemActivity extends BaseActivity implements View.OnClic
         });
     }
 
+    /**
+     * 获取用户选择的设备备用频道
+     */
+    private void setSpinnerItemLintener() {
+        spinnerChannel1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spinnerString1 = CreateGroupItemActivity.this.getResources().getStringArray(R.array.spingar_channel)[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spinnerChannel2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                spinnerString2 = CreateGroupItemActivity.this.getResources().getStringArray(R.array.spingar_channel)[position];
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+    }
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
@@ -291,6 +330,7 @@ public class CreateGroupItemActivity extends BaseActivity implements View.OnClic
                 headDialog.show();
                 break;
             case R.id.btn_commit:       // 确定
+                Toast.makeText(context, "备用频道1: " + spinnerString1 + ", 备用频道2: " + spinnerString2, Toast.LENGTH_LONG).show();
                 nick = editGroupName.getText().toString().trim();
                 sign = editGroupAutograph.getText().toString().trim();
                 if (nick == null || nick.equals("")) {
@@ -302,8 +342,8 @@ public class CreateGroupItemActivity extends BaseActivity implements View.OnClic
                     return;
                 }
                 if (createGroupType == IntegerConstant.CREATE_GROUP_PRIVATE) {
-                    if(!checkEdit()){
-                        return ;
+                    if (!checkEdit()) {
+                        return;
                     }
                 }
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
@@ -370,7 +410,7 @@ public class CreateGroupItemActivity extends BaseActivity implements View.OnClic
                     photoCutAfterImagePath = data.getStringExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH);
                     imageGroupHead.setImageURI(Uri.parse(photoCutAfterImagePath));
                     viewSuccess = 1;
-                }else{
+                } else {
                     Toast.makeText(context, "用户退出上传图片", Toast.LENGTH_SHORT).show();
                 }
                 break;
@@ -426,7 +466,8 @@ public class CreateGroupItemActivity extends BaseActivity implements View.OnClic
                         L.e("图片上传数据", TestURI + ExtName + "&SessionId=" + CommonUtils.getSessionId(getApplicationContext())
                                 + "&UserId=" + CommonUtils.getUserId(getApplicationContext()) + "&IMEI=" + PhoneMessage.imei);
                         Response = ImageUploadReturnUtil.getResPonse(Response);
-                        userPortait = new Gson().fromJson(Response, new TypeToken<UserPortaitInside>() {}.getType());
+                        userPortait = new Gson().fromJson(Response, new TypeToken<UserPortaitInside>() {
+                        }.getType());
                         try {
                             returnType = userPortait.getReturnType();
                         } catch (Exception e1) {
