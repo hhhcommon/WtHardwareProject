@@ -127,11 +127,11 @@ public class SoundFragment extends Fragment{
 		}
 		if(checkList.size() == playList.size()){
 			Intent intentAll = new Intent();
-			intentAll.setAction(PlayHistoryActivity.UPDATA_ACTION_ALL);
+			intentAll.setAction(PlayHistoryActivity.UPDATE_ACTION_ALL);
 			context.sendBroadcast(intentAll);
 		}else{
 			Intent intentNoCheck = new Intent();
-			intentNoCheck.setAction(PlayHistoryActivity.UPDATA_ACTION_CHECK);
+			intentNoCheck.setAction(PlayHistoryActivity.UPDATE_ACTION_CHECK);
 			context.sendBroadcast(intentNoCheck);
 		}
 	}

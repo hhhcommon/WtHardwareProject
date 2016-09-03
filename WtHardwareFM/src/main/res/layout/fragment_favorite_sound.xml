@@ -4,17 +4,15 @@
     android:layout_height="match_parent"
     android:orientation="vertical" >
 
-    <LinearLayout
+    <View
         android:id="@+id/linear_null"
         android:layout_width="match_parent"
         android:layout_height="60dp"
         android:orientation="vertical"
         android:visibility="gone"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"/>
        
-   	</LinearLayout>
-
-    <com.wotingfm.widgetui.xlistview.XListView
+    <com.wotingfm.widget.xlistview.XListView
         android:id="@+id/listView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -23,8 +21,6 @@
         android:background="@color/app_bg"
         android:scrollbars="none"
         android:scrollingCache="false"
-        android:layout_above="@id/linear_null">
-    </com.wotingfm.widgetui.xlistview.XListView>
-
+        android:layout_above="@id/linear_null"/>
 
 </RelativeLayout>

@@ -31,7 +31,7 @@ public class BSApplication extends Application {
         super.onCreate();
         instance=this;
         queues = Volley.newRequestQueue(this);
-        List<String> _l=new ArrayList<String>();//其中每个间隔要是0.5秒的倍数
+        List<String> _l=new ArrayList<>();//其中每个间隔要是0.5秒的倍数
         _l.add("INTE::500");   //第1次检测到未连接成功，隔0.5秒重连
         _l.add("INTE::500");  //第2次检测到未连接成功，隔0.5秒重连
         _l.add("INTE::1000");  //第3次检测到未连接成功，隔1秒重连

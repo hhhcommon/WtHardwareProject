@@ -11,8 +11,6 @@ import android.os.Handler;
 import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
@@ -44,7 +42,6 @@ public class SplashActivity extends Activity {
 	 * ATTENTION: This was auto-generated to implement the App Indexing API.
 	 * See https://g.co/AppIndexing/AndroidStudio for more information.
 	 */
-	private GoogleApiClient client;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -64,9 +61,6 @@ public class SplashActivity extends Activity {
 				send();
 			}
 		}, 1000);
-		// ATTENTION: This was auto-generated to implement the App Indexing API.
-		// See https://g.co/AppIndexing/AndroidStudio for more information.
-		client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 	}
 
 	protected void send() {

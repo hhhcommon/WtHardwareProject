@@ -1,6 +1,5 @@
 package com.wotingfm.activity.music.playhistory.adapter;
 
-
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;

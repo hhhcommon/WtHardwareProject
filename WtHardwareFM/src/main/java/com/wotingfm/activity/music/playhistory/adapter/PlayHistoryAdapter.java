@@ -22,10 +22,6 @@ public class PlayHistoryAdapter extends BaseAdapter {
 	private List<PlayerHistory> list;
 	private Context context;
 	private ImageLoader imageLoader;
-	private PlayerHistory lists;
-	private String url;
-	private SimpleDateFormat format;
-	private Object a;
 	private playhistorycheck playcheck;
 
 	public PlayHistoryAdapter(Context context, List<PlayerHistory> list) {
@@ -61,10 +57,10 @@ public class PlayHistoryAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		ViewHolder holder = null;
+		ViewHolder holder;
 		if (convertView == null) {
 			holder = new ViewHolder();
-			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_play_history, null);
+			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_play_history, parent, false);
 			holder.textView_playName = (TextView) convertView.findViewById(R.id.RankTitle);			// 节目名称
 			holder.textView_PlayIntroduce = (TextView) convertView.findViewById(R.id.tv_last);
 			holder.imageView_playImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);	// 节目图片
@@ -78,7 +74,7 @@ public class PlayHistoryAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		lists = list.get(position);
+        PlayerHistory lists = list.get(position);
 		if (lists.getPlayerName() == null || lists.getPlayerName().equals("")) {
 			holder.textView_playName.setText("未知");
 		} else {
@@ -97,16 +93,16 @@ public class PlayHistoryAdapter extends BaseAdapter {
 		if (lists.getPlayerInTime() == null | lists.getPlayerInTime().equals("")) {
 			holder.textView_PlayIntroduce.setText("未知");
 		} else {
-			format = new SimpleDateFormat("mm:ss");
+            SimpleDateFormat format = new SimpleDateFormat("mm:ss");
 			format.setTimeZone(TimeZone.getTimeZone("GMT"));
-			a = Integer.valueOf(lists.getPlayerInTime());
+			int a = Integer.valueOf(lists.getPlayerInTime());
 			holder.textView_PlayIntroduce.setText("上次播放至" + format.format(a));
 		}
 		if (lists.getPlayerImage() == null || lists.getPlayerImage().equals("") 
 				|| lists.getPlayerImage().equals("null") || lists.getPlayerImage().trim().equals("")) {
 			holder.imageView_playImage.setImageResource(R.mipmap.wt_image_playertx);
 		} else {
-			url = lists.getPlayerImage();
+            String url = lists.getPlayerImage();
 			imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageView_playImage, false, false, null);
 		}
 		if(lists.isCheck()){

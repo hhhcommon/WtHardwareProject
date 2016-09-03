@@ -1,15 +1,6 @@
 package com.wotingfm.helper;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.json.JSONStringer;
-import org.json.JSONTokener;
+import android.graphics.Bitmap;
+import android.util.Log;
 
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.EncodeHintType;
@@ -18,9 +9,17 @@ import com.google.zxing.common.BitMatrix;
 import com.google.zxing.qrcode.QRCodeWriter;
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import org.json.JSONStringer;
+import org.json.JSONTokener;
 
-import android.graphics.Bitmap;
-import android.util.Log;
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 /**
  * 生成二维码
  * @author 辛龙
@@ -59,11 +58,11 @@ public class CreatQRImageHelper {
 	 * @return
 	 */
 	public  Bitmap createQRImage(int type, UserInfo news, int QR_WIDTH, int QR_HEIGHT ){
-		Map<String, Object> map = new HashMap<String, Object>();
+		Map<String, Object> map = new HashMap<>();
 		String url;
 		if(type==1){
 			map.put("Type", type);
-			Map<String, Object> DataMap = new HashMap<String, Object>();
+			Map<String, Object> DataMap = new HashMap<>();
 			DataMap.put("UserId",news.getUserId());
 			DataMap.put("UserName",news.getUserName());
 			DataMap.put("PortraitMini",news.getPortraitMini());
@@ -71,7 +70,7 @@ public class CreatQRImageHelper {
 			 url = jsonEnclose(map).toString();
 		}else{
 			map.put("Type", type);
-			Map<String, Object> DataMap = new HashMap<String, Object>();
+			Map<String, Object> DataMap = new HashMap<>();
 			DataMap.put("GroupName", news.getGroupName());
 			DataMap.put("GroupType", news.getGroupType());
 			DataMap.put("GroupCreator", news.getGroupCreator());
