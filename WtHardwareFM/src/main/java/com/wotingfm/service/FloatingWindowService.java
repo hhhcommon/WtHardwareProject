@@ -1,45 +1,41 @@
 package com.wotingfm.service;
 
-import android.app.ActivityManager;
-import android.app.ActivityManager.RunningTaskInfo;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.View.OnTouchListener;
 import android.view.WindowManager;
-import android.widget.TextView;
+import android.widget.LinearLayout;
+
 import com.wotingfm.R;
-import com.wotingfm.activity.common.main.MainActivity;
+import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.util.PhoneMessage;
-
-import java.util.ArrayList;
-import java.util.List;
-
+/**
+ * 悬浮窗服务----在MainActivity中启动
+ * 作者：xinlong on 2016/9/5 11:37
+ * 邮箱：645700751@qq.com
+ */
 public class FloatingWindowService extends Service {
-	
+
 	public static final String OPERATION = "operation";
 	public static final int OPERATION_SHOW = 100;
 	public static final int OPERATION_HIDE = 101;
-	
 	private static final int HANDLE_CHECK_ACTIVITY = 200;
-	
+
 	private boolean isAdded = false; // 是否已增加悬浮窗
 	private static WindowManager wm;
 	private static WindowManager.LayoutParams params;
-//	private Button btn_floatView;
-	private TextView btn_floatView;
-	private List<String> homeList; // 桌面应用程序包名列表
-	private ActivityManager mActivityManager;
+	private View floatView;
+
 
 	@Override
 	public IBinder onBind(Intent intent) {
@@ -49,20 +45,12 @@ public class FloatingWindowService extends Service {
 	@Override
 	public void onCreate() {
 		super.onCreate();
-		
-		homeList = getHomes();
 		createFloatView();
-	}
-
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
 	}
 
 	@Override
 	public void onStart(Intent intent, int startId) {
 		super.onStart(intent, startId);
-		
 		int operation = intent.getIntExtra(OPERATION, OPERATION_SHOW);
 		switch(operation) {
 		case OPERATION_SHOW:
@@ -80,77 +68,101 @@ public class FloatingWindowService extends Service {
 		public void handleMessage(Message msg) {
 			switch(msg.what) {
 			case HANDLE_CHECK_ACTIVITY:
-				if(isHome()) {
 					if(!isAdded) {
-						wm.addView(btn_floatView, params);
+						wm.addView(floatView, params);
 						isAdded = true;
 					}
-				} else {
-					if(isAdded) {
-						wm.removeView(btn_floatView);
-						isAdded = false;
-					}
-				}
 				mHandler.sendEmptyMessageDelayed(HANDLE_CHECK_ACTIVITY, 1000);
 				break;
 			}
 		}
 	};
-	
-	
+
 	/**
 	 * 创建悬浮窗
 	 */
 	private void createFloatView() {
-		btn_floatView = new TextView(getApplicationContext());
-		btn_floatView.setGravity(Gravity.CENTER);
-		btn_floatView.setTextColor(getResources().getColor(R.color.WHITE));
-		btn_floatView.setBackgroundDrawable(getApplicationContext().getResources().getDrawable(R.mipmap.btn_record_start));
-//        btn_floatView.setText("我听科技");
-        
-        wm = (WindowManager) getApplicationContext()
-        	.getSystemService(Context.WINDOW_SERVICE);
+		floatView= LayoutInflater.from(this).inflate(R.layout.dialog_float, null);
+		LinearLayout lin_a = (LinearLayout) floatView.findViewById(R.id.lin_a);
+		LinearLayout lin_b = (LinearLayout) floatView.findViewById(R.id.lin_b);
+		LinearLayout lin_c = (LinearLayout) floatView.findViewById(R.id.lin_c);
+		final LinearLayout lin_d = (LinearLayout) floatView.findViewById(R.id.lin_d);
+		floatView.setBackgroundDrawable(getApplicationContext().getResources().getDrawable(R.mipmap.aa));
+        //btn_floatView.setText("我听科技");
+        wm = (WindowManager) getApplicationContext().getSystemService(Context.WINDOW_SERVICE);
         params = new WindowManager.LayoutParams();
-        
-        // 设置window type
+        //设置window type
         params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
         /*
          * 如果设置为params.type = WindowManager.LayoutParams.TYPE_PHONE;
          * 那么优先级会降低一些, 即拉下通知栏不可见
          */
-        
         params.format = PixelFormat.RGBA_8888; // 设置图片格式，效果为背景透明
-        
         // 设置Window flag
-        params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
-                              | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-        /*
+        params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL|WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+		/*
          * 下面的flags属性的效果形同“锁定”。
          * 悬浮窗不可触摸，不接受任何事件,同时不影响后面的事件响应。
         wmParams.flags=LayoutParams.FLAG_NOT_TOUCH_MODAL
                                | LayoutParams.FLAG_NOT_FOCUSABLE
                                | LayoutParams.FLAG_NOT_TOUCHABLE;
          */
-        
         // 设置悬浮窗的长得宽
-        params.width = PhoneMessage.ScreenWidth/7;
-        params.height = PhoneMessage.ScreenHeight/12;
+        params.width = PhoneMessage.ScreenWidth/5;
+        params.height = PhoneMessage.ScreenWidth/5;
         // 设置悬浮窗的Touch监听
-        btn_floatView.setOnClickListener(new OnClickListener() {
-			
+		floatView.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				// TODO Auto-generated method stub
-				Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-				//intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_SINGLE_TOP);
-				intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-				startActivity(intent);
+                //Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_SINGLE_TOP);
+                //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                //startActivity(intent);
+				if(GlobalConfig.activitytype==1){
+					GlobalConfig.activitytype=2;
+					Intent push=new Intent(BroadcastConstants.ACTIVITY_CHANGE);
+					sendBroadcast(push);
+					lin_d.setBackgroundResource(R.mipmap.bb);
+				}else if(GlobalConfig.activitytype==2){
+					GlobalConfig.activitytype=3;
+					Intent push=new Intent(BroadcastConstants.ACTIVITY_CHANGE);
+					sendBroadcast(push);
+					lin_d.setBackgroundResource(R.mipmap.cc);
+				}else if(GlobalConfig.activitytype==3){
+					GlobalConfig.activitytype=1;
+					Intent push=new Intent(BroadcastConstants.ACTIVITY_CHANGE);
+					sendBroadcast(push);
+					lin_d.setBackgroundResource(R.mipmap.aa);
+				}
+
 			}
 		});
-        btn_floatView.setOnTouchListener(new OnTouchListener() {
+               //lin_a.setOnClickListener(new OnClickListener() {
+		       //@Override
+               //public void onClick(View v) {
+               //lin_d.setBackgroundResource(R.mipmap.aa);
+               //Log.e("悬浮窗","AAAAAAAA");
+               //}
+               //});
+		       //
+               //lin_b.setOnClickListener(new OnClickListener() {
+               //@Override
+               //public void onClick(View v) {
+		       //lin_d.setBackgroundResource(R.mipmap.bb);
+               //Log.e("悬浮窗","BBBBBBBB");
+               //}
+               //});
+               //
+               //lin_c.setOnClickListener(new OnClickListener() {
+               //@Override
+               //public void onClick(View v) {
+               //lin_d.setBackgroundResource(R.mipmap.cc);
+               //Log.e("悬浮窗","CCCCCCCC");
+               //}
+               //});
+		floatView.setOnTouchListener(new OnTouchListener() {
         	int lastX, lastY;
         	int paramX, paramY;
-        	
 			public boolean onTouch(View v, MotionEvent event) {
 				switch(event.getAction()) {
 				case MotionEvent.ACTION_UP:
@@ -158,10 +170,10 @@ public class FloatingWindowService extends Service {
 					lastY = (int) event.getRawY();
 					paramX = params.x;
 					paramY = params.y;
-//					Intent intent = new Intent(getApplicationContext(),MainActivity.class);
-//					//intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_SINGLE_TOP);
-//					intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
-//					startActivity(intent);
+                    //Intent intent = new Intent(getApplicationContext(),MainActivity.class);
+                    //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_SINGLE_TOP);
+					//intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
+                    //startActivity(intent);
 					break;
 				case MotionEvent.ACTION_DOWN:
 					lastX = (int) event.getRawX();
@@ -175,44 +187,14 @@ public class FloatingWindowService extends Service {
 					params.x = paramX + dx;
 					params.y = paramY + dy;
 					// 更新悬浮窗位置
-			        wm.updateViewLayout(btn_floatView, params);
+			        wm.updateViewLayout(floatView, params);
 					break;
 				}
 				return false;
 			}
 		});
-        
-        wm.addView(btn_floatView, params);
+        wm.addView(floatView, params);
         isAdded = true;
-	}
-	
-	/** 
-	 * 获得属于桌面的应用的应用包名称 
-	 * @return 返回包含所有包名的字符串列表 
-	 */
-	private List<String> getHomes() {
-		List<String> names = new ArrayList<String>();  
-	    PackageManager packageManager = this.getPackageManager();  
-	    // 属性  
-	    Intent intent = new Intent(Intent.ACTION_MAIN);  
-	    intent.addCategory(Intent.CATEGORY_HOME);  
-	    List<ResolveInfo> resolveInfo = packageManager.queryIntentActivities(intent,  
-	            PackageManager.MATCH_DEFAULT_ONLY);  
-	    for(ResolveInfo ri : resolveInfo) {  
-	        names.add(ri.activityInfo.packageName);  
-	    }
-	    return names;  
-	}
-	
-	/** 
-	 * 判断当前界面是否是桌面 
-	 */  
-	public boolean isHome(){  
-		if(mActivityManager == null) {
-			mActivityManager = (ActivityManager)getSystemService(Context.ACTIVITY_SERVICE);  
-		}
-	    List<RunningTaskInfo> rti = mActivityManager.getRunningTasks(1);  
-	    return homeList.contains(rti.get(0).topActivity.getPackageName());  
 	}
 
 }

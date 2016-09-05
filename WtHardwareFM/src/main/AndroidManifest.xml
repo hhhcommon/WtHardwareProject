@@ -83,7 +83,7 @@
         android:name=".common.application.BSApplication"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/app_logo"
         android:label="@string/app_name">
 
         <!-- 启动时的欢迎界面 -->
@@ -102,31 +102,39 @@
 
         <!-- 主界面 -->
         <activity
-            android:name=".activity.common.main.MainActivity"
+            android:name="com.wotingfm.activity.common.main.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:theme="@android:style/Theme.Light.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="com.wotingfm.htmlcallback" />
+            </intent-filter>
+        </activity>
 
         <!-- 创建群组主界面 -->
         <activity
             android:name=".activity.im.interphone.creategroup.main.CreateGroupMainActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 创建群组子界面  即有创建公开群、密码群、验证群 -->
         <activity
             android:name=".activity.im.interphone.creategroup.create.CreateGroupItemActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 消息中心 -->
         <activity
             android:name=".activity.im.interphone.notify.activity.NotifyNewActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 头像剪裁界面 -->
         <activity
@@ -363,7 +371,11 @@
         <activity android:name=".activity.im.interphone.groupmanage.groupperson.GroupPersonActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"></activity>
+            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name="com.wotingfm.activity.common.preference.activity.PreferenceActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
         <!-- 友盟activity -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
@@ -417,14 +429,29 @@
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
 
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5715cf1e67e58e5955000896" >
         </meta-data>
+
+        <!-- 开机启动 -->
+        <receiver android:name="com.wotingfm.receiver.AutoStartReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <category android:name="android.intent.category.HOME" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.wotingfm.service.SubclassService" />
+        <service android:name="com.wotingfm.service.NotificationService" />
+        <service android:name="com.wotingfm.service.timeroffservice" />
+        <service android:name="com.wotingfm.service.SocketService" />
+        <service android:name="com.wotingfm.service.VoiceStreamRecordService" />
+        <service android:name="com.wotingfm.service.VoiceStreamPlayerService" />
+        <service android:name="com.wotingfm.activity.music.common.service.DownloadService" />
+        <service android:name="com.wotingfm.service.FloatingWindowService" />
     </application>
 
 </manifest>

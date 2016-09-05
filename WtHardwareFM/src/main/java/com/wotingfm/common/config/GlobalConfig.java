@@ -41,6 +41,8 @@ public class GlobalConfig {
     public static final int HTTP_CONNECTION_TIMEOUT = 60 * 1000;
     // 数据库版本号
     public static final int dbversoncode = 1;
+    // 此时的界面
+    public static int activitytype=1;
     // 是否吐司
     public static boolean istusi = false;
     // PersonClientDevice(个人客户端设备) 终端类型1=app,2=设备，3=pc
