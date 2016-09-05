@@ -357,14 +357,6 @@
             android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.im.interphone.groupmanage.joingrouplist.activity.JoinGroupListActivity"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <activity
-            android:name=".activity.im.interphone.groupmanage.handlegroupapply.HandleGroupApplyActivity"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <activity
-            android:name=".activity.music.program.radiolist.activity.RadioListActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -398,10 +390,9 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <activity android:name=".activity.im.interphone.creategroup.frienddetails.TalkPersonNewsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5715cf1e67e58e5955000896" />
 
     </application>
 

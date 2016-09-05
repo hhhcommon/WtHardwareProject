@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="73dp"
+    android:layout_height="73dp"
+    android:background="@drawable/linkman_bt"
+    android:gravity="center"
+    android:orientation="vertical" >
+    
+    <ImageView 
+        android:id="@+id/img_gv"
+        android:layout_width="36dp"
+        android:layout_height="36dp"
+        />
+    
+    <TextView 
+        android:id="@+id/tv_gv"
+         android:layout_width="36dp"
+         android:layout_height="36dp"
+        />
+
+</LinearLayout>
