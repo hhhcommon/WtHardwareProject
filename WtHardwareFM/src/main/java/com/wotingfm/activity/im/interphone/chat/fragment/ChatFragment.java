@@ -1,14 +1,5 @@
 package com.wotingfm.activity.im.interphone.chat.fragment;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
-
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -42,7 +33,6 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
-
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.common.message.MessageUtils;
@@ -76,6 +66,13 @@ import com.wotingfm.util.ToastUtils;
 import com.wotingfm.util.VibratorUtils;
 import com.wotingfm.widget.MyLinearLayout;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * 对讲机-获取联系列表，包括群组跟个人

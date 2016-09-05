@@ -26,21 +26,19 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-
 import com.wotingfm.activity.im.interphone.chat.model.TalkListGP;
 import com.wotingfm.activity.im.interphone.find.add.FriendAddActivity;
-import com.wotingfm.activity.im.interphone.find.add.GroupAddActivity;
 import com.wotingfm.activity.im.interphone.find.result.model.FindGroupNews;
+import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.adapter.GroupTalkAdapter;
 import com.wotingfm.activity.im.interphone.groupmanage.groupperson.GroupPersonActivity;
-import com.wotingfm.activity.im.interphone.groupmanage.memberdel.MemberDelActivity;
-import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.im.interphone.groupmanage.handlegroupapply.HandleGroupApplyActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.joingrouplist.activity.JoinGroupListActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.memberadd.activity.MemberAddActivity;
+import com.wotingfm.activity.im.interphone.groupmanage.memberdel.MemberDelActivity;
+import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.im.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.transferauthority.TransferAuthority;
-import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.activity.*;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
 import com.wotingfm.activity.im.interphone.message.model.GroupInfo;
 import com.wotingfm.common.config.GlobalConfig;
@@ -48,7 +46,6 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.helper.CreatQRImageHelper;
 import com.wotingfm.helper.ImageLoader;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.CommonUtils;
@@ -60,7 +57,6 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 /**
  * Created by wz on 2016/8/24 0024.

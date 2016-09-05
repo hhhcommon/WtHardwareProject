@@ -4,9 +4,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.wotingfm.activity.music.album.model.ContentInfo;
 import com.wotingfm.activity.music.common.service.DownloadService;
 import com.wotingfm.activity.music.download.model.FileInfo;
+import com.wotingfm.activity.music.program.album.model.ContentInfo;
 import com.wotingfm.helper.SqliteHelper;
 import com.wotingfm.util.SequenceUUID;
 
@@ -35,7 +35,7 @@ public class FileInfoDao {
 	 *  传递进来的下载地址 对下载地址进行处理使之变成一个list，对其进行保存，默认的finished设置为false；
 	 */
 	public List<FileInfo> queryFileinfo(String s, String useridnow) {
-		List<FileInfo> mylist = new ArrayList<FileInfo>();
+		List<FileInfo> mylist = new ArrayList<>();
 		SQLiteDatabase db = helper.getReadableDatabase();
 		Cursor cursor = null;
 		try {
@@ -91,7 +91,7 @@ public class FileInfoDao {
 	}
 	//type无意义可传任意int数，存在为实现重载
 	public List<FileInfo> queryFileinfo(String sequid,String userid,int type) {
-		List<FileInfo> mylist = new ArrayList<FileInfo>();
+		List<FileInfo> mylist = new ArrayList<>();
 		SQLiteDatabase db = helper.getReadableDatabase();
 		Cursor cursor = null;
 		try {
