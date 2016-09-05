@@ -159,10 +159,10 @@ public class DetailsFragment extends Fragment implements OnClickListener{
 							if (AlbumActivity.ContentFavorite != null && !AlbumActivity.ContentFavorite.equals("")) {
 								if (AlbumActivity.ContentFavorite.equals("0")) {
 									AlbumActivity.tv_favorite.setText("喜欢");
-									AlbumActivity.imgageFavorite.setImageDrawable(context.getResources().getDrawable(R.mipmap.wt_img_like));
+									AlbumActivity.imageFavorite.setImageDrawable(context.getResources().getDrawable(R.mipmap.wt_img_like));
 								} else {
 									AlbumActivity.tv_favorite.setText("已喜欢");
-									AlbumActivity.imgageFavorite.setImageDrawable(context.getResources().getDrawable(R.mipmap.wt_img_liked));
+									AlbumActivity.imageFavorite.setImageDrawable(context.getResources().getDrawable(R.mipmap.wt_img_liked));
 								}
 							}
 							if (AlbumActivity.ContentName != null && !AlbumActivity.ContentName.equals("")) {

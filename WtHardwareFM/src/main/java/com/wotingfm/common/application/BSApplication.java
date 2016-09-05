@@ -7,15 +7,15 @@ import android.content.IntentFilter;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.wotingfm.service.NotificationService;
-import com.wotingfm.service.VoiceStreamPlayerService;
-import com.wotingfm.service.VoiceStreamRecordService;
 import com.wotingfm.activity.music.common.service.DownloadService;
 import com.wotingfm.common.config.SocketClientConfig;
 import com.wotingfm.helper.CommonHelper;
 import com.wotingfm.receiver.NetWorkChangeReceiver;
+import com.wotingfm.service.NotificationService;
 import com.wotingfm.service.SocketService;
 import com.wotingfm.service.SubclassService;
+import com.wotingfm.service.VoiceStreamPlayerService;
+import com.wotingfm.service.VoiceStreamRecordService;
 
 import java.util.ArrayList;
 import java.util.List;

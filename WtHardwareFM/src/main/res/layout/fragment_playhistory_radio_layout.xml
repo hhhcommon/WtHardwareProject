@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     
-    <LinearLayout
+    <View
         android:id="@+id/linear_null"
         android:layout_width="match_parent"
         android:layout_height="60dp"
@@ -11,7 +11,7 @@
         android:visibility="gone"
         android:layout_alignParentBottom="true">
        
-   	</LinearLayout>
+   	</View>
     
     <ListView
         android:id="@+id/list_view"

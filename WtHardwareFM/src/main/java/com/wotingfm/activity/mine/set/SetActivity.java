@@ -88,6 +88,8 @@ public class SetActivity extends Activity implements OnClickListener {
 		UpdateDialog();		// 更新的弹出框
 		initcache();		// 缓存
 		ClearCacheDialog();	// 清除缓存
+
+
 	}
 
 	//启动统计缓存的线程
@@ -275,7 +277,7 @@ public class SetActivity extends Activity implements OnClickListener {
 			protected void requestError(VolleyError error) {
 				if (dialog != null) {
 					dialog.dismiss();
-				}				
+				}
 			}
 		});
 	}

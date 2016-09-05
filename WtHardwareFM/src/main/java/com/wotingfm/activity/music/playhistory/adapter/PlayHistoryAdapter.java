@@ -22,7 +22,7 @@ public class PlayHistoryAdapter extends BaseAdapter {
 	private List<PlayerHistory> list;
 	private Context context;
 	private ImageLoader imageLoader;
-	private playhistorycheck playcheck;
+	private PlayHistoryCheck playCheck;
 
 	public PlayHistoryAdapter(Context context, List<PlayerHistory> list) {
 		super();
@@ -51,8 +51,8 @@ public class PlayHistoryAdapter extends BaseAdapter {
 		return position;
 	}
 
-	public void setonclick(playhistorycheck playcheck) {
-		this.playcheck = playcheck;
+	public void setOnclick(PlayHistoryCheck playCheck) {
+		this.playCheck = playCheck;
 	};
 
 	@Override
@@ -69,7 +69,6 @@ public class PlayHistoryAdapter extends BaseAdapter {
 			holder.check = (ImageView) convertView.findViewById(R.id.img_check);
 			holder.textNumber = (TextView) convertView.findViewById(R.id.text_number);
 			holder.textRankContent = (TextView) convertView.findViewById(R.id.RankContent);
-			//holder.lin_clear = (LinearLayout) convertView.findViewById(R.id.lin_clear);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -118,14 +117,14 @@ public class PlayHistoryAdapter extends BaseAdapter {
 		holder.imageCheck.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				playcheck.checkposition(position);
+                playCheck.checkPosition(position);
 			}
 		});
 		return convertView;
 	}
 
-	public interface playhistorycheck {
-		void checkposition(int position);
+	public interface PlayHistoryCheck {
+		void checkPosition(int position);
 	}
 
 	class ViewHolder {

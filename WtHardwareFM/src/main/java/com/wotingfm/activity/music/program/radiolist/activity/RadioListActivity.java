@@ -20,7 +20,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.program.fenlei.model.fenleiname;
-import com.wotingfm.activity.music.program.radiolist.adapter.MyPagerAdaper;
+import com.wotingfm.activity.music.program.radiolist.adapter.MyPagerAdapter;
 import com.wotingfm.activity.music.program.radiolist.fragment.ClassifyFragment;
 import com.wotingfm.activity.music.program.radiolist.fragment.RecommendFragment;
 import com.wotingfm.activity.music.program.radiolist.model.CatalogData;
@@ -30,7 +30,6 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.PagerSlidingTabStrip;
 
@@ -46,10 +45,9 @@ import java.util.List;
  * 2016年4月5日
  */
 public class RadioListActivity extends FragmentActivity implements OnClickListener {
-	private LinearLayout head_left_btn;		// 返回
-	private TextView mtextview_head;
-	public static String CatagoryName;
-	public static String CatagoryType;
+	private TextView mTextViewHead;
+//	public static String categoryName;
+	public static String categoryType;
 	public static String id;
 	private Dialog dialog;					// 加载对话框
 	private List<String> list;
@@ -57,9 +55,8 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 	private PagerSlidingTabStrip pageSlidingTab;
 	private ViewPager viewPager;
 	private int count = 1;
-	public static final String tag = "RADIOLIST_VOLLEY_REQUEST_CANCEL_TAG";
+	public static final String tag = "RADIO_LIST_VOLLEY_REQUEST_CANCEL_TAG";
 	public static boolean isCancelRequest;
-	private RecommendFragment reco;
 
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	@SuppressLint("InlinedApi")
@@ -70,13 +67,13 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		// 透明状态栏
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	// 透明导航栏
 		fragments = new ArrayList<>();
-		setview();
+        setView();
 		HandleRequestType();
 		if(list == null){
 			list = new ArrayList<>();
 			list.add("推荐");
-			reco = new RecommendFragment();
-			fragments.add(reco);
+            RecommendFragment recommendFragment = new RecommendFragment();
+			fragments.add(recommendFragment);
 		}
 		sendRequest();
 		dialog = DialogUtils.Dialogph(this, "正在获取数据");
@@ -89,10 +86,10 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 		Intent listIntent = getIntent();
 		if (listIntent != null) {
 			fenleiname list = (fenleiname) listIntent.getSerializableExtra("Catalog");
-			CatagoryName = list.getCatalogName();
-			CatagoryType = list.getCatalogType();
+            String categoryName = list.getCatalogName();
+            categoryType = list.getCatalogType();
 			id = list.getCatalogId();
-			mtextview_head.setText(CatagoryName);
+            mTextViewHead.setText(categoryName);
 		}
 	}
 
@@ -101,30 +98,30 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 	 */
 	private void sendRequest(){
 		VolleyRequest.RequestPost(GlobalConfig.getCatalogUrl, tag, setParam(), new VolleyCallback() {
-			private String ReturnType;
-			private List<SubCata> subcataList;
+			private String returnType;
+			private List<SubCata> subCateList;
 			private String CatalogData;
 
 			@Override
 			protected void requestSuccess(JSONObject result) {
 //				closeDialog();
 				try {
-					ReturnType = result.getString("ReturnType");
+                    returnType = result.getString("ReturnType");
 					CatalogData = result.getString("CatalogData");
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				if (ReturnType != null && ReturnType.equals("1001")) {
+				if (returnType != null && returnType.equals("1001")) {
 					CatalogData catalogData = new Gson().fromJson(CatalogData, new TypeToken<CatalogData>() {}.getType());
-					subcataList = catalogData.getSubCata();
-					if(subcataList != null && subcataList.size() > 0){
-						for(int i=0; i<subcataList.size(); i++){
-							list.add(subcataList.get(i).getCatalogName());
-							fragments.add(ClassifyFragment.instance(subcataList.get(i).getCatalogId(), subcataList.get(i).getCatalogType()));
+                    subCateList = catalogData.getSubCata();
+					if(subCateList != null && subCateList.size() > 0){
+						for(int i=0; i<subCateList.size(); i++){
+							list.add(subCateList.get(i).getCatalogName());
+							fragments.add(ClassifyFragment.instance(subCateList.get(i).getCatalogId(), subCateList.get(i).getCatalogType()));
 							count++;
 						}
 					}
-					viewPager.setAdapter(new MyPagerAdaper(getSupportFragmentManager(), list, fragments));
+					viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), list, fragments));
 					pageSlidingTab.setViewPager(viewPager);
 					if(count == 1){
 						pageSlidingTab.setVisibility(View.GONE);
@@ -142,19 +139,10 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 	}
 
 	private JSONObject setParam(){
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = VolleyRequest.getJsonObject(RadioListActivity.this);
 		try {
-			jsonObject.put("SessionId", CommonUtils.getSessionId(RadioListActivity.this));
-			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			PhoneMessage.getGps(RadioListActivity.this);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-			jsonObject.put("PCDType", GlobalConfig.PCDType);
-			// 模块属性
 			jsonObject.put("UserId", CommonUtils.getUserId(RadioListActivity.this));
-			jsonObject.put("CatalogType", CatagoryType);
+			jsonObject.put("CatalogType", categoryType);
 			jsonObject.put("CatalogId", id);
 			jsonObject.put("Page", "1");
 			jsonObject.put("ResultType", "1");
@@ -189,10 +177,10 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 	/**
 	 * 初始化界面
 	 */
-	private void setview() {
-		head_left_btn = (LinearLayout) findViewById(R.id.head_left_btn);
+	private void setView() {
+        LinearLayout head_left_btn = (LinearLayout) findViewById(R.id.head_left_btn);
 		head_left_btn.setOnClickListener(this);
-		mtextview_head = (TextView) findViewById(R.id.head_name_tv);
+        mTextViewHead = (TextView) findViewById(R.id.head_name_tv);
 		pageSlidingTab = (PagerSlidingTabStrip) findViewById(R.id.tabs_title);
 		viewPager = (ViewPager) findViewById(R.id.view_pager);
 		pageSlidingTab.setIndicatorHeight(4);								// 滑动指示器的高度
@@ -217,14 +205,12 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 		isCancelRequest = VolleyRequest.cancelRequest(tag);
 		pageSlidingTab = null;
 		viewPager = null;
-		head_left_btn = null;
-		mtextview_head = null;
+        mTextViewHead = null;
 		dialog = null;
 		if(list != null){
 			list.clear();
 			list = null;
 		}
-		reco = null;
 		if(fragments != null){
 			fragments.clear();
 			fragments = null;

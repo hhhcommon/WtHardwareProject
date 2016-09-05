@@ -96,7 +96,13 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <!--  -->
+
+        <!-- 下载界面 -->
+        <activity
+            android:name=".activity.music.download.activity.DownloadActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@android:style/Theme.Light.NoTitleBar"/>
 
         <!-- 主界面 -->
         <activity

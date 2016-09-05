@@ -281,4 +281,10 @@ public class FindActivity extends Activity implements View.OnClickListener {
             }
         }
     };
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        unregisterReceiver(mBroadcastReceiver);
+    }
 }

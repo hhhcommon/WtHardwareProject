@@ -46,10 +46,10 @@ public class ListInfoAdapter extends BaseAdapter  {
 		ViewHolder holder;
 		if (convertView == null) {
 			holder = new ViewHolder();
-			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_item_radiolist, null);
-			holder.textview_ranktitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
-			holder.imageview_rankimage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
-			holder.mTv_number = (TextView) convertView.findViewById(R.id.tv_num);
+			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_item_radiolist, parent, false);
+			holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
+			holder.imageRank = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
+			holder.textNumber = (TextView) convertView.findViewById(R.id.tv_num);
 			holder.textTime = (TextView) convertView.findViewById(R.id.tv_time);
 			holder.textRankPlaying = (TextView) convertView.findViewById(R.id.RankPlaying);
 			convertView.setTag(holder);
@@ -58,9 +58,9 @@ public class ListInfoAdapter extends BaseAdapter  {
 		}
 		ListInfo lists = list.get(position);
 		if (lists.getContentName() == null || lists.getContentName().equals("")) {
-			holder.textview_ranktitle.setText("未知");
+			holder.textRankTitle.setText("未知");
 		} else {
-			holder.textview_ranktitle.setText(lists.getContentName());
+			holder.textRankTitle.setText(lists.getContentName());
 		}
 		if (lists.getContentImg() == null || lists.getContentImg().equals("")
 				|| lists.getContentImg().equals("null")
@@ -73,14 +73,14 @@ public class ListInfoAdapter extends BaseAdapter  {
 			}else{
 				 url = GlobalConfig.imageurl + lists.getContentImg();
 			}
-			imageLoader.DisplayImage(url.replace("\\/", "/"),holder.imageview_rankimage, false, false, null, null);
+			imageLoader.DisplayImage(url.replace("\\/", "/"),holder.imageRank, false, false, null, null);
 		}
 		if (lists.getPlayCount() == null
 				|| lists.getPlayCount().equals("")
 				|| lists.getPlayCount().equals("null")) {
-			holder.mTv_number.setText("8000");
+			holder.textNumber.setText("8000");
 		} else {
-			holder.mTv_number.setText(lists.getPlayCount());
+			holder.textNumber.setText(lists.getPlayCount());
 		}
 
 		if (lists.getContentPub() == null
@@ -109,9 +109,9 @@ public class ListInfoAdapter extends BaseAdapter  {
 	}
 
     private class ViewHolder {
-		public ImageView imageview_rankimage;
-		public TextView textview_ranktitle;
-		public TextView mTv_number;
+		public ImageView imageRank;
+		public TextView textRankTitle;
+		public TextView textNumber;
 		public TextView textTime;
 		public TextView textRankPlaying;
     }

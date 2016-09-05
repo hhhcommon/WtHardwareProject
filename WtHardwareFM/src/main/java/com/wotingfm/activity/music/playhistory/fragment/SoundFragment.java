@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.wotingfm.R;
@@ -30,7 +29,7 @@ import java.util.List;
  */
 public class SoundFragment extends Fragment{
 	private View rootView;
-	private SearchPlayerHistoryDao dbdao;
+	private SearchPlayerHistoryDao dbDao;
 	private Context context;
 	private ListView listView;
 	private List<PlayerHistory> subList;		// 播放历史全部数据
@@ -40,7 +39,7 @@ public class SoundFragment extends Fragment{
 	private List<PlayerHistory> checkList;		// 选中数据列表
 	public static boolean isData = false;		// 是否有数据 
 	public static boolean isLoad;
-	private LinearLayout linearNull;			// linear_null
+	private View linearNull;			// linear_null
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +53,7 @@ public class SoundFragment extends Fragment{
 		if(rootView == null){
 			rootView = inflater.inflate(R.layout.fragment_playhistory_sound_layout, container, false);
 			listView = (ListView) rootView.findViewById(R.id.list_view);
-			linearNull = (LinearLayout) rootView.findViewById(R.id.linear_null);
+			linearNull = rootView.findViewById(R.id.linear_null);
 			getData();
 			isLoad = true;
 		}
@@ -66,7 +65,7 @@ public class SoundFragment extends Fragment{
 	 * 初始化数据库命令执行对象
 	 */
 	private void initDao() {
-		dbdao = new SearchPlayerHistoryDao(context);
+        dbDao = new SearchPlayerHistoryDao(context);
 	}
 	
 	/**
@@ -75,14 +74,14 @@ public class SoundFragment extends Fragment{
 	public void getData(){
 		listView.setVisibility(View.GONE);
 		isData = false;
-		subList = dbdao.queryHistory();
+		subList = dbDao.queryHistory();
 		playList = null;
 		if (subList != null && subList.size() > 0) {
 			for (int i = 0; i < subList.size(); i++) {
-				if (subList.get(i).getPlayerMediaType()!=null && !subList.get(i).getPlayerMediaType().equals("")) {
+				if (subList.get(i).getPlayerMediaType() != null && !subList.get(i).getPlayerMediaType().equals("")) {
 					if (subList.get(i).getPlayerMediaType().equals("AUDIO")) {
 						if (playList == null) {
-							playList = new ArrayList<PlayerHistory>();
+							playList = new ArrayList<>();
 						}
 						playList.add(subList.get(i));
 						isData = true;
@@ -90,7 +89,7 @@ public class SoundFragment extends Fragment{
 				}
 			}
 			if(playList == null){
-				playList = new ArrayList<PlayerHistory>();
+				playList = new ArrayList<>();
 			}
 			adapter = new PlayHistoryAdapter(context, playList);
 			listView.setAdapter(adapter);
@@ -116,7 +115,7 @@ public class SoundFragment extends Fragment{
 	 */
 	private void ifAll(){
 		if(checkList == null){
-			checkList = new ArrayList<PlayerHistory>();
+			checkList = new ArrayList<>();
 		}
 		for(int i=0; i<playList.size(); i++){
 			if(playList.get(i).getStatus() == 1 && !checkList.contains(playList.get(i))){
@@ -154,9 +153,9 @@ public class SoundFragment extends Fragment{
 	 * 实现接口  设置点击事件
 	 */
 	private void setInterface() {
-		adapter.setonclick(new PlayHistoryAdapter.playhistorycheck() {
+		adapter.setOnclick(new PlayHistoryAdapter.PlayHistoryCheck() {
 			@Override
-			public void checkposition(int position) {
+			public void checkPosition(int position) {
 				if(playList.get(position).getStatus() == 0){
 					playList.get(position).setStatus(1);
 				}else if(playList.get(position).getStatus() == 1){
@@ -184,34 +183,34 @@ public class SoundFragment extends Fragment{
 					ifAll();
 				}else{
 					if(playList != null && playList.get(position) != null){
-						String playername = playList.get(position).getPlayerName();
-						String playerimage = playList.get(position).getPlayerImage();
-						String playerurl = playList.get(position).getPlayerUrl();
-						String playerurI = playList.get(position).getPlayerUrI();
-						String playermediatype = playList.get(position).getPlayerMediaType();
-						String plaplayeralltime = "0";
-						String playerintime = "0";
-						String playercontentdesc = playList.get(position).getPlayerContentDesc();
-						String playernum = playList.get(position).getPlayerNum();
-						String playerzantype = "0";
-						String playerfrom = "";
-						String playerfromid = "";
-						String playerfromurl = playList.get(position).getPlayerFromUrl();
-						String playeraddtime = Long.toString(System.currentTimeMillis());
-						String bjuserid =CommonUtils.getUserId(context);
-						String ContentFavorite=playList.get(position).getContentFavorite();
-						String  playshareurl=playList.get(position).getPlayContentShareUrl();
-						String ContentId= playList.get(position).getContentID();
-						String localurl=playList.get(position).getLocalurl();
+						String playerName = playList.get(position).getPlayerName();
+						String playerImage = playList.get(position).getPlayerImage();
+						String playerUrl = playList.get(position).getPlayerUrl();
+						String playerUri = playList.get(position).getPlayerUrI();
+						String playerMediaType = playList.get(position).getPlayerMediaType();
+						String playerAllTime = "0";
+						String playerInTime = "0";
+						String playerContentDesc = playList.get(position).getPlayerContentDesc();
+						String playerNum = playList.get(position).getPlayerNum();
+						String playerZanType = "0";
+						String playerFrom = "";
+						String playerFromId = "";
+						String playerFromUrl = playList.get(position).getPlayerFromUrl();
+						String playerAddTime = Long.toString(System.currentTimeMillis());
+						String bjUserId = CommonUtils.getUserId(context);
+						String contentFavorite = playList.get(position).getContentFavorite();
+						String playShareUrl = playList.get(position).getPlayContentShareUrl();
+						String contentId = playList.get(position).getContentID();
+						String localUrl = playList.get(position).getLocalurl();
 						
 						//如果该数据已经存在数据库则删除原有数据，然后添加最新数据
-						PlayerHistory history = new PlayerHistory( 
-								playername, playerimage, playerurl, playerurI, playermediatype, 
-								plaplayeralltime, playerintime, playercontentdesc, playernum,
-								playerzantype, playerfrom, playerfromid, playerfromurl,
-								playeraddtime, bjuserid, playshareurl, ContentFavorite, ContentId, localurl);
-						dbdao.deleteHistory(playerurl);
-						dbdao.addHistory(history);
+						PlayerHistory history = new PlayerHistory(
+                                playerName, playerImage, playerUrl, playerUri, playerMediaType,
+                                playerAllTime, playerInTime, playerContentDesc, playerNum,
+                                playerZanType, playerFrom, playerFromId, playerFromUrl,
+                                playerAddTime, bjUserId, playShareUrl, contentFavorite, contentId, localUrl);
+                        dbDao.deleteHistory(playerUrl);
+                        dbDao.addHistory(history);
 //						if(PlayerFragment.context!=null){
 //							MainActivity.change();
 //							HomeActivity.UpdateViewPager();
@@ -265,7 +264,7 @@ public class SoundFragment extends Fragment{
 		int number = 0;
 		for(int i=0; i<playList.size(); i++){
 			if(deleteList == null){
-				deleteList = new ArrayList<PlayerHistory>();
+				deleteList = new ArrayList<>();
 			}
 			if(playList.get(i).getStatus() == 1){
 				deleteList.add(playList.get(i));
@@ -275,7 +274,7 @@ public class SoundFragment extends Fragment{
 		if(deleteList.size() > 0){
 			for(int i=0; i<deleteList.size(); i++){
 				String url = deleteList.get(i).getPlayerUrl();
-				dbdao.deleteHistory(url);
+                dbDao.deleteHistory(url);
 			}
 			if(checkList != null && checkList.size() > 0){
 				checkList.clear();
@@ -289,7 +288,7 @@ public class SoundFragment extends Fragment{
 	
 	@Override
 	public void onDestroyView() {
-		super .onDestroyView();
+		super.onDestroyView();
 		if (null != rootView) {
 			((ViewGroup) rootView.getParent()).removeView(rootView);   
 		}
@@ -307,9 +306,9 @@ public class SoundFragment extends Fragment{
 		playList = null;
 		checkList = null;
 		linearNull = null;
-		if(dbdao != null){
-			dbdao.closedb();
-			dbdao = null;
+		if(dbDao != null){
+            dbDao.closedb();
+            dbDao = null;
 		}
 	}
 }

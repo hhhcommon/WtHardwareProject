@@ -14,16 +14,13 @@ import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.search.model.SuperRankInfo;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 	private Context context;
 	private ImageLoader imageLoader;
 	private List<SuperRankInfo> mSuperRankInfo;
-	private SimpleDateFormat format;
-	private Object a;
-	private String url;
-	private PlayHistoryCheck playCheck;
 
 	public PlayHistoryExpandableAdapter(Context context,List<SuperRankInfo> mSuperRankInfo) {
 		this.context = context;
@@ -31,15 +28,6 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 		imageLoader = new ImageLoader(context);
 	}
 	
-	public void setOnClick(PlayHistoryCheck playCheck) {
-		this.playCheck = playCheck;
-	}
-	
-	public void changeDate(List<SuperRankInfo> list) {
-		this.mSuperRankInfo = list;
-		this.notifyDataSetChanged();
-	}
-
 	@Override
 	public int getGroupCount() {
 		return mSuperRankInfo.size();
@@ -79,10 +67,10 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 	public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
 		ViewHolder holder;
 		if (convertView == null) {
-			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fragment_radio_list, null);
+			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fragment_radio_list, parent, false);
 			holder = new ViewHolder();
-			holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
-			holder.lin_more = (LinearLayout) convertView.findViewById(R.id.lin_head_more);
+			holder.textName = (TextView) convertView.findViewById(R.id.tv_name);
+			holder.linearMore = (LinearLayout) convertView.findViewById(R.id.lin_head_more);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -90,32 +78,32 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 		String key = mSuperRankInfo.get(groupPosition).getKey();
 		if (key != null && !key.equals("")) {
 			if (key.equals("AUDIO")) {
-				holder.tv_name.setText("声音");
+				holder.textName.setText("声音");
 			} else if (key.equals("RADIO")) {
-				holder.tv_name.setText("电台");
-			} else if (key.equals("SEQU")) {
-				holder.tv_name.setText("专辑");
+				holder.textName.setText("电台");
 			} else if (key.equals("TTS")){
-				holder.tv_name.setText("TTS");
+				holder.textName.setText("TTS");
 			}
 		} else {
-			holder.tv_name.setText("我听");
+			holder.textName.setText("我听");
 		}
 		return convertView;
 	}
 
 	@Override
 	public View getChildView(int groupPosition, int childPosition,boolean isLastChild, View convertView, ViewGroup parent) {
-		ViewHolder holder = null;
+		ViewHolder holder;
+        SimpleDateFormat format;
+        String url;
+        int a;
 		if (convertView == null) {
 			holder = new ViewHolder();
-			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_play_history, null);
-			holder.textView_playName = (TextView) convertView.findViewById(R.id.RankTitle);// 节目名称
-			holder.textView_PlayIntroduce = (TextView) convertView.findViewById(R.id.tv_last);// 上次播放时长
-			holder.imageView_playImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 节目图片
+			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_play_history, parent, false);
+			holder.textViewPlayName = (TextView) convertView.findViewById(R.id.RankTitle);// 节目名称
+			holder.textViewPlayIntroduce = (TextView) convertView.findViewById(R.id.tv_last);// 上次播放时长
+			holder.imageViewPlayImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 节目图片
 			holder.textNumber = (TextView) convertView.findViewById(R.id.text_number);
 			holder.textRankContent = (TextView) convertView.findViewById(R.id.RankContent);
-			//holder.lin_clear = (LinearLayout) convertView.findViewById(R.id.lin_clear);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -123,9 +111,9 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 		PlayerHistory lists = mSuperRankInfo.get(groupPosition).getHistoryList().get(childPosition);
 		if (lists.getPlayerMediaType().equals("RADIO")) {
 			if (lists.getPlayerName() == null || lists.getPlayerName().equals("")) {
-				holder.textView_playName.setText("未知");
+				holder.textViewPlayName.setText("未知");
 			} else {
-				holder.textView_playName.setText(lists.getPlayerName());
+				holder.textViewPlayName.setText(lists.getPlayerName());
 			}
 			if (lists.getPlayerNum() == null || lists.getPlayerNum().equals("")) {
 				holder.textNumber.setText("8888");
@@ -138,26 +126,26 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 				holder.textRankContent.setText(lists.getContentPub());
 			}
 			if (lists.getPlayerInTime() == null | lists.getPlayerInTime().equals("")) {
-				holder.textView_PlayIntroduce.setText("未知");
+				holder.textViewPlayIntroduce.setText("未知");
 			} else {
-				format = new SimpleDateFormat("mm:ss");
+				format = new SimpleDateFormat("mm:ss", Locale.CHINA);
 				format.setTimeZone(TimeZone.getTimeZone("GMT"));
 				a = Integer.valueOf(lists.getPlayerInTime());
 				String s = format.format(a);
-				holder.textView_PlayIntroduce.setText("上次播放至" + s);
+				holder.textViewPlayIntroduce.setText("上次播放至" + s);
 			}
 			if (lists.getPlayerImage() == null || lists.getPlayerImage().equals("") 
 					|| lists.getPlayerImage().equals("null") || lists.getPlayerImage().trim().equals("")) {
-				holder.imageView_playImage.setImageResource(R.mipmap.wt_image_playertx);
+				holder.imageViewPlayImage.setImageResource(R.mipmap.wt_image_playertx);
 			} else {
 				url = lists.getPlayerImage();
-				imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageView_playImage, false, false, null);
+				imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageViewPlayImage, false, false, null);
 			}
 		} else if(lists.getPlayerMediaType().equals("AUDIO")){
 			if (lists.getPlayerName() == null || lists.getPlayerName().equals("")) {
-				holder.textView_playName.setText("未知");
+				holder.textViewPlayName.setText("未知");
 			} else {
-				holder.textView_playName.setText(lists.getPlayerName());
+				holder.textViewPlayName.setText(lists.getPlayerName());
 			}
 			if (lists.getPlayerNum() == null || lists.getPlayerNum().equals("")) {
 				holder.textNumber.setText("8888");
@@ -170,27 +158,27 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 				holder.textRankContent.setText(lists.getContentPub());
 			}
 			if (lists.getPlayerInTime() == null | lists.getPlayerInTime().equals("")) {
-				holder.textView_PlayIntroduce.setText("未知");
+				holder.textViewPlayIntroduce.setText("未知");
 			} else {
-				format = new SimpleDateFormat("mm:ss");
+				format = new SimpleDateFormat("mm:ss", Locale.CHINA);
 				format.setTimeZone(TimeZone.getTimeZone("GMT"));
 				a = Integer.valueOf(lists.getPlayerInTime());
 				String s = format.format(a);
-				holder.textView_PlayIntroduce.setText("上次播放至" + s);
+				holder.textViewPlayIntroduce.setText("上次播放至" + s);
 			}
 			if (lists.getPlayerImage() == null || lists.getPlayerImage().equals("") 
 					|| lists.getPlayerImage().equals("null") || lists.getPlayerImage().trim().equals("")) {
-				holder.imageView_playImage.setImageResource(R.mipmap.wt_image_playertx);
+				holder.imageViewPlayImage.setImageResource(R.mipmap.wt_image_playertx);
 			} else {
 				url = lists.getPlayerImage();
-				imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageView_playImage, false, false, null);
+				imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageViewPlayImage, false, false, null);
 			}
 			
-		}/*else if(lists.getPlayerMediaType().equals("SEQU")){// 判断mediatype==sequ的情况
+		}else if(lists.getPlayerMediaType().equals("TTS")){
 			if (lists.getPlayerName() == null || lists.getPlayerName().equals("")) {
-				holder.textView_playName.setText("未知");
+				holder.textViewPlayName.setText("未知");
 			} else {
-				holder.textView_playName.setText(lists.getPlayerName());
+				holder.textViewPlayName.setText(lists.getPlayerName());
 			}
 			if (lists.getPlayerNum() == null || lists.getPlayerNum().equals("")) {
 				holder.textNumber.setText("8888");
@@ -203,53 +191,20 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 				holder.textRankContent.setText(lists.getContentPub());
 			}
 			if (lists.getPlayerInTime() == null | lists.getPlayerInTime().equals("")) {
-				holder.textView_PlayIntroduce.setText("未知");
+				holder.textViewPlayIntroduce.setText("未知");
 			} else {
-				format = new SimpleDateFormat("mm:ss");
+				format = new SimpleDateFormat("mm:ss", Locale.CHINA);
 				format.setTimeZone(TimeZone.getTimeZone("GMT"));
 				a = Integer.valueOf(lists.getPlayerInTime());
 				String s = format.format(a);
-				holder.textView_PlayIntroduce.setText("上次播放至" + s);
+				holder.textViewPlayIntroduce.setText("上次播放至" + s);
 			}
 			if (lists.getPlayerImage() == null || lists.getPlayerImage().equals("") 
 					|| lists.getPlayerImage().equals("null") || lists.getPlayerImage().trim().equals("")) {
-				holder.imageView_playImage.setImageResource(R.drawable.wt_image_playertx_80);
-			} else {
-				// GlobalConfig.imageurl+ 
-				url = lists.getPlayerImage();
-				imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageView_playImage, false, false, null);
-			}
-		}*/else if(lists.getPlayerMediaType().equals("TTS")){
-			if (lists.getPlayerName() == null || lists.getPlayerName().equals("")) {
-				holder.textView_playName.setText("未知");
-			} else {
-				holder.textView_playName.setText(lists.getPlayerName());
-			}
-			if (lists.getPlayerNum() == null || lists.getPlayerNum().equals("")) {
-				holder.textNumber.setText("8888");
-			} else {
-				holder.textNumber.setText(lists.getPlayerNum());
-			}
-			if (lists.getContentPub() == null || lists.getContentPub().equals("")) {
-				holder.textRankContent.setText("我听科技");
-			} else {
-				holder.textRankContent.setText(lists.getContentPub());
-			}
-			if (lists.getPlayerInTime() == null | lists.getPlayerInTime().equals("")) {
-				holder.textView_PlayIntroduce.setText("未知");
-			} else {
-				format = new SimpleDateFormat("mm:ss");
-				format.setTimeZone(TimeZone.getTimeZone("GMT"));
-				a = Integer.valueOf(lists.getPlayerInTime());
-				String s = format.format(a);
-				holder.textView_PlayIntroduce.setText("上次播放至" + s);
-			}
-			if (lists.getPlayerImage() == null || lists.getPlayerImage().equals("") 
-					|| lists.getPlayerImage().equals("null") || lists.getPlayerImage().trim().equals("")) {
-				holder.imageView_playImage.setImageResource(R.mipmap.wt_image_playertx);
+				holder.imageViewPlayImage.setImageResource(R.mipmap.wt_image_playertx);
 			} else {
 				url = lists.getPlayerImage();
-				imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageView_playImage, false, false, null);
+				imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageViewPlayImage, false, false, null);
 			}
 		}
 		return convertView;
@@ -260,18 +215,13 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 		return true;
 	}
 	
-	public interface PlayHistoryCheck {
-		void checkPosition(int position);
-	}
-
 	class ViewHolder {
-		private TextView tv_name;
-		public LinearLayout lin_more;
-		public TextView textView_playName;
-		public TextView textView_PlayIntroduce;
-		public ImageView imageView_playImage;
+		private TextView textName;
+		public LinearLayout linearMore;
+		public TextView textViewPlayName;
+		public TextView textViewPlayIntroduce;
+		public ImageView imageViewPlayImage;
 		public TextView textNumber;
 		public TextView textRankContent;
-		//public LinearLayout lin_clear;
 	}
 }

@@ -66,8 +66,8 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
     private RadioFragment radioFragment; 	// 电台
     private TTSFragment ttsFragment; 		// TTS
     public static boolean isEdit = true; 	// 是否为编辑状态
-    public static final String UPDATE_ACTION_ALL = "com.woting.playhistory.all";
-    public static final String UPDATE_ACTION_CHECK = "com.woting.playhistory.check";
+    public static final String UPDATE_ACTION_ALL = "UPDATE_ACTION_ALL";
+    public static final String UPDATE_ACTION_CHECK = "UPDATE_ACTION_CHECK";
     private boolean isDelete = false;
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -80,13 +80,13 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
         intentFilter.addAction(PlayHistoryActivity.UPDATE_ACTION_CHECK);
         registerReceiver(myBroadcast, intentFilter);
         context = this;
-        dbDao = new SearchPlayerHistoryDao(context); 		// 初始化数据库
+        dbDao = new SearchPlayerHistoryDao(context);    // 初始化数据库
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS); 		// 透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION); 	// 透明导航栏
         MyActivityManager mam = MyActivityManager.getInstance();
-        mam.pushOneActivity(context);						//将 Activity 添加到集合中
+        mam.pushOneActivity(context);   // 将 Activity 添加到集合中
         InitImage();
-        setView(); // 设置界面
+        setView();                      // 设置界面
     }
 
     /*
@@ -191,7 +191,6 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
                 ttsText.setTextColor(context.getResources().getColor(R.color.group_item_text2));
                 clearEmpty.setVisibility(View.VISIBLE);
                 openEdit.setVisibility(View.GONE);
-
             }  else if (i == 2) { // 声音
                 soundText.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
                 allText.setTextColor(context.getResources().getColor(R.color.group_item_text2));
@@ -344,7 +343,7 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
                     imgAllCheck.setImageResource(R.mipmap.wt_group_nochecked);
                     dialogFlag = 0;
                 }
-                handledata(dialogFlag);
+                handleData(dialogFlag);
                 break;
             case R.id.lin_favorite_shanchu:
                 delete();
@@ -404,7 +403,7 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
     /**
      * 处理数据
      */
-    private void handledata(int status) {
+    private void handleData(int status) {
         switch (currIndex) {
             case 1:// 声音
                 soundFragment.setCheckStatus(status);
@@ -444,7 +443,7 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
         }
     }
 
-    //查看更多
+    // 查看更多
     public void updateViewPager(String mediaType){
         int index = 0;
         if(mediaType != null && !mediaType.equals("")){
@@ -468,7 +467,7 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
         textConfirm.setOnClickListener(this);
         TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);
         textTitle.setText("是否清空全部历史记录");
-        confirmDialog = new Dialog(this, R.style.MyDialog);
+        confirmDialog = new Dialog(context, R.style.MyDialog);
         confirmDialog.setContentView(dialog1);
         confirmDialog.setCanceledOnTouchOutside(true);
         confirmDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
