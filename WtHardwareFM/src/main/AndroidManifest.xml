@@ -367,6 +367,11 @@
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
+
+        <meta-data
+            android:name="UMENG_APPKEY"
+            android:value="5715cf1e67e58e5955000896" >
+        </meta-data>
     </application>
 
 </manifest>
