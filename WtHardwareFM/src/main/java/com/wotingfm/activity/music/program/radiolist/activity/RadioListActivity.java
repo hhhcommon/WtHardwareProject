@@ -28,9 +28,7 @@ import com.wotingfm.activity.music.program.radiolist.model.SubCata;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.PagerSlidingTabStrip;
 
@@ -60,12 +58,14 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 	public static final String tag = "RADIOLIST_VOLLEY_REQUEST_CANCEL_TAG";
 	public static boolean isCancelRequest;
 	private RecommendFragment reco;
+	private RadioListActivity context;
 
 	@TargetApi(Build.VERSION_CODES.KITKAT)
 	@SuppressLint("InlinedApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		context=this;
 		setContentView(R.layout.activity_radiolist);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		// 透明状态栏
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	// 透明导航栏
@@ -142,18 +142,8 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 	}
 
 	private JSONObject setParam(){
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
-			jsonObject.put("SessionId", CommonUtils.getSessionId(RadioListActivity.this));
-			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			PhoneMessage.getGps(RadioListActivity.this);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-			jsonObject.put("PCDType", GlobalConfig.PCDType);
-			// 模块属性
-			jsonObject.put("UserId", CommonUtils.getUserId(RadioListActivity.this));
 			jsonObject.put("CatalogType", CatagoryType);
 			jsonObject.put("CatalogId", id);
 			jsonObject.put("Page", "1");
