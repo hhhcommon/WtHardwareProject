@@ -15,12 +15,14 @@ import android.widget.TextView;
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.adapter.MyFragmentPagerAdapter;
-//import com.wotingfm.activity.music.player.fragment.PlayerFragment;
+import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.program.main.ProgramFragment;
 import com.wotingfm.activity.music.search.activity.SearchLikeAcitvity;
 import com.wotingfm.util.ToastUtils;
 
 import java.util.ArrayList;
+
+//import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 
 /**
  * 内容主页
@@ -89,12 +91,12 @@ public class HomeActivity extends FragmentActivity {
 	public void InitViewPager() {
 		mPager = (ViewPager) findViewById(R.id.viewpager);
 		mPager.setOffscreenPageLimit(1);
-		ArrayList<Fragment> fragmentList = new ArrayList<>();
-//		PlayerFragment playfragment = new PlayerFragment();
+		ArrayList<Fragment> fragmentList = new ArrayList<Fragment>();
+		PlayerFragment playfragment = new PlayerFragment();
 		ProgramFragment newsfragment = new ProgramFragment();
-//		fragmentList.add(playfragment);
+ 	    fragmentList.add(playfragment);
 		fragmentList.add(newsfragment);
-		// mPager.setAdapter(new MyFragmentChildPagerAdapter(getChildFragmentManager(), fragmentList));
+		 //mPager.setAdapter(new MyFragmentChildPagerAdapter(getChildFragmentManager(), fragmentList));
 		mPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList));
 		mPager.setOnPageChangeListener(new MyOnPageChangeListener());	// 页面变化时的监听器
 		mPager.setCurrentItem(0);	// 设置当前显示标签页为第一页mPager

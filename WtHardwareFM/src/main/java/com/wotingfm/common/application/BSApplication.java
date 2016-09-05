@@ -7,15 +7,17 @@ import android.content.IntentFilter;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.wotingfm.service.NotificationService;
-import com.wotingfm.service.VoiceStreamPlayerService;
-import com.wotingfm.service.VoiceStreamRecordService;
+import com.umeng.socialize.PlatformConfig;
 import com.wotingfm.activity.music.common.service.DownloadService;
+import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.config.SocketClientConfig;
 import com.wotingfm.helper.CommonHelper;
 import com.wotingfm.receiver.NetWorkChangeReceiver;
+import com.wotingfm.service.NotificationService;
 import com.wotingfm.service.SocketService;
 import com.wotingfm.service.SubclassService;
+import com.wotingfm.service.VoiceStreamPlayerService;
+import com.wotingfm.service.VoiceStreamRecordService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,7 +46,8 @@ public class BSApplication extends Application {
         _l.add("GOTO::8");//之后，调到第9步处理
         scc = new SocketClientConfig();
         scc.setReConnectWays(_l);
-
+        //初始化第三方
+        InitThird();
         //socket服务
         Intent Socket = new Intent(this, SocketService.class);
         startService(Socket);
@@ -65,6 +68,13 @@ public class BSApplication extends Application {
         this.registerNetWorkChangeReceiver(new NetWorkChangeReceiver(this));// 注册网络状态及返回键监听
 
     }
+
+    private void InitThird() {
+        PlatformConfig.setWeixin(GlobalConfig.WEIXIN_KEY, GlobalConfig.WEIXIN_SECRET);
+        PlatformConfig.setQQZone(GlobalConfig.QQ_KEY, GlobalConfig.QQ_SECRET);
+        PlatformConfig.setSinaWeibo(GlobalConfig.WEIBO_KEY,GlobalConfig.WEIBO_SECRET);
+    }
+
 
     public static Context getAppContext(){
         return instance;

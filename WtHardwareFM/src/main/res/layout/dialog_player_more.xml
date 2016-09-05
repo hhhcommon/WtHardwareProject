@@ -2,33 +2,30 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/WHITE_1"
+    android:background="#7fffffff"
     android:gravity="center"
     android:orientation="vertical" >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="161dp"
+        android:layout_height="260dp"
         android:orientation="vertical" >
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:gravity="center" >
-
-            <com.wotingfm.widget.HorizontalListView
-                android:id="@+id/share_gallery"
-                android:layout_width="match_parent"
-                android:layout_marginRight="25dp"
-                android:layout_marginLeft="25dp"
-                android:layout_marginBottom="10dp"
-                android:layout_marginTop="10dp"
-                android:layout_height="100dp"
-                android:gravity="center"
-                android:text="确定退出该群?"
-                android:textColor="@color/BLACK" />
-              
+        
+        <GridView
+        android:id="@+id/gv_more"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:horizontalSpacing="10dp"
+        android:verticalSpacing="15dp"
+        android:paddingLeft="25dp"
+        android:paddingRight="25dp"
+        android:paddingTop="10dp"
+        android:numColumns="3"
+        android:gravity="center"
+        android:scrollbars="none"
+        >
+      </GridView>
+       
         </LinearLayout>
 
         <TextView
@@ -47,11 +44,9 @@
                 android:layout_height="60dp"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="取 消"
+                android:text="关闭"
                 android:textSize="16sp"
                />
 
         </LinearLayout>
     </LinearLayout>
-
-</LinearLayout>

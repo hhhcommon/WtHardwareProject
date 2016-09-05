@@ -80,8 +80,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
         context=this;
         MobclickAgent.openActivityDurationTrack(false);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		//透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	//透明导航栏
-
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	//透明导航
         update(); // 获取版本数据
         InitTextView();	// 设置界面
         InitDao();
