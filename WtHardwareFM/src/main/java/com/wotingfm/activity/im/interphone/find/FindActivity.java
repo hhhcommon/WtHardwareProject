@@ -29,7 +29,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.im.interphone.find.result.FindNewsResultActivity;
+import com.wotingfm.activity.im.interphone.find.result.FindNewsResultActivityApp;
 import com.wotingfm.activity.im.interphone.scanning.activity.CaptureActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
@@ -243,7 +243,7 @@ public class FindActivity extends Activity implements View.OnClickListener {
                     return;
                 }
                 // 跳转到搜索结果界面
-                Intent intent = new Intent(FindActivity.this, FindNewsResultActivity.class);
+                Intent intent = new Intent(FindActivity.this, FindNewsResultActivityApp.class);
                 Bundle bundle = new Bundle();
                 bundle.putString(StringConstant.FIND_CONTENT_TO_RESULT, searchString);
                 bundle.putString(StringConstant.FIND_TYPE, type);

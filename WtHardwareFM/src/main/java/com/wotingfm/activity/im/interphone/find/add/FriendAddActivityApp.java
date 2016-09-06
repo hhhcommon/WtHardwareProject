@@ -10,8 +10,8 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.im.interphone.find.result.model.UserInviteMeInside;
-import com.wotingfm.common.base.BaseActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -27,7 +27,7 @@ import org.json.JSONObject;
 /**
  * 添加好友详情界面
  */
-public class FriendAddActivity extends BaseActivity implements OnClickListener {
+public class FriendAddActivityApp extends AppBaseActivity implements OnClickListener {
     private TextView tv_add;
     private SharedPreferences sharedPreferences;
     private String username;
@@ -125,7 +125,7 @@ public class FriendAddActivity extends BaseActivity implements OnClickListener {
             case R.id.tv_add://点击申请添加按钮
                 String news = et_news.getText().toString().trim();
                 if (news.equals("")) {
-                    ToastUtils.show_allways(FriendAddActivity.this, "请输入验证信息");
+                    ToastUtils.show_allways(FriendAddActivityApp.this, "请输入验证信息");
                 } else {
                     if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                         //发送验证请求
@@ -159,30 +159,30 @@ public class FriendAddActivity extends BaseActivity implements OnClickListener {
                     e.printStackTrace();
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
-                    ToastUtils.show_allways(FriendAddActivity.this, "验证发送成功，等待好友审核");
+                    ToastUtils.show_allways(FriendAddActivityApp.this, "验证发送成功，等待好友审核");
                 } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_allways(FriendAddActivity.this, "添加失败, 请稍后再试 ");
+                    ToastUtils.show_allways(FriendAddActivityApp.this, "添加失败, 请稍后再试 ");
                 } else if (ReturnType != null && ReturnType.equals("T")) {
-                    ToastUtils.show_allways(FriendAddActivity.this, "添加失败, 请稍后再试 ");
+                    ToastUtils.show_allways(FriendAddActivityApp.this, "添加失败, 请稍后再试 ");
                 } else if (ReturnType != null && ReturnType.equals("200")) {
-                    ToastUtils.show_allways(FriendAddActivity.this, "您未登录 ");
+                    ToastUtils.show_allways(FriendAddActivityApp.this, "您未登录 ");
                 } else if (ReturnType != null && ReturnType.equals("0000")) {
-                    ToastUtils.show_allways(FriendAddActivity.this, "添加失败, 请稍后再试 ");
+                    ToastUtils.show_allways(FriendAddActivityApp.this, "添加失败, 请稍后再试 ");
                 } else if (ReturnType != null && ReturnType.equals("1003")) {
-                    ToastUtils.show_allways(FriendAddActivity.this, "添加好友不存在 ");
+                    ToastUtils.show_allways(FriendAddActivityApp.this, "添加好友不存在 ");
                 } else if (ReturnType != null && ReturnType.equals("1004")) {
-                    ToastUtils.show_allways(FriendAddActivity.this, "您已经是他好友了 ");
+                    ToastUtils.show_allways(FriendAddActivityApp.this, "您已经是他好友了 ");
                 } else if (ReturnType != null && ReturnType.equals("1005")) {
-                    ToastUtils.show_allways(FriendAddActivity.this, "对方已经邀请您为好友了，请查看 ");
+                    ToastUtils.show_allways(FriendAddActivityApp.this, "对方已经邀请您为好友了，请查看 ");
                 } else if (ReturnType != null && ReturnType.equals("1006")) {
-                    ToastUtils.show_allways(FriendAddActivity.this, "添加失败, 请稍后再试 ");
+                    ToastUtils.show_allways(FriendAddActivityApp.this, "添加失败, 请稍后再试 ");
                 } else if (ReturnType != null && ReturnType.equals("1007")) {
-                    ToastUtils.show_allways(FriendAddActivity.this, "您已经添加过了 ");
+                    ToastUtils.show_allways(FriendAddActivityApp.this, "您已经添加过了 ");
                 } else {
                     if (Message != null && !Message.trim().equals("")) {
-                        ToastUtils.show_allways(FriendAddActivity.this, Message + "");
+                        ToastUtils.show_allways(FriendAddActivityApp.this, Message + "");
                     } else {
-                        ToastUtils.show_allways(FriendAddActivity.this, "添加失败, 请稍后再试 ");
+                        ToastUtils.show_allways(FriendAddActivityApp.this, "添加失败, 请稍后再试 ");
                     }
                 }
             }

@@ -27,7 +27,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.chat.model.TalkListGP;
-import com.wotingfm.activity.im.interphone.find.add.FriendAddActivity;
+import com.wotingfm.activity.im.interphone.find.add.FriendAddActivityApp;
 import com.wotingfm.activity.im.interphone.find.result.model.FindGroupNews;
 import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.adapter.GroupTalkAdapter;
@@ -368,7 +368,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                             startActivityForResult(intent, 2);
                             ToastUtils.show_allways(context,"是好友，跳转到好友页面");
                         } else {
-                            Intent intent = new Intent(context, FriendAddActivity.class);
+                            Intent intent = new Intent(context, FriendAddActivityApp.class);
                             Bundle bundle = new Bundle();
                             bundle.putString("type", "TalkGroupNewsActivity_p");
                             bundle.putString("id", groupid);
@@ -469,7 +469,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
             signature = f.getGroupSignature();
             grouptype = f.getGroupType();
 			/* myAlias=f.get; */
-        } else if (type.equals("FindNewsResultActivity")) {
+        } else if (type.equals("FindNewsResultActivityApp")) {
             // 处理组邀请时进入
             FindGroupNews news = (FindGroupNews) this.getIntent().getSerializableExtra("contact");
             imageurl = news.getGroupImg();

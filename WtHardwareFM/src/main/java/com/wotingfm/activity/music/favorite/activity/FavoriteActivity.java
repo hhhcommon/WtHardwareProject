@@ -27,7 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.common.adapter.MyFragmentPagerAdapter;
+import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.activity.music.favorite.fragment.RadioFragment;
 import com.wotingfm.activity.music.favorite.fragment.SequFragment;
 import com.wotingfm.activity.music.favorite.fragment.SoundFragment;

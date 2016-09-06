@@ -134,17 +134,441 @@
 
         </RelativeLayout>
 
+        <View
+            android:id="@+id/liner_view_1"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/view_color"/>
+
         <RelativeLayout
             android:id="@+id/listener_set"
             android:layout_width="match_parent"
-            android:layout_height="43dp">
+            android:layout_height="56dp"
+            android:background="@drawable/person_color"
+            android:layout_marginTop="20dp">
+
+            <View
+                android:id="@+id/liner_view_2"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/view_color"/>
 
             <TextView
                 android:id="@+id/text_listener_set"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:text="我听调频设置"
+                android:layout_marginLeft="14dp"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:id="@+id/text_listener_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="将我听与车载调频到同一空白频率下"
+                android:layout_marginLeft="14dp"
+                android:layout_marginBottom="8dp"
+                android:textSize="13sp"
+                android:layout_alignParentBottom="true"/>
+
+            <ImageView
+                android:id="@+id/image_listener_frequency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/live_more"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="14dp"/>
+
+            <TextView
+                android:id="@+id/text_listener_frequency"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="87.5MHz"
+                android:layout_toLeftOf="@id/image_listener_frequency"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"/>
 
         </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/aux_set"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/person_color">
+
+            <View
+                android:id="@+id/liner_view_3"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/view_color"/>
+
+            <TextView
+                android:id="@+id/text_aux_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="AUX连接"
+                android:layout_marginLeft="14dp"
+                android:textSize="16sp"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:id="@+id/text_aux_info"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="使用AUX连接线，连接设备与汽车AUX接口"
+                android:layout_marginLeft="14dp"
+                android:layout_marginBottom="8dp"
+                android:textSize="13sp"
+                android:layout_alignParentBottom="true"/>
+
+            <ImageView
+                android:id="@+id/image_aux_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/wt_person_close"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="14dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/wifi_set"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/person_color">
+
+            <View
+                android:id="@+id/liner_view_4"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/view_color"/>
+
+            <TextView
+                android:id="@+id/text_wifi_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WIFI"
+                android:layout_marginLeft="14dp"
+                android:textSize="16sp"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:id="@+id/image_wifi_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/live_more"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="14dp"/>
+
+            <TextView
+                android:id="@+id/text_wifi_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="已连接的WIFI名称"
+                android:maxLines="1"
+                android:layout_toLeftOf="@id/image_wifi_set"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/bluetooth_set"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/person_color">
+
+            <View
+                android:id="@+id/liner_view_5"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/view_color"/>
+
+            <TextView
+                android:id="@+id/text_bluetooth_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="蓝牙"
+                android:layout_marginLeft="14dp"
+                android:textSize="16sp"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:id="@+id/image_bluetooth_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/live_more"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="14dp"/>
+
+            <TextView
+                android:id="@+id/text_bluetooth_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="关闭"
+                android:maxLines="1"
+                android:layout_toLeftOf="@id/image_bluetooth_set"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="5dp"/>
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/liner_view_6"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/view_color"/>
+
+        <RelativeLayout
+            android:id="@+id/like_set"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/person_color"
+            android:layout_marginTop="20dp">
+
+            <View
+                android:id="@+id/liner_view_7"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/view_color"/>
+
+            <TextView
+                android:id="@+id/text_like_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="喜好设定"
+                android:layout_marginLeft="14dp"
+                android:textSize="16sp"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:id="@+id/image_like_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/live_more"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="14dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/flow_set"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/person_color">
+
+            <View
+                android:id="@+id/liner_view_8"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/view_color"/>
+
+            <TextView
+                android:id="@+id/text_flow_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="流量管理"
+                android:layout_marginLeft="14dp"
+                android:textSize="16sp"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:id="@+id/image_flow_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/live_more"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="14dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/cache_set"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/person_color">
+
+            <View
+                android:id="@+id/liner_view_9"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/view_color"/>
+
+            <TextView
+                android:id="@+id/text_cache_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="清楚缓存"
+                android:layout_marginLeft="14dp"
+                android:textSize="16sp"
+                android:layout_centerVertical="true"/>
+
+            <TextView
+                android:id="@+id/text_cache_statistics"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="99.99M"
+                android:maxLines="1"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="14dp"/>
+
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/liner_view_10"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/view_color"/>
+
+        <RelativeLayout
+            android:id="@+id/update_set"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/person_color"
+            android:layout_marginTop="20dp">
+
+            <View
+                android:id="@+id/liner_view_11"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/view_color"/>
+
+            <TextView
+                android:id="@+id/text_update_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="检查更新"
+                android:layout_marginLeft="14dp"
+                android:textSize="16sp"
+                android:layout_centerVertical="true"/>
+
+            <TextView
+                android:id="@+id/text_update_statistics"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0.1.0.X.021"
+                android:maxLines="1"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="17dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/help_set"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/person_color">
+
+            <View
+                android:id="@+id/liner_view_12"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/view_color"/>
+
+            <TextView
+                android:id="@+id/text_help_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="使用帮助"
+                android:layout_marginLeft="14dp"
+                android:textSize="16sp"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:id="@+id/image_help_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/live_more"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="14dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/feedback_set"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/person_color">
+
+            <View
+                android:id="@+id/liner_view_13"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/view_color"/>
+
+            <TextView
+                android:id="@+id/text_feedback_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="反馈建议"
+                android:layout_marginLeft="14dp"
+                android:textSize="16sp"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:id="@+id/image_feedback_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/live_more"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="14dp"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/about_set"
+            android:layout_width="match_parent"
+            android:layout_height="56dp"
+            android:background="@drawable/person_color">
+
+            <View
+                android:id="@+id/liner_view_14"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/view_color"/>
+
+            <TextView
+                android:id="@+id/text_about_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="关于我听"
+                android:layout_marginLeft="14dp"
+                android:textSize="16sp"
+                android:layout_centerVertical="true"/>
+
+            <ImageView
+                android:id="@+id/image_about_set"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/live_more"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="14dp"/>
+
+        </RelativeLayout>
+
+        <Button
+            android:id="@+id/exit_login"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="退出账号"
+            android:textColor="@color/WHITE"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginBottom="30dp"
+            android:background="@drawable/wt_commit_button_background"/>
 
     </LinearLayout>
 

@@ -18,7 +18,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.common.adapter.MyFragmentChildPagerAdapter;
+import com.wotingfm.activity.common.baseadapter.MyFragmentChildPagerAdapter;
 import com.wotingfm.activity.music.program.diantai.fragment.OnLineFragment;
 import com.wotingfm.activity.music.program.fenlei.fragment.FenLeiFragment;
 import com.wotingfm.activity.music.program.tuijian.fragment.RecommendFragment;

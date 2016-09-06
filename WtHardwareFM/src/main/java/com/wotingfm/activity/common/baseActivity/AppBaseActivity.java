@@ -1,12 +1,8 @@
-package com.wotingfm.common.base;
+package com.wotingfm.activity.common.baseactivity;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,11 +10,11 @@ import com.wotingfm.R;
 import com.wotingfm.manager.MyActivityManager;
 
 /**
- * 基类 包含公共标题栏以及一些公共方法供子类调用或重写
+ * 包含公共标题栏以及一些公共方法供子类调用或重写
  * 继承此类需注意 xml中必须include  base_activity_title.xml
  * Created by Administrator on 2016/8/27 0027.
  */
-public abstract class BaseActivity extends Activity {
+public abstract class AppBaseActivity extends BaseActivity {
     private TextView leftBack;          // 左上角  返回
     private TextView rightMore;         // 右上角  更多
     private TextView textTitle;         // 标题
@@ -26,13 +22,10 @@ public abstract class BaseActivity extends Activity {
     private ImageView rightImage;       // 右上角  图标
     protected Context context;
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(setViewId());
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         context = this;
         MyActivityManager mam = MyActivityManager.getInstance();
         mam.pushOneActivity(this);
@@ -102,7 +95,7 @@ public abstract class BaseActivity extends Activity {
     }
 
     /**
-     * 设置左上角图标返回显示
+     * 设置左上角图标显示
      */
     protected void setLeftImageVisible(){
         leftImage.setVisibility(View.VISIBLE);

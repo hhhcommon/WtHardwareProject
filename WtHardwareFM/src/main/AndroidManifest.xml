@@ -1,6 +1,5 @@
-<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.wotingfm">
+          package="com.wotingfm">
 
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <!-- 蓝牙管理 -->
@@ -83,7 +82,7 @@
         android:name=".common.application.BSApplication"
         android:allowBackup="false"
         android:hardwareAccelerated="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/app_logo"
         android:label="@string/app_name">
 
         <!-- 启动时的欢迎界面 -->
@@ -92,29 +91,17 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar.Fullscreen">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-                <category android:name="android.intent.category.LAUNCHER"/>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <!--  -->
 
-        <!-- 下载界面 -->
-        <activity
-            android:name=".activity.music.download.activity.DownloadActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@android:style/Theme.Light.NoTitleBar"/>
-
-        <!-- 下载界面 -->
-        <activity
-            android:name=".activity.music.download.downloadlist.activity.DownLoadListActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan"
-            android:theme="@android:style/Theme.Light.NoTitleBar"/>
 
         <!-- 主界面 -->
         <activity
-            android:name=".activity.common.main.MainActivity"
+            android:name="com.wotingfm.activity.common.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar" >
             <intent-filter>
@@ -129,24 +116,24 @@
 
         <!-- 创建群组主界面 -->
         <activity
-            android:name=".activity.im.interphone.creategroup.main.CreateGroupMainActivity"
+            android:name="com.wotingfm.activity.im.interphone.creategroup.main.CreateGroupMainActivityApp"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 创建群组子界面  即有创建公开群、密码群、验证群 -->
         <activity
-            android:name=".activity.im.interphone.creategroup.create.CreateGroupItemActivity"
+            android:name=".activity.im.interphone.creategroup.create.CreateGroupItemActivityApp"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 消息中心 -->
         <activity
-            android:name=".activity.im.interphone.notify.activity.NotifyNewActivity"
+            android:name=".activity.im.interphone.notify.activity.NotifyNewActivityApp"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 头像剪裁界面 -->
         <activity
@@ -164,7 +151,7 @@
 
         <!-- 查找好友、群组显示结果界面 -->
         <activity
-            android:name=".activity.im.interphone.find.result.FindNewsResultActivity"
+            android:name=".activity.im.interphone.find.result.FindNewsResultActivityApp"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -178,21 +165,21 @@
 
         <!-- 扫描二维码显示结果界面 -->
         <activity
-            android:name=".activity.im.interphone.scanning.activity.ResultActivity"
+            android:name=".activity.im.interphone.scanning.activity.ResultActivityApp"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
         <!-- 添加好友界面 -->
         <activity
-            android:name=".activity.im.interphone.find.add.FriendAddActivity"
+            android:name=".activity.im.interphone.find.add.FriendAddActivityApp"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
         <!-- 添加好友界面 -->
         <activity
-            android:name=".activity.im.interphone.find.add.GroupAddActivity"
+            android:name=".activity.im.interphone.find.add.GroupAddActivityApp"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -290,7 +277,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
-
         <activity
             android:name=".activity.person.modifypassword.activity.ModifyPasswordActivity"
             android:screenOrientation="portrait"
@@ -320,7 +306,7 @@
 
         <!-- 定时关闭界面 -->
         <activity
-            android:name=".activity.music.timeset.activity.TimerPowerOffActivity"
+            android:name=".activity.music.timeset.activity.TimerPowerOffActivityApp"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -375,47 +361,47 @@
             android:name=".activity.im.interphone.groupmanage.joingrouplist.activity.JoinGroupListActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
+            android:windowSoftInputMode="adjustPan" />
         <activity
             android:name=".activity.im.interphone.groupmanage.handlegroupapply.HandleGroupApplyActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activity.im.interphone.groupmanage.groupperson.GroupPersonActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan"/>
         <activity android:name="com.wotingfm.activity.common.preference.activity.PreferenceActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan"/>
 
-        <activity
-            android:name=".activity.music.program.citylist.activity.CityListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name="com.wotingfm.activity.music.program.citylist.activity.CityListActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan"/>
 
-        <activity
-            android:name=".activity.music.program.album.activity.AlbumActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name="com.wotingfm.activity.music.download.activity.DownloadActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan"/>
 
-        <activity
-            android:name=".activity.music.program.tuijian.activity.RecommendLikeListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+        <activity android:name="com.wotingfm.activity.music.download.downloadlist.activity.DownLoadListActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan"/>
 
-        <activity
-            android:name=".activity.music.program.fmlist.activity.FMListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+        <activity android:name="com.wotingfm.activity.music.program.tuijian.activity.RecommendLikeListActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan"/>
 
-        <activity android:name=".activity.im.interphone.groupmanage.groupperson.GroupPersonActivity"
+        <activity android:name="com.wotingfm.activity.music.program.fmlist.activity.FMListActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name="com.wotingfm.activity.music.program.radiolist.activity.RadioListActivity"
                   android:screenOrientation="portrait"
                   android:theme="@android:style/Theme.Light.NoTitleBar"
                   android:windowSoftInputMode="adjustPan"/>
@@ -474,18 +460,28 @@
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
 
-        <service android:name=".activity.music.common.service.DownloadService"/>
-
-        <service android:name=".service.timeroffservice"/>
-
-        <service android:name=".service.NotificationService"/>
-
-        <service android:name=".service.SocketService"/>
-
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5715cf1e67e58e5955000896" >
         </meta-data>
+
+        <!-- 开机启动 -->
+        <receiver android:name="com.wotingfm.receiver.AutoStartReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <category android:name="android.intent.category.HOME" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name="com.wotingfm.service.SubclassService" />
+        <service android:name="com.wotingfm.service.NotificationService" />
+        <service android:name="com.wotingfm.service.timeroffservice" />
+        <service android:name="com.wotingfm.service.SocketService" />
+        <service android:name="com.wotingfm.service.VoiceStreamRecordService" />
+        <service android:name="com.wotingfm.service.VoiceStreamPlayerService" />
+        <service android:name="com.wotingfm.activity.music.common.service.DownloadService" />
+        <service android:name="com.wotingfm.service.FloatingWindowService" />
     </application>
 
 </manifest>

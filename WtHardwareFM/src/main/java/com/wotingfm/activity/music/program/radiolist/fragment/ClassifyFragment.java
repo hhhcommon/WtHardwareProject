@@ -33,7 +33,6 @@ import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.helper.ImageLoader;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.xlistview.XListView;
 import com.wotingfm.widget.xlistview.XListView.IXListViewListener;
@@ -91,7 +90,7 @@ public class ClassifyFragment extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		if(rootView == null){
 			rootView = inflater.inflate(R.layout.fragment_radio_list_layout, container, false);
-            View headView = LayoutInflater.from(context).inflate(R.layout.headview_acitivity_radiolist, container, false);
+            View headView = LayoutInflater.from(context).inflate(R.layout.headview_acitivity_radiolist, null);
 			// 轮播图
             RollPagerView mLoopViewPager= (RollPagerView) headView.findViewById(R.id.slideshowView);
 //	        mLoopViewPager.setPlayDelay(5000);

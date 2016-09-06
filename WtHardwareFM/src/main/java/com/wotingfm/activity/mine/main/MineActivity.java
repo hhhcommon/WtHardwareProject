@@ -73,7 +73,6 @@ public class MineActivity extends Activity implements OnClickListener {
     private RelativeLayout relativeStatusUnLogin;
     private RelativeLayout relativeStatusLogin;
     private ImageView imageView_ewm;
-    private ImageView lin_image_0;
     private String PhotoCutAfterImagePath;
 
     @Override
@@ -103,17 +102,19 @@ public class MineActivity extends Activity implements OnClickListener {
 
     // 设置view
     private void setView() {
-        imageView_ewm = (ImageView) findViewById(R.id.imageView_ewm);
+        Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.img_person_background);
+        ImageView loginBackgroundImage = (ImageView) findViewById(R.id.lin_image);      // 登录背景图片
+        loginBackgroundImage.setImageBitmap(bmp);
+        ImageView lin_image_0 = (ImageView) findViewById(R.id.lin_image_0);             // 未登录背景图片
+        lin_image_0.setImageBitmap(bmp);
+
+        imageView_ewm = (ImageView) findViewById(R.id.imageView_ewm);                   // 二维码
 
         relativeStatusUnLogin = (RelativeLayout) findViewById(R.id.lin_status_nodenglu);// 未登录时的状态
         relativeStatusUnLogin.setOnClickListener(this);
 
         relativeStatusLogin = (RelativeLayout) findViewById(R.id.lin_status_denglu);    // 登录时的状态
         relativeStatusLogin.setOnClickListener(this);
-
-        Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.img_person_background);
-        lin_image_0 = (ImageView) findViewById(R.id.lin_image_0);
-        lin_image_0.setImageBitmap(bmp);
     }
 
     //初始化状态  登陆 OR 未登录

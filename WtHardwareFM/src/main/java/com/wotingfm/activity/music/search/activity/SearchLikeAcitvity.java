@@ -40,7 +40,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.adapter.MyFragmentPagerAdapter;
+import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.activity.music.search.adapter.SearchHistoryAdapter;
 import com.wotingfm.activity.music.search.adapter.SearchLikeAdapter;
 import com.wotingfm.activity.music.search.adapter.searchhotkeyadapter;

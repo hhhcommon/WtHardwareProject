@@ -30,11 +30,11 @@ import com.google.gson.reflect.TypeToken;
 import com.shenstec.http.MyHttp;
 import com.shenstec.utils.file.FileManager;
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.im.interphone.creategroup.model.GroupRation;
 import com.wotingfm.activity.im.interphone.creategroup.model.UserPortaitInside;
 import com.wotingfm.activity.im.interphone.creategroup.photocut.activity.PhotoCutActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity;
-import com.wotingfm.common.base.BaseActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
@@ -54,7 +54,7 @@ import java.io.File;
 /**
  * 创建群组子页面  即有创建公开群、密码群、验证群
  */
-public class CreateGroupItemActivity extends BaseActivity implements View.OnClickListener {
+public class CreateGroupItemActivityApp extends AppBaseActivity implements View.OnClickListener {
     private Uri outputFileUri;
     private Dialog headDialog;
 
@@ -301,7 +301,7 @@ public class CreateGroupItemActivity extends BaseActivity implements View.OnClic
         spinnerChannel1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                spinnerString1 = CreateGroupItemActivity.this.getResources().getStringArray(R.array.spingar_channel)[position];
+                spinnerString1 = CreateGroupItemActivityApp.this.getResources().getStringArray(R.array.spingar_channel)[position];
             }
 
             @Override
@@ -313,7 +313,7 @@ public class CreateGroupItemActivity extends BaseActivity implements View.OnClic
         spinnerChannel2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                spinnerString2 = CreateGroupItemActivity.this.getResources().getStringArray(R.array.spingar_channel)[position];
+                spinnerString2 = CreateGroupItemActivityApp.this.getResources().getStringArray(R.array.spingar_channel)[position];
             }
 
             @Override
