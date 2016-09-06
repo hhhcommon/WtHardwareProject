@@ -91,7 +91,7 @@ public class G729ACodec {
     private native int Encode(short[] pcm, byte[] bitStream);
     private native int DeInitEncoder();
 	public G729ACodec() {
-    	System.loadLibrary("ppsip_g729_codec");
+       	System.loadLibrary("ppsip_g729_codec");
     }
     
     public static G729ACodec getInstance() throws Exception {

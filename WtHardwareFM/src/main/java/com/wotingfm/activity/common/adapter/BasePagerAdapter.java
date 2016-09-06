@@ -10,7 +10,7 @@ import java.util.List;
 //引导页使用的pageview适配器
 public class BasePagerAdapter extends PagerAdapter{
 	private List<View> views=new ArrayList<View>();
-	
+
 	public BasePagerAdapter(List<View> views){
 		this.views=views;
 	}

@@ -18,4 +18,6 @@ public class BroadcastConstants {
 	public static final String CITY_CHANGE="CITYCHANGE";
 	//刷新组信息
 	public static final String REFRESH_GROUP="REFRESH_GROUP";
+	//
+	public static final String ACTIVITY_CHANGE="ACTIVITY_CHANGE";
 }

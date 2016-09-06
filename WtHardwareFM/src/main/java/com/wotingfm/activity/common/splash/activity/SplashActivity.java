@@ -9,10 +9,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ImageView;
-
 import com.android.volley.VolleyError;
-import com.google.android.gms.appindexing.AppIndex;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
@@ -35,17 +32,10 @@ import org.json.JSONObject;
 public class SplashActivity extends Activity {
 	private SharedPreferences sharedPreferences;
 	private String first;
-//	private Dialog dialog;
 	private Bitmap bmp;
 	private String tag = "SPLASH_VOLLEY_REQUEST_CANCEL_TAG";
 	private boolean isCancelRequest;
 	private ImageView imageView;
-	/**
-	 * ATTENTION: This was auto-generated to implement the App Indexing API.
-	 * See https://g.co/AppIndexing/AndroidStudio for more information.
-	 */
-	private GoogleApiClient client;
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -64,9 +54,6 @@ public class SplashActivity extends Activity {
 				send();
 			}
 		}, 1000);
-		// ATTENTION: This was auto-generated to implement the App Indexing API.
-		// See https://g.co/AppIndexing/AndroidStudio for more information.
-		client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
 	}
 
 	protected void send() {
@@ -76,7 +63,6 @@ public class SplashActivity extends Activity {
 			private String ReturnType;
 			private String SessionId;
 			private String UserInfos;
-
 			@Override
 			protected void requestSuccess(JSONObject result) {
 				if (isCancelRequest) {

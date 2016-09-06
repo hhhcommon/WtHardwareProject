@@ -18,6 +18,7 @@ import com.wotingfm.service.SocketService;
 import com.wotingfm.service.SubclassService;
 import com.wotingfm.service.VoiceStreamPlayerService;
 import com.wotingfm.service.VoiceStreamRecordService;
+import com.wotingfm.util.PhoneMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,7 @@ public class BSApplication extends Application {
         super.onCreate();
         instance=this;
         queues = Volley.newRequestQueue(this);
+        PhoneMessage.getPhoneInfo(instance);//获取手机信息
         List<String> _l=new ArrayList<String>();//其中每个间隔要是0.5秒的倍数
         _l.add("INTE::500");   //第1次检测到未连接成功，隔0.5秒重连
         _l.add("INTE::500");  //第2次检测到未连接成功，隔0.5秒重连
@@ -46,8 +48,7 @@ public class BSApplication extends Application {
         _l.add("GOTO::8");//之后，调到第9步处理
         scc = new SocketClientConfig();
         scc.setReConnectWays(_l);
-        //初始化第三方
-        InitThird();
+
         //socket服务
         Intent Socket = new Intent(this, SocketService.class);
         startService(Socket);
