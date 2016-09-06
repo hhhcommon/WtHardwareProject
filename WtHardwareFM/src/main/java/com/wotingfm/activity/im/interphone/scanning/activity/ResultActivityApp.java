@@ -11,7 +11,7 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.common.base.BaseActivity;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
 
@@ -21,7 +21,7 @@ import com.wotingfm.util.L;
  * @author 辛龙
  *         2016年8月8日
  */
-public class ResultActivity extends BaseActivity {
+public class ResultActivityApp extends AppBaseActivity {
 
     @Override
     protected int setViewId() {

@@ -51,7 +51,7 @@ public class TTSFragment extends Fragment {
 	private XListView mlistView;
 	private int page = 1;
 	private int RefreshType;	// refreshtype 1为下拉加载 2为上拉加载更多
-	private ArrayList<RankInfo> newlist = new ArrayList<RankInfo>();
+	private ArrayList<RankInfo> newlist = new ArrayList<>();
 	private boolean flag;
 	private int pagesizenum = -1;// 先求余 如果等于0 最后结果不加1 如果不等于0 结果加一
 	private View rootView;

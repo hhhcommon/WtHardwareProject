@@ -17,12 +17,12 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.common.adapter.MyFragmentPagerAdapter;
+import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
-import com.wotingfm.activity.im.interphone.creategroup.main.CreateGroupMainActivity;
+import com.wotingfm.activity.im.interphone.creategroup.main.CreateGroupMainActivityApp;
 import com.wotingfm.activity.im.interphone.find.FindActivity;
 import com.wotingfm.activity.im.interphone.linkman.fragment.LinkManFragment;
-import com.wotingfm.activity.im.interphone.notify.activity.NotifyNewActivity;
+import com.wotingfm.activity.im.interphone.notify.activity.NotifyNewActivityApp;
 import com.wotingfm.activity.im.interphone.scanning.activity.CaptureActivity;
 import com.wotingfm.activity.person.login.activity.LoginActivity;
 import com.wotingfm.common.constant.StringConstant;
@@ -146,7 +146,7 @@ public class DuiJiangActivity extends FragmentActivity {
 			public void onClick(View v) {
 				String login = sharedPreferences.getString(StringConstant.ISLOGIN, "false");// 是否登录
 				if (login != null && !login.trim().equals("") && login.equals("true")) {
-					Intent intent = new Intent(context, CreateGroupMainActivity.class);
+					Intent intent = new Intent(context, CreateGroupMainActivityApp.class);
 					startActivity(intent);
 				} else {
 					startActivity(new Intent(context, LoginActivity.class));
@@ -206,7 +206,7 @@ public class DuiJiangActivity extends FragmentActivity {
 		lin_news.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(context, NotifyNewActivity.class);
+				Intent intent = new Intent(context, NotifyNewActivityApp.class);
 				startActivity(intent);
 			}
 		});

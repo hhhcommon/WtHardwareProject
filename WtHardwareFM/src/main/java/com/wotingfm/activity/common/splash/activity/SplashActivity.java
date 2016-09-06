@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.widget.ImageView;
+
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -63,6 +64,7 @@ public class SplashActivity extends Activity {
 			private String ReturnType;
 			private String SessionId;
 			private String UserInfos;
+
 			@Override
 			protected void requestSuccess(JSONObject result) {
 				if (isCancelRequest) {

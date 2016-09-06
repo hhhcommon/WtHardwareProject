@@ -14,15 +14,13 @@ import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.adapter.MyFragmentPagerAdapter;
+import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.program.main.ProgramFragment;
 import com.wotingfm.activity.music.search.activity.SearchLikeAcitvity;
 import com.wotingfm.util.ToastUtils;
 
 import java.util.ArrayList;
-
-//import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 
 /**
  * 内容主页
@@ -91,7 +89,7 @@ public class HomeActivity extends FragmentActivity {
 	public void InitViewPager() {
 		mPager = (ViewPager) findViewById(R.id.viewpager);
 		mPager.setOffscreenPageLimit(1);
-		ArrayList<Fragment> fragmentList = new ArrayList<Fragment>();
+		ArrayList<Fragment> fragmentList = new ArrayList<>();
 		PlayerFragment playfragment = new PlayerFragment();
 		ProgramFragment newsfragment = new ProgramFragment();
  	    fragmentList.add(playfragment);
@@ -133,4 +131,25 @@ public class HomeActivity extends FragmentActivity {
 		view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
 	}
 
+	/*
+	 * 手机实体返回按键的处理  与onbackpress同理
+	 */
+	long waitTime = 2000;
+	long touchTime = 0;
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
+			long currentTime = System.currentTimeMillis();
+			if ((currentTime - touchTime) >= waitTime) {
+				ToastUtils.show_allways(HomeActivity.this, "再按一次退出");
+				touchTime = currentTime;
+			} else {
+				MobclickAgent.onKillProcess(this);
+				finish();
+				android.os.Process.killProcess(android.os.Process.myPid());
+			}
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 }

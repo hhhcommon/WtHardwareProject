@@ -7,11 +7,11 @@ import android.support.v4.view.PagerAdapter;
 
 import java.util.List;
 
-public class MyPagerAdaper extends FragmentStatePagerAdapter{
+public class MyPagerAdapter extends FragmentStatePagerAdapter{
 	private List<String> title;
 	private List<Fragment> fragments;
 
-	public MyPagerAdaper(FragmentManager fm, List<String> title, List<Fragment> fragments) {
+	public MyPagerAdapter(FragmentManager fm, List<String> title, List<Fragment> fragments) {
 		super(fm);
 		this.title = title;
 		this.fragments = fragments;

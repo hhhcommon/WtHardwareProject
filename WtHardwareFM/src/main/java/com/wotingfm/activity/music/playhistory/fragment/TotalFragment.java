@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
+import com.wotingfm.activity.music.playhistory.activity.PlayHistoryActivity;
 import com.wotingfm.activity.music.playhistory.adapter.PlayHistoryExpandableAdapter;
 import com.wotingfm.activity.music.search.model.SuperRankInfo;
 import com.wotingfm.util.CommonUtils;
@@ -37,14 +38,14 @@ public class TotalFragment extends Fragment {
 	private View rootView;
 	private Context context;
 	private ExpandableListView mListView;	//播放历史列表
-	private SearchPlayerHistoryDao dbdao;	//播放历史数据库
-	private PlayHistoryExpandableAdapter adapter;
-	private List<PlayerHistory> subList;	//播放历史数据
-	private ArrayList<SuperRankInfo> list = new ArrayList<SuperRankInfo>();// 返回的节目list，拆分之前的list
+	private SearchPlayerHistoryDao dbDao;	//播放历史数据库
+//	private PlayHistoryExpandableAdapter adapter;
+//	private List<PlayerHistory> subList;	//播放历史数据
+	private ArrayList<SuperRankInfo> list = new ArrayList<>();// 返回的节目list，拆分之前的list
 	private Dialog delDialog;
 	private boolean isLoad;					// 是否已经加载过
-	private int delchildposition = -1;
-	private int delgroupposition = -1;
+	private int delChildPosition = -1;
+	private int delGroupPosition = -1;
 	public static boolean isData = false;	// 是否有数据 
 	public static boolean isDeleteSound;	// 标记单条删除记录为声音数据
 	public static boolean isDeleteRadio;	// 标记单条删除记录为电台数据
@@ -54,7 +55,7 @@ public class TotalFragment extends Fragment {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		context = getActivity();
-		dbdao = new SearchPlayerHistoryDao(context);	// 初始化数据库
+        dbDao = new SearchPlayerHistoryDao(context);	// 初始化数据库
 		delDialog();									// 初始化对话框
 	}
 
@@ -77,13 +78,12 @@ public class TotalFragment extends Fragment {
 	public void getData() {
 		mListView.setVisibility(View.GONE);
 		isData = false;
-		subList = dbdao.queryHistory();
+        List<PlayerHistory> subList = dbDao.queryHistory();
 		if (subList != null && subList.size() > 0) {
 			list.clear();
-			ArrayList<PlayerHistory> playlist = null;
-//			ArrayList<PlayerHistory> sequlist = null;
-			ArrayList<PlayerHistory> ttslist = null;
-			ArrayList<PlayerHistory> radiolist = null;
+			ArrayList<PlayerHistory> playList = null;
+			ArrayList<PlayerHistory> ttsList = null;
+			ArrayList<PlayerHistory> radioList = null;
 
 			/**
 			 * 循环遍历  对数据库里的数据进行分类
@@ -92,71 +92,54 @@ public class TotalFragment extends Fragment {
 				isData = true;
 				if (subList.get(i).getPlayerMediaType()!=null && !subList.get(i).getPlayerMediaType().equals("")) {
 					if (subList.get(i).getPlayerMediaType().equals("AUDIO")) {
-						if (playlist == null) {
-							playlist = new ArrayList<PlayerHistory>();
-							playlist.add(subList.get(i));
+						if (playList == null) {
+                            playList = new ArrayList<>();
+                            playList.add(subList.get(i));
 						} else {
-							if(playlist.size()<3){
-								playlist.add(subList.get(i));
+							if(playList.size()<3){
+                                playList.add(subList.get(i));
 							}
 						}
-					} /*else if (subList.get(i).getPlayerMediaType().equals("SEQU")) {
-						if (sequlist == null) {
-							sequlist = new ArrayList<PlayerHistory>();
-							sequlist.add(subList.get(i));
+					} else if (subList.get(i).getPlayerMediaType().equals("RADIO")) {
+						if (radioList == null) {
+                            radioList = new ArrayList<>();
+                            radioList.add(subList.get(i));
 						} else {
-							if(sequlist.size()<3){
-								sequlist.add(subList.get(i));
-							}
-						}
-					}*/else if (subList.get(i).getPlayerMediaType().equals("RADIO")) {
-						if (radiolist == null) {
-							radiolist = new ArrayList<PlayerHistory>();
-							radiolist.add(subList.get(i));
-						} else {
-							if(radiolist.size()<3){
-								radiolist.add(subList.get(i));
+							if(radioList.size()<3){
+                                radioList.add(subList.get(i));
 							}
 						}
 					}else if (subList.get(i).getPlayerMediaType().equals("TTS")) {
-						if (ttslist == null) {
-							ttslist = new ArrayList<PlayerHistory>();
-							ttslist.add(subList.get(i));
+						if (ttsList == null) {
+                            ttsList = new ArrayList<>();
+                            ttsList.add(subList.get(i));
 						} else {
-							if(ttslist.size()<3){
-								ttslist.add(subList.get(i));
+							if(ttsList.size()<3){
+                                ttsList.add(subList.get(i));
 							}
 						}
 					}
 				}
 			}
-			if (playlist != null && playlist.size() > 0) {
+			if (playList != null && playList.size() > 0) {
 				SuperRankInfo mSuperRankInfo = new SuperRankInfo();
-				mSuperRankInfo.setKey(playlist.get(0).getPlayerMediaType());
-				mSuperRankInfo.setHistoryList(playlist);
+				mSuperRankInfo.setKey(playList.get(0).getPlayerMediaType());
+				mSuperRankInfo.setHistoryList(playList);
 				list.add(mSuperRankInfo);
 			}
-			/*
-			if (sequlist != null &&  sequlist.size() > 0) {
+			if (radioList != null  && radioList.size() > 0) {
 				SuperRankInfo mSuperRankInfo1 = new SuperRankInfo();
-				mSuperRankInfo1.setKey(sequlist.get(0).getPlayerMediaType());							
-				mSuperRankInfo1.setHistoryList(sequlist);
+				mSuperRankInfo1.setKey(radioList.get(0).getPlayerMediaType());
+				mSuperRankInfo1.setHistoryList(radioList);
 				list.add(mSuperRankInfo1);
 			}
-			*/
-			if (radiolist != null  && radiolist.size() > 0) {
-				SuperRankInfo mSuperRankInfo1 = new SuperRankInfo();
-				mSuperRankInfo1.setKey(radiolist.get(0).getPlayerMediaType());							
-				mSuperRankInfo1.setHistoryList(radiolist);
-				list.add(mSuperRankInfo1);
-			}
-			if (ttslist != null &&  ttslist.size() > 0) {
+			if (ttsList != null &&  ttsList.size() > 0) {
 				SuperRankInfo mSuperRankInfo1= new SuperRankInfo();
-				mSuperRankInfo1.setKey(ttslist.get(0).getPlayerMediaType());							
-				mSuperRankInfo1.setHistoryList(ttslist);
+				mSuperRankInfo1.setKey(ttsList.get(0).getPlayerMediaType());
+				mSuperRankInfo1.setHistoryList(ttsList);
 				list.add(mSuperRankInfo1);
 			}
-			adapter = new PlayHistoryExpandableAdapter(context, list);
+            PlayHistoryExpandableAdapter adapter = new PlayHistoryExpandableAdapter(context, list);
 			mListView.setAdapter(adapter);
 			for (int i = 0; i < list.size(); i++) {
 				mListView.expandGroup(i);
@@ -190,39 +173,39 @@ public class TotalFragment extends Fragment {
 			public boolean onChildClick(ExpandableListView parent, View v,int groupPosition, int childPosition, long id) {
 				String MediaType = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerMediaType();
 				if (MediaType != null && !MediaType.equals("SEQU")) {
-					String playername = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerName();
-					String playerimage = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerImage();
-					String playerurl = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerUrl();
-					String playerurI = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerUrI();
-					String playermediatype = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerMediaType();
-					String plaplayeralltime = "0";
-					String playerintime = "0";
-					String playercontentdesc = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerContentDesc();
-					String playernum = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerNum();
-					String playerzantype = "0";
-					String playerfrom = "";
-					String playerfromid = "";
-					String playerfromurl = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerFromUrl();
-					String playeraddtime = Long.toString(System.currentTimeMillis());
-					String bjuserid = CommonUtils.getUserId(context);
-					String ContentFavorite = list.get(groupPosition).getHistoryList().get(childPosition).getContentFavorite();
-					String  playshareurl = list.get(groupPosition).getHistoryList().get(childPosition).getPlayContentShareUrl();
-					String ContentId = list.get(groupPosition).getHistoryList().get(childPosition).getContentID();
-					String localurl = list.get(groupPosition).getHistoryList().get(childPosition).getLocalurl();
+					String playerName = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerName();
+					String playerImage = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerImage();
+					String playerUrl = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerUrl();
+					String playerUri = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerUrI();
+					String playerMediaType = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerMediaType();
+					String playerAllTime = "0";
+					String playerInTime = "0";
+					String playerContentDesc = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerContentDesc();
+					String playerNum = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerNum();
+					String playerZanType = "0";
+					String playerFrom = "";
+					String playerFromId = "";
+					String playerFromUrl = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerFromUrl();
+					String playerAddTime = Long.toString(System.currentTimeMillis());
+					String bjUserId = CommonUtils.getUserId(context);
+					String contentFavorite = list.get(groupPosition).getHistoryList().get(childPosition).getContentFavorite();
+					String playShareUrl = list.get(groupPosition).getHistoryList().get(childPosition).getPlayContentShareUrl();
+					String contentId = list.get(groupPosition).getHistoryList().get(childPosition).getContentID();
+					String localUrl = list.get(groupPosition).getHistoryList().get(childPosition).getLocalurl();
 
-					PlayerHistory history = new PlayerHistory( 
-							playername, playerimage, playerurl, playerurI, playermediatype,
-							plaplayeralltime, playerintime, playercontentdesc, playernum,
-							playerzantype,  playerfrom, playerfromid, playerfromurl,
-							playeraddtime, bjuserid, playshareurl, ContentFavorite, ContentId, localurl);	
+					PlayerHistory history = new PlayerHistory(
+                            playerName, playerImage, playerUrl, playerUri, playerMediaType,
+                            playerAllTime, playerInTime, playerContentDesc, playerNum,
+                            playerZanType,  playerFrom, playerFromId, playerFromUrl,
+                            playerAddTime, bjUserId, playShareUrl, contentFavorite, contentId, localUrl);
 
 					//如果该数据已经存在数据库则删除原有数据，然后添加最新数据
-					if(playermediatype != null && playermediatype.equals("TTS")){
-						dbdao.deleteHistoryById(ContentId);
+					if(playerMediaType != null && playerMediaType.equals("TTS")){
+                        dbDao.deleteHistoryById(contentId);
 					}else {
-						dbdao.deleteHistory(playerurl);
+                        dbDao.deleteHistory(playerUrl);
 					}
-					dbdao.addHistory(history);
+                    dbDao.addHistory(history);
 //					if(PlayerFragment.context!=null){
 //						MainActivity.change();
 //						HomeActivity.UpdateViewPager();
@@ -253,7 +236,7 @@ public class TotalFragment extends Fragment {
 		mListView.setOnGroupClickListener(new OnGroupClickListener() {
 			@Override
 			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {		
-//				((PlayHistoryActivity)getActivity()).updateViewPager(list.get(groupPosition).getKey());
+				((PlayHistoryActivity)getActivity()).updateViewPager(list.get(groupPosition).getKey());
 				return true;
 			}
 		});
@@ -263,9 +246,9 @@ public class TotalFragment extends Fragment {
 			public boolean onItemLongClick(AdapterView<?> parent, View childView, int flatPos, long id){
 				if (ExpandableListView.getPackedPositionType(id) == ExpandableListView.PACKED_POSITION_TYPE_CHILD){
 					long packedPos = ((ExpandableListView) parent).getExpandableListPosition(flatPos);
-					delgroupposition = ExpandableListView.getPackedPositionGroup(packedPos);
-					delchildposition = ExpandableListView.getPackedPositionChild(packedPos);
-					if(delgroupposition != -1 && delchildposition != -1){
+                    delGroupPosition = ExpandableListView.getPackedPositionGroup(packedPos);
+                    delChildPosition = ExpandableListView.getPackedPositionChild(packedPos);
+					if(delGroupPosition != -1 && delChildPosition != -1){
 						delDialog.show();
 					}
 				}
@@ -279,39 +262,39 @@ public class TotalFragment extends Fragment {
 	 */
 	private void delDialog() {
 		final View dialog1 = LayoutInflater.from(context).inflate(R.layout.dialog_exit_confirm, null);
-		TextView tv_cancle = (TextView) dialog1.findViewById(R.id.tv_cancle);
-		TextView tv_title = (TextView) dialog1.findViewById(R.id.tv_title);
-		TextView tv_confirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
-		tv_title.setText("确定删除这条播放记录?");
+		TextView textCancel = (TextView) dialog1.findViewById(R.id.tv_cancle);
+		TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);
+		TextView textConfirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
+        textTitle.setText("确定删除这条播放记录?");
 		delDialog = new Dialog(context, R.style.MyDialog);
 		delDialog.setContentView(dialog1);
 		delDialog.setCanceledOnTouchOutside(false);
 		delDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
 
-		tv_cancle.setOnClickListener(new OnClickListener() {
+        textCancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				delDialog.dismiss();
 			}
 		});
 
-		tv_confirm.setOnClickListener(new OnClickListener() {
+        textConfirm.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				String playType = list.get(delgroupposition).getHistoryList().get(delchildposition).getPlayerMediaType();
+				String playType = list.get(delGroupPosition).getHistoryList().get(delChildPosition).getPlayerMediaType();
 
 				//"TTS" 类型的删除条件为 ContentID, 其他类型为 url
 				if(playType != null && !playType.equals("") && playType.equals("TTS")){
-					String contentId = list.get(delgroupposition).getHistoryList().get(delchildposition).getContentID();
-					dbdao.deleteHistoryById(contentId);
+					String contentId = list.get(delGroupPosition).getHistoryList().get(delChildPosition).getContentID();
+                    dbDao.deleteHistoryById(contentId);
 					isDeleteTTS = true;
 				}else if(playType != null && !playType.equals("") && playType.equals("RADIO")){
-					String url = list.get(delgroupposition).getHistoryList().get(delchildposition).getPlayerUrl();
-					dbdao.deleteHistory(url);
+					String url = list.get(delGroupPosition).getHistoryList().get(delChildPosition).getPlayerUrl();
+                    dbDao.deleteHistory(url);
 					isDeleteRadio = true;
 				}else if(playType != null && !playType.equals("") && playType.equals("AUDIO")){
-					String url = list.get(delgroupposition).getHistoryList().get(delchildposition).getPlayerUrl();
-					dbdao.deleteHistory(url);
+					String url = list.get(delGroupPosition).getHistoryList().get(delChildPosition).getPlayerUrl();
+                    dbDao.deleteHistory(url);
 					isDeleteSound = true;
 				}
 				getData();
@@ -334,13 +317,11 @@ public class TotalFragment extends Fragment {
 		mListView = null;
 		rootView = null;
 		context = null;
-		adapter = null;
-		subList = null;
 		list = null;
 		delDialog = null;
-		if(dbdao != null){
-			dbdao.closedb();
-			dbdao = null;
+		if(dbDao != null){
+            dbDao.closedb();
+            dbDao = null;
 		}
 	}
 }

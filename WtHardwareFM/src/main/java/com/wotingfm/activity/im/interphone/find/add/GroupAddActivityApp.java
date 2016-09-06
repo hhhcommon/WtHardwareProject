@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.im.interphone.find.result.model.FindGroupNews;
-import com.wotingfm.common.base.BaseActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -34,7 +34,7 @@ import org.json.JSONObject;
  * @author 辛龙
  *         2016年1月20日
  */
-public class GroupAddActivity extends BaseActivity implements OnClickListener {
+public class GroupAddActivityApp extends AppBaseActivity implements OnClickListener {
     private TextView tv_add;
     private SharedPreferences sharedPreferences;
     private String username;
@@ -50,7 +50,7 @@ public class GroupAddActivity extends BaseActivity implements OnClickListener {
     private EditText et_password;
     private FindGroupNews contact;
     private String psd = null;        // 密码
-    private GroupAddActivity context;
+    private GroupAddActivityApp context;
     private TextView tv_sign;
     private String tag = "GROUP_ADD_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
@@ -274,7 +274,7 @@ public class GroupAddActivity extends BaseActivity implements OnClickListener {
     private void send() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("UserId", CommonUtils.getUserId(GroupAddActivity.this));
+            jsonObject.put("UserId", CommonUtils.getUserId(GroupAddActivityApp.this));
             jsonObject.put("GroupNum", contact.getGroupNum());
             if (GroupType.equals("2")) {
                 if (psd != null && !psd.equals("")) {
@@ -301,15 +301,15 @@ public class GroupAddActivity extends BaseActivity implements OnClickListener {
                 }
                 if (ReturnType != null) {
                     if (ReturnType.equals("T")) {
-                        ToastUtils.show_allways(GroupAddActivity.this, "异常返回值");
+                        ToastUtils.show_allways(GroupAddActivityApp.this, "异常返回值");
                     } else if (ReturnType.equals("1000")) {
-                        ToastUtils.show_allways(GroupAddActivity.this, "无法获取用户组ID");
+                        ToastUtils.show_allways(GroupAddActivityApp.this, "无法获取用户组ID");
                     } else if (ReturnType.equals("1001")) {
-                        ToastUtils.show_allways(GroupAddActivity.this, "成功返回，用户已经成功加入了这个群组");
+                        ToastUtils.show_allways(GroupAddActivityApp.this, "成功返回，用户已经成功加入了这个群组");
                         Intent pushintent = new Intent("push_refreshlinkman");
                         context.sendBroadcast(pushintent);
                         // TalkGroupNewsActivity.class
-                        Intent intent = new Intent(GroupAddActivity.this, GroupAddActivity.class);
+                        Intent intent = new Intent(GroupAddActivityApp.this, GroupAddActivityApp.class);
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "groupaddactivity");
                         bundle.putSerializable("data", contact);
@@ -317,9 +317,9 @@ public class GroupAddActivity extends BaseActivity implements OnClickListener {
                         startActivity(intent);
                         finish();
                     } else if (ReturnType.equals("1101")) {
-                        ToastUtils.show_allways(GroupAddActivity.this, "成功返回，已经在用户组");
+                        ToastUtils.show_allways(GroupAddActivityApp.this, "成功返回，已经在用户组");
                         // TalkGroupNewsActivity.class
-                        Intent intent = new Intent(GroupAddActivity.this, GroupAddActivity.class);
+                        Intent intent = new Intent(GroupAddActivityApp.this, GroupAddActivityApp.class);
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "groupaddactivity");
                         bundle.putSerializable("data", contact);
@@ -327,18 +327,18 @@ public class GroupAddActivity extends BaseActivity implements OnClickListener {
                         startActivity(intent);
                         finish();
                     } else if (ReturnType.equals("1002")) {
-                        ToastUtils.show_allways(GroupAddActivity.this, "用户不存在");
+                        ToastUtils.show_allways(GroupAddActivityApp.this, "用户不存在");
                     } else if (ReturnType.equals("1003")) {
-                        ToastUtils.show_allways(GroupAddActivity.this, "用户组不存在");
+                        ToastUtils.show_allways(GroupAddActivityApp.this, "用户组不存在");
                     } else if (ReturnType.equals("1004")) {
-                        ToastUtils.show_allways(GroupAddActivity.this, "用户组已经超过五十人，不允许再加入了");
+                        ToastUtils.show_allways(GroupAddActivityApp.this, "用户组已经超过五十人，不允许再加入了");
                     } else if (ReturnType.equals("1006")) {
-                        ToastUtils.show_allways(GroupAddActivity.this, "加入密码群 ,需要提供密码");
+                        ToastUtils.show_allways(GroupAddActivityApp.this, "加入密码群 ,需要提供密码");
                     } else if (ReturnType.equals("1007")) {
-                        ToastUtils.show_allways(GroupAddActivity.this, "加入密码群 , 密码不正确");
+                        ToastUtils.show_allways(GroupAddActivityApp.this, "加入密码群 , 密码不正确");
                     }
                 } else {
-                    ToastUtils.show_allways(GroupAddActivity.this, "返回值异常，请稍后重试");
+                    ToastUtils.show_allways(GroupAddActivityApp.this, "返回值异常，请稍后重试");
                 }
             }
 

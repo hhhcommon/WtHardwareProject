@@ -1,8 +1,9 @@
 package com.wotingfm.manager;
 
-import java.util.Stack;
 import android.app.Activity;
 import android.util.Log;
+
+import java.util.Stack;
 /**
  * Activity管理器代码，主要是建立一个栈，把每个已打开的Activity压入栈中。退出的时候在依次取出来。
  * 介绍：在每一个activity中的onCreate方法里调用压入方法把当前activity压入管理栈中。
@@ -31,13 +32,13 @@ public class MyActivityManager {
 
 	/**
 	 * 把一个activity压入栈中
-	 * @param actvity
+	 * @param activity
 	 */
-	public void pushOneActivity(Activity actvity) {
+	public void pushOneActivity(Activity activity) {
 		if (activityStack == null) {
-			activityStack = new Stack<Activity>();
+			activityStack = new Stack<>();
 		}
-		activityStack.add(actvity);
+		activityStack.add(activity);
 		Log.e("MyActivityManager ", "size = " + activityStack.size());
 	}
 
@@ -62,7 +63,6 @@ public class MyActivityManager {
 
 	/**
 	 * 退出所有activity
-	 * @param activity
 	 */
 	public void finishAllActivity() {
 		if (activityStack != null) {

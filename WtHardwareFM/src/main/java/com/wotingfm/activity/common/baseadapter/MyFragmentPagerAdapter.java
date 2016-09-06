@@ -1,4 +1,4 @@
-package com.wotingfm.activity.common.adapter;
+package com.wotingfm.activity.common.baseadapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

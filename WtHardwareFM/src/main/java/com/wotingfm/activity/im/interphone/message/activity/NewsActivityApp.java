@@ -17,7 +17,7 @@ import com.wotingfm.activity.im.interphone.message.adapter.NewsAdapter;
 import com.wotingfm.activity.im.interphone.message.model.GroupInfo;
 import com.wotingfm.activity.im.interphone.message.model.MessageInfo;
 import com.wotingfm.activity.im.interphone.message.model.UserInviteMeInside;
-import com.wotingfm.common.base.BaseActivity;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * 需要处理的消息中心列表
  */
-public class NewsActivity extends BaseActivity {
+public class NewsActivityApp extends AppBaseActivity {
     private ListView dealMessageList;
 
     private String tag = "MESSAGE_NEWS_VOLLEY_REQUEST_CANCEL_TAG";

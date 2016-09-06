@@ -1,4 +1,4 @@
-package com.wotingfm.activity.common.adapter;
+package com.wotingfm.activity.common.baseadapter;
 
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;

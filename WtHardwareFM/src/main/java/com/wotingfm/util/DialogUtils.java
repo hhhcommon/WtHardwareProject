@@ -50,18 +50,19 @@ public class DialogUtils {
 
     /**
      * 显示加载对话框
-     * @param context
      */
     public static void showDialog(Context context) {
-        View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog, null);
+        if(loadDialog != null && !loadDialog.isShowing()){
+            View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog, null);
 //        TextView loadText = (TextView) dialog1.findViewById(R.id.text_wenzi);
 //        loadText.setText("loading");
-        loadDialog = new Dialog(context, R.style.MyDialog1);
-        loadDialog.setContentView(dialogView);
-        loadDialog.setCanceledOnTouchOutside(false);
-        loadDialog.getWindow().setGravity(Gravity.CENTER);
-        loadDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-        loadDialog.show();
+            loadDialog = new Dialog(context, R.style.MyDialog1);
+            loadDialog.setContentView(dialogView);
+            loadDialog.setCanceledOnTouchOutside(false);
+            loadDialog.getWindow().setGravity(Gravity.CENTER);
+            loadDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+            loadDialog.show();
+        }
     }
 
     /**

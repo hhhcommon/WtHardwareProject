@@ -103,7 +103,8 @@
         <activity
             android:name="com.wotingfm.activity.common.main.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar" >
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -368,13 +369,44 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activity.im.interphone.groupmanage.groupperson.GroupPersonActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan"/>
         <activity android:name="com.wotingfm.activity.common.preference.activity.PreferenceActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name="com.wotingfm.activity.music.program.citylist.activity.CityListActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name="com.wotingfm.activity.music.download.activity.DownloadActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name="com.wotingfm.activity.music.download.downloadlist.activity.DownLoadListActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name="com.wotingfm.activity.music.program.tuijian.activity.RecommendLikeListActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name="com.wotingfm.activity.music.program.fmlist.activity.FMListActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name="com.wotingfm.activity.music.program.radiolist.activity.RadioListActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan"/>
+
         <!-- 友盟activity -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"

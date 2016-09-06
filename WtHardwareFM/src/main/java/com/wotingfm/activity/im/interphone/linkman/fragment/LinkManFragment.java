@@ -1,12 +1,5 @@
 package  com.wotingfm.activity.im.interphone.linkman.fragment;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -37,12 +30,11 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-
 import com.wotingfm.R;
 import com.wotingfm.activity.im.common.service.InterPhoneControl;
 import com.wotingfm.activity.im.interphone.alert.CallAlertActivity;
 import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
-import com.wotingfm.activity.im.interphone.find.add.FriendAddActivity;
+import com.wotingfm.activity.im.interphone.creategroup.frienddetails.TalkPersonNewsActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity;
 import com.wotingfm.activity.im.interphone.linkman.adapter.SortGroupMemberAdapter;
 import com.wotingfm.activity.im.interphone.linkman.adapter.TalkGroupAdapter;
@@ -61,9 +53,15 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.HeightListView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class LinkManFragment extends Fragment implements SectionIndexer,OnClickListener {
 	private ListView sortListView;
@@ -128,7 +126,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 		if(rootView == null){
 			rootView = inflater.inflate(R.layout.activity_add_friends, container, false);
 			initViews();		// 设置界面
-			setEditLiestner();
+            setEditListener();
 		}
 		return rootView;
 	}
@@ -440,7 +438,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 	/**
 	 * 根据输入框输入值的改变来过滤搜索
 	 */
-	private void setEditLiestner() {
+	private void setEditListener() {
 		lin_second.setOnClickListener(this);
 		image_clear.setOnClickListener(this);
 		et_search.addTextChangedListener(new TextWatcher() {
@@ -665,7 +663,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
 				// 跳转到详细信息界面
-				Intent intent = new Intent(context,FriendAddActivity.class);
+				Intent intent = new Intent(context,TalkPersonNewsActivity.class);
 				Bundle bundle = new Bundle();
 				bundle.putString("type", "talkpersonfragment");
 				if(headviewshow){

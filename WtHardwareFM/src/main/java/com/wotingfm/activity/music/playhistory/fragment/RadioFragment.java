@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 
 import com.wotingfm.R;
@@ -30,17 +29,17 @@ import java.util.List;
  */
 public class RadioFragment extends Fragment{
 	private View rootView;
-	private SearchPlayerHistoryDao dbdao;
+	private SearchPlayerHistoryDao dbDao;
 	private Context context;
 	private ListView listView;
 	private ArrayList<PlayerHistory> playList;	// 节目list
-	private List<PlayerHistory> subList;		// 播放历史数据
+//	private List<PlayerHistory> subList;		// 播放历史数据
 	private PlayHistoryAdapter adapter;
-	private List<PlayerHistory> deleteList;		// 删除数据列表
+//	private List<PlayerHistory> deleteList;		// 删除数据列表
 	private List<PlayerHistory> checkList;		// 选中数据列表
 	public static boolean isData;				// 是否有数据
 	public static boolean isLoad;				// 是否加载过
-	private LinearLayout linearNull;			// linear_null
+	private View linearNull;			        // linear_null
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -54,7 +53,7 @@ public class RadioFragment extends Fragment{
 		if(rootView == null){
 			rootView = inflater.inflate(R.layout.fragment_playhistory_radio_layout, container, false);
 			listView = (ListView) rootView.findViewById(R.id.list_view);
-			linearNull = (LinearLayout) rootView.findViewById(R.id.linear_null);
+			linearNull = rootView.findViewById(R.id.linear_null);
 			getData();
 			isLoad = true;
 		}
@@ -65,7 +64,7 @@ public class RadioFragment extends Fragment{
 	 * 初始化数据库命令执行对象
 	 */
 	private void initDao() {
-		dbdao = new SearchPlayerHistoryDao(context);
+        dbDao = new SearchPlayerHistoryDao(context);
 	}
 	
 	/**
@@ -74,14 +73,14 @@ public class RadioFragment extends Fragment{
 	public void getData(){
 		listView.setVisibility(View.GONE);
 		isData = false;
-		subList = dbdao.queryHistory();
+        List<PlayerHistory> subList = dbDao.queryHistory();
 		playList = null;
 		if (subList != null && subList.size() > 0) {
 			for (int i = 0; i < subList.size(); i++) {
 				if (subList.get(i).getPlayerMediaType() != null && !subList.get(i).getPlayerMediaType().equals("")) {
 					if (subList.get(i).getPlayerMediaType().equals("RADIO")) {
 						if (playList == null) {
-							playList = new ArrayList<PlayerHistory>();
+							playList = new ArrayList<>();
 						}
 						playList.add(subList.get(i));
 						isData = true;
@@ -89,7 +88,7 @@ public class RadioFragment extends Fragment{
 				}
 			}
 			if(playList == null){
-				playList = new ArrayList<PlayerHistory>();
+				playList = new ArrayList<>();
 			}
 			adapter = new PlayHistoryAdapter(context, playList);
 			listView.setAdapter(adapter);
@@ -131,10 +130,10 @@ public class RadioFragment extends Fragment{
 	 * 实现接口  设置点击事件
 	 */
 	private void setInterface() {
-		adapter.setonclick(new PlayHistoryAdapter.playhistorycheck() {
+		adapter.setOnclick(new PlayHistoryAdapter.PlayHistoryCheck() {
 			
 			@Override
-			public void checkposition(int position) {
+			public void checkPosition(int position) {
 				if(playList.get(position).getStatus() == 0){
 					playList.get(position).setStatus(1);
 				}else if(playList.get(position).getStatus() == 1){
@@ -188,9 +187,9 @@ public class RadioFragment extends Fragment{
 								playername,  playerimage, playerurl, playerurI, playermediatype,
 								plaplayeralltime, playerintime, playercontentdesc, playernum,
 								playerzantype,  playerfrom, playerfromid, playerfromurl,
-								playeraddtime, bjuserid, playshareurl, ContentFavorite, ContentId, localurl);	
-						dbdao.deleteHistory(playerurl);
-						dbdao.addHistory(history);
+								playeraddtime, bjuserid, playshareurl, ContentFavorite, ContentId, localurl);
+                        dbDao.deleteHistory(playerurl);
+                        dbDao.addHistory(history);
 						
 //						if(PlayerFragment.context != null){
 //							MainActivity.change();
@@ -219,7 +218,7 @@ public class RadioFragment extends Fragment{
 	 */
 	private void ifAll(){
 		if(checkList == null){
-			checkList = new ArrayList<PlayerHistory>();
+			checkList = new ArrayList<>();
 		}
 		for(int i=0; i<playList.size(); i++){
 			if(playList.get(i).getStatus() == 1 && !checkList.contains(playList.get(i))){
@@ -230,11 +229,11 @@ public class RadioFragment extends Fragment{
 		}
 		if(checkList.size() == playList.size()){
 			Intent intentAll = new Intent();
-			intentAll.setAction(PlayHistoryActivity.UPDATA_ACTION_ALL);
+			intentAll.setAction(PlayHistoryActivity.UPDATE_ACTION_ALL);
 			context.sendBroadcast(intentAll);
 		}else{
 			Intent intentNoCheck = new Intent();
-			intentNoCheck.setAction(PlayHistoryActivity.UPDATA_ACTION_CHECK);
+			intentNoCheck.setAction(PlayHistoryActivity.UPDATE_ACTION_CHECK);
 			context.sendBroadcast(intentNoCheck);
 		}
 	}
@@ -268,10 +267,8 @@ public class RadioFragment extends Fragment{
 	 */
 	public int deleteData(){
 		int number = 0;
+        List<PlayerHistory> deleteList = new ArrayList<>();
 		for(int i=0; i<playList.size(); i++){
-			if(deleteList == null){
-				deleteList = new ArrayList<PlayerHistory>();
-			}
 			if(playList.get(i).getStatus() == 1){
 				deleteList.add(playList.get(i));
 			}
@@ -280,7 +277,7 @@ public class RadioFragment extends Fragment{
 		if(deleteList.size() > 0){
 			for(int i=0; i<deleteList.size(); i++){
 				String url = deleteList.get(i).getPlayerUrl();
-				dbdao.deleteHistory(url);
+                dbDao.deleteHistory(url);
 			}
 			if(checkList != null && checkList.size() > 0){
 				checkList.clear();
@@ -307,14 +304,12 @@ public class RadioFragment extends Fragment{
 		context = null;
 		listView = null;
 		playList = null;
-		subList = null;
 		adapter = null;
-		deleteList = null;
 		checkList = null;
 		linearNull = null;
-		if(dbdao != null){
-			dbdao.closedb();
-			dbdao = null;
+		if(dbDao != null){
+            dbDao.closedb();
+            dbDao = null;
 		}
 	}
 }

@@ -15,7 +15,7 @@ import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.linkman.dao.NotifyHistoryDao;
 import com.wotingfm.activity.im.interphone.linkman.model.DBNotifyHistorary;
 import com.wotingfm.activity.im.interphone.notify.adapter.NotifyListAdapter;
-import com.wotingfm.common.base.BaseActivity;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * 通知消息
  */
-public class NotifyNewActivity extends BaseActivity {
+public class NotifyNewActivityApp extends AppBaseActivity {
     private ListView notifyListView;
     private NotifyListAdapter adapter;
     private List<DBNotifyHistorary> list;

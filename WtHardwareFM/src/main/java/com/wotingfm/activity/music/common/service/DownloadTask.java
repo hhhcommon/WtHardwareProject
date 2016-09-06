@@ -31,8 +31,7 @@ public class DownloadTask{
 	private int mFinised = 0;
 	public static boolean isPause = false;
 
-
-	/** 
+	/**
 	 *@param mContexts
 	 *@param mFileInfo
 	 */
@@ -47,7 +46,7 @@ public class DownloadTask{
 	public void downLoad(){
 		// 读取数据库的线程信息
 		List<ThreadInfo> threads = mDao.getThreads(mFileInfo.getUrl());
-		ThreadInfo threadInfo = null;
+		ThreadInfo threadInfo;
 		if (0 == threads.size()){
 			// 初始化线程信息对象
 			threadInfo = new ThreadInfo(mFileInfo.getId(), mFileInfo.getUrl(),0, mFileInfo.getLength(), 0);

@@ -50,6 +50,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.common.service.DownloadService;
+import com.wotingfm.activity.music.download.activity.DownloadActivity;
 import com.wotingfm.activity.music.download.dao.FileInfoDao;
 import com.wotingfm.activity.music.download.model.FileInfo;
 import com.wotingfm.activity.music.favorite.activity.FavoriteActivity;
@@ -62,8 +63,9 @@ import com.wotingfm.activity.music.player.model.LanguageSearchInside;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.player.model.sharemodel;
 import com.wotingfm.activity.music.playhistory.activity.PlayHistoryActivity;
+import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.album.model.ContentInfo;
-import com.wotingfm.activity.music.timeset.activity.TimerPowerOffActivity;
+import com.wotingfm.activity.music.timeset.activity.TimerPowerOffActivityApp;
 import com.wotingfm.activity.music.video.TtsPlayer;
 import com.wotingfm.activity.music.video.VlcPlayer;
 import com.wotingfm.activity.music.video.VoiceRecognizer;
@@ -132,7 +134,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private static MyLinearLayout rl_voice;
     private ImageView imageView_voice;
     private TextView tv_cancle;
-    private LinearLayout lin_download;
     private UMImage image;
     private LinearLayout lin_share;
     private static SeekBar seekBar;
@@ -242,7 +243,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         context.getWindowManager().getDefaultDisplay().getMetrics(dm);
         screenw = dm.widthPixels;
         ViewGroup.LayoutParams params = dialog.getLayoutParams();
-        params.width = (int) screenw;
+        params.width = screenw;
         dialog.setLayoutParams(params);
         window.setGravity(Gravity.BOTTOM);
         window.setWindowAnimations(R.style.sharestyle);
@@ -267,12 +268,11 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 }
             }
         });
-
     }
     private void callmore(int position) {
         switch(position){
             case 0://定时关闭
-                startActivity(new Intent(context,TimerPowerOffActivity.class));
+                startActivity(new Intent(context,TimerPowerOffActivityApp.class));
                 break;
             case 1://下载
                 if (GlobalConfig.playerobject != null) {
@@ -285,7 +285,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                             return;
                         }
                         // 对数据进行转换
-                        List<ContentInfo> datalist = new ArrayList<ContentInfo>();
+                        List<ContentInfo> datalist = new ArrayList<>();
                         ContentInfo mcontent = new ContentInfo();
                         mcontent.setAuthor(datals.getContentPersons());
                         mcontent.setContentPlay(datals.getContentPlay());
@@ -348,7 +348,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                                 ToastUtils.show_allways(context,mcontent.getContentName() + "已经插入了下载列表");
                                 // 未下载列表
                                 List<FileInfo> fileundownloadlist = FID.queryFileinfo("false",CommonUtils.getUserId(context));
-                                FileInfo file = null;
+                                FileInfo file;
                                 for (int kk = 0; kk < fileundownloadlist.size(); kk++) {
                                     if (fileundownloadlist.get(kk).getDownloadtype() == 1) {
                                         DownloadService.workStop(fileundownloadlist.get(kk));
@@ -377,7 +377,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                             ToastUtils.show_allways(context,mcontent.getContentName() + "已经插入了下载列表");
                             // 未下载列表
                             List<FileInfo> fileundownloadlist = FID.queryFileinfo("false", CommonUtils.getUserId(context));
-                            FileInfo file = null;
+                            FileInfo file;
                             for (int k = 0; k < fileundownloadlist.size(); k++) {
                                 if (fileundownloadlist.get(k).getUrl().equals(mcontent.getContentPlay())) {
                                     file = fileundownloadlist.get(k);
@@ -403,7 +403,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 startActivity(new Intent(context,FavoriteActivity.class));
                 break;
             case 4://本地音频 少这个界面
-             /*   startActivity(new Intent(context,DownloadActivity.class));*/
+                startActivity(new Intent(context,DownloadActivity.class));
                 break;
             case 5://预定节目单
                 break;
@@ -840,7 +840,25 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 moredialog.show();
                 break;
             case R.id.lin_sequ:
-                ToastUtils.show_allways(context, "专辑按钮");
+                if(GlobalConfig.playerobject!=null&&GlobalConfig.playerobject.getSeqInfo().getContentId()!=null){
+                    sequid=GlobalConfig.playerobject.getSeqInfo().getContentId();
+                    sequdesc=GlobalConfig.playerobject.getSeqInfo().getContentDesc();
+                    sequimage=GlobalConfig.playerobject.getSeqInfo().getContentImg();
+                    sequname=GlobalConfig.playerobject.getSeqInfo().getContentName();
+                }
+                if(sequid!=null){
+                    Intent intent = new Intent(context, AlbumActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("type", "player");
+                    bundle.putString("conentname",sequname);
+                    bundle.putString("conentdesc",sequdesc);
+                    bundle.putString("conentid",sequid);
+                    bundle.putString("contentimg",sequimage);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }else{
+                    ToastUtils.show_allways(context,"此节目目前没有所属专辑");
+                }
                 break;
         }
     }
@@ -1393,13 +1411,8 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private void searchByVoicesend(String str) {
         sendtype = 2;
         // 发送数据
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-            jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-            jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-            jsonObject.put("IMEI", PhoneMessage.imei);
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
             jsonObject.put("SearchStr", str);
             jsonObject.put("PCDType", GlobalConfig.PCDType);
             jsonObject.put("PageType", "0");
@@ -1692,6 +1705,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         }
         alllist.clear();
         alllist.addAll(list);
+
         if (GlobalConfig.playerobject != null && alllist != null) {
             for (int i = 0; i < alllist.size(); i++) {
                 // alllist.get(i).getContentPlay() == null
