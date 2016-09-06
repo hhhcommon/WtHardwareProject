@@ -50,6 +50,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.common.service.DownloadService;
+import com.wotingfm.activity.music.download.activity.DownloadActivity;
 import com.wotingfm.activity.music.download.dao.FileInfoDao;
 import com.wotingfm.activity.music.download.model.FileInfo;
 import com.wotingfm.activity.music.favorite.activity.FavoriteActivity;
@@ -133,7 +134,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private static MyLinearLayout rl_voice;
     private ImageView imageView_voice;
     private TextView tv_cancle;
-    private LinearLayout lin_download;
     private UMImage image;
     private LinearLayout lin_share;
     private static SeekBar seekBar;
@@ -404,7 +404,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 startActivity(new Intent(context,FavoriteActivity.class));
                 break;
             case 4://本地音频 少这个界面
-             /*   startActivity(new Intent(context,DownloadActivity.class));*/
+                startActivity(new Intent(context,DownloadActivity.class));
                 break;
             case 5://预定节目单
                 break;

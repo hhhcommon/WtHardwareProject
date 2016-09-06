@@ -368,6 +368,19 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"></activity>
+        <activity android:name=".activity.common.preference.activity.PreferenceActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity android:name=".activity.music.download.activity.DownloadActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"></activity>
+        <activity android:name=".activity.music.download.downloadlist.activity.DownLoadListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"></activity>
+
         <!-- 友盟activity -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
@@ -421,14 +434,28 @@
             android:configChanges="keyboardHidden|orientation"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
-        <meta-data
-            android:name="com.google.android.gms.version"
-            android:value="@integer/google_play_services_version" />
+
 
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5715cf1e67e58e5955000896" >
         </meta-data>
+        <!-- 开机启动 -->
+        <receiver android:name="com.wotingfm.receiver.AutoStartReceiver" >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+
+                <category android:name="android.intent.category.HOME" />
+            </intent-filter>
+        </receiver>
+        <service android:name="com.wotingfm.service.SubclassService" />
+        <service android:name="com.wotingfm.service.NotificationService" />
+        <service android:name="com.wotingfm.service.timeroffservice" />
+        <service android:name="com.wotingfm.service.SocketService" />
+        <service android:name="com.wotingfm.service.VoiceStreamRecordService" />
+        <service android:name="com.wotingfm.service.VoiceStreamPlayerService" />
+        <service android:name="com.wotingfm.activity.music.common.service.DownloadService" />
+        <service android:name="com.wotingfm.service.FloatingWindowService" />
     </application>
 
 </manifest>
