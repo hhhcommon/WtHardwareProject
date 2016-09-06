@@ -254,16 +254,8 @@ public class OnLineFragment extends Fragment {
         if (GlobalConfig.AdCode != null && !GlobalConfig.AdCode.equals("")) {
             cityid = GlobalConfig.AdCode;
         }
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-            jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-            jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-            jsonObject.put("IMEI", PhoneMessage.imei);
-            jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-            jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-            jsonObject.put("PCDType", GlobalConfig.PCDType);
-            // 模块属性
             jsonObject.put("UserId", CommonUtils.getUserId(context));
             jsonObject.put("MediaType", "RADIO");
             jsonObject.put("CatalogType", "2");

@@ -33,16 +33,10 @@ import org.json.JSONObject;
 public class SplashActivity extends Activity {
 	private SharedPreferences sharedPreferences;
 	private String first;
-//	private Dialog dialog;
 	private Bitmap bmp;
 	private String tag = "SPLASH_VOLLEY_REQUEST_CANCEL_TAG";
 	private boolean isCancelRequest;
 	private ImageView imageView;
-	/**
-	 * ATTENTION: This was auto-generated to implement the App Indexing API.
-	 * See https://g.co/AppIndexing/AndroidStudio for more information.
-	 */
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);

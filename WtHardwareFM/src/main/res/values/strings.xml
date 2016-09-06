@@ -553,7 +553,7 @@
     <string name="call_state_outgoing">Outgoing</string>
     <string name="call_state_incoming">Incoming</string>
     <string name="pref_background_mode">Background mode</string>
-    <string name="app_name">我听</string>
+    <string name="app_name">我听FM</string>
     <string name="channel_id">woting</string>
     <string name="app_local_path">/woting/</string>
     <string name="mute">Mute</string>

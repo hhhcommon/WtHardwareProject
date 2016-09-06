@@ -1522,7 +1522,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         sendtype = 1;
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
+
             jsonObject.put("PageType", "0");
             jsonObject.put("Page", String.valueOf(page));
             jsonObject.put("PageSize", "10");
@@ -1811,7 +1811,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         }
         // 发送数据
         sendtype = 2;
-        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
+        JSONObject jsonObject =VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("SearchStr", contname);
             jsonObject.put("PCDType",GlobalConfig.PCDType);
@@ -1890,8 +1890,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private static void getContentNews(String id, final int number) {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
             jsonObject.put("MediaType", "TTS");
             jsonObject.put("ContentId", id);
         } catch (JSONException e) {
@@ -1966,7 +1964,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         dialogs = DialogUtils.Dialogph(context, "通讯中");
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            // MediaType
             jsonObject.put("MediaType", GlobalConfig.playerobject.getMediaType());
             jsonObject.put("ContentId", GlobalConfig.playerobject.getContentId());
             jsonObject.put("PCDType",GlobalConfig.PCDType);

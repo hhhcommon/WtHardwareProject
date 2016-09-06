@@ -7,7 +7,9 @@ import android.content.IntentFilter;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.umeng.socialize.PlatformConfig;
 import com.wotingfm.activity.music.common.service.DownloadService;
+import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.config.SocketClientConfig;
 import com.wotingfm.helper.CommonHelper;
 import com.wotingfm.receiver.NetWorkChangeReceiver;
@@ -16,6 +18,7 @@ import com.wotingfm.service.SocketService;
 import com.wotingfm.service.SubclassService;
 import com.wotingfm.service.VoiceStreamPlayerService;
 import com.wotingfm.service.VoiceStreamRecordService;
+import com.wotingfm.util.PhoneMessage;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,7 +34,8 @@ public class BSApplication extends Application {
         super.onCreate();
         instance=this;
         queues = Volley.newRequestQueue(this);
-        List<String> _l=new ArrayList<>();//其中每个间隔要是0.5秒的倍数
+        PhoneMessage.getPhoneInfo(instance);//获取手机信息
+        List<String> _l=new ArrayList<String>();//其中每个间隔要是0.5秒的倍数
         _l.add("INTE::500");   //第1次检测到未连接成功，隔0.5秒重连
         _l.add("INTE::500");  //第2次检测到未连接成功，隔0.5秒重连
         _l.add("INTE::1000");  //第3次检测到未连接成功，隔1秒重连
@@ -65,6 +69,13 @@ public class BSApplication extends Application {
         this.registerNetWorkChangeReceiver(new NetWorkChangeReceiver(this));// 注册网络状态及返回键监听
 
     }
+
+    private void InitThird() {
+        PlatformConfig.setWeixin(GlobalConfig.WEIXIN_KEY, GlobalConfig.WEIXIN_SECRET);
+        PlatformConfig.setQQZone(GlobalConfig.QQ_KEY, GlobalConfig.QQ_SECRET);
+        PlatformConfig.setSinaWeibo(GlobalConfig.WEIBO_KEY,GlobalConfig.WEIBO_SECRET);
+    }
+
 
     public static Context getAppContext(){
         return instance;

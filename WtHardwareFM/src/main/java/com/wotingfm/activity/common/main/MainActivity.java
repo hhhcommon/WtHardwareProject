@@ -6,16 +6,18 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -24,6 +26,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
+import com.wotingfm.activity.common.preference.activity.PreferenceActivity;
 import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
 import com.wotingfm.activity.mine.main.MineActivity;
 import com.wotingfm.activity.music.main.HomeActivity;
@@ -35,9 +38,12 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.manager.UpdateManager;
+import com.wotingfm.service.FloatingWindowService;
 import com.wotingfm.service.timeroffservice;
+import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.PhoneMessage;
+import com.wotingfm.util.ScreenUtils;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -52,7 +58,7 @@ import java.util.List;
  * 作者：xinlong on 2016/8/23 22:59
  * 邮箱：645700751@qq.com
  */
-public class MainActivity extends TabActivity implements View.OnClickListener {
+public class MainActivity extends TabActivity  {
 
     private String tag = "MAIN_VOLLEY_REQUEST_CANCEL_TAG";
 
@@ -61,9 +67,6 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
     private int updatetype=1;//1,不需要强制升级2，需要强制升级
 
     private MainActivity context;
-    private static ImageView image1;
-    private static ImageView image2;
-    private static ImageView image3;
     public static TabHost tabHost;
 
     private final String mPageName = "MainActivity";
@@ -78,6 +81,9 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
         setContentView(R.layout.activity_main);
         tabHost = extracted();
         context=this;
+        startActivity(new Intent(this, PreferenceActivity.class));
+        Intent di = new Intent(this, FloatingWindowService.class);
+        startService(di);
         MobclickAgent.openActivityDurationTrack(false);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		//透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	//透明导航栏
@@ -86,6 +92,39 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
         InitTextView();	// 设置界面
         InitDao();
         registReceiver(); // 注册广播
+        mask();
+    }
+
+    private void mask() {
+        final WindowManager windowManager = getWindowManager();
+        // 动态初始化图层
+        final ImageView img = new ImageView(this);
+        img.setLayoutParams(new WindowManager.LayoutParams(
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT));
+        img.setScaleType(ImageView.ScaleType.FIT_XY);
+        Bitmap bmp = BitmapUtils.readBitMap(this, R.mipmap.ee);
+        img.setImageBitmap(bmp);
+        // 设置LayoutParams参数
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        // 设置显示的类型，TYPE_PHONE指的是来电话的时候会被覆盖，其他时候会在最前端，显示位置在stateBar下面，其他更多的值请查阅文档
+        params.type = WindowManager.LayoutParams.TYPE_PHONE;
+        // 设置显示格式
+        params.format = PixelFormat.RGBA_8888;
+        // 设置对齐方式
+        params.gravity = Gravity.LEFT | Gravity.TOP;
+        // 设置宽高
+        params.width = ScreenUtils.getScreenWidth(this);
+        params.height = ScreenUtils.getScreenHeight(this);
+        // 添加到当前的窗口上
+        windowManager.addView(img, params);
+        // 点击图层之后，将图层移除
+        img.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View arg0) {
+                windowManager.removeView(img);
+            }
+        });
     }
 
     /*
@@ -93,9 +132,6 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
      */
     public static void change() {
         tabHost.setCurrentTabByTag("two");
-        image1.setImageResource(R.mipmap.ic_main_navi_action_bar_tab_discover_normal);
-        image2.setImageResource(R.mipmap.ic_main_navi_action_bar_tab_feed_selected);
-        image3.setImageResource(R.mipmap.ic_main_navi_action_bar_tab_mine_normal);
     }
 
     /*
@@ -204,18 +240,6 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
 
     // 初始化视图
     private void InitTextView() {
-        LinearLayout lin1 = (LinearLayout) findViewById(R.id.main_lin_1);
-        LinearLayout lin2 = (LinearLayout) findViewById(R.id.main_lin_2);
-        LinearLayout lin3 = (LinearLayout) findViewById(R.id.main_lin_3);
-
-        image1 = (ImageView) findViewById(R.id.main_image_1);
-        image2 = (ImageView) findViewById(R.id.main_image_2);
-        image3 = (ImageView) findViewById(R.id.main_image_3);
-
-        lin1.setOnClickListener(this);
-        lin2.setOnClickListener(this);
-        lin3.setOnClickListener(this);
-
         //主页跳转的3个界面
         tabHost.addTab(tabHost.newTabSpec("one").setIndicator("one")
                 .setContent(new Intent(this, DuiJiangActivity.class)));
@@ -223,35 +247,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
                 .setContent(new Intent(this, HomeActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("three").setIndicator("five")
                 .setContent(new Intent(this, MineActivity.class)));
-
         tabHost.setCurrentTabByTag("one");
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.main_lin_1:
-                tabHost.setCurrentTabByTag("one");
-                //			tv1.setTextColor(getResources().getColor(R.color.black));
-                //			tv2.setTextColor(getResources().getColor(R.color.gray));
-                //			tv3.setTextColor(getResources().getColor(R.color.gray));
-                image1.setImageResource(R.mipmap.ic_main_navi_action_bar_tab_discover_selected);
-                image2.setImageResource(R.mipmap.ic_main_navi_action_bar_tab_feed_normal);
-                image3.setImageResource(R.mipmap.ic_main_navi_action_bar_tab_mine_normal);
-                break;
-            case R.id.main_lin_2:
-                tabHost.setCurrentTabByTag("two");
-                image1.setImageResource(R.mipmap.ic_main_navi_action_bar_tab_discover_normal);
-                image2.setImageResource(R.mipmap.ic_main_navi_action_bar_tab_feed_selected);
-                image3.setImageResource(R.mipmap.ic_main_navi_action_bar_tab_mine_normal);
-                break;
-            case R.id.main_lin_3:
-                tabHost.setCurrentTabByTag("three");
-                image1.setImageResource(R.mipmap.ic_main_navi_action_bar_tab_discover_normal);
-                image2.setImageResource(R.mipmap.ic_main_navi_action_bar_tab_feed_normal);
-                image3.setImageResource(R.mipmap.ic_main_navi_action_bar_tab_mine_selected);
-                break;
-        }
     }
 
     //获取版本数据---检查是否需要更新
@@ -386,8 +382,6 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
         text_contnt.setText(Html.fromHtml("<font size='26'>" + updatenews + "</font>"));
         TextView tv_update = (TextView) dialog.findViewById(R.id.tv_update);
         TextView tv_qx = (TextView) dialog.findViewById(R.id.tv_qx);
-        tv_update.setOnClickListener(this);
-        tv_qx.setOnClickListener(this);
         updatedialog = new Dialog(this, R.style.MyDialog);
         updatedialog.setContentView(dialog);
         updatedialog.setCanceledOnTouchOutside(false);
@@ -425,6 +419,7 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
     private void registReceiver(){
         IntentFilter myfileter = new IntentFilter();
         myfileter.addAction(BroadcastConstants.TIMER_END);
+        myfileter.addAction(BroadcastConstants.ACTIVITY_CHANGE);
         registerReceiver(endApplicationBroadcast, myfileter);
     }
 
@@ -432,7 +427,8 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
     private BroadcastReceiver endApplicationBroadcast = new BroadcastReceiver(){
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(intent.getAction().equals(BroadcastConstants.TIMER_END)){
+            String action = intent.getAction();
+            if(action.equals(BroadcastConstants.TIMER_END)){
                 ToastUtils.show_allways(MainActivity.this, "定时关闭应用时间就要到了，应用即将退出");
                 stopService(new Intent(MainActivity.this, timeroffservice.class));	// 停止服务
                 new Handler().postDelayed(new Runnable() {
@@ -441,6 +437,14 @@ public class MainActivity extends TabActivity implements View.OnClickListener {
                         finish();
                     }
                 }, 1000);
+            }else if(action.equals(BroadcastConstants.ACTIVITY_CHANGE)){
+                if(GlobalConfig.activitytype==1){
+                    tabHost.setCurrentTabByTag("one");
+                }else if(GlobalConfig.activitytype==2){
+                    tabHost.setCurrentTabByTag("two");
+                }else{
+                    tabHost.setCurrentTabByTag("three");
+                }
             }
         }
     };
