@@ -133,27 +133,4 @@ public class HomeActivity extends FragmentActivity {
 		view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
 	}
 
-
-
-	/*
-	 * 手机实体返回按键的处理  与onbackpress同理
-	 */
-	long waitTime = 2000;
-	long touchTime = 0;
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
-			long currentTime = System.currentTimeMillis();
-			if ((currentTime - touchTime) >= waitTime) {
-				ToastUtils.show_allways(HomeActivity.this, "再按一次退出");
-				touchTime = currentTime;
-			} else {
-				MobclickAgent.onKillProcess(this);
-				finish();
-				android.os.Process.killProcess(android.os.Process.myPid());
-			}
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
 }

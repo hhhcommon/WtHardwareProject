@@ -1,6 +1,8 @@
 package com.wotingfm.activity.common.preference.activity;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -47,6 +49,7 @@ public class PreferenceActivity extends Activity implements View.OnClickListener
 		head_left_btn = (LinearLayout) findViewById(R.id.head_left_btn);
 		tv_tiaoguo= (TextView) findViewById(R.id.tv_tiaoguo);
 		gv_pianhao= (GridView) findViewById(R.id.gv_pianhao);
+		gv_pianhao.setSelector(new ColorDrawable(Color.TRANSPARENT));
 		tv_over= (TextView) findViewById(R.id.tv_over);
 		if(type==1){
 			head_left_btn.setVisibility(View.INVISIBLE);

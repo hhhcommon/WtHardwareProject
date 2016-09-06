@@ -92,16 +92,15 @@ public class MainActivity extends TabActivity  {
         InitTextView();	// 设置界面
         InitDao();
         registReceiver(); // 注册广播
-        mask();
+        mask();//蒙版
     }
 
     private void mask() {
         final WindowManager windowManager = getWindowManager();
         // 动态初始化图层
         final ImageView img = new ImageView(this);
-        img.setLayoutParams(new WindowManager.LayoutParams(
-                android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-                android.view.ViewGroup.LayoutParams.MATCH_PARENT));
+        img.setLayoutParams(new WindowManager.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                            android.view.ViewGroup.LayoutParams.MATCH_PARENT));
         img.setScaleType(ImageView.ScaleType.FIT_XY);
         Bitmap bmp = BitmapUtils.readBitMap(this, R.mipmap.ee);
         img.setImageBitmap(bmp);
@@ -484,14 +483,25 @@ public class MainActivity extends TabActivity  {
         if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
             long currentTime = System.currentTimeMillis();
             if ((currentTime - touchTime) >= waitTime) {
-                ToastUtils.show_allways(MainActivity.this, "再按一次退出");
+                ToastUtils.show_allways(this, "再按一次退出");
                 touchTime = currentTime;
             } else {
                 MobclickAgent.onKillProcess(this);
                 finish();
+                android.os.Process.killProcess(android.os.Process.myPid());
             }
+            return true;
+        }else if(event.getAction() == KeyEvent.ACTION_DOWN &&keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
+            // 音量减小时应该执行的功能代码
+            ToastUtils.show_allways(this, "音量减小时应该执行的功能代码");
+            return true;
+        }else if(event.getAction() == KeyEvent.ACTION_DOWN &&keyCode == KeyEvent.KEYCODE_VOLUME_UP){
+            // 音量增大时应该执行的功能代码
+            ToastUtils.show_allways(this, "音量增大时应该执行的功能代码");
             return true;
         }
         return super.onKeyDown(keyCode, event);
     }
+
+
 }

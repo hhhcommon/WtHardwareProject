@@ -9,7 +9,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
-import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.adapter.MyFragmentPagerAdapter;
 import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
@@ -28,7 +26,6 @@ import com.wotingfm.activity.im.interphone.notify.activity.NotifyNewActivity;
 import com.wotingfm.activity.im.interphone.scanning.activity.CaptureActivity;
 import com.wotingfm.activity.person.login.activity.LoginActivity;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.util.ToastUtils;
 
 import java.util.ArrayList;
 
@@ -316,25 +313,5 @@ public class DuiJiangActivity extends FragmentActivity {
 
 
 
-	/*
-	 * 手机实体返回按键的处理
-	 */
-	long waitTime = 2000;
-	long touchTime = 0;
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
-			long currentTime = System.currentTimeMillis();
-			if ((currentTime - touchTime) >= waitTime) {
-				ToastUtils.show_allways(DuiJiangActivity.this, "再按一次退出");
-				touchTime = currentTime;
-			} else {
-				MobclickAgent.onKillProcess(this);
-				finish();
-				android.os.Process.killProcess(android.os.Process.myPid());
-			}
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
+
 }

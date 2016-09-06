@@ -21,7 +21,6 @@ import android.os.Message;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -34,7 +33,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.shenstec.http.MyHttp;
 import com.shenstec.utils.file.FileManager;
-import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.creategroup.model.UserPortaitInside;
 import com.wotingfm.activity.im.interphone.creategroup.photocut.activity.PhotoCutActivity;
@@ -734,30 +732,6 @@ public class MineActivity extends Activity implements OnClickListener {
 		return "com.google.android.apps.photos.content".equals(uri.getAuthority());
 	}
 
-
-
-	/**
-	 * 与onbackpress同理 手机实体返回按键的处理
-	 */
-	long waitTime = 2000;
-	long touchTime = 0;
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
-			long currentTime = System.currentTimeMillis();
-			if ((currentTime - touchTime) >= waitTime) {
-				ToastUtils.show_allways(MineActivity.this, "再按一次退出");
-				touchTime = currentTime;
-			} else {
-				MobclickAgent.onKillProcess(this);
-				finish();
-				android.os.Process.killProcess(android.os.Process.myPid()); 
-			}
-			return true;
-		}
-		return super.onKeyDown(keyCode, event);
-	}
-
 	/**
 	 * 广播接收  接收来自定时服务的时间更新广播
 	 */
@@ -778,4 +752,5 @@ public class MineActivity extends Activity implements OnClickListener {
 			}
 		}
 	};
+
 }
