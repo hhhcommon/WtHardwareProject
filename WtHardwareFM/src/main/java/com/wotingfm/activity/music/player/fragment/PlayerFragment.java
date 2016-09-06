@@ -62,6 +62,7 @@ import com.wotingfm.activity.music.player.model.LanguageSearchInside;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.player.model.sharemodel;
 import com.wotingfm.activity.music.playhistory.activity.PlayHistoryActivity;
+import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.album.model.ContentInfo;
 import com.wotingfm.activity.music.timeset.activity.TimerPowerOffActivity;
 import com.wotingfm.activity.music.video.TtsPlayer;
@@ -840,7 +841,25 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 moredialog.show();
                 break;
             case R.id.lin_sequ:
-                ToastUtils.show_allways(context, "专辑按钮");
+                if(GlobalConfig.playerobject!=null&&GlobalConfig.playerobject.getSeqInfo().getContentId()!=null){
+                    sequid=GlobalConfig.playerobject.getSeqInfo().getContentId();
+                    sequdesc=GlobalConfig.playerobject.getSeqInfo().getContentDesc();
+                    sequimage=GlobalConfig.playerobject.getSeqInfo().getContentImg();
+                    sequname=GlobalConfig.playerobject.getSeqInfo().getContentName();
+                }
+                if(sequid!=null){
+                    Intent intent = new Intent(context, AlbumActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("type", "player");
+                    bundle.putString("conentname",sequname);
+                    bundle.putString("conentdesc",sequdesc);
+                    bundle.putString("conentid",sequid);
+                    bundle.putString("contentimg",sequimage);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }else{
+                    ToastUtils.show_allways(context,"此节目目前没有所属专辑");
+                }
                 break;
         }
     }
@@ -1393,13 +1412,8 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private void searchByVoicesend(String str) {
         sendtype = 2;
         // 发送数据
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-            jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-            jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-            jsonObject.put("IMEI", PhoneMessage.imei);
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
             jsonObject.put("SearchStr", str);
             jsonObject.put("PCDType", GlobalConfig.PCDType);
             jsonObject.put("PageType", "0");
@@ -1692,6 +1706,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         }
         alllist.clear();
         alllist.addAll(list);
+
         if (GlobalConfig.playerobject != null && alllist != null) {
             for (int i = 0; i < alllist.size(); i++) {
                 // alllist.get(i).getContentPlay() == null

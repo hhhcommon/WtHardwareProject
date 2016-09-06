@@ -537,7 +537,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.wt_back:
-                Toast.makeText(context,"R.id.wt_back",Toast.LENGTH_LONG).show();
+                 finish();
                 break;
             case R.id.starttalk:
                 Toast.makeText(context,"R.id.starttalk",Toast.LENGTH_LONG).show();

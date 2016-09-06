@@ -24,10 +24,9 @@
                 android:scaleType="centerCrop" />
 
             <ImageView
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_centerInParent="true"
-                android:src="@mipmap/wt_6_b_y_b" />
+                android:layout_width="35dp"
+                android:layout_height="35dp"
+                android:src="@mipmap/wt_img_shouldpay" />
         </RelativeLayout>
 
         <LinearLayout
@@ -46,13 +45,13 @@
                 android:layout_marginTop="11dp"
                 android:textSize="15sp"
                 android:singleLine="true"/>
-            
+
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left|center"
                 android:layout_weight="1">
-            
+
 	            <ImageView
 	                android:id="@+id/image_hint_visibility"
 	                android:layout_width="wrap_content"
@@ -60,7 +59,7 @@
 	                android:src="@mipmap/image_program_album"
 	                android:layout_marginRight="6dp"
 	                android:visibility="gone"/>
-	
+
 	            <TextView
 	                android:id="@+id/RankContent"
 	                android:layout_width="wrap_content"
@@ -92,7 +91,7 @@
                     android:textSize="9sp"
                     android:textColor="@color/beijing"
                     android:text="6666" />
-                
+
                 <ImageView
                     android:id="@+id/image_number_time"
                     android:layout_width="wrap_content"
@@ -119,7 +118,7 @@
         android:background="@color/setting_bg_color" /> -->
     <View
         android:layout_width="match_parent"
-        android:layout_height="1dp"   
+        android:layout_height="1dp"
         android:background="@color/view_color" />
 
 </LinearLayout>
