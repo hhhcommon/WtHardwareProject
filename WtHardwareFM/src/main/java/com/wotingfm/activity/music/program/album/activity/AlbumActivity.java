@@ -94,7 +94,7 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
 	private int targetIndex;
 	private int screenw;
 	private boolean isCancelRequest;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -261,7 +261,7 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
 	private void setview() {
 		tv_album_name = (TextView) findViewById(R.id.head_name_tv);
 		img_album = (ImageView) findViewById(R.id.img_album);
-		imgageFavorite = (ImageView) findViewById(R.id.img_favorite);
+        imageFavorite = (ImageView) findViewById(R.id.img_favorite);
 		imageLoader = new ImageLoader(context);							// 初始化ImageLoader
 		head_left = (LinearLayout) findViewById(R.id.head_left_btn);	// 返回按钮
 		lin_share = (LinearLayout) findViewById(R.id.lin_share);		// 分享按钮
@@ -315,7 +315,7 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
 		}
 	}
 	
-	public static ImageView imgageFavorite;
+	public static ImageView imageFavorite;
 	private String tag = "ALBUM_VOLLEY_REQUEST_CANCEL_TAG";
 
 	/**
@@ -370,11 +370,11 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
 						if (ContentFavorite.equals("0")) {
 							ContentFavorite = "1";
 							tv_favorite.setText("已喜欢");
-							imgageFavorite.setImageDrawable(getResources().getDrawable(R.mipmap.wt_img_liked));
+                            imageFavorite.setImageDrawable(getResources().getDrawable(R.mipmap.wt_img_liked));
 						} else {
 							ContentFavorite = "0";
 							tv_favorite.setText("喜欢");
-							imgageFavorite.setImageDrawable(getResources().getDrawable(R.mipmap.wt_img_like));
+                            imageFavorite.setImageDrawable(getResources().getDrawable(R.mipmap.wt_img_like));
 						}
 					} else if (ReturnType.equals("0000")) {
 						ToastUtils.show_allways(context, "无法获取相关的参数");
