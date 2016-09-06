@@ -35,7 +35,7 @@ import java.util.List;
 /**
  * 需要处理的消息中心列表
  */
-public class NewsActivityApp extends AppBaseActivity {
+public class NewsActivity extends AppBaseActivity {
     private ListView dealMessageList;
 
     private String tag = "MESSAGE_NEWS_VOLLEY_REQUEST_CANCEL_TAG";

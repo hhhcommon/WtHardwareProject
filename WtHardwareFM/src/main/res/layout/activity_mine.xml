@@ -42,7 +42,7 @@
                 android:src="@mipmap/liubianxing_orange" />
 
             <TextView
-                android:id="@+id/tv_username"
+                android:id="@+id/text_user_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
@@ -61,7 +61,7 @@
                 android:layout_height="wrap_content"
                 android:text="24岁 水瓶座 北京  "
                 android:textColor="@color/white"
-                android:layout_alignLeft="@id/tv_username"
+                android:layout_alignLeft="@id/text_user_name"
                 android:layout_toLeftOf="@+id/imageView_ewm"
                 android:layout_centerVertical="true"
                 android:textSize="13sp" />
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="13dp"
                 android:text="少壮不努力，老大徒伤悲"
-                android:layout_alignLeft="@id/tv_username"
+                android:layout_alignLeft="@id/text_user_name"
                 android:layout_toLeftOf="@+id/imageView_ewm"
                 android:layout_alignParentBottom="true"
                 android:layout_marginBottom="25dp"
@@ -144,6 +144,7 @@
             android:id="@+id/listener_set"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:clickable="true"
             android:background="@drawable/person_color"
             android:layout_marginTop="20dp">
 
@@ -196,6 +197,7 @@
             android:id="@+id/aux_set"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:clickable="true"
             android:background="@drawable/person_color">
 
             <View
@@ -227,7 +229,7 @@
                 android:id="@+id/image_aux_set"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/wt_person_close"
+                android:src="@mipmap/wt_person_on"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginRight="14dp"/>
@@ -238,6 +240,7 @@
             android:id="@+id/wifi_set"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:clickable="true"
             android:background="@drawable/person_color">
 
             <View
@@ -280,6 +283,7 @@
             android:id="@+id/bluetooth_set"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:clickable="true"
             android:background="@drawable/person_color">
 
             <View
@@ -328,6 +332,7 @@
             android:id="@+id/like_set"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:clickable="true"
             android:background="@drawable/person_color"
             android:layout_marginTop="20dp">
 
@@ -361,6 +366,7 @@
             android:id="@+id/flow_set"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:clickable="true"
             android:background="@drawable/person_color">
 
             <View
@@ -393,6 +399,7 @@
             android:id="@+id/cache_set"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:clickable="true"
             android:background="@drawable/person_color">
 
             <View
@@ -405,7 +412,7 @@
                 android:id="@+id/text_cache_set"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="清楚缓存"
+                android:text="清除缓存"
                 android:layout_marginLeft="14dp"
                 android:textSize="16sp"
                 android:layout_centerVertical="true"/>
@@ -418,7 +425,7 @@
                 android:maxLines="1"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="14dp"/>
+                android:layout_marginRight="24dp"/>
 
         </RelativeLayout>
 
@@ -432,6 +439,7 @@
             android:id="@+id/update_set"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:clickable="true"
             android:background="@drawable/person_color"
             android:layout_marginTop="20dp">
 
@@ -458,7 +466,7 @@
                 android:maxLines="1"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:layout_marginRight="17dp"/>
+                android:layout_marginRight="24dp"/>
 
         </RelativeLayout>
 
@@ -466,6 +474,7 @@
             android:id="@+id/help_set"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:clickable="true"
             android:background="@drawable/person_color">
 
             <View
@@ -498,6 +507,7 @@
             android:id="@+id/feedback_set"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:clickable="true"
             android:background="@drawable/person_color">
 
             <View
@@ -530,6 +540,8 @@
             android:id="@+id/about_set"
             android:layout_width="match_parent"
             android:layout_height="56dp"
+            android:clickable="true"
+            android:layout_marginBottom="15dp"
             android:background="@drawable/person_color">
 
             <View
@@ -556,6 +568,13 @@
                 android:layout_centerVertical="true"
                 android:layout_marginRight="14dp"/>
 
+            <View
+                android:id="@+id/liner_view_15"
+                android:layout_width="match_parent"
+                android:layout_height="0.5dp"
+                android:background="@color/view_color"
+                android:layout_alignParentBottom="true"/>
+
         </RelativeLayout>
 
         <Button
@@ -564,7 +583,6 @@
             android:layout_height="40dp"
             android:text="退出账号"
             android:textColor="@color/WHITE"
-            android:layout_marginTop="15dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
             android:layout_marginBottom="30dp"

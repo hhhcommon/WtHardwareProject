@@ -54,7 +54,7 @@ import java.io.File;
 /**
  * 创建群组子页面  即有创建公开群、密码群、验证群
  */
-public class CreateGroupItemActivityApp extends AppBaseActivity implements View.OnClickListener {
+public class CreateGroupItemActivity extends AppBaseActivity implements View.OnClickListener {
     private Uri outputFileUri;
     private Dialog headDialog;
 
@@ -301,7 +301,7 @@ public class CreateGroupItemActivityApp extends AppBaseActivity implements View.
         spinnerChannel1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                spinnerString1 = CreateGroupItemActivityApp.this.getResources().getStringArray(R.array.spingar_channel)[position];
+                spinnerString1 = CreateGroupItemActivity.this.getResources().getStringArray(R.array.spingar_channel)[position];
             }
 
             @Override
@@ -313,7 +313,7 @@ public class CreateGroupItemActivityApp extends AppBaseActivity implements View.
         spinnerChannel2.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                spinnerString2 = CreateGroupItemActivityApp.this.getResources().getStringArray(R.array.spingar_channel)[position];
+                spinnerString2 = CreateGroupItemActivity.this.getResources().getStringArray(R.array.spingar_channel)[position];
             }
 
             @Override
