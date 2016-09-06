@@ -34,7 +34,6 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.helper.ImageLoader;
 import com.wotingfm.util.CommonUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.xlistview.XListView;
 import com.wotingfm.widget.xlistview.XListView.IXListViewListener;
@@ -87,7 +86,6 @@ public class RecommendFragment extends Fragment {
 			// headview.findViewById(R.id.slideshowView);// slideshowView
 			mlistView.addHeaderView(headview);
 			mlistView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-
 			// 轮播图
 			mLoopViewPager= (RollPagerView) headview.findViewById(R.id.slideshowView);
 //	        mLoopViewPager.setPlayDelay(5000);
@@ -296,7 +294,6 @@ public class RecommendFragment extends Fragment {
 		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
 			// 模块属性
-			jsonObject.put("UserId", CommonUtils.getUserId(context));
 			jsonObject.put("MediaType", "");
 			jsonObject.put("CatalogType", "-1");// 001为一个结果 002为另一个
 			jsonObject.put("CatalogId", "");

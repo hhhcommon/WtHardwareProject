@@ -2,7 +2,9 @@ package com.wotingfm.activity.music.download.downloadlist.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,11 +17,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.activity.common.main.MainActivity;
 import com.wotingfm.activity.music.download.dao.FileInfoDao;
 import com.wotingfm.activity.music.download.downloadlist.adapter.DownLoadListAdapter;
 import com.wotingfm.activity.music.download.model.FileInfo;
+import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
+import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.ToastUtils;
@@ -238,19 +244,19 @@ public class DownLoadListActivity extends Activity implements OnClickListener {
 									playerzantype,  playerfrom, playerfromid, playerfromurl,playeraddtime,bjuserid,playercontentshareurl,ContentFavorite,ContentId,playlocalrurl);	
 							dbdao.deleteHistory(playerurl);
 							dbdao.addHistory(history);
-//							if(PlayerFragment.context != null){
-//								MainActivity.change();
-//								HomeActivity.UpdateViewPager();
-//								PlayerFragment.SendTextRequest(mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4), context);
-//							}else{
-//								SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
-//								Editor et = sp.edit();
-//								et.putString(StringConstant.PLAYHISTORYENTER, "true");
-//								et.putString(StringConstant.PLAYHISTORYENTERNEWS,mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4));
-//								et.commit();
-//								MainActivity.change();
-//								HomeActivity.UpdateViewPager();
-//							}
+							if(PlayerFragment.context != null){
+								MainActivity.change();
+								HomeActivity.UpdateViewPager();
+								PlayerFragment.SendTextRequest(mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4), context);
+							}else{
+								SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
+								SharedPreferences.Editor et = sp.edit();
+							et.putString(StringConstant.PLAYHISTORYENTER, "true");
+								et.putString(StringConstant.PLAYHISTORYENTERNEWS,mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4));
+								et.commit();
+							MainActivity.change();
+								HomeActivity.UpdateViewPager();
+							}
 							context.finish();
 							dbdao.closedb();
 						} else {	// 此处要调对话框，点击同意删除对应的文件信息
