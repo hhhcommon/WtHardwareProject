@@ -53,7 +53,7 @@ public class ThreadDao {
 	 * 查找ThreadInfo关于该url的对象（list）
 	 */
 	public List<ThreadInfo> getThreads(String url) {
-		List<ThreadInfo> list = new ArrayList<ThreadInfo>();
+		List<ThreadInfo> list = new ArrayList<>();
 		SQLiteDatabase db = helper.getWritableDatabase();
 		Cursor cursor = db.rawQuery("select * from thread_info where url = ?",new String[] { url });
 		while (cursor.moveToNext()) {

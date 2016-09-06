@@ -5,29 +5,24 @@
     android:background="@color/WHITE"
     android:orientation="vertical" >
 
-    <TextView
-        android:layout_width="match_parent"
-        android:background="@color/text_line_1"
-        android:layout_height="1dp" />
     <!--不存在下载数据时 显示此布局  -->
-     <LinearLayout
+    <LinearLayout
         android:id="@+id/lin_status_no"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="200dp"
         android:layout_gravity="center"
         android:orientation="vertical"
-        
         android:visibility="gone" >
-        
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/wt_download_nocontent"
-            android:layout_gravity="center_horizontal"
-             />
-        <TextView 
-            android:layout_height="wrap_content" 
+            android:layout_gravity="center_horizontal"/>
+
+        <TextView
+            android:layout_height="wrap_content"
             android:layout_width="wrap_content"
             android:layout_marginTop="5dp"
             android:layout_marginLeft="5dp"
@@ -35,10 +30,9 @@
             android:text="暂无下载声音哦~"
             android:textSize="@dimen/wt_group_detail_16"
             android:textColor="@color/beijing"
-               android:layout_gravity="center_horizontal"
-            android:visibility="visible"
-            />
- 
+            android:layout_gravity="center_horizontal"
+            android:visibility="visible"/>
+
     </LinearLayout>
 
     <!--存在有下载数据时 显示此布局  -->
@@ -47,67 +41,41 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical" 
-        android:visibility="visible"
-        >
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:background="#f7f7f7"
-            android:orientation="horizontal" >
+            android:background="#f7f7f7" >
 
-            <LinearLayout
-                android:id="@+id/lin_start"
+            <TextView
+                android:id="@+id/tv_start"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center" >
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="全部开始" />
 
-                <ImageView
-                    android:id="@+id/img_start"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/wt_download_play" />
-
-                <TextView
-                    android:id="@+id/tv_start"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="全部开始" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/lin_clear"
+            <TextView
+                android:id="@+id/text_clear"
                 android:layout_width="0dp"
-                android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center" >
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:text="全部清空" />
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/wt_download_clear" />
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="5dp"
-                    android:text="全部清空" />
-            </LinearLayout>
         </LinearLayout>
 
-        <RelativeLayout
+        <View
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="1dp"
+            android:background="@color/view_color"/>
 
-            <ListView
-                android:id="@+id/listView"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scrollbars="none" >
-            </ListView>
-        </RelativeLayout>
+        <ListView
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none" />
 
     </LinearLayout>
 

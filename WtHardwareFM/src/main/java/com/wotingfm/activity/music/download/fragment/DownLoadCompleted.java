@@ -34,9 +34,7 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
     private FragmentActivity context;
     private View rootView;
     private View headView;
-//    private LinearLayout linearUnLogin;
     private List<FileInfo> fileSequList;    // 专辑list
-    private List<FileInfo> fileInfoList;    // 查询当前userId下已经下载完成的list
     private FileInfoDao FID;
     private DownLoadSequAdapter adapter;
     private String userId;
@@ -67,33 +65,32 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
         mListView = (ListView) rootView.findViewById(R.id.list_view);
         LinearLayout linearUnLogin = (LinearLayout) rootView.findViewById(R.id.lin_status_no);
         userId = CommonUtils.getUserId(context);
-        fileInfoList = FID.queryFileinfo("true", userId);
-        if(fileInfoList.size() <= 0){
+        List<FileInfo> fileInfoList = FID.queryFileinfo("true", userId);// 查询当前userId下已经下载完成的list
+        if(fileInfoList.size() > 0){
+            linearUnLogin.setVisibility(View.GONE);
+            fileSequList = FID.GroupFileinfoAll(userId);
+            if (fileSequList.size() > 0) {
+                for (int i = 0; i < fileSequList.size(); i++) {
+                    if (fileSequList.get(i).getSequid().equals("woting")) {
+                        //此处应出现添加headView进首项
+                        headView = LayoutInflater.from(context).inflate(R.layout.headview_onlinefragment, null);
+                        headView.findViewById(R.id.lin_download_single).setOnClickListener(this);
+                        mListView.addHeaderView(headView);
+                    } else if (i == fileSequList.size() - 1) {
+                        if (headView != null) {
+                            mListView.removeHeaderView(headView);
+                        }
+                    }
+                }
+                adapter = new DownLoadSequAdapter(context, fileSequList);
+                mListView.setVisibility(View.VISIBLE);
+                mListView.setAdapter(adapter);
+                setItemListener();
+            }
+        } else {
             mListView.setVisibility(View.GONE);
             linearUnLogin.setVisibility(View.VISIBLE);
-            return ;
         }
-        linearUnLogin.setVisibility(View.GONE);
-        fileSequList = FID.GroupFileinfoAll(userId);
-        if (fileSequList.size() <= 0) {
-            return ;
-        }
-        for (int i = 0; i < fileSequList.size(); i++) {
-            if (fileSequList.get(i).getSequid().equals("woting")) {
-                //此处应出现添加headView进首项
-                headView = LayoutInflater.from(context).inflate(R.layout.headview_onlinefragment, null);
-                headView.findViewById(R.id.lin_download_single).setOnClickListener(this);
-                mListView.addHeaderView(headView);
-            } else if (i == fileSequList.size() - 1) {
-                if (headView != null) {
-                    mListView.removeHeaderView(headView);
-                }
-            }
-        }
-        adapter = new DownLoadSequAdapter(context, fileSequList);
-        mListView.setVisibility(View.VISIBLE);
-        mListView.setAdapter(adapter);
-        setItemListener();
     }
 
     /**
@@ -140,6 +137,7 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
         confirmDialog.setContentView(dialog1);
         confirmDialog.setCanceledOnTouchOutside(false);
         confirmDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+        confirmDialog.show();
     }
 
     @Override
@@ -150,7 +148,7 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
                 break;
             case R.id.tv_confirm:
                 confirmDialog.dismiss();
-                FID.deletesequ(fileInfoList.get(index).getSequname(), userId);
+                FID.deletesequ(fileSequList.get(index).getSequname(), userId);
                 setDownLoadSource();//重新适配界面操作
                 break;
             case R.id.lin_download_single:

@@ -49,8 +49,8 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.wotingfm.R;
-import com.wotingfm.activity.music.album.model.ContentInfo;
 import com.wotingfm.activity.music.common.service.DownloadService;
+import com.wotingfm.activity.music.download.activity.DownloadActivity;
 import com.wotingfm.activity.music.download.dao.FileInfoDao;
 import com.wotingfm.activity.music.download.model.FileInfo;
 import com.wotingfm.activity.music.favorite.activity.FavoriteActivity;
@@ -63,6 +63,7 @@ import com.wotingfm.activity.music.player.model.LanguageSearchInside;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.player.model.sharemodel;
 import com.wotingfm.activity.music.playhistory.activity.PlayHistoryActivity;
+import com.wotingfm.activity.music.program.album.model.ContentInfo;
 import com.wotingfm.activity.music.timeset.activity.TimerPowerOffActivity;
 import com.wotingfm.activity.music.video.TtsPlayer;
 import com.wotingfm.activity.music.video.VlcPlayer;
@@ -242,7 +243,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         context.getWindowManager().getDefaultDisplay().getMetrics(dm);
         screenw = dm.widthPixels;
         ViewGroup.LayoutParams params = dialog.getLayoutParams();
-        params.width = (int) screenw;
+        params.width = screenw;
         dialog.setLayoutParams(params);
         window.setGravity(Gravity.BOTTOM);
         window.setWindowAnimations(R.style.sharestyle);
@@ -267,7 +268,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 }
             }
         });
-
     }
     private void callmore(int position) {
         switch(position){
@@ -285,7 +285,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                             return;
                         }
                         // 对数据进行转换
-                        List<ContentInfo> datalist = new ArrayList<ContentInfo>();
+                        List<ContentInfo> datalist = new ArrayList<>();
                         ContentInfo mcontent = new ContentInfo();
                         mcontent.setAuthor(datals.getContentPersons());
                         mcontent.setContentPlay(datals.getContentPlay());
@@ -348,7 +348,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                                 ToastUtils.show_allways(context,mcontent.getContentName() + "已经插入了下载列表");
                                 // 未下载列表
                                 List<FileInfo> fileundownloadlist = FID.queryFileinfo("false",CommonUtils.getUserId(context));
-                                FileInfo file = null;
+                                FileInfo file;
                                 for (int kk = 0; kk < fileundownloadlist.size(); kk++) {
                                     if (fileundownloadlist.get(kk).getDownloadtype() == 1) {
                                         DownloadService.workStop(fileundownloadlist.get(kk));
@@ -377,7 +377,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                             ToastUtils.show_allways(context,mcontent.getContentName() + "已经插入了下载列表");
                             // 未下载列表
                             List<FileInfo> fileundownloadlist = FID.queryFileinfo("false", CommonUtils.getUserId(context));
-                            FileInfo file = null;
+                            FileInfo file;
                             for (int k = 0; k < fileundownloadlist.size(); k++) {
                                 if (fileundownloadlist.get(k).getUrl().equals(mcontent.getContentPlay())) {
                                     file = fileundownloadlist.get(k);
@@ -403,7 +403,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 startActivity(new Intent(context,FavoriteActivity.class));
                 break;
             case 4://本地音频 少这个界面
-             /*   startActivity(new Intent(context,DownloadActivity.class));*/
+                startActivity(new Intent(context,DownloadActivity.class));
                 break;
             case 5://预定节目单
                 break;

@@ -104,6 +104,13 @@
             android:windowSoftInputMode="adjustPan"
             android:theme="@android:style/Theme.Light.NoTitleBar"/>
 
+        <!-- 下载界面 -->
+        <activity
+            android:name=".activity.music.download.downloadlist.activity.DownLoadListActivity"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustPan"
+            android:theme="@android:style/Theme.Light.NoTitleBar"/>
+
         <!-- 主界面 -->
         <activity
             android:name=".activity.common.main.MainActivity"
@@ -389,6 +396,14 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
+
+        <service android:name=".activity.music.common.service.DownloadService"/>
+
+        <service android:name=".service.timeroffservice"/>
+
+        <service android:name=".service.NotificationService"/>
+
+        <service android:name=".service.SocketService"/>
 
         <meta-data
             android:name="UMENG_APPKEY"

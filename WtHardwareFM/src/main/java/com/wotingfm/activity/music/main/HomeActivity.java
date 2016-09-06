@@ -22,8 +22,6 @@ import com.wotingfm.util.ToastUtils;
 
 import java.util.ArrayList;
 
-//import com.wotingfm.activity.music.player.fragment.PlayerFragment;
-
 /**
  * 内容主页
  * @author 辛龙
@@ -91,7 +89,7 @@ public class HomeActivity extends FragmentActivity {
 	public void InitViewPager() {
 		mPager = (ViewPager) findViewById(R.id.viewpager);
 		mPager.setOffscreenPageLimit(1);
-		ArrayList<Fragment> fragmentList = new ArrayList<Fragment>();
+		ArrayList<Fragment> fragmentList = new ArrayList<>();
 		PlayerFragment playfragment = new PlayerFragment();
 		ProgramFragment newsfragment = new ProgramFragment();
  	    fragmentList.add(playfragment);
@@ -132,8 +130,6 @@ public class HomeActivity extends FragmentActivity {
 		view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
 		view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
 	}
-
-
 
 	/*
 	 * 手机实体返回按键的处理  与onbackpress同理
