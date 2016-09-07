@@ -11,10 +11,9 @@
         android:gravity="center"
         android:background="@color/setting_bg_color"
         android:orientation="horizontal"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <LinearLayout
-            android:id="@+id/lin_address"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"

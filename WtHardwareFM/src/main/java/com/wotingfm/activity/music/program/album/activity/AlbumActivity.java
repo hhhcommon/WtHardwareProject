@@ -86,7 +86,6 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
 		DisplayMetrics dm = new DisplayMetrics();
 		context.getWindowManager().getDefaultDisplay().getMetrics(dm);
 		screenw = dm.widthPixels;
-
 		ViewGroup.LayoutParams params = dialog.getLayoutParams();
 		params.width = (int) screenw;
 		dialog.setLayoutParams(params);
@@ -177,7 +176,6 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
 		img_right.setOnClickListener(new AlbumChangeClickListener(1));
 	}
 	private void handleIntent() {
-
 		String type = this.getIntent().getStringExtra("type");
 		if (type != null && type.trim().equals("radiolistactivity")) {
 			RankInfo list = (RankInfo) getIntent().getSerializableExtra("list");
