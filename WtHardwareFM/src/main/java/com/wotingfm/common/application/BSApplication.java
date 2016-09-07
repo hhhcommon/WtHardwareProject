@@ -33,6 +33,7 @@ public class BSApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance=this;
+        InitThird();//三方服务
         queues = Volley.newRequestQueue(this);
         PhoneMessage.getPhoneInfo(instance);//获取手机信息
         List<String> _l=new ArrayList<String>();//其中每个间隔要是0.5秒的倍数

@@ -44,7 +44,6 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.pulltorefresh.PullToRefreshLayout;
 
@@ -52,7 +51,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,7 +93,6 @@ public class OnLineFragment extends Fragment {
         context = this.getActivity();
         shared = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
         initDao();// 初始化数据库命令执行对象
-
     }
 
     @Override
@@ -348,17 +345,9 @@ public class OnLineFragment extends Fragment {
     }
 
     private void send() {
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject =VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-            jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-            jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-            jsonObject.put("IMEI", PhoneMessage.imei);
-            PhoneMessage.getGps(context);
-            jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-            jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-            jsonObject.put("PCDType", GlobalConfig.PCDType);
-            // 模块属性
+
             jsonObject.put("UserId", CommonUtils.getUserId(context));
             jsonObject.put("MediaType", "RADIO");
             jsonObject.put("CatalogType", "1");// 按地区分类
@@ -477,8 +466,11 @@ public class OnLineFragment extends Fragment {
                     } else if (MediaType.equals("SEQU")) {
                         Intent intent = new Intent(context, AlbumActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putString("type", "recommend");
-                        bundle.putSerializable("list", (Serializable) newlist.get(groupPosition).getList());
+                        bundle.putString("type", "player");
+                        bundle.putString("conentname",newlist.get(groupPosition).getList().get(childPosition).getContentName());
+                        bundle.putString("conentdesc",newlist.get(groupPosition).getList().get(childPosition).getContentDesc());
+                        bundle.putString("conentid",newlist.get(groupPosition).getList().get(childPosition).getContentId());
+                        bundle.putString("contentimg",newlist.get(groupPosition).getList().get(childPosition).getContentImg());
                         intent.putExtras(bundle);
                         startActivity(intent);
                     } else {

@@ -174,8 +174,11 @@ public class RecommendFragment extends Fragment {
 					} else if (MediaType.equals("SEQU")) {
 						Intent intent = new Intent(context, AlbumActivity.class);
 						Bundle bundle = new Bundle();
-						bundle.putString("type", "recommend");
-						bundle.putSerializable("list", newlist.get(position - 2));
+						bundle.putString("type", "player");
+						bundle.putString("conentname",newlist.get(position - 2).getContentName());
+						bundle.putString("conentdesc",newlist.get(position - 2).getContentDesc());
+						bundle.putString("conentid",newlist.get(position - 2).getContentId());
+						bundle.putString("contentimg",newlist.get(position - 2).getContentImg());
 						intent.putExtras(bundle);
 						startActivity(intent);
 					} else {

@@ -184,6 +184,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private final static int CONTINUE = 4;
     public static boolean isCurrentPlay;
     private static String playmtype;// 当前播放的媒体类型
+    private Boolean IsSequ=false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -786,7 +787,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
             case R.id.tv_cancle:
                 rl_voice.setVisibility(View.GONE);
                 textSpeakContent.setVisibility(View.GONE);
@@ -840,13 +840,26 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 moredialog.show();
                 break;
             case R.id.lin_sequ:
-                if(GlobalConfig.playerobject!=null&&GlobalConfig.playerobject.getSeqInfo().getContentId()!=null){
-                    sequid=GlobalConfig.playerobject.getSeqInfo().getContentId();
-                    sequdesc=GlobalConfig.playerobject.getSeqInfo().getContentDesc();
-                    sequimage=GlobalConfig.playerobject.getSeqInfo().getContentImg();
-                    sequname=GlobalConfig.playerobject.getSeqInfo().getContentName();
+                if(GlobalConfig.playerobject!=null){
+                  try {
+                      if(GlobalConfig.playerobject.getSeqInfo()!=null){
+                          if(GlobalConfig.playerobject.getSeqInfo().getContentId()!=null){
+                          sequid = GlobalConfig.playerobject.getSeqInfo().getContentId();
+                          sequdesc = GlobalConfig.playerobject.getSeqInfo().getContentDesc();
+                          sequimage = GlobalConfig.playerobject.getSeqInfo().getContentImg();
+                          sequname = GlobalConfig.playerobject.getSeqInfo().getContentName();
+                          IsSequ=true;
+                          }else{
+                              IsSequ=false;
+                          }
+                      }else{
+                          IsSequ=false;
+                      }
+                  }catch (Exception e){
+                      e.printStackTrace();
+                  }
                 }
-                if(sequid!=null){
+                if(IsSequ){
                     Intent intent = new Intent(context, AlbumActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "player");
