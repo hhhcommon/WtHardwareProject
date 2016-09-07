@@ -1,6 +1,5 @@
 package com.wotingfm.activity.im.interphone.alert;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -11,36 +10,36 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.shenstec.utils.image.ImageLoader;
 import com.wotingfm.R;
-import com.wotingfm.activity.im.interphone.chat.dao.SearchTalkHistoryDao;
-import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
-import com.wotingfm.activity.im.interphone.chat.model.DBTalkHistorary;
+import com.wotingfm.activity.common.baseactivity.BaseActivity;
 import com.wotingfm.activity.im.common.message.MessageUtils;
 import com.wotingfm.activity.im.common.message.MsgNormal;
 import com.wotingfm.activity.im.common.message.content.MapContent;
-import com.wotingfm.helper.InterPhoneControlHelper;
+import com.wotingfm.activity.im.interphone.chat.dao.SearchTalkHistoryDao;
+import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
+import com.wotingfm.activity.im.interphone.chat.model.DBTalkHistorary;
 import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.CommonUtils;
 
 import java.util.Arrays;
 
 
-public class CallAlertActivity extends Activity implements OnClickListener{
+public class CallAlertActivity extends BaseActivity implements OnClickListener{
 	public static CallAlertActivity instance;
 	private TextView tv_news;
 	private TextView tv_name;
 	private LinearLayout lin_call;
 	private LinearLayout lin_guaduan;
 	private MediaPlayer musicPlayer;
-	//private SearchTalkHistoryDao dbdao;
 	private String id;
 	private MessageReceiver Receiver;
 	private String image;
@@ -54,8 +53,6 @@ public class CallAlertActivity extends Activity implements OnClickListener{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dialog_calling);
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		//透明状态栏
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	//透明导航栏
 		instance = this;
 		imageLoader = new ImageLoader(instance);
 		Intent intent = getIntent();
@@ -72,7 +69,7 @@ public class CallAlertActivity extends Activity implements OnClickListener{
 		if(Receiver == null) {
 			Receiver = new MessageReceiver();
 			IntentFilter filter = new IntentFilter();
-			filter.addAction("push_call");
+			filter.addAction(BroadcastConstant.PUSH_CALL);
 			instance.registerReceiver(Receiver, filter);
 		}
 		tv_news = (TextView) findViewById(R.id.tv_news);	
@@ -155,7 +152,7 @@ public class CallAlertActivity extends Activity implements OnClickListener{
 		DBTalkHistorary history = new DBTalkHistorary( bjuserid,  "user",  id, addtime);
 		dbdao.addTalkHistory(history);
 		DBTalkHistorary talkdb = dbdao.queryHistory().get(0);		//得到数据库里边数据
-		//ChatFragment.zhidingperson(talkdb);
+		ChatFragment.zhiDingPerson(talkdb);
 		DuiJiangActivity.update();									//对讲主页界面更新
 		MyActivityManager mam = MyActivityManager.getInstance();
 		mam.finishAllActivity();
@@ -167,7 +164,7 @@ public class CallAlertActivity extends Activity implements OnClickListener{
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action=intent.getAction();
-			if(action.equals("push_call")){
+			if(action.equals(BroadcastConstant.PUSH_CALL)){
 				byte[] bt = intent.getByteArrayExtra("outmessage");
 				Log.e("push_call接收器中数据", Arrays.toString(bt)+"");
 				try {

@@ -61,7 +61,7 @@
                 android:layout_height="140dp"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:visibility="gone" >
+                android:visibility="visible" >
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -95,11 +95,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
                 android:gravity="center"
-                android:orientation="vertical"
-                android:visibility="gone" >
+                android:orientation="horizontal"
+                android:visibility="visible" >
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:orientation="vertical" >
@@ -150,18 +151,40 @@
                             android:textSize="15sp" />
                     </LinearLayout>
                 </LinearLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:gravity="center"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/imageView_guaduan1"
+                        android:src="@mipmap/wt_image_callback_red" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/imageView_zhuanhuan1"
+                        android:src="@mipmap/btn_record_start" />
+                </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/lin_head"
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
-                android:orientation="vertical"
-                android:visibility="gone" >
+                android:orientation="horizontal"
+                android:visibility="visible" >
 
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
                     android:layout_height="match_parent"
+                    android:orientation="horizontal"
                     android:gravity="center" >
 
                     <LinearLayout
@@ -336,6 +359,28 @@
                             </LinearLayout>
                         </LinearLayout>
                     </LinearLayout>
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="wrap_content"
+                    android:gravity="center"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/imageView_guaduan2"
+                        android:src="@mipmap/wt_image_callback_red" />
+
+                    <ImageView
+                        android:layout_width="40dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/imageView_zhuanhuan2"
+                        android:src="@mipmap/btn_record_start" />
+
                 </LinearLayout>
             </LinearLayout>
 
@@ -372,68 +417,6 @@
                 android:scrollingCache="false" />
 
         </LinearLayout>
-        
-        <com.wotingfm.widget.MyLinearLayout
-            android:id="@+id/lin_foot"
-            android:layout_width="match_parent"
-            android:layout_height="136dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/transparentt"
-            android:orientation="vertical"
-            android:visibility="gone" >
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/view_color" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp"
-                    android:orientation="vertical" >
-
-                    <Button
-                        android:id="@+id/image_button"
-                        android:layout_width="99dp"
-                        android:layout_height="99dp"
-                        android:background="@drawable/d_duijiang_button_background" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:orientation="vertical" >
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="13dp"
-                        android:layout_marginTop="10dp"
-                        android:gravity="center"
-                        android:orientation="vertical" >
-
-                        <ImageView
-                            android:id="@+id/imageView_answer"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/d_duijiang_callback_background" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:text="挂断"
-                            android:textColor="@color/red" />
-                    </LinearLayout>
-                </LinearLayout>
-            </RelativeLayout>
-        </com.wotingfm.widget.MyLinearLayout>
     </RelativeLayout>
 </LinearLayout>

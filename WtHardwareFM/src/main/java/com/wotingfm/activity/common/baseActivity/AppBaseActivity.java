@@ -7,7 +7,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.manager.MyActivityManager;
 
 /**
  * 包含公共标题栏以及一些公共方法供子类调用或重写
@@ -26,9 +25,7 @@ public abstract class AppBaseActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(setViewId());
-        context = this;
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.pushOneActivity(this);
+        context =this;
         initView();
     }
 
@@ -165,7 +162,6 @@ public abstract class AppBaseActivity extends BaseActivity {
         leftImage = null;
         rightImage = null;
         setContentView(R.layout.activity_null);
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.popOneActivity(this);
+
     }
 }

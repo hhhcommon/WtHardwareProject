@@ -53,7 +53,7 @@ import com.wotingfm.activity.music.search.fragment.TotalFragment;
 import com.wotingfm.activity.music.search.model.History;
 import com.wotingfm.activity.music.video.VoiceRecognizer;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.manager.MyActivityManager;
@@ -185,7 +185,7 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 			ToastUtils.show_short(SearchLikeAcitvity.this, "网络失败，请检查网络");
 		}
 		IntentFilter myfileter = new IntentFilter();
-		myfileter.addAction(BroadcastConstants.SEARCHVOICE);
+		myfileter.addAction(BroadcastConstant.SEARCHVOICE);
 		registerReceiver(mBroadcastReceiver, myfileter);
 	}
 
@@ -196,7 +196,7 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 		@Override
 		public void onReceive(Context context, final Intent intent) {
 			String action = intent.getAction();
-			if (action.equals(BroadcastConstants.SEARCHVOICE)) {
+			if (action.equals(BroadcastConstant.SEARCHVOICE)) {
 				String str = intent.getStringExtra("VoiceContent");
 				tv_speak_status.setText("正在为您查找: "+str);
 				if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
@@ -255,11 +255,11 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 						curVolume = audioMgr.getStreamVolume(AudioManager.STREAM_MUSIC);
 						audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, stepVolume, AudioManager.FLAG_PLAY_SOUND);
 //						voice_type = 1;
-					    mVoiceRecognizer=VoiceRecognizer.getInstance(context, BroadcastConstants.SEARCHVOICE);
-						mVoiceRecognizer.startListen();
-						tv_speak_status.setText("开始语音转换");
-						imageView_voice.setImageBitmap(bmppresss);
-						textSpeakContent.setVisibility(View.GONE);
+//					    mVoiceRecognizer=VoiceRecognizer.getInstance(context, BroadcastConstant.SEARCHVOICE);
+//						mVoiceRecognizer.startListen();
+//						tv_speak_status.setText("开始语音转换");
+//						imageView_voice.setImageBitmap(bmppresss);
+//						textSpeakContent.setVisibility(View.GONE);
 					} else {
 						ToastUtils.show_short(context, "网络失败，请检查网络");
 					}
@@ -861,10 +861,10 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 			bmppress.recycle();
 			bmppress = null;
 		}
-		if(mVoiceRecognizer!=null){
-			mVoiceRecognizer.ondestroy();
-			mVoiceRecognizer=null;
-		}
+//		if(mVoiceRecognizer!=null){
+//			mVoiceRecognizer.ondestroy();
+//			mVoiceRecognizer=null;
+//		}
 		unregisterReceiver(mBroadcastReceiver);
 		context = null;
 		setContentView(R.layout.activity_null);

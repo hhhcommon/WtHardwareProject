@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
-import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.service.timeroffservice;
 
 /**
@@ -39,11 +39,11 @@ public class TimerPowerOffActivityApp extends AppBaseActivity implements OnClick
         setRightText("00:00", null);
         setView();                                  // 设置界面
         IntentFilter mFilter = new IntentFilter();  // 注册广播里接收器
-        mFilter.addAction(BroadcastConstants.TIMER_UPDATE);
+        mFilter.addAction(BroadcastConstant.TIMER_UPDATE);
         registerReceiver(mBroadcastReceiver, mFilter);
         // 设置Intent
         intent = new Intent(TimerPowerOffActivityApp.this, timeroffservice.class);
-        intent.setAction(BroadcastConstants.TIMER_START);
+        intent.setAction(BroadcastConstant.TIMER_START);
         setImageTimeCheck(0);
     }
 
@@ -257,7 +257,7 @@ public class TimerPowerOffActivityApp extends AppBaseActivity implements OnClick
             case R.id.lin_nostart:// 不启动
                 imageTimeCheck = 0;
                 Intent intent = new Intent(this, timeroffservice.class);
-                intent.setAction(BroadcastConstants.TIMER_STOP);
+                intent.setAction(BroadcastConstant.TIMER_STOP);
                 startService(intent);
                 setRightText("00:00", null);
 //			PlayerFragment.isCurrentPlay = false;
@@ -276,7 +276,7 @@ public class TimerPowerOffActivityApp extends AppBaseActivity implements OnClick
         @Override
         public void onReceive(Context context, final Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastConstants.TIMER_UPDATE)) {
+            if (action.equals(BroadcastConstant.TIMER_UPDATE)) {
                 String s = intent.getStringExtra("update");
                 setRightText(s, null);
                 if (isCheck) {

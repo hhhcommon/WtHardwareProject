@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,16 +17,18 @@ import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 
+import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.activity.im.interphone.creategroup.main.CreateGroupMainActivityApp;
 import com.wotingfm.activity.im.interphone.find.FindActivity;
 import com.wotingfm.activity.im.interphone.linkman.fragment.LinkManFragment;
-import com.wotingfm.activity.im.interphone.notify.activity.NotifyNewActivityApp;
+import com.wotingfm.activity.im.interphone.notify.activity.NotifyNewActivity;
 import com.wotingfm.activity.im.interphone.scanning.activity.CaptureActivity;
 import com.wotingfm.activity.person.login.activity.LoginActivity;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.util.ToastUtils;
 
 import java.util.ArrayList;
 
@@ -44,7 +47,6 @@ public class DuiJiangActivity extends FragmentActivity {
 	private PopupWindow adddialog;
 	private static ViewPager mPager;
 	private static DuiJiangActivity context;
-	public static final String UPDATA_GROUP = "com.woting.UPDATA_GROUP";
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -206,7 +208,7 @@ public class DuiJiangActivity extends FragmentActivity {
 		lin_news.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(context, NotifyNewActivityApp.class);
+				Intent intent = new Intent(context, NotifyNewActivity.class);
 				startActivity(intent);
 			}
 		});
@@ -311,6 +313,34 @@ public class DuiJiangActivity extends FragmentActivity {
 		}
 	}
 
+
+	//手机实体返回按键的处理 与onbackpress同理
+	long waitTime = 2000;
+	long touchTime = 0;
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
+			long currentTime = System.currentTimeMillis();
+			if ((currentTime - touchTime) >= waitTime) {
+				ToastUtils.show_allways(this, "再按一次退出");
+				touchTime = currentTime;
+			} else {
+				MobclickAgent.onKillProcess(this);
+				finish();
+				android.os.Process.killProcess(android.os.Process.myPid());
+			}
+			return true;
+		}else if(event.getAction() == KeyEvent.ACTION_DOWN &&keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
+			// 音量减小时应该执行的功能代码
+			ToastUtils.show_allways(this, "音量减小时应该执行的功能代码");
+			return true;
+		}else if(event.getAction() == KeyEvent.ACTION_DOWN &&keyCode == KeyEvent.KEYCODE_VOLUME_UP){
+			// 音量增大时应该执行的功能代码
+			ToastUtils.show_allways(this, "音量增大时应该执行的功能代码");
+			return true;
+		}
+		return super.onKeyDown(keyCode, event);
+	}
 
 
 

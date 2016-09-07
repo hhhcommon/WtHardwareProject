@@ -117,14 +117,14 @@
 
         <!-- 创建群组主界面 -->
         <activity
-            android:name=".activity.im.interphone.creategroup.main.CreateGroupMainActivity"
+            android:name=".activity.im.interphone.creategroup.main.CreateGroupMainActivityApp"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 创建群组子界面  即有创建公开群、密码群、验证群 -->
         <activity
-            android:name=".activity.im.interphone.creategroup.create.CreateGroupItemActivity"
+            android:name=".activity.im.interphone.creategroup.create.CreateGroupItemActivityApp"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -152,7 +152,7 @@
 
         <!-- 查找好友、群组显示结果界面 -->
         <activity
-            android:name=".activity.im.interphone.find.result.FindNewsResultActivity"
+            android:name=".activity.im.interphone.find.result.FindNewsResultActivityApp"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -166,21 +166,21 @@
 
         <!-- 扫描二维码显示结果界面 -->
         <activity
-            android:name=".activity.im.interphone.scanning.activity.ResultActivity"
+            android:name=".activity.im.interphone.scanning.activity.ResultActivityApp"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
         <!-- 添加好友界面 -->
         <activity
-            android:name=".activity.im.interphone.find.add.FriendAddActivity"
+            android:name=".activity.im.interphone.find.add.FriendAddActivityApp"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
         <!-- 添加好友界面 -->
         <activity
-            android:name=".activity.im.interphone.find.add.GroupAddActivity"
+            android:name=".activity.im.interphone.find.add.GroupAddActivityApp"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -307,7 +307,7 @@
 
         <!-- 定时关闭界面 -->
         <activity
-            android:name=".activity.music.timeset.activity.TimerPowerOffActivity"
+            android:name=".activity.music.timeset.activity.TimerPowerOffActivityApp"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -406,7 +406,10 @@
                   android:screenOrientation="portrait"
                   android:theme="@android:style/Theme.Light.NoTitleBar"
                   android:windowSoftInputMode="adjustPan"/>
-
+        <activity android:name="com.wotingfm.activity.im.interphone.message.activity.NewsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
         <!-- 友盟activity -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"

@@ -16,14 +16,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,7 +36,6 @@ import com.wotingfm.activity.im.common.message.MessageUtils;
 import com.wotingfm.activity.im.common.message.MsgNormal;
 import com.wotingfm.activity.im.common.message.content.MapContent;
 import com.wotingfm.activity.im.common.model.ListInfo;
-import com.wotingfm.activity.im.common.service.InterPhoneControl;
 import com.wotingfm.activity.im.interphone.alert.CallAlertActivity;
 import com.wotingfm.activity.im.interphone.chat.adapter.ChatListAdapter;
 import com.wotingfm.activity.im.interphone.chat.adapter.GroupPersonAdapter;
@@ -47,6 +43,7 @@ import com.wotingfm.activity.im.interphone.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.activity.im.interphone.chat.model.DBTalkHistorary;
 import com.wotingfm.activity.im.interphone.chat.model.GroupTalkInside;
 import com.wotingfm.activity.im.interphone.chat.model.TalkListGP;
+import com.wotingfm.activity.im.interphone.creategroup.frienddetails.TalkPersonNewsActivity;
 import com.wotingfm.activity.im.interphone.find.add.FriendAddActivityApp;
 import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity;
 import com.wotingfm.activity.im.interphone.linkman.model.LinkMan;
@@ -54,17 +51,18 @@ import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
 import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
 import com.wotingfm.activity.person.login.activity.LoginActivity;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.helper.ImageLoader;
+import com.wotingfm.manager.InterPhoneControlManager;
 import com.wotingfm.service.VoiceStreamRecordService;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.util.VibratorUtils;
-import com.wotingfm.widget.MyLinearLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -94,16 +92,13 @@ public class ChatFragment extends Fragment implements OnClickListener{
 	private android.app.Dialog dialog;
 	private static TextView tv_num;
 	private static TextView tv_grouptype;
-	public static MyLinearLayout lin_foot;
 	public static LinearLayout lin_head;
 	private static TextView tv_allnum;
-	public static ImageView imageView_answer;
 	public static boolean iscalling=false;//是否是在通话状态;
 	private static List<DBTalkHistorary> historydatabaselist;//list里边的数据
 	private SharedPreferences shared;
 	public static LinearLayout lin_second;
 	private RelativeLayout Relative_listview;
-	private Button image_button;
 	public static LinearLayout lin_notalk;
 	public static LinearLayout lin_personhead;
 	private static TextView tv_personname;
@@ -112,11 +107,9 @@ public class ChatFragment extends Fragment implements OnClickListener{
 	private ImageView image_group_persontx;
 	private ImageView image_voice;
 	private TextView talking_news;
-	private AnimationDrawable draw;
+	private static AnimationDrawable draw;
 	private AnimationDrawable draw_group;
 	private String UserName;
-	//	private SoundPool sp;
-	//	private HashMap<Integer, Integer> spMap;
 	private static android.app.Dialog confirmdialog;
 	private static String groupid;
 	public static String interphonetype;
@@ -126,10 +119,9 @@ public class ChatFragment extends Fragment implements OnClickListener{
 	private static ArrayList<TalkListGP> alllist = new ArrayList<TalkListGP>();//所有数据库数据
 	private static int entergrouptype;
 	private static int dialogtype;
-	private boolean istalking = false;
+	private static boolean isTalking = false;
 	private long Vibrate = 100;
 	private TextView gridView_tv;
-	//	private TalkPlayManage tpm;
 	private static String phoneid;
 	private static List<ListInfo> listinfo;
 	private static Gson gson = new Gson();
@@ -141,30 +133,29 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		context = this.getActivity();
 		initDao();// 初始化数据库
-		if(Receiver == null) {//注册广播接收socketservice的数据
+		rtRec();//注册广播接收socketService的数据
+	}
+
+	private void rtRec() {
+		if(Receiver == null) {
 			Receiver=new MessageReceiver();
 			IntentFilter filter=new IntentFilter();
-			filter.addAction("push");
-			filter.addAction(DuiJiangActivity.UPDATA_GROUP);
+			filter.addAction(BroadcastConstant.SOCKET_PUSH);
+			filter.addAction(BroadcastConstant.UP_DATA_GROUP);
+			filter.addAction(BroadcastConstant.PUSH_VOICE_IMAGE_REFRESH);
 			context.registerReceiver(Receiver, filter);
 
-			IntentFilter filterb3=new IntentFilter();
-			filterb3.addAction("push_back");
-			filterb3.setPriority(500);
-			context.registerReceiver(Receiver, filterb3);
-
-			IntentFilter filterb4=new IntentFilter();
-			filterb4.addAction("push_voiceimagerefresh");
-			context.registerReceiver(Receiver, filterb4);
-			ToastUtils.show_short(context, "注册了广播接收器");
+			IntentFilter filter1=new IntentFilter();
+			filter1.addAction(BroadcastConstant.PUSH_BACK);
+			filter1.setPriority(500);
+			context.registerReceiver(Receiver, filter1);
 		}
-		imageLoader = new ImageLoader(context);
 	}
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,Bundle savedInstanceState) {
 		rootView = inflater.inflate(R.layout.fragment_talkoldlist,container, false);
-		setview();//设置界面
+		setView();//设置界面
 		return rootView;
 	}
 
@@ -181,16 +172,15 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		shared=context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
 		//此处在splashActivity中refreshB设置成true
 		UserName = shared.getString(StringConstant.USERNAME, "");
-		String personrefresh = shared.getString(StringConstant.PERSONREFRESHB, "false");
-		String islogin = shared.getString(StringConstant.ISLOGIN, "false");
-		if(islogin.equals("true")){
-			if(personrefresh.equals("true")){
+		String personRefresh = shared.getString(StringConstant.PERSONREFRESHB, "false");
+		String isLogin = shared.getString(StringConstant.ISLOGIN, "false");
+		if(isLogin.equals("true")){
+			if(personRefresh.equals("true")){
 				Relative_listview.setVisibility(View.VISIBLE);
 				//显示此时没有人通话界面
 				lin_notalk.setVisibility(View.VISIBLE);
 				lin_personhead.setVisibility(View.GONE);
 				lin_head.setVisibility(View.GONE);
-				lin_foot.setVisibility(View.GONE);
 				lin_second.setVisibility(View.GONE);
 				gettxl();
 				Editor et=shared.edit();
@@ -209,7 +199,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		dbdao = new SearchTalkHistoryDao(context);
 	}
 
-	private void setview() {
+	private void setView() {
 		lin_notalk = (LinearLayout) rootView.findViewById(R.id.lin_notalk);//没有对讲时候的界面
 		lin_personhead = (LinearLayout) rootView.findViewById(R.id.lin_personhead);//有个人对讲时候的界面
 		tv_personname = (TextView) rootView.findViewById(R.id.tv_personname);	//个人对讲时候的好友名字
@@ -229,38 +219,24 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		image_voice = (ImageView) rootView.findViewById(R.id.image_voice);	//群组对讲声音波
 		talking_news= (TextView) rootView.findViewById(R.id.talking_news);	//群组对讲时候通话解释
 		mlistView = (ListView) rootView.findViewById(R.id.listView);	//
-		lin_foot = (MyLinearLayout) rootView.findViewById(R.id.lin_foot);//对讲按钮
-		imageView_answer = (ImageView) rootView.findViewById(R.id.imageView_answer);	//
-		image_button = (Button) rootView.findViewById(R.id.image_button);//
 		Relative_listview = (RelativeLayout) rootView.findViewById(R.id.Relative_listview);//
 		lin_second = (LinearLayout) rootView.findViewById(R.id.lin_second);//
-		//image_personvoice.setBackgroundResource(R.anim.talk_show);
 		draw = (AnimationDrawable) image_personvoice.getBackground();
 		image_personvoice.setVisibility(View.INVISIBLE);
-		//image_voice.setBackgroundResource(R.anim.talk_show);
 		draw_group = (AnimationDrawable) image_voice.getBackground();
 		image_voice.setVisibility(View.INVISIBLE);
 		talkingname.setVisibility(View.INVISIBLE);
+
+		ImageView imageView_guaduan1 = (ImageView) rootView.findViewById(R.id.imageView_guaduan1);
+		ImageView imageView_zhuanhuan1 = (ImageView) rootView.findViewById(R.id.imageView_zhuanhuan1);
+		ImageView imageView_guaduan2 = (ImageView) rootView.findViewById(R.id.imageView_guaduan2);
+		ImageView imageView_zhuanhuan2 = (ImageView) rootView.findViewById(R.id.imageView_zhuanhuan2);
 	}
 
 	private void listener() {
+		imageLoader = new ImageLoader(context);
 		lin_second.setOnClickListener(this);
 		image_grouptx.setOnClickListener(this);
-		imageView_answer.setOnClickListener(this);
-		image_button.setOnTouchListener(new OnTouchListener() {
-			@Override
-			public boolean onTouch(View v, MotionEvent event) {
-				switch (event.getAction()) {
-					case MotionEvent.ACTION_DOWN:
-						press();//按下状态
-						break;
-					case MotionEvent.ACTION_UP:
-						jack();//抬起手后的操作
-						break;
-				}
-				return false;
-			}
-		});
 	}
 
 	@Override
@@ -274,21 +250,25 @@ public class ChatFragment extends Fragment implements OnClickListener{
 				Intent intent = new Intent(context, LoginActivity.class);
 				startActivity(intent);
 				break;
-			case R.id.imageView_answer:
+			case R.id.imageView_guaduan1:
+				//挂断
+				hangUp();
+				break;
+			case R.id.imageView_guaduan2:
 				//挂断
 				hangUp();
 				break;
 		}
 	}
 
+	//挂断
 	private void hangUp() {
-		//挂断
 		if(interphonetype.equals("user")){
 			//挂断电话
 			iscalling=false;
-			InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
+			InterPhoneControlManager.PersonTalkHangUp(context, InterPhoneControlManager.bdcallid);
 			historydatabaselist = dbdao.queryHistory();//得到数据库里边数据
-			getlist();
+			getList();
 			if(alllist.size()==0){
 				if(adapter==null){
 					adapter=new ChatListAdapter(context, alllist,"0");
@@ -304,18 +284,17 @@ public class ChatFragment extends Fragment implements OnClickListener{
 					adapter.ChangeDate(alllist, alllist.get(alllist.size()-1).getId());
 				}
 			}
-			setlistener();
-			setimageview(2,"","");
+			setListener();
+			setImageView(2,"","");
 			lin_notalk.setVisibility(View.VISIBLE);
 			lin_personhead.setVisibility(View.GONE);
 			lin_head.setVisibility(View.GONE);
-			lin_foot.setVisibility(View.GONE);
 			gridView_person.setVisibility(View.GONE);
 			gridView_tv.setVisibility(View.GONE);
 		}else{
-			InterPhoneControl.Quit(context, interphoneid);//退出小组
+			InterPhoneControlManager.Quit(context, interphoneid);//退出小组
 			historydatabaselist = dbdao.queryHistory();//得到数据库里边数据
-			getlist();
+			getList();
 			if(alllist.size()==0){
 				if(adapter==null){
 					adapter=new ChatListAdapter(context, alllist,"0");
@@ -331,19 +310,18 @@ public class ChatFragment extends Fragment implements OnClickListener{
 					adapter.ChangeDate(alllist, alllist.get(alllist.size()-1).getId());
 				}
 			}
-			setlistener();
-			setimageview(2,"","");
+			setListener();
+			setImageView(2,"","");
 			lin_notalk.setVisibility(View.VISIBLE);
 			lin_personhead.setVisibility(View.GONE);
 			lin_head.setVisibility(View.GONE);
-			lin_foot.setVisibility(View.GONE);
 			gridView_person.setVisibility(View.GONE);
 			gridView_tv.setVisibility(View.GONE);
 		}
 	}
 
+	//查看群成员
 	private void checkGroup() {
-		//查看群成员
 		if(grouppersonlist!=null&&grouppersonlist.size()!=0){
 			grouppersonlists.clear();
 			if(listinfo!=null&&listinfo.size()>0){
@@ -353,7 +331,6 @@ public class ChatFragment extends Fragment implements OnClickListener{
 						for(int i=0;i<grouppersonlist.size();i++){
 							String ids = grouppersonlist.get(i).getUserId();
 							if(id.equals(ids)){
-								Log.e("ids",ids+"======="+i);
 								grouppersonlist.get(i).setOnLine(2);
 								grouppersonlists.add(grouppersonlist.get(i));
 							}
@@ -366,7 +343,6 @@ public class ChatFragment extends Fragment implements OnClickListener{
 					for(int i=0;i<grouppersonlist.size();i++){
 						String ids = grouppersonlist.get(i).getUserId();
 						if(id.equals(ids)){
-							Log.e("ids",ids+"======="+i);
 							grouppersonlist.get(i).setOnLine(2);
 							grouppersonlists.add(grouppersonlist.get(i));
 						}
@@ -383,20 +359,20 @@ public class ChatFragment extends Fragment implements OnClickListener{
 			gridView_person.setOnItemClickListener(new OnItemClickListener() {
 				@Override
 				public void onItemClick(AdapterView<?> parent,View view, int position, long id) {
-					boolean isfriend = false;
+					boolean isFriend = false;
 					if(GlobalConfig.list_person!=null&&GlobalConfig.list_person.size()!=0){
 						for(int i=0;i<GlobalConfig.list_person.size();i++){
 							if(grouppersonlists.get(position).getUserId().equals(GlobalConfig.list_person.get(i).getUserId())){
-								isfriend=true;
+								isFriend=true;
 								break;
 							}
 						}
 					}else{
 						//不是我的好友
-						isfriend=false;
+						isFriend=false;
 					}
-					if(isfriend){
-						Intent intent = new Intent(context,GroupDetailAcitivity.class);
+					if(isFriend){
+						Intent intent = new Intent(context,TalkPersonNewsActivity.class);
 						Bundle bundle = new Bundle();
 						bundle.putString("type", "talkoldlistfragment_p");
 						bundle.putSerializable("data", grouppersonlists.get(position));
@@ -424,11 +400,10 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		}
 	}
 
-	public void setimageview(int i,String userName,String url) {
+	public void setImageView(int i,String userName,String url) {
 		//设置有人说话时候界面友好交互
 		//发送消息线程
 		if(i==1){
-			Log.e("userName===============", userName+"");
 			talkingname.setVisibility(View.VISIBLE);
 			if(userName.equals(UserName)){
 				talkingname.setText("我");
@@ -462,58 +437,58 @@ public class ChatFragment extends Fragment implements OnClickListener{
 	 * 设置对讲组为激活状态
 	 * @param
 	 */
-	public static void zhidinggroupss(String groupids ) {
+	public static void zhiDingGroupss(String groupIds ) {
 		Intent intent = new Intent();
-		intent.setAction(DuiJiangActivity.UPDATA_GROUP);
+		intent.setAction(BroadcastConstant.UP_DATA_GROUP);
 		context.sendBroadcast(intent);
 		entergrouptype=1;
-		groupid=groupids;
+		groupid=groupIds;
 		tv_num.setText("1");
 		listinfo=null;
-		InterPhoneControl.Enter(context, groupids);//发送进入组的数据，socket
-		getgridViewperson(groupids);//获取群成员
+		InterPhoneControlManager.Enter(context, groupIds);//发送进入组的数据，socket
+		getGridViewPerson(groupIds);//获取群成员
 	}
 
 	/**
 	 * 设置对讲组为激活状态
 	 */
-	public static void zhidinggroup(TalkGroupInside talkGroupInside) {
+	public static void zhiDingGroup(TalkGroupInside talkGroupInside) {
 		Intent intent = new Intent();
-		intent.setAction(DuiJiangActivity.UPDATA_GROUP);
+		intent.setAction(BroadcastConstant.UP_DATA_GROUP);
 		context.sendBroadcast(intent);
 		entergrouptype=1;
 		groupid=talkGroupInside.getGroupId();
 		tv_num.setText("1");
 		listinfo=null;
-		InterPhoneControl.Enter(context, talkGroupInside.getGroupId());//发送进入组的数据，socket
-		getgridViewperson(talkGroupInside.getGroupId());//获取群成员
+		InterPhoneControlManager.Enter(context, talkGroupInside.getGroupId());//发送进入组的数据，socket
+		getGridViewPerson(talkGroupInside.getGroupId());//获取群成员
 	}
 
 	/**
 	 * 设置对讲组2为激活状态
 	 */
-	public static void zhidinggroups(TalkGroupInside talkGroupInside) {
+	public static void zhiDingGroups(TalkGroupInside talkGroupInside) {
 		Intent intent = new Intent();
-		intent.setAction(DuiJiangActivity.UPDATA_GROUP);
+		intent.setAction(BroadcastConstant.UP_DATA_GROUP);
 		context.sendBroadcast(intent);
 		entergrouptype=2;
 		groupid=talkGroupInside.getGroupId();
 		tv_num.setText("1");
 		listinfo=null;
-		InterPhoneControl.Enter(context, talkGroupInside.getGroupId());//发送进入组的数据，socket
-		getgridViewperson(talkGroupInside.getGroupId());//获取群成员
+		InterPhoneControlManager.Enter(context, talkGroupInside.getGroupId());//发送进入组的数据，socket
+		getGridViewPerson(talkGroupInside.getGroupId());//获取群成员
 	}
 
 	/**
 	 * 设置个人为激活状态/设置第一条为激活状态
 	 */
-	public static  void zhidingperson(DBTalkHistorary talkdb) {
+	public static  void zhiDingPerson(DBTalkHistorary talkdb) {
 		historydatabaselist = dbdao.queryHistory();//得到数据库里边数据
-		getlist();
-		setdateperson();
+		getList();
+		setDatePerson();
 	}
 
-	private static  void setlistener() {
+	private static  void setListener() {
 		adapter.setOnListener(new ChatListAdapter.OnListener() {
 			@Override
 			public void zhiding(int position) {
@@ -522,8 +497,8 @@ public class ChatFragment extends Fragment implements OnClickListener{
 					//此时有对讲状态
 					if(interphonetype.equals("user")){
 						//对讲状态为个人时，弹出框展示
-						String interphonetypes = alllist.get(position).getTyPe();
-						if(interphonetypes!=null&&!interphonetypes.equals("")&&interphonetypes.equals("user")){
+						String interPhoneTypes = alllist.get(position).getTyPe();
+						if(interPhoneTypes!=null&&!interPhoneTypes.equals("")&&interPhoneTypes.equals("user")){
 							dialogtype=1;
 							phoneid=alllist.get(position).getId();
 						}else{
@@ -531,20 +506,20 @@ public class ChatFragment extends Fragment implements OnClickListener{
 						}
 						confirmdialog.show();
 					}else{
-						InterPhoneControl.Quit(context, interphoneid);//退出小组
-						String interphonetypes = alllist.get(position).getTyPe();
-						if(interphonetypes!=null&&!interphonetypes.equals("")&&interphonetypes.equals("user")){
+						InterPhoneControlManager.Quit(context, interphoneid);//退出小组
+						String interPhoneTypes = alllist.get(position).getTyPe();
+						if(interPhoneTypes!=null&&!interPhoneTypes.equals("")&&interPhoneTypes.equals("user")){
 							call(alllist.get(position).getId());
 						}else{
-							zhidinggroupss(groupid);
+							zhiDingGroupss(groupid);
 						}
 					}
 				}else{
-					String interphonetypes = alllist.get(position).getTyPe();
-					if(interphonetypes!=null&&!interphonetypes.equals("")&&interphonetypes.equals("user")){
+					String interPhoneTypes = alllist.get(position).getTyPe();
+					if(interPhoneTypes!=null&&!interPhoneTypes.equals("")&&interPhoneTypes.equals("user")){
 						call(alllist.get(position).getId());
 					}else{
-						zhidinggroupss(groupid);
+						zhiDingGroupss(groupid);
 					}
 				}
 			}
@@ -647,7 +622,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		//得到数据库里边数据
 		historydatabaselist = dbdao.queryHistory();
 		//得到真实的数据
-		getlist();
+		getList();
 		if(alllist==null||alllist.size()==0){
 			//此时数据库里边没有数据，界面不变
 			iscalling=false;
@@ -662,12 +637,10 @@ public class ChatFragment extends Fragment implements OnClickListener{
 			if(adapter==null){
 				adapter=new ChatListAdapter(context, alllist,alllist.get(alllist.size()-1).getId());
 				mlistView.setAdapter(adapter);
-				Log.e("适配========", "1");
 			}else{
 				adapter.ChangeDate(alllist, alllist.get(alllist.size()-1).getId());
-				Log.e("适配========", "2");
 			}
-			setlistener();
+			setListener();
 		}
 	}
 
@@ -677,13 +650,13 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		switch (requestCode) {
 			case 1:
 				if(resultCode==1){
-					getgridViewperson(interphoneid);//获取群成员
+					getGridViewPerson(interphoneid);//获取群成员
 				}
 				break;
 		}
 	}
 
-	public void addgroup(String id) {
+	public void addGroup(String id) {
 		//获取最新激活状态的数据
 		String groupid = id;
 		String type = "group";
@@ -693,15 +666,14 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		DBTalkHistorary history = new DBTalkHistorary( bjuserid,  type,  groupid, addtime);
 		dbdao.addTalkHistory(history);
 		historydatabaselist = dbdao.queryHistory();//得到数据库里边数据
-		getlist();
+		getList();
 	}
 
-	public void setdategroup() {
+	public void setDateGroup() {
 		//设置组为激活状态
 		lin_notalk.setVisibility(View.GONE);
 		lin_personhead.setVisibility(View.GONE);
 		lin_head.setVisibility(View.VISIBLE);
-		lin_foot.setVisibility(View.VISIBLE);
 		lin_second.setVisibility(View.GONE);
 		TalkListGP firstdate = alllist.remove(0);
 		interphonetype= firstdate.getTyPe();//对讲类型，个人跟群组
@@ -735,25 +707,24 @@ public class ChatFragment extends Fragment implements OnClickListener{
 				adapter.ChangeDate(alllist, alllist.get(alllist.size()-1).getId());
 			}
 		}
-		setlistener();
+		setListener();
 	}
 
-	public static void setdateperson() {
+	public static void setDatePerson() {
 		//设置个人为激活状态
 		iscalling=true;
-		TalkListGP firstdate = alllist.remove(0);
-		interphonetype= firstdate.getTyPe();//
-		interphoneid=firstdate.getId();//
+		TalkListGP firstDate = alllist.remove(0);
+		interphonetype= firstDate.getTyPe();//
+		interphoneid=firstDate.getId();//
 		lin_notalk.setVisibility(View.GONE);
 		lin_personhead.setVisibility(View.VISIBLE);
 		lin_head.setVisibility(View.GONE);
-		lin_foot.setVisibility(View.VISIBLE);
 		lin_second.setVisibility(View.GONE);
-		tv_personname.setText(firstdate.getName());
-		if(firstdate.getPortrait()==null||firstdate.getPortrait().equals("")||firstdate.getPortrait().trim().equals("")){
+		tv_personname.setText(firstDate.getName());
+		if(firstDate.getPortrait()==null||firstDate.getPortrait().equals("")||firstDate.getPortrait().trim().equals("")){
 			image_persontx.setImageResource(R.mipmap.wt_image_tx_qz);
 		}else{
-			String url = GlobalConfig.imageurl+firstdate.getPortrait();
+			String url = GlobalConfig.imageurl+firstDate.getPortrait();
 			imageLoader.DisplayImage(url.replace( "\\/", "/"), image_persontx, false, false,null, null);
 		}
 		if(alllist.size()==0){
@@ -771,10 +742,10 @@ public class ChatFragment extends Fragment implements OnClickListener{
 				adapter.ChangeDate(alllist, alllist.get(alllist.size()-1).getId());
 			}
 		}
-		setlistener();
+		setListener();
 	}
 
-	private static   void getlist() {
+	private static   void getList() {
 		alllist.clear();
 		try {
 			if(historydatabaselist!=null&&historydatabaselist.size()>0){
@@ -828,11 +799,11 @@ public class ChatFragment extends Fragment implements OnClickListener{
 				}
 			}
 		} catch (Exception e) {
-			Log.e("getlist异常", e.toString());
+			Log.e("getList异常", e.toString());
 		}
 	}
 
-	private static void getgridViewperson(String interphoneid) {
+	private static void getGridViewPerson(String interPhoneId) {
 		JSONObject jsonObject = new JSONObject();
 		try {
 			// 公共请求属性
@@ -846,7 +817,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
 			//模块属性
 			jsonObject.put("UserId",CommonUtils.getUserId(context));
-			jsonObject.put("GroupId", interphoneid);
+			jsonObject.put("GroupId", interPhoneId);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -880,11 +851,11 @@ public class ChatFragment extends Fragment implements OnClickListener{
 	}
 
 	private void Dialog() {
-		final View dialog1 = LayoutInflater.from(context).inflate(R.layout.dialog_talk_person_del, null);
-		TextView tv_cancle = (TextView) dialog1.findViewById(R.id.tv_cancle);
-		TextView tv_confirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
+		final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_talk_person_del, null);
+		TextView tv_cancle = (TextView) dialog.findViewById(R.id.tv_cancle);
+		TextView tv_confirm = (TextView) dialog.findViewById(R.id.tv_confirm);
 		confirmdialog = new Dialog(context, R.style.MyDialog);
-		confirmdialog.setContentView(dialog1);
+		confirmdialog.setContentView(dialog);
 		confirmdialog.setCanceledOnTouchOutside(true);
 		confirmdialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
 		tv_cancle.setOnClickListener(new OnClickListener() {
@@ -896,24 +867,22 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		tv_confirm.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
+				InterPhoneControlManager.PersonTalkHangUp(context, InterPhoneControlManager.bdcallid);
 				if(dialogtype==1){
-					InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
+					InterPhoneControlManager.PersonTalkHangUp(context, InterPhoneControlManager.bdcallid);
 					iscalling=false;
 					lin_notalk.setVisibility(View.VISIBLE);
 					lin_personhead.setVisibility(View.GONE);
 					lin_head.setVisibility(View.GONE);
-					lin_foot.setVisibility(View.GONE);
 					call(phoneid);
 					confirmdialog.dismiss();
 				}else{
-					InterPhoneControl.PersonTalkHangUp(context, InterPhoneControl.bdcallid);
+					InterPhoneControlManager.PersonTalkHangUp(context, InterPhoneControlManager.bdcallid);
 					iscalling=false;
 					lin_notalk.setVisibility(View.VISIBLE);
 					lin_personhead.setVisibility(View.GONE);
 					lin_head.setVisibility(View.GONE);
-					lin_foot.setVisibility(View.GONE);
-					zhidinggroupss(groupid);
+					zhiDingGroupss(groupid);
 					//对讲主页界面更新
 					DuiJiangActivity.update();
 					confirmdialog.dismiss();
@@ -927,7 +896,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action=intent.getAction();
-			if(action.equals("push")){
+			if(action.equals(BroadcastConstant.SOCKET_PUSH)){
 				//				MsgNormal message = (MsgNormal) intent.getSerializableExtra("outmessage");
 				byte[] bt = intent.getByteArrayExtra("outmessage");
 				//				Log.e("接收器中数据", Arrays.toString(bt)+"");
@@ -963,7 +932,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 											break;
 										case 0x01:
 											//用户可以通话了
-											istalking=true;
+											isTalking=true;
 											ToastUtils.show_short(context, "可以说话");
 											// image_button.setBackground(context.getResources().getDrawable(R.mipmap.wt_duijiang_button_pressed));
 											VoiceStreamRecordService.send();
@@ -1000,32 +969,32 @@ public class ChatFragment extends Fragment implements OnClickListener{
 									switch (returnType) {
 										case 0xff://TTT
 											//结束对讲出异常
-											istalking=false;
+											isTalking=false;
 											ToastUtils.show_short(context, "结束对讲—出异常");
 											break;
 										case 0x00:
 											//没有有效登录用户
-											istalking=false;
+											isTalking=false;
 											ToastUtils.show_allways(context, "数据出错，请注销后重新登录账户");
 											break;
 										case 0x02:
 											//无法获取用户组
-											istalking=false;
+											isTalking=false;
 											ToastUtils.show_allways(context, "无法获取用户组");
 											break;
 										case 0x01:
 											//成功结束对讲
-											istalking=false;
+											isTalking=false;
 											ToastUtils.show_short(context, "结束对讲—成功");
 											break;
 										case 0x04:
 											//	用户不在组
-											istalking=false;
+											isTalking=false;
 											ToastUtils.show_short(context, "结束对讲");
 											break;
 										case 0x05:
 											//	对讲人不是你，无需退出
-											istalking=false;
+											isTalking=false;
 											ToastUtils.show_short(context, "对讲人不是你，无需退出");
 											break;
 
@@ -1041,13 +1010,13 @@ public class ChatFragment extends Fragment implements OnClickListener{
 									if(grouppersonlist!=null&&grouppersonlist.size()!=0){
 										for(int i=0;i<grouppersonlist.size();i++){
 											if(grouppersonlist.get(i).getUserId().equals(talkUserId)){
-												setimageview(1,grouppersonlist.get(i).getUserName(),grouppersonlist.get(i).getPortraitMini());
+												setImageView(1,grouppersonlist.get(i).getUserName(),grouppersonlist.get(i).getPortraitMini());
 											}
 										}
 									}
 								}else if(command==0x20){
 									//组内人说话完毕，有人松手
-									setimageview(2,"","");
+									setImageView(2,"","");
 									ToastUtils.show_short(context, "组内人说话完毕，有人松手");
 								}
 							}else if(cmdType==1){
@@ -1070,16 +1039,16 @@ public class ChatFragment extends Fragment implements OnClickListener{
 											iscalling=true;
 											ToastUtils.show_short(context, "进入组—成功");
 											if(entergrouptype==2){
-												InterPhoneControl.Quit(context, interphoneid);//退出小组
+												InterPhoneControlManager.Quit(context, interphoneid);//退出小组
 												String id = groupid;//对讲组：groupid
 												dbdao.deleteHistory(id);
-												addgroup(id);//加入到数据库
-												setdategroup();
+												addGroup(id);//加入到数据库
+												setDateGroup();
 											}else{
 												String id = groupid;//对讲组：groupid
 												dbdao.deleteHistory(id);
-												addgroup(id);//加入到数据库
-												setdategroup();
+												addGroup(id);//加入到数据库
+												setDateGroup();
 											}
 											break;
 										case 0x02:
@@ -1096,16 +1065,16 @@ public class ChatFragment extends Fragment implements OnClickListener{
 											//用户已在组
 											iscalling=true;
 											if(entergrouptype==2){
-												InterPhoneControl.Quit(context, interphoneid);//退出小组
+												InterPhoneControlManager.Quit(context, interphoneid);//退出小组
 												String id = groupid;//对讲组：groupid
 												dbdao.deleteHistory(id);
-												addgroup(id);//加入到数据库
-												setdategroup();
+												addGroup(id);//加入到数据库
+												setDateGroup();
 											}else{
 												String id = groupid;//对讲组：groupid
 												dbdao.deleteHistory(id);
-												addgroup(id);//加入到数据库
-												setdategroup();
+												addGroup(id);//加入到数据库
+												setDateGroup();
 											}
 											ToastUtils.show_short(context, "进入组—用户已在组");
 											break;
@@ -1159,9 +1128,9 @@ public class ChatFragment extends Fragment implements OnClickListener{
 
 										JSONTokener jsonParser = new JSONTokener(news);
 										JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-										String ingroupusers = arg1.getString("InGroupUsers");
+										String inGroupUsers = arg1.getString("InGroupUsers");
 
-										listinfo = new Gson().fromJson(ingroupusers, new TypeToken<List<ListInfo>>() {}.getType());
+										listinfo = new Gson().fromJson(inGroupUsers, new TypeToken<List<ListInfo>>() {}.getType());
 										//组内所有在线成员
 										//组内有人说话时，根据这个list数据，得到该成员信息啊：头像，昵称等
 										Log.i("组内成员人数", listinfo.size()+"");
@@ -1184,7 +1153,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 										listinfo.add(userinfo);
 										Log.i("组内成员人数", listinfo.size()+"");
 										tv_num.setText(listinfo.size()+"");
-										getgridViewperson(groupids);
+										getGridViewPerson(groupids);
 										//有人加入组
 										ToastUtils.show_short(context, "有人加入组");
 									} catch (Exception e) {
@@ -1212,7 +1181,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 										}
 										Log.i("组内成员人数", listinfo.size()+"");
 										tv_num.setText(listinfo.size()+"");
-										getgridViewperson(groupids);
+										getGridViewPerson(groupids);
 										ToastUtils.show_short(context, "有人退出组");
 									} catch (Exception e) {
 										e.printStackTrace();
@@ -1241,7 +1210,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 											break;
 										case 0x01:
 											//用户可以通话了
-											istalking=true;
+											isTalking=true;
 											ToastUtils.show_short(context, "可以说话");
 											image_personvoice.setVisibility(View.VISIBLE);
 											if (draw.isRunning()) {
@@ -1271,7 +1240,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 									switch (returnType) {
 										case 0xff://TT
 											//结束对讲出异常
-											istalking=false;
+											isTalking=false;
 											if (draw.isRunning()) {
 												draw.stop();
 											}
@@ -1280,7 +1249,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 											break;
 										case 0x02:
 											//	无法获取用户
-											istalking=false;
+											isTalking=false;
 											if (draw.isRunning()) {
 												draw.stop();
 											}
@@ -1289,7 +1258,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 											break;
 										case 0x01:
 											//成功结束对讲
-											istalking=false;
+											isTalking=false;
 											if (draw.isRunning()) {
 												draw.stop();
 											}
@@ -1298,7 +1267,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 											break;
 										case 0x04:
 											//	清除者和当前通话者不同，无法处理
-											istalking=false;
+											isTalking=false;
 											if (draw.isRunning()) {
 												draw.stop();
 											}
@@ -1307,7 +1276,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 											break;
 										case 0x05:
 											//	状态错误
-											istalking=false;
+											isTalking=false;
 											if (draw.isRunning()) {
 												draw.stop();
 											}
@@ -1324,13 +1293,13 @@ public class ChatFragment extends Fragment implements OnClickListener{
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
-			}else if(action.equals(DuiJiangActivity.UPDATA_GROUP)){
+			}else if(action.equals(BroadcastConstant.UP_DATA_GROUP)){
 				if(gridView_person != null){
 					gridView_person.setVisibility(View.GONE);
 				}
-			}else if(action.equals("push_back")){
-				//				MsgNormal message = (MsgNormal) intent.getSerializableExtra("outmessage");
-				//				Log.i("talkoldlistfragment弹出框服务push_back", "接收到的socket服务的信息"+message+"");
+			}else if(action.equals(BroadcastConstant.PUSH_BACK)){
+				//MsgNormal message = (MsgNormal) intent.getSerializableExtra("outmessage");
+				//Log.i("talkOldListFragment弹出框服务push_back", "接收到的socket服务的信息"+message+"");
 				byte[] bt = intent.getByteArrayExtra("outmessage");
 				try {
 					MsgNormal message = (MsgNormal) MessageUtils.buildMsgByBytes(bt);
@@ -1343,7 +1312,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 								//挂断电话的数据处理
 								iscalling = false;
 								historydatabaselist = dbdao.queryHistory();//得到数据库里边数据
-								getlist();
+								getList();
 								if(alllist.size() == 0){
 									if(adapter == null){
 										adapter=new ChatListAdapter(context, alllist,"0");
@@ -1359,21 +1328,19 @@ public class ChatFragment extends Fragment implements OnClickListener{
 										adapter.ChangeDate(alllist, alllist.get(alllist.size()-1).getId());
 									}
 								}
-								setlistener();
+								setListener();
 								lin_notalk.setVisibility(View.VISIBLE);
 								lin_personhead.setVisibility(View.GONE);
 								lin_head.setVisibility(View.GONE);
-								lin_foot.setVisibility(View.GONE);
 							}
 						}
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-			}else 	if(action.equals("push_voiceimagerefresh")){
+			}else if(action.equals(BroadcastConstant.PUSH_VOICE_IMAGE_REFRESH)){
 				int seqNum = intent.getIntExtra("seqNum", -1);
 				if(interphonetype.equals("group")){
-					//			image_voice.setVisibility(View.VISIBLE);
 				}else{
 					//此处处理个人对讲的逻辑
 					if(seqNum<0){
@@ -1397,16 +1364,16 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		}
 	}
 
-	protected void jack() {
-		//抬手后的操作
-		if(istalking){
+	//抬手后的操作
+	public static void jack() {
+		//此处处理群组对讲的逻辑
+		if(isTalking){
 			if(interphonetype.equals("group")){
 				new Handler().postDelayed(new Runnable() {
 					@Override
 					public void run() {
 						VoiceStreamRecordService.stop();
-					// 	image_button.setBackground(context.getResources().getDrawable(R.drawable.talknormal));
-						InterPhoneControl.Loosen(context, interphoneid);//发送取消说话控制
+						InterPhoneControlManager.Loosen(context, interphoneid);//发送取消说话控制
 						if (draw.isRunning()) {
 							draw.stop();
 						}
@@ -1415,8 +1382,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 				}, 300);
 			}else{//此处处理个人对讲的逻辑
 				VoiceStreamRecordService.stop();
-				InterPhoneControl.PersonTalkPressStop(context, interphoneid);//发送取消说话控制
-				//image_button.setBackground(context.getResources().getDrawable(R.drawable.talknormal));
+				InterPhoneControlManager.PersonTalkPressStop(context, interphoneid);//发送取消说话控制
 				if (draw.isRunning()) {
 					draw.stop();
 				}
@@ -1426,15 +1392,16 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		}
 	}
 
-	protected void press() {
-		// 按下的动作
+	// 按下的动作
+	public static void press() {
+		// 此处处理群组对讲的逻辑
 		if(interphonetype.equals("group")){
-			InterPhoneControl.Press(context, interphoneid);
+			InterPhoneControlManager.Press(context, interphoneid);
 			VoiceStreamRecordService.stop();
 			VoiceStreamRecordService.start(context, interphoneid,"group");
 		}else{
 			//此处处理个人对讲的逻辑
-			InterPhoneControl.PersonTalkPressStart(context, interphoneid);
+			InterPhoneControlManager.PersonTalkPressStart(context, interphoneid);
 			VoiceStreamRecordService.stop();
 			VoiceStreamRecordService.start(context, interphoneid,"person");
 		}
