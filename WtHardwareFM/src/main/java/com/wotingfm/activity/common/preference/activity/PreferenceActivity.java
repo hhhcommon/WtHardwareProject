@@ -23,7 +23,7 @@ public class PreferenceActivity extends Activity implements View.OnClickListener
 	private TextView tv_tiaoguo;
 	private LinearLayout head_left_btn;
 	private GridView gv_pianhao;
-	private  int type=1;
+	private int type = 1;
 	private ArrayList<pianhao> list;
 	private PianHaoAdapter adapter;
 
@@ -40,20 +40,19 @@ public class PreferenceActivity extends Activity implements View.OnClickListener
 
 	private void receivedata() {
 		//1：第一次进入  其它：其它界面进入
-		type=this.getIntent().getIntExtra("type",1);
+		type = this.getIntent().getIntExtra("type", 1);
 	}
 
 	private void initview() {
 		head_left_btn = (LinearLayout) findViewById(R.id.head_left_btn);
-		tv_tiaoguo= (TextView) findViewById(R.id.tv_tiaoguo);
-		gv_pianhao= (GridView) findViewById(R.id.gv_pianhao);
-		tv_over= (TextView) findViewById(R.id.tv_over);
-		if(type==1){
+		tv_tiaoguo = (TextView) findViewById(R.id.tv_tiaoguo);
+		gv_pianhao = (GridView) findViewById(R.id.gv_pianhao);
+		tv_over = (TextView) findViewById(R.id.tv_over);
+		if(type == 1){
 			head_left_btn.setVisibility(View.INVISIBLE);
 		}else{
 			tv_tiaoguo.setVisibility(View.INVISIBLE);
 		}
-
 	}
 
 	private void setlistener() {
@@ -77,7 +76,7 @@ public class PreferenceActivity extends Activity implements View.OnClickListener
 	}
 
 	private void setdata() {
-		list = new ArrayList<pianhao>();
+		list = new ArrayList<>();
 		for(int i=0;i<20;i++){
 			pianhao lista=new pianhao();
 			lista.setId("wt"+1);

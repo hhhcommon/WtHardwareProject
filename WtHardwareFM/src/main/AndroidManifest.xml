@@ -233,13 +233,6 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
-        <!-- 设置界面 -->
-        <activity
-            android:name=".activity.mine.set.SetActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
-
         <!-- 修改个人资料 -->
         <activity
             android:name=".activity.mine.update.activity.UpdatePersonActivity"
@@ -399,6 +392,11 @@
                   android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name="com.wotingfm.activity.music.program.fmlist.activity.FMListActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name="com.wotingfm.activity.music.program.album.activity.AlbumActivity"
                   android:screenOrientation="portrait"
                   android:theme="@android:style/Theme.Light.NoTitleBar"
                   android:windowSoftInputMode="adjustPan"/>

@@ -24,7 +24,7 @@ import java.util.List;
 /**
  * 通知消息
  */
-public class NotifyNewActivityApp extends AppBaseActivity {
+public class NotifyNewActivity extends AppBaseActivity {
     private ListView notifyListView;
     private NotifyListAdapter adapter;
     private List<DBNotifyHistorary> list;
