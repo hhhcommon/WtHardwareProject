@@ -1,17 +1,5 @@
 package com.wotingfm.helper;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.util.Collections;
-import java.util.Map;
-import java.util.WeakHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -25,9 +13,20 @@ import com.shenstec.utils.file.FileCache;
 import com.shenstec.utils.image.ImageUtils;
 import com.shenstec.utils.image.MemoryCache;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.Collections;
+import java.util.Map;
+import java.util.WeakHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * 图片异步加载处理
- * @author 辛龙
  *2016年8月5日
  */
 public class ImageLoader {

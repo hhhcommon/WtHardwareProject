@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.wotingfm">
+
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <!-- 蓝牙管理 -->
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
@@ -117,21 +118,21 @@
 
         <!-- 创建群组主界面 -->
         <activity
-            android:name=".activity.im.interphone.creategroup.main.CreateGroupMainActivityApp"
+            android:name=".activity.im.interphone.creategroup.main.CreateGroupMainActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 创建群组子界面  即有创建公开群、密码群、验证群 -->
         <activity
-            android:name=".activity.im.interphone.creategroup.create.CreateGroupItemActivityApp"
+            android:name=".activity.im.interphone.creategroup.create.CreateGroupItemActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-
+00
         <!-- 消息中心 -->
         <activity
-            android:name=".activity.im.interphone.notify.activity.NotifyNewActivity"
+            android:name=".activity.im.interphone.notify.activity.NotifyNewActivityApp"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -152,7 +153,7 @@
 
         <!-- 查找好友、群组显示结果界面 -->
         <activity
-            android:name=".activity.im.interphone.find.result.FindNewsResultActivityApp"
+            android:name=".activity.im.interphone.find.result.FindNewsResultActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -166,21 +167,21 @@
 
         <!-- 扫描二维码显示结果界面 -->
         <activity
-            android:name=".activity.im.interphone.scanning.activity.ResultActivityApp"
+            android:name=".activity.im.interphone.scanning.activity.ResultActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
         <!-- 添加好友界面 -->
         <activity
-            android:name=".activity.im.interphone.find.add.FriendAddActivityApp"
+            android:name=".activity.im.interphone.find.add.FriendAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
         <!-- 添加好友界面 -->
         <activity
-            android:name=".activity.im.interphone.find.add.GroupAddActivityApp"
+            android:name=".activity.im.interphone.find.add.GroupAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -228,13 +229,6 @@
         <!-- 帮助 -->
         <activity
             android:name=".activity.mine.help.HelpActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
-
-        <!-- 设置界面 -->
-        <activity
-            android:name=".activity.mine.set.SetActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -307,7 +301,7 @@
 
         <!-- 定时关闭界面 -->
         <activity
-            android:name=".activity.music.timeset.activity.TimerPowerOffActivityApp"
+            android:name=".activity.music.timeset.activity.TimerPowerOffActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -402,10 +396,20 @@
                   android:theme="@android:style/Theme.Light.NoTitleBar"
                   android:windowSoftInputMode="adjustPan"/>
 
+        <activity android:name="com.wotingfm.activity.music.program.album.activity.AlbumActivity"
+                  android:screenOrientation="portrait"
+                  android:theme="@android:style/Theme.Light.NoTitleBar"
+                  android:windowSoftInputMode="adjustPan"/>
+
         <activity android:name="com.wotingfm.activity.music.program.radiolist.activity.RadioListActivity"
                   android:screenOrientation="portrait"
                   android:theme="@android:style/Theme.Light.NoTitleBar"
                   android:windowSoftInputMode="adjustPan"/>
+        <activity android:name=".activity.music.program.album.activity.AlbumActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
         <activity android:name="com.wotingfm.activity.im.interphone.message.activity.NewsActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"

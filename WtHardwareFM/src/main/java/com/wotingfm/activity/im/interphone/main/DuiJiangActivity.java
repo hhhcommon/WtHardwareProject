@@ -21,7 +21,7 @@ import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
-import com.wotingfm.activity.im.interphone.creategroup.main.CreateGroupMainActivityApp;
+import com.wotingfm.activity.im.interphone.creategroup.main.CreateGroupMainActivity;
 import com.wotingfm.activity.im.interphone.find.FindActivity;
 import com.wotingfm.activity.im.interphone.linkman.fragment.LinkManFragment;
 import com.wotingfm.activity.im.interphone.notify.activity.NotifyNewActivity;
@@ -148,7 +148,7 @@ public class DuiJiangActivity extends FragmentActivity {
 			public void onClick(View v) {
 				String login = sharedPreferences.getString(StringConstant.ISLOGIN, "false");// 是否登录
 				if (login != null && !login.trim().equals("") && login.equals("true")) {
-					Intent intent = new Intent(context, CreateGroupMainActivityApp.class);
+					Intent intent = new Intent(context, CreateGroupMainActivity.class);
 					startActivity(intent);
 				} else {
 					startActivity(new Intent(context, LoginActivity.class));

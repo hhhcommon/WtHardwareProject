@@ -26,7 +26,7 @@ public class PhoneMessage {
 	public static String appVersonName = "";//本机的版本号
 	public static String productor = "";//手机厂商
 	public static String model = "";//手机型号
-	public static String imei = "527D7D9100B76B4E908DA3C6953D3A17";//手机IMEI
+	public static String imei = "";//手机IMEI527D7D9100B76B4E908DA3C6953D3A17
 	public static String modelId = "";//服务返回的机型id
 	public static String channelId = "";// 渠道号
 	public static int versionCode;

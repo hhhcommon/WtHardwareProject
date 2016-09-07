@@ -70,4 +70,6 @@ public class StringConstant {
     public static final String FIND_TYPE_PERSON = "FIND_TYPE_PERSON";
 
     public static final String FIND_CONTENT_TO_RESULT = "searchstr";
+
+    public static final String AUX_SET = "AUX_SET";
 }
