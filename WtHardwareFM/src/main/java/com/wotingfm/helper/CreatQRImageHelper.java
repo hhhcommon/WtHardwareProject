@@ -1,4 +1,5 @@
 package com.wotingfm.helper;
+
 import android.graphics.Bitmap;
 import android.util.Log;
 
@@ -67,7 +68,7 @@ public class CreatQRImageHelper {
 			DataMap.put("UserName",news.getUserName());
 			DataMap.put("PortraitMini",news.getPortraitMini());
 			map.put("UserInviteMeInside", DataMap);
-			 url = jsonEnclose(map).toString();
+            url = jsonEnclose(map).toString();
 		}else{
 			map.put("Type", type);
 			Map<String, Object> DataMap = new HashMap<>();
@@ -78,7 +79,7 @@ public class CreatQRImageHelper {
 			DataMap.put("GroupId", news.getGroupId());
 			DataMap.put("GroupNum", news.getGroupNum());
 			map.put("FindGroupNews", DataMap);
-			 url = jsonEnclose(map).toString();
+            url = jsonEnclose(map).toString();
 		}
 		try	{
 			//判断URL合法性
@@ -86,7 +87,7 @@ public class CreatQRImageHelper {
 				map=null;
 				return null;
 			}else{
-				Hashtable<EncodeHintType, String> hints = new Hashtable<EncodeHintType, String>();
+				Hashtable<EncodeHintType, String> hints = new Hashtable<>();
 				hints.put(EncodeHintType.CHARACTER_SET, "utf-8");
 				//图像数据转换，使用了矩阵转换
 				 bitMatrix = qrcwr.encode(url, BarcodeFormat.QR_CODE, QR_WIDTH, QR_HEIGHT, hints);
