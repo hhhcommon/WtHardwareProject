@@ -42,7 +42,7 @@ import com.wotingfm.activity.im.interphone.groupmanage.transferauthority.Transfe
 import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
 import com.wotingfm.activity.im.interphone.message.model.GroupInfo;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -123,7 +123,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
         if(Receiver==null) {
             Receiver=new MessageReceivers();
             IntentFilter filters=new IntentFilter();
-            filters.addAction(BroadcastConstants.REFRESH_GROUP);
+            filters.addAction(BroadcastConstant.REFRESH_GROUP);
             context.registerReceiver(Receiver, filters);
         }
 
@@ -741,7 +741,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
         @Override
         public void onReceive(Context context, Intent intent) {
             String action=intent.getAction();
-            if(action.equals(BroadcastConstants.REFRESH_GROUP)){
+            if(action.equals(BroadcastConstant.REFRESH_GROUP)){
                 send();
             /*    ToastUtils.show_allways(context,"收到了群员信息变化的广播");*/
             }

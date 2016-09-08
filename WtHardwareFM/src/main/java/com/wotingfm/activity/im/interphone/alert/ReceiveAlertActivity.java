@@ -1,30 +1,28 @@
 package com.wotingfm.activity.im.interphone.alert;
 
-import android.app.Activity;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.shenstec.utils.image.ImageLoader;
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.BaseActivity;
 import com.wotingfm.activity.common.main.MainActivity;
 import com.wotingfm.activity.im.interphone.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.activity.im.interphone.chat.model.DBTalkHistorary;
-import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.service.SubclassService;
 import com.wotingfm.util.CommonUtils;
 
 
-public class ReceiveAlertActivity extends Activity implements OnClickListener {
+public class ReceiveAlertActivity extends BaseActivity implements OnClickListener {
 	public static ReceiveAlertActivity instance;
 	private ImageView imageview;
 	private TextView tv_name;
@@ -42,8 +40,6 @@ public class ReceiveAlertActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dialog_receivecall);
 		instance = this;
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		//透明状态栏
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	//透明导航栏
 		imageLoader = new ImageLoader(instance);
 		//设置界面
 //		tv_news = (TextView) findViewById(R.id.tv_news);	
@@ -97,7 +93,7 @@ public class ReceiveAlertActivity extends Activity implements OnClickListener {
 				SubclassService.musicPlayer.stop();
 				SubclassService.musicPlayer = null;
 			}
-			/*ChatFragment.iscalling=true;*/
+			ChatFragment.iscalling=true;
 //			Intent intent = new Intent(getApplicationContext(),MainActivity.class);
 //			//intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_SINGLE_TOP);
 //			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
@@ -125,7 +121,7 @@ public class ReceiveAlertActivity extends Activity implements OnClickListener {
 		DBTalkHistorary history = new DBTalkHistorary( bjuserid,  "user",  id, addtime);
 		dbdao.addTalkHistory(history);
 		DBTalkHistorary talkdb = dbdao.queryHistory().get(0);//得到数据库里边数据
-/*		ChatFragment.zhidingperson(talkdb);*/
+		ChatFragment.zhiDingPerson(talkdb);
 		MyActivityManager mam = MyActivityManager.getInstance();
 		mam.finishAllActivity();
 		//对讲主页界面更新

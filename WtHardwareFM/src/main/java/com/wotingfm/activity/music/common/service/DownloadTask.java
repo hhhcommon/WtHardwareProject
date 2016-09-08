@@ -8,7 +8,7 @@ import com.wotingfm.activity.music.download.dao.FileInfoDao;
 import com.wotingfm.activity.music.download.dao.ThreadDao;
 import com.wotingfm.activity.music.download.model.FileInfo;
 import com.wotingfm.activity.music.download.model.ThreadInfo;
-import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.BroadcastConstant;
 
 import org.apache.http.HttpStatus;
 
@@ -87,7 +87,7 @@ public class DownloadTask{
 				raf = new RandomAccessFile(file, "rwd");
 				raf.seek(start);
 				Intent intent = new Intent();
-				intent.setAction(BroadcastConstants.ACTION_UPDATE);
+				intent.setAction(BroadcastConstant.ACTION_UPDATE);
 				mFinised += mThreadInfo.getFinished();
 				// 开始下载
 				if (connection.getResponseCode() == HttpStatus.SC_PARTIAL_CONTENT){
@@ -131,7 +131,7 @@ public class DownloadTask{
 					Log.i("DownloadTask", "下载完毕");
 	                //向fragment发送完成消息
 					intent.putExtra("fileInfo",mFileInfo);
-					intent.setAction(BroadcastConstants.ACTION_FINISHED);
+					intent.setAction(BroadcastConstant.ACTION_FINISHED);
 					mContext.sendBroadcast(intent);
 					}
 			}catch (Exception e){

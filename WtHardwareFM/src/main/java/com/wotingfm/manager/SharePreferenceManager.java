@@ -132,7 +132,7 @@ public class SharePreferenceManager{
 	 * 保存数据
 	 * @param up 需要保存的数据
 	 */
-	public static void setupdate(String up){
+	public static void setaUpDate(String up){
 		SimpleDateFormat    formatter    =   new    SimpleDateFormat    ("yyyy-MM-dd-HH:mm:ss-SSS ");     
 		Date    curDate    =   new    Date(System.currentTimeMillis());//获取当前时间     
 		String    addtime    =    formatter.format(curDate);

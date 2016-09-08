@@ -6,13 +6,16 @@ import android.media.AudioFormat;
 import android.media.AudioManager;
 import android.media.AudioTrack;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.IBinder;
 import android.util.Log;
-
 import com.rectsoft.ppsip.G729ACodec;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.helper.BytesTransHelper;
-
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
@@ -34,13 +37,13 @@ public  class VoiceStreamPlayerService   extends  Service{
 	private static VoiceStreamPlayerService context;
 	private static Intent push;
 	private static ArrayBlockingQueue<byte[]>  MsgQueue = new ArrayBlockingQueue<byte[]>(1024); //已经发送的消息队列
-
+	private static ArrayBlockingQueue<String>  voiceQueue = new ArrayBlockingQueue<String>(1024); //已经发送的消息队列
 
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		context=this;
-		push=new Intent("push_voiceimagerefresh");
+		push=new Intent(BroadcastConstant.PUSH_VOICE_IMAGE_REFRESH);
 		creatPlayer();//创建播放器
 		//压缩方法
 		try {
@@ -50,12 +53,14 @@ public  class VoiceStreamPlayerService   extends  Service{
 			e.printStackTrace();
 			Log.i("编码器初始化异常", e.toString());
 		}
+		Receive re=new Receive();
+		re.start();
 		stPlay st=new stPlay();
 		st.start();
 	}
 
 	private class stPlay extends Thread {
-		public void run() { 
+		public void run() {
 			try {
 				while (true) {
 					byte[] vedioData = MsgQueue.take();
@@ -79,7 +84,7 @@ public  class VoiceStreamPlayerService   extends  Service{
 
 	//	/**
 	//	 * 接收数据
-	//	 */  
+	//	 */
 	public static void dealVedioPack(byte[]  mResults ,int seqNum, String talkId) {
 		Bundle bundle=new Bundle();
 		bundle.putInt("seqNum", seqNum);
@@ -87,78 +92,10 @@ public  class VoiceStreamPlayerService   extends  Service{
 		context.sendOrderedBroadcast(push, null);
 		byte[] vedioData=unCompress(mResults); //在这里解码，**重要
 		MsgQueue.add(vedioData);
+		voiceQueue.add(talkId+"::::::"+String.valueOf(seqNum)+"");
 		Log.i("接收到的所有seqNum", seqNum+"");
 
 	}
-
-	/**
-	 * 接收数据
-	 */  
-	//		public static void dealVedioPack(String mResults ,int seqNum, String talkId) {
-	//					if(seqNum<0){
-	//					maxNum=Math.abs(seqNum);
-	//					Log.e("最大值", maxNum+"");
-	//				}
-	//			byte[] vedioData=unCompress(Base64.decode(mResults)); //在这里解码，**重要
-	//			//		byte[] vedioData=Base64.decode(mResults); //在这里解码，**重要
-	//			Log.e("接收到的所有seqNum", seqNum+"");
-	//			audioStreamOld.put(seqNum, vedioData);
-	//			
-	//			//		if(audioStream.size()>30){
-	//			//			if(!isplaying){
-	//			//				isplaying=true;
-	//			//				audioTrack.play();
-	//			//				Log.e("开始播放", "开始播放");	
-	//			//				Player Player = new Player();
-	//			//				Player.start();
-	//			//			}
-	//			//		}
-	//			if(seqNum<0){
-	//				for(int i=0;i<audioStreamOld.size();i++){
-	//					byte[] _da = audioStreamOld.get(i);
-	//					if(_da==null||_da.length==0){
-	//						Log.e("缺少的seq号码", i+"");
-	//					}else{
-	//						audioStream.add(_da);
-	//					}
-	//				}
-	//				
-	//				//		maxNum=Math.abs(seqNum);
-	//				maxNum=audioStream.size();
-	//				Log.e("最大值", maxNum+"");
-	//				isplaying=true;
-	//				audioTrack.play();
-	//				Log.e("开始播放", "开始播放");	
-	//				Player Player = new Player();
-	//				Player.start();
-	//			}
-	//		}
-
-	//		private static class Player extends Thread {
-	//			public void run() { 
-	//				try {
-	//					int num=0;
-	//					while(isplaying){
-	//						if(audioStream.size()>0){
-	//							byte[] decoded = audioStream.get(num);
-	//							audioTrack.write(decoded, 0, decoded.length);
-	//							
-	//							Log.e("解码后长度", decoded.length+"");
-	//							Log.e("播放的数量", num+"");
-	//							num++;
-	//							if(maxNum>0&&num>=maxNum){
-	//								isplaying=false;
-	//								audioStreamOld.clear();
-	//								audioStream.clear();
-	//								audioTrack.stop();
-	//							}
-	//						}
-	//					}
-	//				} catch(Exception e) {
-	//					e.printStackTrace();
-	//				}
-	//			}
-	//		}
 
 	/*
 	 * 解压缩过程
@@ -188,6 +125,41 @@ public  class VoiceStreamPlayerService   extends  Service{
 		return BytesTransHelper.getInstance().Shorts2Bytes(_un);
 	}
 
+	//写播放的音频数据包
+	private class Receive extends Thread {
+		public void run() {
+			while (true) {
+				try {
+					String msg = voiceQueue.take();
+					if(msg!=null){
+						String filePath= Environment.getExternalStorageDirectory() + "/woting/playvoicelog/";
+						File dir=new File(filePath);
+						if (!dir.isDirectory()) dir.mkdirs();
+						filePath+="voicelog";
+						File f=new File(filePath);
+						if (!f.exists()) f.createNewFile();
+						String _sn=msg.toString();
+						FileWriter fw = null;
+						try {
+							fw = new FileWriter(f, true);
+							fw.write(_sn+"\n");
+							fw.flush();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}finally{
+							try {
+								fw.close();
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				} catch(Exception e) {
+				}
+			}
+		}
+	}
+
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;
@@ -202,7 +174,7 @@ public  class VoiceStreamPlayerService   extends  Service{
 		audioTrack=null;
 		MsgQueue.clear();
 		MsgQueue=null;
-		
+
 	}
 
 }

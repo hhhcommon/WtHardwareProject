@@ -24,7 +24,7 @@ import com.wotingfm.activity.im.interphone.groupmanage.memberadd.adapter.CreateG
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.im.interphone.linkman.view.SideBar;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.manager.MyActivityManager;
@@ -402,7 +402,7 @@ public class MemberDelActivity extends Activity implements View.OnClickListener{
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     ToastUtils.show_allways(context, "群成员已经成功删除");
-                    sendBroadcast(new Intent(BroadcastConstants.REFRESH_GROUP));
+                    sendBroadcast(new Intent(BroadcastConstant.REFRESH_GROUP));
                     finish();
                 }else if (ReturnType != null && ReturnType.equals("1002")) {
                     ToastUtils.show_allways(context, "无法获取用户Id");

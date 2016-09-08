@@ -400,10 +400,17 @@
                   android:screenOrientation="portrait"
                   android:theme="@android:style/Theme.Light.NoTitleBar"
                   android:windowSoftInputMode="adjustPan"/>
-        <activity android:name=".activity.music.program.album.activity.AlbumActivity"
+
+        <activity android:name="com.wotingfm.activity.im.interphone.message.activity.NewsActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
+
+        <activity android:name="com.wotingfm.activity.common.welcome.activity.WelcomeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
 
         <!-- 友盟activity -->
         <activity

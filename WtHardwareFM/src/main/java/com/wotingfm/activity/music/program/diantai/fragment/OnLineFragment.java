@@ -40,7 +40,7 @@ import com.wotingfm.activity.music.program.diantai.model.RadioPlay;
 import com.wotingfm.activity.music.program.fmlist.activity.FMListActivity;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -118,7 +118,7 @@ public class OnLineFragment extends Fragment {
             if (Receiver == null) {
                 Receiver = new MessageReceiver();
                 IntentFilter filter = new IntentFilter();
-                filter.addAction(BroadcastConstants.CITY_CHANGE);
+                filter.addAction(BroadcastConstant.CITY_CHANGE);
                 context.registerReceiver(Receiver, filter);
             }
         }
@@ -130,7 +130,7 @@ public class OnLineFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastConstants.CITY_CHANGE)) {
+            if (action.equals(BroadcastConstant.CITY_CHANGE)) {
                 if (GlobalConfig.CityName != null) {
                     cityname = GlobalConfig.CityName;
                 }

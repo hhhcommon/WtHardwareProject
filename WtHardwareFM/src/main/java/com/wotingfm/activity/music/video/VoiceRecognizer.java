@@ -4,49 +4,40 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-
 import com.iflytek.cloud.RecognizerListener;
 import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
-import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.helper.JsonParser;
-
 import org.json.JSONException;
 import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-
 public class VoiceRecognizer {
 
 	private static VoiceRecognizer mVoiceRecognizer;
 	private static SpeechRecognizer mIat;
-	// 用HashMap存储听写结果
-	private static HashMap<String, String> mIatResults; 
-	private static Context contexts;
-	private static String fromwhere;
+	private static HashMap<String, String> mIatResults; // 用HashMap存储听写结果
+	private final Context contexts;
 	private String str;
 
-	
-	private VoiceRecognizer(){
+	/**
+	 * 初始化讯飞语音搜索
+     */
+	public VoiceRecognizer(Context context){
+		contexts=context;
+		if(mIat==null){
+			mIat= SpeechRecognizer.createRecognizer(contexts, null);
+		}
 		setParam();
 	}
-	public static VoiceRecognizer getInstance(Context context,String from){		
-		if(mIat==null){
-		mIat= SpeechRecognizer.createRecognizer(context, null);	
-		}
-		if(mVoiceRecognizer==null){
-			mVoiceRecognizer=new VoiceRecognizer();
-		}
-		contexts=context;
-		if(from!=null&&from!=""){
-		fromwhere=from;
-		}
-		return mVoiceRecognizer;
-	}
-	
+
+	/**
+	 * 讯飞---开始录音
+	 */
 	public void startListen(){
 		if(mIatResults==null){
 			mIatResults = new LinkedHashMap<String, String>();	
@@ -54,15 +45,34 @@ public class VoiceRecognizer {
 		mIatResults.clear();
 		mIat.startListening(mRecoListener);
 	}
-	
+
+	/**
+	 * 讯飞---结束录音
+	 */
 	public void stopListen(){
 		mIat.stopListening();
 	}
-	
-	public String getVoiceStr(){
-		return str;
+
+	/**
+	 * 讯飞---销毁
+	 */
+	public void onDestroy(){
+		if(mIat!=null){
+			mIat=null;
+		}
+		if(mRecoListener!=null){
+			mRecoListener=null;
+		}
+		if(mVoiceRecognizer!=null){
+			mVoiceRecognizer=null;
+		}
+		if(mIatResults!=null){
+			mIatResults=null;
+
+		}
 	}
 
+    //设置讯飞参数
 	private void setParam() {
 		// 清空参数
 		mIat.setParameter(SpeechConstant.PARAMS, null);
@@ -82,7 +92,6 @@ public class VoiceRecognizer {
 		mIat.setParameter(SpeechConstant.VAD_BOS, "10000");
 		// 设置语音后端点:后端点静音检测时间，即用户停止说话多长时间内即认为不再输入， 自动停止录音
 		mIat.setParameter(SpeechConstant.VAD_EOS, "5000");
-
 	}
 
 	private void printResult(RecognizerResult results) {
@@ -104,22 +113,22 @@ public class VoiceRecognizer {
 		str = resultBuffer.toString();
 		if (str != null && !str.equals("")) {
 			str = str.replaceAll("[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……& amp;*（）——+|{}【】‘；：”“’。，、？|-]", "");
-            //根据发起来源决定调用   
-			if(fromwhere.equals(BroadcastConstants.SEARCHVOICE)){
+            //根据发起来源决定调用
+			if(GlobalConfig.voicerecognizer.equals(BroadcastConstant.SEARCHVOICE)){
             	   Intent intent =new Intent();
             	   intent.putExtra("VoiceContent",str);
-            	   intent.setAction(BroadcastConstants.SEARCHVOICE);
-            	   contexts.sendBroadcast(intent); 
-               }else if(fromwhere.equals(BroadcastConstants.PLAYERVOICE)){
+            	   intent.setAction(BroadcastConstant.SEARCHVOICE);
+            	   contexts.sendBroadcast(intent);
+               }else if(GlobalConfig.voicerecognizer.equals(BroadcastConstant.PLAYERVOICE)){
             	   Intent intent =new Intent();
             	   intent.putExtra("VoiceContent",str);
-            	   intent.setAction(BroadcastConstants.PLAYERVOICE);
-            	   contexts.sendBroadcast(intent); 
-               }else if(fromwhere.equals(BroadcastConstants.FINDVOICE)){
+            	   intent.setAction(BroadcastConstant.PLAYERVOICE);
+            	   contexts.sendBroadcast(intent);
+               }else if(GlobalConfig.voicerecognizer.equals(BroadcastConstant.FINDVOICE)){
             	   Intent intent =new Intent();
             	   intent.putExtra("VoiceContent",str);
-            	   intent.setAction(BroadcastConstants.FINDVOICE);
-            	   contexts.sendBroadcast(intent); 
+            	   intent.setAction(BroadcastConstant.FINDVOICE);
+            	   contexts.sendBroadcast(intent);
                }
 		} else {
 
@@ -175,22 +184,5 @@ public class VoiceRecognizer {
 			// Log.d(TAG, "返回音频数据："+arg1.length);
 		}
 	};
-	public void ondestroy(){
-		if(mIat!=null){
-			mIat=null;
-		}
-		if(mRecoListener!=null){
-			mRecoListener=null;
-		}
-		if(mVoiceRecognizer!=null){
-			mVoiceRecognizer=null;
-		}
-		if(mIatResults!=null){
-			mIatResults=null;
-
-		}
-
-	}
-
 
 }

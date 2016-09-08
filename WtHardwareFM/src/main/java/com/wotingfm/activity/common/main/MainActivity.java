@@ -13,7 +13,6 @@ import android.os.Handler;
 import android.text.Html;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
@@ -34,9 +33,10 @@ import com.wotingfm.activity.music.program.citylist.dao.CityInfoDao;
 import com.wotingfm.activity.music.program.fenlei.model.fenlei;
 import com.wotingfm.activity.music.program.fenlei.model.fenleiname;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.manager.UpdateManager;
 import com.wotingfm.service.FloatingWindowService;
 import com.wotingfm.service.timeroffservice;
@@ -79,29 +79,26 @@ public class MainActivity extends TabActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		//透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	//透明导航栏
         tabHost = extracted();
         context=this;
         startActivity(new Intent(this, PreferenceActivity.class));
-        Intent di = new Intent(this, FloatingWindowService.class);
-        startService(di);
+        startService(new Intent(this, FloatingWindowService.class));
         MobclickAgent.openActivityDurationTrack(false);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		//透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	//透明导航栏
-
         update(); // 获取版本数据
         InitTextView();	// 设置界面
         InitDao();
         registReceiver(); // 注册广播
-        mask();
+        mask();//蒙版
     }
 
     private void mask() {
         final WindowManager windowManager = getWindowManager();
         // 动态初始化图层
         final ImageView img = new ImageView(this);
-        img.setLayoutParams(new WindowManager.LayoutParams(
-                android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-                android.view.ViewGroup.LayoutParams.MATCH_PARENT));
+        img.setLayoutParams(new WindowManager.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
+                            android.view.ViewGroup.LayoutParams.MATCH_PARENT));
         img.setScaleType(ImageView.ScaleType.FIT_XY);
         Bitmap bmp = BitmapUtils.readBitMap(this, R.mipmap.ee);
         img.setImageBitmap(bmp);
@@ -418,8 +415,8 @@ public class MainActivity extends TabActivity  {
     //注册广播  用于接收定时服务发送过来的广播
     private void registReceiver(){
         IntentFilter myfileter = new IntentFilter();
-        myfileter.addAction(BroadcastConstants.TIMER_END);
-        myfileter.addAction(BroadcastConstants.ACTIVITY_CHANGE);
+        myfileter.addAction(BroadcastConstant.TIMER_END);
+        myfileter.addAction(BroadcastConstant.ACTIVITY_CHANGE);
         registerReceiver(endApplicationBroadcast, myfileter);
     }
 
@@ -428,7 +425,7 @@ public class MainActivity extends TabActivity  {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if(action.equals(BroadcastConstants.TIMER_END)){
+            if(action.equals(BroadcastConstant.TIMER_END)){
                 ToastUtils.show_allways(MainActivity.this, "定时关闭应用时间就要到了，应用即将退出");
                 stopService(new Intent(MainActivity.this, timeroffservice.class));	// 停止服务
                 new Handler().postDelayed(new Runnable() {
@@ -437,12 +434,18 @@ public class MainActivity extends TabActivity  {
                         finish();
                     }
                 }, 1000);
-            }else if(action.equals(BroadcastConstants.ACTIVITY_CHANGE)){
+            }else if(action.equals(BroadcastConstant.ACTIVITY_CHANGE)){
                 if(GlobalConfig.activitytype==1){
+                    MyActivityManager mam = MyActivityManager.getInstance();
+                    mam.finishAllActivity();
                     tabHost.setCurrentTabByTag("one");
                 }else if(GlobalConfig.activitytype==2){
+                    MyActivityManager mam = MyActivityManager.getInstance();
+                    mam.finishAllActivity();
                     tabHost.setCurrentTabByTag("two");
                 }else{
+                    MyActivityManager mam = MyActivityManager.getInstance();
+                    mam.finishAllActivity();
                     tabHost.setCurrentTabByTag("three");
                 }
             }
@@ -476,22 +479,5 @@ public class MainActivity extends TabActivity  {
         android.os.Process.killProcess(android.os.Process.myPid());
     }
 
-    //手机实体返回按键的处理 与onbackpress同理
-    long waitTime = 2000;
-    long touchTime = 0;
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
-            long currentTime = System.currentTimeMillis();
-            if ((currentTime - touchTime) >= waitTime) {
-                ToastUtils.show_allways(MainActivity.this, "再按一次退出");
-                touchTime = currentTime;
-            } else {
-                MobclickAgent.onKillProcess(this);
-                finish();
-            }
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
+
 }

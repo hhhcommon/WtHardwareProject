@@ -11,6 +11,8 @@ import com.umeng.socialize.PlatformConfig;
 import com.wotingfm.activity.music.common.service.DownloadService;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.config.SocketClientConfig;
+import com.wotingfm.common.constant.KeyConstant;
+import com.wotingfm.devicecontrol.WtDeviceControl;
 import com.wotingfm.helper.CommonHelper;
 import com.wotingfm.receiver.NetWorkChangeReceiver;
 import com.wotingfm.service.NotificationService;
@@ -23,17 +25,21 @@ import com.wotingfm.util.PhoneMessage;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * BSApplication
+ * 作者：xinlong on 2016/8/23 21:18
+ * 邮箱：645700751@qq.com
+ */
 public class BSApplication extends Application {
     private static Context instance;
     private static RequestQueue queues;
-    public static  SocketClientConfig scc;
     private NetWorkChangeReceiver netWorkChangeReceiver = null;
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance=this;
-        InitThird();//三方服务
+        InitThird();
         queues = Volley.newRequestQueue(this);
         PhoneMessage.getPhoneInfo(instance);//获取手机信息
         List<String> _l=new ArrayList<String>();//其中每个间隔要是0.5秒的倍数
@@ -47,9 +53,9 @@ public class BSApplication extends Application {
         _l.add("INTE::10000"); //第8次检测到未连接成功，隔10秒重连
         _l.add("INTE::60000"); //第9次检测到未连接成功，隔1分钟重连
         _l.add("GOTO::8");//之后，调到第9步处理
-        scc = new SocketClientConfig();
+        SocketClientConfig scc = new SocketClientConfig();
         scc.setReConnectWays(_l);
-
+        GlobalConfig.scc=scc;
         //socket服务
         Intent Socket = new Intent(this, SocketService.class);
         startService(Socket);
@@ -57,8 +63,8 @@ public class BSApplication extends Application {
         Intent  record = new Intent(this, VoiceStreamRecordService.class);
         startService(record);
         //播放服务
-        Intent voiceplayer = new Intent(this, VoiceStreamPlayerService.class);
-        startService(voiceplayer);
+        Intent voicePlayer = new Intent(this, VoiceStreamPlayerService.class);
+        startService(voicePlayer);
         //启动全局弹出框服务
         Intent tck = new Intent(this, SubclassService.class);
         startService(tck);
@@ -69,14 +75,15 @@ public class BSApplication extends Application {
         CommonHelper.checkNetworkStatus(instance);//网络设置获取
         this.registerNetWorkChangeReceiver(new NetWorkChangeReceiver(this));// 注册网络状态及返回键监听
 
+        WtDeviceControl mControl = new WtDeviceControl(instance);
+        GlobalConfig.device=mControl;
     }
 
     private void InitThird() {
-        PlatformConfig.setWeixin(GlobalConfig.WEIXIN_KEY, GlobalConfig.WEIXIN_SECRET);
-        PlatformConfig.setQQZone(GlobalConfig.QQ_KEY, GlobalConfig.QQ_SECRET);
-        PlatformConfig.setSinaWeibo(GlobalConfig.WEIBO_KEY,GlobalConfig.WEIBO_SECRET);
+        PlatformConfig.setWeixin(KeyConstant.WEIXIN_KEY, KeyConstant.WEIXIN_SECRET);
+        PlatformConfig.setQQZone(KeyConstant.QQ_KEY, KeyConstant.QQ_SECRET);
+        PlatformConfig.setSinaWeibo(KeyConstant.WEIBO_KEY,KeyConstant.WEIBO_SECRET);
     }
-
 
     public static Context getAppContext(){
         return instance;
