@@ -60,7 +60,6 @@ import com.wotingfm.manager.InterPhoneControlManager;
 import com.wotingfm.service.VoiceStreamRecordService;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.util.VibratorUtils;
 
@@ -221,22 +220,32 @@ public class ChatFragment extends Fragment implements OnClickListener{
 		mlistView = (ListView) rootView.findViewById(R.id.listView);	//
 		Relative_listview = (RelativeLayout) rootView.findViewById(R.id.Relative_listview);//
 		lin_second = (LinearLayout) rootView.findViewById(R.id.lin_second);//
+
+		image_personvoice.setBackgroundResource(R.drawable.talk_show);
 		draw = (AnimationDrawable) image_personvoice.getBackground();
 		image_personvoice.setVisibility(View.INVISIBLE);
+
+		image_voice.setBackgroundResource(R.drawable.talk_show);
 		draw_group = (AnimationDrawable) image_voice.getBackground();
 		image_voice.setVisibility(View.INVISIBLE);
-		talkingname.setVisibility(View.INVISIBLE);
 
+		talkingname.setVisibility(View.INVISIBLE);
 		ImageView imageView_guaduan1 = (ImageView) rootView.findViewById(R.id.imageView_guaduan1);
 		ImageView imageView_zhuanhuan1 = (ImageView) rootView.findViewById(R.id.imageView_zhuanhuan1);
 		ImageView imageView_guaduan2 = (ImageView) rootView.findViewById(R.id.imageView_guaduan2);
 		ImageView imageView_zhuanhuan2 = (ImageView) rootView.findViewById(R.id.imageView_zhuanhuan2);
-	}
 
-	private void listener() {
 		imageLoader = new ImageLoader(context);
 		lin_second.setOnClickListener(this);
 		image_grouptx.setOnClickListener(this);
+		imageView_guaduan1.setOnClickListener(this);
+		imageView_zhuanhuan1.setOnClickListener(this);
+		imageView_guaduan2.setOnClickListener(this);
+		imageView_zhuanhuan2.setOnClickListener(this);
+	}
+
+	private void listener() {
+
 	}
 
 	@Override
@@ -566,7 +575,6 @@ public class ChatFragment extends Fragment implements OnClickListener{
 			dialog = DialogUtils.Dialogph(context, "正在获取数据");
 			JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 			try {
-
 				jsonObject.put("UserId", CommonUtils.getUserId(context));
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -804,17 +812,8 @@ public class ChatFragment extends Fragment implements OnClickListener{
 	}
 
 	private static void getGridViewPerson(String interPhoneId) {
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
-			// 公共请求属性
-			jsonObject.put("SessionId",CommonUtils.getSessionId(context));
-			jsonObject.put("MobileClass", PhoneMessage.model+"::"+PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth+"x"+PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			jsonObject.put("PCDType", "1");
-			PhoneMessage.getGps(context);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
 			//模块属性
 			jsonObject.put("UserId",CommonUtils.getUserId(context));
 			jsonObject.put("GroupId", interPhoneId);
