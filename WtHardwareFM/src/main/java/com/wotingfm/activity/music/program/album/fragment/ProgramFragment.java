@@ -3,6 +3,7 @@ package com.wotingfm.activity.music.program.album.fragment;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -21,16 +22,20 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
+import com.wotingfm.activity.common.main.MainActivity;
 import com.wotingfm.activity.music.common.service.DownloadService;
 import com.wotingfm.activity.music.download.dao.FileInfoDao;
 import com.wotingfm.activity.music.download.model.FileInfo;
+import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
+import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.album.adapter.AlbumAdapter;
 import com.wotingfm.activity.music.program.album.adapter.AlbumMainAdapter;
 import com.wotingfm.activity.music.program.album.model.ContentInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
@@ -164,21 +169,21 @@ public class ProgramFragment extends Fragment implements OnClickListener {
 								playcontentshareurl, ContentFavorite, contentid,localurl);
 						dbdao.deleteHistory(playerurl);
 						dbdao.addHistory(history);
-//						if(PlayerFragment.context!=null){
-//							MainActivity.change();
-//							HomeActivity.UpdateViewPager();
-//							PlayerFragment.SendTextRequest(SubList.get(position).getContentName(), context);
-//						}else{
-//							SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
-//							Editor et = sp.edit();
-//							et.putString(StringConstant.PLAYHISTORYENTER, "true");
-//							et.putString(StringConstant.PLAYHISTORYENTERNEWS,SubList.get(position).getContentName());
-//							et.commit();
-//							MainActivity.change();
-//							HomeActivity.UpdateViewPager();
-//						}
-//						getActivity().setResult(1);
-//						getActivity().finish();
+						if(PlayerFragment.context!=null){
+							MainActivity.change();
+							HomeActivity.UpdateViewPager();
+							PlayerFragment.SendTextRequest(SubList.get(position).getContentName(), context);
+						}else{
+							SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
+							SharedPreferences.Editor et = sp.edit();
+							et.putString(StringConstant.PLAYHISTORYENTER, "true");
+							et.putString(StringConstant.PLAYHISTORYENTERNEWS,SubList.get(position).getContentName());
+							et.commit();
+							MainActivity.change();
+							HomeActivity.UpdateViewPager();
+						}
+						getActivity().setResult(1);
+   					getActivity().finish();
 					} else {
 						ToastUtils.show_short(context, "暂不支持的Type类型");
 					}
@@ -263,17 +268,8 @@ public class ProgramFragment extends Fragment implements OnClickListener {
 	}
 	
 	private JSONObject setParam(){
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject =VolleyRequest.getJsonObject(context);
 		try {
-			// 公共请求属性
-			jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			PhoneMessage.getGps(context);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-			// 模块属性
 			jsonObject.put("UserId", CommonUtils.getUserId(context));
 			jsonObject.put("MediaType", "SEQU");
 			jsonObject.put("ContentId", AlbumActivity.id);

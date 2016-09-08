@@ -22,6 +22,7 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
+import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
@@ -190,16 +191,8 @@ public class RecommendLikeListActivity extends Activity implements OnClickListen
 	}
 	
 	private JSONObject setParam(){
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
-			jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			PhoneMessage.getGps(context);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-			jsonObject.put("PCDType",GlobalConfig.PCDType);
 			// 模块属性
 			jsonObject.put("UserId", CommonUtils.getUserId(context));
 			jsonObject.put("MediaType", "");
@@ -251,7 +244,7 @@ public class RecommendLikeListActivity extends Activity implements OnClickListen
 						dbdao.addHistory(history);
 						
 						HomeActivity.UpdateViewPager();
-//						PlayerFragment.SendTextRequest(newlist.get(position - 1).getContentName(),context);
+						PlayerFragment.SendTextRequest(newlist.get(position - 1).getContentName(),context);
 						finish();
 					} else if (MediaType.equals("SEQU")) {
 						Intent intent = new Intent(context, AlbumActivity.class);

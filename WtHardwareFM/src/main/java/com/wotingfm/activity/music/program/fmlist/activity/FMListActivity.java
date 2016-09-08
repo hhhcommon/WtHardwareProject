@@ -21,6 +21,7 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
+import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.diantai.model.RadioPlay;
 import com.wotingfm.activity.music.program.fmlist.adapter.RankInfoAdapter;
@@ -32,7 +33,6 @@ import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.xlistview.XListView;
 import com.wotingfm.widget.xlistview.XListView.IXListViewListener;
@@ -152,17 +152,9 @@ public class FMListActivity extends Activity implements OnClickListener {
 	}
 	
 	private JSONObject setParam(){
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
-			jsonObject.put("SessionId", CommonUtils.getSessionId(FMListActivity.this));
-			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			PhoneMessage.getGps(FMListActivity.this);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-			// 模块属性
-			jsonObject.put("PCDType", GlobalConfig.PCDType);
+
 			jsonObject.put("UserId", CommonUtils.getUserId(FMListActivity.this));
 			/*	jsonObject.put("CatalogId", CatalogId);*/
 			jsonObject.put("MediaType", "RADIO");
@@ -229,7 +221,7 @@ public class FMListActivity extends Activity implements OnClickListener {
 						dbdao.deleteHistory(playerurl);
 						dbdao.addHistory(history);
 						HomeActivity.UpdateViewPager();
-//						PlayerFragment.SendTextRequest(newlist.get(position-1).getContentName(),context);
+					    PlayerFragment.SendTextRequest(newlist.get(position-1).getContentName(),context);
 						finish();
 					} 
 				}
