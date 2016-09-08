@@ -41,8 +41,8 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
+import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.activity.music.search.adapter.SearchHistoryAdapter;
-import com.wotingfm.activity.music.search.adapter.SearchLikeAdapter;
 import com.wotingfm.activity.music.search.adapter.searchhotkeyadapter;
 import com.wotingfm.activity.music.search.dao.SearchHistoryDao;
 import com.wotingfm.activity.music.search.fragment.RadioFragment;
@@ -62,6 +62,9 @@ import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
+import com.zhy.view.flowlayout.FlowLayout;
+import com.zhy.view.flowlayout.TagAdapter;
+import com.zhy.view.flowlayout.TagFlowLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -77,7 +80,7 @@ import java.util.List;
 public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClickListener {
 	private LinearLayout lin_head_left;
 	private LinearLayout lin_head_right;
-	private GridView gv_topsearch;
+	private TagFlowLayout gv_topsearch;
 	private GridView gv_history;
 	private EditText mEtSearchContent;
 	private SearchHistoryDao shd;
@@ -103,7 +106,6 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 	private ArrayList<String> topsearchlist=new ArrayList<>();
 	
 	private ArrayList<String> topsearchlist1=new ArrayList<>();//热门搜索list
-	private SearchLikeAdapter adapter;
 	private searchhotkeyadapter seachhotadapter;
 	private SearchHistoryAdapter adapterhistory;
 //	private SearchContentAdapter searchadapter;
@@ -138,13 +140,18 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 	private String tag = "SEARCHLIKE_VOLLEY_REQUEST_CANCEL_TAG";
 	private boolean isCancelRequest;
 	private VoiceRecognizer mVoiceRecognizer;
+	private SearchPlayerHistoryDao dbdao;
+	private LayoutInflater mInflater;
+
 
 	@Override
+
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_searchlike);
 		context = this;
 		bmp = BitmapUtils.readBitMap(context, R.mipmap.talknormal);
+		 mInflater = LayoutInflater.from(context);
 		bmppress = BitmapUtils.readBitMap(context, R.mipmap.wt_duijiang_button_pressed);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		// 透明状态栏
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	// 透明导航栏
@@ -303,7 +310,7 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 		lin_head_right = (LinearLayout) findViewById(R.id.lin_head_right);
 		// 清理历史搜索数据库
 		img_clear = (LinearLayout) findViewById(R.id.img_clear);
-		gv_topsearch = (GridView) findViewById(R.id.gv_topsearch);
+		gv_topsearch = (TagFlowLayout) findViewById(R.id.gv_topsearch);
 		gv_history = (GridView) findViewById(R.id.gv_history);
 		lin_status_first = (LinearLayout) findViewById(R.id.lin_searchlike_status_first);
 		lin_status_second = (LinearLayout) findViewById(R.id.lin_searchlike_status_second);
@@ -316,12 +323,10 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 		// 初始化lin状态
 		lin_status_first.setVisibility(View.GONE);
 		lin_status_second.setVisibility(View.GONE);
-
 		// 取消默认selector
-		gv_topsearch.setSelector(new ColorDrawable(Color.TRANSPARENT));
+	/*	gv_topsearch.setSelector(new ColorDrawable(Color.TRANSPARENT));*/
 		gv_history.setSelector(new ColorDrawable(Color.TRANSPARENT));
 		lv_mlistview.setSelector(new ColorDrawable(Color.TRANSPARENT));
-
 		// lin_third
 		lin_status_third = (LinearLayout) findViewById(R.id.lin_searchlike_status_third);
 		tv_total=(TextView)findViewById(R.id.tv_total);//全部
@@ -332,7 +337,6 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 		mPager = (ViewPager)findViewById(R.id.viewpager);
 		mPager.setOffscreenPageLimit(1);
 	}
-
 	private void setListener() {
 		lin_head_left.setOnClickListener(this);
 		lin_head_right.setOnClickListener(this);
@@ -365,7 +369,7 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 
 	private void initDao() {
 		shd = new SearchHistoryDao(this);
-//		dbdao = new SearchPlayerHistoryDao(this);
+		dbdao = new SearchPlayerHistoryDao(this);
 	}
 
 	private void setlistview() {
@@ -379,13 +383,15 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 			}
 		});
 
-		gv_topsearch.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+		gv_topsearch.setOnTagClickListener(new TagFlowLayout.OnTagClickListener()
+		{
 			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				// 跳转到第三页的结果当中 并且默认打开第一页
+			public boolean onTagClick(View view, int position, FlowLayout parent)
+			{
 				lin_status_first.setVisibility(View.GONE);
 				lin_status_second.setVisibility(View.GONE);
 				mEtSearchContent.setText(topsearchlist1.get(position));
+				return true;
 			}
 		});
 	}
@@ -485,7 +491,6 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 			break;
 		}
 	}
-
 	private void CheckEdit(String str){
 		if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
 			History history1 = new History(CommonUtils.getUserId(context), str);
@@ -535,18 +540,8 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 	 * @param keyword
 	 */
 	protected void sendKey(String keyword) {
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject =VolleyRequest.getJsonObject(context);
 		try {
-			// 公共请求属性
-			jsonObject.put("SessionId", CommonUtils.getSessionId(this));
-			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			jsonObject.put("PCDType", GlobalConfig.PCDType);
-			PhoneMessage.getGps(this);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude", PhoneMessage.latitude);
-			// 模块属性
 			jsonObject.put("UserId", CommonUtils.getUserId(this));
 			jsonObject.put("FunType", "1");
 			jsonObject.put("WordSize", "10");
@@ -560,7 +555,6 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 //			private String SessionId;
 			private String ReturnType;
 			private String Message;
-
 			@Override
 			protected void requestSuccess(JSONObject result) {
 				if (dialog != null) {
@@ -620,18 +614,8 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 	 * 得到搜索热词，返回的是两个list
 	 */
 	private void send() {
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
-			// 公共请求属性
-			jsonObject.put("SessionId", CommonUtils.getSessionId(this));
-			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			jsonObject.put("PCDType", GlobalConfig.PCDType);
-			PhoneMessage.getGps(this);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-			// 模块属性
 			jsonObject.put("UserId", CommonUtils.getUserId(this));
 			jsonObject.put("FunType","1");
 			jsonObject.put("WordSize","12");
@@ -672,8 +656,19 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 				}
 				if (ReturnType != null && ReturnType.equals("1001")) {
 					lin_status_first.setVisibility(View.VISIBLE);
-					adapter = new SearchLikeAdapter(SearchLikeAcitvity.this,topsearchlist1);
-					gv_topsearch.setAdapter(adapter);
+				/*	adapter = new SearchLikeAdapter(SearchLikeAcitvity.this,topsearchlist1);*/
+
+				gv_topsearch.setAdapter(new TagAdapter<String>(topsearchlist1)
+				{
+					@Override
+					public View getView(FlowLayout parent, int position, String s)
+					{
+						TextView tv = (TextView)mInflater.inflate(R.layout.adapter_searchlike,
+								gv_topsearch, false);
+						tv.setText(s);
+						return tv;
+					}
+				});
 					history = new History(CommonUtils.getUserId(context), "");
 					historydatabaselist = shd.queryHistory(history);
 					if (historydatabaselist.size() != 0) {
@@ -850,7 +845,6 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 		lin_status_third = null;
 		historydatabaselist = null;
 		shd = null;
-		adapter = null;
 		seachhotadapter = null;
 		adapterhistory = null;
 		if(bmp != null){

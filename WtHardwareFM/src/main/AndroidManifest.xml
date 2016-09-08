@@ -118,21 +118,21 @@
 
         <!-- 创建群组主界面 -->
         <activity
-            android:name=".activity.im.interphone.creategroup.main.CreateGroupMainActivityApp"
+            android:name=".activity.im.interphone.creategroup.main.CreateGroupMainActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 创建群组子界面  即有创建公开群、密码群、验证群 -->
         <activity
-            android:name=".activity.im.interphone.creategroup.create.CreateGroupItemActivityApp"
+            android:name=".activity.im.interphone.creategroup.create.CreateGroupItemActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 00
         <!-- 消息中心 -->
         <activity
-            android:name=".activity.im.interphone.notify.activity.NotifyNewActivityApp"
+            android:name=".activity.im.interphone.notify.activity.NotifyNewActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -392,11 +392,6 @@
                   android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name="com.wotingfm.activity.music.program.fmlist.activity.FMListActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"
-                  android:windowSoftInputMode="adjustPan"/>
-
-        <activity android:name="com.wotingfm.activity.music.program.album.activity.AlbumActivity"
                   android:screenOrientation="portrait"
                   android:theme="@android:style/Theme.Light.NoTitleBar"
                   android:windowSoftInputMode="adjustPan"/>
