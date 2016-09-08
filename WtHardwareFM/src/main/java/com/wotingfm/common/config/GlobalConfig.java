@@ -3,6 +3,7 @@ package com.wotingfm.common.config;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
 import com.wotingfm.activity.music.player.model.LanguageSearchInside;
+import com.wotingfm.devicecontrol.WtDeviceControl;
 
 import java.util.List;
 
@@ -12,15 +13,7 @@ import java.util.List;
  * 邮箱：645700751@qq.com
  */
 public class GlobalConfig {
-    //微信
-    public static final String WEIXIN_KEY="wx99e28b6b8ed44a60";
-    public static final String WEIXIN_SECRET="a579a0cfe0755b87eb17442e81254857";
-    //QQ
-    public static final String QQ_KEY="1105341370";
-    public static final String QQ_SECRET="Hi2ccDP2eAfvjg1E";
-    //新浪微博
-    public static final String WEIBO_KEY="2633057288";
-    public static final String WEIBO_SECRET="95a5b41d6818cecffab50b2f1347fef8";
+
     // 定位信息保存
     public static String longitude;
     public static String latitude;
@@ -43,6 +36,12 @@ public class GlobalConfig {
     public static final int dbversoncode = 1;
     // 此时的界面
     public static int activitytype=1;
+    // Socket连接客户端配置信息
+    public static SocketClientConfig scc;
+    // 硬件设备控制器
+    public static WtDeviceControl device;
+    // 此时的语音搜索界面
+    public static String voicerecognizer;
     // 是否吐司
     public static boolean istusi = false;
     // PersonClientDevice(个人客户端设备) 终端类型1=app,2=设备，3=pc

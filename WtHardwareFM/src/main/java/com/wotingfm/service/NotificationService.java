@@ -1,6 +1,5 @@
 package com.wotingfm.service;
 
-import android.annotation.TargetApi;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -9,13 +8,9 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.media.AudioManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v4.app.NotificationCompat;
-import android.text.TextUtils;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -28,6 +23,7 @@ import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.im.interphone.linkman.dao.NotifyHistoryDao;
 import com.wotingfm.activity.im.interphone.linkman.model.DBNotifyHistorary;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.JsonEncloseUtils;
 
@@ -55,7 +51,7 @@ public  class NotificationService   extends  Service{
 		if(Receiver==null) {
 			Receiver=new MessageReceiver();
 			IntentFilter filter=new IntentFilter();
-			filter.addAction("pushnotify");
+			filter.addAction(BroadcastConstant.PUSH_NOTIFY);
 			registerReceiver(Receiver, filter);
 		}
 	}
@@ -79,7 +75,7 @@ public  class NotificationService   extends  Service{
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action=intent.getAction();
-			if(action.equals("pushnotify")){
+			if(action.equals(BroadcastConstant.PUSH_NOTIFY)){
 				//				MsgNormal message = (MsgNormal) intent.getSerializableExtra("outmessage");
 				byte[] bt = intent.getByteArrayExtra("outmessage");
 				Log.e("Notification接收器中数据", Arrays.toString(bt)+"");
@@ -125,11 +121,11 @@ public  class NotificationService   extends  Service{
 								}
 								setNewMessageNotification(context, news, "我听");
 								//已经添加在通讯录
-								Intent pushintent=new Intent("push_newperson");
+								Intent pushIntent=new Intent(BroadcastConstant.PUSH_NEWPERSON);
 								Bundle bundle=new Bundle();
 								bundle.putString("outmessage",news);
-								pushintent.putExtras(bundle);
-								context. sendBroadcast(pushintent);
+								pushIntent.putExtras(bundle);
+								context. sendBroadcast(pushIntent);
 								//	add("Ub1", imageurl, news, "好友邀请信息", dealtime);
 							}else if(command==3){
 								//好友邀请被接受或拒绝(Server->App)
@@ -175,8 +171,8 @@ public  class NotificationService   extends  Service{
 								if(dealtype!=null&&dealtype.equals("1")){
 									setNewMessageNotification(context, news, "我听");
 									add("Ub3", imageurl, news, "好友邀请信息", dealtime);
-									Intent pushintent=new Intent("push_refreshlinkman");
-									context. sendBroadcast(pushintent);
+									Intent pushIntent=new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
+									context. sendBroadcast(pushIntent);
 								}else{
 									setNewMessageNotification(context, news, "我听");
 									add("Ub3", imageurl, news, "好友邀请信息", dealtime);
@@ -185,8 +181,8 @@ public  class NotificationService   extends  Service{
 								//A与B原为好友，A把B从自己的好友中删除后，向B发送A已删除自己为好友的信息。
 								//										Data data = message.getData();
 								setNewMessageNotification(context, "测试：《该提示不显示》删除好友通知", "我听");
-								Intent pushintent=new Intent("push_refreshlinkman");
-								context. sendBroadcast(pushintent);
+								Intent pushIntent=new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
+								context. sendBroadcast(pushIntent);
 							}
 							break;
 						case 2:
@@ -234,7 +230,7 @@ public  class NotificationService   extends  Service{
 									}
 									setNewMessageNotification(context, news, "我听");
 									//已经添加在通讯录
-									Intent pushintent=new Intent("push_newperson");
+									Intent pushintent=new Intent(BroadcastConstant.PUSH_NEWPERSON);
 									Bundle bundle=new Bundle();
 									bundle.putString("outmessage",news);
 									pushintent.putExtras(bundle);
@@ -313,8 +309,8 @@ public  class NotificationService   extends  Service{
 											}else{
 												news="对讲组:"+name+"同意了您的入组请求";
 											}
-											Intent pushintent=new Intent("push_refreshlinkman");
-											context. sendBroadcast(pushintent);
+											Intent pushIntent=new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
+											context. sendBroadcast(pushIntent);
 										}else{//拒绝
 											if(name==null||name.trim().equals("")){
 												news="有一个您的入组申请什么没有通过";
@@ -473,8 +469,8 @@ public  class NotificationService   extends  Service{
 								setNewMessageNotification(context, news, "我听");
 								add("Gb6", groupurl, news, "组信息", String.valueOf(System.currentTimeMillis()));
 								//刷新通讯录
-								Intent pushintent=new Intent("push_refreshlinkman");
-								context. sendBroadcast(pushintent);
+								Intent pushIntent=new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
+								context. sendBroadcast(pushIntent);
 							}else if(command2==7){
 								//当管理员把某组的权限移交给另一个人时，向组内所有成员发送新管理员Id。
 								String news = null;
@@ -525,8 +521,8 @@ public  class NotificationService   extends  Service{
 									//如果管理员权限移交给自己，则需要刷新通讯录
 									if(userid!=null&&!userid.equals("")&&CommonUtils.getUserId(context)!=null&&
 											CommonUtils.getUserId(context).equals(userid)){
-										Intent pushintent=new Intent("push_refreshlinkman");
-										context. sendBroadcast(pushintent);
+										Intent pushIntent=new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
+										context. sendBroadcast(pushIntent);
 									}
 								} catch (Exception e) {
 									Log.e("消息接收服务中Gb7的异常", e.toString());
@@ -618,8 +614,8 @@ public  class NotificationService   extends  Service{
 									setNewMessageNotification(context, news, "我听");
 									add("Gb9", groupurl, news, "组信息", String.valueOf(System.currentTimeMillis()));
 									//刷新通讯录
-									Intent pushintent=new Intent("push_refreshlinkman");
-									context. sendBroadcast(pushintent);
+									Intent pushIntent=new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
+									context. sendBroadcast(pushIntent);
 								} catch (Exception e) {
 									Log.e("消息接收服务中Gb9的异常", e.toString());
 								}
@@ -630,32 +626,13 @@ public  class NotificationService   extends  Service{
 						}
 					}
 					//如果此时消息中心的界面在打开状态，则发送广播刷新消息中心界面
-					Intent pushnews=new Intent("push_refreshnews");
-					context. sendBroadcast(pushnews);
+					Intent pushNews=new Intent(BroadcastConstant.PUSH_REFRESHNEWS);
+					context. sendBroadcast(pushNews);
 				} catch (Exception e1) {
 					e1.printStackTrace();
 				}
 			}
 		}
-	}
-
-	private void setNewMessageNotification(Context ctx, String msg,String title) {
-		String ns = Context.NOTIFICATION_SERVICE;
-		NotificationManager nm = (NotificationManager) ctx.getSystemService(ns);
-		Intent pushaintent=new Intent("pushnnn");
-		Notification notification = new Notification(R.mipmap.app_logo, msg,System.currentTimeMillis());
-		notification.sound = null;
-		String ringNotify = "content://settings/system/notification_sound";
-		Uri soundUri = TextUtils.isEmpty(ringNotify) ? null : Uri.parse(ringNotify);
-		notification.audioStreamType = AudioManager.STREAM_RING; // tried
-		notification.sound = soundUri;
-		long[] vibrate = new long[] { 1000, 1000 };
-		notification.vibrate = vibrate;
-		notification.defaults=Notification.DEFAULT_LIGHTS;//点亮屏幕
-		PendingIntent in = PendingIntent.getBroadcast(ctx, 2, pushaintent,PendingIntent.FLAG_UPDATE_CURRENT);
-		notification.flags = notification.flags | Notification.FLAG_AUTO_CANCEL;
-		/*notification.setLatestEventInfo(ctx,title , msg, in);*/
-		nm.notify(0, notification);
 	}
 
     /**
@@ -664,11 +641,10 @@ public  class NotificationService   extends  Service{
      * @param message
      * @param title
      */
-    @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-    private void setNewMessageNotify(Context mContext, String message, String title){
+    private void setNewMessageNotification(Context mContext, String message, String title){
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Intent pushIntent = new Intent("pushnnn");
-//        Intent pushIntent = new Intent(mContext, NotifyNewActivity.class);
+        Intent pushIntent = new Intent(BroadcastConstant.PUSH_NOTIFICATION);
+//        Intent pushIntent = new Intent(mContext, NotifyNewActivityApp.class);
 //        PendingIntent in = PendingIntent.getActivity(mContext, 0, pushIntent, 0);
         PendingIntent in = PendingIntent.getBroadcast(mContext, 2, pushIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(mContext);
@@ -683,30 +659,6 @@ public  class NotificationService   extends  Service{
         mNotificationManager.notify(0, mBuilder.build());
     }
 
-//	Notification notification = new Notification.Builder(context)
-//	//设置通知标题
-//	.setContentTitle("标题")
-//	// /<span style="font-family: Arial;">/设置通知栏显示内容</span>
-//	.setContentText("测试内容")
-//	// 设置通知栏点击意图
-//	.setContentIntent(getDefalutIntent(Notification.FLAG_AUTO_CANCEL))
-//	//设置通知集合的数量
-//	.setNumber(number)
-//	// 通知首次出现在通知栏，带上升动画效果的
-//	.setTicker("测试通知来啦")
-//	// 通知产生的时间，会在通知信息里显示，一般是系统获取到的时间
-//	.setWhen(System.currentTimeMillis())
-//	//设置该通知优先级
-//	.setPriority(Notification.PRIORITY_DEFAULT)
-//	//设置这个标志当用户单击面板就可以让通知将自动取消
-//	.setAutoCancel(true)
-//	//ture，设置他为一个正在进行的通知。他们通常是用来表示一个后台任务,用户积极参与(如播放音乐)或以某种方式正在等待,因此占用设备(如一个文件下载,同步操作,主动网络连接)
-//    .setOngoing(false)
-//	.setDefaults(Notification.DEFAULT_VIBRATE)//向通知添加声音、闪灯和振动效果的最简单、最一致的方式是使用当前的用户默认设置，使用defaults属性，可以组合
-//	// Notification.DEFAULT_ALL  Notification.DEFAULT_SOUND 添加声音
-//	// requires VIBRATE permission
-//	.setSmallIcon(R.drawable.ic_launcher)//设置通知小ICON
-//	.build();
 	@Override
 	public IBinder onBind(Intent intent) {
 		return null;

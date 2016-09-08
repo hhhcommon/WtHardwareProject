@@ -57,6 +57,7 @@ public class NewsActivity extends AppBaseActivity {
     protected void init() {
         setTitle("新的朋友");
         dealMessageList = findView(R.id.deal_message_list_view);
+        //发送广播到linkmanfragment界面,来更新按钮为====新的朋友
         Intent pushIntent = new Intent("push_newperson");
         Bundle bundle = new Bundle();
         bundle.putString("outmessage", "");
@@ -64,14 +65,12 @@ public class NewsActivity extends AppBaseActivity {
         context.sendBroadcast(pushIntent);
 
         // 网络还没有初始化
-        DialogUtils.showDialog(context);
-        sendPerson();
-//        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-//            DialogUtils.showDialog(context);
-//            sendPerson();
-//        } else {
-//            ToastUtils.show_allways(this, "网络连接失败，请稍后重试");
-//        }
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+            DialogUtils.showDialog(context);
+            sendPerson();
+        } else {
+            ToastUtils.show_allways(this, "网络连接失败，请稍后重试");
+        }
         delDialog();
     }
 
@@ -439,5 +438,10 @@ public class NewsActivity extends AppBaseActivity {
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
+        dealMessageList = null;
+        groupList = null;
+        userList = null;
+        message = null;
+        adapter = null;
     }
 }

@@ -25,7 +25,7 @@ import com.wotingfm.activity.music.common.service.DownloadTask;
 import com.wotingfm.activity.music.download.adapter.DownloadAdapter;
 import com.wotingfm.activity.music.download.dao.FileInfoDao;
 import com.wotingfm.activity.music.download.model.FileInfo;
-import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.ToastUtils;
 
@@ -55,8 +55,8 @@ public class DownLoadUnCompleted extends Fragment {
         context = getActivity();
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
-        filter.addAction(BroadcastConstants.ACTION_UPDATE);
-        filter.addAction(BroadcastConstants.ACTION_FINISHED);
+        filter.addAction(BroadcastConstant.ACTION_UPDATE);
+        filter.addAction(BroadcastConstant.ACTION_FINISHED);
         context.registerReceiver(mReceiver, filter);
         if (Receiver == null) {
             Receiver = new MessageReceivers();
@@ -254,14 +254,14 @@ public class DownLoadUnCompleted extends Fragment {
     BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context contexts, Intent intent) {
-            if (BroadcastConstants.ACTION_UPDATE.equals(intent.getAction())) {
+            if (BroadcastConstant.ACTION_UPDATE.equals(intent.getAction())) {
                 int start = intent.getIntExtra("start", 0);
                 int end = intent.getIntExtra("end", 0);
                 String url = intent.getStringExtra("url");
                 if (adapter != null) {
                     adapter.updateProgress(url, start, end);
                 }
-            } else if (BroadcastConstants.ACTION_FINISHED.equals(intent.getAction())) {
+            } else if (BroadcastConstant.ACTION_FINISHED.equals(intent.getAction())) {
                 // 下载结束
                 FileInfo fileInfo = (FileInfo) intent.getSerializableExtra("fileInfo");
                 ToastUtils.show_short(contexts, fileInfo.getFileName() + "已经下载完毕");

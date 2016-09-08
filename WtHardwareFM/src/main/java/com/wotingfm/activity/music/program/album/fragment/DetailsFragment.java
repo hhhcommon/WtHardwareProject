@@ -22,9 +22,9 @@ import com.wotingfm.activity.music.program.album.model.ContentInfo;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.helper.ImageLoader;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -49,11 +49,26 @@ public class DetailsFragment extends Fragment implements OnClickListener{
 	private List<ContentInfo> SubList;	// 请求返回的网络数据值
 	private String contentDesc;
 	private TextView textConcern;		// text_concern
-	
+	private ImageLoader imageLoader;
+	private LinearLayout lin_share;
+	private LinearLayout lin_favorite;
+	public static String ContentFavorite;		// 从网络获取的当前值，如果为空，表示页面并未获取到此值
+	private String tag = "DETAILS_VOLLEY_REQUEST_CANCEL_TAG";
+	private boolean isCancelRequest;
+	private TextView tv_favorite;
+	private ImageView imgFavorite;
+	private String ContentShareURL;
+	private String ContentImg;
+	private String ContentName;
+	private ImageView img_album;
+
+
 	@Override
+
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		context = getActivity();
+		imageLoader=new ImageLoader(context);
 	}
 	
 	@Override
@@ -61,6 +76,7 @@ public class DetailsFragment extends Fragment implements OnClickListener{
 		if(rootView == null){
 			rootView = inflater.inflate(R.layout.fragment_album_details, container, false);
 			findView(rootView);
+			setListener();
 		}
 		if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
 			dialog = DialogUtils.Dialogph(context, "正在获取数据");
@@ -68,19 +84,30 @@ public class DetailsFragment extends Fragment implements OnClickListener{
 		} else {
 			ToastUtils.show_short(context, "网络失败，请检查网络");
 		}
+
 		return rootView;
 	}
-	
+
+	private void setListener() {
+		lin_share.setOnClickListener(this);
+		lin_favorite.setOnClickListener(this);
+	}
+
 	/**
 	 * 初始化控件
 	 */
 	private void findView(View view){
+		lin_share = (LinearLayout)view.findViewById(R.id.lin_share);		// 分享按钮
+		lin_favorite = (LinearLayout)view. findViewById(R.id.lin_favorite);	// 喜欢按钮
 		imageHead = (ImageView) view.findViewById(R.id.round_image_head);	//圆形头像
 		textAnchor = (TextView) view.findViewById(R.id.text_anchor_name);		//节目名
 		textContent = (TextView) view.findViewById(R.id.text_content);			//内容介绍
 		textLabel = (TextView) view.findViewById(R.id.text_label);				//标签
 		imageConcern = (ImageView) view.findViewById(R.id.image_concern);		//关注
 		textConcern = (TextView) view.findViewById(R.id.text_concern);
+		tv_favorite = (TextView) view.findViewById(R.id.tv_favorite);
+		imgFavorite=(ImageView)view.findViewById(R.id.img_favorite);
+		img_album=(ImageView)view.findViewById(R.id.img_album);
 		linearConcern = (LinearLayout) view.findViewById(R.id.linear_concern);
 		linearConcern.setOnClickListener(this);
 	}
@@ -88,7 +115,7 @@ public class DetailsFragment extends Fragment implements OnClickListener{
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
-		case R.id.linear_concern://关注
+			case R.id.linear_concern://关注
 			if(!isConcern){
 				imageConcern.setImageDrawable(context.getResources().getDrawable(R.mipmap.focus_concern));
 				textConcern.setText("已关注");
@@ -98,13 +125,107 @@ public class DetailsFragment extends Fragment implements OnClickListener{
 				textConcern.setText("关注");
 				ToastUtils.show_allways(context, "取消关注");
 			}
-			isConcern = !isConcern;
 			break;
+		    case R.id.lin_favorite: // 喜欢
+				if (ContentFavorite != null && !ContentFavorite.equals("")) {
+					if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+						dialog = DialogUtils.Dialogph(context, "正在获取数据");
+						sendFavorite();
+					} else {
+						ToastUtils.show_allways(context, "网络失败，请检查网络");
+					}
+				} else {
+					ToastUtils.show_allways(context, "专辑信息获取异常");
+				}
+
+			isConcern = !isConcern;
+				break;
+			case R.id.lin_share:
+				AlbumActivity.Sharedialog.show();
+				break;
 		}
 	}
-	
-	private String tag = "DETAILS_VOLLEY_REQUEST_CANCEL_TAG";
-	private boolean isCancelRequest;
+
+	/**
+	 * 发送网络请求  获取喜欢数据
+	 */
+	private void sendFavorite(){
+		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
+			try {
+			jsonObject.put("UserId", CommonUtils.getUserId(context));
+			jsonObject.put("MediaType", "SEQU");
+			jsonObject.put("ContentId", AlbumActivity.id);
+			jsonObject.put("PCDType", GlobalConfig.PCDType);
+			if (ContentFavorite.equals("0")) {
+				jsonObject.put("Flag", "1");
+			} else {
+				jsonObject.put("Flag", "0");
+			}
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+
+		VolleyRequest.RequestPost(GlobalConfig.clickFavoriteUrl, tag, jsonObject, new VolleyCallback() {
+			private String ReturnType;
+			private String Message;
+
+			@Override
+			protected void requestSuccess(JSONObject result) {
+				if (dialog != null) {
+					dialog.dismiss();
+				}
+				if(isCancelRequest){
+					return ;
+				}
+				try {
+					ReturnType = result.getString("ReturnType");
+					Message = result.getString("Message");
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
+				// 根据返回值来对程序进行解析
+				if (ReturnType != null) {
+					if (ReturnType.equals("1001")) {
+						if (ContentFavorite.equals("0")) {
+							ContentFavorite = "1";
+							tv_favorite.setText("已喜欢");
+							imgFavorite.setImageDrawable(getResources().getDrawable(R.mipmap.wt_img_liked));
+						} else {
+							ContentFavorite = "0";
+							tv_favorite.setText("喜欢");
+							imgFavorite.setImageDrawable(getResources().getDrawable(R.mipmap.wt_img_like));
+						}
+					} else if (ReturnType.equals("0000")) {
+						ToastUtils.show_allways(context, "无法获取相关的参数");
+					} else if (ReturnType.equals("1002")) {
+						ToastUtils.show_allways(context, "无法获得内容类别");
+					} else if (ReturnType.equals("1003")) {
+						ToastUtils.show_allways(context, "无法获得内容Id");
+					} else if (ReturnType.equals("1004")) {
+						ToastUtils.show_allways(context, "所指定的节目不存在");
+					} else if (ReturnType.equals("1005")) {
+						ToastUtils.show_allways(context, "已经喜欢了此内容");
+					} else if (ReturnType.equals("1006")) {
+						ToastUtils.show_allways(context, "还未喜欢此内容");
+					} else if (ReturnType.equals("T")) {
+						ToastUtils.show_allways(context, "获取列表异常");
+					} else {
+						ToastUtils.show_allways(context, Message + "");
+					}
+				} else {
+					ToastUtils.show_allways(context, "Returntype==null");
+				}
+			}
+
+			@Override
+			protected void requestError(VolleyError error) {
+				if (dialog != null) {
+					dialog.dismiss();
+				}
+			}
+		});
+	}
+
 	
 	/**
 	 * 向服务器发送请求
@@ -144,47 +265,45 @@ public class DetailsFragment extends Fragment implements OnClickListener{
 							SubList = gson.fromJson(StringSubList, new TypeToken<List<ContentInfo>>() {}.getType());
 							ContentInfo contentInfo = gson.fromJson(ResultList, new TypeToken<ContentInfo>() {}.getType());
 							contentCatalogsList = contentInfo.getContentCatalogs();
-							
 							contentDesc = arg1.getString("ContentDesc");
-							AlbumActivity.ContentImg = arg1.getString("ContentImg");
-							AlbumActivity.ContentName = arg1.getString("ContentName");
-							AlbumActivity.ContentShareURL = arg1.getString("ContentShareURL");
-							AlbumActivity.ContentFavorite = arg1.getString("ContentFavorite");
+						    ContentImg = arg1.getString("ContentImg");
+							ContentName= arg1.getString("ContentName");
+							ContentShareURL = arg1.getString("ContentShareURL");
+						    ContentFavorite = arg1.getString("ContentFavorite");
 						} catch (Exception e) {
 							e.printStackTrace();
 						}
 						
-						AlbumActivity.returnresult = 1;
+					//	AlbumActivity.returnresult = 1;
 						if (SubList != null && SubList.size() > 0) {
-							if (AlbumActivity.ContentFavorite != null && !AlbumActivity.ContentFavorite.equals("")) {
-								if (AlbumActivity.ContentFavorite.equals("0")) {
-									AlbumActivity.tv_favorite.setText("喜欢");
-									AlbumActivity.imageFavorite.setImageDrawable(context.getResources().getDrawable(R.mipmap.wt_img_like));
+							if (ContentFavorite  != null && !ContentFavorite .equals("")) {
+								if (ContentFavorite.equals("0")) {
+									tv_favorite.setText("喜欢");
+									imgFavorite.setImageDrawable(context.getResources().getDrawable(R.mipmap.wt_img_like));
 								} else {
-									AlbumActivity.tv_favorite.setText("已喜欢");
-									AlbumActivity.imageFavorite.setImageDrawable(context.getResources().getDrawable(R.mipmap.wt_img_liked));
+									tv_favorite.setText("已喜欢");
+									imgFavorite.setImageDrawable(context.getResources().getDrawable(R.mipmap.wt_img_liked));
 								}
 							}
 							if (AlbumActivity.ContentName != null && !AlbumActivity.ContentName.equals("")) {
-								AlbumActivity.tv_album_name.setText(AlbumActivity.ContentName);
+								//作者 这地方可能要改
 								textAnchor.setText(AlbumActivity.ContentName);
 							}else{
 								textAnchor.setText("我听我享听");
 							}
 							if (AlbumActivity.ContentImg == null || AlbumActivity.ContentImg.equals("")) {
-								AlbumActivity.img_album.setImageResource(R.mipmap.wt_image_playertx);
+								img_album.setImageResource(R.mipmap.wt_image_playertx);
 							} else {
 								String url;
-								if (AlbumActivity.ContentImg.startsWith("http")) {
-									url = AlbumActivity.ContentImg;
+								if (ContentImg.startsWith("http")) {
+									url = ContentImg;
 								} else {
 									url = GlobalConfig.imageurl + AlbumActivity.ContentImg;
 								}
-								AlbumActivity.imageLoader.DisplayImage(url.replace("\\/", "/"), AlbumActivity.img_album,
+							      imageLoader.DisplayImage(url.replace("\\/", "/"), img_album,
 										false, false, null, null);
-								
-								AlbumActivity.imageLoader.DisplayImage(url.replace("\\/", "/"), imageHead,
-										false, false, null, null);
+								  /*imageLoader.DisplayImage(url.replace("\\/", "/"), imageHead,
+										false, false, null, null);*/
 							}
 							 if (contentDesc != null && !contentDesc.equals("") && !contentDesc.equals("null")) {
 								 textContent.setText(contentDesc);
@@ -236,17 +355,8 @@ public class DetailsFragment extends Fragment implements OnClickListener{
 	 * @return jsonObject
 	 */
 	private JSONObject setParam(){
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
-			// 公共请求属性
-			jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			PhoneMessage.getGps(context);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-			// 模块属性
 			jsonObject.put("UserId", CommonUtils.getUserId(context));
 			jsonObject.put("MediaType", "SEQU");
 			jsonObject.put("ContentId", AlbumActivity.id);

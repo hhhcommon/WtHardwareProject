@@ -20,6 +20,7 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
+import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
@@ -34,7 +35,6 @@ import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.helper.ImageLoader;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.xlistview.XListView;
 import com.wotingfm.widget.xlistview.XListView.IXListViewListener;
@@ -248,7 +248,7 @@ public class RecommendFragment extends Fragment{
                             dbDao.addHistory(history);
 
 							HomeActivity.UpdateViewPager();
-//							PlayerFragment.SendTextRequest(newList.get(position - 2).getContentName(),context);
+							PlayerFragment.SendTextRequest(newList.get(position - 2).getContentName(),context);
 							getActivity().finish();
 						} else if (MediaType.equals("SEQU")) {
 							Intent intent = new Intent(context, AlbumActivity.class);

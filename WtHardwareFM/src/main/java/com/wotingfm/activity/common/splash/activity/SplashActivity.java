@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.main.MainActivity;
+import com.wotingfm.activity.common.welcome.activity.WelcomeActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
@@ -106,10 +107,8 @@ public class SplashActivity extends Activity {
 				if (first != null && first.equals("1")) {
 					startActivity(new Intent(SplashActivity.this, MainActivity.class));//跳转到主页
 				} else {
-					startActivity(new Intent(SplashActivity.this, MainActivity.class));//跳转到引导页
+					startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));//跳转到引导页
 				}
-				//				overridePendingTransition(R.anim.wt_fade, R.anim.wt_hold);
-				//				overridePendingTransition(R.anim.wt_zoom_enter, R.anim.wt_zoom_exit);
 				finish();
 			}
 
@@ -118,10 +117,8 @@ public class SplashActivity extends Activity {
 				if (first != null && first.equals("1")) {
 					startActivity(new Intent(SplashActivity.this, MainActivity.class));//跳转到主页
 				} else {
-					startActivity(new Intent(SplashActivity.this, MainActivity.class));//跳转到引导页
+					startActivity(new Intent(SplashActivity.this, WelcomeActivity.class));//跳转到引导页
 				}
-//				overridePendingTransition(R.anim.wt_fade, R.anim.wt_hold);
-//				overridePendingTransition(R.anim.wt_zoom_enter, R.anim.wt_zoom_exit);
 				finish();
 			}
 		});

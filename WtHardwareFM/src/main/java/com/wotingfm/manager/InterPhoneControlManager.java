@@ -1,4 +1,4 @@
-package com.wotingfm.activity.im.common.service;
+package com.wotingfm.manager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,7 +20,7 @@ import com.wotingfm.util.SequenceUUID;
  * @author 辛龙
  *2016年8月3日
  */
-public class InterPhoneControl   {
+public class InterPhoneControlManager {
 	public static String bdcallid;
 
 	/**

@@ -71,7 +71,7 @@ import com.wotingfm.activity.music.video.VlcPlayer;
 import com.wotingfm.activity.music.video.VoiceRecognizer;
 import com.wotingfm.activity.music.video.WtAudioPlay;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -184,6 +184,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private final static int CONTINUE = 4;
     public static boolean isCurrentPlay;
     private static String playmtype;// 当前播放的媒体类型
+    private Boolean IsSequ=false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -197,9 +198,9 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             Receiver = new MessageReceiver();
             IntentFilter filter = new IntentFilter();
             filter.addAction("pushmusic");
-            filter.addAction(BroadcastConstants.TIMER_UPDATE);
-            filter.addAction(BroadcastConstants.TIMER_STOP);
-            filter.addAction(BroadcastConstants.PLAYERVOICE);
+            filter.addAction(BroadcastConstant.TIMER_UPDATE);
+            filter.addAction(BroadcastConstant.TIMER_STOP);
+            filter.addAction(BroadcastConstant.PLAYERVOICE);
             context.registerReceiver(Receiver, filter);
         }
         format = new SimpleDateFormat("HH:mm:ss");
@@ -485,14 +486,14 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     case MotionEvent.ACTION_DOWN:
                         searchPress();
                         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                            curVolume = audioMgr.getStreamVolume(AudioManager.STREAM_MUSIC);
-                            audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC,stepVolume, AudioManager.FLAG_PLAY_SOUND);
-                            voice_type = 1;
-                            mVoiceRecognizer= VoiceRecognizer.getInstance(context,BroadcastConstants.PLAYERVOICE);
-                            mVoiceRecognizer.startListen();
-                            tv_speak_status.setText("开始语音转换");
-                            imageView_voice.setImageBitmap(bmppresss);
-                            textSpeakContent.setVisibility(View.GONE);
+//                            curVolume = audioMgr.getStreamVolume(AudioManager.STREAM_MUSIC);
+//                            audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC,stepVolume, AudioManager.FLAG_PLAY_SOUND);
+//                            voice_type = 1;
+//                            mVoiceRecognizer= VoiceRecognizer.getInstance(context, BroadcastConstant.PLAYERVOICE);
+//                            mVoiceRecognizer.startListen();
+//                            tv_speak_status.setText("开始语音转换");
+//                            imageView_voice.setImageBitmap(bmppresss);
+//                            textSpeakContent.setVisibility(View.GONE);
                         } else {
                             ToastUtils.show_short(context, "网络失败，请检查网络");
                         }
@@ -522,7 +523,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     public void run() {
                         if (PlayerFragment.isCurrentPlay) {
                             Intent intent = new Intent(context, timeroffservice.class);
-                            intent.setAction(BroadcastConstants.TIMER_START);
+                            intent.setAction(BroadcastConstant.TIMER_START);
                             int time = PlayerFragment.timerService;
                             intent.putExtra("time", time);
                             context.startService(intent);
@@ -786,7 +787,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-
             case R.id.tv_cancle:
                 rl_voice.setVisibility(View.GONE);
                 textSpeakContent.setVisibility(View.GONE);
@@ -840,13 +840,26 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 moredialog.show();
                 break;
             case R.id.lin_sequ:
-                if(GlobalConfig.playerobject!=null&&GlobalConfig.playerobject.getSeqInfo().getContentId()!=null){
-                    sequid=GlobalConfig.playerobject.getSeqInfo().getContentId();
-                    sequdesc=GlobalConfig.playerobject.getSeqInfo().getContentDesc();
-                    sequimage=GlobalConfig.playerobject.getSeqInfo().getContentImg();
-                    sequname=GlobalConfig.playerobject.getSeqInfo().getContentName();
+                if(GlobalConfig.playerobject!=null){
+                  try {
+                      if(GlobalConfig.playerobject.getSeqInfo()!=null){
+                          if(GlobalConfig.playerobject.getSeqInfo().getContentId()!=null){
+                          sequid = GlobalConfig.playerobject.getSeqInfo().getContentId();
+                          sequdesc = GlobalConfig.playerobject.getSeqInfo().getContentDesc();
+                          sequimage = GlobalConfig.playerobject.getSeqInfo().getContentImg();
+                          sequname = GlobalConfig.playerobject.getSeqInfo().getContentName();
+                          IsSequ=true;
+                          }else{
+                              IsSequ=false;
+                          }
+                      }else{
+                          IsSequ=false;
+                      }
+                  }catch (Exception e){
+                      e.printStackTrace();
+                  }
                 }
-                if(sequid!=null){
+                if(IsSequ){
                     Intent intent = new Intent(context, AlbumActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "player");
@@ -927,7 +940,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private static void stopCurrentTimer() {
         if (PlayerFragment.isCurrentPlay) {
             Intent intent = new Intent(context, timeroffservice.class);
-            intent.setAction(BroadcastConstants.TIMER_STOP);
+            intent.setAction(BroadcastConstant.TIMER_STOP);
             context.startService(intent);
             PlayerFragment.isCurrentPlay = false;
         }
@@ -1080,10 +1093,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     public void onDestroy() {
         super.onDestroy();
 
-        if(mVoiceRecognizer!=null){
-            mVoiceRecognizer.ondestroy();
-            mVoiceRecognizer=null;
-        }
+//        if(mVoiceRecognizer!=null){
+//            mVoiceRecognizer.ondestroy();
+//            mVoiceRecognizer=null;
+//        }
         if (Receiver != null) { // 注销广播
             context.unregisterReceiver(Receiver);
             Receiver = null;
@@ -1121,16 +1134,16 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
 
                     }
                 }
-            } else if (action.equals(BroadcastConstants.TIMER_UPDATE)) {
+            } else if (action.equals(BroadcastConstant.TIMER_UPDATE)) {
                 String s = intent.getStringExtra("update");
                 if (textTime != null) {
                     textTime.setText(s);
                 }
-            } else if (action.equals(BroadcastConstants.TIMER_STOP)) {
+            } else if (action.equals(BroadcastConstant.TIMER_STOP)) {
                 if (textTime != null) {
                     textTime.setText("定时");
                 }
-            } else if (action.equals(BroadcastConstants.PLAYERVOICE)) {
+            } else if (action.equals(BroadcastConstant.PLAYERVOICE)) {
                 String str = intent.getStringExtra("VoiceContent");
                 tv_speak_status.setText("正在为您查找: "+str);
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {

@@ -156,7 +156,7 @@
                         android:gravity="left|center"
                         android:visibility="visible" >
 
-                        <GridView
+                        <com.zhy.view.flowlayout.TagFlowLayout
                             android:id="@+id/gv_topsearch"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -168,7 +168,7 @@
                             android:paddingTop="18dp"
                             android:scrollbars="none"
                             android:verticalSpacing="15dp" >
-                        </GridView>
+                        </com.zhy.view.flowlayout.TagFlowLayout>
                     </LinearLayout>
 
                     <LinearLayout

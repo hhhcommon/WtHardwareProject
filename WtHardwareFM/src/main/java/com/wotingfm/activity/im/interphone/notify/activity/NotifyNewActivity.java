@@ -28,7 +28,6 @@ public class NotifyNewActivity extends AppBaseActivity {
     private ListView notifyListView;
     private NotifyListAdapter adapter;
     private List<DBNotifyHistorary> list;
-    private Dialog notifyContentDialog;
     private NotifyHistoryDao dbDao;
     private MessageReceiver receiver;
 
@@ -52,7 +51,6 @@ public class NotifyNewActivity extends AppBaseActivity {
         list = getNotifyNew();
         adapter = new NotifyListAdapter(context, list);
         notifyListView.setAdapter(adapter);
-//        getDate();
     }
 
     /*
@@ -93,7 +91,7 @@ public class NotifyNewActivity extends AppBaseActivity {
         textTitle.setText(list.get(position).getTitle());
         TextView textContent = (TextView) dialog.findViewById(R.id.text_content);
         textContent.setText(list.get(position).getContent());
-        notifyContentDialog = new Dialog(context, R.style.MyDialog);
+        final Dialog notifyContentDialog = new Dialog(context, R.style.MyDialog);
         notifyContentDialog.setContentView(dialog);
         notifyContentDialog.setCanceledOnTouchOutside(true);
         notifyContentDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
@@ -110,7 +108,6 @@ public class NotifyNewActivity extends AppBaseActivity {
 	 * 广播接收  用于刷新界面
 	 */
     class MessageReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();

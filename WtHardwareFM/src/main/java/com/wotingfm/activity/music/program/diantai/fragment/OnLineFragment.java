@@ -30,6 +30,7 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
+import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.citylist.activity.CityListActivity;
@@ -39,12 +40,11 @@ import com.wotingfm.activity.music.program.diantai.model.RadioPlay;
 import com.wotingfm.activity.music.program.fmlist.activity.FMListActivity;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.pulltorefresh.PullToRefreshLayout;
 
@@ -52,7 +52,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,7 +74,6 @@ public class OnLineFragment extends Fragment {
     //	private int pagesizenum;
     private String BeginCatalogId;
     private View headview;
-    private LinearLayout lin_address;
     private TextView tv_name;
     private LinearLayout lin_head_more;
     private GridView gridView;
@@ -88,6 +86,9 @@ public class OnLineFragment extends Fragment {
     private PullToRefreshLayout mPullToRefreshLayout;
     private MessageReceiver Receiver;
     private String cityname;
+    private LinearLayout lin_country;
+    private LinearLayout lin_province;
+    private LinearLayout lin_internet;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,7 +96,6 @@ public class OnLineFragment extends Fragment {
         context = this.getActivity();
         shared = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
         initDao();// 初始化数据库命令执行对象
-
     }
 
     @Override
@@ -104,10 +104,12 @@ public class OnLineFragment extends Fragment {
             rootView = inflater.inflate(R.layout.fragment_radio, container, false);
             listView_main = (ExpandableListView) rootView.findViewById(R.id.listView_main);
             headview = LayoutInflater.from(context).inflate(R.layout.head_online, null);
-            lin_address = (LinearLayout) headview.findViewById(R.id.lin_address);
             tv_name = (TextView) headview.findViewById(R.id.tv_name);
             lin_head_more = (LinearLayout) headview.findViewById(R.id.lin_head_more);
             gridView = (GridView) headview.findViewById(R.id.gridView);
+            lin_country=(LinearLayout) headview.findViewById(R.id.lin_country);//国家台
+            lin_province=(LinearLayout) headview.findViewById(R.id.lin_province);//国家台
+            lin_internet=(LinearLayout) headview.findViewById(R.id.lin_internet);//国家台
             // 取消默认selector
             gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
             mPullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.refresh_view);
@@ -116,7 +118,7 @@ public class OnLineFragment extends Fragment {
             if (Receiver == null) {
                 Receiver = new MessageReceiver();
                 IntentFilter filter = new IntentFilter();
-                filter.addAction(BroadcastConstants.CITY_CHANGE);
+                filter.addAction(BroadcastConstant.CITY_CHANGE);
                 context.registerReceiver(Receiver, filter);
             }
         }
@@ -128,7 +130,7 @@ public class OnLineFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastConstants.CITY_CHANGE)) {
+            if (action.equals(BroadcastConstant.CITY_CHANGE)) {
                 if (GlobalConfig.CityName != null) {
                     cityname = GlobalConfig.CityName;
                 }
@@ -180,15 +182,45 @@ public class OnLineFragment extends Fragment {
     }
 
     private void setView() {
-        lin_address.setOnClickListener(new OnClickListener() {
 
+        lin_country.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String cityid = shared.getString(StringConstant.CITYID, "110000");
+                String cityname = shared.getString(StringConstant.CITYNAME, "北京");
+                Intent intent = new Intent(context, FMListActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("fromtype", "online");
+                bundle.putString("name", "国家台");
+                bundle.putString("type", "2");
+                bundle.putString("id", cityid);
+                intent.putExtras(bundle);
+                startActivity(intent);
+
+            }
+        });
+        lin_province.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, CityListActivity.class);
                 startActivityForResult(intent, 0);
             }
         });
-
+        lin_internet.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String cityid = shared.getString(StringConstant.CITYID, "110000");
+                String cityname = shared.getString(StringConstant.CITYNAME, "北京");
+                Intent intent = new Intent(context, FMListActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("fromtype", "online");
+                bundle.putString("name", "网络台");
+                bundle.putString("type", "2");
+                bundle.putString("id", cityid);
+                intent.putExtras(bundle);
+                startActivity(intent);
+            }
+        });
         lin_head_more.setOnClickListener(new OnClickListener() {
 
             @Override
@@ -339,7 +371,7 @@ public class OnLineFragment extends Fragment {
                                 playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid, playcontentshareurl, ContentFavorite, ContentId, localurl);
                         dbdao.deleteHistory(playerurl);
                         dbdao.addHistory(history);
-//						PlayerFragment.SendTextRequest(mainlists.get(position).getContentName(), context);
+     					PlayerFragment.SendTextRequest(mainlists.get(position).getContentName(), context);
                         HomeActivity.UpdateViewPager();
                     }
                 }
@@ -348,17 +380,9 @@ public class OnLineFragment extends Fragment {
     }
 
     private void send() {
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject =VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-            jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-            jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-            jsonObject.put("IMEI", PhoneMessage.imei);
-            PhoneMessage.getGps(context);
-            jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-            jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-            jsonObject.put("PCDType", GlobalConfig.PCDType);
-            // 模块属性
+
             jsonObject.put("UserId", CommonUtils.getUserId(context));
             jsonObject.put("MediaType", "RADIO");
             jsonObject.put("CatalogType", "1");// 按地区分类
@@ -473,12 +497,14 @@ public class OnLineFragment extends Fragment {
                         dbdao.addHistory(history);
                         HomeActivity.UpdateViewPager();
 //						PlayerFragment.SendTextRequest(newlist.get(groupPosition).getList().get(childPosition).getContentName(), context);
-
                     } else if (MediaType.equals("SEQU")) {
                         Intent intent = new Intent(context, AlbumActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putString("type", "recommend");
-                        bundle.putSerializable("list", (Serializable) newlist.get(groupPosition).getList());
+                        bundle.putString("type", "player");
+                        bundle.putString("conentname",newlist.get(groupPosition).getList().get(childPosition).getContentName());
+                        bundle.putString("conentdesc",newlist.get(groupPosition).getList().get(childPosition).getContentDesc());
+                        bundle.putString("conentid",newlist.get(groupPosition).getList().get(childPosition).getContentId());
+                        bundle.putString("contentimg",newlist.get(groupPosition).getList().get(childPosition).getContentImg());
                         intent.putExtras(bundle);
                         startActivity(intent);
                     } else {
