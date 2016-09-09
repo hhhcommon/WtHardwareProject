@@ -353,6 +353,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 					if (dialogs != null) {
 						dialogs.dismiss();
 					}
+					Log.e("linkman返回",""+result.toString());
 					if(isCancelRequest){
 						return ;
 					}

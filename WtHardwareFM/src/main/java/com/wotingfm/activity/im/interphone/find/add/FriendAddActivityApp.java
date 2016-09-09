@@ -12,6 +12,7 @@ import com.android.volley.VolleyError;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.im.interphone.find.result.model.UserInviteMeInside;
+import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -42,6 +43,8 @@ public class FriendAddActivityApp extends AppBaseActivity implements OnClickList
     private String tag = "FRIEND_ADD_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
     private ImageView clearImage;
+    private String type;
+
 
     @Override
     protected int setViewId() {
@@ -54,12 +57,11 @@ public class FriendAddActivityApp extends AppBaseActivity implements OnClickList
         imageLoader = new ImageLoader(context);
         sharedPreferences = getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
         username = sharedPreferences.getString(StringConstant.USERNAME, "");            //当前登录账号的姓名
-        contact = (UserInviteMeInside) getIntent().getSerializableExtra("contact");
+
         setView();        //设置界面
         setListener();    //设置监听
-        if (contact != null && !contact.equals("")) {
-            setvalue();    //适配数据
-        }
+        handleIntent();    //适配数据
+
     }
 
     private void setView() {
@@ -72,8 +74,11 @@ public class FriendAddActivityApp extends AppBaseActivity implements OnClickList
         clearImage = (ImageView) findViewById(R.id.clear_image);
     }
 
-    private void setvalue() {
+    private void handleIntent() {
+        type = this.getIntent().getStringExtra("type");
         //数据适配
+        if (type == null || type.equals("")) {
+            contact = (UserInviteMeInside) getIntent().getSerializableExtra("contact");
         if (contact.getUserName() == null || contact.getUserName().equals("")) {
             tv_name.setText("未知");
         } else {
@@ -105,6 +110,43 @@ public class FriendAddActivityApp extends AppBaseActivity implements OnClickList
             et_news.setText("");
         } else {
             et_news.setText("我是 " + username);
+        }
+        } else if (type.equals("talkoldlistfragment")) {
+            UserInfo  contact = (UserInfo) this.getIntent().getSerializableExtra("data");
+            if (contact.getUserName() == null || contact.getUserName().equals("")) {
+                tv_name.setText("未知");
+            } else {
+                tv_name.setText(contact.getUserName());
+            }
+            if (contact.getUserNum() == null || contact.getUserNum().equals("")) {
+                tv_id.setVisibility(View.INVISIBLE);
+            } else {
+                tv_id.setVisibility(View.VISIBLE);
+                tv_id.setText(contact.getUserNum());
+            }
+            if (contact.getDescn() == null || contact.getDescn().equals("")) {
+                tv_sign.setVisibility(View.INVISIBLE);
+            } else {
+                tv_sign.setVisibility(View.VISIBLE);
+                tv_sign.setText(contact.getDescn());
+            }
+            if (contact.getPortraitMini() == null || contact.getPortraitMini().equals("") || contact.getPortraitMini().equals("null") || contact.getPortraitMini().trim().equals("")) {
+                image_touxiang.setImageResource(R.mipmap.wt_image_tx_hy);
+            } else {
+                if (contact.getPortraitMini().startsWith("http:")) {
+                    url = contact.getPortraitMini();
+                } else {
+                    url = GlobalConfig.imageurl + contact.getPortraitMini();
+                }
+                imageLoader.DisplayImage(url.replace("\\/", "/"), image_touxiang, false, false, null, null);
+            }
+            if (username == null || username.equals("")) {
+                et_news.setText("");
+            } else {
+                et_news.setText("我是 " + username);
+            }
+
+
         }
     }
 

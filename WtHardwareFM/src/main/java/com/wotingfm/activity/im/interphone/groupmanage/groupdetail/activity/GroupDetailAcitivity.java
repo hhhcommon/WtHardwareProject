@@ -28,10 +28,10 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.chat.model.TalkListGP;
 import com.wotingfm.activity.im.interphone.creategroup.frienddetails.TalkPersonNewsActivity;
+import com.wotingfm.activity.im.interphone.find.add.FriendAddActivityApp;
 import com.wotingfm.activity.im.interphone.find.result.model.FindGroupNews;
 import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.adapter.GroupTalkAdapter;
-import com.wotingfm.activity.im.interphone.groupmanage.groupperson.GroupPersonActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.handlegroupapply.HandleGroupApplyActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.joingrouplist.activity.JoinGroupListActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.memberadd.activity.MemberAddActivity;
@@ -358,21 +358,23 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                             // 不是我的好友
                             isfriend = false;
                         }
-                        if (isfriend) {
-                            Intent intent = new Intent(context, GroupPersonActivity.class);
-                            Bundle bundle = new Bundle();
-                            bundle.putString("type", "TalkGroupNewsActivity_p");
-                            bundle.putSerializable("data", userlist.get(position));
-                            bundle.putString("id", groupid);
-                            intent.putExtras(bundle);
-                            startActivityForResult(intent, 2);
-                            ToastUtils.show_allways(context,"是好友，跳转到好友页面");
-                        } else {
+
+                        Boolean b=isfriend;
+                        if (true) {
                             Intent intent = new Intent(context, TalkPersonNewsActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putString("type", "TalkGroupNewsActivity_p");
                             bundle.putString("id", groupid);
-                  /*        bundle.putSerializable("data", lists.get(position));*/
+                            bundle.putSerializable("data", userlist.get(position));
+                            intent.putExtras(bundle);
+                            startActivityForResult(intent, 2);
+                            ToastUtils.show_allways(context,"是好友，跳转到好友页面");
+                        } else {
+                            Intent intent = new Intent(context,FriendAddActivityApp.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putString("type", "TalkGroupNewsActivity_p");
+                            bundle.putSerializable("data", userlist.get(position));
+                            bundle.putString("id", groupid);
                             intent.putExtras(bundle);
                             startActivityForResult(intent, 2);
                             ToastUtils.show_allways(context,"非好友跳转到群陌生人");

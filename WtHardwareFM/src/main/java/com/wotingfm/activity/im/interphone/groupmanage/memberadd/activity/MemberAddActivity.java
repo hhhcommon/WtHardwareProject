@@ -130,7 +130,6 @@ public class MemberAddActivity extends Activity implements View.OnClickListener{
                     }
                     int sum = userlist.size();
                     // 给计数项设置值
-
                     userlist2.clear();
                     userlist2.addAll(userlist);
                     filledData(userlist2);
@@ -143,7 +142,6 @@ public class MemberAddActivity extends Activity implements View.OnClickListener{
 
                     }else{
                         int sum = userlist.size();
-
                         userlist2.clear();
                         userlist2.addAll(userlist);
                         filledData(userlist2);
