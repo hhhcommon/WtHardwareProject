@@ -27,7 +27,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.chat.model.TalkListGP;
-import com.wotingfm.activity.im.interphone.find.add.FriendAddActivityApp;
+import com.wotingfm.activity.im.interphone.creategroup.frienddetails.TalkPersonNewsActivity;
 import com.wotingfm.activity.im.interphone.find.result.model.FindGroupNews;
 import com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.adapter.GroupTalkAdapter;
@@ -368,7 +368,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                             startActivityForResult(intent, 2);
                             ToastUtils.show_allways(context,"是好友，跳转到好友页面");
                         } else {
-                            Intent intent = new Intent(context, FriendAddActivityApp.class);
+                            Intent intent = new Intent(context, TalkPersonNewsActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putString("type", "TalkGroupNewsActivity_p");
                             bundle.putString("id", groupid);
@@ -403,7 +403,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
 
     //处理从通讯录传入的值
     private void handleIntent() {
-        pushintent=new Intent("push_refreshlinkman");
+        pushintent=new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
         type = this.getIntent().getStringExtra("type");
         if (type == null || type.equals("")) {
         } else if (type.equals("talkoldlistfragment")) {

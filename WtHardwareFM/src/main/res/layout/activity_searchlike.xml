@@ -29,11 +29,13 @@
                 android:gravity="left|center"
                 android:visibility="visible" >
 
-                <ImageView
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="6dp"
-                    android:background="@mipmap/back_images" />
+                    android:text="返回"
+                    android:textColor="@color/WHITE_1"
+                    android:textSize="@dimen/wt_dinglan_text_right"/>
             </LinearLayout>
 
             <LinearLayout
@@ -85,7 +87,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginRight="8dp"
                             android:src="@mipmap/wt_img_voicenew"
-                            android:visibility="visible" />
+                            android:visibility="gone" />
 
                         <ImageView
                             android:id="@+id/img_edit_clear"
