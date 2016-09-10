@@ -29,6 +29,7 @@ import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
 import com.wotingfm.activity.im.interphone.message.model.UserInviteMeInside;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -38,7 +39,6 @@ import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -193,7 +193,7 @@ public class TalkPersonNewsActivity extends Activity {
 			b_name = data.getUserAliasName();
 
 		} else if (type.equals("TalkGroupNewsActivity_p")) {
-			GroupTalkInside data = (GroupTalkInside) this.getIntent().getSerializableExtra("data");
+			UserInfo data = (UserInfo ) this.getIntent().getSerializableExtra("data");
 			groupid = this.getIntent().getStringExtra("id");
 			name = data.getUserName();
 			imageurl = data.getPortraitBig();
@@ -396,17 +396,9 @@ public class TalkPersonNewsActivity extends Activity {
 	}
 
 	protected void update(final String b_name2, String groupSignature) {
-		JSONObject jsonObject = new JSONObject();
+
+		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
-			// 公共请求属性
-			jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			PhoneMessage.getGps(context);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-			jsonObject.put("PCDType",GlobalConfig.PCDType);
 			// 模块属性
 			jsonObject.put("UserId", CommonUtils.getUserId(context));
 			if(Viewtype==-1){
@@ -449,9 +441,9 @@ public class TalkPersonNewsActivity extends Activity {
 				if (ReturnType != null) {
 					if (ReturnType.equals("1001")||ReturnType.equals("10011")) {
 						et_b_name.setText(b_name2);
-						Intent pushintent=new Intent("push_refreshlinkman");
-						Intent groupintent=new Intent("GROUP_DETAIL_CHANGE");
-						context. sendBroadcast(pushintent);
+						Intent pushintent=new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
+						Intent groupintent=new Intent(BroadcastConstant.REFRESH_GROUP);
+						context.sendBroadcast(pushintent);
 						context.sendBroadcast(groupintent);
 						ToastUtils.show_allways(context, "修改成功");
 					} else if (ReturnType.equals("0000")) {
@@ -490,17 +482,8 @@ public class TalkPersonNewsActivity extends Activity {
 	}
 
 	private void send() {
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
-			// 公共请求属性
-			jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			PhoneMessage.getGps(context);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-			jsonObject.put("PCDType", GlobalConfig.PCDType);
 			// 模块属性
 			jsonObject.put("UserId", CommonUtils.getUserId(context));
 			jsonObject.put("FriendUserId", id);
@@ -531,7 +514,7 @@ public class TalkPersonNewsActivity extends Activity {
 				// 根据返回值来对程序进行解析
 				if (ReturnType != null) {
 					if (ReturnType.equals("1001")) {
-						Intent pushintent=new Intent("push_refreshlinkman");
+						Intent pushintent=new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
 						context. sendBroadcast(pushintent);
 						if(ChatFragment.context != null &&
 								ChatFragment.interphoneid != null && ChatFragment.interphoneid.equals(id)){

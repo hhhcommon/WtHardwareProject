@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.WindowManager;
@@ -105,6 +106,7 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 			@Override
 			protected void requestSuccess(JSONObject result) {
 //				closeDialog();
+				Log.e("获取分类列表返回值",""+result.toString());
 				try {
                     returnType = result.getString("ReturnType");
 					CatalogData = result.getString("CatalogData");

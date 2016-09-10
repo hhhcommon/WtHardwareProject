@@ -55,6 +55,8 @@ public class BroadcastConstant {
 	//PUSH_REFRESHNEWS-----push_refreshnews
 	public static final String PUSH_REFRESHNEWS="PUSH_REFRESHNEWS";
 
+
+
 	//PUSH_NOTIFICATION-----pushnnn
 	public static final String PUSH_NOTIFICATION="PUSH_NOTIFICATION";
 

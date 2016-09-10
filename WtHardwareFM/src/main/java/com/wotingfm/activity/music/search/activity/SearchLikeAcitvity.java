@@ -414,7 +414,7 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 					lin_status_third.setVisibility(View.GONE);
 				} else {
 					img_edit_clear.setVisibility(View.GONE);
-					img_edit_normal.setVisibility(View.VISIBLE);
+					img_edit_normal.setVisibility(View.GONE);
 					lin_status_second.setVisibility(View.GONE);
 					lin_status_first.setVisibility(View.VISIBLE);
 				}
@@ -473,7 +473,7 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 			mEtSearchContent.setText("");
 			lin_status_second.setVisibility(View.GONE);
 			lin_status_first.setVisibility(View.VISIBLE);
-			img_edit_normal.setVisibility(View.VISIBLE);
+			img_edit_normal.setVisibility(View.GONE);
 			lin_status_third.setVisibility(View.GONE);
 			img_edit_clear.setVisibility(View.GONE);
 
