@@ -1,36 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/BaseStyle"
-    android:orientation="vertical">
+    style="@style/BaseStyle">
 
     <include android:id="@+id/include_title" layout="@layout/base_activity_title"/>
 
     <LinearLayout
-        android:id="@+id/linear_bluetooth_search"
+        android:id="@+id/linear_scan"
         android:layout_width="match_parent"
         android:layout_height="70dp"
-        android:background="@color/WHITE"
-        android:layout_alignParentBottom="true">
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:background="@color/WHITE">
 
         <Button
-            android:id="@+id/bluetooth_search"
+            android:id="@+id/btn_scan_wifi"
             android:layout_width="match_parent"
             android:layout_height="40dp"
+            android:text="扫描"
             android:background="@drawable/wt_commit_button_background"
-            android:text="搜索设备"
             android:textColor="@color/WHITE"
-            android:textSize="16sp"
-            android:layout_margin="15dp"/>
+            android:layout_marginLeft="14dp"
+            android:layout_marginRight="14dp"/>
 
     </LinearLayout>
 
     <ListView
-        android:id="@+id/list_user_bluetooth"
+        android:id="@+id/wifi_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/include_title"
         android:scrollbars="none"
-        android:layout_below="@id/include_title"
-        android:layout_above="@id/linear_bluetooth_search"
+        android:layout_above="@id/linear_scan"
         android:background="@color/WHITE"/>
 
 </RelativeLayout>

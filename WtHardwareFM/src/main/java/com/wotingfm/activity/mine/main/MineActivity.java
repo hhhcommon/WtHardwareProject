@@ -14,6 +14,7 @@ import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -48,9 +49,11 @@ import com.wotingfm.activity.mine.about.AboutActivity;
 import com.wotingfm.activity.mine.bluetooth.BluetoothActivity;
 import com.wotingfm.activity.mine.feedback.activity.FeedbackActivity;
 import com.wotingfm.activity.mine.flowmanage.FlowManageActivity;
+import com.wotingfm.activity.mine.fm.FMConnectActivity;
 import com.wotingfm.activity.mine.help.HelpActivity;
 import com.wotingfm.activity.mine.qrcode.EWMShowActivity;
 import com.wotingfm.activity.mine.update.activity.UpdatePersonActivity;
+import com.wotingfm.activity.mine.wifi.WiFiActivity;
 import com.wotingfm.activity.person.login.activity.LoginActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.IntegerConstant;
@@ -79,6 +82,7 @@ import java.io.File;
  */
 public class MineActivity extends Activity implements OnClickListener {
     public static BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
+    public static WifiManager wifiManager;
     public DeviceReceiver mDevice = new DeviceReceiver();
     private MineActivity context;
     private SharedPreferences sharedPreferences;
@@ -114,6 +118,7 @@ public class MineActivity extends Activity implements OnClickListener {
     private ImageView imageAuxSet;
     private String PhotoCutAfterImagePath;
 
+    private TextView textWifiName;
     private TextView textBluetoothState;            // 蓝牙状态 打开 OR 关闭
     private TextView textCache;                     // 缓存统计
     private TextView textUserName;                  // 用户名
@@ -128,6 +133,7 @@ public class MineActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine);
         context = this;
+        wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         sharedPreferences = getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
         imageLoader = new ImageLoader(context);
         initCache();
@@ -144,6 +150,9 @@ public class MineActivity extends Activity implements OnClickListener {
     private void getBluetoothState(){
         if(blueAdapter.isEnabled()){
             textBluetoothState.setText("打开");
+            Intent intent = new Intent();
+            intent.setAction(StringConstant.UPDATE_BLUETO0TH_TIME);
+            sendBroadcast(intent);
         } else {
             textBluetoothState.setText("关闭");
         }
@@ -216,7 +225,7 @@ public class MineActivity extends Activity implements OnClickListener {
 
         View wifiSet = findViewById(R.id.wifi_set);             // WIFI设置
         wifiSet.setOnClickListener(this);
-        TextView textWifiName = (TextView) findViewById(R.id.text_wifi_name);           // 连接的WIFI的名字
+        textWifiName = (TextView) findViewById(R.id.text_wifi_name);           // 连接的WIFI的名字
 
         View auxSet = findViewById(R.id.aux_set);               // AUX设置
         auxSet.setOnClickListener(this);
@@ -298,7 +307,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 startActivity(new Intent(context, BluetoothActivity.class));
                 break;
             case R.id.wifi_set:                 // WIFI连接设置
-
+                startActivity(new Intent(context, WiFiActivity.class));
                 break;
             case R.id.aux_set:                  // AUX设置
                 Editor et = sharedPreferences.edit();
@@ -332,6 +341,9 @@ public class MineActivity extends Activity implements OnClickListener {
                 break;
             case R.id.image_touxiang:           // 更换头像
                 imageDialog.show();
+                break;
+            case R.id.listener_set:
+                startActivity(new Intent(context, FMConnectActivity.class));
                 break;
         }
     }
@@ -380,8 +392,15 @@ public class MineActivity extends Activity implements OnClickListener {
             if(BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)){    // 搜索到新设备
                 if(blueAdapter.getState() == BluetoothAdapter.STATE_OFF){
                     textBluetoothState.setText("关闭");
+                    Intent intentUpdateTime = new Intent();
+                    intentUpdateTime.setAction(StringConstant.UPDATE_BLUETO0TH_TIME_OFF);
+                    sendBroadcast(intentUpdateTime);
                 } else if(blueAdapter.getState() == BluetoothAdapter.STATE_ON){
                     textBluetoothState.setText("打开");
+                    Intent intentUpdateTime = new Intent();
+                    intentUpdateTime.setAction(StringConstant.UPDATE_BLUETO0TH_TIME);
+                    sendBroadcast(intentUpdateTime);
+
                 }
             }
         }
@@ -391,6 +410,12 @@ public class MineActivity extends Activity implements OnClickListener {
     protected void onResume() {
         super.onResume();
         getLoginStatus();
+        if(wifiManager.isWifiEnabled()) {
+            String  SSIDWiFi = wifiManager.getConnectionInfo().getSSID();
+            textWifiName.setText(SSIDWiFi.substring(1, SSIDWiFi.length() - 1));
+        } else {
+            textWifiName.setText("关闭");
+        }
     }
 
     // 注销数据交互
@@ -1004,5 +1029,8 @@ public class MineActivity extends Activity implements OnClickListener {
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
+        if(blueAdapter != null && blueAdapter.isDiscovering()){
+            blueAdapter.cancelDiscovery();
+        }
     }
 }

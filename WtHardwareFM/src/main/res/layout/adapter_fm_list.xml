@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+      android:id="@+id/linear_view"
+      android:orientation="vertical"
+      android:layout_width="match_parent"
+      android:layout_height="62dp"
+      android:gravity="center_vertical"
+      android:background="@drawable/person_color">
+
+    <TextView
+        android:id="@+id/text_fm_frequency"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="87.5MHz"
+        android:textSize="16sp"
+        android:layout_marginLeft="14dp"/>
+
+    <TextView
+        android:id="@+id/text_fm_info"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="将车载调频调到87.5MHz"
+        android:textSize="14sp"
+        android:layout_marginLeft="14dp"
+        android:layout_marginTop="5dp"
+        android:visibility="visible"/>
+
+</LinearLayout>
