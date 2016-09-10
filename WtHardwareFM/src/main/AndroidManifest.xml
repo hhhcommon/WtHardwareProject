@@ -174,14 +174,14 @@
 
         <!-- 添加好友界面 -->
         <activity
-            android:name=".activity.im.interphone.find.add.FriendAddActivityApp"
+            android:name=".activity.im.interphone.find.add.FriendAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
         <!-- 添加好友界面 -->
         <activity
-            android:name=".activity.im.interphone.find.add.GroupAddActivityApp"
+            android:name=".activity.im.interphone.find.add.GroupAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -478,6 +478,13 @@
         <!--FM调频界面-->
         <activity
             android:name=".activity.mine.fm.FMConnectActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <!-- 专辑界面 -->
+        <activity
+            android:name=".activity.music.program.album.activity.AlbumActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>

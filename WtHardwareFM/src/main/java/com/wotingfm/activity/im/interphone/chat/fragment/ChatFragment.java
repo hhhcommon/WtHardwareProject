@@ -44,7 +44,7 @@ import com.wotingfm.activity.im.interphone.chat.model.DBTalkHistorary;
 import com.wotingfm.activity.im.interphone.chat.model.GroupTalkInside;
 import com.wotingfm.activity.im.interphone.chat.model.TalkListGP;
 import com.wotingfm.activity.im.interphone.creategroup.frienddetails.TalkPersonNewsActivity;
-import com.wotingfm.activity.im.interphone.find.add.FriendAddActivityApp;
+import com.wotingfm.activity.im.interphone.find.add.FriendAddActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity;
 import com.wotingfm.activity.im.interphone.linkman.model.LinkMan;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
@@ -388,7 +388,7 @@ public class ChatFragment extends Fragment implements OnClickListener{
 						intent.putExtras(bundle);
 						startActivity(intent);
 					}else{
-						Intent intent = new Intent(context,FriendAddActivityApp.class);
+						Intent intent = new Intent(context,FriendAddActivity.class);
 						Bundle bundle = new Bundle();
 						bundle.putString("type", "talkoldlistfragment_p");
 						bundle.putString("id", interphoneid);

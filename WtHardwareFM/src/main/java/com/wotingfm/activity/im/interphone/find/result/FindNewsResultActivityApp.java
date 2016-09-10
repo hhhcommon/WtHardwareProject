@@ -12,8 +12,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
-import com.wotingfm.activity.im.interphone.find.add.FriendAddActivityApp;
-import com.wotingfm.activity.im.interphone.find.add.GroupAddActivityApp;
+import com.wotingfm.activity.im.interphone.find.add.FriendAddActivity;
+import com.wotingfm.activity.im.interphone.find.add.GroupAddActivity;
 import com.wotingfm.activity.im.interphone.find.result.adapter.FindFriendResultAdapter;
 import com.wotingfm.activity.im.interphone.find.result.adapter.FindGroupResultAdapter;
 import com.wotingfm.activity.im.interphone.find.result.model.FindGroupNews;
@@ -174,7 +174,7 @@ public class FindNewsResultActivityApp extends AppBaseActivity {
                     if (type.equals(StringConstant.FIND_TYPE_PERSON)) {
                         if (position > 0) {
                             if (UserList != null && UserList.size() > 0) {
-                                Intent intent = new Intent(FindNewsResultActivityApp.this, FriendAddActivityApp.class);
+                                Intent intent = new Intent(FindNewsResultActivityApp.this, FriendAddActivity.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("contact", UserList.get(position - 1));
                                 intent.putExtras(bundle);
@@ -194,7 +194,7 @@ public class FindNewsResultActivityApp extends AppBaseActivity {
                                     intent.putExtras(bundle);
                                     startActivity(intent);
                                 } else {
-                                    Intent intent = new Intent(FindNewsResultActivityApp.this, GroupAddActivityApp.class);
+                                    Intent intent = new Intent(FindNewsResultActivityApp.this, GroupAddActivity.class);
                                     Bundle bundle = new Bundle();
                                     bundle.putSerializable("contact", GroupList.get(position - 1));
                                     intent.putExtras(bundle);
