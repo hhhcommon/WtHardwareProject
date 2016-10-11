@@ -51,8 +51,8 @@ public class GlobalConfig {
     // apk下载默认路径
     public static String apkUrl = "http://182.92.175.134/download/WoTing.apk";
     // socket请求ip
-    public static final String socketUrl = "182.92.175.134";//生产服务器地址
-//     public static final String socketUrl = "123.56.254.75";//测试服务器地址
+//    public static final String socketUrl = "182.92.175.134";//生产服务器地址
+     public static final String socketUrl = "123.56.254.75";//测试服务器地址
     // public static final String socketUrl = "192.168.1.3";//
     // socket请求端口
     public static final int socketport = 15678;

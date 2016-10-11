@@ -19,15 +19,13 @@ import com.android.volley.VolleyError;
 import com.wotingfm.R;
 import com.wotingfm.activity.person.forgetpassword.activity.ForgetPasswordActivity;
 import com.wotingfm.activity.person.register.activity.RegisterActivity;
-import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.manager.SharePreferenceManager;
-import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -204,7 +202,6 @@ public class LoginActivity extends Activity implements OnClickListener {
 					SharedPreferences sp = getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
 					Editor et = sp.edit();
 					et.putString(StringConstant.USERID, userid);
-					et.putString(StringConstant.SESSIONID, SessionId);
 					et.putString(StringConstant.ISLOGIN, "true");
 					et.putString(StringConstant.USERNAME, returnusername);
 					et.putString(StringConstant.IMAGEURL, imageurl);

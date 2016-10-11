@@ -460,10 +460,9 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                         filePath = photoCutAfterImagePath;
                         String ExtName = filePath.substring(filePath.lastIndexOf("."));
                         String TestURI = "http://182.92.175.134:808/wt/common/upload4App.do?FType=GroupP&ExtName=";
-                        String Response = MyHttp.postFile(new File(filePath), TestURI + ExtName + "&SessionId="
-                                + CommonUtils.getSessionId(getApplicationContext()) + "&PCDType=" + GlobalConfig.PCDType + "&GroupId=" + groupRation.GroupId
+                        String Response = MyHttp.postFile(new File(filePath), TestURI + ExtName + "&PCDType=" + GlobalConfig.PCDType + "&GroupId=" + groupRation.GroupId
                                 + "&IMEI=" + PhoneMessage.imei);
-                        L.e("图片上传数据", TestURI + ExtName + "&SessionId=" + CommonUtils.getSessionId(getApplicationContext())
+                        L.e("图片上传数据", TestURI + ExtName
                                 + "&UserId=" + CommonUtils.getUserId(getApplicationContext()) + "&IMEI=" + PhoneMessage.imei);
                         Response = ImageUploadReturnUtil.getResPonse(Response);
                         userPortait = new Gson().fromJson(Response, new TypeToken<UserPortaitInside>() {

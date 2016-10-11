@@ -37,9 +37,7 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.manager.MyActivityManager;
-import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -220,17 +218,8 @@ public class CityListActivity extends Activity implements OnClickListener {
      * @return
      */
     private JSONObject setParam() {
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-            jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-            jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-            jsonObject.put("IMEI", PhoneMessage.imei);
-            PhoneMessage.getGps(context);
-            jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-            jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-            jsonObject.put("PCDType", GlobalConfig.PCDType);
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
             jsonObject.put("CatalogType", "2");
             jsonObject.put("ResultType", "1");
             jsonObject.put("RelLevel", "0");

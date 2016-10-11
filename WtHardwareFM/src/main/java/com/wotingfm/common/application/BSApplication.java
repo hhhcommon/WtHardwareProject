@@ -15,6 +15,7 @@ import com.wotingfm.common.constant.KeyConstant;
 import com.wotingfm.devicecontrol.WtDeviceControl;
 import com.wotingfm.helper.CommonHelper;
 import com.wotingfm.receiver.NetWorkChangeReceiver;
+import com.wotingfm.service.FloatingWindowService;
 import com.wotingfm.service.NotificationService;
 import com.wotingfm.service.SocketService;
 import com.wotingfm.service.SubclassService;
@@ -34,11 +35,13 @@ public class BSApplication extends Application {
     private static Context instance;
     private static RequestQueue queues;
     private NetWorkChangeReceiver netWorkChangeReceiver = null;
+    public  static android.content.SharedPreferences SharedPreferences;
 
     @Override
     public void onCreate() {
         super.onCreate();
         instance=this;
+        SharedPreferences = this.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);    //保存引导页查看状态
         InitThird();
         queues = Volley.newRequestQueue(this);
         PhoneMessage.getPhoneInfo(instance);//获取手机信息
@@ -57,26 +60,21 @@ public class BSApplication extends Application {
         scc.setReConnectWays(_l);
         GlobalConfig.scc=scc;
         //socket服务
-        Intent Socket = new Intent(this, SocketService.class);
-        startService(Socket);
+        startService(new Intent(this, SocketService.class));
         //录音服务
-        Intent  record = new Intent(this, VoiceStreamRecordService.class);
-        startService(record);
+        startService(new Intent(this, VoiceStreamRecordService.class));
         //播放服务
-        Intent voicePlayer = new Intent(this, VoiceStreamPlayerService.class);
-        startService(voicePlayer);
+        startService(new Intent(this, VoiceStreamPlayerService.class));
         //启动全局弹出框服务
-        Intent tck = new Intent(this, SubclassService.class);
-        startService(tck);
-        Intent download = new Intent(this, DownloadService.class);
-        startService(download);
-        Intent Notification = new Intent(this, NotificationService.class);
-        startService(Notification);
+        startService(new Intent(this, SubclassService.class));
+        startService(new Intent(this, DownloadService.class));
+        startService(new Intent(this, NotificationService.class));
         CommonHelper.checkNetworkStatus(instance);//网络设置获取
         this.registerNetWorkChangeReceiver(new NetWorkChangeReceiver(this));// 注册网络状态及返回键监听
 
         WtDeviceControl mControl = new WtDeviceControl(instance);
         GlobalConfig.device=mControl;
+        startService(new Intent(this, FloatingWindowService.class));
     }
 
     private void InitThird() {
