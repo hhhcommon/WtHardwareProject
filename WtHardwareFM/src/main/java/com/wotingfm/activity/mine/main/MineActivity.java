@@ -474,7 +474,6 @@ public class MineActivity extends Activity implements OnClickListener {
                 }
                 Editor et = sharedPreferences.edit();
                 et.putString(StringConstant.ISLOGIN, "false");
-                et.putString(StringConstant.SESSIONID, "");
                 et.putString(StringConstant.USERID, "");
                 et.putString(StringConstant.IMAGEURL, "");
                 et.commit();
@@ -774,8 +773,6 @@ public class MineActivity extends Activity implements OnClickListener {
                     String TestURI = "http://182.92.175.134:808/wt/common/upload4App.do?FType=UserP&ExtName=";
                     String Response = MyHttp.postFile(new File(filePath), TestURI
                             + ExtName
-                            + "&SessionId="
-                            + CommonUtils.getSessionId(getApplicationContext())
                             + "&PCDType="
                             + GlobalConfig.PCDType
                             + "&UserId="
@@ -783,8 +780,6 @@ public class MineActivity extends Activity implements OnClickListener {
                             + "&IMEI=" + PhoneMessage.imei);
                     L.e("图片上传数据", TestURI
                             + ExtName
-                            + "&SessionId="
-                            + CommonUtils.getSessionId(getApplicationContext())
                             + "&UserId="
                             + CommonUtils.getUserId(getApplicationContext())
                             + "&IMEI=" + PhoneMessage.imei);

@@ -20,9 +20,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.manager.MyActivityManager;
-import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -116,17 +114,9 @@ public class ModifyPasswordActivity extends BaseActivity {
 	}
 
 	protected void sendmodifypassword() {
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
-			jsonObject.put("SessionId", CommonUtils.getSessionId(this));
-			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			PhoneMessage.getGps(this);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
 			jsonObject.put("RetrieveUserId", userid);
-			jsonObject.put("PCDType",GlobalConfig.PCDType);
 			jsonObject.put("NewPassword", newpassword);
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -219,17 +209,8 @@ public class ModifyPasswordActivity extends BaseActivity {
 
 	protected void send() {
 		dialog = DialogUtils.Dialogph(this, "正在提交请求");
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
-			jsonObject.put("SessionId", CommonUtils.getSessionId(this));
-			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			PhoneMessage.getGps(this);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-			jsonObject.put("UserId", CommonUtils.getUserId(this));
-			jsonObject.put("PCDType",GlobalConfig.PCDType);
 			jsonObject.put("OldPassword", oldpassword);// 待改
 			jsonObject.put("NewPassword", newpassword);
 		} catch (JSONException e) {

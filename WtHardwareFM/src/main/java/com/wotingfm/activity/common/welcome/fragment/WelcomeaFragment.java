@@ -8,18 +8,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-
 import com.wotingfm.R;
 import com.wotingfm.util.BitmapUtils;
-
 /**
- *  第一张引导页
- * @author 辛龙
- * 2016年4月27日
+ * 第一张引导页
+ * 作者：xinlong on 2016/4/27 21:18
+ * 邮箱：645700751@qq.com
  */
-public class WelcomeaFragment extends Fragment  {
-	private FragmentActivity context;
-	private ImageView imageView1;
+public class WelcomeAFragment extends Fragment  {
 	private Bitmap bmp;
 
 	@Override

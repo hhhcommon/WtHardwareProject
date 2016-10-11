@@ -32,16 +32,16 @@ import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.program.citylist.dao.CityInfoDao;
 import com.wotingfm.activity.music.program.fenlei.model.fenlei;
 import com.wotingfm.activity.music.program.fenlei.model.fenleiname;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.manager.UpdateManager;
-import com.wotingfm.service.FloatingWindowService;
 import com.wotingfm.service.timeroffservice;
 import com.wotingfm.util.BitmapUtils;
-import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ScreenUtils;
 import com.wotingfm.util.ToastUtils;
@@ -58,39 +58,44 @@ import java.util.List;
  * 作者：xinlong on 2016/8/23 22:59
  * 邮箱：645700751@qq.com
  */
-public class MainActivity extends TabActivity  {
-
-    private String tag = "MAIN_VOLLEY_REQUEST_CANCEL_TAG";
-
-    private String updatenews;//版本更新内容
-    private Dialog updatedialog;//版本更新弹出框
-    private int updatetype=1;//1,不需要强制升级2，需要强制升级
-
+public class MainActivity extends TabActivity {
     private MainActivity context;
     public static TabHost tabHost;
+    private Dialog upDataDialog;//版本更新弹出框
 
-    private final String mPageName = "MainActivity";
-
+    private String tag = "MAIN_VOLLEY_REQUEST_CANCEL_TAG";
+    private String upDataNews;//版本更新内容
+    private String mPageName = "MainActivity";
+    private int upDataType = 1;//1,不需要强制升级2，需要强制升级
     private boolean isCancelRequest;
     private List<fenleiname> list;
+
     private CityInfoDao CID;//城市列表数据库
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		//透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	//透明导航栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        //透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    //透明导航栏
         tabHost = extracted();
-        context=this;
-        startActivity(new Intent(this, PreferenceActivity.class));
-        startService(new Intent(this, FloatingWindowService.class));
+        context = this;
+        String first = BSApplication.SharedPreferences.getString(StringConstant.PREFERENCE, "0");//是否是第一次打开偏好设置界面
+        if (first != null && first.equals("1")) {
+            //此时已经进行过偏好设置
+        } else {//1：第一次进入  其它：其它界面进入
+            Intent intent = new Intent(this, PreferenceActivity.class);
+            Bundle bundle = new Bundle();
+            bundle.putString("type", "1");
+            intent.putExtras(bundle);
+            startActivity(intent);
+        }
         MobclickAgent.openActivityDurationTrack(false);
         update(); // 获取版本数据
-        InitTextView();	// 设置界面
+        InitTextView();    // 设置界面
         InitDao();
-        registReceiver(); // 注册广播
-        mask();//蒙版
+        registerReceiver(); // 注册广播
+        //mask();//蒙版
     }
 
     private void mask() {
@@ -98,7 +103,7 @@ public class MainActivity extends TabActivity  {
         // 动态初始化图层
         final ImageView img = new ImageView(this);
         img.setLayoutParams(new WindowManager.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
-                            android.view.ViewGroup.LayoutParams.MATCH_PARENT));
+                android.view.ViewGroup.LayoutParams.MATCH_PARENT));
         img.setScaleType(ImageView.ScaleType.FIT_XY);
         Bitmap bmp = BitmapUtils.readBitMap(this, R.mipmap.ee);
         img.setImageBitmap(bmp);
@@ -135,104 +140,12 @@ public class MainActivity extends TabActivity  {
      *以下是内部方法
      */
     private void InitDao() {
-        CID=new CityInfoDao(context);
+        CID = new CityInfoDao(context);
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             sendRequest();
         } else {
             ToastUtils.show_allways(context, "网络失败，请检查网络");
         }
-    }
-
-    //发送获取城市列表的网络请求
-    private void sendRequest(){
-        //设置获取城市列表的请求参数
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-            jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-            jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-            jsonObject.put("IMEI", PhoneMessage.imei);
-            PhoneMessage.getGps(context);
-            jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-            jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-            jsonObject.put("PCDType", GlobalConfig.PCDType);
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
-            jsonObject.put("CatalogType", "2");
-            jsonObject.put("ResultType", "1");
-            jsonObject.put("RelLevel", "0");
-            jsonObject.put("Page", "1");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        VolleyRequest.RequestPost(GlobalConfig.getCatalogUrl, tag, jsonObject, new VolleyCallback() {
-
-            @Override
-            protected void requestSuccess(JSONObject result) {
-                Log.i("获取城市列表", ""+result.toString());
-                // 如果网络请求已经执行取消操作  就表示就算请求成功也不需要数据返回了  所以方法就此结束
-                if(isCancelRequest){
-                    return ;
-                }
-                try {
-                    String ReturnType = result.getString("ReturnType");
-                    // 根据返回值来对程序进行解析
-                    if (ReturnType != null) {
-                        if (ReturnType.equals("1001")) {
-                            try {
-                                // 获取列表
-                                String ResultList = result.getString("CatalogData");
-                                fenlei SubList_all = new Gson().fromJson(ResultList, new TypeToken<fenlei>() {}.getType());
-                                List<fenleiname> srclist = SubList_all.getSubCata();
-                                if(srclist!=null) {
-                                    if (srclist.size() == 0) {
-                                        ToastUtils.show_short(context, "获取城市列表为空");
-                                    } else {
-                                        //将数据写入数据库
-                                        list = CID.queryCityInfo();
-                                        List<fenleiname> mlist = new ArrayList<fenleiname>();
-                                        for (int i = 0; i < srclist.size(); i++) {
-                                            fenleiname mFenleiname = new fenleiname();
-                                            mFenleiname.setCatalogId(srclist.get(i).getCatalogId());
-                                            mFenleiname.setCatalogName(srclist.get(i).getCatalogName());
-                                            mlist.add(mFenleiname);
-                                        }
-                                        if (list.size() == 0) {
-                                            if (mlist.size() != 0) CID.InsertCityInfo(mlist);
-                                        } else {
-                                            //此处要对数据库查询出的list和获取的mlist进行去重
-                                            CID.DelCityInfo();
-                                            if (mlist.size() != 0) CID.InsertCityInfo(mlist);
-                                        }
-                                    }
-                                }
-                            } catch (JSONException e) {
-                                e.printStackTrace();
-                                Log.e("MainActivity获取城市",e.toString());
-                            }
-                        } else if (ReturnType.equals("1002")) {
-                            ToastUtils.show_short(context, "无此分类信息");
-                        } else if (ReturnType.equals("1003")) {
-                            ToastUtils.show_short(context, "分类不存在");
-                        } else if (ReturnType.equals("1011")) {
-                            ToastUtils.show_short(context, "当前暂无分类");
-                        } else if (ReturnType.equals("T")) {
-                            ToastUtils.show_short(context, "获取列表异常");
-                        }
-                    } else {
-                        ToastUtils.show_short(context, "数据获取异常，请稍候重试");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                    Log.e("获取城市列表异常", e.toString());
-                }
-            }
-
-            @Override
-            protected void requestError(VolleyError error) {
-                Log.e("获取城市列表异常", error.toString());
-            }
-        });
     }
 
     // 初始化视图
@@ -249,17 +162,9 @@ public class MainActivity extends TabActivity  {
 
     //获取版本数据---检查是否需要更新
     private void update() {
-        JSONObject jsonObject = new JSONObject();
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("MobileClass", PhoneMessage.model+"::"+PhoneMessage.productor);
-            jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-            jsonObject.put("IMEI", PhoneMessage.imei);
-            jsonObject.put("PCDType", GlobalConfig.PCDType);
-            PhoneMessage.getGps(this);
-            jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-            jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-            jsonObject.put("SessionId",CommonUtils.getSessionId(this));
-            jsonObject.put("Version",PhoneMessage.appVersonName);
+            jsonObject.put("Version", PhoneMessage.appVersonName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -267,11 +172,10 @@ public class MainActivity extends TabActivity  {
         VolleyRequest.RequestPost(GlobalConfig.VersionUrl, tag, jsonObject, new VolleyCallback() {
             @Override
             protected void requestSuccess(JSONObject result) {
-                if(isCancelRequest){
-                    return ;
+                if (isCancelRequest) {
+                    return;
                 }
                 try {
-                    //String SessionId = result.getString("SessionId");
                     String ReturnType = result.getString("ReturnType");
                     if (ReturnType != null) {
                         if (ReturnType.equals("1001")) {
@@ -292,37 +196,119 @@ public class MainActivity extends TabActivity  {
                             } catch (JSONException e1) {
                                 e1.printStackTrace();
                             }
-                            if(ResultList != null && MastUpdate != null){
-                                dealVerson(ResultList, MastUpdate);
-                            }else{
+                            if (ResultList != null && MastUpdate != null) {
+                                dealVersion(ResultList, MastUpdate);
+                            } else {
                                 Log.e("检查更新返回值", "返回值为1001，但是返回的数值有误");
                             }
                         }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.e(tag+"检查更新异常", e.toString());
+                    Log.e(tag + "检查更新异常", e.toString());
                 }
 
             }
 
             @Override
             protected void requestError(VolleyError error) {
-                Log.e(tag+"检查更新网络异常", error.toString());
+                Log.e(tag + "检查更新网络异常", error.toString());
+            }
+        });
+    }
+
+    //发送获取城市列表的网络请求
+    private void sendRequest() {
+        //设置获取城市列表的请求参数
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
+        try {
+            jsonObject.put("CatalogType", "2");
+            jsonObject.put("ResultType", "1");
+            jsonObject.put("RelLevel", "0");
+            jsonObject.put("Page", "1");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        VolleyRequest.RequestPost(GlobalConfig.getCatalogUrl, tag, jsonObject, new VolleyCallback() {
+            @Override
+            protected void requestSuccess(JSONObject result) {
+                // 如果网络请求已经执行取消操作  就表示就算请求成功也不需要数据返回了  所以方法就此结束
+                if (isCancelRequest) {
+                    return;
+                }
+                try {
+                    String ReturnType = result.getString("ReturnType");
+                    // 根据返回值来对程序进行解析
+                    if (ReturnType != null) {
+                        if (ReturnType.equals("1001")) {
+                            try {
+                                // 获取列表
+                                String ResultList = result.getString("CatalogData");
+                                fenlei SubList_all = new Gson().fromJson(ResultList, new TypeToken<fenlei>() {
+                                }.getType());
+                                List<fenleiname> srcList = SubList_all.getSubCata();
+                                if (srcList != null) {
+                                    if (srcList.size() == 0) {
+                                        ToastUtils.show_short(context, "获取城市列表为空");
+                                    } else {
+                                        //将数据写入数据库
+                                        list = CID.queryCityInfo();
+                                        List<fenleiname> mList = new ArrayList<fenleiname>();
+                                        for (int i = 0; i < srcList.size(); i++) {
+                                            fenleiname mFenLeiName = new fenleiname();
+                                            mFenLeiName.setCatalogId(srcList.get(i).getCatalogId());
+                                            mFenLeiName.setCatalogName(srcList.get(i).getCatalogName());
+                                            mList.add(mFenLeiName);
+                                        }
+                                        if (list.size() == 0) {
+                                            if (mList.size() != 0) CID.InsertCityInfo(mList);
+                                        } else {
+                                            //此处要对数据库查询出的list和获取的mList进行去重
+                                            CID.DelCityInfo();
+                                            if (mList.size() != 0) CID.InsertCityInfo(mList);
+                                        }
+                                    }
+                                }
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                                Log.e("MainActivity获取城市列表异常", e.toString() + "");
+                            }
+                        } else if (ReturnType.equals("1002")) {
+                            ToastUtils.show_short(context, "无此分类信息");
+                        } else if (ReturnType.equals("1003")) {
+                            ToastUtils.show_short(context, "分类不存在");
+                        } else if (ReturnType.equals("1011")) {
+                            ToastUtils.show_short(context, "当前暂无分类");
+                        } else if (ReturnType.equals("T")) {
+                            ToastUtils.show_short(context, "获取列表异常");
+                        }
+                    } else {
+                        ToastUtils.show_short(context, "数据获取异常，请稍候重试");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    Log.e("MainActivity获取城市列表异常", e.toString() + "");
+                }
+            }
+
+            @Override
+            protected void requestError(VolleyError error) {
+                Log.e("MainActivity获取城市列表异常", error.toString() + "");
             }
         });
     }
 
     //检查版本更新
-    private void dealVerson(String ResultList, String mastUpdate) {
+    private void dealVersion(String ResultList, String mastUpdate) {
         String Version = "0.1.0.X.0";
-        String Descn = null;
+        String Desc = null;
         try {
             JSONTokener jsonParser = new JSONTokener(ResultList);
             JSONObject arg1 = (JSONObject) jsonParser.nextValue();
             Version = arg1.getString("Version");
             //String AppName = arg1.getString("AppName");
-            Descn = arg1.getString("Descn");
+            Desc = arg1.getString("Descn");
             //String BugPatch = arg1.getString("BugPatch");
             //String ApkSize = arg1.getString("ApkSize");
             //String PubTime = arg1.getString("Version");
@@ -331,65 +317,65 @@ public class MainActivity extends TabActivity  {
         }
 
         // 版本更新比较
-        String verson=Version;
-        String[] strArray=null;
-        strArray= verson.split("\\.");
+        String version = Version;
+        String[] strArray = null;
+        strArray = version.split("\\.");
         //String verson_big = strArray[0].toString();//大版本
         //String verson_medium = strArray[1].toString();//中版本
         //String verson_small = strArray[2].toString();//小版本
         //String verson_x = strArray[3];//X
-        String verson_build;
+        String version_build;
         try {
-            verson_build = strArray[4];
-            int verson_old=PhoneMessage.versionCode;
-            int verson_new=Integer.parseInt(verson_build);
-            if(verson_new>verson_old){
-                if(mastUpdate!=null&&mastUpdate.equals("1")){
+            version_build = strArray[4];
+            int version_old = PhoneMessage.versionCode;
+            int version_new = Integer.parseInt(version_build);
+            if (version_new > version_old) {
+                if (mastUpdate != null && mastUpdate.equals("1")) {
                     //强制升级
-                    if(Descn!=null&&!Descn.trim().equals("")){
-                        updatenews=Descn;
-                    }else{
-                        updatenews="本次版本升级较大，需要更新";
+                    if (Desc != null && !Desc.trim().equals("")) {
+                        upDataNews = Desc;
+                    } else {
+                        upDataNews = "本次版本升级较大，需要更新";
                     }
-                    updatetype=2;
+                    upDataType = 2;
                     UpdateDialog();
-                    updatedialog.show();
-                }else{
+                    upDataDialog.show();
+                } else {
                     //普通升级
-                    if(Descn!=null&&!Descn.trim().equals("")){
-                        updatenews=Descn;
-                    }else{
-                        updatenews="有新的版本需要升级喽";
+                    if (Desc != null && !Desc.trim().equals("")) {
+                        upDataNews = Desc;
+                    } else {
+                        upDataNews = "有新的版本需要升级喽";
                     }
-                    updatetype=1;//不需要强制升级
+                    upDataType = 1;//不需要强制升级
                     UpdateDialog();
-                    updatedialog.show();
+                    upDataDialog.show();
                 }
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Log.e("版本处理异常", e.toString()+"");
+            Log.e("版本处理异常", e.toString() + "");
         }
     }
 
     //版本更新对话框
     private void UpdateDialog() {
-        View dialog= LayoutInflater.from(this).inflate(R.layout.dialog_update, null);
-        TextView text_contnt = (TextView) dialog.findViewById(R.id.text_contnt);
-        text_contnt.setText(Html.fromHtml("<font size='26'>" + updatenews + "</font>"));
+        View dialog = LayoutInflater.from(this).inflate(R.layout.dialog_update, null);
+        TextView text_content = (TextView) dialog.findViewById(R.id.text_contnt);
+        text_content.setText(Html.fromHtml("<font size='26'>" + upDataNews + "</font>"));
         TextView tv_update = (TextView) dialog.findViewById(R.id.tv_update);
         TextView tv_qx = (TextView) dialog.findViewById(R.id.tv_qx);
-        updatedialog = new Dialog(this, R.style.MyDialog);
-        updatedialog.setContentView(dialog);
-        updatedialog.setCanceledOnTouchOutside(false);
-        updatedialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+        upDataDialog = new Dialog(this, R.style.MyDialog);
+        upDataDialog.setContentView(dialog);
+        upDataDialog.setCanceledOnTouchOutside(false);
+        upDataDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
 
         //开始更新
         tv_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                okupdate();
-                updatedialog.dismiss();
+                okUpData();
+                upDataDialog.dismiss();
             }
         });
 
@@ -397,9 +383,9 @@ public class MainActivity extends TabActivity  {
         tv_qx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(updatetype==1){
-                    updatedialog.dismiss();
-                }else{
+                if (upDataType == 1) {
+                    upDataDialog.dismiss();
+                } else {
                     ToastUtils.show_allways(MainActivity.this, "本次需要更新");
                 }
             }
@@ -407,43 +393,43 @@ public class MainActivity extends TabActivity  {
     }
 
     // 调用更新功能
-    private void okupdate() {
+    private void okUpData() {
         UpdateManager updateManager = new UpdateManager(this);
         updateManager.checkUpdateInfo1();
     }
 
     //注册广播  用于接收定时服务发送过来的广播
-    private void registReceiver(){
-        IntentFilter myfileter = new IntentFilter();
-        myfileter.addAction(BroadcastConstant.TIMER_END);
-        myfileter.addAction(BroadcastConstant.ACTIVITY_CHANGE);
-        registerReceiver(endApplicationBroadcast, myfileter);
+    private void registerReceiver() {
+        IntentFilter myFilter = new IntentFilter();
+        myFilter.addAction(BroadcastConstant.TIMER_END);
+        myFilter.addAction(BroadcastConstant.ACTIVITY_CHANGE);
+        registerReceiver(endApplicationBroadcast, myFilter);
     }
 
     //接收定时服务发送过来的广播  用于结束应用
-    private BroadcastReceiver endApplicationBroadcast = new BroadcastReceiver(){
+    private BroadcastReceiver endApplicationBroadcast = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if(action.equals(BroadcastConstant.TIMER_END)){
+            if (action.equals(BroadcastConstant.TIMER_END)) {
                 ToastUtils.show_allways(MainActivity.this, "定时关闭应用时间就要到了，应用即将退出");
-                stopService(new Intent(MainActivity.this, timeroffservice.class));	// 停止服务
+                stopService(new Intent(MainActivity.this, timeroffservice.class));    // 停止服务
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         finish();
                     }
                 }, 1000);
-            }else if(action.equals(BroadcastConstant.ACTIVITY_CHANGE)){
-                if(GlobalConfig.activitytype==1){
+            } else if (action.equals(BroadcastConstant.ACTIVITY_CHANGE)) {
+                if (GlobalConfig.activitytype == 1) {
                     MyActivityManager mam = MyActivityManager.getInstance();
                     mam.finishAllActivity();
                     tabHost.setCurrentTabByTag("one");
-                }else if(GlobalConfig.activitytype==2){
+                } else if (GlobalConfig.activitytype == 2) {
                     MyActivityManager mam = MyActivityManager.getInstance();
                     mam.finishAllActivity();
                     tabHost.setCurrentTabByTag("two");
-                }else{
+                } else {
                     MyActivityManager mam = MyActivityManager.getInstance();
                     mam.finishAllActivity();
                     tabHost.setCurrentTabByTag("three");
@@ -472,7 +458,7 @@ public class MainActivity extends TabActivity  {
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
-        unregisterReceiver(endApplicationBroadcast);	// 取消注册广播
+        unregisterReceiver(endApplicationBroadcast);    // 取消注册广播
         Log.v("--- Main ---", "--- 杀死进程 ---");
         //		ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         //		manager.killBackgroundProcesses("com.woting");

@@ -17,20 +17,21 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
-import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.manager.MyActivityManager;
-import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
+
 import org.json.JSONException;
 import org.json.JSONObject;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -196,17 +197,8 @@ public class RegisterActivity extends Activity implements OnClickListener {
 	}
 
 	private void sendrequest() {
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
-			// 公共请求属性
-			jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			PhoneMessage.getGps(context);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-			jsonObject.put("PCDType", GlobalConfig.PCDType);
 			// 模块属性
 			jsonObject.put("PhoneNum", phonenum);
 			jsonObject.put("CheckCode", yanzhengma);
@@ -327,17 +319,8 @@ public class RegisterActivity extends Activity implements OnClickListener {
 	}
 
 	private void ReGetVertifyCode() {
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
-			// 公共请求属性
-			jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			PhoneMessage.getGps(context);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-			jsonObject.put("PCDType", GlobalConfig.PCDType);
 			// 模块属性
 			jsonObject.put("PhoneNum", phonenumvertify);
 			jsonObject.put("OperType",1);
@@ -399,17 +382,8 @@ public class RegisterActivity extends Activity implements OnClickListener {
 	}
 
 	private void GetVertifyCode() {
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
-			// 公共请求属性
-			jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-			jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
-			jsonObject.put("IMEI", PhoneMessage.imei);
-			PhoneMessage.getGps(context);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-			jsonObject.put("PCDType",GlobalConfig.PCDType);
 			// 模块属性
 			jsonObject.put("PhoneNum", phonenumvertify);
 		} catch (JSONException e) {
@@ -472,19 +446,10 @@ public class RegisterActivity extends Activity implements OnClickListener {
 	}
 
 	private void send() {
-		JSONObject jsonObject = new JSONObject();
+		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
-			// 公共请求属性
-			jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-			jsonObject.put("MobileClass", PhoneMessage.model+"::"+PhoneMessage.productor);
-			jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x"+ PhoneMessage.ScreenHeight);
-			PhoneMessage.getGps(context);
-			jsonObject.put("GPS-longitude", PhoneMessage.longitude);
-			jsonObject.put("GPS-latitude ", PhoneMessage.latitude);
-			jsonObject.put("IMEI", PhoneMessage.imei);
 			jsonObject.put("UserName",username);
 			jsonObject.put("Password", password);
-			jsonObject.put("PCDType",GlobalConfig.PCDType);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -536,7 +501,6 @@ public class RegisterActivity extends Activity implements OnClickListener {
 					Editor et = sp.edit();
 					et.putString(StringConstant.USERID, userid);
 					et.putString(StringConstant.ISLOGIN, "true");
-					et.putString(StringConstant.SESSIONID, SessionId);
 					et.putString(StringConstant.USERNAME, username);
 					et.putString(StringConstant.PERSONREFRESHB, "true");
 					et.commit();
