@@ -53,7 +53,7 @@ import com.wotingfm.activity.mine.fm.FMConnectActivity;
 import com.wotingfm.activity.mine.help.HelpActivity;
 import com.wotingfm.activity.mine.qrcode.EWMShowActivity;
 import com.wotingfm.activity.mine.update.activity.UpdatePersonActivity;
-import com.wotingfm.activity.mine.wifi.WiFiActivity;
+import com.wotingfm.activity.mine.wifi.WIFIActivity;
 import com.wotingfm.activity.person.login.activity.LoginActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.IntegerConstant;
@@ -307,7 +307,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 startActivity(new Intent(context, BluetoothActivity.class));
                 break;
             case R.id.wifi_set:                 // WIFI连接设置
-                startActivity(new Intent(context, WiFiActivity.class));
+                startActivity(new Intent(context, WIFIActivity.class));
                 break;
             case R.id.aux_set:                  // AUX设置
                 Editor et = sharedPreferences.edit();

@@ -463,7 +463,7 @@
 
         <!-- WiFi界面 -->
         <activity
-            android:name=".activity.mine.wifi.WiFiActivity"
+            android:name=".activity.mine.wifi.WIFIActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
