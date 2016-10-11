@@ -348,7 +348,7 @@ public class MineActivity extends Activity implements OnClickListener {
         }
     }
 
-    //获取用户的登陆状态   登陆 OR 未登录
+    // 获取用户的登陆状态   登陆 OR 未登录
     private void getLoginStatus() {
         String isLogin = sharedPreferences.getString(StringConstant.ISLOGIN, "false");
         if (isLogin.equals("true")) {
@@ -377,13 +377,19 @@ public class MineActivity extends Activity implements OnClickListener {
     protected void onStart() {
         if(!hasRegister){
             hasRegister = true;
-            IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-            registerReceiver(mDevice, filter);
+            IntentFilter filterBluetooth = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
+            registerReceiver(mDevice, filterBluetooth);
+
+            IntentFilter filterWiFi = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
+            registerReceiver(mDevice, filterWiFi);
+
+            IntentFilter filterUpdate = new IntentFilter("UPDATE_VIEW");
+            registerReceiver(mDevice, filterUpdate);
         }
         super.onStart();
     }
 
-    // 蓝牙搜索状态广播监听
+    // 设备状态广播监听
     private class DeviceReceiver extends BroadcastReceiver {
 
         @Override
@@ -400,7 +406,20 @@ public class MineActivity extends Activity implements OnClickListener {
                     Intent intentUpdateTime = new Intent();
                     intentUpdateTime.setAction(StringConstant.UPDATE_BLUETO0TH_TIME);
                     sendBroadcast(intentUpdateTime);
-
+                }
+            } else if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(intent.getAction())) {// 这个监听wifi的打开与关闭，与wifi的连接无关
+                sendBroadcast(new Intent("UPDATE_VIEW"));
+            } else if("UPDATE_VIEW".equals(intent.getAction())) {
+                if(wifiManager.isWifiEnabled()) {
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            String  SSIDWiFi = wifiManager.getConnectionInfo().getSSID();
+                            textWifiName.setText(SSIDWiFi.substring(1, SSIDWiFi.length() - 1));
+                        }
+                    }, 2000);
+                } else {
+                    textWifiName.setText("关闭");
                 }
             }
         }
@@ -410,12 +429,6 @@ public class MineActivity extends Activity implements OnClickListener {
     protected void onResume() {
         super.onResume();
         getLoginStatus();
-        if(wifiManager.isWifiEnabled()) {
-            String  SSIDWiFi = wifiManager.getConnectionInfo().getSSID();
-            textWifiName.setText(SSIDWiFi.substring(1, SSIDWiFi.length() - 1));
-        } else {
-            textWifiName.setText("关闭");
-        }
     }
 
     // 注销数据交互

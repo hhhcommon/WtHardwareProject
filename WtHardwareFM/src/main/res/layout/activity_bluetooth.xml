@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:background="@drawable/wt_commit_button_background"
-            android:text="搜索设备"
+            android:text="正在扫描附近蓝牙设备..."
             android:textColor="@color/WHITE"
             android:textSize="16sp"
             android:layout_margin="15dp"/>

@@ -88,4 +88,7 @@ public class StringConstant {
 
     // 标记 FM是否打开
     public static final String FM_IS_OPEN = "FM_IS_OPEN";
+
+    // 蓝牙连接UUID
+    public static final String SPP_UUID = "00001101-0000-1000-8000-00805F9B34FB";
 }

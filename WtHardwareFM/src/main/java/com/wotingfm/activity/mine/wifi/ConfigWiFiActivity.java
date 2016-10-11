@@ -61,6 +61,7 @@ public class ConfigWiFiActivity extends AppBaseActivity implements View.OnClickL
                 } else {
                     editPsw.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                 }
+                editPsw.setSelection(editPsw.getText().toString().length());
                 isVisible = !isVisible;
                 break;
         }

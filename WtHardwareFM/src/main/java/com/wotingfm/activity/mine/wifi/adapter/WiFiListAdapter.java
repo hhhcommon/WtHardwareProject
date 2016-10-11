@@ -27,6 +27,11 @@ public class WiFiListAdapter extends BaseAdapter {
         this.list = list;
     }
 
+    public void setList(List<ScanResult> list) {
+        this.list = list;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getCount() {
         return list.size();

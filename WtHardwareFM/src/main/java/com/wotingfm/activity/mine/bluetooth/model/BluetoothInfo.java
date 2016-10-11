@@ -9,6 +9,16 @@ public class BluetoothInfo {
 
     private String bluetoothAddress;// 蓝牙地址
 
+    private int bluetoothType;// 1为已配对设备 0为可以配对设备
+
+    public int getBluetoothType() {
+        return bluetoothType;
+    }
+
+    public void setBluetoothType(int bluetoothType) {
+        this.bluetoothType = bluetoothType;
+    }
+
     public String getBluetoothName() {
         return bluetoothName;
     }

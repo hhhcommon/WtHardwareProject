@@ -271,7 +271,7 @@
                 android:id="@+id/text_wifi_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="已连接的WIFI名称"
+                android:text="已连接"
                 android:maxLines="1"
                 android:layout_toLeftOf="@id/image_wifi_set"
                 android:layout_centerVertical="true"
