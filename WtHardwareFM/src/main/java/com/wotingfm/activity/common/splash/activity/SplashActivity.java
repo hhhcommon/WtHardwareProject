@@ -5,15 +5,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
-import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.wotingfm.R;
 import com.wotingfm.activity.common.main.MainActivity;
 import com.wotingfm.activity.common.welcome.activity.WelcomeActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
@@ -21,7 +18,6 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.util.BitmapUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -34,17 +30,17 @@ import org.json.JSONObject;
 public class SplashActivity extends Activity {
 	private SharedPreferences sharedPreferences;
 	private String first;
-	private Bitmap bmp;
+//	private Bitmap bmp;
 	private String tag = "SPLASH_VOLLEY_REQUEST_CANCEL_TAG";
 	private boolean isCancelRequest;
-	private ImageView imageView;
+//	private ImageView imageView;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_splash);
-		imageView = (ImageView) findViewById(R.id.imageView1);
-		bmp = BitmapUtils.readBitMap(SplashActivity.this, R.mipmap.splash);
-		imageView.setImageBitmap(bmp);
+//		setContentView(R.layout.activity_splash);
+//		imageView = (ImageView) findViewById(R.id.imageView1);
+//		bmp = BitmapUtils.readBitMap(SplashActivity.this, R.mipmap.splash);
+//		imageView.setImageBitmap(bmp);
 		sharedPreferences = this.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
 		first = sharedPreferences.getString(StringConstant.FIRST, "0");//是否是第一次登录
 		Editor et = sharedPreferences.edit();
@@ -131,13 +127,10 @@ public class SplashActivity extends Activity {
 		sharedPreferences = null;
 		first = null;
 		tag = null;
-		imageView.setImageBitmap(null);
-		if (bmp != null && !bmp.isRecycled()) {
-			bmp.recycle();
-			bmp = null;
-		}
-		sharedPreferences = null;
-		imageView = null;
-		setContentView(R.layout.activity_null);
+//		imageView.setImageBitmap(null);
+//		if (bmp != null && !bmp.isRecycled()) {
+//			bmp.recycle();
+//			bmp = null;
+//		}
 	}
 }
