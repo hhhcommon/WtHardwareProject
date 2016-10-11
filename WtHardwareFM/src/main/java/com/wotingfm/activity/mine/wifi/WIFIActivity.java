@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * WIFI界面
  */
-public class WiFiActivity extends AppBaseActivity implements View.OnClickListener {
+public class WIFIActivity extends AppBaseActivity implements View.OnClickListener {
     private WiFiListAdapter adapter;
     private ScanResult wiFiName;
 
