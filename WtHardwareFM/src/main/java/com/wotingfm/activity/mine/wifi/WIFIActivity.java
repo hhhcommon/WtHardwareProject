@@ -10,6 +10,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.net.wifi.ScanResult;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
+import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -96,6 +97,7 @@ public class WIFIActivity extends AppBaseActivity implements View.OnClickListene
                 } else {// 否则打开WiFi
                     MineActivity.wifiManager.setWifiEnabled(true);
                     openWiFiDialog = DialogUtils.Dialogph(context, "正在打开并扫面附近WiFi");
+                    scanResultList = MineActivity.wifiManager.getScanResults();
                 }
                 break;
             case R.id.btn_scan_wifi:// 扫描附近WiFi
@@ -223,7 +225,12 @@ public class WIFIActivity extends AppBaseActivity implements View.OnClickListene
             if(intent.getAction().equals(BroadcastConstant.UPDATE_WIFI_LIST)) {
                 L.i("扫描WiFi");
                 getConfiguration();
-                adapter.setList(scanResultList = MineActivity.wifiManager.getScanResults());
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.setList(scanResultList = MineActivity.wifiManager.getScanResults());
+                    }
+                }, 1200L);
                 L.i("scanResultList.size() --- > > " + scanResultList.size());
                 if(openWiFiDialog != null) {
                     openWiFiDialog.dismiss();
