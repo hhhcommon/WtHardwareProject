@@ -1,5 +1,6 @@
 package com.wotingfm.activity.music.download.activity;
 
+import android.annotation.TargetApi;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -11,6 +12,7 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.text.format.Formatter;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.wotingfm.R;
@@ -29,10 +31,13 @@ public class DownloadActivity extends FragmentActivity {
     private TextView textMemory;
     private ViewPager viewPagerDownload;
 
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_download);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         setView();
     }
 
@@ -134,7 +139,7 @@ public class DownloadActivity extends FragmentActivity {
 
         // 利用formatFileSize函数把字节转换为用户等看懂的大小数值单位
         String totalText = Formatter.formatFileSize(getBaseContext(), blockSize * totalBlocks);
-        String availableText = Formatter.formatFileSize(getBaseContext(), blockSize * availableBlocks);
+//        String availableText = Formatter.formatFileSize(getBaseContext(), blockSize * availableBlocks);
         String userText = Formatter.formatFileSize(getBaseContext(), (blockSize * totalBlocks) - (blockSize * availableBlocks));
         textMemory.setText("已用" + userText + "/总容量" + totalText);
     }

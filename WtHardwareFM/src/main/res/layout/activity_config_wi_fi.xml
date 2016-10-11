@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/BaseStyle"
+    android:orientation="vertical">
+
+    <include android:id="@+id/include_title" layout="@layout/base_activity_title"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/home_top_title">
+
+        <TextView
+            android:id="@+id/text_psw"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="密码"
+            android:textSize="16sp"
+            android:textColor="@color/BLACK"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="14dp"/>
+
+        <ImageView
+            android:id="@+id/image_visibility"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/ic_launcher"
+            android:layout_marginRight="14dp"
+            android:layout_marginTop="20dp"/>
+
+        <EditText
+            android:id="@+id/edit_psw"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/wt_edit_text_background"
+            android:layout_toRightOf="@id/text_psw"
+            android:padding="5dp"
+            android:layout_toLeftOf="@id/image_visibility"
+            android:maxLines="1"
+            android:inputType="textPassword"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_psw"
+            android:layout_marginTop="50dp"
+            android:layout_alignLeft="@id/text_psw"
+            android:layout_alignRight="@id/image_visibility">
+
+            <Button
+                android:id="@+id/btn_cancel"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="50dp"
+                android:text="取消"
+                android:layout_marginRight="10dp"
+                android:background="@drawable/background_button_gray"/>
+
+            <Button
+                android:id="@+id/btn_confirm"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="50dp"
+                android:text="连接"
+                android:layout_marginLeft="10dp"
+                android:background="@drawable/background_button_gray"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

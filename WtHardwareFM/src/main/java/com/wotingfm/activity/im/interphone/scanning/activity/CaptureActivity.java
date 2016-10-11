@@ -25,8 +25,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.zxing.Result;
 import com.wotingfm.R;
-import com.wotingfm.activity.im.interphone.find.add.FriendAddActivityApp;
-import com.wotingfm.activity.im.interphone.find.add.GroupAddActivityApp;
+import com.wotingfm.activity.im.interphone.find.add.FriendAddActivity;
+import com.wotingfm.activity.im.interphone.find.add.GroupAddActivity;
 import com.wotingfm.activity.im.interphone.find.result.model.FindGroupNews;
 import com.wotingfm.activity.im.interphone.find.result.model.UserInviteMeInside;
 import com.wotingfm.activity.im.interphone.scanning.DecodeThread;
@@ -181,7 +181,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                             //添加好友
                             UserInviteMeInside personnews = message.getUserInviteMeInside();
                             if (personnews != null) {
-                                Intent intent = new Intent(context, FriendAddActivityApp.class);
+                                Intent intent = new Intent(context, FriendAddActivity.class);
                                 Bundle bundle1 = new Bundle();
                                 bundle1.putSerializable("contact", personnews);
                                 intent.putExtras(bundle1);
@@ -201,7 +201,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                                         intent.putExtras(bundle1);
                                         startActivity(intent);
                                     } else {
-                                        Intent intent = new Intent(context, GroupAddActivityApp.class);
+                                        Intent intent = new Intent(context, GroupAddActivity.class);
                                         Bundle bundle2 = new Bundle();
                                         bundle2.putSerializable("contact", groupnews);
                                         intent.putExtras(bundle2);

@@ -94,21 +94,14 @@ public class DuiJiangActivity extends FragmentActivity {
 			public void onClick(View v) {
 				String login = sharedPreferences.getString(StringConstant.ISLOGIN, "false");// 是否登录
 				if (login != null && !login.trim().equals("") && login.equals("true")) {
-//					Intent Intent = new Intent(context, FindActivity.class);
-//					Bundle bundle = new Bundle();
-//					bundle.putString(StringConstant.FIND_TYPE, StringConstant.FIND_TYPE_PERSON);
-//					Intent.putExtras(bundle);
-//					startActivity(Intent);
+					Intent Intent = new Intent(context, FindActivity.class);
+					Bundle bundle = new Bundle();
+					bundle.putString(StringConstant.FIND_TYPE, StringConstant.FIND_TYPE_PERSON);
+					Intent.putExtras(bundle);
+					startActivity(Intent);
 				} else {
-//					startActivity(new Intent(context, LoginActivity.class));
+					startActivity(new Intent(context, LoginActivity.class));
 				}
-
-				Intent Intent = new Intent(context, FindActivity.class);
-				Bundle bundle = new Bundle();
-				bundle.putString(StringConstant.FIND_TYPE, StringConstant.FIND_TYPE_PERSON);
-				Intent.putExtras(bundle);
-				startActivity(Intent);
-
 				adddialog.dismiss();
 			}
 		});
@@ -121,21 +114,14 @@ public class DuiJiangActivity extends FragmentActivity {
 			public void onClick(View v) {
 				String login = sharedPreferences.getString(StringConstant.ISLOGIN, "false");// 是否登录
 				if (login != null && !login.trim().equals("") && login.equals("true")) {
-//					Intent Intent = new Intent(context, FindActivity.class);
-//					Bundle bundle = new Bundle();
-//					bundle.putString(StringConstant.FIND_TYPE, StringConstant.FIND_TYPE_PERSON);
-//					Intent.putExtras(bundle);
-//					startActivity(Intent);
+					Intent Intent = new Intent(context, FindActivity.class);
+					Bundle bundle = new Bundle();
+					bundle.putString(StringConstant.FIND_TYPE, StringConstant.FIND_TYPE_PERSON);
+					Intent.putExtras(bundle);
+					startActivity(Intent);
 				} else {
-//					startActivity(new Intent(context, LoginActivity.class));
+					startActivity(new Intent(context, LoginActivity.class));
 				}
-
-				Intent Intent = new Intent(context, FindActivity.class);
-				Bundle bundle = new Bundle();
-				bundle.putString(StringConstant.FIND_TYPE, StringConstant.FIND_TYPE_GROUP);
-				Intent.putExtras(bundle);
-				startActivity(Intent);
-
 				adddialog.dismiss();
 			}
 		});
@@ -275,7 +261,7 @@ public class DuiJiangActivity extends FragmentActivity {
 		mPager = (ViewPager) findViewById(R.id.viewpager);
 		mPager.setOffscreenPageLimit(1);
 		fragmentList = new ArrayList<Fragment>();
-		Fragment btFragment = new ChatFragment();			 // 电台首页
+		Fragment btFragment = new ChatFragment();			         // 电台首页
 		Fragment btFragment1 = new LinkManFragment();				 // 通讯录
 		fragmentList.add(btFragment);
 		fragmentList.add(btFragment1);

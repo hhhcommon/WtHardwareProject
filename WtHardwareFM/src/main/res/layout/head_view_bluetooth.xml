@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/WHITE">
+
+    <RelativeLayout
+        android:id="@+id/bluetooth_set"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:clickable="true"
+        android:background="@drawable/person_color">
+
+        <TextView
+            android:id="@+id/text_bluetooth_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="开启蓝牙"
+            android:layout_marginLeft="14dp"
+            android:textSize="16sp"
+            android:layout_centerVertical="true"/>
+
+        <ImageView
+            android:id="@+id/image_bluetooth_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/wt_person_close"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="14dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/open_detection"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:clickable="true"
+        android:background="@drawable/person_color">
+
+        <View
+            android:id="@+id/liner_view_1"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/view_color"/>
+
+        <TextView
+            android:id="@+id/text_open_detection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="开放检测"
+            android:layout_marginLeft="14dp"
+            android:textSize="16sp"
+            android:layout_marginTop="8dp"/>
+
+        <TextView
+            android:id="@+id/text_open_detection_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="对附近所有的蓝牙设备可见"
+            android:textColor="@color/textshang2"
+            android:layout_marginLeft="14dp"
+            android:layout_marginBottom="8dp"
+            android:textSize="13sp"
+            android:layout_alignParentBottom="true"/>
+
+        <TextView
+            android:id="@+id/text_open_detection_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/textshang2"
+            android:text="(倒计时 120)"
+            android:layout_marginBottom="8dp"
+            android:layout_toRightOf="@id/text_open_detection_info"
+            android:textSize="13sp"
+            android:layout_alignParentBottom="true"/>
+
+        <ImageView
+            android:id="@+id/image_open_detection"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/wt_person_close"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="14dp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/device_name_set"
+        android:layout_width="match_parent"
+        android:layout_height="62dp"
+        android:clickable="true"
+        android:background="@drawable/person_color">
+
+        <View
+            android:id="@+id/liner_view_2"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/view_color"/>
+
+        <TextView
+            android:id="@+id/text_device"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设备名称"
+            android:layout_marginLeft="14dp"
+            android:textSize="16sp"
+            android:layout_centerVertical="true"/>
+
+        <ImageView
+            android:id="@+id/image_wifi_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/live_more"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="14dp"/>
+
+        <TextView
+            android:id="@+id/text_device_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="本设备的名称"
+            android:maxLines="1"
+            android:layout_toLeftOf="@id/image_wifi_set"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="5dp"/>
+
+        <View
+            android:id="@+id/liner_view_3"
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/view_color"
+            android:layout_alignParentBottom="true"/>
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/text_pair_device"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/linkman_bt"
+        android:textSize="14sp"
+        android:text="已配对的设备"
+        android:gravity="center_vertical"
+        android:paddingLeft="14dp"/>
+
+    <View
+        android:id="@+id/liner_view_4"
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"/>
+
+    <ListView
+        android:id="@+id/list_pair_bluetooth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"/>
+
+    <TextView
+        android:id="@+id/text_user_device"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/linkman_bt"
+        android:layout_marginTop="20dp"
+        android:textSize="14sp"
+        android:text="可用设备"
+        android:gravity="center_vertical"
+        android:paddingLeft="14dp"/>
+
+</LinearLayout>

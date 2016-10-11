@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/BaseStyle"
+    android:orientation="vertical">
+
+    <include android:id="@+id/include_title" layout="@layout/base_activity_title"/>
+
+    <LinearLayout
+        android:id="@+id/linear_bluetooth_search"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        android:background="@color/WHITE"
+        android:layout_alignParentBottom="true">
+
+        <Button
+            android:id="@+id/bluetooth_search"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:background="@drawable/wt_commit_button_background"
+            android:text="搜索设备"
+            android:textColor="@color/WHITE"
+            android:textSize="16sp"
+            android:layout_margin="15dp"/>
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/list_user_bluetooth"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:layout_below="@id/include_title"
+        android:layout_above="@id/linear_bluetooth_search"
+        android:background="@color/WHITE"/>
+
+</RelativeLayout>

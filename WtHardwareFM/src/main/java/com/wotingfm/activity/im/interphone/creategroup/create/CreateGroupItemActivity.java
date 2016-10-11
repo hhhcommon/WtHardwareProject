@@ -108,7 +108,7 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
         spinnerChannel1.setSelection(0);
         spinnerChannel2 = (Spinner) findViewById(R.id.spinner_channel2);
         spinnerChannel2.setSelection(1);
-        setSpinnerItemLintener();
+        setSpinnerItemListener();
 
         switch (createGroupType) {
             case IntegerConstant.CREATE_GROUP_PUBLIC:
@@ -297,7 +297,7 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
     /**
      * 获取用户选择的设备备用频道
      */
-    private void setSpinnerItemLintener() {
+    private void setSpinnerItemListener() {
         spinnerChannel1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

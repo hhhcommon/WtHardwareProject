@@ -174,14 +174,14 @@
 
         <!-- 添加好友界面 -->
         <activity
-            android:name=".activity.im.interphone.find.add.FriendAddActivityApp"
+            android:name=".activity.im.interphone.find.add.FriendAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
         <!-- 添加好友界面 -->
         <activity
-            android:name=".activity.im.interphone.find.add.GroupAddActivityApp"
+            android:name=".activity.im.interphone.find.add.GroupAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -336,22 +336,30 @@
             android:name=".activity.im.interphone.groupmanage.memberdel.MemberDelActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
+
+        <!-- 全部群成员 -->
         <activity
             android:name=".activity.im.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
+
+        <!-- 修改群密码 -->
         <activity
             android:name=".activity.im.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
+
+        <!-- 对讲主页 -->
         <activity
             android:name=".activity.im.interphone.main.DuiJiangActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan"/>
+
+        <!-- 审核消息 -->
         <activity
             android:name=".activity.im.interphone.groupmanage.joingrouplist.activity.JoinGroupListActivity"
             android:screenOrientation="portrait"
@@ -361,35 +369,49 @@
             android:name=".activity.im.interphone.groupmanage.handlegroupapply.HandleGroupApplyActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
-        <activity android:name=".activity.im.interphone.groupmanage.groupperson.GroupPersonActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"
-                  android:windowSoftInputMode="adjustPan"/>
-        <activity android:name="com.wotingfm.activity.common.preference.activity.PreferenceActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"
-                  android:windowSoftInputMode="adjustPan"/>
+            android:windowSoftInputMode="adjustPan"/>
 
-        <activity android:name="com.wotingfm.activity.music.program.citylist.activity.CityListActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"
-                  android:windowSoftInputMode="adjustPan"/>
+        <!-- 我的好友的界面，通过群界面登入 -->
+        <activity
+            android:name=".activity.im.interphone.groupmanage.groupperson.GroupPersonActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
 
-        <activity android:name="com.wotingfm.activity.music.download.activity.DownloadActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"
-                  android:windowSoftInputMode="adjustPan"/>
+        <!-- 偏好设置界面 -->
+        <activity
+            android:name=".activity.common.preference.activity.PreferenceActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
 
-        <activity android:name="com.wotingfm.activity.music.download.downloadlist.activity.DownLoadListActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"
-                  android:windowSoftInputMode="adjustPan"/>
+        <!-- 城市列表 -->
+        <activity
+            android:name=".activity.music.program.citylist.activity.CityListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
 
-        <activity android:name="com.wotingfm.activity.music.program.tuijian.activity.RecommendLikeListActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"
-                  android:windowSoftInputMode="adjustPan"/>
+        <!-- 下载主页 -->
+        <activity
+            android:name=".activity.music.download.activity.DownloadActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <!-- 下载列表 -->
+        <activity
+            android:name=".activity.music.download.downloadlist.activity.DownLoadListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <!-- 猜你喜欢更多推荐 -->
+        <activity
+            android:name=".activity.music.program.tuijian.activity.RecommendLikeListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name="com.wotingfm.activity.music.program.fmlist.activity.FMListActivity"
                   android:screenOrientation="portrait"
@@ -400,10 +422,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-        <activity android:name="com.wotingfm.activity.music.program.radiolist.activity.RadioListActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"
-                  android:windowSoftInputMode="adjustPan"/>
 
         <activity android:name="com.wotingfm.activity.im.interphone.message.activity.NewsActivity"
             android:screenOrientation="portrait"
@@ -415,6 +433,61 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
+        <!-- 分类界面 -->
+        <activity
+            android:name=".activity.music.program.radiolist.activity.RadioListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <!-- 流量管理界面 -->
+        <activity
+            android:name=".activity.mine.flowmanage.FlowManageActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <!-- 二维码界面 -->
+        <activity
+            android:name=".activity.mine.qrcode.EWMShowActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <!-- 蓝牙 -->
+        <activity
+            android:name=".activity.mine.bluetooth.BluetoothActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <!-- WiFi界面 -->
+        <activity
+            android:name=".activity.mine.wifi.WiFiActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <!-- WiFi密码配置 -->
+        <activity
+            android:name=".activity.mine.wifi.ConfigWiFiActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <!--FM调频界面-->
+        <activity
+            android:name=".activity.mine.fm.FMConnectActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <!-- 专辑界面 -->
+        <activity
+            android:name=".activity.music.program.album.activity.AlbumActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 友盟activity -->
         <activity

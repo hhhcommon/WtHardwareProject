@@ -11,7 +11,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewOutlineProvider;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -43,7 +42,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 /*
- *是我的好友的界面，通过群界面登入
+ * 是我的好友的界面，通过群界面登入
  */
 public class GroupPersonActivity extends Activity {
     private ImageLoader imageLoader;
