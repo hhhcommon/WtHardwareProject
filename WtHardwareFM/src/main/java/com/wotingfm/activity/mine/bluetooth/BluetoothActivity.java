@@ -370,9 +370,7 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
         }
     }
 
-    /**
-     * 获取已经配对的蓝牙设备
-     */
+    // 获取已经配对的蓝牙设备
     private List<BluetoothInfo> findAvalibleDevice(){
         List<BluetoothInfo> pairList = new ArrayList<>();
         // 获取可配对蓝牙设备
@@ -395,9 +393,7 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
         return pairList;
     }
 
-    /**
-     * 子条目点击事件  发送配对请求
-     */
+    // 子条目点击事件  发送配对请求
     private void setItemLis(){
         userBluetoothList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -434,9 +430,7 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
             }
         });
 
-        /**
-         * 点击取消已配对的蓝牙设备
-         */
+        // 点击取消已配对的蓝牙设备
         userAdapter.setListener(new UserBluetoothAdapter.CancelListener() {
             @Override
             public void cancelPair(int p) {

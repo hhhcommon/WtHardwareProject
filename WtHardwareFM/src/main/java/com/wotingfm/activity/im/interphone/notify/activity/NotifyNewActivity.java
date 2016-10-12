@@ -12,14 +12,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.im.interphone.linkman.dao.NotifyHistoryDao;
 import com.wotingfm.activity.im.interphone.linkman.model.DBNotifyHistorary;
 import com.wotingfm.activity.im.interphone.notify.adapter.NotifyListAdapter;
-import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 通知消息
@@ -46,6 +47,7 @@ public class NotifyNewActivity extends AppBaseActivity {
         }
         initDao();
         setTitle("消息中心");
+        deleteDialog();
 
         notifyListView = (ListView) findViewById(R.id.notify_list_view);// 消息列表
         list = getNotifyNew();
@@ -68,6 +70,7 @@ public class NotifyNewActivity extends AppBaseActivity {
         adapter = new NotifyListAdapter(context, list);
         notifyListView.setAdapter(adapter);
         setListItemListener();
+        clickLongDelete();
     }
 
     /*
@@ -80,6 +83,47 @@ public class NotifyNewActivity extends AppBaseActivity {
                 notifyContentDialog(position);
             }
         });
+    }
+
+    // 长按删除
+    private void clickLongDelete() {
+        notifyListView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                NotifyNewActivity.this.position = position;
+                deleteDialog.show();
+                return true;
+            }
+        });
+    }
+
+    private Dialog deleteDialog;
+    private int position;
+
+    // 长按删除对话框
+    private void deleteDialog() {
+        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_exit_confirm, null);
+        TextView textTitle = (TextView) dialogView.findViewById(R.id.tv_title);
+        textTitle.setText("确定删除通知？");
+        dialogView.findViewById(R.id.tv_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteDialog.dismiss();
+                dbDao.deleteHistory(list.get(position).getAddTime());
+                list.remove(position);
+                adapter.notifyDataSetChanged();
+            }
+        });
+        dialogView.findViewById(R.id.tv_cancle).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                deleteDialog.dismiss();
+            }
+        });
+        deleteDialog = new Dialog(this, R.style.MyDialog);
+        deleteDialog.setContentView(dialogView);
+        deleteDialog.setCanceledOnTouchOutside(false);
+        deleteDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
     }
 
     /*
@@ -141,10 +185,11 @@ public class NotifyNewActivity extends AppBaseActivity {
             notifyNewData = new DBNotifyHistorary();
             notifyNewData.setTitle("消息标题_" + i);
             notifyNewData.setContent("测试数据，看到效果就可以删除测试数据，看到效果就可以删除测试数据，看到效果就可以删除_" + i);
-            notifyNewData.setAddTime(new SimpleDateFormat("hh:mm").format(System.currentTimeMillis()));
+            notifyNewData.setAddTime(new SimpleDateFormat("hh:mm", Locale.CHINA).format(System.currentTimeMillis()));
             list.add(notifyNewData);
         }
         setListItemListener();
+        clickLongDelete();
         // -----------------------------------------------------
         return list;
     }

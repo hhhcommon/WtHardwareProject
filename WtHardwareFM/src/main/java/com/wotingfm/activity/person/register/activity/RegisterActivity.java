@@ -2,9 +2,7 @@ package com.wotingfm.activity.person.register.activity;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -20,6 +18,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -496,12 +495,12 @@ public class RegisterActivity extends Activity implements OnClickListener {
 					e.printStackTrace();
 				}*/
 				if (ReturnType.equals("1001")) {
-					// 通过shareperfrence存储用户的登录信息
-					SharedPreferences sp = getSharedPreferences("wotingfm",	Context.MODE_PRIVATE);
-					Editor et = sp.edit();
+					// 通过sharedPreference存储用户的登录信息
+					Editor et = BSApplication.SharedPreferences.edit();
 					et.putString(StringConstant.USERID, userid);
 					et.putString(StringConstant.ISLOGIN, "true");
 					et.putString(StringConstant.USERNAME, username);
+                    et.putString(StringConstant.PHONENUMBER, phonenum);
 					et.putString(StringConstant.PERSONREFRESHB, "true");
 					et.commit();
 					Intent pushintent = new Intent("push_refreshlinkman");

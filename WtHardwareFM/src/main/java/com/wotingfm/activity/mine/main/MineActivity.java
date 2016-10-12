@@ -225,7 +225,7 @@ public class MineActivity extends Activity implements OnClickListener {
 
         View wifiSet = findViewById(R.id.wifi_set);             // WIFI设置
         wifiSet.setOnClickListener(this);
-        textWifiName = (TextView) findViewById(R.id.text_wifi_name);           // 连接的WIFI的名字
+        textWifiName = (TextView) findViewById(R.id.text_wifi_name);                    // 连接的WIFI的名字
 
         View auxSet = findViewById(R.id.aux_set);               // AUX设置
         auxSet.setOnClickListener(this);
@@ -429,6 +429,17 @@ public class MineActivity extends Activity implements OnClickListener {
     protected void onResume() {
         super.onResume();
         getLoginStatus();
+        if(wifiManager.isWifiEnabled()) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    String  SSIDWiFi = wifiManager.getConnectionInfo().getSSID();
+                    textWifiName.setText(SSIDWiFi.substring(1, SSIDWiFi.length() - 1));
+                }
+            }, 2000);
+        } else {
+            textWifiName.setText("关闭");
+        }
     }
 
     // 注销数据交互

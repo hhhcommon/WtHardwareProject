@@ -1,163 +1,104 @@
 package com.wotingfm.activity.mine.update.activity;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.os.Bundle;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
-import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
+import com.wotingfm.activity.person.modifypassword.activity.ModifyPasswordActivity;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.manager.MyActivityManager;
+
 /**
  * 修改个人信息(还未完成，后台接口暂时没有)
  * @author 辛龙
- * 2016年7月19日
+ *         2016年7月19日
  */
-public class UpdatePersonActivity extends Activity implements OnClickListener {
-	private UpdatePersonActivity context;
-	private LinearLayout head_left_btn;
-	private LinearLayout lin_gender;
-	private Dialog Imagedialog;
-	private TextView tv_gender;
-	private LinearLayout lin_age;
-	private LinearLayout lin_xingzuo;
-	private TextView tv_zhanghu;
-	private TextView tv_name;
-	private SharedPreferences sharedPreferences;
+public class UpdatePersonActivity extends AppBaseActivity implements OnClickListener {
+    private Dialog imageDialog;
+    private TextView textGender;// 性别
 
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_updateperson);
-		context = this;
-		sharedPreferences = this.getSharedPreferences("wotingfm",Context.MODE_PRIVATE);
-		setview();			// 设置界面
-		setLisener();		// 设置监听
-		calldialog();		//初始化性别选择对话框
-//		datepickdialog();	//日期选择对话框
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		// 透明状态栏
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	// 透明导航栏
-		MyActivityManager mam = MyActivityManager.getInstance();
-		mam.pushOneActivity(context);
-		setdata();
-	}
+    @Override
+    protected int setViewId() {
+        return R.layout.activity_updateperson;
+    }
 
-	private void setdata() {
-		String username = sharedPreferences.getString(StringConstant.USERNAME, "");
-		String userid = sharedPreferences.getString(StringConstant.USERID, "");
-		tv_zhanghu.setText(userid);
-		tv_name.setText(username);
-	}
+    @Override
+    protected void init() {
+        setTitle("修改资料");
+        callDialog();        // 初始化性别选择对话框
+        setData();
 
-	private void setLisener() {
-		head_left_btn.setOnClickListener(context);
-		lin_gender.setOnClickListener(this);
-		lin_age.setOnClickListener(this);
-		lin_xingzuo.setOnClickListener(this);
-	}
+        findViewById(R.id.linear_modify).setOnClickListener(this);  // 密码
+        findViewById(R.id.lin_gender).setOnClickListener(this);     // 性别
+        findViewById(R.id.lin_age).setOnClickListener(this);        // 年龄
+        findViewById(R.id.lin_xingzuo).setOnClickListener(this);    // 星座
+    }
 
-	private void setview() {
-		head_left_btn = (LinearLayout) findViewById(R.id.head_left_btn);
-		lin_gender = (LinearLayout) findViewById(R.id.lin_gender);
-		tv_gender=(TextView)findViewById(R.id.tv_gender);
-		tv_zhanghu=(TextView)findViewById(R.id.tv_zhanghu);
-		tv_name=(TextView)findViewById(R.id.tv_name);
-		lin_age = (LinearLayout) findViewById(R.id.lin_age);
-		lin_xingzuo = (LinearLayout) findViewById(R.id.lin_xingzuo);
-	}
-	
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.head_left_btn:// 注销登录
-			finish();
-			break;
-		case R.id.lin_gender:
-			Imagedialog.show();
-			break;
-		case R.id.lin_age:
-			showMonPicker();
-			break;
-		case R.id.lin_xingzuo:
-			showMonPicker();
-			break;
-		}
-	}
-	
-	private void showMonPicker() {
-		
-	}
+    // 设置性别对话框
+    private void callDialog() {
+        final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_exit_confirm, null);
+        TextView textTitle = (TextView) dialog.findViewById(R.id.tv_title);
+        textTitle.setText("请选择您的性别");
 
-	private void calldialog() {
-		final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_exit_confirm, null);
-		TextView tv_title= (TextView) dialog.findViewById(R.id.tv_title);
-		TextView tv_cancle = (TextView) dialog.findViewById(R.id.tv_cancle);
-		TextView tv_confirm = (TextView) dialog.findViewById(R.id.tv_confirm);
-		tv_cancle.setText("男");
-		tv_confirm.setText("女");
-		tv_title.setText("请选择您的性别");
-		Imagedialog = new Dialog(context, R.style.MyDialog);
-		Imagedialog.setContentView(dialog);
-		Imagedialog.setCanceledOnTouchOutside(true);
-		Imagedialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-		
-		tv_confirm.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				tv_gender.setText("女");
-				Imagedialog.dismiss();
-			}
-		});
-		
-		tv_cancle.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				tv_gender.setText("男");
-				Imagedialog.dismiss();
-			}
-		});
-		
-	}
-//	private void datepickdialog() {
-//		final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_exit_confirm, null);
-//		TextView tv_title= (TextView) dialog.findViewById(R.id.tv_title);
-//		TextView tv_cancle = (TextView) dialog.findViewById(R.id.tv_cancle);
-//		TextView tv_confirm = (TextView) dialog.findViewById(R.id.tv_confirm);
-//		tv_cancle.setText("男");
-//		tv_confirm.setText("女");
-//		tv_title.setText("请选择您的性别");
-//		Imagedialog = new Dialog(context, R.style.MyDialog);
-//		Imagedialog.setContentView(dialog);
-//		Imagedialog.setCanceledOnTouchOutside(true);
-//		Imagedialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-//		tv_confirm.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				tv_gender.setText("女");
-//				Imagedialog.dismiss();
-//			}
-//		});
-	
-//		tv_cancle.setOnClickListener(new OnClickListener() {
-//			@Override
-//			public void onClick(View v) {
-//				tv_gender.setText("男");
-//				Imagedialog.dismiss();
-//			}
-//		});
-//		
-//	}
-	
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-		MyActivityManager mam = MyActivityManager.getInstance();
-		mam.popOneActivity(context);
-	}
+        TextView textCancel = (TextView) dialog.findViewById(R.id.tv_cancle);
+        textCancel.setText("男");
+        textCancel.setOnClickListener(this);
+
+        TextView textConfirm = (TextView) dialog.findViewById(R.id.tv_confirm);
+        textConfirm.setText("女");
+        textConfirm.setOnClickListener(this);
+
+        imageDialog = new Dialog(context, R.style.MyDialog);
+        imageDialog.setContentView(dialog);
+        imageDialog.setCanceledOnTouchOutside(true);
+        imageDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+    }
+
+    // 初始化数据
+    private void setData() {
+        textGender = (TextView) findViewById(R.id.tv_gender);       // 性别
+
+        String userName = BSApplication.SharedPreferences.getString(StringConstant.USERNAME, "");                   // 用户名
+        TextView textName = (TextView) findViewById(R.id.tv_name);
+        textName.setText(userName);
+
+        String userId = BSApplication.SharedPreferences.getString(StringConstant.USERID, "");                       // 用户ID
+        TextView textUserId = (TextView) findViewById(R.id.tv_zhanghu);
+        textUserId.setText(userId);
+
+        String phoneNumber = BSApplication.SharedPreferences.getString(StringConstant.PHONENUMBER, "13012345678");  // 用户手机号
+        TextView textPhoneNumber = (TextView) findViewById(R.id.tv_phone_number);
+        textPhoneNumber.setText(phoneNumber);
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.lin_gender:       // 性别
+                imageDialog.show();
+                break;
+            case R.id.lin_age:          // 年龄
+
+                break;
+            case R.id.lin_xingzuo:      // 星座
+
+                break;
+            case R.id.linear_modify:    // 密码
+                startActivity(new Intent(UpdatePersonActivity.this, ModifyPasswordActivity.class));
+                break;
+            case R.id.tv_cancle:
+                textGender.setText("男");
+                imageDialog.dismiss();
+                break;
+            case R.id.tv_confirm:
+                textGender.setText("女");
+                imageDialog.dismiss();
+                break;
+        }
+    }
 }
