@@ -16,6 +16,7 @@ import com.wotingfm.devicecontrol.WtDeviceControl;
 import com.wotingfm.helper.CommonHelper;
 import com.wotingfm.receiver.NetWorkChangeReceiver;
 import com.wotingfm.service.FloatingWindowService;
+import com.wotingfm.service.LocationService;
 import com.wotingfm.service.NotificationService;
 import com.wotingfm.service.SocketService;
 import com.wotingfm.service.SubclassService;
@@ -65,13 +66,14 @@ public class BSApplication extends Application {
         startService(new Intent(this, VoiceStreamRecordService.class));
         //播放服务
         startService(new Intent(this, VoiceStreamPlayerService.class));
+        //定位服务
+        startService(new Intent(this, LocationService.class));
         //启动全局弹出框服务
         startService(new Intent(this, SubclassService.class));
         startService(new Intent(this, DownloadService.class));
         startService(new Intent(this, NotificationService.class));
         CommonHelper.checkNetworkStatus(instance);//网络设置获取
         this.registerNetWorkChangeReceiver(new NetWorkChangeReceiver(this));// 注册网络状态及返回键监听
-
         WtDeviceControl mControl = new WtDeviceControl(instance);
         GlobalConfig.device=mControl;
         startService(new Intent(this, FloatingWindowService.class));

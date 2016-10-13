@@ -547,6 +547,11 @@
             android:name="UMENG_APPKEY"
             android:value="5715cf1e67e58e5955000896" >
         </meta-data>
+        <!-- 高德地图用户Key -->
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="7dabc8027d924f36cd758732c895c261">
+        </meta-data>
 
         <!-- 开机启动 -->
         <receiver android:name="com.wotingfm.receiver.AutoStartReceiver" >
@@ -565,6 +570,8 @@
         <service android:name="com.wotingfm.service.VoiceStreamPlayerService" />
         <service android:name="com.wotingfm.activity.music.common.service.DownloadService" />
         <service android:name="com.wotingfm.service.FloatingWindowService" />
+        <service android:name="com.wotingfm.service.LocationService" />
+        <service android:name="com.amap.api.location.APSService"/>
     </application>
 
 </manifest>

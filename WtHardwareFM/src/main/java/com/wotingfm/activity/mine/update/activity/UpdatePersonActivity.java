@@ -8,7 +8,7 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
+import com.wotingfm.activity.common.baseActivity.AppBaseActivity;
 import com.wotingfm.activity.person.modifypassword.activity.ModifyPasswordActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;

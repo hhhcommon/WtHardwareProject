@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.creategroup.create.CreateGroupItemActivity;
-import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
+import com.wotingfm.activity.common.baseActivity.AppBaseActivity;
 import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
 
