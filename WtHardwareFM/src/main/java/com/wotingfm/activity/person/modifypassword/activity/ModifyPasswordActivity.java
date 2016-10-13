@@ -126,9 +126,35 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
             Toast.makeText(context, "密码请输入六位以上", Toast.LENGTH_LONG).show();
             return false;
         }
+        if ("".equalsIgnoreCase(oldPassword) && "".equalsIgnoreCase(verificationCode)) {
+            Toast.makeText(context, "请选择一种修改密码的方式!", Toast.LENGTH_LONG).show();
+            return false;
+        } else {// 如果两者都填了则程序走后者 即验证码方式修改
+            if (!"".equalsIgnoreCase(oldPassword)) {        // 旧密码
+                modifyType = 1;
+            }
+            if(!"".equalsIgnoreCase(verificationCode)) {    // 验证码
+                modifyType = 2;
+            }
+        }
         return true;
     }
 
+    // 验证手机号正确就获取验证码
+    private void checkVerificationCode() {
+        phoneNum = BSApplication.SharedPreferences.getString(StringConstant.PHONENUMBER, "13012345678");  // 用户手机号
+        L.v("phoneNum", phoneNum);
+        if ("".equalsIgnoreCase(phoneNum) || !isMobile(phoneNum)) { // 检查输入数字是否为手机号
+            ToastUtils.show_allways(context, "请输入正确的手机号码!");
+            return ;
+        }
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+            dialog = DialogUtils.Dialogph(context, "正在获取验证码...");
+            sendVerificationCode();                                 // 发送网络请求 获取验证码
+        } else {
+            ToastUtils.show_allways(context, "网络失败，请检查网络!");
+        }
+    }
 
     // 获取验证码
     private void sendVerificationCode() {
