@@ -8,7 +8,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
+import com.wotingfm.activity.common.baseActivity.AppBaseActivity;
 
 /**
  * 配置WiFi密码

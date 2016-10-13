@@ -223,8 +223,8 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_play, container, false);
         mHandler = new Handler();
-        setview(); // 设置界面
-        setlistener(); // 设置监听
+        setView(); // 设置界面
+        setListener(); // 设置监听
         WifiDialog(); // wifi提示dialog
         ShareDialog(); // 分享dialog
         moreDialog();//更多
@@ -429,7 +429,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         }
     }
 
-    private void setview() {
+    private void setView() {
         mlistView = (XListView) rootView.findViewById(R.id.listView);
         mlistView.setPullLoadEnable(false);
         mlistView.setXListViewListener(this);
@@ -467,7 +467,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         mlistView.addHeaderView(headview);
     }
 
-    private void setlistener() {
+    private void setListener() {
         lin_like.setOnClickListener(this);
         lin_left.setOnClickListener(this);
         lin_center.setOnClickListener(this);
@@ -1533,7 +1533,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         sendtype = 1;
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-
             jsonObject.put("PageType", "0");
             jsonObject.put("Page", String.valueOf(page));
             jsonObject.put("PageSize", "10");
