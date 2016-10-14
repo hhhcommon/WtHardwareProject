@@ -161,7 +161,7 @@ public class OnLineFragment extends Fragment {
             send();
         } else {
 //			listView_main.stopLoadMore();
-            mPullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);
+          /*  mPullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);*/
             ToastUtils.show_short(context, "网络失败，请检查网络");
         }
     }
