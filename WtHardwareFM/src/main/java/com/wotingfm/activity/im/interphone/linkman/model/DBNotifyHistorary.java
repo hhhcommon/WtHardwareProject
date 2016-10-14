@@ -3,14 +3,24 @@ package com.wotingfm.activity.im.interphone.linkman.model;
 import java.io.Serializable;
 
 public class DBNotifyHistorary implements Serializable{
-	private String BJUserId;//本机userid
-	private String TyPe;//通知类型
-	private String ImageUrl;//图片路径
-	private String 	Title;//标题
-	private String Content;//内容
-	private String DealTime;//服务段处理时间
-	private String AddTime;//添加时间
-	public DBNotifyHistorary(){
+	private String BJUserId;    // 本机userId
+	private String TyPe;        // 通知类型
+	private String ImageUrl;    // 图片路径
+	private String 	Title;      // 标题
+	private String Content;     // 内容
+	private String DealTime;    // 服务段处理时间
+	private String AddTime;     // 添加时间
+    private int state;           // == 1 为未选中状态  == 0 为选中状态  == -1 为非删除状态
+
+    public int getState() {
+        return state;
+    }
+
+    public void setState(int state) {
+        this.state = state;
+    }
+
+    public DBNotifyHistorary(){
 
 	}
 	public DBNotifyHistorary(String bjuserid, String type, 

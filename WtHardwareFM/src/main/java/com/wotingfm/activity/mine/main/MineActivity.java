@@ -9,7 +9,6 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.database.Cursor;
 import android.graphics.Bitmap;
@@ -55,6 +54,7 @@ import com.wotingfm.activity.mine.qrcode.EWMShowActivity;
 import com.wotingfm.activity.mine.update.activity.UpdatePersonActivity;
 import com.wotingfm.activity.mine.wifi.WIFIActivity;
 import com.wotingfm.activity.person.login.activity.LoginActivity;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
@@ -81,18 +81,28 @@ import java.io.File;
  * 个人信息主页
  */
 public class MineActivity extends Activity implements OnClickListener {
+    private MineActivity context;
+    public DeviceReceiver mDevice = new DeviceReceiver();
     public static BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
     public static WifiManager wifiManager;
-    public DeviceReceiver mDevice = new DeviceReceiver();
-    private MineActivity context;
-    private SharedPreferences sharedPreferences;
     private UserPortaitInside UserPortait;
     private ImageLoader imageLoader;
 
-    private final int TO_GALLERY = 1;               // 打开图库
-    private final int TO_CAMERA = 2;                // 打开照相机
-    private int updateType = 1;                     // 版本更新类型
-    private int imageNum;
+    private Dialog dialog;                          // 加载数据对话框
+    protected Dialog imageDialog;                   // 修改头像对话框
+    private Dialog updateDialog;                    // 更新对话框
+    private Dialog clearCacheDialog;                // 清除缓存对话框
+    private Dialog exitLoginDialog;                 // 退出登录对话框
+
+    private RelativeLayout relativeStatusUnLogin;   // 未登录状态
+    private RelativeLayout relativeStatusLogin;     // 登录状态
+    private ImageView userHead;                     // 用户头像
+    private ImageView imageAuxSet;
+    private TextView textWifiName;
+    private TextView textBluetoothState;            // 蓝牙状态 打开 OR 关闭
+    private TextView textCache;                     // 缓存统计
+    private TextView textUserName;                  // 用户名
+    private Button exitLogin;                       // 退出登录
 
     private String ReturnType;
     private String MiniUri;
@@ -105,28 +115,17 @@ public class MineActivity extends Activity implements OnClickListener {
     private String url;
     private String userId;
     private String userName;
-
-    private Dialog dialog;                          // 加载数据对话框
-    protected Dialog imageDialog;                   // 修改头像对话框
-    private Dialog updateDialog;                    // 更新对话框
-    private Dialog clearCacheDialog;                // 清除缓存对话框
-    private Dialog exitLoginDialog;                 // 退出登录对话框
-
-    private RelativeLayout relativeStatusUnLogin;   // 未登录状态
-    private RelativeLayout relativeStatusLogin;     // 登录状态
-    private ImageView userHead;                     // 用户头像
-    private ImageView imageAuxSet;
     private String PhotoCutAfterImagePath;
+    private String isLogin;                         // 判断是否登录
 
-    private TextView textWifiName;
-    private TextView textBluetoothState;            // 蓝牙状态 打开 OR 关闭
-    private TextView textCache;                     // 缓存统计
-    private TextView textUserName;                  // 用户名
-    private Button exitLogin;                       // 退出登录
-
+    private final int TO_GALLERY = 1;               // 打开图库
+    private final int TO_CAMERA = 2;                // 打开照相机
+    private int updateType = 1;                     // 版本更新类型
+    private int imageNum;
     private boolean isCancelRequest;
     private boolean auxState;                       // AUX设置的状态
     private boolean hasRegister = false;
+    private boolean isFirst = true;                 // 第一次加载界面
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -134,7 +133,6 @@ public class MineActivity extends Activity implements OnClickListener {
         setContentView(R.layout.activity_mine);
         context = this;
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
-        sharedPreferences = getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
         imageLoader = new ImageLoader(context);
         initCache();
         clearCacheDialog();
@@ -144,9 +142,7 @@ public class MineActivity extends Activity implements OnClickListener {
         getBluetoothState();
     }
 
-    /**
-     * 获取蓝牙状态
-     */
+    // 获取蓝牙状态
     private void getBluetoothState(){
         if(blueAdapter.isEnabled()){
             textBluetoothState.setText("打开");
@@ -230,7 +226,7 @@ public class MineActivity extends Activity implements OnClickListener {
         View auxSet = findViewById(R.id.aux_set);               // AUX设置
         auxSet.setOnClickListener(this);
         imageAuxSet = (ImageView) findViewById(R.id.image_aux_set);
-        auxState = sharedPreferences.getBoolean(StringConstant.AUX_SET, true);          // 获取AUX状态并初始化
+        auxState = BSApplication.SharedPreferences.getBoolean(StringConstant.AUX_SET, true);          // 获取AUX状态并初始化
         if (auxState) {
             imageAuxSet.setImageResource(R.mipmap.wt_person_on);
         } else {
@@ -239,7 +235,7 @@ public class MineActivity extends Activity implements OnClickListener {
 
         View channelSet = findViewById(R.id.listener_set);      // 频道设置
         channelSet.setOnClickListener(this);
-        TextView textChannel = (TextView) findViewById(R.id.text_listener_frequency);   // 频率
+//        TextView textChannel = (TextView) findViewById(R.id.text_listener_frequency);   // 频率
     }
 
     @Override
@@ -286,7 +282,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 break;
             case R.id.update_set:               // 检查更新
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    dialog = DialogUtils.Dialogph(context, "通讯中");
+                    dialog = DialogUtils.Dialogph(context, "通讯中...");
                     sendRequestUpdate();
                 } else {
                     ToastUtils.show_short(context, "网络失败，请检查网络");
@@ -310,7 +306,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 startActivity(new Intent(context, WIFIActivity.class));
                 break;
             case R.id.aux_set:                  // AUX设置
-                Editor et = sharedPreferences.edit();
+                Editor et = BSApplication.SharedPreferences.edit();
                 if (auxState) {
                     imageAuxSet.setImageResource(R.mipmap.wt_person_close);
                     et.putBoolean(StringConstant.AUX_SET, false);
@@ -350,14 +346,20 @@ public class MineActivity extends Activity implements OnClickListener {
 
     // 获取用户的登陆状态   登陆 OR 未登录
     private void getLoginStatus() {
-        String isLogin = sharedPreferences.getString(StringConstant.ISLOGIN, "false");
+        if(isFirst) {
+            isFirst = false;
+        } else if(isLogin.equals(BSApplication.SharedPreferences.getString(StringConstant.ISLOGIN, "false"))) {
+            L.v("isLogin 登录状态没有发生变化 -- > > " + isLogin);
+            return ;
+        }
+        isLogin = BSApplication.SharedPreferences.getString(StringConstant.ISLOGIN, "false");
         if (isLogin.equals("true")) {
             relativeStatusUnLogin.setVisibility(View.GONE);
             relativeStatusLogin.setVisibility(View.VISIBLE);
             exitLogin.setVisibility(View.VISIBLE);
-            String imageUrl = sharedPreferences.getString(StringConstant.IMAGEURL, "");
-            userName = sharedPreferences.getString(StringConstant.USERNAME, "");// 用户名，昵称
-            userId = sharedPreferences.getString(StringConstant.USERID, "");
+            String imageUrl = BSApplication.SharedPreferences.getString(StringConstant.IMAGEURL, "");
+            userName = BSApplication.SharedPreferences.getString(StringConstant.USERNAME, "");// 用户名，昵称
+            userId = BSApplication.SharedPreferences.getString(StringConstant.USERID, "");
             textUserName.setText(userName);
             if (imageUrl.startsWith("http:")) {
                 url = imageUrl;
@@ -446,7 +448,7 @@ public class MineActivity extends Activity implements OnClickListener {
     private void sendRequestLogout(){
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            String userId = sharedPreferences.getString(StringConstant.USERID, "");
+            String userId = BSApplication.SharedPreferences.getString(StringConstant.USERID, "");
             if (!userId.equals("")) {
                 jsonObject.put("UserId", CommonUtils.getUserId(context));
             }
@@ -483,14 +485,16 @@ public class MineActivity extends Activity implements OnClickListener {
                 } else {
                     L.w(ReturnType + "--->  其它情况");
                 }
-                Editor et = sharedPreferences.edit();
+                Editor et = BSApplication.SharedPreferences.edit();
                 et.putString(StringConstant.ISLOGIN, "false");
                 et.putString(StringConstant.USERID, "");
                 et.putString(StringConstant.IMAGEURL, "");
-                et.commit();
+                if(!et.commit()) {
+                    L.w("数据 commit 失败!");
+                }
                 exitLogin.setVisibility(View.GONE);
                 getLoginStatus();
-                Toast.makeText(context, "注销成功,请稍等", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "注销成功!", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -649,7 +653,7 @@ public class MineActivity extends Activity implements OnClickListener {
             public void onClick(View v) {
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                     exitLoginDialog.dismiss();
-                    dialog = DialogUtils.Dialogph(context, "正在获取数据");
+                    dialog = DialogUtils.Dialogph(context, "正在注销...");
                     sendRequestLogout();
                 } else {
                     ToastUtils.show_short(context, "网络失败，请检查网络");
@@ -740,7 +744,7 @@ public class MineActivity extends Activity implements OnClickListener {
         startActivityForResult(intent, IntegerConstant.PHOTO_REQUEST_CUT);
     }
 
-    //图片处理
+    // 图片处理
     private void dealt() {
         final Handler handler = new Handler() {
             @Override
@@ -748,7 +752,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 super.handleMessage(msg);
                 if (msg.what == 1) {
                     ToastUtils.show_allways(MineActivity.this, "保存成功");
-                    Editor et = sharedPreferences.edit();
+                    Editor et = BSApplication.SharedPreferences.edit();
                     String imageurl;
                     if (MiniUri.startsWith("http:")) {
                         imageurl = MiniUri;

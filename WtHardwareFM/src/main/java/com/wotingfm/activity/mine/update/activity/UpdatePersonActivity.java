@@ -8,8 +8,9 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseActivity.AppBaseActivity;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.person.modifypassword.activity.ModifyPasswordActivity;
+import com.wotingfm.activity.person.modifyphonenumber.ModifyPhoneNumberActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 
@@ -20,7 +21,8 @@ import com.wotingfm.common.constant.StringConstant;
  */
 public class UpdatePersonActivity extends AppBaseActivity implements OnClickListener {
     private Dialog imageDialog;
-    private TextView textGender;// 性别
+    private TextView textGender;        // 性别
+    private TextView textPhoneNumber;   // 手机号码
 
     @Override
     protected int setViewId() {
@@ -33,10 +35,11 @@ public class UpdatePersonActivity extends AppBaseActivity implements OnClickList
         callDialog();        // 初始化性别选择对话框
         setData();
 
-        findViewById(R.id.linear_modify).setOnClickListener(this);  // 密码
-        findViewById(R.id.lin_gender).setOnClickListener(this);     // 性别
-        findViewById(R.id.lin_age).setOnClickListener(this);        // 年龄
-        findViewById(R.id.lin_xingzuo).setOnClickListener(this);    // 星座
+        findViewById(R.id.linear_modify).setOnClickListener(this);              // 密码
+        findViewById(R.id.lin_gender).setOnClickListener(this);                 // 性别
+        findViewById(R.id.lin_age).setOnClickListener(this);                    // 年龄
+        findViewById(R.id.lin_xingzuo).setOnClickListener(this);                // 星座
+        findViewById(R.id.linear_modify_phone_number).setOnClickListener(this); // 修改手机号
     }
 
     // 设置性别对话框
@@ -61,7 +64,8 @@ public class UpdatePersonActivity extends AppBaseActivity implements OnClickList
 
     // 初始化数据
     private void setData() {
-        textGender = (TextView) findViewById(R.id.tv_gender);       // 性别
+        textGender = (TextView) findViewById(R.id.tv_gender);           // 性别
+        textPhoneNumber = (TextView) findViewById(R.id.tv_phone_number);// 手机号码
 
         String userName = BSApplication.SharedPreferences.getString(StringConstant.USERNAME, "");                   // 用户名
         TextView textName = (TextView) findViewById(R.id.tv_name);
@@ -70,9 +74,12 @@ public class UpdatePersonActivity extends AppBaseActivity implements OnClickList
         String userId = BSApplication.SharedPreferences.getString(StringConstant.USERID, "");                       // 用户ID
         TextView textUserId = (TextView) findViewById(R.id.tv_zhanghu);
         textUserId.setText(userId);
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
         String phoneNumber = BSApplication.SharedPreferences.getString(StringConstant.PHONENUMBER, "13012345678");  // 用户手机号
-        TextView textPhoneNumber = (TextView) findViewById(R.id.tv_phone_number);
         textPhoneNumber.setText(phoneNumber);
     }
 
@@ -98,6 +105,9 @@ public class UpdatePersonActivity extends AppBaseActivity implements OnClickList
             case R.id.tv_confirm:
                 textGender.setText("女");
                 imageDialog.dismiss();
+                break;
+            case R.id.linear_modify_phone_number:
+                startActivity(new Intent(context, ModifyPhoneNumberActivity.class));
                 break;
         }
     }

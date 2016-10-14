@@ -129,7 +129,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-00
+
         <!-- 消息中心 -->
         <activity
             android:name=".activity.im.interphone.notify.activity.NotifyNewActivity"
@@ -412,13 +412,13 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-
-        <activity android:name="com.wotingfm.activity.music.program.fmlist.activity.FMListActivity"
-                  android:screenOrientation="portrait"
-                  android:theme="@android:style/Theme.Light.NoTitleBar"
-                  android:windowSoftInputMode="adjustPan"/>
-
-        <activity android:name="com.wotingfm.activity.im.interphone.creategroup.frienddetails.TalkPersonNewsActivity"
+        <activity
+            android:name=".activity.music.program.fmlist.activity.FMListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name=".activity.im.interphone.creategroup.frienddetails.TalkPersonNewsActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -485,6 +485,12 @@
         <!-- 专辑界面 -->
         <activity
             android:name=".activity.music.program.album.activity.AlbumActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <activity
+            android:name=".activity.person.modifyphonenumber.ModifyPhoneNumberActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
