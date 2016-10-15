@@ -18,6 +18,25 @@ public class GroupRation implements Serializable {
     public String GroupType;
     public String GroupSignature;
 
+    private String alternateChannel1;// 备用频道 1
+    private String alternateChannel2;// 备用频道 2
+
+    public String getAlternateChannel1() {
+        return alternateChannel1;
+    }
+
+    public void setAlternateChannel1(String alternateChannel1) {
+        this.alternateChannel1 = alternateChannel1;
+    }
+
+    public String getAlternateChannel2() {
+        return alternateChannel2;
+    }
+
+    public void setAlternateChannel2(String alternateChannel2) {
+        this.alternateChannel2 = alternateChannel2;
+    }
+
     public String getGroupSignature() {
         return GroupSignature;
     }

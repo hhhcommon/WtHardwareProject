@@ -45,6 +45,11 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
 
     @Override
     public void onClick(View v) {
+        // 以下操作都需要网络 所以没有网络就不需要继续验证直接提示用户设置网络
+        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            ToastUtils.show_allways(context, "网络失败，请检查网络");
+            return ;
+        }
         switch (v.getId()) {
             case R.id.btn_confirm:                  // 确定修改
                 checkValue();
@@ -83,12 +88,9 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
             ToastUtils.show_allways(context, "请输入正确的手机号码!");
             return ;
         }
-        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            dialog = DialogUtils.Dialogph(context, "正在获取验证码...");
-            sendVerificationCode();                                     // 发送网络请求 获取验证码
-        } else {
-            ToastUtils.show_allways(context, "网络失败，请检查网络!");
-        }
+
+        dialog = DialogUtils.Dialogph(context, "正在获取验证码...");
+        sendVerificationCode();                                         // 发送网络请求 获取验证码
     }
 
     // 检查数据的正确性
@@ -102,12 +104,9 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
             ToastUtils.show_allways(context, "验证码不正确!");
             return ;
         }
-        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            dialog = DialogUtils.Dialogph(context, "正在验证手机号...");
-            sendRequest();
-        } else {
-            ToastUtils.show_short(context, "网络失败，请检查网络!");
-        }
+
+        dialog = DialogUtils.Dialogph(context, "正在验证手机号...");
+        sendRequest();
     }
 
     // 请求网络获取验证码
@@ -170,6 +169,7 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }
@@ -221,6 +221,7 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }
@@ -269,6 +270,7 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }

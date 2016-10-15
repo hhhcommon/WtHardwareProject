@@ -57,17 +57,18 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
 
     @Override
     public void onClick(View v) {
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {// 检查是否连接网络
+            ToastUtils.show_allways(context, "网络连接失败，请稍后重试!");
+            return ;
+        }
         switch (v.getId()) {
             case R.id.btn_modifypassword:   // 修改密码确认按钮
                 if (!checkData()) {         // 检查数据的正确性
                     return;
                 }
-                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {// 检查是否连接网络
-                    ToastUtils.show_allways(context, "网络连接失败，请稍后重试");
-                }
                 dialog = DialogUtils.Dialogph(context, "正在提交请求...");
                 if(modifyType == 1) {
-                    sendAdoptOldPasswordMotif();
+                    sendAdoptOldPasswordMotify();
                 } else {
                     sendAdoptCodeModify();
                 }
@@ -148,19 +149,16 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
             ToastUtils.show_allways(context, "请输入正确的手机号码!");
             return ;
         }
-        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            dialog = DialogUtils.Dialogph(context, "正在获取验证码...");
-            sendVerificationCode();                                 // 发送网络请求 获取验证码
-        } else {
-            ToastUtils.show_allways(context, "网络失败，请检查网络!");
-        }
+
+        dialog = DialogUtils.Dialogph(context, "正在获取验证码...");
+        sendVerificationCode();                                     // 发送网络请求 获取验证码
     }
 
     // 获取验证码
     private void sendVerificationCode() {
         String url;
         if(sendType == 1) {
-            url = GlobalConfig.registerByPhoneNumUrl;               // 第一次发送验证码接口
+            url = GlobalConfig.retrieveByPhoneNumUrl;               // 第一次发送验证码接口
         } else {
             url = GlobalConfig.reSendPhoneCheckCodeNumUrl;          // 重新发送验证码接口
         }
@@ -168,7 +166,7 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
         try {
             jsonObject.put("PhoneNum", phoneNum);
             if(sendType == 2) {
-                jsonObject.put("OperType", "1");
+                jsonObject.put("OperType", "2");
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -196,7 +194,7 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
                 if (returnType != null && returnType.equals("1001")) {
                     sendType = 2;// 再次发送验证码
 
-                    ToastUtils.show_allways(context, "验证码已经发送");
+                    ToastUtils.show_allways(context, "验证码已经发送!");
                     timerDown();
                     textGetYzm.setVisibility(View.GONE);
                     textCxFaSong.setVisibility(View.VISIBLE);
@@ -216,12 +214,13 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }
 
     // 通过旧密码修改新密码
-    protected void sendAdoptOldPasswordMotif() {
+    protected void sendAdoptOldPasswordMotify() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("OldPassword", oldPassword);// 待改
@@ -250,7 +249,7 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
                     e.printStackTrace();
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
-                    ToastUtils.show_allways(context, "密码修改成功");
+                    ToastUtils.show_allways(context, "密码修改成功!");
                     finish();
                 } else {
                     ToastUtils.show_allways(context, "修改密码失败，请稍后重试!");
@@ -262,6 +261,7 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }
@@ -307,6 +307,7 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }
@@ -343,7 +344,7 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
                     ToastUtils.show_allways(context, "密码修改成功");
                     finish();
                 } else {
-                    ToastUtils.show_allways(context, "密码修改成功,请稍后重试!");
+                    ToastUtils.show_allways(context, "密码修改失败,请稍后重试!");
                 }
             }
 
@@ -352,6 +353,7 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }

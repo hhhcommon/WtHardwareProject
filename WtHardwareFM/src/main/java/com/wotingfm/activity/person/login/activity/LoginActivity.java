@@ -182,6 +182,7 @@ public class LoginActivity extends AppBaseActivity implements OnClickListener {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }

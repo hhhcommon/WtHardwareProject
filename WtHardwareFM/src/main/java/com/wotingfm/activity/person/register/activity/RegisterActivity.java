@@ -63,6 +63,11 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
 
     @Override
     public void onClick(View v) {
+        // 以下操作都需要网络 所以没有网络就不需要继续验证直接提示用户设置网络
+        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            ToastUtils.show_allways(context, "网络失败，请检查网络");
+            return ;
+        }
         switch (v.getId()) {
             case R.id.tv_register:          // 验证数据
                 checkValue();
@@ -133,12 +138,9 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
             Toast.makeText(context, "请输入六位以上密码", Toast.LENGTH_SHORT).show();
             return;
         }
-        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            dialog = DialogUtils.Dialogph(context, "正在验证手机号");
-            sendRequest();
-        } else {
-            ToastUtils.show_allways(context, "网络失败，请检查网络");
-        }
+
+        dialog = DialogUtils.Dialogph(context, "正在验证手机号");
+        sendRequest();
     }
 
     // 发送网络请求
@@ -202,6 +204,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }
@@ -218,19 +221,16 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
             }
         }
         if ("".equalsIgnoreCase(phoneNumVerify)) {
-            ToastUtils.show_allways(this, "手机号码不能为空");
+            ToastUtils.show_allways(context, "手机号码不能为空");
             return;
         }
         if (!isMobile(phoneNumVerify)) {
-            ToastUtils.show_allways(this, "请您输入正确的手机号");
+            ToastUtils.show_allways(context, "请您输入正确的手机号");
             return;
         }
-        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            dialog = DialogUtils.Dialogph(context, "正在验证手机号");
-            getVerifyCode();
-        } else {
-            ToastUtils.show_allways(context, "网络失败，请检查网络");
-        }
+
+        dialog = DialogUtils.Dialogph(context, "正在验证手机号");
+        getVerifyCode();
     }
 
     // 获取验证码
@@ -244,7 +244,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("PhoneNum", phoneNumVerify);
-            if (sendType == -1) {
+            if (sendType != -1) {
                 jsonObject.put("OperType", 1);
             }
         } catch (JSONException e) {
@@ -296,6 +296,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }
@@ -367,6 +368,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }

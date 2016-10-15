@@ -314,7 +314,9 @@ public class MineActivity extends Activity implements OnClickListener {
                     imageAuxSet.setImageResource(R.mipmap.wt_person_on);
                     et.putBoolean(StringConstant.AUX_SET, true);
                 }
-                et.commit();
+                if(!et.commit()) {
+                    L.w("数据 commit 失败");
+                }
                 auxState = !auxState;
                 break;
             case R.id.tv_update:                // 更新
@@ -502,6 +504,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }
@@ -556,6 +559,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }
@@ -672,7 +676,7 @@ public class MineActivity extends Activity implements OnClickListener {
         exitLoginDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
     }
 
-    // 拍照调用逻辑  从相册选择which==0   拍照which==1
+    // 拍照调用逻辑  从相册选择 which == 0   拍照 which == 1
     private void doDialogClick(int which) {
         switch (which) {
             case 0:    // 调用图库

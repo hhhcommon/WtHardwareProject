@@ -86,7 +86,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 	 */
 	private PinyinComparator pinyinComparator;
 	private FragmentActivity context;
-	private boolean headviewshow = false;
+	private boolean headviewshow = true;
 	private MessageReceiver Receiver;
 	private SharedPreferences sharedPreferences;
 	private String islogin;
