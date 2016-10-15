@@ -20,7 +20,7 @@ import com.wotingfm.service.timeroffservice;
  * @author 辛龙
  *         2016年4月1日
  */
-public class TimerPowerOffActivityApp extends AppBaseActivity implements OnClickListener {
+public class TimerPowerOffActivity extends AppBaseActivity implements OnClickListener {
     private Intent intent;
     private LinearLayout linearPlayEnd;
     private ImageView imageTime10, imageTime20, imageTime30,
@@ -42,7 +42,7 @@ public class TimerPowerOffActivityApp extends AppBaseActivity implements OnClick
         mFilter.addAction(BroadcastConstant.TIMER_UPDATE);
         registerReceiver(mBroadcastReceiver, mFilter);
         // 设置Intent
-        intent = new Intent(TimerPowerOffActivityApp.this, timeroffservice.class);
+        intent = new Intent(TimerPowerOffActivity.this, timeroffservice.class);
         intent.setAction(BroadcastConstant.TIMER_START);
         setImageTimeCheck(0);
     }

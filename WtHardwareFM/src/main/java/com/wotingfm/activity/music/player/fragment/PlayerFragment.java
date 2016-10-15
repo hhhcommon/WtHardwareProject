@@ -65,7 +65,7 @@ import com.wotingfm.activity.music.player.model.sharemodel;
 import com.wotingfm.activity.music.playhistory.activity.PlayHistoryActivity;
 import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.album.model.ContentInfo;
-import com.wotingfm.activity.music.timeset.activity.TimerPowerOffActivityApp;
+import com.wotingfm.activity.music.timeset.activity.TimerPowerOffActivity;
 import com.wotingfm.activity.music.video.TtsPlayer;
 import com.wotingfm.activity.music.video.VlcPlayer;
 import com.wotingfm.activity.music.video.VoiceRecognizer;
@@ -272,7 +272,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private void callmore(int position) {
         switch(position){
             case 0://定时关闭
-                startActivity(new Intent(context,TimerPowerOffActivityApp.class));
+                startActivity(new Intent(context,TimerPowerOffActivity.class));
                 break;
             case 1://下载
                 if (GlobalConfig.playerobject != null) {

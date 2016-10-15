@@ -171,7 +171,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         if (!news.equals("")) {
             if (news.contains("http")) {
                 bundle.putString("result", news);
-                startActivity(new Intent(CaptureActivity.this, ResultActivityApp.class).putExtras(bundle));
+                startActivity(new Intent(CaptureActivity.this, ResultActivity.class).putExtras(bundle));
             } else {
                 MessageInfo message = gson.fromJson(news, new TypeToken<MessageInfo>() {
                 }.getType());
@@ -197,7 +197,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                                         Intent intent = new Intent(context, CaptureActivity.class);
                                         Bundle bundle1 = new Bundle();
                                         bundle1.putSerializable("contact", groupnews);
-                                        bundle1.putString("type", "FindNewsResultActivityApp");
+                                        bundle1.putString("type", "FindNewsResultActivity");
                                         intent.putExtras(bundle1);
                                         startActivity(intent);
                                     } else {
