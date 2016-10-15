@@ -11,6 +11,8 @@ import android.widget.LinearLayout;
 
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
+import com.wotingfm.activity.music.player.fragment.PlayerFragment;
+import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.service.timeroffservice;
 
@@ -25,8 +27,6 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
     private LinearLayout linearPlayEnd;
     private ImageView imageTime10, imageTime20, imageTime30,
             imageTime40, imageTime50, imageTime60, imageTimeProgramOver, imageTimeNoStart;
-    //	private View linView;
-//    private int imageTimeCheck = 0;//定时关闭标记
 
     @Override
     protected int setViewId() {
@@ -48,31 +48,16 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
     }
 
     private void setView() {
-        LinearLayout lin_10 = (LinearLayout) findViewById(R.id.lin_10);             // 10分钟结束
-        lin_10.setOnClickListener(this);
+        findViewById(R.id.lin_10).setOnClickListener(this);             // 10分钟结束
+        findViewById(R.id.lin_20).setOnClickListener(this);             // 20分钟结束
+        findViewById(R.id.lin_30).setOnClickListener(this);             // 30分钟结束
+        findViewById(R.id.lin_40).setOnClickListener(this);             // 40分钟结束
+        findViewById(R.id.lin_50).setOnClickListener(this);             // 50分钟结束
+        findViewById(R.id.lin_60).setOnClickListener(this);             // 60分钟结束
+        findViewById(R.id.lin_nostart).setOnClickListener(this);        // 不启动服务
 
-        LinearLayout lin_20 = (LinearLayout) findViewById(R.id.lin_20);             // 20分钟结束
-        lin_20.setOnClickListener(this);
-
-        LinearLayout lin_30 = (LinearLayout) findViewById(R.id.lin_30);             // 30分钟结束
-        lin_30.setOnClickListener(this);
-
-        LinearLayout lin_40 = (LinearLayout) findViewById(R.id.lin_40);             // 40分钟结束
-        lin_40.setOnClickListener(this);
-
-        LinearLayout lin_50 = (LinearLayout) findViewById(R.id.lin_50);             // 50分钟结束
-        lin_50.setOnClickListener(this);
-
-        LinearLayout lin_60 = (LinearLayout) findViewById(R.id.lin_60);             // 60分钟结束
-        lin_60.setOnClickListener(this);
-
-        LinearLayout linearNoStart = (LinearLayout) findViewById(R.id.lin_nostart); // 不启动服务
-        linearNoStart.setOnClickListener(this);
-
-        linearPlayEnd = (LinearLayout) findViewById(R.id.lin_playend);              // 当前节目播放完结束
+        linearPlayEnd = (LinearLayout) findViewById(R.id.lin_playend);  // 当前节目播放完结束
         linearPlayEnd.setOnClickListener(this);
-
-//        View linView = findViewById(R.id.lin_view);
 
         imageTime10 = (ImageView) findViewById(R.id.image_time_10);
         imageTime20 = (ImageView) findViewById(R.id.image_time_20);
@@ -83,41 +68,27 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
         imageTimeProgramOver = (ImageView) findViewById(R.id.image_time_program_over);
         imageTimeNoStart = (ImageView) findViewById(R.id.image_time_nostart);
 
-        // 判断定时服务中的当前节目播放完后关闭是否显示  当前正在播放的是电台节目、当前没有播放任何节目以及当前播放节目处于暂停状态时隐藏此服务
-//		if(GlobalConfig.playerobject != null){
-//			if(GlobalConfig.playerobject.getMediaType().equals("RADIO")){
-//				linearPlayEnd.setVisibility(View.GONE);
-//				linView.setVisibility(View.GONE);
-//			}else{
-//				if(PlayerFragment.audioplay == null){
-//					linearPlayEnd.setVisibility(View.GONE);
-//					linView.setVisibility(View.GONE);
-//					return ;
-//				}
-//				if(PlayerFragment.audioplay.isPlaying()){
-//					linearPlayEnd.setVisibility(View.VISIBLE);
-//					linView.setVisibility(View.VISIBLE);
-//				}else{
-//					linearPlayEnd.setVisibility(View.GONE);
-//					linView.setVisibility(View.GONE);
-//				}
-//			}
-//		}else{
-//			linearPlayEnd.setVisibility(View.GONE);
-//			linView.setVisibility(View.GONE);
-//		}
-//
-//		if(PlayerFragment.isCurrentPlay){
-//			linearPlayEnd.setClickable(false);
-//		}
+        View linView = findViewById(R.id.lin_view);
+
+        if(GlobalConfig.playerobject != null && PlayerFragment.audioplay != null &&
+                PlayerFragment.audioplay.isPlaying() && !GlobalConfig.playerobject.getMediaType().equals("RADIO")) {
+
+            linearPlayEnd.setVisibility(View.VISIBLE);
+            linView.setVisibility(View.VISIBLE);
+        } else {
+            linearPlayEnd.setVisibility(View.GONE);
+            linView.setVisibility(View.GONE);
+        }
+
+        if(PlayerFragment.isCurrentPlay){
+            linearPlayEnd.setClickable(false);
+        }
     }
 
-    /*
-     * 设置选中图片的显示与隐藏
-     */
+    // 设置选中图片的显示与隐藏
     private void setImageTimeCheck(int index) {
         switch (index) {
-            case 10:    //十分钟
+            case 10:    // 十分钟
                 imageTime10.setVisibility(View.VISIBLE);
                 imageTime20.setVisibility(View.GONE);
                 imageTime30.setVisibility(View.GONE);
@@ -127,7 +98,7 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
                 imageTimeProgramOver.setVisibility(View.GONE);
                 imageTimeNoStart.setVisibility(View.GONE);
                 break;
-            case 20:    //二十分钟
+            case 20:    // 二十分钟
                 imageTime10.setVisibility(View.GONE);
                 imageTime20.setVisibility(View.VISIBLE);
                 imageTime30.setVisibility(View.GONE);
@@ -137,7 +108,7 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
                 imageTimeProgramOver.setVisibility(View.GONE);
                 imageTimeNoStart.setVisibility(View.GONE);
                 break;
-            case 30:    //三十分钟
+            case 30:    // 三十分钟
                 imageTime10.setVisibility(View.GONE);
                 imageTime20.setVisibility(View.GONE);
                 imageTime30.setVisibility(View.VISIBLE);
@@ -147,7 +118,7 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
                 imageTimeProgramOver.setVisibility(View.GONE);
                 imageTimeNoStart.setVisibility(View.GONE);
                 break;
-            case 40:    //四十分钟
+            case 40:    // 四十分钟
                 imageTime10.setVisibility(View.GONE);
                 imageTime20.setVisibility(View.GONE);
                 imageTime30.setVisibility(View.GONE);
@@ -157,7 +128,7 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
                 imageTimeProgramOver.setVisibility(View.GONE);
                 imageTimeNoStart.setVisibility(View.GONE);
                 break;
-            case 50:    //五十分钟
+            case 50:    // 五十分钟
                 imageTime10.setVisibility(View.GONE);
                 imageTime20.setVisibility(View.GONE);
                 imageTime30.setVisibility(View.GONE);
@@ -167,7 +138,7 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
                 imageTimeProgramOver.setVisibility(View.GONE);
                 imageTimeNoStart.setVisibility(View.GONE);
                 break;
-            case 60:    //六十分钟
+            case 60:    // 六十分钟
                 imageTime10.setVisibility(View.GONE);
                 imageTime20.setVisibility(View.GONE);
                 imageTime30.setVisibility(View.GONE);
@@ -177,7 +148,7 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
                 imageTimeProgramOver.setVisibility(View.GONE);
                 imageTimeNoStart.setVisibility(View.GONE);
                 break;
-            case 100:   //当前节目播放完
+            case 100:   // 当前节目播放完
                 imageTime10.setVisibility(View.GONE);
                 imageTime20.setVisibility(View.GONE);
                 imageTime30.setVisibility(View.GONE);
@@ -187,7 +158,7 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
                 imageTimeProgramOver.setVisibility(View.VISIBLE);
                 imageTimeNoStart.setVisibility(View.GONE);
                 break;
-            case 0:     //不启动
+            case 0:     // 不启动
                 imageTime10.setVisibility(View.GONE);
                 imageTime20.setVisibility(View.GONE);
                 imageTime30.setVisibility(View.GONE);
@@ -204,63 +175,63 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
     public void onClick(View v) {
         int imageTimeCheck = 0;
         switch (v.getId()) {
-            case R.id.lin_10:            //十分钟
+            case R.id.lin_10:            // 十分钟
                 imageTimeCheck = 10;
                 intent.putExtra("time", 10);
                 startService(intent);
-//			PlayerFragment.isCurrentPlay = false;
+			    PlayerFragment.isCurrentPlay = false;
                 linearPlayEnd.setClickable(true);
                 break;
-            case R.id.lin_20:            //二十分钟
+            case R.id.lin_20:            // 二十分钟
                 imageTimeCheck = 20;
                 intent.putExtra("time", 20);
                 startService(intent);
-//			PlayerFragment.isCurrentPlay = false;
+			    PlayerFragment.isCurrentPlay = false;
                 linearPlayEnd.setClickable(true);
                 break;
-            case R.id.lin_30:            //三十分钟
+            case R.id.lin_30:            // 三十分钟
                 imageTimeCheck = 30;
                 intent.putExtra("time", 30);
                 startService(intent);
-//			PlayerFragment.isCurrentPlay = false;
+			    PlayerFragment.isCurrentPlay = false;
                 linearPlayEnd.setClickable(true);
                 break;
-            case R.id.lin_40:            //四十分钟
+            case R.id.lin_40:            // 四十分钟
                 imageTimeCheck = 40;
                 intent.putExtra("time", 40);
                 startService(intent);
-//			PlayerFragment.isCurrentPlay = false;
+			    PlayerFragment.isCurrentPlay = false;
                 linearPlayEnd.setClickable(true);
                 break;
-            case R.id.lin_50:            //五十分钟
+            case R.id.lin_50:            // 五十分钟
                 imageTimeCheck = 50;
                 intent.putExtra("time", 50);
                 startService(intent);
-//			PlayerFragment.isCurrentPlay = false;
+			    PlayerFragment.isCurrentPlay = false;
                 linearPlayEnd.setClickable(true);
                 break;
-            case R.id.lin_60:            //六十分钟
+            case R.id.lin_60:            // 六十分钟
                 imageTimeCheck = 60;
                 intent.putExtra("time", 60);
                 startService(intent);
-//			PlayerFragment.isCurrentPlay = false;
+			    PlayerFragment.isCurrentPlay = false;
                 linearPlayEnd.setClickable(true);
                 break;
-            case R.id.lin_playend:        //当前节目播放完
+            case R.id.lin_playend:      // 当前节目播放完
                 imageTimeCheck = 100;
-//			int time = PlayerFragment.timerService;
-//			intent.putExtra("time", time);
+                int time = PlayerFragment.timerService;
+                intent.putExtra("time", time);
                 startService(intent);
-//			PlayerFragment.isCurrentPlay = true;
+			    PlayerFragment.isCurrentPlay = true;
                 linearPlayEnd.setClickable(false);
                 break;
-            case R.id.lin_nostart:// 不启动
+            case R.id.lin_nostart:      // 不启动
                 imageTimeCheck = 0;
                 Intent intent = new Intent(this, timeroffservice.class);
                 intent.setAction(BroadcastConstant.TIMER_STOP);
                 startService(intent);
                 setRightText("00:00", null);
-//			PlayerFragment.isCurrentPlay = false;
+			    PlayerFragment.isCurrentPlay = false;
                 linearPlayEnd.setClickable(true);
                 break;
         }
@@ -269,9 +240,7 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
 
     private boolean isCheck = true;
 
-    /**
-     * 广播接收器
-     */
+    // 广播接收器
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {

@@ -25,14 +25,14 @@ public abstract class AppBaseActivity extends BaseActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(setViewId());
-        context =this;
+        context = this;
         initView();
     }
 
     /*
      * 初始化
      */
-    private void initView(){
+    private void initView() {
         leftBack = findView(R.id.left_back);
         leftBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -58,54 +58,56 @@ public abstract class AppBaseActivity extends BaseActivity {
     /**
      * 查找视图
      */
-    protected <T extends View> T findView(int id){
-        return (T)findViewById(id);
+    protected <T extends View> T findView(int id) {
+        return (T) findViewById(id);
     }
 
     /**
      * 设置标题
      */
-    protected void setTitle(String title){
+    protected void setTitle(String title) {
         textTitle.setText(title);
     }
 
     /**
      * 设置标题
      */
-    protected void setTitleInt(int title){
+    protected void setTitleInt(int title) {
         textTitle.setText(title);
     }
 
     /**
      * 设置左上角返回隐藏
      */
-    protected void setLeftTextGone(){
+    protected void setLeftTextGone() {
         leftBack.setVisibility(View.GONE);
     }
 
     /**
      * 设置左上角文字
+     *
      * @param leftText
      */
-    protected void setLeftText(String leftText){
+    protected void setLeftText(String leftText) {
         leftBack.setText(leftText);
     }
 
     /**
      * 设置左上角图标显示
      */
-    protected void setLeftImageVisible(){
+    protected void setLeftImageVisible() {
         leftImage.setVisibility(View.VISIBLE);
     }
 
     /**
      * 设置左上角图标并显示
+     *
      * @param imageId
      */
-    protected void setLeftImage(int imageId, View.OnClickListener onClickListener){
+    protected void setLeftImage(int imageId, View.OnClickListener onClickListener) {
         leftImage.setImageDrawable(getResources().getDrawable(imageId));
         leftImage.setVisibility(View.VISIBLE);
-        if(onClickListener == null){
+        if (onClickListener == null) {
             leftImage.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -120,16 +122,17 @@ public abstract class AppBaseActivity extends BaseActivity {
     /**
      * 设置右上角更多显示
      */
-    protected void setRightTextVisible(View.OnClickListener onClickListener){
+    protected void setRightTextVisible(View.OnClickListener onClickListener) {
         rightMore.setVisibility(View.VISIBLE);
         rightMore.setOnClickListener(onClickListener);
     }
 
     /**
      * 设置右上角文字并显示
+     *
      * @param rightText
      */
-    protected void setRightText(String rightText, View.OnClickListener onClickListener){
+    protected void setRightText(String rightText, View.OnClickListener onClickListener) {
         rightMore.setText(rightText);
         rightMore.setVisibility(View.VISIBLE);
         rightMore.setOnClickListener(onClickListener);
@@ -138,16 +141,17 @@ public abstract class AppBaseActivity extends BaseActivity {
     /**
      * 设置右上角图标显示
      */
-    protected void setRightImageVisible(View.OnClickListener onClickListener){
+    protected void setRightImageVisible(View.OnClickListener onClickListener) {
         rightImage.setVisibility(View.VISIBLE);
         rightImage.setOnClickListener(onClickListener);
     }
 
     /**
      * 设置右上角图标并显示
+     *
      * @param imageId
      */
-    protected void setRightImage(int imageId, View.OnClickListener onClickListener){
+    protected void setRightImage(int imageId, View.OnClickListener onClickListener) {
         rightImage.setImageDrawable(getResources().getDrawable(imageId));
         rightImage.setVisibility(View.VISIBLE);
         rightImage.setOnClickListener(onClickListener);
@@ -162,6 +166,5 @@ public abstract class AppBaseActivity extends BaseActivity {
         leftImage = null;
         rightImage = null;
         setContentView(R.layout.activity_null);
-
     }
 }

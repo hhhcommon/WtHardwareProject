@@ -42,6 +42,7 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
     private String verificationCode;                // 验证码
     private int sendType = 1;                       // == 1 为第一次发送验证码  == 2 为重新发送验证码
     private boolean isCancelRequest;
+    private boolean isGetCode;                      // 判断是否已经获取验证码
 
     @Override
     public void onClick(View v) {
@@ -52,6 +53,10 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
         }
         switch (v.getId()) {
             case R.id.btn_confirm:                  // 确定修改
+                if(!isGetCode) {
+                    ToastUtils.show_allways(context, "请先获取验证码!");
+                    return ;
+                }
                 checkValue();
                 break;
             case R.id.text_get_verification_code:   // 获取验证码
@@ -148,13 +153,13 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
 
                 if (returnType != null && returnType.equals("1001")) {
                     sendType = 2;// 再次发送验证码
-
+                    isGetCode = true;
                     ToastUtils.show_allways(context, "验证码已经发送");
                     timerDown();
                     textGetVerificationCode.setVisibility(View.GONE);
                     textResend.setVisibility(View.VISIBLE);
                 } else if (returnType != null && returnType.equals("T")) {
-                    ToastUtils.show_allways(context, "异常返回值");
+                    ToastUtils.show_allways(context, "获取异常，请确认后重试!");
                 } else if (returnType != null && returnType.equals("1002")) {
                     ToastUtils.show_allways(context, "此号码已经注册");
                 } else {
@@ -206,7 +211,7 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
                     dialog = DialogUtils.Dialogph(context, "正在修改绑定手机号...");
                     sendBinding();
                 } else if (returnType != null && returnType.equals("T")) {
-                    ToastUtils.show_allways(context, "异常返回值!");
+                    ToastUtils.show_allways(context, "修改过程中发生异常，请稍后重试!");
                 } else if (returnType != null && returnType.equals("1002")) {
                     ToastUtils.show_allways(context, "验证码错误!");
                 }else {
@@ -258,7 +263,9 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
                     ToastUtils.show_allways(context, "手机号修改成功!");
                     SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
                     et.putString(StringConstant.PHONENUMBER, phoneNumber);
-                    et.commit();
+                    if(!et.commit()) {
+                        L.w(" 数据 commit 失败!");
+                    }
                     finish();
                 } else {
                     ToastUtils.show_allways(context, "手机号修改失败!");

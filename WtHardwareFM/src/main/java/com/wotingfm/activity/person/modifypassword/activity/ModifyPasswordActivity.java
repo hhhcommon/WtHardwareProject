@@ -57,7 +57,8 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
 
     @Override
     public void onClick(View v) {
-        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {// 检查是否连接网络
+        // 以下操作需要网络支持 所以没有网络就不需要继续验证先提醒用户进行网络设置
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
             ToastUtils.show_allways(context, "网络连接失败，请稍后重试!");
             return ;
         }
@@ -143,7 +144,7 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
 
     // 验证手机号正确就获取验证码
     private void checkVerificationCode() {
-        phoneNum = BSApplication.SharedPreferences.getString(StringConstant.PHONENUMBER, "13012345678");  // 用户手机号
+        phoneNum = BSApplication.SharedPreferences.getString(StringConstant.PHONENUMBER, "");  // 用户手机号
         L.v("phoneNum", phoneNum);
         if ("".equalsIgnoreCase(phoneNum) || !isMobile(phoneNum)) { // 检查输入数字是否为手机号
             ToastUtils.show_allways(context, "请输入正确的手机号码!");
@@ -199,7 +200,7 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
                     textGetYzm.setVisibility(View.GONE);
                     textCxFaSong.setVisibility(View.VISIBLE);
                 } else if (returnType != null && returnType.equals("T")) {
-                    ToastUtils.show_allways(context, "异常返回值");
+                    ToastUtils.show_allways(context, "获取异常，请确认后重试!");
                 } else if (returnType != null && returnType.equals("1002")) {
                     ToastUtils.show_allways(context, "此号码已经注册");
                 } else {

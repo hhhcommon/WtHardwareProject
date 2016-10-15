@@ -3,6 +3,8 @@ package com.wotingfm.activity.im.interphone.main;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -40,7 +42,6 @@ import java.util.ArrayList;
 public class DuiJiangActivity extends FragmentActivity {
 	private static TextView view1;
 	private static TextView view2;
-	private ArrayList<Fragment> fragmentList;
 	//	private Dialog adddialog;
 	private LinearLayout lin_more;
 	private SharedPreferences sharedPreferences;
@@ -53,7 +54,7 @@ public class DuiJiangActivity extends FragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_duijiang);
 		context = this;
-		sharedPreferences = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
+		sharedPreferences = getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
 
 		InitTextView();		// 初始化视图
 		InitViewPager();	// 初始化ViewPager
@@ -78,8 +79,10 @@ public class DuiJiangActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				String login = sharedPreferences.getString(StringConstant.ISLOGIN, "false");// 是否登录
-				if (login != null && !login.trim().equals("") && login.equals("true")) {
+				if (!login.trim().equals("") && login.equals("true")) {
+
 				} else {
+
 				}
 				//				startActivity(new Intent(context, ContactAddInformationActivity.class));
 				adddialog.dismiss();
@@ -93,7 +96,7 @@ public class DuiJiangActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				String login = sharedPreferences.getString(StringConstant.ISLOGIN, "false");// 是否登录
-				if (login != null && !login.trim().equals("") && login.equals("true")) {
+				if (!login.trim().equals("") && login.equals("true")) {
 					Intent Intent = new Intent(context, FindActivity.class);
 					Bundle bundle = new Bundle();
 					bundle.putString(StringConstant.FIND_TYPE, StringConstant.FIND_TYPE_PERSON);
@@ -113,7 +116,7 @@ public class DuiJiangActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				String login = sharedPreferences.getString(StringConstant.ISLOGIN, "false");// 是否登录
-				if (login != null && !login.trim().equals("") && login.equals("true")) {
+				if (!login.trim().equals("") && login.equals("true")) {
 					Intent Intent = new Intent(context, FindActivity.class);
 					Bundle bundle = new Bundle();
 					bundle.putString(StringConstant.FIND_TYPE, StringConstant.FIND_TYPE_PERSON);
@@ -133,7 +136,7 @@ public class DuiJiangActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				String login = sharedPreferences.getString(StringConstant.ISLOGIN, "false");// 是否登录
-				if (login != null && !login.trim().equals("") && login.equals("true")) {
+				if (!login.trim().equals("") && login.equals("true")) {
 					Intent intent = new Intent(context, CreateGroupMainActivity.class);
 					startActivity(intent);
 				} else {
@@ -150,7 +153,7 @@ public class DuiJiangActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				String login = sharedPreferences.getString(StringConstant.ISLOGIN, "false");// 是否登录
-				if (login != null && !login.trim().equals("") && login.equals("true")) {
+				if (!login.trim().equals("") && login.equals("true")) {
 					startActivity(new Intent(context, CaptureActivity.class));
 				} else {
 					startActivity(new Intent(context, LoginActivity.class));
@@ -260,7 +263,7 @@ public class DuiJiangActivity extends FragmentActivity {
 	public void InitViewPager() {
 		mPager = (ViewPager) findViewById(R.id.viewpager);
 		mPager.setOffscreenPageLimit(1);
-		fragmentList = new ArrayList<Fragment>();
+        ArrayList<Fragment> fragmentList = new ArrayList<>();
 		Fragment btFragment = new ChatFragment();			         // 电台首页
 		Fragment btFragment1 = new LinkManFragment();				 // 通讯录
 		fragmentList.add(btFragment);
@@ -300,9 +303,10 @@ public class DuiJiangActivity extends FragmentActivity {
 	}
 
 
-	//手机实体返回按键的处理 与onbackpress同理
+	// 手机实体返回按键的处理 与 onBackPress 同理
 	long waitTime = 2000;
 	long touchTime = 0;
+
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
@@ -328,6 +332,13 @@ public class DuiJiangActivity extends FragmentActivity {
 		return super.onKeyDown(keyCode, event);
 	}
 
-
-
+    // 设置android app 的字体大小不受系统字体大小改变的影响
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        return res;
+    }
 }

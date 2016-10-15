@@ -244,7 +244,7 @@ public class ForgetPasswordActivity extends AppBaseActivity implements OnClickLi
                     textGetYzm.setVisibility(View.GONE);
                     textCxFaSong.setVisibility(View.VISIBLE);
                 } else if (ReturnType != null && ReturnType.equals("T")) {
-                    ToastUtils.show_allways(context, "异常返回值");
+                    ToastUtils.show_allways(context, "获取验证码异常，请确认后重试!");
                 } else if (ReturnType != null && ReturnType.equals("1002")) {
                     ToastUtils.show_allways(context, "此手机号在系统内没有注册");
                 } else {

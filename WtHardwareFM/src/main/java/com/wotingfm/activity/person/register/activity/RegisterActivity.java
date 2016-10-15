@@ -341,14 +341,16 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
                     e.printStackTrace();
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
-                    // 通过sharedPreference存储用户的登录信息
+                    // 通过 sharedPreference 存储用户的登录信息
                     Editor et = BSApplication.SharedPreferences.edit();
                     et.putString(StringConstant.USERID, userId);
                     et.putString(StringConstant.ISLOGIN, "true");
                     et.putString(StringConstant.USERNAME, userName);
                     et.putString(StringConstant.PHONENUMBER, phoneNum);
                     et.putString(StringConstant.PERSONREFRESHB, "true");
-                    et.commit();
+                    if(!et.commit()) {
+                        L.w("数据 commit 失败!");
+                    }
                     Intent pushIntent = new Intent("push_refreshlinkman");
                     sendBroadcast(pushIntent);
                     InterPhoneControlHelper.sendEntryMessage(context);
