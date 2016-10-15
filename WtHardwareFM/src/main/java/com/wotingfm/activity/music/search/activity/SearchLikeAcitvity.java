@@ -142,6 +142,8 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 	private VoiceRecognizer mVoiceRecognizer;
 	private SearchPlayerHistoryDao dbdao;
 	private LayoutInflater mInflater;
+	private LinearLayout lin_top_title;
+
 
 
 	@Override
@@ -311,6 +313,7 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 		// 清理历史搜索数据库
 		img_clear = (LinearLayout) findViewById(R.id.img_clear);
 		gv_topsearch = (TagFlowLayout) findViewById(R.id.gv_topsearch);
+		lin_top_title=(LinearLayout)findViewById(R.id.lin_top_title);
 		gv_history = (GridView) findViewById(R.id.gv_history);
 		lin_status_first = (LinearLayout) findViewById(R.id.lin_searchlike_status_first);
 		lin_status_second = (LinearLayout) findViewById(R.id.lin_searchlike_status_second);
@@ -370,6 +373,15 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 	private void initDao() {
 		shd = new SearchHistoryDao(this);
 		dbdao = new SearchPlayerHistoryDao(this);
+		history = new History(CommonUtils.getUserId(context), "");
+		historydatabaselist = shd.queryHistory(history);
+		if (historydatabaselist.size() != 0) {
+			lin_history.setVisibility(View.VISIBLE);
+			adapterhistory = new SearchHistoryAdapter(SearchLikeAcitvity.this, historydatabaselist);
+			gv_history.setAdapter(adapterhistory);
+		} else {
+			lin_history.setVisibility(View.GONE);
+		}
 	}
 
 	private void setlistview() {
@@ -658,6 +670,7 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 					lin_status_first.setVisibility(View.VISIBLE);
 				/*	adapter = new SearchLikeAdapter(SearchLikeAcitvity.this,topsearchlist1);*/
 
+				if(topsearchlist1!=null&&topsearchlist1.size()!=0){
 				gv_topsearch.setAdapter(new TagAdapter<String>(topsearchlist1)
 				{
 					@Override
@@ -669,22 +682,21 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 						return tv;
 					}
 				});
-					history = new History(CommonUtils.getUserId(context), "");
-					historydatabaselist = shd.queryHistory(history);
-					if (historydatabaselist.size() != 0) {
-						lin_history.setVisibility(View.VISIBLE);
-						adapterhistory = new SearchHistoryAdapter(SearchLikeAcitvity.this, historydatabaselist);
-						gv_history.setAdapter(adapterhistory);
-					} else {
-						lin_history.setVisibility(View.GONE);
-					}
+				}else{
+					lin_top_title.setVisibility(View.GONE);
+					gv_topsearch.setVisibility(View.GONE);
 				}
-				if (ReturnType != null && ReturnType.equals("1002")) {
+
+				}else if (ReturnType != null && ReturnType.equals("1002")) {
 					ToastUtils.show_short(getApplicationContext(), "提交失败，失败原因"+ Message);
+					lin_top_title.setVisibility(View.GONE);
+					gv_topsearch.setVisibility(View.GONE);
 				} else {
 					if (Message != null && !Message.trim().equals("")) {
 						ToastUtils.show_short(getApplicationContext(), Message+ "请稍后重试");
 					}
+					lin_top_title.setVisibility(View.GONE);
+					gv_topsearch.setVisibility(View.GONE);
 				}
 			}
 
