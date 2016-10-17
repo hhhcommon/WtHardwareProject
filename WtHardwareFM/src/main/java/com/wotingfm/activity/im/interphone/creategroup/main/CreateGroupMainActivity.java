@@ -5,7 +5,7 @@ import android.view.View;
 
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.creategroup.create.CreateGroupItemActivity;
-import com.wotingfm.activity.common.baseActivity.AppBaseActivity;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
 
@@ -24,14 +24,9 @@ public class CreateGroupMainActivity extends AppBaseActivity implements View.OnC
     protected void init() {
         setTitle("创建群组");
 
-        View relativeCreatePublic = findViewById(R.id.relative_create_public);               // 创建公开群 无需验证可加入
-        relativeCreatePublic.setOnClickListener(this);
-
-        View relativeCreatePrivate = findViewById(R.id.relative_create_private);             // 创建密码群 需要密码才来加入
-        relativeCreatePrivate.setOnClickListener(this);
-
-        View relativeCreateVerification = findViewById(R.id.relative_create_verification);   // 创建验证群 需要通过验证才能加入
-        relativeCreateVerification.setOnClickListener(this);
+        findViewById(R.id.relative_create_public).setOnClickListener(this);         // 创建公开群 无需验证就可加入
+        findViewById(R.id.relative_create_private).setOnClickListener(this);        // 创建密码群 需要密码才来加入
+        findViewById(R.id.relative_create_verification).setOnClickListener(this);   // 创建验证群 需要验证才能加入
     }
 
     @Override

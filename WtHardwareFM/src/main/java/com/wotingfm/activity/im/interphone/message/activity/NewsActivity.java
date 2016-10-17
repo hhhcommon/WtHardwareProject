@@ -17,7 +17,7 @@ import com.wotingfm.activity.im.interphone.message.adapter.NewsAdapter;
 import com.wotingfm.activity.im.interphone.message.model.GroupInfo;
 import com.wotingfm.activity.im.interphone.message.model.MessageInfo;
 import com.wotingfm.activity.im.interphone.message.model.UserInviteMeInside;
-import com.wotingfm.activity.common.baseActivity.AppBaseActivity;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;

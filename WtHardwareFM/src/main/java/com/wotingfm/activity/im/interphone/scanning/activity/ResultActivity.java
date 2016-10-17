@@ -11,7 +11,7 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseActivity.AppBaseActivity;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
 

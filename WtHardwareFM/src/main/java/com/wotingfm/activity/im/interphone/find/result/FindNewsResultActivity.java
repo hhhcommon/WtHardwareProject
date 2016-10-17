@@ -11,7 +11,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseActivity.AppBaseActivity;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.im.interphone.find.add.FriendAddActivity;
 import com.wotingfm.activity.im.interphone.find.add.GroupAddActivity;
 import com.wotingfm.activity.im.interphone.find.result.adapter.FindFriendResultAdapter;
