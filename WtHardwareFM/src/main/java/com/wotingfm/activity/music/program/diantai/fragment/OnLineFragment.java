@@ -39,12 +39,14 @@ import com.wotingfm.activity.music.program.diantai.adapter.onlineAdapter;
 import com.wotingfm.activity.music.program.diantai.model.RadioPlay;
 import com.wotingfm.activity.music.program.fmlist.activity.FMListActivity;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.pulltorefresh.PullToRefreshLayout;
 
@@ -60,41 +62,80 @@ import java.util.List;
  *
  * @author 辛龙 2016年2月26日
  */
-public class OnLineFragment extends Fragment {
+public class OnLineFragment extends Fragment implements OnClickListener {
     private FragmentActivity context;
-    private View rootView;
-    private String ReturnType;
+    private MessageReceiver receiver;
+    private PullToRefreshLayout mPullToRefreshLayout;
+    private SearchPlayerHistoryDao dbDao;
     private onlineAdapter adapter;
-    /* private ExpandableListView listView_main; */
-    private List<RadioPlay> mainlist;
-    private ExpandableListView listView_main;
-    private int RefreshType;// refreshtype 1为下拉加载 2为上拉加载更多
-    private int page = 1;// 数的问题
-    private ArrayList<RadioPlay> newlist = new ArrayList<>();
-    //	private int pagesizenum;
-    private String BeginCatalogId;
-    private View headview;
-    private TextView tv_name;
-    private LinearLayout lin_head_more;
+
+    private View rootView;
+    private ExpandableListView listViewMain;
     private GridView gridView;
-    private List<RankInfo> mainlists;
-    private SharedPreferences shared;
-    private SearchPlayerHistoryDao dbdao;
-    private String cityid;
+    private TextView textName;
+
+    private List<RadioPlay> mainList;
+    private List<RankInfo> mainListS;
+    private List<RadioPlay> newList = new ArrayList<>();
+
+    private int refreshType;    // refreshType 1为下拉加载 2为上拉加载更多
+    private int page = 1;       // 数的问题
+    private String beginCatalogId;
+    private String returnType;
+    private String cityId;
+    private String cityName;
     private String tag = "ONLINE_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
-    private PullToRefreshLayout mPullToRefreshLayout;
-    private MessageReceiver Receiver;
-    private String cityname;
-    private LinearLayout lin_country;
-    private LinearLayout lin_province;
-    private LinearLayout lin_internet;
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.lin_country:// 国家台
+                String cityIdCountry = BSApplication.SharedPreferences.getString(StringConstant.CITYID, "110000");
+//                String cityNameCountry = BSApplication.SharedPreferences.getString(StringConstant.CITYNAME, "北京");
+                Intent intentCountry = new Intent(context, FMListActivity.class);
+                Bundle bundleCountry = new Bundle();
+                bundleCountry.putString("fromtype", "online");
+                bundleCountry.putString("name", "国家台");
+                bundleCountry.putString("type", "2");
+                bundleCountry.putString("id", cityIdCountry);
+                intentCountry.putExtras(bundleCountry);
+                startActivity(intentCountry);
+                break;
+            case R.id.lin_province:// 省市台
+                startActivityForResult(new Intent(context, CityListActivity.class), 0);
+                break;
+            case R.id.lin_internet:// 网络台
+                String cityIdInternet = BSApplication.SharedPreferences.getString(StringConstant.CITYID, "110000");
+//                String cityNameInternet = BSApplication.SharedPreferences.getString(StringConstant.CITYNAME, "北京");
+                Intent intentInternet = new Intent(context, FMListActivity.class);
+                Bundle bundleInternet = new Bundle();
+                bundleInternet.putString("fromtype", "online");
+                bundleInternet.putString("name", "网络台");
+                bundleInternet.putString("type", "2");
+                bundleInternet.putString("id", cityIdInternet);
+                intentInternet.putExtras(bundleInternet);
+                startActivity(intentInternet);
+                break;
+            case R.id.lin_head_more:// 更多
+                String cityId = BSApplication.SharedPreferences.getString(StringConstant.CITYID, "110000");
+                String cityName = BSApplication.SharedPreferences.getString(StringConstant.CITYNAME, "北京");
+                Intent intent = new Intent(context, FMListActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("fromtype", "online");
+                bundle.putString("name", cityName);
+                bundle.putString("type", "2");
+                bundle.putString("id", cityId);
+                intent.putExtras(bundle);
+                startActivity(intent);
+                break;
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        context = this.getActivity();
-        shared = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
+        context = getActivity();
         initDao();// 初始化数据库命令执行对象
     }
 
@@ -102,47 +143,50 @@ public class OnLineFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_radio, container, false);
-            listView_main = (ExpandableListView) rootView.findViewById(R.id.listView_main);
-            headview = LayoutInflater.from(context).inflate(R.layout.head_online, null);
-            tv_name = (TextView) headview.findViewById(R.id.tv_name);
-            lin_head_more = (LinearLayout) headview.findViewById(R.id.lin_head_more);
-            gridView = (GridView) headview.findViewById(R.id.gridView);
-            lin_country=(LinearLayout) headview.findViewById(R.id.lin_country);//国家台
-            lin_province=(LinearLayout) headview.findViewById(R.id.lin_province);//国家台
-            lin_internet=(LinearLayout) headview.findViewById(R.id.lin_internet);//国家台
+            listViewMain = (ExpandableListView) rootView.findViewById(R.id.listView_main);
+            View headView = LayoutInflater.from(context).inflate(R.layout.head_online, null);
+            textName = (TextView) headView.findViewById(R.id.tv_name);
+            gridView = (GridView) headView.findViewById(R.id.gridView);
+
+            headView.findViewById(R.id.lin_head_more).setOnClickListener(this);
+            headView.findViewById(R.id.lin_country).setOnClickListener(this);// 国家台
+            headView.findViewById(R.id.lin_province).setOnClickListener(this);// 省市台
+            headView.findViewById(R.id.lin_internet).setOnClickListener(this);// 网络台
+
             // 取消默认selector
             gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
             mPullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.refresh_view);
             setView();
-            listView_main.addHeaderView(headview);
-            if (Receiver == null) {
-                Receiver = new MessageReceiver();
+            listViewMain.addHeaderView(headView);
+            if (receiver == null) {
+                receiver = new MessageReceiver();
                 IntentFilter filter = new IntentFilter();
                 filter.addAction(BroadcastConstant.CITY_CHANGE);
-                context.registerReceiver(Receiver, filter);
+                context.registerReceiver(receiver, filter);
             }
         }
         return rootView;
     }
 
     class MessageReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(BroadcastConstant.CITY_CHANGE)) {
                 if (GlobalConfig.CityName != null) {
-                    cityname = GlobalConfig.CityName;
+                    cityName = GlobalConfig.CityName;
                 }
-                tv_name.setText(cityname);
+                textName.setText(cityName);
                 page = 1;
-                BeginCatalogId = "";
-                RefreshType = 1;
-                getcity();
+                beginCatalogId = "";
+                refreshType = 1;
+                getCity();
                 send();
-                Editor et = shared.edit();
+                Editor et = BSApplication.SharedPreferences.edit();
                 et.putString(StringConstant.CITYTYPE, "false");
-                et.commit();
+                if(!et.commit()) {
+                    L.w("数据 commit 失败!");
+                }
             }
         }
 
@@ -153,11 +197,11 @@ public class OnLineFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
         // 发送网络请求
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            RefreshType = 1;
-            BeginCatalogId = "";
-            String cityname = shared.getString(StringConstant.CITYNAME, "北京");
-            tv_name.setText(cityname);
-            getcity();
+            refreshType = 1;
+            beginCatalogId = "";
+            String cityName = BSApplication.SharedPreferences.getString(StringConstant.CITYNAME, "北京");
+            textName.setText(cityName);
+            getCity();
             send();
         } else {
 //			listView_main.stopLoadMore();
@@ -166,97 +210,27 @@ public class OnLineFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (null != rootView) {
-            ((ViewGroup) rootView.getParent()).removeView(rootView);
-        }
-    }
-
-    /**
-     * 初始化数据库命令执行对象
-     */
+    // 初始化数据库命令执行对象
     private void initDao() {
-        dbdao = new SearchPlayerHistoryDao(context);
+        dbDao = new SearchPlayerHistoryDao(context);
     }
 
     private void setView() {
-
-        lin_country.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String cityid = shared.getString(StringConstant.CITYID, "110000");
-                String cityname = shared.getString(StringConstant.CITYNAME, "北京");
-                Intent intent = new Intent(context, FMListActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("fromtype", "online");
-                bundle.putString("name", "国家台");
-                bundle.putString("type", "2");
-                bundle.putString("id", cityid);
-                intent.putExtras(bundle);
-                startActivity(intent);
-
-            }
-        });
-        lin_province.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, CityListActivity.class);
-                startActivityForResult(intent, 0);
-            }
-        });
-        lin_internet.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String cityid = shared.getString(StringConstant.CITYID, "110000");
-                String cityname = shared.getString(StringConstant.CITYNAME, "北京");
-                Intent intent = new Intent(context, FMListActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("fromtype", "online");
-                bundle.putString("name", "网络台");
-                bundle.putString("type", "2");
-                bundle.putString("id", cityid);
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
-        lin_head_more.setOnClickListener(new OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                if (mainlists != null) {
-                    String cityid = shared.getString(StringConstant.CITYID, "110000");
-                    String cityname = shared.getString(StringConstant.CITYNAME, "北京");
-                    Intent intent = new Intent(context, FMListActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("fromtype", "online");
-                    bundle.putString("name", cityname);
-                    bundle.putString("type", "2");
-                    bundle.putString("id", cityid);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                }
-            }
-        });
-
-        listView_main.setOnGroupClickListener(new OnGroupClickListener() {
-
+        listViewMain.setOnGroupClickListener(new OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
                 return true;
             }
         });
 
-        listView_main.setGroupIndicator(null);
+        listViewMain.setGroupIndicator(null);
         mPullToRefreshLayout.setOnRefreshListener(new PullToRefreshLayout.OnRefreshListener() {
-
             @Override
             public void onRefresh(PullToRefreshLayout pullToRefreshLayout) {
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    RefreshType = 1;
+                    refreshType = 1;
                     page = 1;
-                    BeginCatalogId = "";
+                    beginCatalogId = "";
                     send();
                 } else {
                     ToastUtils.show_short(context, "网络失败，请检查网络");
@@ -265,9 +239,8 @@ public class OnLineFragment extends Fragment {
 
             @Override
             public void onLoadMore(PullToRefreshLayout pullToRefreshLayout) {
-                //if (page <= pagesizenum) {
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    RefreshType = 2;
+                    refreshType = 2;
                     send();
                     ToastUtils.show_short(context, "正在请求" + page + "页信息");
                 } else {
@@ -276,22 +249,21 @@ public class OnLineFragment extends Fragment {
             }
 
         });
-
-        listView_main.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        listViewMain.setSelector(new ColorDrawable(Color.TRANSPARENT));
     }
 
-    private void getcity() {
-        // 此处在splashActivity中refreshB设置成true
-        cityid = shared.getString(StringConstant.CITYID, "110000");
+    private void getCity() {
+        // 此处在 splashActivity 中 refreshB 设置成 true
+        cityId = BSApplication.SharedPreferences.getString(StringConstant.CITYID, "110000");
         if (GlobalConfig.AdCode != null && !GlobalConfig.AdCode.equals("")) {
-            cityid = GlobalConfig.AdCode;
+            cityId = GlobalConfig.AdCode;
         }
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
+//            jsonObject.put("UserId", CommonUtils.getUserId(context));
             jsonObject.put("MediaType", "RADIO");
             jsonObject.put("CatalogType", "2");
-            jsonObject.put("CatalogId", cityid);
+            jsonObject.put("CatalogId", cityId);
             jsonObject.put("Page", "1");
             jsonObject.put("PerSize", "3");
             jsonObject.put("ResultType", "3");
@@ -309,21 +281,19 @@ public class OnLineFragment extends Fragment {
                     return;
                 }
                 try {
-                    ReturnType = result.getString("ReturnType");
-                    if (ReturnType != null && ReturnType.equals("1001")) {
-                        // 获取列表
+                    returnType = result.getString("ReturnType");
+                    if (returnType != null && returnType.equals("1001")) {
                         String ResultList = result.getString("ResultList");
                         JSONTokener jsonParser = new JSONTokener(ResultList);
                         JSONObject arg1 = (JSONObject) jsonParser.nextValue();
                         String MainList = arg1.getString("List");
-                        mainlists = new Gson().fromJson(MainList, new TypeToken<List<RankInfo>>() {}.getType());
+                        mainListS = new Gson().fromJson(MainList, new TypeToken<List<RankInfo>>() {}.getType());
                         if (adapters == null) {
-                            adapters = new citynewsadapter(context, mainlists);
-                            gridView.setAdapter(adapters);
+                            gridView.setAdapter(adapters = new citynewsadapter(context, mainListS));
                         } else {
                             adapters.notifyDataSetChanged();
                         }
-                        gridlistener();
+                        gridListener();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -332,46 +302,46 @@ public class OnLineFragment extends Fragment {
 
             @Override
             protected void requestError(VolleyError error) {
-
+                ToastUtils.showVolleyError(context);
             }
         });
     }
 
-    protected void gridlistener() {
+    protected void gridListener() {
         gridView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (mainlists != null && mainlists.get(position) != null && mainlists.get(position).getMediaType() != null) {
-                    String MediaType = mainlists.get(position).getMediaType();
+                if (mainListS != null && mainListS.get(position) != null && mainListS.get(position).getMediaType() != null) {
+                    String MediaType = mainListS.get(position).getMediaType();
                     if (MediaType.equals("RADIO") || MediaType.equals("AUDIO")) {
-                        String playername = mainlists.get(position).getContentName();
-                        String playerimage = mainlists.get(position).getContentImg();
-                        String playerurl = mainlists.get(position).getContentPlay();
-                        String playerurI = mainlists.get(position).getContentURI();
-                        String playermediatype = mainlists.get(position).getMediaType();
-                        String playcontentshareurl = mainlists.get(position).getContentShareURL();
+                        String playername = mainListS.get(position).getContentName();
+                        String playerimage = mainListS.get(position).getContentImg();
+                        String playerurl = mainListS.get(position).getContentPlay();
+                        String playerurI = mainListS.get(position).getContentURI();
+                        String playermediatype = mainListS.get(position).getMediaType();
+                        String playcontentshareurl = mainListS.get(position).getContentShareURL();
                         String plaplayeralltime = "0";
                         String playerintime = "0";
-                        String playercontentdesc = mainlists.get(position).getCurrentContent();
-                        String playernum = mainlists.get(position).getWatchPlayerNum();
+                        String playercontentdesc = mainListS.get(position).getCurrentContent();
+                        String playernum = mainListS.get(position).getWatchPlayerNum();
                         String playerzantype = "0";
                         String playerfrom = "";
                         String playerfromid = "";
                         String playerfromurl = "";
                         String playeraddtime = Long.toString(System.currentTimeMillis());
                         String bjuserid = CommonUtils.getUserId(context);
-                        String ContentFavorite = mainlists.get(position).getContentFavorite();
-                        String ContentId = mainlists.get(position).getContentId();
-                        String localurl = mainlists.get(position).getLocalurl();
+                        String ContentFavorite = mainListS.get(position).getContentFavorite();
+                        String ContentId = mainListS.get(position).getContentId();
+                        String localurl = mainListS.get(position).getLocalurl();
 
                         //如果该数据已经存在数据库则删除原有数据，然后添加最新数据
                         PlayerHistory history = new PlayerHistory(
                                 playername, playerimage, playerurl, playerurI, playermediatype,
                                 plaplayeralltime, playerintime, playercontentdesc, playernum,
                                 playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid, playcontentshareurl, ContentFavorite, ContentId, localurl);
-                        dbdao.deleteHistory(playerurl);
-                        dbdao.addHistory(history);
-     					PlayerFragment.SendTextRequest(mainlists.get(position).getContentName(), context);
+                        dbDao.deleteHistory(playerurl);
+                        dbDao.addHistory(history);
+                        PlayerFragment.SendTextRequest(mainListS.get(position).getContentName(), context);
                         HomeActivity.UpdateViewPager();
                     }
                 }
@@ -380,17 +350,15 @@ public class OnLineFragment extends Fragment {
     }
 
     private void send() {
-        JSONObject jsonObject =VolleyRequest.getJsonObject(context);
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
             jsonObject.put("MediaType", "RADIO");
             jsonObject.put("CatalogType", "1");// 按地区分类
             JSONObject js = new JSONObject();
             js.put("CatalogType", "2");
-            js.put("CatalogId", cityid);
+            js.put("CatalogId", cityId);
             jsonObject.put("FilterData", js);
-            jsonObject.put("BeginCatalogId", BeginCatalogId);
+            jsonObject.put("BeginCatalogId", beginCatalogId);
             jsonObject.put("Page", String.valueOf(page));
             jsonObject.put("PerSize", "3");
             jsonObject.put("ResultType", "1");
@@ -400,52 +368,43 @@ public class OnLineFragment extends Fragment {
         }
 
         VolleyRequest.RequestPost(GlobalConfig.getContentUrl, tag, jsonObject, new VolleyCallback() {
-            private String MainList;
 
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (isCancelRequest) {
                     return;
                 }
-                String s = "" + result.toString();
                 page++;
                 try {
-                    ReturnType = result.getString("ReturnType");
-                    if (ReturnType != null) {
-                        if (ReturnType.equals("1001")) {
-                            // 获取列表
-                            String ResultList = result.getString("ResultList");
-                            JSONTokener jsonParser = new JSONTokener(ResultList);
-                            JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                            MainList = arg1.getString("List");
-                            BeginCatalogId = arg1.getString("BeginCatalogId");
-                            mainlist = new Gson().fromJson(MainList, new TypeToken<List<RadioPlay>>() {}.getType());
-                            if (RefreshType == 1) {
-                                mPullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
-                                newlist.clear();
-                                newlist.addAll(mainlist);
-                                if (adapter == null) {
-                                    adapter = new onlineAdapter(context, newlist);
-                                    listView_main.setAdapter(adapter);
-                                } else {
-                                    adapter.notifyDataSetChanged();
-                                }
-                            }
-                            if (RefreshType == 2) {
-                                mPullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
-                                newlist.addAll(mainlist);
+                    returnType = result.getString("ReturnType");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    if (returnType != null && returnType.equals("1001")) {
+                        JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
+                        beginCatalogId = arg1.getString("BeginCatalogId");
+                        mainList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RadioPlay>>() {}.getType());
+                        if (refreshType == 1) {
+                            mPullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
+                            newList.clear();
+                            newList.addAll(mainList);
+                            if (adapter == null) {
+                                listViewMain.setAdapter(adapter = new onlineAdapter(context, newList));
+                            } else {
                                 adapter.notifyDataSetChanged();
                             }
-                            for (int i = 0; i < newlist.size(); i++) {
-                                listView_main.expandGroup(i);
-                            }
-                            setItemListener();
-                        } else {
-
+                        } else if (refreshType == 2) {
+                            mPullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.SUCCEED);
+                            newList.addAll(mainList);
+                            adapter.notifyDataSetChanged();
                         }
+                        for (int i = 0; i < newList.size(); i++) {
+                            listViewMain.expandGroup(i);
+                        }
+                        setItemListener();
                     } else {
-
-                        ToastUtils.show_always(context, "暂无数据");
+                        ToastUtils.show_allways(context, "暂无数据");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -454,57 +413,57 @@ public class OnLineFragment extends Fragment {
 
             @Override
             protected void requestError(VolleyError error) {
-
+                ToastUtils.showVolleyError(context);
             }
         });
     }
 
     // 初始一号位置为0,0
     protected void setItemListener() {
-        listView_main.setOnChildClickListener(new OnChildClickListener() {
+        listViewMain.setOnChildClickListener(new OnChildClickListener() {
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
-                if (newlist != null && newlist.get(groupPosition).getList().get(childPosition) != null
-                        && newlist.get(groupPosition).getList().get(childPosition).getMediaType() != null) {
-                    String MediaType = newlist.get(groupPosition).getList().get(childPosition).getMediaType();
+                if (newList != null && newList.get(groupPosition).getList().get(childPosition) != null
+                        && newList.get(groupPosition).getList().get(childPosition).getMediaType() != null) {
+                    String MediaType = newList.get(groupPosition).getList().get(childPosition).getMediaType();
                     if (MediaType.equals("RADIO") || MediaType.equals("AUDIO")) {
-                        String playername = newlist.get(groupPosition).getList().get(childPosition).getContentName();
-                        String playerimage = newlist.get(groupPosition).getList().get(childPosition).getContentImg();
-                        String playerurl = newlist.get(groupPosition).getList().get(childPosition).getContentPlay();
-                        String playerurI = newlist.get(groupPosition).getList().get(childPosition).getContentURI();
-                        String playermediatype = newlist.get(groupPosition).getList().get(childPosition).getMediaType();
-                        String playcontentshareurl = newlist.get(groupPosition).getList().get(childPosition).getContentShareURL();
+                        String playername = newList.get(groupPosition).getList().get(childPosition).getContentName();
+                        String playerimage = newList.get(groupPosition).getList().get(childPosition).getContentImg();
+                        String playerurl = newList.get(groupPosition).getList().get(childPosition).getContentPlay();
+                        String playerurI = newList.get(groupPosition).getList().get(childPosition).getContentURI();
+                        String playermediatype = newList.get(groupPosition).getList().get(childPosition).getMediaType();
+                        String playcontentshareurl = newList.get(groupPosition).getList().get(childPosition).getContentShareURL();
                         String plaplayeralltime = "0";
                         String playerintime = "0";
-                        String playercontentdesc = newlist.get(groupPosition).getList().get(childPosition).getCurrentContent();
-                        String playernum = newlist.get(groupPosition).getList().get(childPosition).getWatchPlayerNum();
+                        String playercontentdesc = newList.get(groupPosition).getList().get(childPosition).getCurrentContent();
+                        String playernum = newList.get(groupPosition).getList().get(childPosition).getWatchPlayerNum();
                         String playerzantype = "0";
                         String playerfrom = "";
                         String playerfromid = "";
                         String playerfromurl = "";
                         String playeraddtime = Long.toString(System.currentTimeMillis());
                         String bjuserid = CommonUtils.getUserId(context);
-                        String ContentFavorite = newlist.get(groupPosition).getList().get(childPosition).getContentFavorite();
-                        String ContentId = newlist.get(groupPosition).getList().get(childPosition).getContentId();
-                        String localurl = newlist.get(groupPosition).getList().get(childPosition).getLocalurl();
+                        String ContentFavorite = newList.get(groupPosition).getList().get(childPosition).getContentFavorite();
+                        String ContentId = newList.get(groupPosition).getList().get(childPosition).getContentId();
+                        String localurl = newList.get(groupPosition).getList().get(childPosition).getLocalurl();
 
                         //如果该数据已经存在数据库则删除原有数据，然后添加最新数据
                         PlayerHistory history = new PlayerHistory(
                                 playername, playerimage, playerurl, playerurI, playermediatype,
                                 plaplayeralltime, playerintime, playercontentdesc, playernum,
                                 playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid, playcontentshareurl, ContentFavorite, ContentId, localurl);
-                        dbdao.deleteHistory(playerurl);
-                        dbdao.addHistory(history);
+                        dbDao.deleteHistory(playerurl);
+                        dbDao.addHistory(history);
                         HomeActivity.UpdateViewPager();
-//						PlayerFragment.SendTextRequest(newlist.get(groupPosition).getList().get(childPosition).getContentName(), context);
+						PlayerFragment.SendTextRequest(newList.get(groupPosition).getList().get(childPosition).getContentName(), context);
                     } else if (MediaType.equals("SEQU")) {
                         Intent intent = new Intent(context, AlbumActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "player");
-                        bundle.putString("conentname",newlist.get(groupPosition).getList().get(childPosition).getContentName());
-                        bundle.putString("conentdesc",newlist.get(groupPosition).getList().get(childPosition).getContentDesc());
-                        bundle.putString("conentid",newlist.get(groupPosition).getList().get(childPosition).getContentId());
-                        bundle.putString("contentimg",newlist.get(groupPosition).getList().get(childPosition).getContentImg());
+                        bundle.putString("conentname", newList.get(groupPosition).getList().get(childPosition).getContentName());
+                        bundle.putString("conentdesc", newList.get(groupPosition).getList().get(childPosition).getContentDesc());
+                        bundle.putString("conentid", newList.get(groupPosition).getList().get(childPosition).getContentId());
+                        bundle.putString("contentimg", newList.get(groupPosition).getList().get(childPosition).getContentImg());
                         intent.putExtras(bundle);
                         startActivity(intent);
                     } else {
@@ -519,22 +478,32 @@ public class OnLineFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        String citytype = shared.getString(StringConstant.CITYTYPE, "false");
-        cityname = shared.getString(StringConstant.CITYNAME, "北京");
-        cityid = shared.getString(StringConstant.CITYID, "110000");
+        String cityType = BSApplication.SharedPreferences.getString(StringConstant.CITYTYPE, "false");
+        cityName = BSApplication.SharedPreferences.getString(StringConstant.CITYNAME, "北京");
+        cityId = BSApplication.SharedPreferences.getString(StringConstant.CITYID, "110000");
         if (GlobalConfig.CityName != null) {
-            cityname = GlobalConfig.CityName;
+            cityName = GlobalConfig.CityName;
         }
-        if (citytype != null && citytype.equals("true")) {
-            tv_name.setText(cityname);
+        if (cityType.equals("true")) {
+            textName.setText(cityName);
             page = 1;
-            BeginCatalogId = "";
-            RefreshType = 1;
-            getcity();
+            beginCatalogId = "";
+            refreshType = 1;
+            getCity();
             send();
-            Editor et = shared.edit();
+            Editor et = BSApplication.SharedPreferences.edit();
             et.putString(StringConstant.CITYTYPE, "false");
-            et.commit();
+            if(!et.commit()) {
+                L.w("数据 commit 失败!");
+            }
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (null != rootView) {
+            ((ViewGroup) rootView.getParent()).removeView(rootView);
         }
     }
 
@@ -542,6 +511,6 @@ public class OnLineFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
-        context.unregisterReceiver(Receiver);
+        context.unregisterReceiver(receiver);
     }
 }

@@ -24,6 +24,7 @@ import com.wotingfm.activity.common.main.MainActivity;
 import com.wotingfm.activity.music.favorite.adapter.FavorListAdapter;
 import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
+import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.activity.music.search.activity.SearchLikeAcitvity;
@@ -170,7 +171,7 @@ public class SequFragment extends Fragment {
 						dbdao.addHistory(history);
 						MainActivity.changeToMusic();
 						HomeActivity.UpdateViewPager();
-//						PlayerFragment.SendTextRequest(newlist.get(position - 1).getContentName(), context);
+						PlayerFragment.SendTextRequest(newlist.get(position - 1).getContentName(), context);
 						context.finish();
 					}  else {
 						ToastUtils.show_short(context, "暂不支持的Type类型");

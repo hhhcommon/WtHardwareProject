@@ -143,6 +143,53 @@ public class SearchPlayerHistoryDao {
 	}
 
 	/**
+	 * 查询数据库里的数据，无参查询语句 供特定使用
+	 */
+
+	public List<PlayerHistory> queryHistoryNoUserId() {
+		List<PlayerHistory> mylist = new ArrayList<PlayerHistory>();
+		SQLiteDatabase db = helper.getReadableDatabase();
+
+		Cursor cursor = null;
+		try {
+			cursor = db.rawQuery("Select * from playerhistory  order by playeraddtime desc ",null);
+			while (cursor.moveToNext()) {
+				String playername = cursor.getString(1);
+				String playerimage = cursor.getString(2);
+				String playerurl = cursor.getString(3);
+				String playerurI= cursor.getString(4);//iiiii
+				String playermediatype = cursor.getString(5);
+				String playeralltime = cursor.getString(6);
+				String playerintime = cursor.getString(7);
+				String playercontentdesc = cursor.getString(8);
+				String playernum = cursor.getString(9);
+				String playerzantype = cursor.getString(10);
+				String playerfrom = cursor.getString(11);
+				String playerfromid = cursor.getString(12);
+				String playerfromurl = cursor.getString(13);
+				String playeraddtime = cursor.getString(14);
+				String bjuserid = cursor.getString(15);
+				String playcontentshareurl = cursor.getString(16);
+				String ContentFavorite=cursor.getString(17);
+				String ContentID=cursor.getString(18);
+				String localurl=cursor.getString(19);
+				PlayerHistory h = new PlayerHistory(playername, playerimage, playerurl, playerurI,playermediatype, playeralltime,
+						playerintime, playercontentdesc, playernum, playerzantype, playerfrom, playerfromid,playerfromurl,playeraddtime,bjuserid,playcontentshareurl,ContentFavorite,ContentID,localurl);
+				mylist.add(h);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			if (cursor != null) {
+				cursor.close();
+			}
+			if (db != null) {
+				db.close();
+			}
+		}
+		return mylist;
+	}
+	/**
 	 * 通过url删除数据库表中的数据
 	 */
 	public void deleteHistory(String url) {

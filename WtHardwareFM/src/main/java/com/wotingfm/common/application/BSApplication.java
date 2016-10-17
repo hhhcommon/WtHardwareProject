@@ -18,7 +18,6 @@ import com.wotingfm.receiver.NetWorkChangeReceiver;
 import com.wotingfm.service.FloatingWindowService;
 import com.wotingfm.service.LocationService;
 import com.wotingfm.service.NotificationService;
-import com.wotingfm.service.SocketService;
 import com.wotingfm.service.SubclassService;
 import com.wotingfm.service.VoiceStreamPlayerService;
 import com.wotingfm.service.VoiceStreamRecordService;
@@ -61,7 +60,7 @@ public class BSApplication extends Application {
         scc.setReConnectWays(_l);
         GlobalConfig.scc=scc;
         //socket服务
-        startService(new Intent(this, SocketService.class));
+        //startService(new Intent(this, SocketService.class));
         //录音服务
         startService(new Intent(this, VoiceStreamRecordService.class));
         //播放服务
