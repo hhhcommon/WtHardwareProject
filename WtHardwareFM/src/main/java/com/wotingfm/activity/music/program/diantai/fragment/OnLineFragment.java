@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -21,7 +20,6 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -404,7 +402,7 @@ public class OnLineFragment extends Fragment implements OnClickListener {
                         }
                         setItemListener();
                     } else {
-                        ToastUtils.show_allways(context, "暂无数据");
+                        ToastUtils.show_always(context, "暂无数据");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
