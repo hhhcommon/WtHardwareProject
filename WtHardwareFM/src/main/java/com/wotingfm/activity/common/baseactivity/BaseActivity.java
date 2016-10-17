@@ -1,4 +1,4 @@
-package com.wotingfm.activity.common.baseactivity;
+package com.wotingfm.activity.common.baseActivity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;

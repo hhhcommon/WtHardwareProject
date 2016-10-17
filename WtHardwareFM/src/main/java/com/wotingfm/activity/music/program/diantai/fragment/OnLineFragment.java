@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -20,6 +21,7 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -66,16 +68,16 @@ public class OnLineFragment extends Fragment implements OnClickListener {
     private PullToRefreshLayout mPullToRefreshLayout;
     private SearchPlayerHistoryDao dbDao;
     private onlineAdapter adapter;
-    
+
     private View rootView;
     private ExpandableListView listViewMain;
     private GridView gridView;
     private TextView textName;
-    
+
     private List<RadioPlay> mainList;
     private List<RankInfo> mainListS;
     private List<RadioPlay> newList = new ArrayList<>();
-    
+
     private int refreshType;    // refreshType 1为下拉加载 2为上拉加载更多
     private int page = 1;       // 数的问题
     private String beginCatalogId;
@@ -129,7 +131,7 @@ public class OnLineFragment extends Fragment implements OnClickListener {
                 break;
         }
     }
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -145,12 +147,12 @@ public class OnLineFragment extends Fragment implements OnClickListener {
             View headView = LayoutInflater.from(context).inflate(R.layout.head_online, null);
             textName = (TextView) headView.findViewById(R.id.tv_name);
             gridView = (GridView) headView.findViewById(R.id.gridView);
-            
+
             headView.findViewById(R.id.lin_head_more).setOnClickListener(this);
             headView.findViewById(R.id.lin_country).setOnClickListener(this);// 国家台
             headView.findViewById(R.id.lin_province).setOnClickListener(this);// 省市台
             headView.findViewById(R.id.lin_internet).setOnClickListener(this);// 网络台
-            
+
             // 取消默认selector
             gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
             mPullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.refresh_view);

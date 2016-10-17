@@ -9,7 +9,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import com.shenstec.utils.image.ImageLoader;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseactivity.BaseActivity;
+import com.wotingfm.activity.common.baseActivity.BaseActivity;
 import com.wotingfm.activity.common.main.MainActivity;
 import com.wotingfm.activity.im.interphone.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
