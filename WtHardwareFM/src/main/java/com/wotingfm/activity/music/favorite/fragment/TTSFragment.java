@@ -237,7 +237,7 @@ public class TTSFragment extends Fragment {
 				} else {
 					mlistView.stopLoadMore();
 					mlistView.setPullLoadEnable(false);
-					ToastUtils.show_allways(context, "已经是最后一页了");
+					ToastUtils.show_always(context, "已经是最后一页了");
 				}
 			}
 		});
@@ -277,7 +277,7 @@ public class TTSFragment extends Fragment {
 				if (ReturnType != null) {
 					if (ReturnType.equals("1001")) {
 						if(isDel){
-							ToastUtils.show_allways(context, "已删除");
+							ToastUtils.show_always(context, "已删除");
 							isDel = false;
 						}
 						try {
@@ -305,7 +305,7 @@ public class TTSFragment extends Fragment {
 									pagesizenum = allcount / pagesize + 1;
 								}
 							} else {
-								ToastUtils.show_allways(context, "页码获取异常");
+								ToastUtils.show_always(context, "页码获取异常");
 							}
 						} catch (JSONException e) {
 							e.printStackTrace();
@@ -374,7 +374,7 @@ public class TTSFragment extends Fragment {
 					page = 1;
 					send();
 				} else {
-					ToastUtils.show_allways(context, "网络失败，请检查网络");
+					ToastUtils.show_always(context, "网络失败，请检查网络");
 				}
 			}else if(action.equals(FavoriteActivity.SET_NOT_LOAD_REFRESH)){
 				if(isVisible()){
@@ -476,7 +476,7 @@ public class TTSFragment extends Fragment {
 			RefreshType = 1;
 			sendrequest();
 		} else {
-			ToastUtils.show_allways(context, "网络失败，请检查网络");
+			ToastUtils.show_always(context, "网络失败，请检查网络");
 		}
 	}
 
@@ -518,19 +518,19 @@ public class TTSFragment extends Fragment {
 //						send();
 //						context.sendBroadcast(mintent);
 //					} else {
-//						ToastUtils.show_allways(context, "网络失败，请检查网络");
+//						ToastUtils.show_always(context, "网络失败，请检查网络");
 //					}
 				} else if (ReturnType != null && ReturnType.equals("1002")) {
-					ToastUtils.show_allways(context, "无法获取用户Id");
+					ToastUtils.show_always(context, "无法获取用户Id");
 				} else if (ReturnType != null && ReturnType.equals("T")) {
-					ToastUtils.show_allways(context, "异常返回值");
+					ToastUtils.show_always(context, "异常返回值");
 				} else if (ReturnType != null && ReturnType.equals("200")) {
-					ToastUtils.show_allways(context, "尚未登录");
+					ToastUtils.show_always(context, "尚未登录");
 				} else if (ReturnType != null && ReturnType.equals("1003")) {
-					ToastUtils.show_allways(context, "异常返回值");
+					ToastUtils.show_always(context, "异常返回值");
 				} else {
 					if (Message != null && !Message.trim().equals("")) {
-						ToastUtils.show_allways(context, Message + "");
+						ToastUtils.show_always(context, Message + "");
 					}
 				}
 			}

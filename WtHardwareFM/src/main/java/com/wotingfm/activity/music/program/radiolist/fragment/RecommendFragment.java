@@ -161,7 +161,7 @@ public class RecommendFragment extends Fragment{
                                 pageSizeNumber = allCount / pageSize + 1;
 							}
 						} else {
-							ToastUtils.show_allways(context, "页码获取异常");
+							ToastUtils.show_always(context, "页码获取异常");
 						}
 					} catch (JSONException e) {
 						e.printStackTrace();
@@ -180,7 +180,7 @@ public class RecommendFragment extends Fragment{
 					}
                     setOnItem();
 				} else {
-					ToastUtils.show_allways(context, "暂没有该分类数据");
+					ToastUtils.show_always(context, "暂没有该分类数据");
 				}				
 			}
 

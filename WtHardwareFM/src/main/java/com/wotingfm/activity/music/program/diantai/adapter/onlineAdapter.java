@@ -183,7 +183,7 @@ public class onlineAdapter extends BaseExpandableListAdapter  {
 					holder.lin_CurrentPlay.setVisibility(View.INVISIBLE);
 				}
 			}else{
-				ToastUtils.show_allways(context, "服务器返回数据MediaType为空");
+				ToastUtils.show_always(context, "服务器返回数据MediaType为空");
 			}
 			if (lists.getWatchPlayerNum() == null
 					|| lists.getWatchPlayerNum().equals("")

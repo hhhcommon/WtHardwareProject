@@ -277,11 +277,11 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             case 1://下载
                 if (GlobalConfig.playerobject != null) {
                     if (GlobalConfig.playerobject.getMediaType().equals("AUDIO")) {
-					/* ToastUtil.show_allways(context, "已经将该节目添加到下载列表"); */
+					/* ToastUtil.show_always(context, "已经将该节目添加到下载列表"); */
                         // 此处执行将当前播放任务加到数据库的操作
                         LanguageSearchInside datals = GlobalConfig.playerobject;
                         if (datals.getLocalurl() != null) {
-                            ToastUtils.show_allways(context, "此节目已经保存到本地，请到已下载界面查看");
+                            ToastUtils.show_always(context, "此节目已经保存到本地，请到已下载界面查看");
                             return;
                         }
                         // 对数据进行转换
@@ -342,10 +342,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                                 }
                             }
                             if (isdownload) {
-                                ToastUtils.show_allways(context,mcontent.getContentName() + "已经存在于下载列表");
+                                ToastUtils.show_always(context,mcontent.getContentName() + "已经存在于下载列表");
                             } else {
                                 FID.insertfileinfo(datalist);
-                                ToastUtils.show_allways(context,mcontent.getContentName() + "已经插入了下载列表");
+                                ToastUtils.show_always(context,mcontent.getContentName() + "已经插入了下载列表");
                                 // 未下载列表
                                 List<FileInfo> fileundownloadlist = FID.queryFileinfo("false",CommonUtils.getUserId(context));
                                 FileInfo file;
@@ -374,7 +374,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                              * 此时库里没数据
                              */
                             FID.insertfileinfo(datalist);
-                            ToastUtils.show_allways(context,mcontent.getContentName() + "已经插入了下载列表");
+                            ToastUtils.show_always(context,mcontent.getContentName() + "已经插入了下载列表");
                             // 未下载列表
                             List<FileInfo> fileundownloadlist = FID.queryFileinfo("false", CommonUtils.getUserId(context));
                             FileInfo file;
@@ -390,10 +390,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                             }
                         }
                     } else {
-                        ToastUtils.show_allways(context, "您现在播放的是电台节目，不支持下载");
+                        ToastUtils.show_always(context, "您现在播放的是电台节目，不支持下载");
                     }
                 } else {
-                    ToastUtils.show_allways(context, "当前播放器播放对象为空");
+                    ToastUtils.show_always(context, "当前播放器播放对象为空");
                 }
                 break;
             case 2://播放历史
@@ -417,12 +417,12 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     }
                     audioplay = TtsPlayer.getInstance(context);
                 }
-                ToastUtils.show_allways(context, "点击了路况TTS按钮");
+                ToastUtils.show_always(context, "点击了路况TTS按钮");
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                     dialogs = DialogUtils.Dialogph(context, "通讯中");
                     getLuKuangTTS();// 获取路况数据播报
                 } else {
-                    ToastUtils.show_allways(context, "网络连接失败，请稍后重试");
+                    ToastUtils.show_always(context, "网络连接失败，请稍后重试");
                 }
                 break;
 
@@ -696,7 +696,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     adapter.notifyDataSetChanged();
                     if (alllist.get(number).getLocalurl() != null) {
                         musicPlay("file:///"+ alllist.get(number).getLocalurl());
-                        ToastUtils.show_allways(context, "正在播放本地内容");
+                        ToastUtils.show_always(context, "正在播放本地内容");
                     } else {
                         musicPlay(alllist.get(number).getContentPlay());
                     }
@@ -772,7 +772,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                         play(number);
                         num = number;
                     } else {
-                        ToastUtils.show_allways(context, "无网络连接");
+                        ToastUtils.show_always(context, "无网络连接");
                     }
                 }
             } else {
@@ -869,7 +869,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }else{
-                    ToastUtils.show_allways(context,"此节目目前没有所属专辑");
+                    ToastUtils.show_always(context,"此节目目前没有所属专辑");
                 }
                 break;
         }
@@ -882,7 +882,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             getnetwork(num, context);
             stopCurrentTimer();
         } else {
-            ToastUtils.show_allways(context, "已经是第一条数据了");
+            ToastUtils.show_always(context, "已经是第一条数据了");
         }
 
     }
@@ -972,7 +972,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     adapter.notifyDataSetChanged();
                     if (GlobalConfig.playerobject.getLocalurl() != null) {
                         musicPlay("file:///"+ GlobalConfig.playerobject.getLocalurl());
-                        ToastUtils.show_allways(context, "正在播放本地内容");
+                        ToastUtils.show_always(context, "正在播放本地内容");
                     } else {
                         musicPlay(GlobalConfig.playerobject.getContentPlay());
                     }
@@ -1019,7 +1019,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 }
             }
         } else {
-            ToastUtils.show_allways(context, "当前播放对象为空");
+            ToastUtils.show_always(context, "当前播放对象为空");
         }
     }
 
@@ -1067,7 +1067,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     dialogs = DialogUtils.Dialogph(context, "通讯中");
                     firstsend();// 搜索第一次数据
                 } else {
-                    ToastUtils.show_allways(context, "网络连接失败，请稍后重试");
+                    ToastUtils.show_always(context, "网络连接失败，请稍后重试");
                 }
             }
             first = false;
@@ -1765,7 +1765,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         if (GlobalConfig.playerobject != null) {
             if (GlobalConfig.playerobject.getMediaType().equals("Radio")) {
                 // 不支持分享
-                ToastUtils.show_allways(context, "电台节目目前不支持分享");
+                ToastUtils.show_always(context, "电台节目目前不支持分享");
                 return;
                 // 设置灰色界面
             } else {
@@ -1787,10 +1787,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             } else {
                 tv_like.setText("喜欢");
                 img_like.setImageResource(R.mipmap.wt_dianzan_nomal);
-                // ToastUtil.show_allways(context, "本节目不支持喜欢");
+                // ToastUtil.show_always(context, "本节目不支持喜欢");
             }
         } else {
-            // ToastUtil.show_allways(context,"当前播放对象异常");
+            // ToastUtil.show_always(context,"当前播放对象异常");
         }
     }
 
@@ -2030,24 +2030,24 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                             }
                         }
                     } else if (ReturnType.equals("0000")) {
-                        ToastUtils.show_allways(context, "无法获取相关的参数");
+                        ToastUtils.show_always(context, "无法获取相关的参数");
                     } else if (ReturnType.equals("1002")) {
-                        ToastUtils.show_allways(context, "无法获得内容类别");
+                        ToastUtils.show_always(context, "无法获得内容类别");
                     } else if (ReturnType.equals("1003")) {
-                        ToastUtils.show_allways(context, "无法获得内容Id");
+                        ToastUtils.show_always(context, "无法获得内容Id");
                     } else if (ReturnType.equals("1004")) {
-                        ToastUtils.show_allways(context, "所指定的节目不存在");
+                        ToastUtils.show_always(context, "所指定的节目不存在");
                     } else if (ReturnType.equals("1005")) {
-                        ToastUtils.show_allways(context, "已经喜欢了此内容");
+                        ToastUtils.show_always(context, "已经喜欢了此内容");
                     } else if (ReturnType.equals("1006")) {
-                        ToastUtils.show_allways(context, "还未喜欢此内容");
+                        ToastUtils.show_always(context, "还未喜欢此内容");
                     } else if (ReturnType.equals("T")) {
-                        ToastUtils.show_allways(context, "获取列表异常");
+                        ToastUtils.show_always(context, "获取列表异常");
                     } else {
-                        ToastUtils.show_allways(context, Message + "");
+                        ToastUtils.show_always(context, Message + "");
                     }
                 } else {
-                    ToastUtils.show_allways(context, "Returntype==null");
+                    ToastUtils.show_always(context, "Returntype==null");
                 }
             }
 

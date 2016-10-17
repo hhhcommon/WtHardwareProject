@@ -8,16 +8,16 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.music.program.fenlei.model.fenleiname;
+import com.wotingfm.activity.music.program.fenlei.model.fenLeiName;
 
 import java.util.List;
 
 public class fenleigridAdapter extends BaseAdapter {
-	private List<fenleiname> list;
+	private List<fenLeiName> list;
 	private Context context;
 	private ViewHolder holder;
 
-	public fenleigridAdapter(Context context, List<fenleiname> list) {
+	public fenleigridAdapter(Context context, List<fenLeiName> list) {
 		super();
 		this.list = list;
 		this.context = context;

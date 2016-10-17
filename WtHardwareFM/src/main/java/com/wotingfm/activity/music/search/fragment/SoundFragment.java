@@ -127,7 +127,7 @@ public class SoundFragment extends Fragment {
 								playerzantype,  playerfrom, playerfromid, playerfromurl,playeraddtime,bjuserid,playercontentshareurl,ContentFavorite,ContentId,localurl);	
 						dbdao.deleteHistory(playerurl);
 						dbdao.addHistory(history);
-						MainActivity.change();
+						MainActivity.changeToMusic();
 						HomeActivity.UpdateViewPager();
 //						PlayerFragment.SendTextRequest(newlist.get(position - 1).getContentName(),context);
 						context.finish();
@@ -234,7 +234,7 @@ public class SoundFragment extends Fragment {
 					}
 					
 				} else {
-					ToastUtils.show_allways(context, "网络失败，请检查网络");
+					ToastUtils.show_always(context, "网络失败，请检查网络");
 				}
 			} 
 		}

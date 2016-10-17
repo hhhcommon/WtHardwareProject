@@ -41,7 +41,6 @@ import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -170,7 +169,7 @@ public class ProgramFragment extends Fragment implements OnClickListener {
 						dbdao.deleteHistory(playerurl);
 						dbdao.addHistory(history);
 						if(PlayerFragment.context!=null){
-							MainActivity.change();
+							MainActivity.changeToMusic();
 							HomeActivity.UpdateViewPager();
 							PlayerFragment.SendTextRequest(SubList.get(position).getContentName(), context);
 						}else{
@@ -179,7 +178,7 @@ public class ProgramFragment extends Fragment implements OnClickListener {
 							et.putString(StringConstant.PLAYHISTORYENTER, "true");
 							et.putString(StringConstant.PLAYHISTORYENTERNEWS,SubList.get(position).getContentName());
 							et.commit();
-							MainActivity.change();
+							MainActivity.changeToMusic();
 							HomeActivity.UpdateViewPager();
 						}
 						getActivity().setResult(1);
@@ -245,15 +244,15 @@ public class ProgramFragment extends Fragment implements OnClickListener {
 					}
 				} else {
 					if (ReturnType.equals("0000")) {
-						ToastUtils.show_allways(context, "无法获取相关的参数");
+						ToastUtils.show_always(context, "无法获取相关的参数");
 					} else if (ReturnType.equals("1002")) {
-						ToastUtils.show_allways(context, "无此分类信息");
+						ToastUtils.show_always(context, "无此分类信息");
 					} else if (ReturnType.equals("1003")) {
-						ToastUtils.show_allways(context, "无法获得列表");
+						ToastUtils.show_always(context, "无法获得列表");
 					} else if (ReturnType.equals("1011")) {
-						ToastUtils.show_allways(context, "列表为空（列表为空[size==0]");
+						ToastUtils.show_always(context, "列表为空（列表为空[size==0]");
 					} else if (ReturnType.equals("T")) {
-						ToastUtils.show_allways(context, "获取列表异常");
+						ToastUtils.show_always(context, "获取列表异常");
 					}
 				}
 			}
@@ -291,7 +290,7 @@ public class ProgramFragment extends Fragment implements OnClickListener {
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 				if (SubListAll != null && SubListAll.get(position) != null) {
 					if (SubListAll.get(position).getCheckType() == 3) {
-						ToastUtils.show_allways(context, "已经下载过");
+						ToastUtils.show_always(context, "已经下载过");
 					} else {
 						if (SubListAll.get(position).getCheckType() == 1) {
 							SubListAll.get(position).setCheckType(2);
@@ -454,7 +453,7 @@ public class ProgramFragment extends Fragment implements OnClickListener {
 				context.sendBroadcast(p_intent);
 				lin_status2.setVisibility(View.GONE);
 			} else {
-				ToastUtils.show_allways(context, "请重新选择数据");
+				ToastUtils.show_always(context, "请重新选择数据");
 				return;
 			}
 			break;

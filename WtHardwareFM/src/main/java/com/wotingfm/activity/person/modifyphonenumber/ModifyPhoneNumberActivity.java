@@ -48,13 +48,13 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
     public void onClick(View v) {
         // 以下操作都需要网络 所以没有网络就不需要继续验证直接提示用户设置网络
         if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
-            ToastUtils.show_allways(context, "网络失败，请检查网络");
+            ToastUtils.show_always(context, "网络失败，请检查网络");
             return ;
         }
         switch (v.getId()) {
             case R.id.btn_confirm:                  // 确定修改
                 if(!isGetCode) {
-                    ToastUtils.show_allways(context, "请先获取验证码!");
+                    ToastUtils.show_always(context, "请先获取验证码!");
                     return ;
                 }
                 checkValue();
@@ -90,7 +90,7 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
     private void checkVerificationCode() {
         phoneNumber = editPhoneNumber.getText().toString().trim();
         if ("".equalsIgnoreCase(phoneNumber) || !isMobile(phoneNumber)) {// 检查输入数字是否为手机号
-            ToastUtils.show_allways(context, "请输入正确的手机号码!");
+            ToastUtils.show_always(context, "请输入正确的手机号码!");
             return ;
         }
 
@@ -102,11 +102,11 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
     private void checkValue() {
         verificationCode = editVerificationCode.getText().toString().trim();
         if ("".equalsIgnoreCase(phoneNumber) || !isMobile(phoneNumber)) {// 检查输入数字是否为手机号
-            ToastUtils.show_allways(context, "请输入正确的手机号码!");
+            ToastUtils.show_always(context, "请输入正确的手机号码!");
             return ;
         }
         if ("".equalsIgnoreCase(verificationCode) || verificationCode.length() != 6) {
-            ToastUtils.show_allways(context, "验证码不正确!");
+            ToastUtils.show_always(context, "验证码不正确!");
             return ;
         }
 
@@ -154,17 +154,17 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
                 if (returnType != null && returnType.equals("1001")) {
                     sendType = 2;// 再次发送验证码
                     isGetCode = true;
-                    ToastUtils.show_allways(context, "验证码已经发送");
+                    ToastUtils.show_always(context, "验证码已经发送");
                     timerDown();
                     textGetVerificationCode.setVisibility(View.GONE);
                     textResend.setVisibility(View.VISIBLE);
                 } else if (returnType != null && returnType.equals("T")) {
-                    ToastUtils.show_allways(context, "获取异常，请确认后重试!");
+                    ToastUtils.show_always(context, "获取异常，请确认后重试!");
                 } else if (returnType != null && returnType.equals("1002")) {
-                    ToastUtils.show_allways(context, "此号码已经注册");
+                    ToastUtils.show_always(context, "此号码已经注册");
                 } else {
                     if (message != null && !message.trim().equals("")) {
-                        ToastUtils.show_allways(context, message + "");
+                        ToastUtils.show_always(context, message + "");
                     }
                 }
             }
@@ -211,12 +211,12 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
                     dialog = DialogUtils.Dialogph(context, "正在修改绑定手机号...");
                     sendBinding();
                 } else if (returnType != null && returnType.equals("T")) {
-                    ToastUtils.show_allways(context, "修改过程中发生异常，请稍后重试!");
+                    ToastUtils.show_always(context, "修改过程中发生异常，请稍后重试!");
                 } else if (returnType != null && returnType.equals("1002")) {
-                    ToastUtils.show_allways(context, "验证码错误!");
+                    ToastUtils.show_always(context, "验证码错误!");
                 }else {
                     if (message != null && !message.trim().equals("")) {
-                        ToastUtils.show_allways(context, message + "");
+                        ToastUtils.show_always(context, message + "");
                     }
                 }
             }
@@ -260,7 +260,7 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
                     e.printStackTrace();
                 }
                 if (returnType != null && returnType.equals("1001")) {
-                    ToastUtils.show_allways(context, "手机号修改成功!");
+                    ToastUtils.show_always(context, "手机号修改成功!");
                     SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
                     et.putString(StringConstant.PHONENUMBER, phoneNumber);
                     if(!et.commit()) {
@@ -268,7 +268,7 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
                     }
                     finish();
                 } else {
-                    ToastUtils.show_allways(context, "手机号修改失败!");
+                    ToastUtils.show_always(context, "手机号修改失败!");
                 }
             }
 

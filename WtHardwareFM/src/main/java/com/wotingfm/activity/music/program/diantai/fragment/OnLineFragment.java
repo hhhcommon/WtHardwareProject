@@ -445,7 +445,7 @@ public class OnLineFragment extends Fragment {
                         }
                     } else {
 
-                        ToastUtils.show_allways(context, "暂无数据");
+                        ToastUtils.show_always(context, "暂无数据");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

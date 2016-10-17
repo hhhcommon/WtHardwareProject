@@ -119,11 +119,11 @@ public class DetailsFragment extends Fragment implements OnClickListener{
 			if(!isConcern){
 				imageConcern.setImageDrawable(context.getResources().getDrawable(R.mipmap.focus_concern));
 				textConcern.setText("已关注");
-				ToastUtils.show_allways(context, "关注成功");
+				ToastUtils.show_always(context, "关注成功");
 			}else{
 				imageConcern.setImageDrawable(context.getResources().getDrawable(R.mipmap.focus));
 				textConcern.setText("关注");
-				ToastUtils.show_allways(context, "取消关注");
+				ToastUtils.show_always(context, "取消关注");
 			}
 			break;
 		    case R.id.lin_favorite: // 喜欢
@@ -132,10 +132,10 @@ public class DetailsFragment extends Fragment implements OnClickListener{
 						dialog = DialogUtils.Dialogph(context, "正在获取数据");
 						sendFavorite();
 					} else {
-						ToastUtils.show_allways(context, "网络失败，请检查网络");
+						ToastUtils.show_always(context, "网络失败，请检查网络");
 					}
 				} else {
-					ToastUtils.show_allways(context, "专辑信息获取异常");
+					ToastUtils.show_always(context, "专辑信息获取异常");
 				}
 
 			isConcern = !isConcern;
@@ -196,24 +196,24 @@ public class DetailsFragment extends Fragment implements OnClickListener{
 							imgFavorite.setImageDrawable(getResources().getDrawable(R.mipmap.wt_img_like));
 						}
 					} else if (ReturnType.equals("0000")) {
-						ToastUtils.show_allways(context, "无法获取相关的参数");
+						ToastUtils.show_always(context, "无法获取相关的参数");
 					} else if (ReturnType.equals("1002")) {
-						ToastUtils.show_allways(context, "无法获得内容类别");
+						ToastUtils.show_always(context, "无法获得内容类别");
 					} else if (ReturnType.equals("1003")) {
-						ToastUtils.show_allways(context, "无法获得内容Id");
+						ToastUtils.show_always(context, "无法获得内容Id");
 					} else if (ReturnType.equals("1004")) {
-						ToastUtils.show_allways(context, "所指定的节目不存在");
+						ToastUtils.show_always(context, "所指定的节目不存在");
 					} else if (ReturnType.equals("1005")) {
-						ToastUtils.show_allways(context, "已经喜欢了此内容");
+						ToastUtils.show_always(context, "已经喜欢了此内容");
 					} else if (ReturnType.equals("1006")) {
-						ToastUtils.show_allways(context, "还未喜欢此内容");
+						ToastUtils.show_always(context, "还未喜欢此内容");
 					} else if (ReturnType.equals("T")) {
-						ToastUtils.show_allways(context, "获取列表异常");
+						ToastUtils.show_always(context, "获取列表异常");
 					} else {
-						ToastUtils.show_allways(context, Message + "");
+						ToastUtils.show_always(context, Message + "");
 					}
 				} else {
-					ToastUtils.show_allways(context, "Returntype==null");
+					ToastUtils.show_always(context, "Returntype==null");
 				}
 			}
 
@@ -328,15 +328,15 @@ public class DetailsFragment extends Fragment implements OnClickListener{
 					}
 				} else {
 					if (ReturnType.equals("0000")) {
-						ToastUtils.show_allways(context, "无法获取相关的参数");
+						ToastUtils.show_always(context, "无法获取相关的参数");
 					} else if (ReturnType.equals("1002")) {
-						ToastUtils.show_allways(context, "无此分类信息");
+						ToastUtils.show_always(context, "无此分类信息");
 					} else if (ReturnType.equals("1003")) {
-						ToastUtils.show_allways(context, "无法获得列表");
+						ToastUtils.show_always(context, "无法获得列表");
 					} else if (ReturnType.equals("1011")) {
-						ToastUtils.show_allways(context, "列表为空（列表为空[size==0]");
+						ToastUtils.show_always(context, "列表为空（列表为空[size==0]");
 					} else if (ReturnType.equals("T")) {
-						ToastUtils.show_allways(context, "获取列表异常");
+						ToastUtils.show_always(context, "获取列表异常");
 					}
 				}
 			}

@@ -30,8 +30,8 @@ import com.wotingfm.activity.im.interphone.linkman.view.PinyinComparator_d;
 import com.wotingfm.activity.im.interphone.linkman.view.SideBar;
 import com.wotingfm.activity.music.program.citylist.adapter.CityListAdapter;
 import com.wotingfm.activity.music.program.citylist.dao.CityInfoDao;
-import com.wotingfm.activity.music.program.fenlei.model.fenlei;
-import com.wotingfm.activity.music.program.fenlei.model.fenleiname;
+import com.wotingfm.activity.music.program.fenlei.model.fenLei;
+import com.wotingfm.activity.music.program.fenlei.model.fenLeiName;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -65,9 +65,9 @@ public class CityListActivity extends Activity implements OnClickListener {
     private EditText et_searh_content;
     private LinearLayout lin_head_left;
     private ImageView image_clear;
-    private List<fenleiname> userlist = new ArrayList<>();
+    private List<fenLeiName> userlist = new ArrayList<>();
     private CityListAdapter adapter;
-    private List<fenleiname> srclist;
+    private List<fenLeiName> srclist;
     private String tag = "CITY_LIST_REQUEST_CANCLE_TAG";
     private boolean isCancelRequest;
     private CityInfoDao CID;
@@ -90,7 +90,7 @@ public class CityListActivity extends Activity implements OnClickListener {
             dialog = DialogUtils.Dialogph(context, "正在获取信息");
             sendRequest();
         } else {
-            ToastUtils.show_allways(context, "网络失败，请检查网络");
+            ToastUtils.show_always(context, "网络失败，请检查网络");
         }
     }
 
@@ -124,7 +124,7 @@ public class CityListActivity extends Activity implements OnClickListener {
     private void sendRequest() {
         VolleyRequest.RequestPost(GlobalConfig.getCatalogUrl, tag, setParam(), new VolleyCallback() {
             private String ReturnType;
-            private fenleiname mFenleiname;
+            private fenLeiName mFenleiname;
 
             @Override
             protected void requestSuccess(JSONObject result) {
@@ -149,7 +149,7 @@ public class CityListActivity extends Activity implements OnClickListener {
                         try {
                             // 获取列表
                             String ResultList = result.getString("CatalogData");
-                            fenlei SubList_all = new Gson().fromJson(ResultList, new TypeToken<fenlei>() {
+                            fenLei SubList_all = new Gson().fromJson(ResultList, new TypeToken<fenLei>() {
                             }.getType());
                             srclist = SubList_all.getSubCata();
 
@@ -158,7 +158,7 @@ public class CityListActivity extends Activity implements OnClickListener {
                         }
 
                         if (srclist.size() == 0) {
-                            ToastUtils.show_allways(context, "获取分类列表为空");
+                            ToastUtils.show_always(context, "获取分类列表为空");
                         } else {
 
                             userlist.clear();
@@ -190,16 +190,16 @@ public class CityListActivity extends Activity implements OnClickListener {
 						    } */
                         }
                     } else if (ReturnType.equals("1002")) {
-                        ToastUtils.show_allways(context, "无此分类信息");
+                        ToastUtils.show_always(context, "无此分类信息");
                     } else if (ReturnType.equals("1003")) {
-                        ToastUtils.show_allways(context, "分类不存在");
+                        ToastUtils.show_always(context, "分类不存在");
                     } else if (ReturnType.equals("1011")) {
-                        ToastUtils.show_allways(context, "当前暂无分类");
+                        ToastUtils.show_always(context, "当前暂无分类");
                     } else if (ReturnType.equals("T")) {
-                        ToastUtils.show_allways(context, "获取列表异常");
+                        ToastUtils.show_always(context, "获取列表异常");
                     }
                 } else {
-                    ToastUtils.show_allways(context, "数据获取异常，请稍候重试");
+                    ToastUtils.show_always(context, "数据获取异常，请稍候重试");
                 }
             }
 
@@ -230,7 +230,7 @@ public class CityListActivity extends Activity implements OnClickListener {
         return jsonObject;
     }
 
-    private void filledData(List<fenleiname> person) {
+    private void filledData(List<fenLeiName> person) {
         for (int i = 0; i < person.size(); i++) {
             person.get(i).setName(person.get(i).getCatalogName());
             // 汉字转换成拼音
@@ -340,13 +340,13 @@ public class CityListActivity extends Activity implements OnClickListener {
      * 根据输入框中的值来过滤数据并更新ListView
      */
     private void search(String search_name) {
-        List<fenleiname> filterDateList = new ArrayList<>();
+        List<fenLeiName> filterDateList = new ArrayList<>();
         if (TextUtils.isEmpty(search_name)) {
             filterDateList = userlist;
             tvNofriends.setVisibility(View.GONE);
         } else {
             filterDateList.clear();
-            for (fenleiname sortModel : userlist) {
+            for (fenLeiName sortModel : userlist) {
                 String name = sortModel.getName();
                 if (name.indexOf(search_name.toString()) != -1
                         || characterParser.getSelling(name).startsWith(search_name.toString())) {

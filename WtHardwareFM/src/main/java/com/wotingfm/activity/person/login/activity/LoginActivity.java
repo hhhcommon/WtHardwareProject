@@ -14,6 +14,7 @@ import com.wotingfm.activity.person.forgetpassword.activity.ForgetPasswordActivi
 import com.wotingfm.activity.person.register.activity.RegisterActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -28,9 +29,9 @@ import org.json.JSONObject;
 import org.json.JSONTokener;
 
 /**
- * 登录界面
- * @author 辛龙
- *         2016年2月23日
+ * 登录界面，暂时没有第三方登录代码
+ * 作者：xinlong on 2016/8/23 21:18
+ * 邮箱：645700751@qq.com
  */
 public class LoginActivity extends AppBaseActivity implements OnClickListener {
     private Dialog dialog;              // 加载数据对话框
@@ -81,18 +82,18 @@ public class LoginActivity extends AppBaseActivity implements OnClickListener {
     private void checkData() {
         // 没有网路则不需要验证直接提示用户进行网络设置
         if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
-            ToastUtils.show_allways(context, "网络失败，请检查网络");
+            ToastUtils.show_always(context, "网络失败，请检查网络");
             return ;
         }
 
         userName = editTextUserName.getText().toString().trim();
         password = editTextPassword.getText().toString().trim();
         if (userName == null || userName.trim().equals("")) {
-            ToastUtils.show_allways(context, "用户名不能为空");
+            ToastUtils.show_always(context, "用户名不能为空");
             return ;
         }
         if (password == null || password.trim().equals("")) {
-            ToastUtils.show_allways(context, "密码不能为空");
+            ToastUtils.show_always(context, "密码不能为空");
             return ;
         }
 
@@ -111,9 +112,6 @@ public class LoginActivity extends AppBaseActivity implements OnClickListener {
         }
 
         VolleyRequest.RequestPost(GlobalConfig.loginUrl, tag, jsonObject, new VolleyCallback() {
-            private String ReturnType;
-            private String Message;
-
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) {
@@ -123,80 +121,74 @@ public class LoginActivity extends AppBaseActivity implements OnClickListener {
                     return;
                 }
                 try {
-                    ReturnType = result.getString("ReturnType");
+                    String ReturnType = result.getString("ReturnType");
+                    if (ReturnType != null && ReturnType.equals("1001")) {
+                        JSONObject arg1 = null;
+                        String imageUrl = "";
+                        String imageUrlBig = "";
+                        String userId = null;
+                        String returnUserName = null;
+                        String phoneNumber = null;
+                        try {
+                            arg1 = (JSONObject) new JSONTokener(result.getString("UserInfo")).nextValue();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if(arg1 != null) {
+                            try {
+                                returnUserName = arg1.getString("UserName");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                userId = arg1.getString("UserId");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                imageUrl = arg1.getString("PortraitMini");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                imageUrlBig = arg1.getString("PortraitBig");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                phoneNumber = arg1.getString("PhoneNum");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        }
+                        // 通过 SharedPreferences 存储用户的登录信息
+                        Editor et = BSApplication.SharedPreferences.edit();
+                        et.putString(StringConstant.USERID, userId);            // 用户 ID
+                        et.putString(StringConstant.ISLOGIN, "true");           // 用户为登录状态
+                        et.putString(StringConstant.USERNAME, returnUserName);  // 用户名
+                        et.putString(StringConstant.PHONENUMBER, phoneNumber);  // 用户注册时绑定的手机号码
+                        et.putString(StringConstant.IMAGEURL, imageUrl);        // 用户头像 URL
+                        et.putString(StringConstant.IMAGEURBIG, imageUrlBig);   // 用户大头像 URL
+                        et.putString(StringConstant.PERSONREFRESHB, "true");    // 是否刷新聊天
+                        if(!et.commit()) {
+                            L.w("数据 commit 失败!");
+                        }
+                        context.sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));//刷新通信录界面
+                        context.sendBroadcast(new Intent("push_down_completed"));// 刷新下载界面
+                        setResult(1);
+
+                        SharePreferenceManager.saveBatchSharedPreference(context, "USER_NAME", "USER_NAME", userName);
+                        InterPhoneControlHelper.sendEntryMessage(context);//登录后socket发送进入的请求
+                        finish();
+                    } else if (ReturnType != null && ReturnType.equals("1002")) {
+                        ToastUtils.show_always(context, "服务器端无此用户!");
+                    } else if (ReturnType != null && ReturnType.equals("1003")) {
+                        ToastUtils.show_always(context, "密码错误!");
+                    } else {
+                        ToastUtils.show_always(context, "发生未知错误，请稍后重试!");
+                    }
                 } catch (Exception e1) {
                     e1.printStackTrace();
-                }
-                try {
-                    Message = result.getString("Message");
-                    L.v("Message -- > > " + Message);
-                } catch (JSONException e1) {
-                    e1.printStackTrace();
-                }
-                if (ReturnType != null && ReturnType.equals("1001")) {
-                    JSONObject arg1 = null;
-                    String imageUrl = "";
-                    String imageUrlBig = "";
-                    String userId = null;
-                    String returnUserName = null;
-                    String phoneNumber = null;
-                    try {
-                        arg1 = (JSONObject) new JSONTokener(result.getString("UserInfo")).nextValue();
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                    if(arg1 != null) {
-                        try {
-                            returnUserName = arg1.getString("UserName");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            userId = arg1.getString("UserId");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            imageUrl = arg1.getString("PortraitMini");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            imageUrlBig = arg1.getString("PortraitBig");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                        try {
-                            phoneNumber = arg1.getString("PhoneNum");
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
-                    }
-                    // 通过 SharedPreferences 存储用户的登录信息
-                    Editor et = BSApplication.SharedPreferences.edit();
-                    et.putString(StringConstant.USERID, userId);            // 用户 ID
-                    et.putString(StringConstant.ISLOGIN, "true");           // 用户为登录状态
-                    et.putString(StringConstant.USERNAME, returnUserName);  // 用户名
-                    et.putString(StringConstant.PHONENUMBER, phoneNumber);  // 用户注册时绑定的手机号码
-                    et.putString(StringConstant.IMAGEURL, imageUrl);        // 用户头像 URL
-                    et.putString(StringConstant.IMAGEURBIG, imageUrlBig);   // 用户大头像 URL
-                    et.putString(StringConstant.PERSONREFRESHB, "true");    // 是否刷新聊天
-                    if(!et.commit()) {
-                        L.w("数据 commit 失败!");
-                    }
-                    context.sendBroadcast(new Intent("push_refreshlinkman"));
-                    context.sendBroadcast(new Intent("push_down_completed"));// 刷新下载界面
-                    setResult(1);
-
-                    SharePreferenceManager.saveBatchSharedPreference(context, "USER_NAME", "USER_NAME", userName);
-                    InterPhoneControlHelper.sendEntryMessage(context);
-                    finish();
-                } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_allways(context, "服务器端无此用户!");
-                } else if (ReturnType != null && ReturnType.equals("1003")) {
-                    ToastUtils.show_allways(context, "密码错误!");
-                } else {
-                    ToastUtils.show_allways(context, "发生未知错误，请稍后重试!");
                 }
             }
 

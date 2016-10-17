@@ -132,7 +132,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
             dialog = DialogUtils.Dialogph(context, "正在获取群成员信息");
             send();
         }else{
-            ToastUtils.show_allways(context,"获取组ID失败");
+            ToastUtils.show_always(context,"获取组ID失败");
         }
        /* } else {
             ToastUtils.show_allways(context, "网络失败，请检查网络");
@@ -275,7 +275,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                 }
                 list = new Gson().fromJson(srclist, new TypeToken<List<UserInfo>>(){}.getType());
                 if (list == null || list.size() == 0) {
-                    ToastUtils.show_allways(context,"您当前没有数据");
+                    ToastUtils.show_always(context,"您当前没有数据");
                     context.sendBroadcast(pushintent);
                 }else{
                     //处理组装数据 判断list和Creater大小进行组装
@@ -368,7 +368,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                             bundle.putSerializable("data", userlist.get(position));
                             intent.putExtras(bundle);
                             startActivityForResult(intent, 2);
-                            ToastUtils.show_allways(context,"是好友，跳转到好友页面");
+                            ToastUtils.show_always(context,"是好友，跳转到好友页面");
                         } else {
                             Intent intent = new Intent(context,FriendAddActivity.class);
                             Bundle bundle = new Bundle();
@@ -377,7 +377,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                             bundle.putString("id", groupid);
                             intent.putExtras(bundle);
                             startActivityForResult(intent, 2);
-                            ToastUtils.show_allways(context,"非好友跳转到群陌生人");
+                            ToastUtils.show_always(context,"非好友跳转到群陌生人");
                         }
                     }
                 } else if (userlist.get(position).getType() == 2) {
@@ -644,25 +644,25 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                       sendBroadcast(pushintent);
                     } else {
                         if (ReturnType.equals("0000")) {
-                            ToastUtils.show_allways(context,"无法获取相关的参数");
+                            ToastUtils.show_always(context,"无法获取相关的参数");
                         } else if (ReturnType.equals("1000")) {
-                            ToastUtils.show_allways(context,"无法获取用户组id");
+                            ToastUtils.show_always(context,"无法获取用户组id");
                         } else if (ReturnType.equals("1101")) {
-                            ToastUtils.show_allways(context,"成功返回已经在用户组");
+                            ToastUtils.show_always(context,"成功返回已经在用户组");
                         } else if (ReturnType.equals("1002")) {
-                            ToastUtils.show_allways(context,"用户不存在");
+                            ToastUtils.show_always(context,"用户不存在");
                         } else if (ReturnType.equals("1003")) {
-                            ToastUtils.show_allways(context,"用户组不存在");
+                            ToastUtils.show_always(context,"用户组不存在");
                         } else if (ReturnType.equals("1011")) {
-                            ToastUtils.show_allways(context,"用户不在改组，无法删除");
+                            ToastUtils.show_always(context,"用户不在改组，无法删除");
                         } else if (ReturnType.equals("T")) {
-                            ToastUtils.show_allways(context,"异常返回值");
+                            ToastUtils.show_always(context,"异常返回值");
                         } else {
-                            ToastUtils.show_allways(context, "消息异常");
+                            ToastUtils.show_always(context, "消息异常");
                         }
                     }
                 } else {
-                    ToastUtils.show_allways(context,"ReturnType不能为空");
+                    ToastUtils.show_always(context,"ReturnType不能为空");
                 }
             }
 
@@ -703,7 +703,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                 }
                 if (ReturnType != null && !ReturnType.equals("")) {
                     if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
-                        ToastUtils.show_allways(context,"已经成功退出该组");
+                        ToastUtils.show_always(context,"已经成功退出该组");
                         sendBroadcast(pushintent);
                         SharedPreferences sp = getSharedPreferences("wotingfm",Context.MODE_PRIVATE);
                             SharedPreferences.Editor et = sp.edit();
@@ -712,23 +712,23 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
                         finish();
                     } else {
                         if (ReturnType.equals("0000")) {
-                            ToastUtils.show_allways(context,"无法获取相关的参数");
+                            ToastUtils.show_always(context,"无法获取相关的参数");
                         } else if (ReturnType.equals("1000")) {
-                            ToastUtils.show_allways(context,"无法获取用户组id");
+                            ToastUtils.show_always(context,"无法获取用户组id");
                         } else if (ReturnType.equals("1101")) {
-                            ToastUtils.show_allways(context,"成功返回已经在用户组");
+                            ToastUtils.show_always(context,"成功返回已经在用户组");
                         } else if (ReturnType.equals("1002")) {
-                            ToastUtils.show_allways(context,"用户不存在");
+                            ToastUtils.show_always(context,"用户不存在");
                         } else if (ReturnType.equals("1003")) {
-                            ToastUtils.show_allways(context,"用户组不存在");
+                            ToastUtils.show_always(context,"用户组不存在");
                         } else if (ReturnType.equals("1011")) {
-                            ToastUtils.show_allways(context,"用户不在改组，无法删除");
+                            ToastUtils.show_always(context,"用户不在改组，无法删除");
                         } else if (ReturnType.equals("T")) {
-                            ToastUtils.show_allways(context,"异常返回值");
+                            ToastUtils.show_always(context,"异常返回值");
                         }
                     }
                 } else {
-                    ToastUtils.show_allways(context,"ReturnType不能为空");
+                    ToastUtils.show_always(context,"ReturnType不能为空");
                 }
             }
             @Override

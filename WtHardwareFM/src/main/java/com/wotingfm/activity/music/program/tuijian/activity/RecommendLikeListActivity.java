@@ -32,7 +32,6 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.xlistview.XListView;
 import com.wotingfm.widget.xlistview.XListView.IXListViewListener;
@@ -135,7 +134,7 @@ public class RecommendLikeListActivity extends Activity implements OnClickListen
 									pagesizenum = allcount / pageSize + 1;
 								}
 							} else {
-								ToastUtils.show_allways(context, "页码获取异常");
+								ToastUtils.show_always(context, "页码获取异常");
 							}
 						} catch (JSONException e) {
 							e.printStackTrace();

@@ -19,8 +19,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.program.fenlei.adapter.fenleigridAdapter;
-import com.wotingfm.activity.music.program.fenlei.model.fenlei;
-import com.wotingfm.activity.music.program.fenlei.model.fenleiname;
+import com.wotingfm.activity.music.program.fenlei.model.fenLei;
+import com.wotingfm.activity.music.program.fenlei.model.fenLeiName;
 import com.wotingfm.activity.music.program.radiolist.activity.RadioListActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -42,10 +42,10 @@ public class FenLeiFragment extends Fragment {
 	private FragmentActivity context;
 	private View rootView;
 	private GridView gv_fenlei;
-	List<fenleiname> fenleilist = new ArrayList<>();
+	List<fenLeiName> fenleilist = new ArrayList<>();
 	private fenleigridAdapter adapter;
 	private Dialog dialog;
-	protected List<fenleiname> SubList;
+	protected List<fenLeiName> SubList;
 	private String tag = "FENLEI_VOLLEY_REQUEST_CANCEL_TAG";
 	private boolean isCancelRequest;
 
@@ -116,11 +116,11 @@ public class FenLeiFragment extends Fragment {
 					if (ReturnType.equals("1001")) {
 						try {
 							ResultList = result.getString("CatalogData");
-							fenlei SubList_all = new Gson().fromJson(ResultList, new TypeToken<fenlei>() {}.getType());
+							fenLei SubList_all = new Gson().fromJson(ResultList, new TypeToken<fenLei>() {}.getType());
 							SubList = SubList_all.getSubCata();
 							if (SubList != null) {
 								if (SubList.size() == 0) {
-									ToastUtils.show_allways(context, "获取分类列表为空");
+									ToastUtils.show_always(context, "获取分类列表为空");
 								} else {
 									if (adapter == null) {
 										adapter = new fenleigridAdapter(context, SubList);
@@ -131,22 +131,22 @@ public class FenLeiFragment extends Fragment {
 									setItemListener();
 								}
 							} else {
-								ToastUtils.show_allways(context, "获取分类列表为空");
+								ToastUtils.show_always(context, "获取分类列表为空");
 							}
 						} catch (JSONException e) {
 							e.printStackTrace();
 						}
 					} else if (ReturnType.equals("1002")) {
-						ToastUtils.show_allways(context, "无此分类信息");
+						ToastUtils.show_always(context, "无此分类信息");
 					} else if (ReturnType.equals("1003")) {
-						ToastUtils.show_allways(context, "分类不存在");
+						ToastUtils.show_always(context, "分类不存在");
 					} else if (ReturnType.equals("1011")) {
-						ToastUtils.show_allways(context, "当前暂无分类");
+						ToastUtils.show_always(context, "当前暂无分类");
 					} else if (ReturnType.equals("T")) {
-						ToastUtils.show_allways(context, "获取列表异常");
+						ToastUtils.show_always(context, "获取列表异常");
 					}
 				} else {
-					ToastUtils.show_allways(context, "数据获取异常，请稍候重试");
+					ToastUtils.show_always(context, "数据获取异常，请稍候重试");
 				}
 			}
 			

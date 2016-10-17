@@ -265,13 +265,13 @@ public class TotalFragment extends Fragment {
 						ToastUtils.show_short(context, "数据获取异常");
 					}
 				}else if (ReturnType != null && ReturnType.equals("1002")) {
-					ToastUtils.show_allways(context, ""+ Message);
+					ToastUtils.show_always(context, ""+ Message);
 				} else if (ReturnType != null && ReturnType.equals("1011")) {
-					ToastUtils.show_allways(context, ""+ Message);
+					ToastUtils.show_always(context, ""+ Message);
 					ex_listview.setVisibility(View.GONE);
 				} else {
 					if (Message != null && !Message.trim().equals("")) {
-						ToastUtils.show_allways(context,Message + "");
+						ToastUtils.show_always(context,Message + "");
 					}
 				}
 			}
@@ -335,7 +335,7 @@ public class TotalFragment extends Fragment {
 							playerzantype,  playerfrom, playerfromid, playerfromurl,playeraddtime,bjuserid,playcontentshareurl,ContentFavorite,ContentId,localurl);	
 					dbdao.deleteHistory(playerurl);
 					dbdao.addHistory(history);
-					MainActivity.change();
+					MainActivity.changeToMusic();
 					HomeActivity.UpdateViewPager();
 //					PlayerFragment.SendTextRequest(list.get(groupPosition).getList().get(childPosition).getContentName(),context.getApplicationContext());
 			     	context.finish();
@@ -367,10 +367,10 @@ public class TotalFragment extends Fragment {
 						dialog = DialogUtils.Dialogph(context, "通讯中");
 						sendRequest();
 					}else{
-					/*	ToastUtil.show_allways(context, "搜索字符串获取异常");*/
+					/*	ToastUtil.show_always(context, "搜索字符串获取异常");*/
 					}
 				} else {
-					ToastUtils.show_allways(context, "网络失败，请检查网络");
+					ToastUtils.show_always(context, "网络失败，请检查网络");
 				}
 			} 
 		}

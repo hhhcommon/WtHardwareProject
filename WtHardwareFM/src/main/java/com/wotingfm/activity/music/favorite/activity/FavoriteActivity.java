@@ -261,13 +261,13 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
             } else if (mediatype.equals("TTS")) {
                 index = 4;
             } else {
-                ToastUtils.show_allways(context, "mediatype不属于已经分类的四种类型");
+                ToastUtils.show_always(context, "mediatype不属于已经分类的四种类型");
             }
             mPager.setCurrentItem(index);
             currentindex = index;
             viewChange(index);
         } else {
-            ToastUtils.show_allways(context, "传进来的mediatype值为空");
+            ToastUtils.show_always(context, "传进来的mediatype值为空");
 
         }
     }
@@ -311,7 +311,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                 if (sum != 0) {
                     confirmDialog.show();
                 } else {
-                    ToastUtils.show_allways(context, "您还没有喜欢的数据");
+                    ToastUtils.show_always(context, "您还没有喜欢的数据");
                 }
             }
         } else if (currentindex == 1) {
@@ -327,7 +327,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                         DelDialog.show();
                     }
                 } else {
-                    ToastUtils.show_allways(context, "当前页无数据");
+                    ToastUtils.show_always(context, "当前页无数据");
                 }
             } else if (type == 2) {// 隐藏view
                 sequfragment.changeviewtype(0);
@@ -339,7 +339,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                 sequfragment.changechecktype(0);
             } else if (type == 5) {// 删除
                 if (sequfragment.getdelitemsum() == 0) {
-                    ToastUtils.show_allways(context, "请选择您要删除的数据");
+                    ToastUtils.show_always(context, "请选择您要删除的数据");
                     return;
                 }
                 if (DelDialog.isShowing()) {
@@ -367,7 +367,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                         DelDialog.show();
                     }
                 } else {
-                    ToastUtils.show_allways(context, "当前页无数据");
+                    ToastUtils.show_always(context, "当前页无数据");
                 }
             } else if (type == 2) {// 隐藏view
                 soundfragment.changeviewtype(0);
@@ -379,7 +379,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                 soundfragment.changechecktype(0);
             } else if (type == 5) {// 删除
                 if (soundfragment.getdelitemsum() == 0) {
-                    ToastUtils.show_allways(context, "请选择您要删除的数据");
+                    ToastUtils.show_always(context, "请选择您要删除的数据");
                     return;
                 }
                 if (DelDialog.isShowing()) {
@@ -407,7 +407,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                         DelDialog.show();
                     }
                 } else {
-                    ToastUtils.show_allways(context, "当前页无数据");
+                    ToastUtils.show_always(context, "当前页无数据");
                 }
             } else if (type == 2) {// 隐藏view
                 radiofragment.changeviewtype(0);
@@ -419,7 +419,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                 radiofragment.changechecktype(0);
             } else if (type == 5) {// 删除
                 if (radiofragment.getdelitemsum() == 0) {
-                    ToastUtils.show_allways(context, "请选择您要删除的数据");
+                    ToastUtils.show_always(context, "请选择您要删除的数据");
                     return;
                 }
                 if (DelDialog.isShowing()) {
@@ -447,7 +447,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                         DelDialog.show();
                     }
                 } else {
-                    ToastUtils.show_allways(context, "当前页无数据");
+                    ToastUtils.show_always(context, "当前页无数据");
                 }
             } else if (type == 2) {// 隐藏view
                 ttsfragment.changeviewtype(0);
@@ -459,7 +459,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                 ttsfragment.changechecktype(0);
             } else if (type == 5) {// 删除
                 if (ttsfragment.getdelitemsum() == 0) {
-                    ToastUtils.show_allways(context, "请选择您要删除的数据");
+                    ToastUtils.show_always(context, "请选择您要删除的数据");
                     return;
                 }
                 if (DelDialog.isShowing()) {

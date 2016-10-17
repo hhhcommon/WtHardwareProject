@@ -54,7 +54,7 @@ public class ForgetPasswordActivity extends AppBaseActivity implements OnClickLi
     public void onClick(View v) {
         // 以下验证操作都需要网络 所以没有网络则不需要继续 提示用户设置网络
         if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
-            ToastUtils.show_allways(context, "网络失败，请检查网络!");
+            ToastUtils.show_always(context, "网络失败，请检查网络!");
             return ;
         }
         switch (v.getId()) {
@@ -104,7 +104,7 @@ public class ForgetPasswordActivity extends AppBaseActivity implements OnClickLi
             }
         }
         if ("".equalsIgnoreCase(phoneNum) || !isMobile(phoneNum)) {
-            ToastUtils.show_allways(context, "请输入正确的手机号码!");
+            ToastUtils.show_always(context, "请输入正确的手机号码!");
             return ;
         }
 
@@ -115,22 +115,22 @@ public class ForgetPasswordActivity extends AppBaseActivity implements OnClickLi
     // 验证数据的正确性 然后将数据发送到服务器进行验证
     private void checkValue() {
         if (verifyCode == -1) {
-            ToastUtils.show_allways(context, "获取验证码异常!");
+            ToastUtils.show_always(context, "获取验证码异常!");
             return ;
         }
 
         verificationCode = editYzm.getText().toString().trim();
         password = mEditTextPassWord.getText().toString().trim();
         if ("".equalsIgnoreCase(phoneNum) || !isMobile(phoneNum)) {
-            ToastUtils.show_allways(context, "请输入正确的手机号码!");
+            ToastUtils.show_always(context, "请输入正确的手机号码!");
             return ;
         }
         if ("".equalsIgnoreCase(verificationCode) || verificationCode.length() != 6) {
-            ToastUtils.show_allways(context, "验证码不正确!");
+            ToastUtils.show_always(context, "验证码不正确!");
             return ;
         }
         if (password.length() < 6 || "".equalsIgnoreCase(password)) {
-            ToastUtils.show_allways(context, "密码格式错误!");
+            ToastUtils.show_always(context, "密码格式错误!");
             return ;
         }
 
@@ -177,15 +177,15 @@ public class ForgetPasswordActivity extends AppBaseActivity implements OnClickLi
                     if (UserId != null && !UserId.equals("")) {
                         sendModifyPassword(UserId);
                     } else {
-                        ToastUtils.show_allways(context, "获取UserId异常");
+                        ToastUtils.show_always(context, "获取UserId异常");
                     }
                 } else if (ReturnType != null && ReturnType.equals("T")) {
-                    ToastUtils.show_allways(context, "异常返回值");
+                    ToastUtils.show_always(context, "异常返回值");
                 } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_allways(context, "验证码不匹配");
+                    ToastUtils.show_always(context, "验证码不匹配");
                 } else {
                     if (Message != null && !Message.trim().equals("")) {
-                        ToastUtils.show_allways(context, Message + "");
+                        ToastUtils.show_always(context, Message + "");
                     }
                 }
             }
@@ -237,19 +237,19 @@ public class ForgetPasswordActivity extends AppBaseActivity implements OnClickLi
                     e.printStackTrace();
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
-                    ToastUtils.show_allways(context, "验证码已经发送!");
+                    ToastUtils.show_always(context, "验证码已经发送!");
                     verifyCode = 1;
                     sendType = 2;
                     timerDown();
                     textGetYzm.setVisibility(View.GONE);
                     textCxFaSong.setVisibility(View.VISIBLE);
                 } else if (ReturnType != null && ReturnType.equals("T")) {
-                    ToastUtils.show_allways(context, "获取验证码异常，请确认后重试!");
+                    ToastUtils.show_always(context, "获取验证码异常，请确认后重试!");
                 } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_allways(context, "此手机号在系统内没有注册");
+                    ToastUtils.show_always(context, "此手机号在系统内没有注册");
                 } else {
                     if (Message != null && !Message.trim().equals("")) {
-                        ToastUtils.show_allways(context, Message + "");
+                        ToastUtils.show_always(context, Message + "");
                     }
                 }
             }
@@ -294,11 +294,11 @@ public class ForgetPasswordActivity extends AppBaseActivity implements OnClickLi
                     e.printStackTrace();
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
-                    ToastUtils.show_allways(context, "密码修改成功!");
+                    ToastUtils.show_always(context, "密码修改成功!");
                     finish();
                 } else {
                     if (Message != null && !Message.trim().equals("")) {
-                        ToastUtils.show_allways(context, Message);
+                        ToastUtils.show_always(context, Message);
                     }
                 }
             }
