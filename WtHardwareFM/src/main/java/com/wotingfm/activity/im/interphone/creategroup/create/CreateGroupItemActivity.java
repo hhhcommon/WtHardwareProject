@@ -231,6 +231,8 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                     try {
                         groupInfo = result.getString("GroupInfo");
                         groupRation = new Gson().fromJson(groupInfo, new TypeToken<GroupRation>() {}.getType());
+                        groupRation.setAlternateChannel1(spinnerString1);// 备用频道 1
+                        groupRation.setAlternateChannel2(spinnerString2);// 备用频道 2
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
@@ -331,6 +333,10 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                 break;
             case R.id.btn_commit:       // 确定
                 Toast.makeText(context, "备用频道1: " + spinnerString1 + ", 备用频道2: " + spinnerString2, Toast.LENGTH_LONG).show();
+                if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+                    Toast.makeText(context, "网络失败，请检查网络", Toast.LENGTH_SHORT).show();
+                    return ;
+                }
                 nick = editGroupName.getText().toString().trim();
                 sign = editGroupAutograph.getText().toString().trim();
                 if (nick == null || nick.equals("")) {
@@ -346,12 +352,9 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                         return;
                     }
                 }
-                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    DialogUtils.showDialog(context);
-                    sendRequest();
-                } else {
-                    Toast.makeText(context, "网络失败，请检查网络", Toast.LENGTH_SHORT).show();
-                }
+
+                DialogUtils.showDialog(context);
+                sendRequest();
                 break;
         }
     }

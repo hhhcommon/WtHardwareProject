@@ -471,7 +471,7 @@ public class GroupDetailAcitivity extends Activity implements View.OnClickListen
             signature = f.getGroupSignature();
             grouptype = f.getGroupType();
 			/* myAlias=f.get; */
-        } else if (type.equals("FindNewsResultActivityApp")) {
+        } else if (type.equals("FindNewsResultActivity")) {
             // 处理组邀请时进入
             FindGroupNews news = (FindGroupNews) this.getIntent().getSerializableExtra("contact");
             imageurl = news.getGroupImg();

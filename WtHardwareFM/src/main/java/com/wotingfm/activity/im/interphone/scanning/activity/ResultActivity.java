@@ -21,7 +21,7 @@ import com.wotingfm.util.L;
  * @author 辛龙
  *         2016年8月8日
  */
-public class ResultActivityApp extends AppBaseActivity {
+public class ResultActivity extends AppBaseActivity {
 
     @Override
     protected int setViewId() {

@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences.Editor;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -97,7 +99,7 @@ public class MineActivity extends Activity implements OnClickListener {
     private RelativeLayout relativeStatusUnLogin;   // 未登录状态
     private RelativeLayout relativeStatusLogin;     // 登录状态
     private ImageView userHead;                     // 用户头像
-    private ImageView imageAuxSet;
+//    private ImageView imageAuxSet;
     private TextView textWifiName;
     private TextView textBluetoothState;            // 蓝牙状态 打开 OR 关闭
     private TextView textCache;                     // 缓存统计
@@ -123,7 +125,6 @@ public class MineActivity extends Activity implements OnClickListener {
     private int updateType = 1;                     // 版本更新类型
     private int imageNum;
     private boolean isCancelRequest;
-    private boolean auxState;                       // AUX设置的状态
     private boolean hasRegister = false;
     private boolean isFirst = true;                 // 第一次加载界面
 
@@ -134,12 +135,12 @@ public class MineActivity extends Activity implements OnClickListener {
         context = this;
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         imageLoader = new ImageLoader(context);
-        initCache();
         clearCacheDialog();
         exitLoginDialog();
         setView();           // 设置界面
         imageDialog();
         getBluetoothState();
+        initCache();
     }
 
     // 获取蓝牙状态
@@ -223,16 +224,6 @@ public class MineActivity extends Activity implements OnClickListener {
         wifiSet.setOnClickListener(this);
         textWifiName = (TextView) findViewById(R.id.text_wifi_name);                    // 连接的WIFI的名字
 
-        View auxSet = findViewById(R.id.aux_set);               // AUX设置
-        auxSet.setOnClickListener(this);
-        imageAuxSet = (ImageView) findViewById(R.id.image_aux_set);
-        auxState = BSApplication.SharedPreferences.getBoolean(StringConstant.AUX_SET, true);          // 获取AUX状态并初始化
-        if (auxState) {
-            imageAuxSet.setImageResource(R.mipmap.wt_person_on);
-        } else {
-            imageAuxSet.setImageResource(R.mipmap.wt_person_close);
-        }
-
         View channelSet = findViewById(R.id.listener_set);      // 频道设置
         channelSet.setOnClickListener(this);
 //        TextView textChannel = (TextView) findViewById(R.id.text_listener_frequency);   // 频率
@@ -305,18 +296,6 @@ public class MineActivity extends Activity implements OnClickListener {
             case R.id.wifi_set:                 // WIFI连接设置
                 startActivity(new Intent(context, WIFIActivity.class));
                 break;
-            case R.id.aux_set:                  // AUX设置
-                Editor et = BSApplication.SharedPreferences.edit();
-                if (auxState) {
-                    imageAuxSet.setImageResource(R.mipmap.wt_person_close);
-                    et.putBoolean(StringConstant.AUX_SET, false);
-                } else {
-                    imageAuxSet.setImageResource(R.mipmap.wt_person_on);
-                    et.putBoolean(StringConstant.AUX_SET, true);
-                }
-                et.commit();
-                auxState = !auxState;
-                break;
             case R.id.tv_update:                // 更新
                 UpdateManager updateManager = new UpdateManager(context);
                 updateManager.checkUpdateInfo1();
@@ -361,12 +340,16 @@ public class MineActivity extends Activity implements OnClickListener {
             userName = BSApplication.SharedPreferences.getString(StringConstant.USERNAME, "");// 用户名，昵称
             userId = BSApplication.SharedPreferences.getString(StringConstant.USERID, "");
             textUserName.setText(userName);
-            if (imageUrl.startsWith("http:")) {
-                url = imageUrl;
+            if(!imageUrl.equals("")) {
+                if (imageUrl.startsWith("http:")) {
+                    url = imageUrl;
+                } else {
+                    url = GlobalConfig.imageurl + imageUrl;
+                }
+                imageLoader.DisplayImage(url.replace("\\", "/"),userHead, false, false, null, null);
             } else {
-                url = GlobalConfig.imageurl + imageUrl;
+                userHead.setImageResource(0);
             }
-            imageLoader.DisplayImage(url.replace("\\", "/"),userHead, false, false, null, null);
         } else {
             relativeStatusLogin.setVisibility(View.GONE);
             relativeStatusUnLogin.setVisibility(View.VISIBLE);
@@ -374,7 +357,7 @@ public class MineActivity extends Activity implements OnClickListener {
         }
     }
 
-    // 注册蓝牙接收广播
+    // 注册广播 接收蓝牙、WiFi状态发生改变信息
     @Override
     protected void onStart() {
         if(!hasRegister){
@@ -502,6 +485,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }
@@ -556,6 +540,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }
@@ -672,7 +657,7 @@ public class MineActivity extends Activity implements OnClickListener {
         exitLoginDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
     }
 
-    // 拍照调用逻辑  从相册选择which==0   拍照which==1
+    // 拍照调用逻辑  从相册选择 which == 0   拍照 which == 1
     private void doDialogClick(int which) {
         switch (which) {
             case 0:    // 调用图库
@@ -1046,6 +1031,16 @@ public class MineActivity extends Activity implements OnClickListener {
                 initCache();
             }
         }
+    }
+
+    // 设置android app 的字体大小不受系统字体大小改变的影响
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        return res;
     }
 
     @Override

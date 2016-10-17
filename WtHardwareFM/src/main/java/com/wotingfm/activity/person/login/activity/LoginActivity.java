@@ -134,20 +134,43 @@ public class LoginActivity extends AppBaseActivity implements OnClickListener {
                     e1.printStackTrace();
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
-                    String imageUrl = null;
-                    String imageUrlBig = null;
+                    JSONObject arg1 = null;
+                    String imageUrl = "";
+                    String imageUrlBig = "";
                     String userId = null;
                     String returnUserName = null;
                     String phoneNumber = null;
                     try {
-                        JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("UserInfo")).nextValue();
-                        returnUserName = arg1.getString("UserName");
-                        userId = arg1.getString("UserId");
-                        imageUrl = arg1.getString("PortraitMini");
-                        imageUrlBig = arg1.getString("PortraitBig");
-                        phoneNumber = arg1.getString("PhoneNum");
+                        arg1 = (JSONObject) new JSONTokener(result.getString("UserInfo")).nextValue();
                     } catch (Exception e) {
                         e.printStackTrace();
+                    }
+                    if(arg1 != null) {
+                        try {
+                            returnUserName = arg1.getString("UserName");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            userId = arg1.getString("UserId");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            imageUrl = arg1.getString("PortraitMini");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            imageUrlBig = arg1.getString("PortraitBig");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            phoneNumber = arg1.getString("PhoneNum");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                     // 通过 SharedPreferences 存储用户的登录信息
                     Editor et = BSApplication.SharedPreferences.edit();
@@ -182,6 +205,7 @@ public class LoginActivity extends AppBaseActivity implements OnClickListener {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }

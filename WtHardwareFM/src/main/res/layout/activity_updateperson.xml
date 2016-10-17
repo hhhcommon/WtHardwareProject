@@ -128,7 +128,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginLeft="25dp"
                 android:layout_weight="8"
-                android:text="13012345678"
+                android:text=""
                 android:gravity="left|center"
                 android:textColor="#5e6471"/>
 

@@ -4,6 +4,8 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -171,7 +173,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         if (!news.equals("")) {
             if (news.contains("http")) {
                 bundle.putString("result", news);
-                startActivity(new Intent(CaptureActivity.this, ResultActivityApp.class).putExtras(bundle));
+                startActivity(new Intent(CaptureActivity.this, ResultActivity.class).putExtras(bundle));
             } else {
                 MessageInfo message = gson.fromJson(news, new TypeToken<MessageInfo>() {
                 }.getType());
@@ -197,7 +199,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                                         Intent intent = new Intent(context, CaptureActivity.class);
                                         Bundle bundle1 = new Bundle();
                                         bundle1.putSerializable("contact", groupnews);
-                                        bundle1.putString("type", "FindNewsResultActivityApp");
+                                        bundle1.putString("type", "FindNewsResultActivity");
                                         intent.putExtras(bundle1);
                                         startActivity(intent);
                                     } else {
@@ -315,6 +317,16 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
             e.printStackTrace();
         }
         return 0;
+    }
+
+    // 设置android app 的字体大小不受系统字体大小改变的影响
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        return res;
     }
 
     @Override
