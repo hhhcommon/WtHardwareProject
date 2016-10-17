@@ -34,8 +34,14 @@ public class SearchHistoryDao {
 	public void addHistory(History history) {
 		//通过helper的实现对象获取可操作的数据库db
 		SQLiteDatabase db = helper.getWritableDatabase();
-		db.execSQL("insert into history(userid,playname) values(?,?)",
-				new Object[] { history.getUserId(), history.getPlayName()});//sql语句
+		String userId = CommonUtils.getUserId(context);
+		if(userId!=null){
+			db.execSQL("insert into history(userid,playname) values(?,?)",
+					new Object[] { history.getUserId(), history.getPlayName()});//sql语句
+		}else{
+			db.execSQL("insert into history(userid,playname) values(?,?)",
+					new Object[] {"wotingkeji", history.getPlayName()});//sql语句
+		}
 		db.close();//关闭数据库对象
 	}
 
@@ -113,8 +119,13 @@ public class SearchHistoryDao {
 	public void deleteHistory(String news) {
 		SQLiteDatabase db = helper.getReadableDatabase();
 		String userid = CommonUtils.getUserId(context);
-		db.execSQL("Delete from history where userid like ?and playname=?",
-				new String[] { userid ,news});
+		if(userid!=null){
+			db.execSQL("Delete from history where userid like ?and playname=?",
+					new String[] { userid ,news});
+		}else {
+			db.execSQL("Delete from history where playname=?",
+					new String[] { news});
+		}
 		db.close();
 	}
 	/**
@@ -124,8 +135,11 @@ public class SearchHistoryDao {
 	public void deleteHistoryall(String news) {
 		SQLiteDatabase db = helper.getReadableDatabase();
 		String userid = CommonUtils.getUserId(context);
-		db.execSQL("Delete from history where userid like ?",
-				new String[] {userid});
+		if(userid!=null){
+			db.execSQL("Delete from history where userid like ?", new String[] {userid});
+		}else {
+			db.execSQL("Delete from history");
+		}
 		db.close();
 	}
 }

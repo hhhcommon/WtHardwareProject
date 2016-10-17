@@ -1,6 +1,5 @@
 package com.wotingfm.activity.music.program.fmlist.activity;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -19,6 +18,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseActivity.BaseActivity;
 import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.activity.music.player.fragment.PlayerFragment;
@@ -49,7 +49,7 @@ import java.util.List;
  * @author 辛龙
  *2016年8月8日
  */
-public class FMListActivity extends Activity implements OnClickListener {
+public class FMListActivity extends BaseActivity implements OnClickListener {
 	private LinearLayout head_left_btn;
 	private XListView mlistview;
 	private Dialog dialog;

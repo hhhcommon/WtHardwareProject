@@ -184,6 +184,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     public static boolean isCurrentPlay;
     private static String playmtype;// 当前播放的媒体类型
     private Boolean IsSequ=false;
+    private static List<PlayerHistory> historydatabaselist;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -557,7 +558,12 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         if (dbdao == null) {
             dbdao = new SearchPlayerHistoryDao(context);
         }
-        List<PlayerHistory> historydatabaselist = dbdao.queryHistory();
+        String userId = CommonUtils.getUserId(context);
+        if(userId!=null){
+            historydatabaselist = dbdao.queryHistory();
+        }else{
+            historydatabaselist = dbdao.queryHistoryNoUserId();
+        }
         LanguageSearchInside historynews = null;
         if (historydatabaselist != null && historydatabaselist.size() > 0) {
             PlayerHistory historynew = historydatabaselist.get(0);
@@ -1886,6 +1892,9 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     ToastUtils.show_short(context, "没有查询内容");
                 } else {
                     ToastUtils.show_short(context, "没有新的数据");
+
+
+
                 }
             }
 

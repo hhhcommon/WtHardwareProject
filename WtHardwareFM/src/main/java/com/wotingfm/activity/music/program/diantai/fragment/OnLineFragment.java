@@ -496,7 +496,7 @@ public class OnLineFragment extends Fragment {
                         dbdao.deleteHistory(playerurl);
                         dbdao.addHistory(history);
                         HomeActivity.UpdateViewPager();
-//						PlayerFragment.SendTextRequest(newlist.get(groupPosition).getList().get(childPosition).getContentName(), context);
+						PlayerFragment.SendTextRequest(newlist.get(groupPosition).getList().get(childPosition).getContentName(), context);
                     } else if (MediaType.equals("SEQU")) {
                         Intent intent = new Intent(context, AlbumActivity.class);
                         Bundle bundle = new Bundle();
