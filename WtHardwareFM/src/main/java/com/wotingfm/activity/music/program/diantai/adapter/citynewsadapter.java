@@ -47,31 +47,29 @@ public class citynewsadapter extends BaseAdapter {
 		ViewHolder holder;
 		if (convertView == null) {
 			holder = new ViewHolder();
-			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fragment_radio_grid, null);
-			holder.textview_ranktitle = (TextView) convertView.findViewById(R.id.tv_name);// 台名
-			holder.imageview_rankimage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
+			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fragment_radio_grid, parent, false);
+			holder.textRankTitle = (TextView) convertView.findViewById(R.id.tv_name);          // 台名
+			holder.imageRankImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);   // 电台图标
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		RankInfo lists = list.get(position);
-		holder.textview_ranktitle.setText(lists.getContentName());
+		holder.textRankTitle.setText(lists.getContentName());
 		if (lists.getContentImg() == null || lists.getContentImg().equals("")
 				|| lists.getContentImg().equals("null") || lists.getContentImg().trim().equals("")) {
 			
 			Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
-			holder.imageview_rankimage.setImageBitmap(bmp);
+			holder.imageRankImage.setImageBitmap(bmp);
 		} else {
-			String url = /*GlobalConfig.imageurl +*/ lists.getContentImg();
-			imageLoader.DisplayImage(url.replace("\\/", "/"),holder.imageview_rankimage, false, false, null, null);
+			String url = lists.getContentImg();
+			imageLoader.DisplayImage(url.replace("\\/", "/"),holder.imageRankImage, false, false, null, null);
 		}
-		
 		return convertView;
 	}
 
-
 	private class ViewHolder {
-		public ImageView imageview_rankimage;
-		public TextView textview_ranktitle;
+		public ImageView imageRankImage;
+		public TextView textRankTitle;
 	}
 }

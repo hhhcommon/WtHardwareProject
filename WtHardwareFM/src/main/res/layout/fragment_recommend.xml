@@ -13,7 +13,6 @@
         android:animationCache="false"
         android:divider="@color/WHITE"
         android:scrollbars="none"
-        android:scrollingCache="false">
-    </com.wotingfm.widget.xlistview.XListView>
-    
+        android:scrollingCache="false"/>
+
 </LinearLayout>
