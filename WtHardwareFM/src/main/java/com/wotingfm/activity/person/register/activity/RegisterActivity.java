@@ -31,9 +31,6 @@ import com.wotingfm.util.ToastUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * 注册
  * 作者：xinlong on 2016/8/23 21:18
@@ -47,6 +44,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
     private EditText mEditTextUserPhone;    // 手机号
     private EditText mEditTextName;         // 用户名
     private EditText mEditTextPassWord;     // 密码
+    private EditText mEditTextPassWordT;    // 确认密码
     private EditText editYzm;               // 验证码
     private TextView textGetYzm;            // 获取验证码
     private TextView textCxFaSong;          // 重新发送验证码
@@ -57,6 +55,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
     private String phoneNum;                // 手机号
     private String userName;                // 用户名
     private String password;                // 密码
+    private String passwordT;                // 确认密码
     private String verificationCode;        // 验证码
     private String tempVerify;
     private String tag = "REGISTER_VOLLEY_REQUEST_CANCEL_TAG";
@@ -77,6 +76,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
         mEditTextUserPhone = (EditText) findViewById(R.id.edittext_userphone);  // 输入 手机号
         mEditTextName = (EditText) findViewById(R.id.edittext_username);        // 输入 用户名
         mEditTextPassWord = (EditText) findViewById(R.id.edittext_password);    // 输入 密码
+        mEditTextPassWordT = (EditText) findViewById(R.id.edittext_passwordT);    // 输入 确认密码
 
         editYzm = (EditText) findViewById(R.id.et_yzm);                         // 输入 验证码
         editYzm.addTextChangedListener(new MyEditListener());
@@ -90,7 +90,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
         mTextRegister = (TextView) findViewById(R.id.tv_register);              // 注册
         mTextRegister.setOnClickListener(this);
 
-        LinearLayout agreement = (LinearLayout)findViewById(R.id.lin_agreement);// 注册协议
+        LinearLayout agreement = (LinearLayout) findViewById(R.id.lin_agreement);// 注册协议
         agreement.setOnClickListener(this);
 
     }
@@ -120,8 +120,13 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
         phoneNum = mEditTextUserPhone.getText().toString().trim();              // 手机号
         userName = mEditTextName.getText().toString().trim();                   // 用户名
         password = mEditTextPassWord.getText().toString().trim();               // 密码
+        passwordT = mEditTextPassWordT.getText().toString().trim();             // 确认密码
         verificationCode = editYzm.getText().toString().trim();                 // 验证码
-        if ("".equalsIgnoreCase(phoneNum) || !isMobile(phoneNum)) {
+//        if ("".equalsIgnoreCase(phoneNum) || !isMobile(phoneNum)) {
+//            ToastUtils.show_always(context, "请输入正确的手机号码!");
+//            return;
+//        }
+        if ("".equalsIgnoreCase(phoneNum) || phoneNum.length() != 11) {
             ToastUtils.show_always(context, "请输入正确的手机号码!");
             return;
         }
@@ -129,10 +134,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
             ToastUtils.show_always(context, "请输入您之前获取验证的手机号码");
             return;
         }
-        if ("".equalsIgnoreCase(verificationCode) || verificationCode.length() != 6) {
-            ToastUtils.show_always(context, "验证码不正确!");
-            return;
-        }
+
         if (userName == null || userName.trim().equals("")) {
             Toast.makeText(context, "用户名不能为空", Toast.LENGTH_SHORT).show();
             return;
@@ -150,8 +152,20 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
             return;
         }
 
+        if (passwordT == null || passwordT.trim().equals("")) {
+            Toast.makeText(context, "密码不能为空", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (!passwordT.equals(password)) {
+            Toast.makeText(context, "密码跟确认密码不匹配", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if ("".equalsIgnoreCase(verificationCode) || verificationCode.length() != 6) {
+            ToastUtils.show_always(context, "验证码不正确!");
+            return;
+        }
         dialog = DialogUtils.Dialogph(context, "正在验证手机号");
-        sendRequest();
+        sendRequest();//验证验证码，成功后会执行注册程序
     }
 
     // 发送网络请求
@@ -167,7 +181,6 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
         VolleyRequest.RequestPost(GlobalConfig.checkPhoneCheckCodeUrl, tag, jsonObject, new VolleyCallback() {
             private String ReturnType;
             private String Message;
-//            private String UserId;
 
             @Override
             protected void requestSuccess(JSONObject result) {
@@ -179,34 +192,29 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
                 }
                 try {
                     ReturnType = result.getString("ReturnType");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    Message = result.getString("Message");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-//                try {
-//                    UserId = result.getString("UserId");
-//                } catch (JSONException e) {
-//                    e.printStackTrace();
-//                }
-                if (ReturnType != null && ReturnType.equals("1001")) {
-                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                        dialog = DialogUtils.Dialogph(context, "注册中...");
-                        send();
+                    if (ReturnType != null && ReturnType.equals("1001")) {
+                        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                            dialog = DialogUtils.Dialogph(context, "注册中...");
+                            send();
+                        } else {
+                            ToastUtils.show_always(context, "网络失败，请检查网络");
+                        }
+                    } else if (ReturnType != null && ReturnType.equals("T")) {
+                        ToastUtils.show_always(context, "数据出错了,请稍后再试");
+                    } else if (ReturnType != null && ReturnType.equals("1002")) {
+                        ToastUtils.show_always(context, "验证码不匹配");
                     } else {
-                        ToastUtils.show_always(context, "网络失败，请检查网络");
+                        try {
+                            Message = result.getString("Message");
+                            if (Message != null && !Message.trim().equals("")) {
+                                ToastUtils.show_always(context, Message + "");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
-                } else if (ReturnType != null && ReturnType.equals("T")) {
-                    ToastUtils.show_always(context, "异常返回值");
-                } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_always(context, "验证码不匹配");
-                } else {
-                    if (Message != null && !Message.trim().equals("")) {
-                        ToastUtils.show_always(context, Message + "");
-                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -236,11 +244,14 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
             ToastUtils.show_always(context, "手机号码不能为空");
             return;
         }
-        if (!isMobile(phoneNumVerify)) {
+//        if (!isMobile(phoneNumVerify)) {
+//            ToastUtils.show_always(context, "请您输入正确的手机号");
+//            return;
+//        }
+        if (phoneNumVerify.length() != 11) {
             ToastUtils.show_always(context, "请您输入正确的手机号");
             return;
         }
-
         dialog = DialogUtils.Dialogph(context, "正在验证手机号");
         getVerifyCode();
     }
@@ -287,7 +298,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
                         textGetYzm.setVisibility(View.GONE);
                         textCxFaSong.setVisibility(View.VISIBLE);
                     } else if (ReturnType != null && ReturnType.equals("T")) {
-                        ToastUtils.show_always(context, "获取验证码发生异常，请稍后重试!");
+                        ToastUtils.show_always(context, "数据出错了,请稍后再试");
                     } else if (ReturnType != null && ReturnType.equals("1002")) {
                         ToastUtils.show_always(context, "此号码已经注册!");
                     } else {
@@ -361,7 +372,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
                     } else if (ReturnType != null && ReturnType.equals("1003")) {
                         ToastUtils.show_always(context, "您输入的用户名已存在");
                     } else {
-                        ToastUtils.show_always(context, "发生未知错误，请稍后重试");
+                        ToastUtils.show_always(context, "数据出错了,请稍后再试");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -394,12 +405,12 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
         }.start();
     }
 
-    // 验证手机号的方法
-    private boolean isMobile(String str) {
-        Pattern pattern = Pattern.compile("^[1][3,4,5,7,8][0-9]{9}$"); // 验证手机号格式
-        Matcher matcher = pattern.matcher(str);
-        return matcher.matches();
-    }
+    // 验证手机号的方法，为了避免手机格式的匹配不完全，取消前端的正则匹配，交由后端处理，前端只处理字节是否为11位
+//    private boolean isMobile(String str) {
+//        Pattern pattern = Pattern.compile("^[1][3,4,5,7,8][0-9]{9}$"); // 验证手机号格式
+//        Matcher matcher = pattern.matcher(str);
+//        return matcher.matches();
+//    }
 
     // 输入框监听
     class MyEditListener implements TextWatcher {
@@ -439,6 +450,8 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
         mEditTextName = null;
         mEditTextPassWord = null;
         password = null;
+        mEditTextPassWordT = null;
+        passwordT = null;
         userName = null;
         context = null;
         dialog = null;
