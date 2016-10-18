@@ -1,23 +1,17 @@
 package com.wotingfm.activity.music.program.citylist.activity;
 
-import android.app.Activity;
 import android.app.Dialog;
-import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -25,19 +19,20 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.im.interphone.linkman.view.CharacterParser;
 import com.wotingfm.activity.im.interphone.linkman.view.PinyinComparator_d;
 import com.wotingfm.activity.im.interphone.linkman.view.SideBar;
 import com.wotingfm.activity.music.program.citylist.adapter.CityListAdapter;
-import com.wotingfm.activity.music.program.citylist.dao.CityInfoDao;
 import com.wotingfm.activity.music.program.fenlei.model.fenlei;
 import com.wotingfm.activity.music.program.fenlei.model.fenleiname;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -53,39 +48,37 @@ import java.util.List;
  * @author 辛龙
  *         2016年4月7日
  */
-public class CityListActivity extends Activity implements OnClickListener {
-    private CityListActivity context;
+public class CityListActivity extends AppBaseActivity {
+    private CityListAdapter adapter;
     private CharacterParser characterParser;
     private PinyinComparator_d pinyinComparator;
+    
     private Dialog dialog;
-    private TextView tvNofriends;
     private SideBar sideBar;
-    private TextView dialogs;
     private ListView listView;
-    private EditText et_searh_content;
-    private LinearLayout lin_head_left;
-    private ImageView image_clear;
-    private List<fenleiname> userlist = new ArrayList<>();
-    private CityListAdapter adapter;
-    private List<fenleiname> srclist;
-    private String tag = "CITY_LIST_REQUEST_CANCLE_TAG";
+    private TextView textNoFriend;
+    private EditText editSearchContent;
+    private ImageView imageClear;
+    
+    private List<fenleiname> userList = new ArrayList<>();
+    private List<fenleiname> srcList;
+    
+    private String tag = "CITY_LIST_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
-    private CityInfoDao CID;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_citylists);
-        context = this;
+    protected int setViewId() {
+        return R.layout.activity_citylists;
+    }
+
+    @Override
+    protected void init() {
+        setTitle("省市台");
+
         characterParser = CharacterParser.getInstance();                                // 实例化汉字转拼音类
         pinyinComparator = new PinyinComparator_d();
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.pushOneActivity(this);
-        setview();
-    /*	InitDao();*/
-        setlistener();
+        setView();
+        setListener();
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             dialog = DialogUtils.Dialogph(context, "正在获取信息");
             sendRequest();
@@ -94,37 +87,24 @@ public class CityListActivity extends Activity implements OnClickListener {
         }
     }
 
-/*	private void InitDao() {
-		CID=new CityInfoDao(context);
-	}*/
+    // 初始化控件
+    private void setView() {
+        textNoFriend = (TextView) findViewById(R.id.title_layout_no_friends);
 
-    private void setview() {
-        tvNofriends = (TextView) findViewById(R.id.title_layout_no_friends);
+        TextView dialogs = (TextView) findViewById(R.id.dialog);
         sideBar = (SideBar) findViewById(R.id.sidrbar);
-        dialogs = (TextView) findViewById(R.id.dialog);
         sideBar.setTextView(dialogs);
-        listView = (ListView) findViewById(R.id.country_lvcountry);        // listview
-        et_searh_content = (EditText) findViewById(R.id.et_search);        // 搜索控件
-        lin_head_left = (LinearLayout) findViewById(R.id.head_left_btn);
-        image_clear = (ImageView) findViewById(R.id.image_clear);
+
+        listView = (ListView) findViewById(R.id.country_lvcountry);        // listView
+        editSearchContent = (EditText) findViewById(R.id.et_search);        // 搜索控件
+        imageClear = (ImageView) findViewById(R.id.image_clear);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.head_left_btn:
-                finish();
-                break;
-        }
-    }
-
-    /**
-     * 发送网络请求
-     */
+    // 发送网络请求获取数据列表
     private void sendRequest() {
         VolleyRequest.RequestPost(GlobalConfig.getCatalogUrl, tag, setParam(), new VolleyCallback() {
             private String ReturnType;
-            private fenleiname mFenleiname;
+//            private fenleiname mFenleiname;
 
             @Override
             protected void requestSuccess(JSONObject result) {
@@ -144,32 +124,25 @@ public class CityListActivity extends Activity implements OnClickListener {
                 }
 
                 // 根据返回值来对程序进行解析
-                if (ReturnType != null) {
-                    if (ReturnType.equals("1001")) {
-                        try {
-                            // 获取列表
-                            String ResultList = result.getString("CatalogData");
-                            fenlei SubList_all = new Gson().fromJson(ResultList, new TypeToken<fenlei>() {
-                            }.getType());
-                            srclist = SubList_all.getSubCata();
+                if (ReturnType != null && ReturnType.equals("1001")) {
+                    try {
+                        fenlei subListAll = new Gson().fromJson(result.getString("CatalogData"), new TypeToken<fenlei>() {}.getType());
+                        srcList = subListAll.getSubCata();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
 
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-
-                        if (srclist.size() == 0) {
-                            ToastUtils.show_allways(context, "获取分类列表为空");
-                        } else {
-
-                            userlist.clear();
-                            userlist.addAll(srclist);
-                            filledData(userlist);
-                            Collections.sort(userlist, pinyinComparator);
-                            adapter = new CityListAdapter(context, userlist);
-                            listView.setAdapter(adapter);
-                            setinterface();
+                    if (srcList.size() == 0) {
+                        ToastUtils.show_allways(context, "获取分类列表为空");
+                    } else {
+                        userList.clear();
+                        userList.addAll(srcList);
+                        filledData(userList);
+                        Collections.sort(userList, pinyinComparator);
+                        listView.setAdapter(adapter = new CityListAdapter(context, userList));
+                        setInterface();
 						  /*  //将数据写入数据库
-						    List<fenleiname> mlist=new ArrayList<fenleiname>();					    
+						    List<fenleiname> mlist=new ArrayList<fenleiname>();
 						    for(int i=0;i<srclist.size();i++){
 						    	 mFenleiname=new fenleiname();
 						    	 mFenleiname.setCatalogId(srclist.get(i).getCatalogId());
@@ -188,17 +161,16 @@ public class CityListActivity extends Activity implements OnClickListener {
 						    if(mlist.size()!=0){
 						    	CID.InsertCityInfo(mlist);
 						    } */
-                        }
-                    } else if (ReturnType.equals("1002")) {
-                        ToastUtils.show_allways(context, "无此分类信息");
-                    } else if (ReturnType.equals("1003")) {
-                        ToastUtils.show_allways(context, "分类不存在");
-                    } else if (ReturnType.equals("1011")) {
-                        ToastUtils.show_allways(context, "当前暂无分类");
-                    } else if (ReturnType.equals("T")) {
-                        ToastUtils.show_allways(context, "获取列表异常");
                     }
-                } else {
+                } else if (ReturnType != null && ReturnType.equals("1002")) {
+                    ToastUtils.show_allways(context, "无此分类信息");
+                } else if (ReturnType != null && ReturnType.equals("1003")) {
+                    ToastUtils.show_allways(context, "分类不存在");
+                } else if (ReturnType != null && ReturnType.equals("1011")) {
+                    ToastUtils.show_allways(context, "当前暂无分类");
+                } else if (ReturnType != null && ReturnType.equals("T")) {
+                    ToastUtils.show_allways(context, "获取列表异常");
+                }else {
                     ToastUtils.show_allways(context, "数据获取异常，请稍候重试");
                 }
             }
@@ -208,15 +180,12 @@ public class CityListActivity extends Activity implements OnClickListener {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }
 
-    /**
-     * 设置请求参数
-     *
-     * @return
-     */
+    // 请求网络需要提交的参数
     private JSONObject setParam() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
@@ -245,31 +214,29 @@ public class CityListActivity extends Activity implements OnClickListener {
         }
     }
 
-    private void setinterface() {
+    private void setInterface() {
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SharedPreferences sp = getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
-                Editor et = sp.edit();
+                Editor et = BSApplication.SharedPreferences.edit();
                 et.putString(StringConstant.CITYTYPE, "true");
-                if (userlist.get(position).getCatalogId() != null && !userlist.get(position).getCatalogId().equals("")) {
-                    et.putString(StringConstant.CITYID, userlist.get(position).getCatalogId());
-                    GlobalConfig.AdCode = userlist.get(position).getCatalogId();
+                if (userList.get(position).getCatalogId() != null && !userList.get(position).getCatalogId().equals("")) {
+                    et.putString(StringConstant.CITYID, userList.get(position).getCatalogId());
+                    GlobalConfig.AdCode = userList.get(position).getCatalogId();
                 }
-                if (userlist.get(position).getCatalogName() != null && !userlist.get(position).getCatalogName().equals("")) {
-                    et.putString(StringConstant.CITYNAME, userlist.get(position).getCatalogName());
-                    GlobalConfig.CityName = userlist.get(position).getCatalogName();
+                if (userList.get(position).getCatalogName() != null && !userList.get(position).getCatalogName().equals("")) {
+                    et.putString(StringConstant.CITYNAME, userList.get(position).getCatalogName());
+                    GlobalConfig.CityName = userList.get(position).getCatalogName();
                 }
-                et.commit();
+                if(!et.commit()) {
+                    L.w("数据 commit 失败!");
+                }
                 finish();
             }
         });
 
-        /**
-         * 设置右侧触摸监听
-         */
+        // 设置右侧触摸监听
         sideBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
-
             @Override
             public void onTouchingLetterChanged(String s) {
                 // 该字母首次出现的位置
@@ -281,24 +248,17 @@ public class CityListActivity extends Activity implements OnClickListener {
         });
     }
 
-    private void setlistener() {
-        lin_head_left.setOnClickListener(this);
-        image_clear.setOnClickListener(this);
-
-        image_clear.setOnClickListener(new OnClickListener() {
-
+    private void setListener() {
+        imageClear.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                image_clear.setVisibility(View.INVISIBLE);
-                et_searh_content.setText("");
+                imageClear.setVisibility(View.INVISIBLE);
+                editSearchContent.setText("");
             }
         });
 
-        /**
-         * 当输入框输入过汉字，且回复0后就要调用使用userlist1的原表数据
-         */
-        et_searh_content.addTextChangedListener(new TextWatcher() {
-
+        // 当输入框输入过汉字，且回复0后就要调用使用userList1的原表数据
+        editSearchContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
@@ -310,43 +270,41 @@ public class CityListActivity extends Activity implements OnClickListener {
             @Override
             public void afterTextChanged(Editable s) {
                 String search_name = s.toString();
-                if (search_name == null || search_name.equals("") || search_name.trim().equals("")) {
-                    image_clear.setVisibility(View.INVISIBLE);
-                    tvNofriends.setVisibility(View.GONE);
+                if (search_name.equals("") || search_name.trim().equals("")) {
+                    imageClear.setVisibility(View.INVISIBLE);
+                    textNoFriend.setVisibility(View.GONE);
                     // 关键词为空
-                    if (srclist == null || srclist.size() == 0) {
+                    if (srcList == null || srcList.size() == 0) {
                         listView.setVisibility(View.GONE);
                     } else {
                         listView.setVisibility(View.VISIBLE);
-                        userlist.clear();
-                        userlist.addAll(srclist);
-                        filledData(userlist);
-                        Collections.sort(userlist, pinyinComparator);
-                        adapter = new CityListAdapter(context, userlist);
+                        userList.clear();
+                        userList.addAll(srcList);
+                        filledData(userList);
+                        Collections.sort(userList, pinyinComparator);
+                        adapter = new CityListAdapter(context, userList);
                         listView.setAdapter(adapter);
-                        setinterface();
+                        setInterface();
                     }
                 } else {
-                    userlist.clear();
-                    userlist.addAll(srclist);
-                    image_clear.setVisibility(View.VISIBLE);
+                    userList.clear();
+                    userList.addAll(srcList);
+                    imageClear.setVisibility(View.VISIBLE);
                     search(search_name);
                 }
             }
         });
     }
 
-    /**
-     * 根据输入框中的值来过滤数据并更新ListView
-     */
+    // 根据输入框中的值来过滤数据并更新ListView
     private void search(String search_name) {
         List<fenleiname> filterDateList = new ArrayList<>();
         if (TextUtils.isEmpty(search_name)) {
-            filterDateList = userlist;
-            tvNofriends.setVisibility(View.GONE);
+            filterDateList = userList;
+            textNoFriend.setVisibility(View.GONE);
         } else {
             filterDateList.clear();
-            for (fenleiname sortModel : userlist) {
+            for (fenleiname sortModel : userList) {
                 String name = sortModel.getName();
                 if (name.indexOf(search_name.toString()) != -1
                         || characterParser.getSelling(name).startsWith(search_name.toString())) {
@@ -358,10 +316,10 @@ public class CityListActivity extends Activity implements OnClickListener {
         // 根据a-z进行排序
         Collections.sort(filterDateList, pinyinComparator);
         adapter.ChangeDate(filterDateList);
-        userlist.clear();
-        userlist.addAll(filterDateList);
+        userList.clear();
+        userList.addAll(filterDateList);
         if (filterDateList.size() == 0) {
-            tvNofriends.setVisibility(View.VISIBLE);
+            textNoFriend.setVisibility(View.VISIBLE);
         }
     }
 
@@ -369,22 +327,16 @@ public class CityListActivity extends Activity implements OnClickListener {
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.popOneActivity(context);
-        srclist = null;
-        userlist = null;
+        srcList = null;
+        userList = null;
         adapter = null;
-        tvNofriends = null;
+        textNoFriend = null;
         sideBar = null;
-        dialogs = null;
         listView = null;
-        lin_head_left = null;
-        et_searh_content = null;
+        editSearchContent = null;
         listView = null;
-        image_clear = null;
+        imageClear = null;
         pinyinComparator = null;
-        context = null;
         characterParser = null;
-        setContentView(R.layout.activity_null);
     }
 }

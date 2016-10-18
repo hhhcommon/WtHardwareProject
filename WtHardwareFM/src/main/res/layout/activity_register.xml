@@ -136,8 +136,8 @@
                 android:layout_height="@dimen/wt_edittext_default_high"
                 android:layout_marginLeft="@dimen/wt_login_default_margin_left"
                 android:layout_marginRight="@dimen/wt_login_default_margin_right"
-                android:layout_marginTop="15dp"
                 android:background="@drawable/bg_edittext_normal"
+                android:layout_marginTop="15dp"
                 android:orientation="horizontal" >
 
                 <ImageView

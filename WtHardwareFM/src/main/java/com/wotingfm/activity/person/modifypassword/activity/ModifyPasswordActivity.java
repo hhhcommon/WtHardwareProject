@@ -69,7 +69,7 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
                 }
                 dialog = DialogUtils.Dialogph(context, "正在提交请求...");
                 if(modifyType == 1) {
-                    sendAdoptOldPasswordMotify();
+                    sendAdoptOldPasswordModify();
                 } else {
                     sendAdoptCodeModify();
                 }
@@ -221,7 +221,7 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
     }
 
     // 通过旧密码修改新密码
-    protected void sendAdoptOldPasswordMotify() {
+    protected void sendAdoptOldPasswordModify() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("OldPassword", oldPassword);// 待改

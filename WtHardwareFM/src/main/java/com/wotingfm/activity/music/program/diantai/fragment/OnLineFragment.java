@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -21,7 +20,6 @@ import android.widget.ExpandableListView;
 import android.widget.ExpandableListView.OnChildClickListener;
 import android.widget.ExpandableListView.OnGroupClickListener;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -148,13 +146,12 @@ public class OnLineFragment extends Fragment implements OnClickListener {
             textName = (TextView) headView.findViewById(R.id.tv_name);
             gridView = (GridView) headView.findViewById(R.id.gridView);
 
-            headView.findViewById(R.id.lin_head_more).setOnClickListener(this);
-            headView.findViewById(R.id.lin_country).setOnClickListener(this);// 国家台
-            headView.findViewById(R.id.lin_province).setOnClickListener(this);// 省市台
-            headView.findViewById(R.id.lin_internet).setOnClickListener(this);// 网络台
+            headView.findViewById(R.id.lin_head_more).setOnClickListener(this); // 更多
+            headView.findViewById(R.id.lin_country).setOnClickListener(this);   // 国家台
+            headView.findViewById(R.id.lin_province).setOnClickListener(this);  // 省市台
+            headView.findViewById(R.id.lin_internet).setOnClickListener(this);  // 网络台
 
-            // 取消默认selector
-            gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+            gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));         // 取消默认 selector
             mPullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.refresh_view);
             setView();
             listViewMain.addHeaderView(headView);
@@ -195,7 +192,6 @@ public class OnLineFragment extends Fragment implements OnClickListener {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // 发送网络请求
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             refreshType = 1;
             beginCatalogId = "";
@@ -282,12 +278,13 @@ public class OnLineFragment extends Fragment implements OnClickListener {
                 }
                 try {
                     returnType = result.getString("ReturnType");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
                     if (returnType != null && returnType.equals("1001")) {
-                        String ResultList = result.getString("ResultList");
-                        JSONTokener jsonParser = new JSONTokener(ResultList);
-                        JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                        String MainList = arg1.getString("List");
-                        mainListS = new Gson().fromJson(MainList, new TypeToken<List<RankInfo>>() {}.getType());
+                        JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
+                        mainListS = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
                         if (adapters == null) {
                             gridView.setAdapter(adapters = new citynewsadapter(context, mainListS));
                         } else {
