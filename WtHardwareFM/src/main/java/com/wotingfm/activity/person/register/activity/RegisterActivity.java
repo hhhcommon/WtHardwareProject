@@ -335,6 +335,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("UserName", userName);
+            jsonObject.put("UsePhone", "1");
             jsonObject.put("Password", password);
         } catch (JSONException e) {
             e.printStackTrace();

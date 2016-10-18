@@ -18,6 +18,7 @@ import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.program.main.ProgramFragment;
 import com.wotingfm.activity.music.search.activity.SearchLikeAcitvity;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.util.ToastUtils;
 
 import java.util.ArrayList;
@@ -143,6 +144,7 @@ public class HomeActivity extends FragmentActivity {
 				ToastUtils.show_always(this, "再按一次退出");
 				touchTime = currentTime;
 			} else {
+				BSApplication.onStop();
 				MobclickAgent.onKillProcess(this);
 				finish();
 				android.os.Process.killProcess(android.os.Process.myPid());

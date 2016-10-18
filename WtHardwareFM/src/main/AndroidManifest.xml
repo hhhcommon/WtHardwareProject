@@ -262,9 +262,10 @@
         <!-- 注册 -->
         <activity
             android:name=".activity.person.register.activity.RegisterActivity"
+            android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
         <!-- 忘记密码 -->
         <activity
@@ -285,12 +286,12 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
-        <!-- 修改手机号 -->
+        <!-- 修改手机号
         <activity
             android:name=".activity.person.phonecheck.activity.PhoneCheckActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="adjustPan" />-->
 
         <!-- 播放历史界面 -->
         <activity
