@@ -1,31 +1,28 @@
 package com.wotingfm.activity.person.modifypassword.activity;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
 import android.os.CountDownTimer;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
+import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * 修改密码
@@ -40,14 +37,16 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
     private EditText editOldPassword;       // 输入 旧密码
     private EditText editNewPassword;       // 输入 新密码
     private EditText editNewPasswordConfirm;// 输入 确定新密码
+    private EditText editPhoneNumber;       // 输入 手机号
     private EditText editYzm;               // 输入 验证码
-    private TextView textGetYzm;            // 获取验证码
-    private TextView textCxFaSong;          // 重新发送验证码
+    private Button btnGetYzm;               // 获取验证码
+    private Button btnModifyPassword;
 
     private String oldPassword;             // 旧密码
     private String newPassword;             // 新密码
     private String verificationCode;        // 验证码
-    private String userId;                  // 用户 ID
+    private String passwordConfirm;
+//    private String userId;                  // 用户 ID
     private String phoneNum;                // 用户手机号
     private String tag = "MODIFY_PASSWORD_VOLLEY_REQUEST_CANCEL_TAG";
 
@@ -64,9 +63,13 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
         }
         switch (v.getId()) {
             case R.id.btn_modifypassword:   // 修改密码确认按钮
-                if (!checkData()) {         // 检查数据的正确性
-                    return;
+                newPassword = editNewPassword.getText().toString().trim();
+                passwordConfirm = editNewPasswordConfirm.getText().toString().trim();
+                if(!newPassword.equals(passwordConfirm)) {
+                    ToastUtils.show_always(context, "两次输入的密码不一致,请确认后提交!");
+                    return ;
                 }
+
                 dialog = DialogUtils.Dialogph(context, "正在提交请求...");
                 if(modifyType == 1) {
                     sendAdoptOldPasswordModify();
@@ -74,7 +77,7 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
                     sendAdoptCodeModify();
                 }
                 break;
-            case R.id.tv_getyzm:
+            case R.id.btn_get_yzm:
                 checkVerificationCode();
                 break;
         }
@@ -89,64 +92,32 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
     protected void init() {
         setTitle("修改密码");
 
-        findViewById(R.id.btn_modifypassword).setOnClickListener(this);             // 确定修改密码
+        btnModifyPassword = (Button) findViewById(R.id.btn_modifypassword);         // 确定修改密码
+        btnModifyPassword.setOnClickListener(this);
 
         editOldPassword = (EditText) findViewById(R.id.edit_oldpassword);           // 旧密码
+        editOldPassword.addTextChangedListener(new MyEditTextChangeListener());
+
         editNewPassword = (EditText) findViewById(R.id.edit_newpassword);           // 新密码
+        editNewPassword.addTextChangedListener(new MyEditTextChangeListener());
+
         editNewPasswordConfirm = (EditText) findViewById(R.id.edit_confirmpassword);// 确定新密码
+        editNewPasswordConfirm.addTextChangedListener(new MyEditTextChangeListener());
+
+        editPhoneNumber = (EditText) findViewById(R.id.edit_phone_number);          // 手机号
+        editPhoneNumber.addTextChangedListener(new MyEditTextChangeListener());
+
         editYzm = (EditText) findViewById(R.id.edit_yzm);                           // 验证码
+        editYzm.addTextChangedListener(new MyEditTextChangeListener());
 
-        textGetYzm = (TextView) findViewById(R.id.tv_getyzm);                       // 获取验证码
-        textGetYzm.setOnClickListener(this);
-
-        textCxFaSong = (TextView) findViewById(R.id.tv_cxfasong);                   // 重新发送验证码
-    }
-
-    // 检查数据的正确性
-    protected boolean checkData() {
-        verificationCode = editYzm.getText().toString().trim();
-        oldPassword = editOldPassword.getText().toString().trim();
-        newPassword = editNewPassword.getText().toString().trim();
-        String passwordConfirm = editNewPasswordConfirm.getText().toString().trim();
-        if ("".equalsIgnoreCase(newPassword)) {
-            Toast.makeText(context, "请输入您的新密码", Toast.LENGTH_LONG).show();
-            return false;
-        }
-        if (newPassword.length() < 6) {
-            Toast.makeText(context, "密码请输入六位以上", Toast.LENGTH_LONG).show();
-            return false;
-        }
-        if ("".equalsIgnoreCase(newPassword)) {
-            Toast.makeText(context, "请再次输入密码", Toast.LENGTH_LONG).show();
-            return false;
-        }
-        if (!newPassword.equals(passwordConfirm)) {
-            new AlertDialog.Builder(this).setMessage("两次输入的密码不一致").setPositiveButton("确定", null).show();
-            return false;
-        }
-        if (passwordConfirm.length() < 6) {
-            Toast.makeText(context, "密码请输入六位以上", Toast.LENGTH_LONG).show();
-            return false;
-        }
-        if ("".equalsIgnoreCase(oldPassword) && "".equalsIgnoreCase(verificationCode)) {
-            Toast.makeText(context, "请选择一种修改密码的方式!", Toast.LENGTH_LONG).show();
-            return false;
-        } else {// 如果两者都填了则程序走后者 即验证码方式修改
-            if (!"".equalsIgnoreCase(oldPassword)) {        // 旧密码
-                modifyType = 1;
-            }
-            if(!"".equalsIgnoreCase(verificationCode)) {    // 验证码
-                modifyType = 2;
-            }
-        }
-        return true;
+        btnGetYzm = (Button) findViewById(R.id.btn_get_yzm);                        // 获取验证码
+        btnGetYzm.setOnClickListener(this);
     }
 
     // 验证手机号正确就获取验证码
     private void checkVerificationCode() {
-        phoneNum = BSApplication.SharedPreferences.getString(StringConstant.PHONENUMBER, "");  // 用户手机号
-        L.v("phoneNum", phoneNum);
-        if ("".equalsIgnoreCase(phoneNum) || !isMobile(phoneNum)) { // 检查输入数字是否为手机号
+        phoneNum = editPhoneNumber.getText().toString().trim();     // 用户手机号
+        if ("".equalsIgnoreCase(phoneNum) || phoneNum.length() != 11) { // 检查输入数字是否为手机号
             ToastUtils.show_always(context, "请输入正确的手机号码!");
             return ;
         }
@@ -197,8 +168,7 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
 
                     ToastUtils.show_always(context, "验证码已经发送!");
                     timerDown();
-                    textGetYzm.setVisibility(View.GONE);
-                    textCxFaSong.setVisibility(View.VISIBLE);
+                    btnGetYzm.setEnabled(false);
                 } else if (returnType != null && returnType.equals("T")) {
                     ToastUtils.show_always(context, "获取异常，请确认后重试!");
                 } else if (returnType != null && returnType.equals("1002")) {
@@ -295,6 +265,8 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
                 }
                 if (returnType != null && returnType.equals("1001")) {
                     sendModifyPassword();
+                } else if(returnType != null && returnType.equals("1002")) {
+                    ToastUtils.show_always(context, "验证码不正确!");
                 } else {
                     ToastUtils.show_always(context, "网络异常或验证码错误，请稍后重试!");
                     if (dialog != null) {
@@ -314,9 +286,18 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
     }
 
     protected void sendModifyPassword() {
-        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
+        JSONObject jsonObject = new JSONObject();
         try {
-            jsonObject.put("RetrieveUserId", userId);
+            jsonObject.put("MobileClass", PhoneMessage.model + "::" + PhoneMessage.productor);
+            jsonObject.put("ScreenSize", PhoneMessage.ScreenWidth + "x" + PhoneMessage.ScreenHeight);
+            jsonObject.put("IMEI", PhoneMessage.imei);
+            PhoneMessage.getGps(context);
+            jsonObject.put("PCDType", GlobalConfig.PCDType);
+            jsonObject.put("GPS-longitude", PhoneMessage.longitude);
+            jsonObject.put("GPS-latitude", PhoneMessage.latitude);
+
+            jsonObject.put("RetrieveUserId", CommonUtils.getUserId(context));
+            L.v("CommonUtils.getUserId(context) -- > " + CommonUtils.getUserId(context));
             jsonObject.put("NewPassword", newPassword);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -364,23 +345,65 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
         mCountDownTimer = new CountDownTimer(60000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
-                textCxFaSong.setText(millisUntilFinished / 1000 + "s后重新发送");
+                btnGetYzm.setText(millisUntilFinished / 1000 + "s后重新发送");
             }
 
             @Override
             public void onFinish() {
-                textCxFaSong.setVisibility(View.GONE);
-                textGetYzm.setVisibility(View.VISIBLE);
+                btnGetYzm.setEnabled(true);
+                btnGetYzm.setText("获取验证码");
             }
         }.start();
     }
 
-    // 用正则验证手机号
-    private boolean isMobile(String str) {
-        Pattern pattern = Pattern.compile("^[1][3,4,5,7,8][0-9]{9}$");
-        Matcher matcher = pattern.matcher(str);
-        return matcher.matches();
+    class MyEditTextChangeListener implements TextWatcher {
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            btnModifyPassword.setEnabled(false);
+            newPassword = editNewPassword.getText().toString().trim();
+            passwordConfirm = editNewPasswordConfirm.getText().toString().trim();
+            oldPassword = editOldPassword.getText().toString().trim();
+            phoneNum = editPhoneNumber.getText().toString().trim();
+            verificationCode = editYzm.getText().toString().trim();
+
+            if(newPassword.equals("") || newPassword.length() < 6) {
+                return ;
+            }
+
+            if(passwordConfirm.equals("") || passwordConfirm.length() < 6) {
+                return ;
+            }
+
+            if(!oldPassword.equals("") && oldPassword.length() >= 6) {
+                modifyType = 1;
+                btnModifyPassword.setEnabled(true);
+            }
+
+            if(!phoneNum.equals("") && phoneNum.length() == 11) {
+                if(verificationCode.equals("") || verificationCode.length() != 6) {
+                    return ;
+                }
+                modifyType = 2;
+                btnModifyPassword.setEnabled(true);
+            }
+        }
     }
+
+    // 用正则验证手机号 服务器端验证手机号码是否正确
+//    private boolean isMobile(String str) {
+//        Pattern pattern = Pattern.compile("^[1][3,4,5,7,8][0-9]{9}$");
+//        Matcher matcher = pattern.matcher(str);
+//        return matcher.matches();
+//    }
 
     @Override
     protected void onDestroy() {
@@ -396,7 +419,7 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
         dialog = null;
         oldPassword = null;
         newPassword = null;
-        userId = null;
+//        userId = null;
         phoneNum = null;
         tag = null;
     }
