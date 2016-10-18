@@ -27,10 +27,9 @@ import com.wotingfm.util.BitmapUtils;
  * 作者：xinlong on 2016/4/27 21:18
  * 邮箱：645700751@qq.com
  */
-public class WelcomecFragment extends Fragment implements OnClickListener {
+public class WelcomeCCFragment extends Fragment implements OnClickListener {
     private FragmentActivity context;
     private Bitmap bmp;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

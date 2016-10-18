@@ -11,9 +11,9 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
-import com.wotingfm.activity.common.welcome.fragment.WelcomeaFragment;
+import com.wotingfm.activity.common.welcome.fragment.WelcomeAAFragment;
 import com.wotingfm.activity.common.welcome.fragment.WelcomeBFragment;
-import com.wotingfm.activity.common.welcome.fragment.WelcomecFragment;
+import com.wotingfm.activity.common.welcome.fragment.WelcomeCCFragment;
 import java.util.ArrayList;
 /**
  * 引导页
@@ -52,9 +52,9 @@ public class WelcomeActivity extends FragmentActivity {
         ViewPager mPager = (ViewPager) findViewById(R.id.viewpager);
         mPager.setOffscreenPageLimit(1);
         ArrayList<Fragment> fragmentList = new ArrayList<Fragment>();
-        Fragment btFragmentA = new WelcomeaFragment();
+        Fragment btFragmentA = new WelcomeAAFragment();
         Fragment btFragmentB = new WelcomeBFragment();
-        Fragment btFragmentC = new WelcomecFragment();
+        Fragment btFragmentC = new WelcomeCCFragment();
         fragmentList.add(btFragmentA);
         fragmentList.add(btFragmentB);
         fragmentList.add(btFragmentC);

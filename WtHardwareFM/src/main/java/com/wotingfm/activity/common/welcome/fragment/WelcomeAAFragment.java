@@ -15,9 +15,8 @@ import com.wotingfm.util.BitmapUtils;
  * 作者：xinlong on 2016/4/27 21:18
  * 邮箱：645700751@qq.com
  */
-public class WelcomeaFragment extends Fragment  {
+public class WelcomeAAFragment extends Fragment  {
 	private Bitmap bmp;
-
 
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
