@@ -74,9 +74,13 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
         setTitle("注册");
 
         mEditTextUserPhone = (EditText) findViewById(R.id.edittext_userphone);  // 输入 手机号
+        mEditTextUserPhone.addTextChangedListener(new MyEditListener());
         mEditTextName = (EditText) findViewById(R.id.edittext_username);        // 输入 用户名
+        mEditTextName.addTextChangedListener(new MyEditListener());
         mEditTextPassWord = (EditText) findViewById(R.id.edittext_password);    // 输入 密码
-        mEditTextPassWordT = (EditText) findViewById(R.id.edittext_passwordT);    // 输入 确认密码
+        mEditTextPassWord.addTextChangedListener(new MyEditListener());
+        mEditTextPassWordT = (EditText) findViewById(R.id.edittext_passwordT);  // 输入 确认密码
+        mEditTextPassWordT.addTextChangedListener(new MyEditListener());
 
         editYzm = (EditText) findViewById(R.id.et_yzm);                         // 输入 验证码
         editYzm.addTextChangedListener(new MyEditListener());
@@ -97,16 +101,21 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
 
     @Override
     public void onClick(View v) {
-        // 以下操作都需要网络 所以没有网络就不需要继续验证直接提示用户设置网络
-        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
-            ToastUtils.show_always(context, "网络失败，请检查网络");
-            return;
-        }
         switch (v.getId()) {
             case R.id.tv_register:          // 验证数据
+                // 以下操作都需要网络 所以没有网络就不需要继续验证直接提示用户设置网络
+                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+                    ToastUtils.show_always(context, "网络失败，请检查网络");
+                    return;
+                }
                 checkValue();
                 break;
             case R.id.tv_getyzm:            // 检查手机号是否正确
+                // 以下操作都需要网络 所以没有网络就不需要继续验证直接提示用户设置网络
+                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+                    ToastUtils.show_always(context, "网络失败，请检查网络");
+                    return;
+                }
                 checkYzm();
                 break;
             case R.id.lin_agreement:        // 注册协议
@@ -115,57 +124,52 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
         }
     }
 
-    // 检查数据的正确性
-    private void checkValue() {
+    // 判断数据是否填写完整
+    private boolean isComplete(int type) {
         phoneNum = mEditTextUserPhone.getText().toString().trim();              // 手机号
         userName = mEditTextName.getText().toString().trim();                   // 用户名
         password = mEditTextPassWord.getText().toString().trim();               // 密码
         passwordT = mEditTextPassWordT.getText().toString().trim();             // 确认密码
         verificationCode = editYzm.getText().toString().trim();                 // 验证码
-//        if ("".equalsIgnoreCase(phoneNum) || !isMobile(phoneNum)) {
-//            ToastUtils.show_always(context, "请输入正确的手机号码!");
-//            return;
-//        }
+
         if ("".equalsIgnoreCase(phoneNum) || phoneNum.length() != 11) {
-            ToastUtils.show_always(context, "请输入正确的手机号码!");
-            return;
+            if (type == 1) ToastUtils.show_always(context, "请输入正确的手机号码!");
+            return false;
+        } else if (!phoneNum.equals(phoneNumVerify)) {
+            if (type == 1) ToastUtils.show_always(context, "请输入您之前获取验证的手机号码");
+            return false;
+        } else if (userName == null || userName.trim().equals("")) {
+            if (type == 1) Toast.makeText(context, "用户名不能为空", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (userName.length() < 3) {
+            if (type == 1) Toast.makeText(context, "请输入三位以上用户名", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (password == null || password.trim().equals("")) {
+            if (type == 1) Toast.makeText(context, "密码不能为空", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (password.length() < 6) {
+            if (type == 1) Toast.makeText(context, "请输入六位以上密码", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (passwordT == null || passwordT.trim().equals("")) {
+            if (type == 1) Toast.makeText(context, "密码不能为空", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if (!passwordT.equals(password)) {
+            if (type == 1) Toast.makeText(context, "密码跟确认密码不匹配", Toast.LENGTH_SHORT).show();
+            return false;
+        } else if ("".equalsIgnoreCase(verificationCode) || verificationCode.length() != 6) {
+            if (type == 1) ToastUtils.show_always(context, "验证码不正确!");
+            return false;
+        } else {
+            return true;
         }
-        if (!phoneNum.equals(phoneNumVerify)) {
-            ToastUtils.show_always(context, "请输入您之前获取验证的手机号码");
-            return;
-        }
+    }
 
-        if (userName == null || userName.trim().equals("")) {
-            Toast.makeText(context, "用户名不能为空", Toast.LENGTH_SHORT).show();
-            return;
+    // 检查数据的正确性
+    private void checkValue() {
+        if (isComplete(1)) {
+            dialog = DialogUtils.Dialogph(context, "正在验证手机号");
+            sendRequest();//验证验证码，成功后会执行注册程序
         }
-        if (userName.length() < 3) {
-            Toast.makeText(context, "请输入三位以上用户名", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (password == null || password.trim().equals("")) {
-            Toast.makeText(context, "密码不能为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (password.length() < 6) {
-            Toast.makeText(context, "请输入六位以上密码", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        if (passwordT == null || passwordT.trim().equals("")) {
-            Toast.makeText(context, "密码不能为空", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if (!passwordT.equals(password)) {
-            Toast.makeText(context, "密码跟确认密码不匹配", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        if ("".equalsIgnoreCase(verificationCode) || verificationCode.length() != 6) {
-            ToastUtils.show_always(context, "验证码不正确!");
-            return;
-        }
-        dialog = DialogUtils.Dialogph(context, "正在验证手机号");
-        sendRequest();//验证验证码，成功后会执行注册程序
     }
 
     // 发送网络请求
@@ -425,7 +429,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (s.length() == 6 && phoneNumVerify != null && !phoneNumVerify.equals("")) {
+            if (isComplete(2)) {
                 if (verifyStatus == 1) {
                     textNext.setVisibility(View.GONE);
                     mTextRegister.setVisibility(View.VISIBLE);
