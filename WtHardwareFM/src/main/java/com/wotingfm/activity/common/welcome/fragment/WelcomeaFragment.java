@@ -18,6 +18,7 @@ import com.wotingfm.util.BitmapUtils;
 public class WelcomeaFragment extends Fragment  {
 	private Bitmap bmp;
 
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		FragmentActivity context = this.getActivity();

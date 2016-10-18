@@ -31,6 +31,7 @@ public class WelcomecFragment extends Fragment implements OnClickListener {
     private FragmentActivity context;
     private Bitmap bmp;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         context = this.getActivity();
