@@ -29,6 +29,7 @@ import com.wotingfm.activity.im.interphone.linkman.fragment.LinkManFragment;
 import com.wotingfm.activity.im.interphone.notify.activity.NotifyNewActivity;
 import com.wotingfm.activity.im.interphone.scanning.activity.CaptureActivity;
 import com.wotingfm.activity.person.login.activity.LoginActivity;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.ToastUtils;
 
@@ -315,6 +316,7 @@ public class DuiJiangActivity extends FragmentActivity {
 				ToastUtils.show_always(this, "再按一次退出");
 				touchTime = currentTime;
 			} else {
+				BSApplication.onStop();
 				MobclickAgent.onKillProcess(this);
 				finish();
 				android.os.Process.killProcess(android.os.Process.myPid());

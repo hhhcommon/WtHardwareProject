@@ -20,7 +20,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.util.PhoneMessage;
 /**
- * 悬浮窗服务----在MainActivity中启动
+ * 悬浮窗服务----在BSApplication中启动
  * 作者：xinlong on 2016/9/5 11:37
  * 邮箱：645700751@qq.com
  */

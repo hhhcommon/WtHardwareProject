@@ -54,4 +54,5 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.19'
     compile 'com.google.code.gson:gson:2.6.2'
     compile 'com.zhy:flowlayout-lib:1.0.3'
+    compile files('libs/SocialSDK_umengqq.jar')
 }

@@ -953,6 +953,7 @@ public class MineActivity extends Activity implements OnClickListener {
                     ToastUtils.show_always(MineActivity.this, "再按一次退出");
                     touchTime = currentTime;
                 } else {
+                    BSApplication.onStop();
                     MobclickAgent.onKillProcess(this);
                     finish();
                     android.os.Process.killProcess(android.os.Process.myPid());
