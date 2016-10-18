@@ -6,6 +6,8 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 
+import com.wotingfm.activity.music.player.fragment.PlayerFragment;
+
 import org.videolan.libvlc.EventHandler;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.LibVlcException;
@@ -106,7 +108,7 @@ public class VlcPlayer implements WtAudioPlay {
 			switch (msg.getData().getInt("event")) {
 			case EventHandler.MediaPlayerEncounteredError:
 				Log.e("url", "playerror+Url");
-//				PlayerFragment.playNext();
+			    PlayerFragment.playNext();
 				break;
 			case EventHandler.MediaPlayerOpening:
 				Log.e("url", "MediaPlayerOpenning()"+Url);
@@ -122,7 +124,7 @@ public class VlcPlayer implements WtAudioPlay {
 				break;
 			case EventHandler.MediaPlayerEndReached:
 				Log.e("url", "MediaPlayerEndReached()");
-//				PlayerFragment.playNext();
+				PlayerFragment.playNext();
 				break;
 			}
 		}

@@ -14,19 +14,19 @@ import java.util.List;
  *2016年8月5日
  */
 public class ShareUtils {
-	
-	public static List<sharemodel> getShareModelList() {  
+
+	public static List<sharemodel> getShareModelList() {
 		List<sharemodel> list=new ArrayList<sharemodel>();
-		String[] textlist={"微信朋友圈","微信好友","QQ好友","QQ空间","新浪微博"};
+		String[] textlist={"朋友圈","微信好友","QQ好友","QQ空间","新浪微博"};
 		SHARE_MEDIA[] sharelist={SHARE_MEDIA.WEIXIN_CIRCLE,SHARE_MEDIA.WEIXIN,SHARE_MEDIA.QQ,SHARE_MEDIA.QZONE,SHARE_MEDIA.SINA};
-		int[] imglist={R.mipmap.img_loginwx,R.mipmap.img_loginwx,R.mipmap.img_loginqq,R.mipmap.img_loginqq,R.mipmap.img_loginwb};
+		int[] imglist={R.mipmap.img_login_wxcircle,R.mipmap.img_loginwx_share,R.mipmap.img_loginqq_share,R.mipmap.img_login_space,R.mipmap.img_loginwb_share};
 		for(int i=0;i<textlist.length;i++){
-		 sharemodel sm=new sharemodel();
-		 sm.setShareImageUrl(imglist[i]);
-		 sm.setSharePlatform(sharelist[i]);
-		 sm.setShareText(textlist[i]);
-         list.add(sm);		 			
+			sharemodel sm=new sharemodel();
+			sm.setShareImageUrl(imglist[i]);
+			sm.setSharePlatform(sharelist[i]);
+			sm.setShareText(textlist[i]);
+			list.add(sm);
 		}
-		return list;  
-	}  
+		return list;
+	}
 }

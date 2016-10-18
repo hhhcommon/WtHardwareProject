@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="260dp"
+        android:layout_height="280dp"
         android:orientation="vertical" >
         
         <GridView
@@ -15,9 +15,14 @@
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:layout_gravity="center"
+            android:horizontalSpacing="10dp"
+            android:verticalSpacing="10dp"
         android:numColumns="3"
         android:gravity="center"
         android:scrollbars="none"
+            android:paddingLeft="25dp"
             android:background="#7f000000"
         >
       </GridView>

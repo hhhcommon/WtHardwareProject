@@ -40,19 +40,19 @@
 
             <ImageView
                 android:id="@+id/img_shareimg"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
-                android:layout_centerInParent="true"
-                android:src="@mipmap/wt_6_b_y_b" />
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:scaleType="centerCrop"
+                android:layout_centerInParent="true"/>
         </LinearLayout>
 
         <TextView
             android:id="@+id/tv_sharetext"
             android:layout_width="match_parent"
-            android:layout_marginTop="5dp"
             android:layout_height="20dp"
             android:gravity="center"
-            android:text="平台ID名" />
+            android:text="平台ID名"
+            android:textSize="12sp"/>
     </LinearLayout>
 
 </LinearLayout>
