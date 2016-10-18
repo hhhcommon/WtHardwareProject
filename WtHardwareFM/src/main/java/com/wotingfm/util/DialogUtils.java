@@ -47,6 +47,19 @@ public class DialogUtils {
 //		 android:background="@drawable/dialog_ph"
         return dialog;
     }
+    public static Dialog Dialogphnoshow(Context context, String str) {
+        View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog, null);
+        TextView loadText = (TextView) dialogView.findViewById(R.id.text_wenzi);
+        loadText.setText(str);
+        Dialog dialog = new Dialog(context, R.style.MyDialog1);
+        dialog.setContentView(dialogView);
+        dialog.setCanceledOnTouchOutside(false);
+        dialog.getWindow().setGravity(Gravity.CENTER);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+        return dialog;
+    }
+
+
 
     /**
      * 显示加载对话框

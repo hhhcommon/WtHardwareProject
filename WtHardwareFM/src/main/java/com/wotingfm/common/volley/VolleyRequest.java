@@ -158,12 +158,9 @@ public class VolleyRequest {
                 }
             }
         };
-
         jsonObjectRequest.setTag(TAG);// 设置标签
         jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(GlobalConfig.HTTP_CONNECTION_TIMEOUT, 1, 1.0f));
         BSApplication.getHttpQueues().add(jsonObjectRequest);// 加入队列
-        //		BSApplication.getHttpQueues().start();// 启动
-
         Log.i("请求服务器地址", "--- > > >  " + url);
         Log.v("请求服务器提交的参数", "--- > > >  " + jsonObject.toString());
     }

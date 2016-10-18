@@ -85,7 +85,6 @@ import com.wotingfm.util.PlayermoreUtil;
 import com.wotingfm.util.ShareUtils;
 import com.wotingfm.util.TimeUtils;
 import com.wotingfm.util.ToastUtils;
-import com.wotingfm.widget.HorizontalListView;
 import com.wotingfm.widget.MyLinearLayout;
 import com.wotingfm.widget.xlistview.XListView;
 
@@ -140,7 +139,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     // 数据
     private static int num;// -2 播放器没有播放，-1播放器里边的数据不在list中，其它是在list中
     private static ArrayList<LanguageSearchInside> alllist = new ArrayList<LanguageSearchInside>();
-    //	private FileInfo file;
+
     protected String sequid;
     protected String sequimage;
     protected String sequname;
@@ -154,7 +153,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private static PlayerListAdapter adapter;
     private static Dialog dialogs;
     private static Dialog wifidialog;
-    private Dialog Sharedialog;
+    private Dialog shareDialog;
     private Dialog dialog1;
     private static Handler mHandler;
     // 标识参数
@@ -226,50 +225,13 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         setView(); // 设置界面
         setListener(); // 设置监听
         WifiDialog(); // wifi提示dialog
-        ShareDialog(); // 分享dialog
+        shareDialog(); // 分享dialog
         moreDialog();//更多
         return rootView;
     }
 
-    private void moreDialog() {
-        final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_player_more, null);
-        gv_more=(GridView)dialog.findViewById(R.id.gv_more);
-        TextView tv_cancle = (TextView) dialog.findViewById(R.id.tv_cancle);
-        moredialog = new Dialog(context, R.style.MyDialog);
-        // 从底部上升到一个位置
-        moredialog.setContentView(dialog);
-        Window window = moredialog.getWindow();
-        DisplayMetrics dm = new DisplayMetrics();
-        context.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        screenw = dm.widthPixels;
-        ViewGroup.LayoutParams params = dialog.getLayoutParams();
-        params.width = screenw;
-        dialog.setLayoutParams(params);
-        window.setGravity(Gravity.BOTTOM);
-        window.setWindowAnimations(R.style.sharestyle);
-        moredialog.setCanceledOnTouchOutside(true);
-        moredialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-        final List<sharemodel> mylist = PlayermoreUtil.getPlayMoreList();
-        gv_more_adapter shareadapter = new gv_more_adapter(context, mylist);
-        gv_more.setAdapter(shareadapter);
-        gv_more.setSelector(new ColorDrawable(Color.TRANSPARENT));
-        gv_more.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                callmore(position);//呼出更多
-                moredialog.dismiss();
-            }
-        });
-        tv_cancle.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (moredialog.isShowing()) {
-                    moredialog.dismiss();
-                }
-            }
-        });
-    }
-    private void callmore(int position) {
+
+    private void callMore(int position) {
         switch(position){
             case 0://定时关闭
                 startActivity(new Intent(context,TimerPowerOffActivity.class));
@@ -799,12 +761,9 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 if(moredialog.isShowing()){
                     moredialog.dismiss();
                 }
-                Sharedialog.show();
+               shareDialog.show();
                 break;
             case R.id.lin_like:
-                // if (GlobalConfig.playerobject.getMediaType().equals("AUDIO")) {
-                // }
-
                 String s=GlobalConfig.playerobject.getContentFavorite();
                 if (GlobalConfig.playerobject.getContentFavorite() != null
                         && !GlobalConfig.playerobject.getContentFavorite().equals("")) {
@@ -834,8 +793,8 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 }
                 break;
             case R.id.lin_more:
-                if(Sharedialog.isShowing()){
-                    Sharedialog.dismiss();
+                if(shareDialog.isShowing()){
+                    shareDialog.dismiss();
                 }
                 moredialog.show();
                 break;
@@ -881,6 +840,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             Log.e("点击num===============", num + "");
             num = num - 1;
             getnetwork(num, context);
+            adddb(alllist.get(num));//当播放下一首或者上一首时需要将此播放内容放到数据库当中
             stopCurrentTimer();
         } else {
             ToastUtils.show_always(context, "已经是第一条数据了");
@@ -1078,11 +1038,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     @Override
     public void onDestroy() {
         super.onDestroy();
-
-//        if(mVoiceRecognizer!=null){
-//            mVoiceRecognizer.ondestroy();
-//            mVoiceRecognizer=null;
-//        }
         if (Receiver != null) { // 注销广播
             context.unregisterReceiver(Receiver);
             Receiver = null;
@@ -1160,11 +1115,14 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         if (num + 1 < alllist.size()) {
             // 此时自动播放下一首
             num = num + 1;
+            adddb(alllist.get(num));//当播放下一首或者上一首时需要将此播放内容放到数据库当中
             getnetwork(num, context);
+            stopCurrentTimer();
         } else {
             // 全部播放完毕了
             num = 0;
             getnetwork(num, context);
+            stopCurrentTimer();
         }
     }
 
@@ -1316,50 +1274,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         }
     }
 
-    // //////////
-    // 分享模块//
-    // //////////
-    private void ShareDialog() {
-        final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_sharedialog, null);
-        HorizontalListView mgallery = (HorizontalListView) dialog.findViewById(R.id.share_gallery);
-        TextView tv_cancle = (TextView) dialog.findViewById(R.id.tv_cancle);
-        Sharedialog = new Dialog(context, R.style.MyDialog);
-        // 从底部上升到一个位置
-        Sharedialog.setContentView(dialog);
-        Window window = Sharedialog.getWindow();
-        DisplayMetrics dm = new DisplayMetrics();
-        context.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        screenw = dm.widthPixels;
-        ViewGroup.LayoutParams params = dialog.getLayoutParams();
-        params.width = (int) screenw;
-        dialog.setLayoutParams(params);
-        window.setGravity(Gravity.BOTTOM);
-        window.setWindowAnimations(R.style.sharestyle);
-        Sharedialog.setCanceledOnTouchOutside(true);
-        Sharedialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-		 /* Sharedialog.show(); */
-        dialog1 = DialogUtils.Dialogphnoshow(context, "通讯中", dialog1);
-        Config.dialog = dialog1;
-        final List<sharemodel> mylist = ShareUtils.getShareModelList();
-        ImageAdapter shareadapter = new ImageAdapter(context, mylist);
-        mgallery.setAdapter(shareadapter);
-        mgallery.setOnItemClickListener(new OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                SHARE_MEDIA Platform = mylist.get(position).getSharePlatform();
-                CallShare(Platform);
-                Sharedialog.dismiss();
-            }
-        });
-        tv_cancle.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (Sharedialog.isShowing()) {
-                    Sharedialog.dismiss();
-                }
-            }
-        });
-    }
+
 
     protected void CallShare(SHARE_MEDIA Platform) {
         String sharename;
@@ -1681,15 +1596,8 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         } else {
             tv_name.setText("未知数据");
         }
-        // if (flist.getPlayerAllTime() == null||
-        // flist.getPlayerAllTime().trim().equals("")) {
         time_start.setText("00:00:00");
         time_end.setText("00:00:00");
-        // } else {
-        // time_start.setText("00:00:00");
-        // String ss = format.format(Long.parseLong(flist.getPlayerAllTime()));
-        // time_end.setText(ss);
-        // }
         if (flist.getContentImg() != null) {
             String url;
             if (flist.getContentImg().startsWith("http")) {
@@ -1706,10 +1614,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
 
         if (GlobalConfig.playerobject != null && alllist != null) {
             for (int i = 0; i < alllist.size(); i++) {
-                // alllist.get(i).getContentPlay() == null
-                // if (alllist.get(i).getContentPlay() != null &&
-                // alllist.get(i).getContentPlay().equals(GlobalConfig.playerobject.getContentPlay()))
-                // {
                 String s = alllist.get(i).getContentPlay();
                 if (s != null) {
                     if (s.equals(GlobalConfig.playerobject.getContentPlay())) {
@@ -1788,10 +1692,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             } else {
                 tv_like.setText("喜欢");
                 img_like.setImageResource(R.mipmap.wt_dianzan_nomal);
-                // ToastUtil.show_always(context, "本节目不支持喜欢");
+
             }
         } else {
-            // ToastUtil.show_always(context,"当前播放对象异常");
+
         }
     }
 
@@ -1887,9 +1791,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     ToastUtils.show_short(context, "没有查询内容");
                 } else {
                     ToastUtils.show_short(context, "没有新的数据");
-
-
-
                 }
             }
 
@@ -2063,7 +1964,89 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             }
         });
     }
-
+   // 点击更多时的对话框
+    private void moreDialog() {
+        final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_player_more, null);
+        gv_more=(GridView)dialog.findViewById(R.id.gv_more);
+        TextView tv_cancle = (TextView) dialog.findViewById(R.id.tv_cancle);
+        moredialog = new Dialog(context, R.style.MyDialog);
+        // 从底部上升到一个位置
+        moredialog.setContentView(dialog);
+        Window window = moredialog.getWindow();
+        DisplayMetrics dm = new DisplayMetrics();
+        context.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        screenw = dm.widthPixels;
+        ViewGroup.LayoutParams params = dialog.getLayoutParams();
+        params.width = screenw;
+        dialog.setLayoutParams(params);
+        window.setGravity(Gravity.BOTTOM);
+        window.setWindowAnimations(R.style.sharestyle);
+        moredialog.setCanceledOnTouchOutside(true);
+        moredialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+        final List<sharemodel> mylist = PlayermoreUtil.getPlayMoreList();
+        gv_more_adapter shareadapter = new gv_more_adapter(context, mylist);
+        gv_more.setAdapter(shareadapter);
+        gv_more.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        gv_more.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                callMore(position);//呼出更多
+                moredialog.dismiss();
+            }
+        });
+        tv_cancle.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (moredialog.isShowing()) {
+                    moredialog.dismiss();
+                }
+            }
+        });
+    }
+    // //////////
+    // 分享模块//
+    // //////////
+    private void shareDialog() {
+        final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_sharedialog, null);
+        GridView mGallery = (GridView) dialog.findViewById(R.id.share_gallery);
+        TextView tv_cancle = (TextView) dialog.findViewById(R.id.tv_cancle);
+        shareDialog = new Dialog(context, R.style.MyDialog);
+        // 从底部上升到一个位置
+        shareDialog.setContentView(dialog);
+        Window window = shareDialog.getWindow();
+        DisplayMetrics dm = new DisplayMetrics();
+        context.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        screenw = dm.widthPixels;
+        ViewGroup.LayoutParams params = dialog.getLayoutParams();
+        params.width = screenw;
+        dialog.setLayoutParams(params);
+        window.setGravity(Gravity.BOTTOM);
+        window.setWindowAnimations(R.style.sharestyle);
+        shareDialog.setCanceledOnTouchOutside(true);
+        shareDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+        dialog1 = DialogUtils.Dialogphnoshow(context, "通讯中");
+        Config.dialog = dialog1;
+        final List<sharemodel> myList = ShareUtils.getShareModelList();
+        ImageAdapter shareAdapter = new ImageAdapter(context, myList);
+        mGallery.setAdapter(shareAdapter);
+        mGallery.setSelector(new ColorDrawable(Color.TRANSPARENT));// 取消默认selector
+        mGallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                SHARE_MEDIA Platform = myList.get(position).getSharePlatform();
+                CallShare(Platform);
+                shareDialog.dismiss();
+            }
+        });
+        tv_cancle.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (shareDialog.isShowing()) {
+                    shareDialog.dismiss();
+                }
+            }
+        });
+    }
     /**
      * 设置当前为播放状态
      */

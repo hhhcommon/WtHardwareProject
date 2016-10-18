@@ -15,6 +15,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -35,7 +36,6 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ShareUtils;
 import com.wotingfm.util.ToastUtils;
-import com.wotingfm.widget.HorizontalListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,7 +77,7 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
 
 	private void sharedialog() {
 		final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_sharedialog, null);
-		HorizontalListView mgallery = (HorizontalListView) dialog.findViewById(R.id.share_gallery);
+		GridView mgallery = (GridView) dialog.findViewById(R.id.share_gallery);
 		TextView tv_cancle = (TextView) dialog.findViewById(R.id.tv_cancle);
 		Sharedialog = new Dialog(context, R.style.MyDialog);
 		// 从底部上升到一个位置
