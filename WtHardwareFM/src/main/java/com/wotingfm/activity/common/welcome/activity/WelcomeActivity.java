@@ -12,7 +12,7 @@ import android.widget.ImageView;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.activity.common.welcome.fragment.WelcomeAFragment;
-import com.wotingfm.activity.common.welcome.fragment.WelcomeBBBFragment;
+import com.wotingfm.activity.common.welcome.fragment.WelcomeBFragment;
 import com.wotingfm.activity.common.welcome.fragment.WelcomeCFragment;
 import java.util.ArrayList;
 /**
@@ -53,7 +53,7 @@ public class WelcomeActivity extends FragmentActivity {
         mPager.setOffscreenPageLimit(1);
         ArrayList<Fragment> fragmentList = new ArrayList<Fragment>();
         Fragment btFragmentA = new WelcomeAFragment();
-        Fragment btFragmentB = new WelcomeBBBFragment();
+        Fragment btFragmentB = new WelcomeBFragment();
         Fragment btFragmentC = new WelcomeCFragment();
         fragmentList.add(btFragmentA);
         fragmentList.add(btFragmentB);
