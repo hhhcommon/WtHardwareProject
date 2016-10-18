@@ -111,9 +111,9 @@ public class DownLoadListActivity extends Activity implements OnClickListener {
 					setListValue();
 					Intent p_intent = new Intent("push_down_completed");
 					context.sendBroadcast(p_intent);
-					ToastUtils.show_allways(context, "此目录内已经没有内容");
+					ToastUtils.show_always(context, "此目录内已经没有内容");
 				} catch (Exception e) {
-					ToastUtils.show_allways(context, "文件删除失败，请稍后重试");
+					ToastUtils.show_always(context, "文件删除失败，请稍后重试");
 					if (confirmdialog != null) {
 						confirmdialog.dismiss();
 					}
@@ -153,7 +153,7 @@ public class DownLoadListActivity extends Activity implements OnClickListener {
 			mlistview.setVisibility(View.GONE);*/
 			Intent p_intent = new Intent("push_down_completed");
 			context.sendBroadcast(p_intent);
-			ToastUtils.show_allways(context, "此目录内已经没有内容");
+			ToastUtils.show_always(context, "此目录内已经没有内容");
 		}
 	}
 
@@ -166,7 +166,7 @@ public class DownLoadListActivity extends Activity implements OnClickListener {
 				 * fileinfolist.get(position).setChecktype(1); Toast }else{
 				 * fileinfolist.get(position).setChecktype(0); }
 				 */
-				/* ToastUtil.show_allways(context, "此处弹窗确认是否删除"); */
+				/* ToastUtil.show_always(context, "此处弹窗确认是否删除"); */
 				deleteConfirmDialog(position);
 				confirmdialog1.show();
 			}
@@ -209,7 +209,7 @@ public class DownLoadListActivity extends Activity implements OnClickListener {
 		mlistview.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				//ToastUtil.show_allways(context, "我的localurl是"+fileinfolist.get(position).getLocalurl());
+				//ToastUtil.show_always(context, "我的localurl是"+fileinfolist.get(position).getLocalurl());
 				if(fileinfolist != null && fileinfolist.size() != 0){
 					positionnow =position;
 					FileInfo mFileInfo = fileinfolist.get(position);
@@ -245,7 +245,7 @@ public class DownLoadListActivity extends Activity implements OnClickListener {
 							dbdao.deleteHistory(playerurl);
 							dbdao.addHistory(history);
 							if(PlayerFragment.context != null){
-								MainActivity.change();
+								MainActivity.changeToMusic();
 								HomeActivity.UpdateViewPager();
 								PlayerFragment.SendTextRequest(mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4), context);
 							}else{
@@ -254,13 +254,13 @@ public class DownLoadListActivity extends Activity implements OnClickListener {
 							et.putString(StringConstant.PLAYHISTORYENTER, "true");
 								et.putString(StringConstant.PLAYHISTORYENTERNEWS,mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4));
 								et.commit();
-							MainActivity.change();
+							MainActivity.changeToMusic();
 								HomeActivity.UpdateViewPager();
 							}
 							context.finish();
 							dbdao.closedb();
 						} else {	// 此处要调对话框，点击同意删除对应的文件信息
-							/* ToastUtil.show_allways(context, "文件已经被删除，是否删除本条记录"); */
+							/* ToastUtil.show_always(context, "文件已经被删除，是否删除本条记录"); */
 							positionnow = position;
 							confirmdialog.show();
 						}

@@ -149,7 +149,7 @@ public class TotalFragment extends Fragment {
 			mListView.setVisibility(View.VISIBLE);
 		}
 		if(!isData){
-			ToastUtils.show_allways(context, "没有历史播放记录");
+			ToastUtils.show_always(context, "没有历史播放记录");
 		}
 	}
 
@@ -160,7 +160,7 @@ public class TotalFragment extends Fragment {
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
 		if(isVisibleToUser && isLoad && !isData){
-			ToastUtils.show_allways(context, "没有历史播放记录");
+			ToastUtils.show_always(context, "没有历史播放记录");
 		}
 	}
 

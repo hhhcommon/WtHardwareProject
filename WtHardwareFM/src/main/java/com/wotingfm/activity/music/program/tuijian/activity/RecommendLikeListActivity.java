@@ -149,7 +149,7 @@ public class RecommendLikeListActivity extends AppBaseActivity {
                                     pageSizeNum = allCount / pageSize + 1;
 								}
 							} else {
-								ToastUtils.show_allways(context, "页码获取异常");
+								ToastUtils.show_always(context, "页码获取异常");
 							}
 						} catch (JSONException e) {
 							e.printStackTrace();

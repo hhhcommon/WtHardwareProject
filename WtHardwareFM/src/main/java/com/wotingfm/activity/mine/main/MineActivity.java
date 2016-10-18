@@ -531,7 +531,7 @@ public class MineActivity extends Activity implements OnClickListener {
                         e.printStackTrace();
                     }
                 } else {
-                    ToastUtils.show_allways(context, "当前已是最新版本");
+                    ToastUtils.show_always(context, "当前已是最新版本");
                 }
             }
 
@@ -590,7 +590,7 @@ public class MineActivity extends Activity implements OnClickListener {
                     updateDialog.show();
                 }
             }else if(versionNew == versionOld){
-                ToastUtils.show_allways(context, "已经是最新版本");
+                ToastUtils.show_always(context, "已经是最新版本");
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -678,7 +678,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 startActivityForResult(intents, TO_CAMERA);
                 break;
             default:
-                ToastUtils.show_allways(MineActivity.this, "发生未知异常");
+                ToastUtils.show_always(MineActivity.this, "发生未知异常");
                 break;
         }
     }
@@ -736,7 +736,7 @@ public class MineActivity extends Activity implements OnClickListener {
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (msg.what == 1) {
-                    ToastUtils.show_allways(MineActivity.this, "保存成功");
+                    ToastUtils.show_always(MineActivity.this, "保存成功");
                     Editor et = BSApplication.SharedPreferences.edit();
                     String imageurl;
                     if (MiniUri.startsWith("http:")) {
@@ -748,9 +748,9 @@ public class MineActivity extends Activity implements OnClickListener {
                     // 正常切可用代码 已从服务器获得返回值，但是无法正常显示
                     imageLoader.DisplayImage(imageurl.replace("\\", "/"), userHead, false, false, null, null);
                 } else if (msg.what == 0) {
-                    ToastUtils.show_allways(context, "头像保存失败，请稍后再试");
+                    ToastUtils.show_always(context, "头像保存失败，请稍后再试");
                 } else if (msg.what == -1) {
-                    ToastUtils.show_allways(context, "头像保存异常，图片未上传成功，请重新发布");
+                    ToastUtils.show_always(context, "头像保存异常，图片未上传成功，请重新发布");
                 }
                 if (dialog != null) {
                     dialog.dismiss();
@@ -961,15 +961,15 @@ public class MineActivity extends Activity implements OnClickListener {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
-            long currentTime = System.currentTimeMillis();
-            if ((currentTime - touchTime) >= waitTime) {
-                ToastUtils.show_allways(MineActivity.this, "再按一次退出");
-                touchTime = currentTime;
-            } else {
-                MobclickAgent.onKillProcess(this);
-                finish();
-                android.os.Process.killProcess(android.os.Process.myPid());
-            }
+                long currentTime = System.currentTimeMillis();
+                if ((currentTime - touchTime) >= waitTime) {
+                    ToastUtils.show_always(MineActivity.this, "再按一次退出");
+                    touchTime = currentTime;
+                } else {
+                    MobclickAgent.onKillProcess(this);
+                    finish();
+                    android.os.Process.killProcess(android.os.Process.myPid());
+                }
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -1024,7 +1024,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 dialog.dismiss();
             }
             if (clearResult) {
-                ToastUtils.show_allways(context, "缓存已清除");
+                ToastUtils.show_always(context, "缓存已清除");
                 textCache.setText("0MB");
             } else {
                 L.e("缓存异常", "缓存清理异常");

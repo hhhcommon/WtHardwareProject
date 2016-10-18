@@ -78,7 +78,7 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
             dialog = DialogUtils.Dialogph(AllGroupMemberActivity.this, "正在获取群成员信息");
             send();
             }else{
-              ToastUtils.show_allways(context,"获取组ID失败");
+              ToastUtils.show_always(context,"获取组ID失败");
             }
        /* } else {
             ToastUtils.show_allways(context, "网络失败，请检查网络");
@@ -160,14 +160,14 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
                     }
                 }
                 if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_allways(context, "无法获取组Id");
+                    ToastUtils.show_always(context, "无法获取组Id");
                 } else if (ReturnType != null && ReturnType.equals("T")) {
-                    ToastUtils.show_allways(context, "异常返回值");
+                    ToastUtils.show_always(context, "异常返回值");
                 } else if (ReturnType != null && ReturnType.equals("1011")) {
-                    ToastUtils.show_allways(context, "组中无成员");
+                    ToastUtils.show_always(context, "组中无成员");
                 } else {
                     if (Message != null && !Message.trim().equals("")) {
-                        ToastUtils.show_allways(context, Message + "");
+                        ToastUtils.show_always(context, Message + "");
                     }
                 }
             }
@@ -274,7 +274,7 @@ public class AllGroupMemberActivity extends Activity implements View.OnClickList
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
                 boolean isfriend = false;
                 if(userlist2.get(position).getUserId().equals(CommonUtils.getUserId(context))){
-                    ToastUtils.show_allways(context, "点击的是本人");
+                    ToastUtils.show_always(context, "点击的是本人");
                 }else{
                     if (GlobalConfig.list_person != null&& GlobalConfig.list_person.size() != 0) {
                         for (int i = 0; i < GlobalConfig.list_person.size(); i++) {

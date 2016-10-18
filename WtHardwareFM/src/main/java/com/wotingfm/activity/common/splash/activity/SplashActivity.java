@@ -2,8 +2,9 @@ package com.wotingfm.activity.common.splash.activity;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
@@ -29,7 +30,6 @@ import org.json.JSONObject;
  * 邮箱：645700751@qq.com
  */
 public class SplashActivity extends Activity {
-    private SharedPreferences sharedPreferences= BSApplication.SharedPreferences;
     private String first;
     private String tag = "SPLASH_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
@@ -37,16 +37,16 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        first = sharedPreferences.getString(StringConstant.FIRST, "0");//是否是第一次登录
-        Editor et = sharedPreferences.edit();
-        et.putString(StringConstant.PERSONREFRESHB, "true");
+        first = BSApplication.SharedPreferences.getString(StringConstant.FIRST, "0");//是否是第一次登录
+        Editor et = BSApplication.SharedPreferences.edit();
+        et.putString(StringConstant.PERSONREFRESHB, "true");//默认每次都是刷新通讯录界面
         et.commit();
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 send();
             }
-        }, 1000);
+        }, 1000);//延时一秒钟后执行send方法
     }
 
     // 获取请求网络公共属性
@@ -61,11 +61,10 @@ public class SplashActivity extends Activity {
                 try {
                     String ReturnType = result.getString("ReturnType");
                     if (ReturnType.equals("1001")) {
-
                         try {
                             String UserInfo = result.getString("UserInfo");
                             if (UserInfo == null || UserInfo.trim().equals("")) {
-                                Editor et = sharedPreferences.edit();
+                                Editor et = BSApplication.SharedPreferences.edit();
                                 et.putString(StringConstant.USERID, "userid");
                                 et.putString(StringConstant.USERNAME, "username");
                                 et.putString(StringConstant.IMAGEURL, "imageurl");
@@ -78,7 +77,7 @@ public class SplashActivity extends Activity {
                                 String userName = list.getUserName();
                                 String imageUrl = list.getPortraitMini();
                                 String imageUrlBig = list.getPortraitBig();
-                                Editor et = sharedPreferences.edit();
+                                Editor et = BSApplication.SharedPreferences.edit();
                                 et.putString(StringConstant.USERID, userId);
                                 et.putString(StringConstant.IMAGEURL, imageUrl);
                                 et.putString(StringConstant.IMAGEURBIG, imageUrlBig);
@@ -115,11 +114,20 @@ public class SplashActivity extends Activity {
         });
     }
 
+    //设置android app 的字体大小不受系统字体大小改变的影响
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        return res;
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
-        sharedPreferences = null;
         first = null;
         tag = null;
     }

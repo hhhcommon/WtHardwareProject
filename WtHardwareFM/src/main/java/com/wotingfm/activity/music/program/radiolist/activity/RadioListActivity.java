@@ -20,7 +20,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.activity.music.program.fenlei.model.fenleiname;
+import com.wotingfm.activity.music.program.fenlei.model.fenLeiName;
 import com.wotingfm.activity.music.program.radiolist.adapter.MyPagerAdapter;
 import com.wotingfm.activity.music.program.radiolist.fragment.ClassifyFragment;
 import com.wotingfm.activity.music.program.radiolist.fragment.RecommendFragment;
@@ -86,7 +86,7 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 	private void HandleRequestType() {
 		Intent listIntent = getIntent();
 		if (listIntent != null) {
-			fenleiname list = (fenleiname) listIntent.getSerializableExtra("Catalog");
+			fenLeiName list = (fenLeiName) listIntent.getSerializableExtra("Catalog");
             String categoryName = list.getCatalogName();
             categoryType = list.getCatalogType();
 			id = list.getCatalogId();
@@ -129,7 +129,7 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 						pageSlidingTab.setVisibility(View.GONE);
 					}
 				} else {
-					ToastUtils.show_allways(RadioListActivity.this, "暂没有该分类数据");
+					ToastUtils.show_always(RadioListActivity.this, "暂没有该分类数据");
 				}
 			}
 

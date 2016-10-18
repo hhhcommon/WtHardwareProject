@@ -440,6 +440,12 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
+        <!-- 注册协议 -->
+        <activity
+            android:name="com.wotingfm.activity.person.agreement.AgreementActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
         <!-- 流量管理界面 -->
         <activity
             android:name=".activity.mine.flowmanage.FlowManageActivity"

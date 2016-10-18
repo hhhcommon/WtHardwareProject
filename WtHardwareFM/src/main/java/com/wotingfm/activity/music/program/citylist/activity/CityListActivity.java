@@ -52,17 +52,17 @@ public class CityListActivity extends AppBaseActivity {
     private CityListAdapter adapter;
     private CharacterParser characterParser;
     private PinyinComparator_d pinyinComparator;
-    
+
     private Dialog dialog;
     private SideBar sideBar;
     private ListView listView;
     private TextView textNoFriend;
     private EditText editSearchContent;
     private ImageView imageClear;
-    
+
     private List<fenleiname> userList = new ArrayList<>();
     private List<fenleiname> srcList;
-    
+
     private String tag = "CITY_LIST_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
 

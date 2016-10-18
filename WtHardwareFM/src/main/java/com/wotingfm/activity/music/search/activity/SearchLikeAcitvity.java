@@ -394,7 +394,7 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 					if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
 						sendKey(s.toString());// 发送搜索变更内容
 					} else {
-						ToastUtils.show_allways(SearchLikeAcitvity.this,"网络失败，请检查网络");
+						ToastUtils.show_always(SearchLikeAcitvity.this,"网络失败，请检查网络");
 					}
 					lin_status_first.setVisibility(View.GONE);
 					lin_status_second.setVisibility(View.VISIBLE);
@@ -511,7 +511,7 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 			sendBroadcast(mIntent);
 			mPager.setCurrentItem(0);
 		} else {
-			ToastUtils.show_allways(getApplicationContext(), "网络连接失败，请稍后重试");
+			ToastUtils.show_always(getApplicationContext(), "网络连接失败，请稍后重试");
 		}
 	}
 
@@ -568,13 +568,13 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 						}
 						setlv_mlistviewlistener();
 					} else {
-						ToastUtils.show_allways(context, "数据异常");
+						ToastUtils.show_always(context, "数据异常");
 					}
 				} else if (ReturnType != null && ReturnType.equals("1002")) {
-					ToastUtils.show_allways(getApplicationContext(), "没有查询到内容"+ Message);
+					ToastUtils.show_always(getApplicationContext(), "没有查询到内容"+ Message);
 				} else {
 					if (Message != null && !Message.trim().equals("")) {
-						ToastUtils.show_allways(getApplicationContext(), Message + "请稍后重试");
+						ToastUtils.show_always(getApplicationContext(), Message + "请稍后重试");
 					}
 				}
 			}
@@ -723,12 +723,12 @@ public class SearchLikeAcitvity  extends FragmentActivity implements View.OnClic
 			}else if(mediatype.equals("TTS")){
 				index = 4;
 			}else{
-				ToastUtils.show_allways(context, "mediatype不属于已经分类的四种类型");
+				ToastUtils.show_always(context, "mediatype不属于已经分类的四种类型");
 			}
 			mPager.setCurrentItem(index);
 			viewChange(index);
 		}else{
-			ToastUtils.show_allways(context, "传进来的mediatype值为空");
+			ToastUtils.show_always(context, "传进来的mediatype值为空");
 
 		}
 	}

@@ -4,7 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.wotingfm.activity.music.program.fenlei.model.fenleiname;
+import com.wotingfm.activity.music.program.fenlei.model.fenLeiName;
 import com.wotingfm.helper.SqliteHelper;
 
 import java.util.ArrayList;
@@ -25,8 +25,8 @@ public class CityInfoDao {
     }
 
     //查
-    public List<fenleiname> queryCityInfo() {
-        List<fenleiname> mylist = new ArrayList<fenleiname>();
+    public List<fenLeiName> queryCityInfo() {
+        List<fenLeiName> myList = new ArrayList<fenLeiName>();
         SQLiteDatabase db = helper.getReadableDatabase();
         Cursor cursor = null;
     /*	String url = cursor.getString(cursor.getColumnIndex("url"));
@@ -37,10 +37,10 @@ public class CityInfoDao {
             while (cursor.moveToNext()) {
                 String Adcode = cursor.getString(cursor.getColumnIndex("adcode"));
                 String CityName = cursor.getString(cursor.getColumnIndex("cityname"));
-                fenleiname mfFenleiname = new fenleiname();
-                mfFenleiname.setCatalogId(Adcode);
-                mfFenleiname.setCatalogName(CityName);
-                mylist.add(mfFenleiname);
+                fenLeiName mFenLeiName = new fenLeiName();
+                mFenLeiName.setCatalogId(Adcode);
+                mFenLeiName.setCatalogName(CityName);
+                myList.add(mFenLeiName);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -52,11 +52,11 @@ public class CityInfoDao {
                 db.close();
             }
         }
-        return mylist;
+        return myList;
     }
 
     //增
-    public void InsertCityInfo(List<fenleiname> list) {
+    public void InsertCityInfo(List<fenLeiName> list) {
         SQLiteDatabase db = helper.getWritableDatabase();
         for (int i = 0; i < list.size(); i++) {
             String adcode = list.get(i).getCatalogId();

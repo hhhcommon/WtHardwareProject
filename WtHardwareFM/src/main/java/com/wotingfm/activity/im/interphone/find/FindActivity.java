@@ -98,7 +98,7 @@ public class FindActivity extends AppBaseActivity implements View.OnClickListene
                     setTitle("添加好友");
                 }
             } else {
-                ToastUtils.show_allways(FindActivity.this, "类型获取异常，请返回上一级界面重试");
+                ToastUtils.show_always(FindActivity.this, "类型获取异常，请返回上一级界面重试");
             }
         }
     }
@@ -224,7 +224,7 @@ public class FindActivity extends AppBaseActivity implements View.OnClickListene
             case R.id.lin_contact_search:   // 搜索
                 String searchString = editContent.getText().toString().trim();
                 if (searchString.equals("")) {
-                    ToastUtils.show_allways(FindActivity.this, "您所输入的内容为空");
+                    ToastUtils.show_always(FindActivity.this, "您所输入的内容为空");
                     return;
                 }
                 // 跳转到搜索结果界面

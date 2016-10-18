@@ -30,8 +30,8 @@ import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
 import com.wotingfm.activity.mine.main.MineActivity;
 import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.program.citylist.dao.CityInfoDao;
-import com.wotingfm.activity.music.program.fenlei.model.fenlei;
-import com.wotingfm.activity.music.program.fenlei.model.fenleiname;
+import com.wotingfm.activity.music.program.fenlei.model.fenLei;
+import com.wotingfm.activity.music.program.fenlei.model.fenLeiName;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstant;
@@ -61,16 +61,16 @@ import java.util.List;
 public class MainActivity extends TabActivity {
     private MainActivity context;
     public static TabHost tabHost;
-    private Dialog upDataDialog;//版本更新弹出框
+    private Dialog upDataDialog;     // 版本更新弹出框
 
     private String tag = "MAIN_VOLLEY_REQUEST_CANCEL_TAG";
-    private String upDataNews;//版本更新内容
+    private String upDataNews;       // 版本更新内容
     private String mPageName = "MainActivity";
-    private int upDataType = 1;//1,不需要强制升级2，需要强制升级
+    private int upDataType = 1;      // 1,不需要强制升级2，需要强制升级
     private boolean isCancelRequest;
-    private List<fenleiname> list;
+    private List<fenLeiName> list;
 
-    private CityInfoDao CID;//城市列表数据库
+    private CityInfoDao CID;         // 城市列表数据库
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,75 +82,66 @@ public class MainActivity extends TabActivity {
         context = this;
         String first = BSApplication.SharedPreferences.getString(StringConstant.PREFERENCE, "0");//是否是第一次打开偏好设置界面
         if (first != null && first.equals("1")) {
-            //此时已经进行过偏好设置
-        } else {//1：第一次进入  其它：其它界面进入
+            // 此时已经进行过偏好设置
+        } else {// 1：第一次进入  其它：其它界面进入
             Intent intent = new Intent(this, PreferenceActivity.class);
             Bundle bundle = new Bundle();
             bundle.putString("type", "1");
             intent.putExtras(bundle);
             startActivity(intent);
         }
-        MobclickAgent.openActivityDurationTrack(false);
-        update(); // 获取版本数据
-        InitTextView();    // 设置界面
-        InitDao();
+        MobclickAgent.openActivityDurationTrack(false);//友盟的数据统计
+        update();           // 获取版本数据
+        InitTextView();     // 设置界面
+        InitDao();          // 加载数据库
         registerReceiver(); // 注册广播
-        //mask();//蒙版
+        //mask();           // 蒙版
     }
 
     private void mask() {
         final WindowManager windowManager = getWindowManager();
-        // 动态初始化图层
-        final ImageView img = new ImageView(this);
+        final ImageView img = new ImageView(this);          // 动态初始化图层
         img.setLayoutParams(new WindowManager.LayoutParams(android.view.ViewGroup.LayoutParams.MATCH_PARENT,
                 android.view.ViewGroup.LayoutParams.MATCH_PARENT));
         img.setScaleType(ImageView.ScaleType.FIT_XY);
         Bitmap bmp = BitmapUtils.readBitMap(this, R.mipmap.ee);
         img.setImageBitmap(bmp);
-        // 设置LayoutParams参数
-        WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        WindowManager.LayoutParams params = new WindowManager.LayoutParams(); // 设置LayoutParams参数
         // 设置显示的类型，TYPE_PHONE指的是来电话的时候会被覆盖，其他时候会在最前端，显示位置在stateBar下面，其他更多的值请查阅文档
         params.type = WindowManager.LayoutParams.TYPE_PHONE;
-        // 设置显示格式
-        params.format = PixelFormat.RGBA_8888;
-        // 设置对齐方式
-        params.gravity = Gravity.LEFT | Gravity.TOP;
-        // 设置宽高
-        params.width = ScreenUtils.getScreenWidth(this);
+        params.format = PixelFormat.RGBA_8888;               // 设置显示格式
+        params.gravity = Gravity.LEFT | Gravity.TOP;         // 设置对齐方式
+        params.width = ScreenUtils.getScreenWidth(this);     // 设置宽高
         params.height = ScreenUtils.getScreenHeight(this);
-        // 添加到当前的窗口上
-        windowManager.addView(img, params);
-        // 点击图层之后，将图层移除
+        windowManager.addView(img, params);                  // 添加到当前的窗口上
         img.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View arg0) {
                 windowManager.removeView(img);
             }
-        });
+        });                                                  // 点击图层之后，将图层移除
     }
 
-    /*
-     * 以下是外部调用
+    /**
+     * 切换到音乐播放界面
      */
-    public static void change() {
+    public static void changeToMusic() {
         tabHost.setCurrentTabByTag("two");
     }
 
-    /*
-     *以下是内部方法
-     */
+    //加载数据库
     private void InitDao() {
         CID = new CityInfoDao(context);
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+            // 发送获取城市列表的网络请求
             sendRequest();
         } else {
-            ToastUtils.show_allways(context, "网络失败，请检查网络");
+            ToastUtils.show_always(context, "网络失败，请检查网络");
         }
     }
 
-    // 初始化视图
+    // 初始化视图,主页跳转的3个界面
     private void InitTextView() {
-        //主页跳转的3个界面
         tabHost.addTab(tabHost.newTabSpec("one").setIndicator("one")
                 .setContent(new Intent(this, DuiJiangActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("two").setIndicator("two")
@@ -207,7 +198,6 @@ public class MainActivity extends TabActivity {
                     e.printStackTrace();
                     Log.e(tag + "检查更新异常", e.toString());
                 }
-
             }
 
             @Override
@@ -245,24 +235,26 @@ public class MainActivity extends TabActivity {
                             try {
                                 // 获取列表
                                 String ResultList = result.getString("CatalogData");
-                                fenlei SubList_all = new Gson().fromJson(ResultList, new TypeToken<fenlei>() {
+                                fenLei SubList_all = new Gson().fromJson(ResultList, new TypeToken<fenLei>() {
                                 }.getType());
-                                List<fenleiname> srcList = SubList_all.getSubCata();
+                                List<fenLeiName> srcList = SubList_all.getSubCata();
                                 if (srcList != null) {
                                     if (srcList.size() == 0) {
                                         ToastUtils.show_short(context, "获取城市列表为空");
                                     } else {
-                                        //将数据写入数据库
-                                        list = CID.queryCityInfo();
-                                        List<fenleiname> mList = new ArrayList<fenleiname>();
+                                        //组装从后台获取到的数据
+                                        List<fenLeiName> mList = new ArrayList<fenLeiName>();
                                         for (int i = 0; i < srcList.size(); i++) {
-                                            fenleiname mFenLeiName = new fenleiname();
+                                            fenLeiName mFenLeiName = new fenLeiName();
                                             mFenLeiName.setCatalogId(srcList.get(i).getCatalogId());
                                             mFenLeiName.setCatalogName(srcList.get(i).getCatalogName());
                                             mList.add(mFenLeiName);
                                         }
+                                        //获取数据库中的地理位置数据
+                                        list = CID.queryCityInfo();
                                         if (list.size() == 0) {
-                                            if (mList.size() != 0) CID.InsertCityInfo(mList);
+                                            if (mList.size() != 0)
+                                                CID.InsertCityInfo(mList);  //将数据写入数据库
                                         } else {
                                             //此处要对数据库查询出的list和获取的mList进行去重
                                             CID.DelCityInfo();
@@ -318,7 +310,7 @@ public class MainActivity extends TabActivity {
 
         // 版本更新比较
         String version = Version;
-        String[] strArray = null;
+        String[] strArray;
         strArray = version.split("\\.");
         //String verson_big = strArray[0].toString();//大版本
         //String verson_medium = strArray[1].toString();//中版本
@@ -386,7 +378,7 @@ public class MainActivity extends TabActivity {
                 if (upDataType == 1) {
                     upDataDialog.dismiss();
                 } else {
-                    ToastUtils.show_allways(MainActivity.this, "本次需要更新");
+                    ToastUtils.show_always(MainActivity.this, "本次需要更新");
                 }
             }
         });
@@ -412,7 +404,7 @@ public class MainActivity extends TabActivity {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(BroadcastConstant.TIMER_END)) {
-                ToastUtils.show_allways(MainActivity.this, "定时关闭应用时间就要到了，应用即将退出");
+                ToastUtils.show_always(MainActivity.this, "定时关闭应用时间就要到了，应用即将退出");
                 stopService(new Intent(MainActivity.this, timeroffservice.class));    // 停止服务
                 new Handler().postDelayed(new Runnable() {
                     @Override
@@ -464,6 +456,5 @@ public class MainActivity extends TabActivity {
         //		manager.killBackgroundProcesses("com.woting");
         android.os.Process.killProcess(android.os.Process.myPid());
     }
-
 
 }

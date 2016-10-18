@@ -142,15 +142,15 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 	private void checkvalue() {
 		yanzhengma = et_yzm.getText().toString().trim();
 		if ("".equalsIgnoreCase(phonenum)) {
-			ToastUtils.show_allways(this, "手机号码不能为空");
+			ToastUtils.show_always(this, "手机号码不能为空");
 			return;
 		}
 		if ("".equalsIgnoreCase(yanzhengma)) {
-			ToastUtils.show_allways(this, "验证码码不能为空");
+			ToastUtils.show_always(this, "验证码码不能为空");
 			return;
 		}
 		if (yanzhengma.length() != 6) {
-			ToastUtils.show_allways(this, "请输入六位验证码");
+			ToastUtils.show_always(this, "请输入六位验证码");
 			return;
 		}
 		if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
@@ -165,7 +165,7 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 		//检查手机号内容是否为空 检查输入数字是否为手机号 发送网络请求 返回值如果为正常的话 开启线程 每一秒刷新一次一下按钮
 		phonenum = et_phonenum.getText().toString().trim();
 		if ("".equalsIgnoreCase(phonenum)) {
-			ToastUtils.show_allways(this, "手机号码不能为空");
+			ToastUtils.show_always(this, "手机号码不能为空");
 			return;
 		}
 		if (isMobile(phonenum) == false) {
@@ -238,19 +238,19 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 					e.printStackTrace();
 				}
 				if (ReturnType != null && ReturnType.equals("1001")) {
-					ToastUtils.show_allways(context, "验证码已经发送");
+					ToastUtils.show_always(context, "验证码已经发送");
 					sendtype = 2;
 					timerdown();		// 每秒减1
 					et_phonenum.setEnabled(false);
 					tv_getyzm.setVisibility(View.GONE);
 					tv_cxfasong.setVisibility(View.VISIBLE);
 				} else if (ReturnType != null && ReturnType.equals("T")) {
-					ToastUtils.show_allways(context, "异常返回值");
+					ToastUtils.show_always(context, "异常返回值");
 				} else if (ReturnType != null && ReturnType.equals("1002")) {
-					ToastUtils.show_allways(context, "此手机号在系统内没有注册");
+					ToastUtils.show_always(context, "此手机号在系统内没有注册");
 				} else {
 					if (Message != null && !Message.trim().equals("")) {
-						ToastUtils.show_allways(context, Message + "");
+						ToastUtils.show_always(context, Message + "");
 					}
 				}
 			}
@@ -300,12 +300,12 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 					e.printStackTrace();
 				}
 				if (ReturnType != null && ReturnType.equals("1001")) {
-					ToastUtils.show_allways(context, "验证码已经再次发送，请查收");
+					ToastUtils.show_always(context, "验证码已经再次发送，请查收");
 				} else if (ReturnType != null && ReturnType.equals("T")) {
-					ToastUtils.show_allways(context, "异常返回值");
+					ToastUtils.show_always(context, "异常返回值");
 				} else {
 					if (Message != null && !Message.trim().equals("")) {
-						ToastUtils.show_allways(context, Message + "");
+						ToastUtils.show_always(context, Message + "");
 					}
 				}
 			}
@@ -314,7 +314,7 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 			protected void requestError(VolleyError error) {
 				if (dialog != null) {
 					dialog.dismiss();
-					ToastUtils.show_allways(context, "VolleyError捕获到异常");
+					ToastUtils.show_always(context, "VolleyError捕获到异常");
 				}
 			}
 		});
@@ -358,7 +358,7 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 				}
 				if (ReturnType != null && ReturnType.equals("1001")) {
 					if (ViewType == 1) {
-						ToastUtils.show_allways(context, "验证成功,跳往注册界面");
+						ToastUtils.show_always(context, "验证成功,跳往注册界面");
 						Intent intent = new Intent(context, RegisterActivity.class);
 						intent.putExtra("phonenum", phonenum);
 						intent.putExtra("type", type);
@@ -367,7 +367,7 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 						finish();
 					} else if (ViewType == 0) {
 						if (UserId != null && !UserId.equals("")) {
-							ToastUtils.show_allways(context, "验证成功,跳往修改密码界面");
+							ToastUtils.show_always(context, "验证成功,跳往修改密码界面");
 							Intent intent = new Intent(context, ModifyPasswordActivity.class);
 							intent.putExtra("origin", 0);
 							intent.putExtra("userid", UserId);
@@ -376,7 +376,7 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 							setResult(1);
 							finish();
 						} else {
-							ToastUtils.show_allways(context, "获取UserId异常");
+							ToastUtils.show_always(context, "获取UserId异常");
 						}
 					} else if (ViewType == 2) {
 						// 修改手机号的界面
@@ -385,15 +385,15 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 							sendbingding();
 							}
 						} else {
-							ToastUtils.show_allways(context, "网络失败，请检查网络");
+							ToastUtils.show_always(context, "网络失败，请检查网络");
 						}			
 				} else if (ReturnType != null && ReturnType.equals("T")) {
-					ToastUtils.show_allways(context, "异常返回值");
+					ToastUtils.show_always(context, "异常返回值");
 				} else if (ReturnType != null && ReturnType.equals("1002")) {
-					ToastUtils.show_allways(context, "验证码不匹配");
+					ToastUtils.show_always(context, "验证码不匹配");
 				}else {
 					if (Message != null && !Message.trim().equals("")) {
-						ToastUtils.show_allways(context, Message + "");
+						ToastUtils.show_always(context, Message + "");
 					}
 				}
 			}
@@ -402,7 +402,7 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 			protected void requestError(VolleyError error) {
 				if (dialog != null) {
 					dialog.dismiss();
-					ToastUtils.show_allways(context, "VolleyError捕获到异常");
+					ToastUtils.show_always(context, "VolleyError捕获到异常");
 				}
 			}
 		});
@@ -439,13 +439,13 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 				}
 				if (ReturnType != null && !ReturnType.equals("")) {
 					if (ReturnType.equals("1001")) {
-                        ToastUtils.show_allways(context, "登录用手机号已经成功修改为" + phonenum);
+                        ToastUtils.show_always(context, "登录用手机号已经成功修改为" + phonenum);
                         finish();
 					} else {
-						ToastUtils.show_allways(context, Message + "");
+						ToastUtils.show_always(context, Message + "");
 					}
 				} else {
-                   ToastUtils.show_allways(context, "数据获取异常，返回值为null");
+                   ToastUtils.show_always(context, "数据获取异常，返回值为null");
 				}
 			}
 			
@@ -489,19 +489,19 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 					e.printStackTrace();
 				}
 				if (ReturnType != null && ReturnType.equals("1001")) {
-					ToastUtils.show_allways(context, "验证码已经发送");
+					ToastUtils.show_always(context, "验证码已经发送");
 					sendtype = 2;
 					timerdown();		// 每秒减1
 					et_phonenum.setEnabled(false);
 					tv_getyzm.setVisibility(View.GONE);
 					tv_cxfasong.setVisibility(View.VISIBLE);
 				} else if (ReturnType != null && ReturnType.equals("T")) {
-					ToastUtils.show_allways(context, "异常返回值");
+					ToastUtils.show_always(context, "异常返回值");
 				} else if (ReturnType != null && ReturnType.equals("1002")) {
-					ToastUtils.show_allways(context, "此号码已经注册");
+					ToastUtils.show_always(context, "此号码已经注册");
 				}else {
 					if (Message != null && !Message.trim().equals("")) {
-						ToastUtils.show_allways(context, Message + "");
+						ToastUtils.show_always(context, Message + "");
 					}
 				}
 			}

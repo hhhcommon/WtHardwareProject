@@ -129,7 +129,7 @@ public class SequFragment extends Fragment {
 				} else {
 					mlistView.stopLoadMore();
 					mlistView.setPullLoadEnable(false);
-					ToastUtils.show_allways(context, "已经是最后一页了");
+					ToastUtils.show_always(context, "已经是最后一页了");
 				}
 			}
 		});
@@ -169,7 +169,7 @@ public class SequFragment extends Fragment {
 								playerzantype,  playerfrom, playerfromid, playerfromurl,playeraddtime,bjuserid,playercontentshareurl,ContentFavorite,ContentId,localurl);	
 						dbdao.deleteHistory(playerurl);
 						dbdao.addHistory(history);
-						MainActivity.change();
+						MainActivity.changeToMusic();
 						HomeActivity.UpdateViewPager();
 						PlayerFragment.SendTextRequest(newlist.get(position - 1).getContentName(), context);
 						context.finish();
@@ -229,7 +229,7 @@ public class SequFragment extends Fragment {
 									pagesizenum = allcount / pagesize + 1;
 								}
 							} else {
-								ToastUtils.show_allways(context, "页码获取异常");
+								ToastUtils.show_always(context, "页码获取异常");
 							}
 						} catch (JSONException e) {
 							e.printStackTrace();
@@ -303,10 +303,10 @@ public class SequFragment extends Fragment {
 						dialog = DialogUtils.Dialogph(context, "通讯中");
 						sendRequest();
 					}else{
-						/*ToastUtil.show_allways(context, "搜索字符串获取异常");*/
+						/*ToastUtil.show_always(context, "搜索字符串获取异常");*/
 					}
 				} else {
-					ToastUtils.show_allways(context, "网络失败，请检查网络");
+					ToastUtils.show_always(context, "网络失败，请检查网络");
 				}
 			} 
 		}

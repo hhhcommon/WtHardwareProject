@@ -81,10 +81,10 @@ public class MemberDelActivity extends Activity implements View.OnClickListener{
             dialog = DialogUtils.Dialogph(context, "正在获取群成员信息");
             send();
         }else{
-            ToastUtils.show_allways(context,"获取组ID失败");
+            ToastUtils.show_always(context,"获取组ID失败");
         }
        /* } else {
-            ToastUtils.show_allways(context, "网络失败，请检查网络");
+            ToastUtils.show_always(context, "网络失败，请检查网络");
         }*/
     }
 
@@ -153,14 +153,14 @@ public class MemberDelActivity extends Activity implements View.OnClickListener{
                     }
                 }
                 if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_allways(context, "无法获取组Id");
+                    ToastUtils.show_always(context, "无法获取组Id");
                 } else if (ReturnType != null && ReturnType.equals("T")) {
-                    ToastUtils.show_allways(context, "异常返回值");
+                    ToastUtils.show_always(context, "异常返回值");
                 } else if (ReturnType != null && ReturnType.equals("1011")) {
-                    ToastUtils.show_allways(context, "组中无成员");
+                    ToastUtils.show_always(context, "组中无成员");
                 } else {
                     if (Message != null && !Message.trim().equals("")) {
-                        ToastUtils.show_allways(context, Message + "");
+                        ToastUtils.show_always(context, Message + "");
                     }
                 }
             }
@@ -235,11 +235,11 @@ public class MemberDelActivity extends Activity implements View.OnClickListener{
                             image_clear.setVisibility(View.VISIBLE);
                             search(search_name);
                         }else{
-                            ToastUtils.show_allways(context,"网络异常，没有获取导数据");
+                            ToastUtils.show_always(context,"网络异常，没有获取导数据");
                         }
                     }
                 }else{
-                    ToastUtils.show_allways(context,"网络异常，没有获取导数据");
+                    ToastUtils.show_always(context,"网络异常，没有获取导数据");
                 }
             }});
     }
@@ -344,10 +344,10 @@ public class MemberDelActivity extends Activity implements View.OnClickListener{
                         dialog = DialogUtils.Dialogph(context, "正在发送邀请");*/
                         sendMemberDelete();
                    /* } else {
-                        ToastUtils.show_allways(context, "网络失败，请检查网络");
+                        ToastUtils.show_always(context, "网络失败，请检查网络");
                     }
                 } else {
-                    ToastUtils.show_allways(context, "请您勾选您要邀请的好友");
+                    ToastUtils.show_always(context, "请您勾选您要邀请的好友");
                 }*/
                 break;
         }
@@ -401,26 +401,26 @@ public class MemberDelActivity extends Activity implements View.OnClickListener{
                     e.printStackTrace();
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
-                    ToastUtils.show_allways(context, "群成员已经成功删除");
+                    ToastUtils.show_always(context, "群成员已经成功删除");
                     sendBroadcast(new Intent(BroadcastConstant.REFRESH_GROUP));
                     finish();
                 }else if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_allways(context, "无法获取用户Id");
+                    ToastUtils.show_always(context, "无法获取用户Id");
                 } else if (ReturnType != null && ReturnType.equals("T")) {
-                    ToastUtils.show_allways(context, "异常返回值");
+                    ToastUtils.show_always(context, "异常返回值");
                 } else if (ReturnType != null && ReturnType.equals("200")) {
-                    ToastUtils.show_allways(context, "尚未登录");
+                    ToastUtils.show_always(context, "尚未登录");
                 } else if (ReturnType != null && ReturnType.equals("1003")) {
-                    ToastUtils.show_allways(context, "异常返回值");
+                    ToastUtils.show_always(context, "异常返回值");
                 } else if (ReturnType != null && ReturnType.equals("10021")) {
-                    ToastUtils.show_allways(context, "用户不是该组的管理员");
+                    ToastUtils.show_always(context, "用户不是该组的管理员");
                 } else if (ReturnType != null && ReturnType.equals("0000")) {
-                    ToastUtils.show_allways(context, "无法获取相关的参数");
+                    ToastUtils.show_always(context, "无法获取相关的参数");
                 } else if (ReturnType != null && ReturnType.equals("1004")) {
-                    ToastUtils.show_allways(context, "无法获取被踢出用户Id");
+                    ToastUtils.show_always(context, "无法获取被踢出用户Id");
                 } else {
                     if (Message != null && !Message.trim().equals("")) {
-                        ToastUtils.show_allways(context, Message + "");
+                        ToastUtils.show_always(context, Message + "");
                     }
                 }
             }

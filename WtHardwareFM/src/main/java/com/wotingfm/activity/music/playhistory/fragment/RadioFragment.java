@@ -104,7 +104,7 @@ public class RadioFragment extends Fragment{
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		super.setUserVisibleHint(isVisibleToUser);
 		if(isVisibleToUser && isLoad && !isData){
-			ToastUtils.show_allways(context, "没有历史播放记录");
+			ToastUtils.show_always(context, "没有历史播放记录");
 		}
 		if(isVisibleToUser && TotalFragment.isDeleteRadio){
 			getData();

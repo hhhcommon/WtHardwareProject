@@ -173,7 +173,7 @@ public class ClassifyFragment extends Fragment{
                                 pageSizeNumber = allCount / pageSize + 1;
 							}
 						} else {
-							ToastUtils.show_allways(context, "页码获取异常");
+							ToastUtils.show_always(context, "页码获取异常");
 						}
                         List<ListInfo> subList = new Gson().fromJson(stringSubList, new TypeToken<List<ListInfo>>() {}.getType());
 						if (refreshType == 1) {
@@ -192,7 +192,7 @@ public class ClassifyFragment extends Fragment{
 						e.printStackTrace();
 					}
 				} else {
-					ToastUtils.show_allways(context, "暂没有该分类数据");
+					ToastUtils.show_always(context, "暂没有该分类数据");
 				}
 			}
 

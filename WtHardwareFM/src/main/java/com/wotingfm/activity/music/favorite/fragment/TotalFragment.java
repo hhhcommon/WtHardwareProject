@@ -92,7 +92,7 @@ public class TotalFragment extends Fragment {
                 dialog = DialogUtils.Dialogph(context, "正在获取全部喜欢信息");
                 send();
             } else {
-                ToastUtils.show_allways(context, "网络失败，请检查网络");
+                ToastUtils.show_always(context, "网络失败，请检查网络");
             }
         }
         return rootView;
@@ -184,7 +184,7 @@ public class TotalFragment extends Fragment {
                     }
                     sendrequest();
                 } else {
-                    ToastUtils.show_allways(context, "网络失败，请检查网络");
+                    ToastUtils.show_always(context, "网络失败，请检查网络");
                 }
                 DelDialog.dismiss();
             }
@@ -227,19 +227,19 @@ public class TotalFragment extends Fragment {
                         send();
                         context.sendBroadcast(mintent);
                     } else {
-                        ToastUtils.show_allways(context, "网络失败，请检查网络");
+                        ToastUtils.show_always(context, "网络失败，请检查网络");
                     }
                 } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_allways(context, "无法获取用户Id");
+                    ToastUtils.show_always(context, "无法获取用户Id");
                 } else if (ReturnType != null && ReturnType.equals("T")) {
-                    ToastUtils.show_allways(context, "异常返回值");
+                    ToastUtils.show_always(context, "异常返回值");
                 } else if (ReturnType != null && ReturnType.equals("200")) {
-                    ToastUtils.show_allways(context, "尚未登录");
+                    ToastUtils.show_always(context, "尚未登录");
                 } else if (ReturnType != null && ReturnType.equals("1003")) {
-                    ToastUtils.show_allways(context, "异常返回值");
+                    ToastUtils.show_always(context, "异常返回值");
                 } else {
                     if (Message != null && !Message.trim().equals("")) {
-                        ToastUtils.show_allways(context, Message + "");
+                        ToastUtils.show_always(context, Message + "");
                     }
                 }
             }
@@ -386,13 +386,13 @@ public class TotalFragment extends Fragment {
                         ToastUtils.show_short(context, "数据获取异常");
                     }
                 } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_allways(context, "" + Message);
+                    ToastUtils.show_always(context, "" + Message);
                 } else if (ReturnType != null && ReturnType.equals("1011")) {
-                    ToastUtils.show_allways(context, "" + Message);
+                    ToastUtils.show_always(context, "" + Message);
                     ex_listview.setVisibility(View.GONE);
                 } else {
                     if (Message != null && !Message.trim().equals("")) {
-                        ToastUtils.show_allways(context, "加载失败" + Message);
+                        ToastUtils.show_always(context, "加载失败" + Message);
                     }
                 }
             }
@@ -502,7 +502,7 @@ public class TotalFragment extends Fragment {
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                     send();
                 } else {
-                    ToastUtils.show_allways(context, "网络失败，请检查网络");
+                    ToastUtils.show_always(context, "网络失败，请检查网络");
                 }
             }
         }
@@ -541,7 +541,7 @@ public class TotalFragment extends Fragment {
             }
             sendrequest();
         } else {
-            ToastUtils.show_allways(context, "网络失败，请检查网络");
+            ToastUtils.show_always(context, "网络失败，请检查网络");
         }
     }
 

@@ -140,7 +140,7 @@ public class HomeActivity extends FragmentActivity {
 		if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
 			long currentTime = System.currentTimeMillis();
 			if ((currentTime - touchTime) >= waitTime) {
-				ToastUtils.show_allways(this, "再按一次退出");
+				ToastUtils.show_always(this, "再按一次退出");
 				touchTime = currentTime;
 			} else {
 				MobclickAgent.onKillProcess(this);
@@ -150,11 +150,11 @@ public class HomeActivity extends FragmentActivity {
 			return true;
 		}else if(event.getAction() == KeyEvent.ACTION_DOWN &&keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
 			// 音量减小时应该执行的功能代码
-			ToastUtils.show_allways(this, "音量减小时应该执行的功能代码");
+			ToastUtils.show_always(this, "音量减小时应该执行的功能代码");
 			return true;
 		}else if(event.getAction() == KeyEvent.ACTION_DOWN &&keyCode == KeyEvent.KEYCODE_VOLUME_UP){
 			// 音量增大时应该执行的功能代码
-			ToastUtils.show_allways(this, "音量增大时应该执行的功能代码");
+			ToastUtils.show_always(this, "音量增大时应该执行的功能代码");
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
