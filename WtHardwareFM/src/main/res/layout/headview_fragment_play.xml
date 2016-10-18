@@ -363,7 +363,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="27dp"
+                    android:layout_marginLeft="8dp"
                     android:text="相关推荐"
                     android:textColor="@color/s_green"
                     android:textSize="13sp" />

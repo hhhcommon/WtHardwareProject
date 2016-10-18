@@ -27,7 +27,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="27dp"
+                android:layout_marginLeft="8dp"
                 android:text="猜你喜欢"
                 android:textColor="@color/wt_login_third"
                 android:textSize="13sp"/>
@@ -52,7 +52,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/live_more"
-            	android:layout_marginRight="18dp"/>
+            	android:layout_marginRight="3dp"/>
         </LinearLayout>
     </LinearLayout>
 
