@@ -25,6 +25,7 @@ import android.os.Message;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.Html;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -400,7 +401,8 @@ public class MineActivity extends Activity implements OnClickListener {
                         @Override
                         public void run() {
                             String  SSIDWiFi = wifiManager.getConnectionInfo().getSSID();
-                            textWifiName.setText(SSIDWiFi.substring(1, SSIDWiFi.length() - 1));
+                            Log.e("SSIDWiFi",SSIDWiFi+"");
+//                    textWifiName.setText(SSIDWiFi.substring(1, SSIDWiFi.length() - 1));
                         }
                     }, 2000);
                 } else {
@@ -414,17 +416,6 @@ public class MineActivity extends Activity implements OnClickListener {
     protected void onResume() {
         super.onResume();
         getLoginStatus();
-        if(wifiManager.isWifiEnabled()) {
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    String  SSIDWiFi = wifiManager.getConnectionInfo().getSSID();
-                    textWifiName.setText(SSIDWiFi.substring(1, SSIDWiFi.length() - 1));
-                }
-            }, 2000);
-        } else {
-            textWifiName.setText("关闭");
-        }
     }
 
     // 注销数据交互

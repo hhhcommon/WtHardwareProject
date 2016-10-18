@@ -3,7 +3,10 @@ package com.wotingfm.activity.person.modifyphonenumber;
 import android.app.Dialog;
 import android.content.SharedPreferences;
 import android.os.CountDownTimer;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -22,9 +25,6 @@ import com.wotingfm.util.ToastUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * 修改手机号
  */
@@ -32,13 +32,16 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
     private CountDownTimer mCountDownTimer;         // 计时器
 
     private Dialog dialog;                          // 加载数据对话框
-    private EditText editPhoneNumber;               // 输入 手机号码
+    private EditText editPhoneNumber;               // 输入新手机号码
+    private EditText editPhoneNumberOld;            // 输入旧手机号码
     private EditText editVerificationCode;          // 输入 验证码
     private TextView textGetVerificationCode;       // 获取验证码
     private TextView textResend;                    // 重新发送验证码
+    private Button btUpdate;                        // 修改按钮
 
     private String tag = "MODIFY_PHONE_NUMBER_VOLLEY_REQUEST_CANCEL_TAG";
-    private String phoneNumber;                     // 手机号
+    private String phoneNumber;                     // 新手机号
+    private String phoneNumberOld;                  // 旧手机号
     private String verificationCode;                // 验证码
     private int sendType = 1;                       // == 1 为第一次发送验证码  == 2 为重新发送验证码
     private boolean isCancelRequest;
@@ -47,15 +50,15 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
     @Override
     public void onClick(View v) {
         // 以下操作都需要网络 所以没有网络就不需要继续验证直接提示用户设置网络
-        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
             ToastUtils.show_always(context, "网络失败，请检查网络");
-            return ;
+            return;
         }
         switch (v.getId()) {
             case R.id.btn_confirm:                  // 确定修改
-                if(!isGetCode) {
+                if (!isGetCode) {
                     ToastUtils.show_always(context, "请先获取验证码!");
-                    return ;
+                    return;
                 }
                 checkValue();
                 break;
@@ -73,59 +76,52 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
     @Override
     protected void init() {
         setTitle("修改手机号");
-
-        editPhoneNumber = (EditText) findViewById(R.id.edit_phone_number);                  // 手机号码
+        editPhoneNumberOld = (EditText) findViewById(R.id.edit_phone_numberOld);            // 旧手机号码
+        editPhoneNumber = (EditText) findViewById(R.id.edit_phone_number);                  // 新手机号码
         editVerificationCode = (EditText) findViewById(R.id.edit_verification_code);        // 验证码
-
+        editPhoneNumberOld.addTextChangedListener(new MyEditListener());
+        editPhoneNumber.addTextChangedListener(new MyEditListener());
+        editVerificationCode.addTextChangedListener(new MyEditListener());
         textGetVerificationCode = (TextView) findViewById(R.id.text_get_verification_code); // 获取验证码
         textGetVerificationCode.setOnClickListener(this);
 
         textResend = (TextView) findViewById(R.id.text_resend);                             // 重新发送验证码
         textResend.setOnClickListener(this);
-
-        findViewById(R.id.btn_confirm).setOnClickListener(this);                            // 确定修改
+        btUpdate = (Button) findViewById(R.id.btn_confirm);                                 // 确定修改
+        btUpdate.setOnClickListener(this);
     }
 
     // 验证码手机号正确就获取验证码
     private void checkVerificationCode() {
-        phoneNumber = editPhoneNumber.getText().toString().trim();
-        if ("".equalsIgnoreCase(phoneNumber) || !isMobile(phoneNumber)) {// 检查输入数字是否为手机号
+        phoneNumberOld = editPhoneNumberOld.getText().toString().trim();
+        if ("".equalsIgnoreCase(phoneNumberOld) || phoneNumberOld.length() != 11) {// 检查输入数字是否为手机号
             ToastUtils.show_always(context, "请输入正确的手机号码!");
-            return ;
+            return;
         }
-
-        dialog = DialogUtils.Dialogph(context, "正在获取验证码...");
+        dialog = DialogUtils.Dialogph(context, "正在获取验证码");
         sendVerificationCode();                                         // 发送网络请求 获取验证码
     }
 
     // 检查数据的正确性
     private void checkValue() {
-        verificationCode = editVerificationCode.getText().toString().trim();
-        if ("".equalsIgnoreCase(phoneNumber) || !isMobile(phoneNumber)) {// 检查输入数字是否为手机号
-            ToastUtils.show_always(context, "请输入正确的手机号码!");
-            return ;
+        if (isComplete(1)) {
+            dialog = DialogUtils.Dialogph(context, "正在验证手机号");
+            sendRequest();
         }
-        if ("".equalsIgnoreCase(verificationCode) || verificationCode.length() != 6) {
-            ToastUtils.show_always(context, "验证码不正确!");
-            return ;
-        }
-
-        dialog = DialogUtils.Dialogph(context, "正在验证手机号...");
-        sendRequest();
     }
 
     // 请求网络获取验证码
     private void sendVerificationCode() {
         String url;
-        if(sendType == 1) {
+        if (sendType == 1) {
             url = GlobalConfig.registerByPhoneNumUrl;       // 第一次发送验证码接口
         } else {
             url = GlobalConfig.reSendPhoneCheckCodeNumUrl;  // 重新发送验证码接口
         }
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("PhoneNum", phoneNumber);
-            if(sendType == 2) {
+            jsonObject.put("PhoneNum", phoneNumberOld);
+            if (sendType == 2) {
                 jsonObject.put("OperType", "1");
             }
         } catch (JSONException e) {
@@ -133,47 +129,41 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
         }
 
         VolleyRequest.RequestPost(url, tag, jsonObject, new VolleyCallback() {
-            private String returnType;
-            private String message;
-
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                if(isCancelRequest){
-                    return ;
-                }
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return;
                 try {
-                    returnType = result.getString("ReturnType");
-                    message = result.getString("Message");
+                    String returnType = result.getString("ReturnType");
+                    if (returnType != null && returnType.equals("1001")) {
+                        sendType = 2;// 再次发送验证码
+                        isGetCode = true;
+                        ToastUtils.show_always(context, "验证码已经发送");
+                        timerDown();
+                        textGetVerificationCode.setVisibility(View.GONE);
+                        textResend.setVisibility(View.VISIBLE);
+                    } else if (returnType != null && returnType.equals("T")) {
+                        ToastUtils.show_always(context, "获取异常，请确认后重试!");
+                    } else if (returnType != null && returnType.equals("1002")) {
+                        ToastUtils.show_always(context, "此号码已经注册");
+                    } else {
+                        try {
+                            String message = result.getString("Message");
+                            if (message != null && !message.trim().equals("")) {
+                                ToastUtils.show_always(context, message + "");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
-
-                if (returnType != null && returnType.equals("1001")) {
-                    sendType = 2;// 再次发送验证码
-                    isGetCode = true;
-                    ToastUtils.show_always(context, "验证码已经发送");
-                    timerDown();
-                    textGetVerificationCode.setVisibility(View.GONE);
-                    textResend.setVisibility(View.VISIBLE);
-                } else if (returnType != null && returnType.equals("T")) {
-                    ToastUtils.show_always(context, "获取异常，请确认后重试!");
-                } else if (returnType != null && returnType.equals("1002")) {
-                    ToastUtils.show_always(context, "此号码已经注册");
-                } else {
-                    if (message != null && !message.trim().equals("")) {
-                        ToastUtils.show_always(context, message + "");
-                    }
                 }
             }
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+                if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
             }
         });
@@ -190,42 +180,38 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
         }
 
         VolleyRequest.RequestPost(GlobalConfig.checkPhoneCheckCodeUrl, tag, jsonObject, new VolleyCallback() {
-            private String returnType;
-            private String message;
-
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                if(isCancelRequest){
-                    return ;
-                }
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return;
                 try {
-                    returnType = result.getString("ReturnType");
-                    message = result.getString("Message");
+                    String returnType = result.getString("ReturnType");
+                    if (returnType != null && returnType.equals("1001")) {
+                        dialog = DialogUtils.Dialogph(context, "正在修改绑定手机号...");
+                        sendBinding();
+                    } else if (returnType != null && returnType.equals("T")) {
+                        ToastUtils.show_always(context, "数据出错了,请稍后再试");
+                    } else if (returnType != null && returnType.equals("1002")) {
+                        ToastUtils.show_always(context, "验证码错误!");
+                    } else {
+                        try {
+                            String message = result.getString("Message");
+                            if (message != null && !message.trim().equals("")) {
+                                ToastUtils.show_always(context, message + "");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if (returnType != null && returnType.equals("1001")) {
-                    dialog = DialogUtils.Dialogph(context, "正在修改绑定手机号...");
-                    sendBinding();
-                } else if (returnType != null && returnType.equals("T")) {
-                    ToastUtils.show_always(context, "修改过程中发生异常，请稍后重试!");
-                } else if (returnType != null && returnType.equals("1002")) {
-                    ToastUtils.show_always(context, "验证码错误!");
-                }else {
-                    if (message != null && !message.trim().equals("")) {
-                        ToastUtils.show_always(context, message + "");
-                    }
-                }
+
             }
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+                if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
             }
         });
@@ -241,42 +227,31 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
         }
 
         VolleyRequest.RequestPost(GlobalConfig.bindExtUserUrl, tag, jsonObject, new VolleyCallback() {
-            private String returnType;
-            private String message;
-
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                if(isCancelRequest){
-                    return ;
-                }
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return;
                 try {
-                    returnType = result.getString("ReturnType");
-                    message = result.getString("Message");
-                    L.v("message", "sendBinding -- > > " + message);
+                    String returnType = result.getString("ReturnType");
+                    if (returnType != null && returnType.equals("1001")) {
+                        ToastUtils.show_always(context, "手机号修改成功!");
+                        SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+                        et.putString(StringConstant.PHONENUMBER, phoneNumber);
+                        if (!et.commit()) {
+                            L.w(" 数据 commit 失败!");
+                        }
+                        finish();
+                    } else {
+                        ToastUtils.show_always(context, "手机号修改失败!");
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
-                if (returnType != null && returnType.equals("1001")) {
-                    ToastUtils.show_always(context, "手机号修改成功!");
-                    SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
-                    et.putString(StringConstant.PHONENUMBER, phoneNumber);
-                    if(!et.commit()) {
-                        L.w(" 数据 commit 失败!");
-                    }
-                    finish();
-                } else {
-                    ToastUtils.show_always(context, "手机号修改失败!");
                 }
             }
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+                if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
             }
         });
@@ -298,18 +273,58 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
         }.start();
     }
 
-    // 用正则验证手机号
-    private boolean isMobile(String str) {
-        Pattern pattern = Pattern.compile("^[1][3,4,5,7,8][0-9]{9}$");
-        Matcher matcher = pattern.matcher(str);
-        return matcher.matches();
+    //    用正则验证手机号
+    //    private boolean isMobile(String str) {
+    //        Pattern pattern = Pattern.compile("^[1][3,4,5,7,8][0-9]{9}$");
+    //        Matcher matcher = pattern.matcher(str);
+    //        return matcher.matches();
+    //    }
+
+    // 判断数据是否填写完整
+    private boolean isComplete(int type) {
+        verificationCode = editVerificationCode.getText().toString().trim();
+        phoneNumber = editPhoneNumber.getText().toString().trim();
+        phoneNumberOld = editPhoneNumberOld.getText().toString().trim();
+
+        if ("".equalsIgnoreCase(phoneNumberOld) || phoneNumberOld.length() != 11) {// 检查输入数字是否为手机号
+            if(type==1)ToastUtils.show_always(context, "请输入旧的正确的手机号码!");
+            return false;
+        } else if ("".equalsIgnoreCase(phoneNumber) || phoneNumber.length() != 11) {// 检查输入数字是否为手机号
+            if(type==1) ToastUtils.show_always(context, "请输入新的正确的手机号码!");
+            return false;
+        } else if ("".equalsIgnoreCase(verificationCode) || verificationCode.length() != 6) {
+            if(type==1) ToastUtils.show_always(context, "验证码不正确!");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    // 输入框监听
+    class MyEditListener implements TextWatcher {
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            if (isComplete(2)) {
+                btUpdate.setBackgroundResource(R.drawable.wt_commit_button_background);
+            } else {
+                btUpdate.setBackgroundResource(R.drawable.bg_graybutton);
+            }
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);// 根据 TAG 取消网络请求
-        if(mCountDownTimer != null) {
+        if (mCountDownTimer != null) {
             mCountDownTimer.cancel();
             mCountDownTimer = null;
         }
