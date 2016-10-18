@@ -223,7 +223,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
     // 验证手机号码获取验证码
     private void checkYzm() {
         phoneNumVerify = mEditTextUserPhone.getText().toString().trim();
-        //判断获取到的验证码是否是跟注册账号为同一个账号
+        // 判断获取到的验证码是否是跟注册账号为同一个账号
         if (tempVerify == null) {
             tempVerify = phoneNumVerify;
         } else {
@@ -345,13 +345,13 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
                             et.putString(StringConstant.ISLOGIN, "true");
                             et.putString(StringConstant.USERNAME, userName);
                             et.putString(StringConstant.PHONENUMBER, phoneNum);
-                            et.putString(StringConstant.PERSONREFRESHB, "true");//刷新通信录
+                            et.putString(StringConstant.PERSONREFRESHB, "true");// 刷新通信录
                             if (!et.commit()) {
                                 L.w("数据 commit 失败!");
                             }
-                            sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));//刷新通信录界面
-                            InterPhoneControlHelper.sendEntryMessage(context);//登录后socket发送进入的请求
-                            setResult(1);//返回结果数据到上一个界面
+                            sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));// 刷新通信录界面
+                            InterPhoneControlHelper.sendEntryMessage(context);// 登录后socket发送进入的请求
+                            setResult(1);// 返回结果数据到上一个界面
                             finish();
                         } catch (JSONException e) {
                             e.printStackTrace();

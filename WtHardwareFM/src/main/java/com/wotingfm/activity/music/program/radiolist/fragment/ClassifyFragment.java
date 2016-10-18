@@ -49,17 +49,18 @@ import java.util.List;
  * @author woting11
  */
 public class ClassifyFragment extends Fragment{
-	private View rootView;
-	private Context context;
+    private Context context;
+    private SearchPlayerHistoryDao dbDao;	// 数据库
+    protected ListInfoAdapter adapter;
+
+    private View rootView;
 	private XListView mListView;			// 列表
 	private Dialog dialog;					// 加载对话框
-	private int page = 1;					// 页码
 	private List<ListInfo> newList;
-	private int pageSizeNumber;
-	private SearchPlayerHistoryDao dbDao;	// 数据库
-//	protected List<ListInfo> subList;
-	protected ListInfoAdapter adapter;
-	private int refreshType;				// refreshtype 1为下拉加载 2为上拉加载更多
+
+    private int page = 1;					// 页码
+    private int pageSizeNumber;
+	private int refreshType = 1;			// refreshtype 1为下拉加载 2为上拉加载更多
 	private String catalogId;
 	private String catalogType;
 
@@ -80,8 +81,7 @@ public class ClassifyFragment extends Fragment{
 		super.onCreate(savedInstanceState);
 		context = getActivity();
 		initDao();
-        refreshType = 1;
-		Bundle bundle = getArguments();                 //取值 用以判断加载的数据
+		Bundle bundle = getArguments();                 // 取值 用以判断加载的数据
         catalogId = bundle.getString("CatalogId");
         catalogType = bundle.getString("CatalogType");
 	}
@@ -106,19 +106,13 @@ public class ClassifyFragment extends Fragment{
 		return rootView;
 	}
 
-	/**
-	 * 与onActivityCreated()方法 解决预加载问题 
-	 */
+	// 与onActivityCreated()方法 解决预加载问题
 	@Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         if(isVisibleToUser && adapter == null && getActivity() != null){
-            if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-				dialog = DialogUtils.Dialogph(context, "正在获取数据");
-                newList = new ArrayList<>();
-				sendRequest();
-			} else {
-				ToastUtils.show_short(context, "网络连接失败，请稍后重试");
-			}
+            dialog = DialogUtils.Dialogph(context, "正在获取数据");
+            newList = new ArrayList<>();
+            sendRequest();
         }
         super.setUserVisibleHint(isVisibleToUser);
     }
@@ -129,14 +123,16 @@ public class ClassifyFragment extends Fragment{
         setUserVisibleHint(getUserVisibleHint());
     }
 
-	/**
-	 * 请求网络获取分类信息
-	 */
+	// 请求网络获取分类信息
 	private void sendRequest(){
+        // 以下操作需要网络支持
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            ToastUtils.show_short(context, "网络失败，请检查网络");
+            return ;
+        }
+
 		VolleyRequest.RequestPost(GlobalConfig.getContentUrl, setParam(), new VolleyCallback() {
 			private String returnType;
-			private String resultList;
-			private String stringSubList;
 
 			@Override
 			protected void requestSuccess(JSONObject result) {
@@ -146,15 +142,12 @@ public class ClassifyFragment extends Fragment{
 				page++;
 				try {
                     returnType = result.getString("ReturnType");
-                    resultList = result.getString("ResultList");
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 				if (returnType != null && returnType.equals("1001")) {
 					try {
-						JSONTokener jsonParser = new JSONTokener(resultList);
-						JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                        stringSubList = arg1.getString("List");
+						JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
 						String pageSizeString = arg1.getString("PageSize");
 						String allCountString = arg1.getString("AllCount");
 						if(Integer.valueOf(pageSizeString) < 10){
@@ -175,13 +168,12 @@ public class ClassifyFragment extends Fragment{
 						} else {
 							ToastUtils.show_always(context, "页码获取异常");
 						}
-                        List<ListInfo> subList = new Gson().fromJson(stringSubList, new TypeToken<List<ListInfo>>() {}.getType());
+                        List<ListInfo> subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<ListInfo>>() {}.getType());
 						if (refreshType == 1) {
                             mListView.stopRefresh();
                             newList.clear();
                             newList.addAll(subList);
-							adapter = new ListInfoAdapter(context, newList);
-                            mListView.setAdapter(adapter);
+                            mListView.setAdapter(adapter = new ListInfoAdapter(context, newList));
 						} else if (refreshType == 2) {
                             mListView.stopLoadMore();
                             newList.addAll(subList);
@@ -201,6 +193,7 @@ public class ClassifyFragment extends Fragment{
 				if (dialog != null) {
 					dialog.dismiss();
 				}
+                ToastUtils.showVolleyError(context);
 			}
 		});
 	}
@@ -208,7 +201,7 @@ public class ClassifyFragment extends Fragment{
 	private JSONObject setParam(){
 		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
-			jsonObject.put("UserId", CommonUtils.getUserId(context));
+//			jsonObject.put("UserId", CommonUtils.getUserId(context));
 			jsonObject.put("CatalogType", catalogType);
 			jsonObject.put("CatalogId", catalogId);
 			jsonObject.put("Page", String.valueOf(page));
@@ -274,9 +267,7 @@ public class ClassifyFragment extends Fragment{
 		});
 	}
 
-	/**
-	 * 设置刷新、加载更多参数
-	 */
+	// 设置刷新、加载更多参数
 	private void setListener() {
         mListView.setPullLoadEnable(true);
         mListView.setPullRefreshEnable(true);
@@ -284,25 +275,17 @@ public class ClassifyFragment extends Fragment{
         mListView.setXListViewListener(new IXListViewListener() {
 			@Override
 			public void onRefresh() {
-				if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    refreshType = 1;
-					page = 1;
-					sendRequest();
-				} else {
-					ToastUtils.show_short(context, "网络失败，请检查网络");
-				}
+                refreshType = 1;
+                page = 1;
+                sendRequest();
 			}
 
 			@Override
 			public void onLoadMore() {
 				if (page <= pageSizeNumber) {
-					if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                        refreshType = 2;
-						sendRequest();
-						ToastUtils.show_short(context, "正在请求" + page + "页信息");
-					} else {
-						ToastUtils.show_short(context, "网络失败，请检查网络");
-					}
+                    refreshType = 2;
+                    sendRequest();
+                    ToastUtils.show_short(context, "正在请求" + page + "页信息");
 				} else {
                     mListView.stopLoadMore();
                     mListView.setPullLoadEnable(false);
@@ -312,9 +295,7 @@ public class ClassifyFragment extends Fragment{
 		});
 	}
 
-	/**
-	 * 初始化数据库命令执行对象
-	 */
+	// 初始化数据库命令执行对象
 	private void initDao() {
         dbDao = new SearchPlayerHistoryDao(context);
 	}
@@ -327,7 +308,7 @@ public class ClassifyFragment extends Fragment{
 		}
 	}
 	
-	private class LoopAdapter extends LoopPagerAdapter {
+    class LoopAdapter extends LoopPagerAdapter {
         public LoopAdapter(RollPagerView viewPager) {
 			super(viewPager);
 		}

@@ -24,8 +24,8 @@ import com.wotingfm.activity.im.interphone.linkman.view.CharacterParser;
 import com.wotingfm.activity.im.interphone.linkman.view.PinyinComparator_d;
 import com.wotingfm.activity.im.interphone.linkman.view.SideBar;
 import com.wotingfm.activity.music.program.citylist.adapter.CityListAdapter;
-import com.wotingfm.activity.music.program.fenlei.model.fenlei;
-import com.wotingfm.activity.music.program.fenlei.model.fenleiname;
+import com.wotingfm.activity.music.program.fenlei.model.fenLei;
+import com.wotingfm.activity.music.program.fenlei.model.fenLeiName;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
@@ -60,8 +60,8 @@ public class CityListActivity extends AppBaseActivity {
     private EditText editSearchContent;
     private ImageView imageClear;
 
-    private List<fenleiname> userList = new ArrayList<>();
-    private List<fenleiname> srcList;
+    private List<fenLeiName> userList = new ArrayList<>();
+    private List<fenLeiName> srcList;
 
     private String tag = "CITY_LIST_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
@@ -83,7 +83,7 @@ public class CityListActivity extends AppBaseActivity {
             dialog = DialogUtils.Dialogph(context, "正在获取信息");
             sendRequest();
         } else {
-            ToastUtils.show_allways(context, "网络失败，请检查网络");
+            ToastUtils.show_always(context, "网络失败，请检查网络");
         }
     }
 
@@ -104,7 +104,7 @@ public class CityListActivity extends AppBaseActivity {
     private void sendRequest() {
         VolleyRequest.RequestPost(GlobalConfig.getCatalogUrl, tag, setParam(), new VolleyCallback() {
             private String ReturnType;
-//            private fenleiname mFenleiname;
+//            private fenLeiName mFenleiname;
 
             @Override
             protected void requestSuccess(JSONObject result) {
@@ -126,14 +126,14 @@ public class CityListActivity extends AppBaseActivity {
                 // 根据返回值来对程序进行解析
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
-                        fenlei subListAll = new Gson().fromJson(result.getString("CatalogData"), new TypeToken<fenlei>() {}.getType());
+                        fenLei subListAll = new Gson().fromJson(result.getString("CatalogData"), new TypeToken<fenLei>() {}.getType());
                         srcList = subListAll.getSubCata();
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
 
                     if (srcList.size() == 0) {
-                        ToastUtils.show_allways(context, "获取分类列表为空");
+                        ToastUtils.show_always(context, "获取分类列表为空");
                     } else {
                         userList.clear();
                         userList.addAll(srcList);
@@ -142,16 +142,16 @@ public class CityListActivity extends AppBaseActivity {
                         listView.setAdapter(adapter = new CityListAdapter(context, userList));
                         setInterface();
 						  /*  //将数据写入数据库
-						    List<fenleiname> mlist=new ArrayList<fenleiname>();
+						    List<fenLeiName> mlist=new ArrayList<fenLeiName>();
 						    for(int i=0;i<srclist.size();i++){
-						    	 mFenleiname=new fenleiname();
+						    	 mFenleiname=new fenLeiName();
 						    	 mFenleiname.setCatalogId(srclist.get(i).getCatalogId());
 						    	 mFenleiname.setCatalogName(srclist.get(i).getCatalogName());
 						    	 mlist.add(mFenleiname);
 						    	 // 暂时只解析一层 不向下解析了
 						    	 if(srclist.get(i).getSubCata()!=null&&srclist.get(i).getSubCata().size()>0){
 						    		 for(int j=0;j<srclist.get(i).getSubCata().size();j++){
-						    			 mFenleiname=new fenleiname();
+						    			 mFenleiname=new fenLeiName();
 								    	 mFenleiname.setCatalogId(srclist.get(i).getSubCata().get(j).getCatalogId());
 								    	 mFenleiname.setCatalogName(srclist.get(i).getSubCata().get(j).getCatalogName());
 								    	 mlist.add(mFenleiname);
@@ -163,15 +163,15 @@ public class CityListActivity extends AppBaseActivity {
 						    } */
                     }
                 } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_allways(context, "无此分类信息");
+                    ToastUtils.show_always(context, "无此分类信息");
                 } else if (ReturnType != null && ReturnType.equals("1003")) {
-                    ToastUtils.show_allways(context, "分类不存在");
+                    ToastUtils.show_always(context, "分类不存在");
                 } else if (ReturnType != null && ReturnType.equals("1011")) {
-                    ToastUtils.show_allways(context, "当前暂无分类");
+                    ToastUtils.show_always(context, "当前暂无分类");
                 } else if (ReturnType != null && ReturnType.equals("T")) {
-                    ToastUtils.show_allways(context, "获取列表异常");
+                    ToastUtils.show_always(context, "获取列表异常");
                 }else {
-                    ToastUtils.show_allways(context, "数据获取异常，请稍候重试");
+                    ToastUtils.show_always(context, "数据获取异常，请稍候重试");
                 }
             }
 
@@ -199,7 +199,7 @@ public class CityListActivity extends AppBaseActivity {
         return jsonObject;
     }
 
-    private void filledData(List<fenleiname> person) {
+    private void filledData(List<fenLeiName> person) {
         for (int i = 0; i < person.size(); i++) {
             person.get(i).setName(person.get(i).getCatalogName());
             // 汉字转换成拼音
@@ -298,13 +298,13 @@ public class CityListActivity extends AppBaseActivity {
 
     // 根据输入框中的值来过滤数据并更新ListView
     private void search(String search_name) {
-        List<fenleiname> filterDateList = new ArrayList<>();
+        List<fenLeiName> filterDateList = new ArrayList<>();
         if (TextUtils.isEmpty(search_name)) {
             filterDateList = userList;
             textNoFriend.setVisibility(View.GONE);
         } else {
             filterDateList.clear();
-            for (fenleiname sortModel : userList) {
+            for (fenLeiName sortModel : userList) {
                 String name = sortModel.getName();
                 if (name.indexOf(search_name.toString()) != -1
                         || characterParser.getSelling(name).startsWith(search_name.toString())) {

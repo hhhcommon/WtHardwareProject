@@ -92,6 +92,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/image_program_number"
+                    android:visibility="gone"
                     android:layout_marginLeft="14dp"/>
 
                 <TextView
@@ -101,6 +102,7 @@
                     android:layout_marginLeft="4dp"
                     android:textSize="9sp"
                     android:textColor="@color/beijing"
+                    android:visibility="gone"
                     android:text="88集"/>
             </LinearLayout>
         </LinearLayout>

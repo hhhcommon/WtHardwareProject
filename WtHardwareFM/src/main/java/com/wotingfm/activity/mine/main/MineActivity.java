@@ -617,7 +617,7 @@ public class MineActivity extends Activity implements OnClickListener {
     private void clearCacheDialog() {
         View dialog = LayoutInflater.from(this).inflate(R.layout.dialog_exit_confirm, null);
         TextView textTitle = (TextView) dialog.findViewById(R.id.tv_title);
-        textTitle.setText("是否删除本地存储缓存");
+        textTitle.setText("是否删除本地存储缓存？");
         TextView textConfirm = (TextView) dialog.findViewById(R.id.tv_confirm);
         textConfirm.setOnClickListener(this);
         TextView textCancel = (TextView) dialog.findViewById(R.id.tv_cancle);

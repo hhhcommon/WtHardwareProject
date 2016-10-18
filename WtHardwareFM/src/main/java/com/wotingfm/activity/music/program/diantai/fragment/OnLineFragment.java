@@ -57,7 +57,6 @@ import java.util.List;
 
 /**
  * 电台主页
- *
  * @author 辛龙 2016年2月26日
  */
 public class OnLineFragment extends Fragment implements OnClickListener {
@@ -84,6 +83,11 @@ public class OnLineFragment extends Fragment implements OnClickListener {
     private String cityName;
     private String tag = "ONLINE_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
+
+    // 初始化数据库命令执行对象
+    private void initDao() {
+        dbDao = new SearchPlayerHistoryDao(context);
+    }
 
     @Override
     public void onClick(View v) {
@@ -165,30 +169,6 @@ public class OnLineFragment extends Fragment implements OnClickListener {
         return rootView;
     }
 
-    class MessageReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(BroadcastConstant.CITY_CHANGE)) {
-                if (GlobalConfig.CityName != null) {
-                    cityName = GlobalConfig.CityName;
-                }
-                textName.setText(cityName);
-                page = 1;
-                beginCatalogId = "";
-                refreshType = 1;
-                getCity();
-                send();
-                Editor et = BSApplication.SharedPreferences.edit();
-                et.putString(StringConstant.CITYTYPE, "false");
-                if(!et.commit()) {
-                    L.w("数据 commit 失败!");
-                }
-            }
-        }
-
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -204,11 +184,6 @@ public class OnLineFragment extends Fragment implements OnClickListener {
           /*  mPullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);*/
             ToastUtils.show_short(context, "网络失败，请检查网络");
         }
-    }
-
-    // 初始化数据库命令执行对象
-    private void initDao() {
-        dbDao = new SearchPlayerHistoryDao(context);
     }
 
     private void setView() {
@@ -492,6 +467,30 @@ public class OnLineFragment extends Fragment implements OnClickListener {
             et.putString(StringConstant.CITYTYPE, "false");
             if(!et.commit()) {
                 L.w("数据 commit 失败!");
+            }
+        }
+    }
+
+    class MessageReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BroadcastConstant.CITY_CHANGE)) {
+                if (GlobalConfig.CityName != null) {
+                    cityName = GlobalConfig.CityName;
+                }
+                textName.setText(cityName);
+                page = 1;
+                beginCatalogId = "";
+                refreshType = 1;
+                getCity();
+                send();
+                Editor et = BSApplication.SharedPreferences.edit();
+                et.putString(StringConstant.CITYTYPE, "false");
+                if(!et.commit()) {
+                    L.w("数据 commit 失败!");
+                }
             }
         }
     }
