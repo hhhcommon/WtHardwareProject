@@ -37,7 +37,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="  账    号  "
+                    android:text="账        号"
                     android:textSize="16sp" />
 
 
@@ -50,7 +50,7 @@
                     android:background="@drawable/bg_edittext_normal"
                     android:ems="10"
                     android:gravity="left|center"
-                    android:hint="手机号"
+                    android:hint="请输入手机号"
                     android:inputType="phone"
                     android:maxLength="11"
                     android:paddingLeft="10dp"
@@ -74,7 +74,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" 用 户 名 "
+                    android:text="用  户  名"
                     android:textSize="16sp" />
 
                 <EditText
@@ -86,7 +86,7 @@
                     android:background="@drawable/bg_edittext_normal"
                     android:ems="10"
                     android:gravity="left|center"
-                    android:hint="用户名"
+                    android:hint="请输入至少3位用户名"
                     android:maxLength="100"
                     android:maxLines="1"
                     android:paddingLeft="10dp"
@@ -186,7 +186,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentLeft="true"
                     android:layout_centerInParent="true"
-                    android:text=" 验 证 码 "
+                    android:text="验  证  码"
                     android:textSize="16sp" />
 
                 <EditText
@@ -197,7 +197,7 @@
                     android:layout_marginRight="2dp"
                     android:layout_toRightOf="@id/tv_nameyzm"
                     android:background="@drawable/bg_edittext_normal"
-                    android:hint="验证码"
+                    android:hint="请输入验证码"
                     android:inputType="number"
                     android:maxLength="6"
                     android:paddingLeft="10dp"
@@ -271,6 +271,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/lin_agreement"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="12dp"
@@ -285,7 +286,6 @@
                 android:src="@mipmap/image_all_check" />
 
             <LinearLayout
-                android:id="@+id/lin_agreement"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"

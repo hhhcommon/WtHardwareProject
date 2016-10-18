@@ -770,7 +770,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 try {
                     filePath = PhotoCutAfterImagePath;
                     String ExtName = filePath.substring(filePath.lastIndexOf("."));
-                    String TestURI = "http://182.92.175.134:808/wt/common/upload4App.do?FType=UserP&ExtName=";
+                    String TestURI = GlobalConfig.baseUrl+"wt/common/upload4App.do?FType=UserP&ExtName=";
                     String Response = MyHttp.postFile(new File(filePath), TestURI
                             + ExtName
                             + "&PCDType="
@@ -792,11 +792,7 @@ public class MineActivity extends Activity implements OnClickListener {
                     } catch (Exception e1) {
                         e1.printStackTrace();
                     }
-                    try {
-                        String SessionId = UserPortait.getSessionId();
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
+
                     try {
                         MiniUri = UserPortait.getPortraitMini();
                     } catch (Exception e1) {

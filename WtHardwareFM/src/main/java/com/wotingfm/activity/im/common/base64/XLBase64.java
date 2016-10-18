@@ -4,7 +4,7 @@ package com.wotingfm.activity.im.common.base64;
  * @author 辛龙
  *2016年7月21日
  */
-public class Base64 {
+public class XLBase64 {
 	    static private final int BASELENGTH = 128;
 	    static private final int LOOKUPLENGTH = 64;
 	    static private final int TWENTYFOURBITGROUP = 24;
