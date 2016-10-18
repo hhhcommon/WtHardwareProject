@@ -17,7 +17,7 @@ import com.wotingfm.util.BitmapUtils;
  * 作者：xinlong on 2016/4/27 21:18
  * 邮箱：645700751@qq.com
  */
-public class WelcomeBFragment extends Fragment {
+public class WelcomeBBBFragment extends Fragment {
     private Bitmap bmp;
 
 
