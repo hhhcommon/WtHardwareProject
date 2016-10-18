@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#7fffffff"
     android:gravity="center"
     android:orientation="vertical" >
 
@@ -15,14 +14,11 @@
         android:id="@+id/gv_more"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:horizontalSpacing="10dp"
-        android:verticalSpacing="15dp"
-        android:paddingLeft="25dp"
-        android:paddingRight="25dp"
         android:paddingTop="10dp"
         android:numColumns="3"
         android:gravity="center"
         android:scrollbars="none"
+            android:background="#7f000000"
         >
       </GridView>
        
@@ -36,6 +32,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:background="#7fffffff"
             android:orientation="horizontal" >
 
             <TextView
@@ -47,6 +44,5 @@
                 android:text="关闭"
                 android:textSize="16sp"
                />
-
         </LinearLayout>
     </LinearLayout>

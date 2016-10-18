@@ -129,7 +129,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private LinearLayout lin_voicesearch;
     private static XListView mlistView;
     private static LinearLayout lin_tuijian;
-    private ImageView image_liu;
+
     private static MyLinearLayout rl_voice;
     private ImageView imageView_voice;
     private TextView tv_cancle;
@@ -168,7 +168,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private HandlerThread mHandlerThread;
     private LinearLayout lin_like;
     private static ImageView img_like;
-    private LinearLayout lin_lukuangtts;
     private VoiceRecognizer mVoiceRecognizer;
     private GridView gv_more;
     private Dialog moredialog;
@@ -437,16 +436,12 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         headview = LayoutInflater.from(context).inflate(R.layout.headview_fragment_play, null);
         lin_center = (RelativeLayout) headview.findViewById(R.id.lin_center);
         lin_tuijian = (LinearLayout) headview.findViewById(R.id.lin_tuijian);
-        lin_lukuangtts = (LinearLayout) headview.findViewById(R.id.lin_lukuangtts);
         lin_like = (LinearLayout) headview.findViewById(R.id.lin_like);
         img_like = (ImageView) headview.findViewById(R.id.img_like);
         tv_like = (TextView) headview.findViewById(R.id.tv_like);
         lin_right = (LinearLayout) headview.findViewById(R.id.lin_right);
         img_news = (ImageView) headview.findViewById(R.id.img_news);
         img_play = (ImageView) headview.findViewById(R.id.img_play);
-        image_liu = (ImageView) headview.findViewById(R.id.image_liu);
-        Bitmap bmp1 = BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b);
-        image_liu.setImageBitmap(bmp1);
         lin_more= (LinearLayout) headview.findViewById(R.id.lin_more);//更多
         lin_sequ= (LinearLayout) headview.findViewById(R.id.lin_sequ);//专辑
         lin_left = (LinearLayout) headview.findViewById(R.id.lin_left);

@@ -21,22 +21,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
-
-                <LinearLayout
-                    android:id="@+id/lin_lukuangtts"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_marginTop="15dp"
-                    android:orientation="vertical"
-                    android:visibility="gone" >
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/wt_icon_lktts"
-                        android:layout_marginLeft="18dp"/>
-                </LinearLayout>
-
                 <TextView
                     android:id="@+id/tv_name"
                     android:layout_width="0dp"
@@ -80,7 +64,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="right|center"
+                    android:gravity="left|center"
                     android:orientation="vertical" >
 
                     <LinearLayout
@@ -91,9 +75,18 @@
                         android:orientation="vertical" >
 
                         <ImageView
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:src="@mipmap/wt_play_left" />
+                        <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:src="@mipmap/wt_play_left" />
+                            android:text="上一首"
+                            android:paddingTop="5dp"
+                            android:paddingLeft="7dp"
+                            android:textColor="@color/dinglan_orange"
+                            />
+
                     </LinearLayout>
                 </LinearLayout>
 
@@ -110,17 +103,12 @@
 
                         <ImageView
                             android:id="@+id/img_news"
-                            android:layout_width="135dp"
-                            android:layout_height="135dp"
+                            android:layout_width="120dp"
+                            android:layout_height="120dp"
                             android:layout_centerInParent="true"
                             android:scaleType="centerCrop"
                             android:src="@mipmap/wt_image_playertx" />
 
-                        <ImageView
-                            android:id="@+id/image_liu"
-                            android:layout_width="135dp"
-                            android:layout_height="135dp"
-                            android:layout_centerInParent="true" />
 
                         <ImageView
                             android:id="@+id/img_play"
@@ -135,7 +123,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
-                    android:gravity="left|center"
+                    android:gravity="right|center"
                     android:orientation="vertical" >
 
                     <LinearLayout
@@ -146,9 +134,19 @@
                         android:orientation="vertical" >
 
                         <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="40dp"
+                            android:layout_height="40dp"
+                            android:layout_marginRight="10dp"
                             android:src="@mipmap/wt_play_right" />
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="下一首"
+                            android:paddingTop="5dp"
+                            android:layout_marginRight="5dp"
+                            android:gravity="right"
+                            android:textColor="@color/dinglan_orange"
+                            />
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -156,14 +154,16 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="29dp"
                 android:orientation="vertical" >
 
+
                 <LinearLayout
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="25dp"
-                    android:layout_marginRight="25dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginRight="8dp"
                     android:gravity="center"
                     android:orientation="horizontal" >
 
@@ -199,6 +199,7 @@
                         android:textColor="@color/dinglan_orange"
                         android:textSize="11sp" />
                 </LinearLayout>
+
             </LinearLayout>
 
             <LinearLayout
@@ -206,8 +207,8 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="horizontal"
-                android:layout_marginTop="22dp"
-                android:layout_marginBottom="22dp">
+                android:layout_marginTop="12dp"
+                android:layout_marginBottom="12dp">
                 <LinearLayout
                     android:id="@+id/lin_like"
                     android:layout_width="0dp"
@@ -215,7 +216,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:layout_marginLeft="20dp"
+
                     >
 
                     <ImageView
@@ -283,7 +284,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:layout_marginRight="20dp" >
+                    >
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -370,4 +371,5 @@
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
+
 </LinearLayout>
