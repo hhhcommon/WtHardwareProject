@@ -142,16 +142,6 @@ public class MineActivity extends Activity implements OnClickListener {
         initCache();
     }
 
-    // 获取蓝牙状态
-    private void getBluetoothState(){
-        if(blueAdapter.isEnabled()){
-            textBluetoothState.setText("打开");
-        } else {
-            textBluetoothState.setText("关闭");
-        }
-    }
-
-
     // 设置 view
     private void setView() {
         Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.img_person_background);
@@ -311,9 +301,6 @@ public class MineActivity extends Activity implements OnClickListener {
     private void getBluetoothState(){
         if(blueAdapter.isEnabled()){
             textBluetoothState.setText("打开");
-            Intent intent = new Intent();
-            intent.setAction(StringConstant.UPDATE_BLUETO0TH_TIME);
-            sendBroadcast(intent);
         } else {
             textBluetoothState.setText("关闭");
         }

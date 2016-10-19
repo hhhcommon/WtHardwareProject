@@ -78,7 +78,7 @@
     <uses-permission android:name="android.permission.WRITE_CONTACTS" />
     <!--  -->
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
+    <!-- android:hardwareAccelerated="true"-->
     <application
         android:name=".common.application.BSApplication"
         android:allowBackup="false"

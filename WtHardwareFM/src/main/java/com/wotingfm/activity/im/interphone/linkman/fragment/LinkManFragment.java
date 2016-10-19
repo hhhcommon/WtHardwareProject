@@ -53,12 +53,10 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.manager.InterPhoneControlManager;
-import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.HeightListView;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -340,12 +338,6 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 				dialogs = DialogUtils.Dialogph(context, "正在获取数据");
 			}
 			JSONObject jsonObject = VolleyRequest.getJsonObject(context);
-			try {
-				// 模块属性
-				jsonObject.put("UserId", CommonUtils.getUserId(context));
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
 
 			VolleyRequest.RequestPost(GlobalConfig.gettalkpersonsurl, tag, jsonObject, new VolleyCallback() {
 				@Override
