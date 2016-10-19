@@ -144,30 +144,7 @@ public class MineActivity extends Activity implements OnClickListener {
         initCache();
     }
 
-    // 获取蓝牙状态
-    private void getBluetoothState(){
-        if(blueAdapter.isEnabled()){
-            textBluetoothState.setText("打开");
-            Intent intent = new Intent();
-            intent.setAction(StringConstant.UPDATE_BLUETO0TH_TIME);
-            sendBroadcast(intent);
-        } else {
-            textBluetoothState.setText("关闭");
-        }
-    }
 
-    // 登陆状态下 用户设置头像对话框
-    private void imageDialog() {
-        final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_imageupload, null);
-        TextView textGallery = (TextView) dialog.findViewById(R.id.tv_gallery);
-        textGallery.setOnClickListener(this);
-        TextView textCamera = (TextView) dialog.findViewById(R.id.tv_camera);
-        textCamera.setOnClickListener(this);
-        imageDialog = new Dialog(context, R.style.MyDialog);
-        imageDialog.setContentView(dialog);
-        imageDialog.setCanceledOnTouchOutside(true);
-        imageDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-    }
 
     // 设置view
     private void setView() {
@@ -277,7 +254,7 @@ public class MineActivity extends Activity implements OnClickListener {
                     dialog = DialogUtils.Dialogph(context, "通讯中...");
                     sendRequestUpdate();
                 } else {
-                    ToastUtils.show_short(context, "网络失败，请检查网络");
+                    ToastUtils.show_always(context, "网络失败，请检查网络");
                 }
                 break;
             case R.id.cache_set:                // 清除缓存
@@ -322,6 +299,31 @@ public class MineActivity extends Activity implements OnClickListener {
                 startActivity(new Intent(context, FMConnectActivity.class));
                 break;
         }
+    }
+
+    // 获取蓝牙状态
+    private void getBluetoothState(){
+        if(blueAdapter.isEnabled()){
+            textBluetoothState.setText("打开");
+            Intent intent = new Intent();
+            intent.setAction(StringConstant.UPDATE_BLUETO0TH_TIME);
+            sendBroadcast(intent);
+        } else {
+            textBluetoothState.setText("关闭");
+        }
+    }
+
+    // 登陆状态下 用户设置头像对话框
+    private void imageDialog() {
+        final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_imageupload, null);
+        TextView textGallery = (TextView) dialog.findViewById(R.id.tv_gallery);
+        textGallery.setOnClickListener(this);
+        TextView textCamera = (TextView) dialog.findViewById(R.id.tv_camera);
+        textCamera.setOnClickListener(this);
+        imageDialog = new Dialog(context, R.style.MyDialog);
+        imageDialog.setContentView(dialog);
+        imageDialog.setCanceledOnTouchOutside(true);
+        imageDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
     }
 
     // 获取用户的登陆状态   登陆 OR 未登录
@@ -421,18 +423,8 @@ public class MineActivity extends Activity implements OnClickListener {
     // 注销数据交互
     private void sendRequestLogout(){
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
-        try {
-            String userId = BSApplication.SharedPreferences.getString(StringConstant.USERID, "");
-            if (!userId.equals("")) {
-                jsonObject.put("UserId", CommonUtils.getUserId(context));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
         VolleyRequest.RequestPost(GlobalConfig.logoutUrl, tag, jsonObject, new VolleyCallback() {
             private String ReturnType;
-
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) {
