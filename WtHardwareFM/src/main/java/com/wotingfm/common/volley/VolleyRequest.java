@@ -190,7 +190,7 @@ public class VolleyRequest {
         JSONObject jsonObject = new JSONObject();
         try {
 //			jsonObject.put("SessionId", CommonUtils.getSessionId(context));
-            String userId = CommonUtils.getUserId(context);
+            String userId = CommonUtils.getSocketUserId(context);
             if (userId != null && !userId.trim().equals("")) {
                 jsonObject.put("UserId", userId);
             }

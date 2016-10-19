@@ -729,15 +729,15 @@ public class MineActivity extends Activity implements OnClickListener {
                 if (msg.what == 1) {
                     ToastUtils.show_always(MineActivity.this, "保存成功");
                     Editor et = BSApplication.SharedPreferences.edit();
-                    String imageurl;
+                    String imageUrl;
                     if (MiniUri.startsWith("http:")) {
-                        imageurl = MiniUri;
+                        imageUrl = MiniUri;
                     } else {
-                        imageurl = GlobalConfig.imageurl + MiniUri;
+                        imageUrl = GlobalConfig.imageurl + MiniUri;
                     }
-                    et.putString(StringConstant.IMAGEURL, imageurl);
+                    et.putString(StringConstant.IMAGEURL, imageUrl);
                     // 正常切可用代码 已从服务器获得返回值，但是无法正常显示
-                    imageLoader.DisplayImage(imageurl.replace("\\", "/"), userHead, false, false, null, null);
+                    imageLoader.DisplayImage(imageUrl.replace("\\", "/"), userHead, false, false, null, null);
                 } else if (msg.what == 0) {
                     ToastUtils.show_always(context, "头像保存失败，请稍后再试");
                 } else if (msg.what == -1) {
