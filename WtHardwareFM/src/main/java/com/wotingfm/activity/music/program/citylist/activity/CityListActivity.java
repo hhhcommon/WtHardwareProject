@@ -1,11 +1,11 @@
 package com.wotingfm.activity.music.program.citylist.activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences.Editor;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -28,6 +28,7 @@ import com.wotingfm.activity.music.program.fenlei.model.fenLei;
 import com.wotingfm.activity.music.program.fenlei.model.fenLeiName;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -111,7 +112,6 @@ public class CityListActivity extends AppBaseActivity {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
-                Log.e("获取城市列表", "" + result.toString());
                 // 如果网络请求已经执行取消操作  就表示就算请求成功也不需要数据返回了  所以方法就此结束
                 if (isCancelRequest) {
                     return;
@@ -231,6 +231,7 @@ public class CityListActivity extends AppBaseActivity {
                 if(!et.commit()) {
                     L.w("数据 commit 失败!");
                 }
+                sendBroadcast(new Intent(BroadcastConstant.CITY_CHANGE));// 发送广播更新城市信息
                 finish();
             }
         });
@@ -306,8 +307,8 @@ public class CityListActivity extends AppBaseActivity {
             filterDateList.clear();
             for (fenLeiName sortModel : userList) {
                 String name = sortModel.getName();
-                if (name.indexOf(search_name.toString()) != -1
-                        || characterParser.getSelling(name).startsWith(search_name.toString())) {
+                if (name.indexOf(search_name) != -1
+                        || characterParser.getSelling(name).startsWith(search_name)) {
                     filterDateList.add(sortModel);
                 }
             }

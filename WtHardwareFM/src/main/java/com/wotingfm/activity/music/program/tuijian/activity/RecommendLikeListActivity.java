@@ -96,7 +96,6 @@ public class RecommendLikeListActivity extends AppBaseActivity {
                 if (page <= pageSizeNum) {
                     refreshType = 2;
                     sendRequest();
-                    ToastUtils.show_always(context, "正在请求" + page + "页信息");
                 } else {
                     mListView.stopLoadMore();
                     ToastUtils.show_always(context, "已经没有最新的数据了");
@@ -110,6 +109,8 @@ public class RecommendLikeListActivity extends AppBaseActivity {
         // 以下操作需要网络支持
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
             ToastUtils.show_always(context, "网络连接失败，请稍后重试!");
+            mListView.stopRefresh();
+            mListView.stopLoadMore();
             return ;
         }
 

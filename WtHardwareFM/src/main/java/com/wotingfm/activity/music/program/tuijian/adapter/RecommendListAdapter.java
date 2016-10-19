@@ -28,7 +28,7 @@ public class RecommendListAdapter extends BaseAdapter {
         this.context = context;
         this.list = list;
         imageLoader = new ImageLoader(context);
-        this.isHintVisibility = isHintVisibility;
+//        this.isHintVisibility = isHintVisibility;
     }
 
     @Override
@@ -64,11 +64,7 @@ public class RecommendListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        if (isHintVisibility) {
-            holder.imageHintVisibility.setVisibility(View.GONE);
-        } else {
-            holder.imageHintVisibility.setVisibility(View.VISIBLE);
-        }
+
         RankInfo lists = list.get(position);
         if (lists.getContentName() == null || lists.getContentName().equals("")) {
             holder.textViewRankTitle.setText("未知");
@@ -90,6 +86,7 @@ public class RecommendListAdapter extends BaseAdapter {
         }
         if (lists.getMediaType() != null) {
             if (lists.getMediaType().equals("SEQU")) {
+                isHintVisibility = false;
                 holder.imageNumberTime.setImageResource(R.mipmap.image_program_number);
                 if (lists.getContentSubCount() == null
                         || lists.getContentSubCount().equals("") || lists.getContentSubCount().equals("null")) {
@@ -98,7 +95,8 @@ public class RecommendListAdapter extends BaseAdapter {
                 } else {
                     holder.textTotal.setText(lists.getContentSubCount() + "集");
                 }
-            } else if (lists.getMediaType().equals("RADIO") || lists.getMediaType().equals("AUDIO")) {
+            } else if (lists.getMediaType().equals("AUDIO")) {
+                isHintVisibility = false;
                 holder.imageNumberTime.setImageResource(R.mipmap.image_program_time);
                 // 节目时长
                 if (lists.getContentTimes() == null
@@ -113,7 +111,16 @@ public class RecommendListAdapter extends BaseAdapter {
                         holder.textTotal.setText(minute + "\'" + " " + second + "\"");
                     }
                 }
+            } else if(lists.getMediaType().equals("RADIO")) {
+                isHintVisibility = true;
+                holder.imageNumberTime.setVisibility(View.GONE);
+                holder.textTotal.setVisibility(View.GONE);
             }
+        }
+        if (isHintVisibility) {
+            holder.imageHintVisibility.setVisibility(View.GONE);
+        } else {
+            holder.imageHintVisibility.setVisibility(View.VISIBLE);
         }
         if (lists.getPlayCount() == null || lists.getPlayCount().equals("") || lists.getPlayCount().equals("null")) {
             holder.mTextNumber.setText("8000");

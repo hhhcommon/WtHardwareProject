@@ -9,12 +9,12 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
+import com.wotingfm.activity.im.interphone.notify.activity.NotifyNewActivity;
 import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.program.main.ProgramFragment;
 import com.wotingfm.activity.music.search.activity.SearchLikeAcitvity;
@@ -45,21 +45,42 @@ public class HomeActivity extends FragmentActivity {
 
 	private void InitTextView() {
 		view1 = (TextView) findViewById(R.id.tv_guid1);
-		view2 = (TextView) findViewById(R.id.tv_guid2);
-		//		LinearLayout lin_news = (LinearLayout) findViewById(R.id.lin_news);
+        view1.setOnClickListener(new txListener(0));
 
-		LinearLayout lin_find = (LinearLayout) findViewById(R.id.lin_find);
-		lin_find.setOnClickListener(new OnClickListener() {
+		view2 = (TextView) findViewById(R.id.tv_guid2);
+        view2.setOnClickListener(new txListener(1));
+
+		findViewById(R.id.lin_find).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				// 跳转到搜索界面  原来的代码 要加在这里
-				Intent intent = new Intent(context, SearchLikeAcitvity.class);
-				startActivity(intent);
+				startActivity(new Intent(context, SearchLikeAcitvity.class));
 			}
 		});
-		view1.setOnClickListener(new txListener(0));
-		view2.setOnClickListener(new txListener(1));
+
+        findViewById(R.id.lin_news).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // 跳转到通知界面
+                startActivity(new Intent(context, NotifyNewActivity.class));
+            }
+        });
 	}
+
+    // 更新视图
+    private void updateView(int index) {
+        if (index == 0) {
+            view1.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
+            view2.setTextColor(context.getResources().getColor(R.color.white));
+            view1.setBackgroundDrawable(context.getResources().getDrawable(	R.drawable.color_wt_circle_home_white));
+            view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
+        } else if (index == 1) {
+            view1.setTextColor(context.getResources().getColor(R.color.white));
+            view2.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
+            view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
+            view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
+        }
+    }
 
 	public class txListener implements OnClickListener {
 		private int index = 0;
@@ -70,17 +91,7 @@ public class HomeActivity extends FragmentActivity {
 		@Override
 		public void onClick(View v) {
 			mPager.setCurrentItem(index);
-			if (index == 0) {
-				view1.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-				view2.setTextColor(context.getResources().getColor(R.color.white));
-				view1.setBackgroundDrawable(context.getResources().getDrawable(	R.drawable.color_wt_circle_home_white));
-				view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
-			} else if (index == 1) {
-				view1.setTextColor(context.getResources().getColor(R.color.white));
-				view2.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-				view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
-				view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
-			}
+            updateView(index);
 		}
 	}
 
@@ -110,17 +121,7 @@ public class HomeActivity extends FragmentActivity {
 		}
 		@Override
 		public void onPageSelected(int arg0) {
-			if (arg0 == 0) {
-				view1.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-				view2.setTextColor(context.getResources().getColor(R.color.white));
-				view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
-				view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
-			} else if (arg0 == 1) {
-				view1.setTextColor(context.getResources().getColor(R.color.white));
-				view2.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-				view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
-				view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
-			}
+            updateView(arg0);
 		}
 	}
 
