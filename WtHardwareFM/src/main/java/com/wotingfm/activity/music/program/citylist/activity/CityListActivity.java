@@ -19,7 +19,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseactivitya.AppBaseActivity;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.im.interphone.linkman.view.CharacterParser;
 import com.wotingfm.activity.im.interphone.linkman.view.PinyinComparator_d;
 import com.wotingfm.activity.im.interphone.linkman.view.SideBar;

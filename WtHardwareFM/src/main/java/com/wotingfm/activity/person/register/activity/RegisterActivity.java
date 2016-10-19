@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseactivitya.AppBaseActivity;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.person.agreement.AgreementActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;

@@ -9,7 +9,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseactivitya.AppBaseActivity;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.common.constant.StringConstant;
 
 /**

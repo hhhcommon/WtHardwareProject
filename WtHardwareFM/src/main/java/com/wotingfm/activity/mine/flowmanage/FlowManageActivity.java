@@ -1,7 +1,7 @@
 package com.wotingfm.activity.mine.flowmanage;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseactivitya.AppBaseActivity;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 
 /**
  * 流量管理

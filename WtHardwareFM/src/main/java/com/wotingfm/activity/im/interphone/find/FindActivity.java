@@ -25,7 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseactivitya.AppBaseActivity;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.im.interphone.find.result.FindNewsResultActivity;
 import com.wotingfm.activity.im.interphone.scanning.activity.CaptureActivity;
 import com.wotingfm.common.config.GlobalConfig;

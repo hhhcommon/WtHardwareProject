@@ -20,7 +20,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseactivitya.AppBaseActivity;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.mine.main.MineActivity;
 import com.wotingfm.activity.mine.wifi.adapter.WiFiListAdapter;
 import com.wotingfm.common.constant.BroadcastConstant;

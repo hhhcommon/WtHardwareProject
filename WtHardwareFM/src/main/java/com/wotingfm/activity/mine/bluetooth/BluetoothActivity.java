@@ -25,7 +25,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseactivitya.AppBaseActivity;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.mine.bluetooth.adapter.UserBluetoothAdapter;
 import com.wotingfm.activity.mine.bluetooth.model.BluetoothInfo;
 import com.wotingfm.activity.mine.main.MineActivity;

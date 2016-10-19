@@ -1,4 +1,4 @@
-package com.wotingfm.activity.common.baseactivitya;
+package com.wotingfm.activity.common.baseactivity;
 
 import android.content.Context;
 import android.os.Bundle;
