@@ -30,7 +30,7 @@ import com.google.gson.reflect.TypeToken;
 import com.shenstec.http.MyHttp;
 import com.shenstec.utils.file.FileManager;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
+import com.wotingfm.activity.common.baseactivitya.AppBaseActivity;
 import com.wotingfm.activity.im.interphone.creategroup.model.GroupRation;
 import com.wotingfm.activity.im.interphone.creategroup.model.UserPortaitInside;
 import com.wotingfm.activity.im.interphone.creategroup.photocut.activity.PhotoCutActivity;

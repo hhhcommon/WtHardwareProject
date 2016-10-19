@@ -7,7 +7,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseactivity.BaseActivity;
+import com.wotingfm.activity.common.baseactivitya.BaseActivity;
 
 /**
  * 注册协议

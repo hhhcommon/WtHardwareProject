@@ -179,7 +179,7 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
-        <!-- 添加好友界面 -->
+        <!-- 添加群组界面 -->
         <activity
             android:name=".activity.im.interphone.find.add.GroupAddActivity"
             android:screenOrientation="portrait"
@@ -273,11 +273,14 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
+        <!--修改密码-->
         <activity
             android:name=".activity.person.modifypassword.activity.ModifyPasswordActivity"
+            android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
         <!-- 反馈建议历史 -->
         <activity

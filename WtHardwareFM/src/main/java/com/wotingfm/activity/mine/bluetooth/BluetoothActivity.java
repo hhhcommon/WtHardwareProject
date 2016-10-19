@@ -25,10 +25,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
+import com.wotingfm.activity.common.baseactivitya.AppBaseActivity;
 import com.wotingfm.activity.mine.bluetooth.adapter.UserBluetoothAdapter;
 import com.wotingfm.activity.mine.bluetooth.model.BluetoothInfo;
 import com.wotingfm.activity.mine.main.MineActivity;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.L;
 
@@ -45,7 +46,6 @@ import java.util.UUID;
  * 蓝牙设置界面
  */
 public class BluetoothActivity extends AppBaseActivity implements View.OnClickListener {
-    private SharedPreferences sharedPreferences;
     private UserBluetoothAdapter userAdapter;
     private DeviceReceiver mDevice = new DeviceReceiver();  // 蓝牙广播
 
@@ -66,7 +66,7 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
     private Button btnSearchDevice;                         // 扫描蓝牙设备
     private Dialog setBluetoothNameDialog;                  // 用户重命名蓝牙名字
 
-    private String newName;                                 // 保存用户对设备设置的心名字
+//    private String newName;                                 // 保存用户对设备设置的心名字
     private boolean hasRegister = false;                    // 标识 是否已注册蓝牙监听广播
     private boolean openDetectionState;                     // 标识 是否为开放检测
     private boolean isScan = true;                          // 是否正在扫描蓝牙
@@ -80,7 +80,6 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
     @Override
     protected void init() {
         setTitle("蓝牙");
-        sharedPreferences = getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
 
         btnSearchDevice = (Button) findViewById(R.id.bluetooth_search);// 搜索蓝牙设备
         btnSearchDevice.setOnClickListener(this);
@@ -94,6 +93,7 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
 
         openDetection = (RelativeLayout) headView.findViewById(R.id.open_detection);// 开放检测
         openDetection.setOnClickListener(this);
+
         imageOpenDetection = (ImageView) headView.findViewById(R.id.image_open_detection);// 开放检测开关
         textOpenDetection = (TextView) headView.findViewById(R.id.text_open_detection);
         textOpenDetectionInfo = (TextView) headView.findViewById(R.id.text_open_detection_info);
@@ -104,11 +104,12 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
 
         headView.findViewById(R.id.device_name_set).setOnClickListener(this);
         headView.findViewById(R.id.bluetooth_set).setOnClickListener(this);// 开启蓝牙
+
         imageBluetoothSet = (ImageView) findViewById(R.id.image_bluetooth_set);
         if (MineActivity.blueAdapter.isEnabled()) {
             imageBluetoothSet.setImageResource(R.mipmap.wt_person_on);
             openDetection.setClickable(true);
-            openDetectionState = sharedPreferences.getBoolean(StringConstant.BLUETOOTH_OPEN_DETECTION_SET, true);// 开放蓝牙检测开关
+            openDetectionState = BSApplication.SharedPreferences.getBoolean(StringConstant.BLUETOOTH_OPEN_DETECTION_SET, true);// 开放蓝牙检测开关
             if(openDetectionState){
                 imageOpenDetection.setImageResource(R.mipmap.wt_person_on);
                 textOpenDetectionInfo.setText("对附近所有的蓝牙设备可见");
@@ -148,14 +149,10 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
             IntentFilter filterStart = new IntentFilter(BluetoothDevice.ACTION_FOUND);
             IntentFilter filterEnd = new IntentFilter(BluetoothAdapter.ACTION_DISCOVERY_FINISHED);
             IntentFilter filter = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
-            IntentFilter filterTime = new IntentFilter(StringConstant.UPDATE_BLUETO0TH_TIME);
-            IntentFilter filterTimeOff = new IntentFilter(StringConstant.UPDATE_BLUETO0TH_TIME_OFF);
             IntentFilter filterBond = new IntentFilter(BluetoothDevice.ACTION_BOND_STATE_CHANGED);
             registerReceiver(mDevice, filter);
             registerReceiver(mDevice, filterStart);
             registerReceiver(mDevice, filterEnd);
-            registerReceiver(mDevice, filterTime);
-            registerReceiver(mDevice, filterTimeOff);
             registerReceiver(mDevice, filterBond);
         }
         super.onStart();
@@ -170,9 +167,6 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
                 if(userList != null) {
                     userList.clear();
                 }
-//                list.clear();
-//                list.addAll(pairList = findAvalibleDevice());
-//                userAdapter.setList(list);
                 btnSearchDevice.setText("正在扫描附近蓝牙设备...");
                 btnSearchDevice.setClickable(false);
                 break;
@@ -180,10 +174,12 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
                 if (MineActivity.blueAdapter.isEnabled()) {
                     MineActivity.blueAdapter.cancelDiscovery();// 停止蓝牙搜索
                     MineActivity.blueAdapter.disable();// 关闭蓝牙
-                    SharedPreferences.Editor et = sharedPreferences.edit();
+                    SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
                     imageBluetoothSet.setImageResource(R.mipmap.wt_person_close);
                     et.putBoolean(StringConstant.BLUETOOTH_SET, false);
-                    et.commit();
+                    if(!et.commit()) {
+                        L.w("数据 commit 失败!");
+                    }
                     openDetection.setClickable(false);
                     imageOpenDetection.setImageResource(R.mipmap.wt_person_close);
                 } else {
@@ -191,11 +187,13 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
                 }
                 break;
             case R.id.open_detection:// 开放检测
-                SharedPreferences.Editor et = sharedPreferences.edit();
+                SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
                 if(openDetectionState){
                     imageOpenDetection.setImageResource(R.mipmap.wt_person_close);
                     et.putBoolean(StringConstant.BLUETOOTH_OPEN_DETECTION_SET, false);
-                    et.commit();
+                    if(!et.commit()) {
+                        L.w("数据 commit 失败!");
+                    }
                     textOpenDetectionInfo.setText("仅让已配对的蓝牙设备可见");
                     textOpenDetectionTime.setVisibility(View.GONE);
                 } else {
@@ -204,7 +202,9 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
                     startActivity(intentOpen);
                     imageOpenDetection.setImageResource(R.mipmap.wt_person_on);
                     et.putBoolean(StringConstant.BLUETOOTH_OPEN_DETECTION_SET, true);
-                    et.commit();
+                    if(!et.commit()) {
+                        L.w("数据 commit 失败!");
+                    }
                     textOpenDetectionInfo.setText("对附近所有的蓝牙设备可见");
                     textOpenDetectionTime.setVisibility(View.VISIBLE);
                 }
@@ -228,7 +228,7 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
         dialog.findViewById(R.id.btn_confirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                newName = editNewName.getText().toString();
+                String newName = editNewName.getText().toString();
                 if(!TextUtils.isEmpty(newName.trim())) {
                     MineActivity.blueAdapter.setName(newName);
                     textBluetoothName.setText(newName);
@@ -253,7 +253,7 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
             MineActivity.blueAdapter.enable(); // 直接开启，不经过提示
             imageBluetoothSet.setImageResource(R.mipmap.wt_person_on);
             openDetection.setClickable(true);
-            openDetectionState = sharedPreferences.getBoolean(StringConstant.BLUETOOTH_OPEN_DETECTION_SET, true);
+            openDetectionState = BSApplication.SharedPreferences.getBoolean(StringConstant.BLUETOOTH_OPEN_DETECTION_SET, true);
             if(openDetectionState){
                 imageOpenDetection.setImageResource(R.mipmap.wt_person_on);
                 Intent intentOpen = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);// 使蓝牙设备可见，方便配对
@@ -287,9 +287,11 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
                     list.clear();
                     userAdapter.notifyDataSetChanged();
                 } else if(MineActivity.blueAdapter.getState() == BluetoothAdapter.STATE_ON){
+                    MineActivity.blueAdapter.startDiscovery();
                     imageBluetoothSet.setImageResource(R.mipmap.wt_person_on);
                     openDetection.setClickable(true);
-                    openDetectionState = sharedPreferences.getBoolean(StringConstant.BLUETOOTH_OPEN_DETECTION_SET, true);// 开放蓝牙检测开关
+                    // 开放蓝牙检测开关
+                    openDetectionState = BSApplication.SharedPreferences.getBoolean(StringConstant.BLUETOOTH_OPEN_DETECTION_SET, true);
                     if(openDetectionState){
                         imageOpenDetection.setImageResource(R.mipmap.wt_person_on);
                         textOpenDetectionInfo.setText("对附近所有的蓝牙设备可见");
@@ -306,9 +308,7 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
                     list.addAll(pairList = findAvalibleDevice());
                     userAdapter.notifyDataSetChanged();
                 }
-            }
-
-            if(BluetoothDevice.ACTION_FOUND.equals(action)){// 搜索到新设备
+            } else if(BluetoothDevice.ACTION_FOUND.equals(action)){// 搜索到新设备
                 BluetoothDevice btd = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 if (btd.getBondState() != BluetoothDevice.BOND_BONDED) {// 搜索没有配过对的蓝牙设备
                     if(device == null) {
@@ -326,7 +326,7 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
                     isScan = false;
                     btnSearchDevice.setClickable(true);
                     btnSearchDevice.setText("搜索设备");
-                    if(device.size() > 0){ // 存在已经配对过的蓝牙设备
+                    if(device != null && device.size() > 0){ // 存在已经配对过的蓝牙设备
                         Iterator<BluetoothDevice> it = device.iterator();
                         while (it.hasNext()){
                             BluetoothDevice btd = it.next();
@@ -343,9 +343,7 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
                         userAdapter.setList(list);
                     }
                 }
-            }
-
-            if(BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)){
+            } else if(BluetoothDevice.ACTION_BOND_STATE_CHANGED.equals(action)){
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
                 switch (device.getBondState()) {
                     case BluetoothDevice.BOND_BONDING:
@@ -398,13 +396,7 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
         userBluetoothList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(!MineActivity.blueAdapter.isEnabled()) {
-                    return ;
-                }
-                if(isScan) {
-                    return ;
-                }
-                if(list.size() == 0) {
+                if(!MineActivity.blueAdapter.isEnabled() || isScan || list.size() == 0) {
                     return ;
                 }
                 if(position - 1 >= 0) {
@@ -422,7 +414,6 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
                                 list.get(index).setBluetoothType(1);
                             }
                         } catch (Exception e) {
-                            // DisplayMessage("无法配对!");
                             e.printStackTrace();
                         }
                     }
@@ -434,10 +425,7 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
         userAdapter.setListener(new UserBluetoothAdapter.CancelListener() {
             @Override
             public void cancelPair(int p) {
-                if(!MineActivity.blueAdapter.isEnabled()){
-                    return ;
-                }
-                if(isScan) {
+                if(!MineActivity.blueAdapter.isEnabled() || isScan){
                     return ;
                 }
                 try {

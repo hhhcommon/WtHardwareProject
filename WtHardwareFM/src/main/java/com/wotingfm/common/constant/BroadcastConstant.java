@@ -60,5 +60,6 @@ public class BroadcastConstant {
 	//PUSH_NOTIFICATION-----pushnnn
 	public static final String PUSH_NOTIFICATION="PUSH_NOTIFICATION";
 
+    // 更新 WiFi 列表
     public static final String UPDATE_WIFI_LIST = "UPDATE_WIFI_LIST";
 }

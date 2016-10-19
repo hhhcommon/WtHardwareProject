@@ -15,7 +15,7 @@ import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
+import com.wotingfm.activity.common.baseactivitya.AppBaseActivity;
 import com.wotingfm.activity.person.agreement.AgreementActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
@@ -75,10 +75,13 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
 
         mEditTextUserPhone = (EditText) findViewById(R.id.edittext_userphone);  // 输入 手机号
         mEditTextUserPhone.addTextChangedListener(new MyEditListener());
+
         mEditTextName = (EditText) findViewById(R.id.edittext_username);        // 输入 用户名
         mEditTextName.addTextChangedListener(new MyEditListener());
+
         mEditTextPassWord = (EditText) findViewById(R.id.edittext_password);    // 输入 密码
         mEditTextPassWord.addTextChangedListener(new MyEditListener());
+
         mEditTextPassWordT = (EditText) findViewById(R.id.edittext_passwordT);  // 输入 确认密码
         mEditTextPassWordT.addTextChangedListener(new MyEditListener());
 
@@ -168,7 +171,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
     private void checkValue() {
         if (isComplete(1)) {
             dialog = DialogUtils.Dialogph(context, "正在验证手机号");
-            sendRequest();//验证验证码，成功后会执行注册程序
+            sendRequest();// 验证验证码，成功后会执行注册程序
         }
     }
 
