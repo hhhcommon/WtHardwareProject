@@ -255,9 +255,10 @@
         <!-- 登录 -->
         <activity
             android:name=".activity.person.login.activity.LoginActivity"
+            android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
 
         <!-- 注册 -->
         <activity
@@ -270,9 +271,10 @@
         <!-- 忘记密码 -->
         <activity
             android:name=".activity.person.forgetpassword.activity.ForgetPasswordActivity"
+            android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
 
         <!--修改密码-->
         <activity

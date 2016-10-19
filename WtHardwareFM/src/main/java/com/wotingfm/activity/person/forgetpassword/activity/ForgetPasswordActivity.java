@@ -59,10 +59,11 @@ public class ForgetPasswordActivity extends AppBaseActivity implements OnClickLi
         setTitle("忘记密码");
 
         mEditTextPassWord = (EditText) findViewById(R.id.edittext_password);    // 输入 密码
+        mEditTextPassWord.addTextChangedListener(new MyEditListener());
         mEditTextPassWordT = (EditText) findViewById(R.id.edittext_passwordT);  // 输入确认密码
-
+        mEditTextPassWordT.addTextChangedListener(new MyEditListener());
         editPhoneNum = (EditText) findViewById(R.id.edittext_userphone);        // 输入 手机号
-
+        editPhoneNum.addTextChangedListener(new MyEditListener());
         editYzm = (EditText) findViewById(R.id.et_yzm);                         // 输入 验证码
         editYzm.addTextChangedListener(new MyEditListener());
 
@@ -93,6 +94,34 @@ public class ForgetPasswordActivity extends AppBaseActivity implements OnClickLi
         }
     }
 
+    // 判断数据是否填写完整
+    private boolean isComplete(int type) {
+        verificationCode = editYzm.getText().toString().trim(); // 获取验证码
+        password = mEditTextPassWord.getText().toString().trim(); // 获取密码
+        passwordT = mEditTextPassWordT.getText().toString().trim();// 获取确认密码
+        phoneNum= editPhoneNum.getText().toString().trim();// 获取手机号
+
+        if ("".equalsIgnoreCase(phoneNum) || phoneNum.length() != 11) {
+            if (type == 1) ToastUtils.show_always(context, "请输入正确的手机号码!");
+            return false;
+        } else if (password.length() < 6 || "".equalsIgnoreCase(password)) {
+            if (type == 1) ToastUtils.show_always(context, "新密码格式错误!");
+            return false;
+        } else if (passwordT.length() < 6 || "".equalsIgnoreCase(passwordT)) {
+            if (type == 1) ToastUtils.show_always(context, "确认密码格式错误!");
+            return false;
+        } else if (!passwordT.equalsIgnoreCase(password)) {
+            if (type == 1) ToastUtils.show_always(context, "密码跟确认密码不匹配!");
+            return false;
+        } else if ("".equalsIgnoreCase(verificationCode) || verificationCode.length() != 6) {
+            if (type == 1) ToastUtils.show_always(context, "验证码不正确!");
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+
     // 手机号正确则发送请求获取验证码
     private void checkYzm() {
         phoneNum = editPhoneNum.getText().toString().trim();
@@ -115,36 +144,11 @@ public class ForgetPasswordActivity extends AppBaseActivity implements OnClickLi
 
     // 验证数据的正确性 然后将数据发送到服务器进行验证
     private void checkValue() {
-        if (verifyCode == -1) {
-            ToastUtils.show_always(context, "获取验证码异常!");
-            return;
+        if (isComplete(1)) {
+            dialog = DialogUtils.Dialogph(context, "正在提交数据...");
+            sendRequest();
         }
 
-        verificationCode = editYzm.getText().toString().trim();
-        password = mEditTextPassWord.getText().toString().trim();
-        passwordT = mEditTextPassWordT.getText().toString().trim();
-        if ("".equalsIgnoreCase(phoneNum) || phoneNum.length() != 11) {
-            ToastUtils.show_always(context, "请输入正确的手机号码!");
-            return;
-        }
-        if (password.length() < 6 || "".equalsIgnoreCase(password)) {
-            ToastUtils.show_always(context, "新密码格式错误!");
-            return;
-        }
-        if (passwordT.length() < 6 || "".equalsIgnoreCase(passwordT)) {
-            ToastUtils.show_always(context, "确认密码格式错误!");
-            return;
-        }
-        if (!passwordT.equalsIgnoreCase(password)) {
-            ToastUtils.show_always(context, "密码跟确认密码不匹配!");
-            return;
-        }
-        if ("".equalsIgnoreCase(verificationCode) || verificationCode.length() != 6) {
-            ToastUtils.show_always(context, "验证码不正确!");
-            return;
-        }
-        dialog = DialogUtils.Dialogph(context, "正在提交数据...");
-        sendRequest();
     }
 
     // 提交数据到服务器进行验证
@@ -263,6 +267,17 @@ public class ForgetPasswordActivity extends AppBaseActivity implements OnClickLi
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                if (isComplete(2)) {
+                    if (verifyCode == -1) {
+                        ToastUtils.show_always(context, "请点击获取验证码，获取验证码信息");
+                    } else {
+                        textNext.setVisibility(View.GONE);
+                        mTextConfirm.setVisibility(View.VISIBLE);
+                    }
+                } else {
+                    mTextConfirm.setVisibility(View.GONE);
+                    textNext.setVisibility(View.VISIBLE);
+                }
             }
 
             @Override
@@ -366,9 +381,13 @@ public class ForgetPasswordActivity extends AppBaseActivity implements OnClickLi
 
         @Override
         public void afterTextChanged(Editable s) {
-            if (s != null && s.length() == 6) {
-                textNext.setVisibility(View.GONE);
-                mTextConfirm.setVisibility(View.VISIBLE);
+            if (isComplete(2)) {
+                if (verifyCode == -1) {
+                    ToastUtils.show_always(context, "请点击获取验证码，获取验证码信息");
+                } else {
+                    textNext.setVisibility(View.GONE);
+                    mTextConfirm.setVisibility(View.VISIBLE);
+                }
             } else {
                 mTextConfirm.setVisibility(View.GONE);
                 textNext.setVisibility(View.VISIBLE);

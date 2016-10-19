@@ -25,7 +25,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
 
@@ -34,7 +34,6 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/wt_login_default_margin_left"
                     android:layout_marginRight="@dimen/wt_login_default_margin_right"
-
                     android:gravity="left|center"
                     android:orientation="horizontal"
                     android:padding="5dip">
@@ -71,7 +70,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/wt_login_default_margin_left"
                     android:layout_marginRight="@dimen/wt_login_default_margin_right"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="5dp"
                     android:gravity="left|center"
                     android:orientation="horizontal"
                     android:padding="5dip">
@@ -107,7 +106,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/wt_login_default_margin_left"
                     android:layout_marginRight="@dimen/wt_login_default_margin_right"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="5dp"
                     android:gravity="left|center"
                     android:orientation="horizontal"
                     android:padding="5dip">
@@ -144,7 +143,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/wt_login_default_margin_left"
                     android:layout_marginRight="@dimen/wt_login_default_margin_right"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="5dp"
                     android:gravity="left|center"
                     android:orientation="horizontal"
                     android:padding="5dip">
@@ -181,7 +180,7 @@
                     android:layout_height="50dp"
                     android:layout_marginLeft="@dimen/wt_login_default_margin_left"
                     android:layout_marginRight="@dimen/wt_login_default_margin_right"
-                    android:layout_marginTop="15dp"
+                    android:layout_marginTop="5dp"
                     android:orientation="horizontal"
                     android:padding="5dp">
 
@@ -281,7 +280,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="10dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="5dp"
                 android:gravity="left|center"
                 android:orientation="horizontal">
 
@@ -299,14 +298,12 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="2dp"
                         android:gravity="center"
                         android:orientation="horizontal">
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="8dp"
                             android:gravity="center"
                             android:text="我已同意"
                             android:textColor="@color/black"
@@ -323,7 +320,6 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="0.5dp"
-                        android:layout_marginLeft="8dp"
                         android:layout_marginTop="1dp"
                         android:background="@color/black" />
                 </LinearLayout>

@@ -140,7 +140,7 @@
             android:layout_height="0.5dp"
             android:background="@color/view_color" />
 
-        <RelativeLayout
+             <RelativeLayout
             android:id="@+id/listener_set"
             android:layout_width="match_parent"
             android:layout_height="56dp"
@@ -159,19 +159,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="14dp"
-                android:layout_marginTop="8dp"
-                android:text="我听调频设置"
+                android:layout_centerVertical="true"
+                android:text="调频"
                 android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/text_listener_info"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="8dp"
-                android:layout_marginLeft="14dp"
-                android:text="将我听与车载调频到同一空白频率下"
-                android:textSize="13sp" />
 
             <ImageView
                 android:id="@+id/image_listener_frequency"
