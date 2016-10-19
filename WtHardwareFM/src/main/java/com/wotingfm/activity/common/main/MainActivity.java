@@ -451,6 +451,7 @@ public class MainActivity extends TabActivity {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
         unregisterReceiver(endApplicationBroadcast);    // 取消注册广播
+//        BSApplication.onStop();
         Log.v("--- Main ---", "--- 杀死进程 ---");
         //		ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         //		manager.killBackgroundProcesses("com.woting");

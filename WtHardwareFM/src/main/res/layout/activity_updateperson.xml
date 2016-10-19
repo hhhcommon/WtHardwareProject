@@ -24,6 +24,7 @@
             android:background="@drawable/person_color"
             android:clickable="true"
             android:gravity="left|center"
+            android:visibility="gone"
             android:orientation="horizontal">
 
             <TextView

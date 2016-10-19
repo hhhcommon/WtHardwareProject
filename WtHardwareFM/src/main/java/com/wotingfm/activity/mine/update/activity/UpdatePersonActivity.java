@@ -67,11 +67,11 @@ public class UpdatePersonActivity extends AppBaseActivity implements OnClickList
         textGender = (TextView) findViewById(R.id.tv_gender);           // 性别
         textPhoneNumber = (TextView) findViewById(R.id.tv_phone_number);// 手机号码
 
-        String userName = BSApplication.SharedPreferences.getString(StringConstant.USERNAME, "");                   // 用户名
+        String userName = BSApplication.SharedPreferences.getString(StringConstant.USERNAME, "");       // 用户名
         TextView textName = (TextView) findViewById(R.id.tv_name);
         textName.setText(userName);
 
-        String userId = BSApplication.SharedPreferences.getString(StringConstant.USERID, "");                       // 用户ID
+        String userId = BSApplication.SharedPreferences.getString(StringConstant.USERID, "");           // 用户ID
         TextView textUserId = (TextView) findViewById(R.id.tv_zhanghu);
         textUserId.setText(userId);
     }
@@ -79,7 +79,7 @@ public class UpdatePersonActivity extends AppBaseActivity implements OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-        String phoneNumber = BSApplication.SharedPreferences.getString(StringConstant.PHONENUMBER, "13012345678");  // 用户手机号
+        String phoneNumber = BSApplication.SharedPreferences.getString(StringConstant.PHONENUMBER, ""); // 用户手机号
         textPhoneNumber.setText(phoneNumber);
     }
 

@@ -197,7 +197,7 @@ public class RecommendFragment extends Fragment{
 	private JSONObject setParam(){
 		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
-			jsonObject.put("UserId", CommonUtils.getUserId(context));
+//			jsonObject.put("UserId", CommonUtils.getUserId(context));
 			jsonObject.put("MediaType", "");
 			jsonObject.put("CatalogType", RadioListActivity.categoryType);
 			jsonObject.put("CatalogId", RadioListActivity.id);
@@ -267,9 +267,7 @@ public class RecommendFragment extends Fragment{
 		});
 	}
 
-	/**
-	 * 设置刷新、加载更多参数
-	 */
+	// 设置刷新、加载更多参数
 	private void setListener() {
         mListView.setPullLoadEnable(true);
         mListView.setPullRefreshEnable(true);

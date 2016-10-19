@@ -304,14 +304,16 @@ public class WIFIActivity extends AppBaseActivity implements View.OnClickListene
                     @Override
                     public void run() {
                         mWifiInfo = MineActivity.wifiManager.getConnectionInfo();
-                        adapter.setList(scanResultList = MineActivity.wifiManager.getScanResults());
+                        scanResultList = MineActivity.wifiManager.getScanResults();
+                        adapter.setList(scanResultList);
+                        L.i("scanResultList.size() --- > > " + scanResultList.size()+"");
                         if(openWiFiDialog != null) {
                             openWiFiDialog.dismiss();
                         }
                         L.v(mWifiInfo.toString());
                     }
                 }, 2000L);// 等待扫描完成后显示列表
-                L.i("scanResultList.size() --- > > " + scanResultList.size());
+
             }
             if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(intent.getAction())) {// 这个监听wifi的打开与关闭，与wifi的连接无关
                 int wifiState = intent.getIntExtra(WifiManager.EXTRA_WIFI_STATE, 0);

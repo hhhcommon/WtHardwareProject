@@ -608,7 +608,7 @@ public class MineActivity extends Activity implements OnClickListener {
     private void clearCacheDialog() {
         View dialog = LayoutInflater.from(this).inflate(R.layout.dialog_exit_confirm, null);
         TextView textTitle = (TextView) dialog.findViewById(R.id.tv_title);
-        textTitle.setText("是否删除本地存储缓存");
+        textTitle.setText("是否删除本地存储缓存？");
         TextView textConfirm = (TextView) dialog.findViewById(R.id.tv_confirm);
         textConfirm.setOnClickListener(this);
         TextView textCancel = (TextView) dialog.findViewById(R.id.tv_cancle);
@@ -729,15 +729,15 @@ public class MineActivity extends Activity implements OnClickListener {
                 if (msg.what == 1) {
                     ToastUtils.show_always(MineActivity.this, "保存成功");
                     Editor et = BSApplication.SharedPreferences.edit();
-                    String imageurl;
+                    String imageUrl;
                     if (MiniUri.startsWith("http:")) {
-                        imageurl = MiniUri;
+                        imageUrl = MiniUri;
                     } else {
-                        imageurl = GlobalConfig.imageurl + MiniUri;
+                        imageUrl = GlobalConfig.imageurl + MiniUri;
                     }
-                    et.putString(StringConstant.IMAGEURL, imageurl);
+                    et.putString(StringConstant.IMAGEURL, imageUrl);
                     // 正常切可用代码 已从服务器获得返回值，但是无法正常显示
-                    imageLoader.DisplayImage(imageurl.replace("\\", "/"), userHead, false, false, null, null);
+                    imageLoader.DisplayImage(imageUrl.replace("\\", "/"), userHead, false, false, null, null);
                 } else if (msg.what == 0) {
                     ToastUtils.show_always(context, "头像保存失败，请稍后再试");
                 } else if (msg.what == -1) {
@@ -953,6 +953,7 @@ public class MineActivity extends Activity implements OnClickListener {
                     ToastUtils.show_always(MineActivity.this, "再按一次退出");
                     touchTime = currentTime;
                 } else {
+                    BSApplication.onStop();
                     MobclickAgent.onKillProcess(this);
                     finish();
                     android.os.Process.killProcess(android.os.Process.myPid());

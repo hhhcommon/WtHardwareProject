@@ -26,9 +26,9 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.xlistview.XListView;
-import com.wotingfm.widget.xlistview.XListView.IXListViewListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -50,13 +50,17 @@ public class RecommendLikeListActivity extends AppBaseActivity {
 	protected List<RankInfo> subList;
 
 	private SearchPlayerHistoryDao dbDao;	// 数据库
-	private String returnType;
-	private String tag = "RECOMMENDLIKE_VOLLEY_REQUEST_CANCEL_TAG";
+	private String tag = "RECOMMEND_LIKE_VOLLEY_REQUEST_CANCEL_TAG";
 	private boolean isCancelRequest;
 	private int pageSize;
     private int page = 1;					// 页码
     private int refreshType = 1;		    // refreshType 1为下拉加载 2为上拉加载更多
     private int pageSizeNum;
+
+    // 初始化数据库命令执行对象
+    private void initDao() {
+        dbDao = new SearchPlayerHistoryDao(context);
+    }
 
     @Override
     protected int setViewId() {
@@ -67,50 +71,51 @@ public class RecommendLikeListActivity extends AppBaseActivity {
     protected void init() {
         setTitle("猜你喜欢");
         initDao();
+        initListView();
+
+        dialog = DialogUtils.Dialogph(context, "正在获取数据...");
+        sendRequest();
+    }
+
+    // 初始化控件
+    private void initListView() {
         mListView = (XListView) findViewById(R.id.listview_fm);
         mListView.setPullLoadEnable(true);
         mListView.setPullRefreshEnable(true);
         mListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-        mListView.setXListViewListener(new IXListViewListener() {
+        mListView.setXListViewListener(new XListView.IXListViewListener() {
             @Override
             public void onRefresh() {
-                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    refreshType = 1;
-                    page = 1;
-                    sendRequest();
-                } else {
-                    ToastUtils.show_short(context, "网络失败，请检查网络");
-                }
+                refreshType = 1;
+                page = 1;
+                sendRequest();
             }
 
             @Override
             public void onLoadMore() {
                 if (page <= pageSizeNum) {
-                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                        refreshType = 2;
-                        sendRequest();
-                        ToastUtils.show_short(context, "正在请求" + page + "页信息");
-                    } else {
-                        ToastUtils.show_short(context, "网络失败，请检查网络");
-                    }
+                    refreshType = 2;
+                    sendRequest();
+                    ToastUtils.show_always(context, "正在请求" + page + "页信息");
                 } else {
                     mListView.stopLoadMore();
-                    ToastUtils.show_short(context, "已经没有最新的数据了");
+                    ToastUtils.show_always(context, "已经没有最新的数据了");
                 }
             }
         });
-
-        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            dialog = DialogUtils.Dialogph(context, "正在获取数据...");
-            sendRequest();
-        } else {
-            ToastUtils.show_short(context, "网络连接失败，请稍后重试!");
-        }
     }
 
     // 请求网络数据 获取列表
 	private void sendRequest(){
+        // 以下操作需要网络支持
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            ToastUtils.show_always(context, "网络连接失败，请稍后重试!");
+            return ;
+        }
+
 		VolleyRequest.RequestPost(GlobalConfig.getContentUrl, tag, setParam(), new VolleyCallback() {
+            String returnType;
+
 			@Override
 			protected void requestSuccess(JSONObject result) {
 				if (dialog != null) {
@@ -122,75 +127,63 @@ public class RecommendLikeListActivity extends AppBaseActivity {
 				page++;
 				try {
                     returnType = result.getString("ReturnType");
-				} catch (JSONException e) {
+                    L.v("returnType -- > > " + returnType);
+                } catch (JSONException e) {
 					e.printStackTrace();
 				}
-				if (returnType != null) {
-					if (returnType.equals("1001")) {
-						try {
-							JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
-                            subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
-							String pageSizeString = arg1.getString("PageSize");
-							String AllCount = arg1.getString("AllCount");
-                            pageSizeNum = Integer.valueOf(pageSizeString);
-							if(Integer.valueOf(pageSizeString) < 10){
-								mListView.stopLoadMore();
-								mListView.setPullLoadEnable(false);
-							}else{
-								mListView.setPullLoadEnable(true);
-							}
-							if (AllCount != null && !AllCount.equals("") && pageSizeString != null && !pageSizeString.equals("")) {
-								int allCount = Integer.valueOf(AllCount);
-								pageSize = Integer.valueOf(pageSizeString);
-								// 先求余 如果等于0 最后结果不加1 如果不等于0 结果加一
-								if (allCount % pageSize == 0) {
-                                    pageSizeNum = allCount / pageSize;
-								} else {
-                                    pageSizeNum = allCount / pageSize + 1;
-								}
-							} else {
-								ToastUtils.show_always(context, "页码获取异常");
-							}
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
-						if (refreshType == 1) {
-                            newList.clear();
-                            newList.addAll(subList);
-							if (adapterLikeList == null) {
-								adapterLikeList = new RecommendListAdapter(context, newList, false);
-								mListView.setAdapter(adapterLikeList);
-							} else {
-								adapterLikeList.notifyDataSetChanged();
-							}
-							mListView.stopRefresh();
-						} else if (refreshType == 2) {
-							mListView.stopLoadMore();
-                            newList.addAll(subList);
-							adapterLikeList.notifyDataSetChanged();
-						}
-                        setOnItem();
-					} else {
-						if (returnType.equals("0000")) {
-							ToastUtils.show_short(context, "无法获取相关的参数");
-						} else if (returnType.equals("1002")) {
-							ToastUtils.show_short(context, "无此分类信息");
-						} else if (returnType.equals("1003")) {
-							ToastUtils.show_short(context, "无法获得列表");
-						} else if (returnType.equals("1011")) {
-							ToastUtils.show_short(context, "列表为空");
-						}
-
-						// 无论何种返回值，都需要终止掉上拉刷新及下拉加载的滚动状态
-						if (refreshType == 1) {
-							mListView.stopRefresh();
-						} else {
-							mListView.stopLoadMore();
-						}
-					}
+				if (returnType != null && returnType.equals("1001")) {
+                    try {
+                        JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
+                        subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
+                        String pageSizeString = arg1.getString("PageSize");
+                        String allCountString = arg1.getString("AllCount");
+                        pageSizeNum = Integer.valueOf(pageSizeString);
+                        if(Integer.valueOf(pageSizeString) < 10){
+                            mListView.stopLoadMore();
+                            mListView.setPullLoadEnable(false);
+                        }else{
+                            mListView.setPullLoadEnable(true);
+                        }
+                        if (allCountString != null && !allCountString.equals("") && pageSizeString != null && !pageSizeString.equals("")) {
+                            int allCountInt = Integer.valueOf(allCountString);
+                            pageSize = Integer.valueOf(pageSizeString);
+                            // 先求余 如果等于0 最后结果不加1 如果不等于0 结果加一
+                            if (allCountInt % pageSize == 0) {
+                                pageSizeNum = allCountInt / pageSize;
+                            } else {
+                                pageSizeNum = allCountInt / pageSize + 1;
+                            }
+                        } else {
+                            ToastUtils.show_always(context, "页码获取异常");
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    if (refreshType == 1) {
+                        newList.clear();
+                        newList.addAll(subList);
+                        if (adapterLikeList == null) {
+                            mListView.setAdapter(adapterLikeList = new RecommendListAdapter(context, newList, false));
+                        } else {
+                            adapterLikeList.notifyDataSetChanged();
+                        }
+                        mListView.stopRefresh();
+                    } else if (refreshType == 2) {
+                        mListView.stopLoadMore();
+                        newList.addAll(subList);
+                        adapterLikeList.notifyDataSetChanged();
+                    }
+                    setOnItem();
 				} else {
-					ToastUtils.show_short(context, "数据返回失败");
-				}
+                    ToastUtils.show_always(context, "暂无数据");
+                }
+
+                // 无论何种返回值，都需要终止掉上拉刷新及下拉加载的滚动状态
+                if (refreshType == 1) {
+                    mListView.stopRefresh();
+                } else {
+                    mListView.stopLoadMore();
+                }
 			}
 			
 			@Override
@@ -286,11 +279,6 @@ public class RecommendLikeListActivity extends AppBaseActivity {
 		}
 	}
 
-    // 初始化数据库命令执行对象
-    private void initDao() {
-        dbDao = new SearchPlayerHistoryDao(context);
-    }
-
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -299,14 +287,11 @@ public class RecommendLikeListActivity extends AppBaseActivity {
 		dialog = null;
 		newList = null;
         subList = null;
-		context = null;
-        returnType = null;
 		adapterLikeList = null;
 		tag = null;
 		if(dbDao != null){
             dbDao.closedb();
             dbDao = null;
 		}
-		setContentView(R.layout.activity_null);
 	}
 }

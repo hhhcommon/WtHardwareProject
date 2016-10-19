@@ -11,314 +11,320 @@
         android:id="@+id/include_title"
         layout="@layout/base_activity_title" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <ScrollView
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:background="@color/WHITE"
-        android:orientation="vertical">
+        android:scrollbars="none">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/wt_login_default_margin_left"
-                android:layout_marginRight="@dimen/wt_login_default_margin_right"
-
-                android:gravity="left|center"
-                android:orientation="horizontal"
-                android:padding="5dip">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="账        号"
-                    android:textSize="16sp" />
-
-
-                <EditText
-                    android:id="@+id/edittext_userphone"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/wt_edittext_default_high"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_edittext_normal"
-                    android:ems="10"
-                    android:gravity="left|center"
-                    android:hint="请输入手机号"
-                    android:inputType="phone"
-                    android:maxLength="11"
-                    android:paddingLeft="10dp"
-                    android:singleLine="true"
-                    android:textColor="@color/wt_login_third"
-                    android:textColorHint="@color/gray"
-                    android:textCursorDrawable="@drawable/wt_edittext_cursor"
-                    android:textSize="@dimen/wt_edittext_default_text"></EditText>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/wt_login_default_margin_left"
-                android:layout_marginRight="@dimen/wt_login_default_margin_right"
-                android:layout_marginTop="15dp"
-                android:gravity="left|center"
-                android:orientation="horizontal"
-                android:padding="5dip">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="用  户  名"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:id="@+id/edittext_username"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/wt_edittext_default_high"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_edittext_normal"
-                    android:ems="10"
-                    android:gravity="left|center"
-                    android:hint="请输入至少3位用户名"
-                    android:maxLength="100"
-                    android:maxLines="1"
-                    android:paddingLeft="10dp"
-                    android:singleLine="true"
-                    android:textColor="@color/wt_login_third"
-                    android:textColorHint="@color/gray"
-                    android:textCursorDrawable="@drawable/wt_edittext_cursor"
-                    android:textSize="@dimen/wt_edittext_default_text"></EditText>
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/wt_login_default_margin_left"
-                android:layout_marginRight="@dimen/wt_login_default_margin_right"
-                android:layout_marginTop="15dp"
-                android:gravity="left|center"
-                android:orientation="horizontal"
-                android:padding="5dip">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="设置密码"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:id="@+id/edittext_password"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/wt_edittext_default_high"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_edittext_normal"
-                    android:ems="10"
-                    android:gravity="left|center"
-                    android:hint="请输入至少6位密码"
-                    android:maxLength="100"
-                    android:maxLines="1"
-                    android:paddingLeft="10dp"
-                    android:password="true"
-                    android:singleLine="true"
-                    android:textColor="@color/wt_login_third"
-                    android:textColorHint="@color/gray"
-                    android:textCursorDrawable="@drawable/wt_edittext_cursor"
-                    android:textSize="@dimen/wt_edittext_default_text" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/wt_login_default_margin_left"
-                android:layout_marginRight="@dimen/wt_login_default_margin_right"
-                android:layout_marginTop="15dp"
-                android:gravity="left|center"
-                android:orientation="horizontal"
-                android:padding="5dip">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="确认密码"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:id="@+id/edittext_passwordT"
-                    android:layout_width="0dp"
-                    android:layout_height="@dimen/wt_edittext_default_high"
-                    android:layout_marginLeft="10dp"
-                    android:layout_weight="1"
-                    android:background="@drawable/bg_edittext_normal"
-                    android:ems="10"
-                    android:gravity="left|center"
-                    android:hint="请再次输入相同密码"
-                    android:maxLength="100"
-                    android:maxLines="1"
-                    android:paddingLeft="10dp"
-                    android:password="true"
-                    android:singleLine="true"
-                    android:textColor="@color/wt_login_third"
-                    android:textColorHint="@color/gray"
-                    android:textCursorDrawable="@drawable/wt_edittext_cursor"
-                    android:textSize="@dimen/wt_edittext_default_text" />
-            </LinearLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginLeft="@dimen/wt_login_default_margin_left"
-                android:layout_marginRight="@dimen/wt_login_default_margin_right"
-                android:layout_marginTop="15dp"
-                android:orientation="horizontal"
-                android:padding="5dp">
-
-                <TextView
-                    android:id="@+id/tv_nameyzm"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentLeft="true"
-                    android:layout_centerInParent="true"
-                    android:text="验  证  码"
-                    android:textSize="16sp" />
-
-                <EditText
-                    android:id="@+id/et_yzm"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/wt_edittext_default_high"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="2dp"
-                    android:layout_toRightOf="@id/tv_nameyzm"
-                    android:background="@drawable/bg_edittext_normal"
-                    android:hint="请输入验证码"
-                    android:inputType="number"
-                    android:maxLength="6"
-                    android:paddingLeft="10dp"
-                    android:textColor="@color/wt_login_third"
-                    android:textColorHint="@color/gray"
-                    android:textCursorDrawable="@drawable/wt_edittext_cursor"
-                    android:textSize="@dimen/wt_edittext_default_text" />
-
-
-                <TextView
-                    android:id="@+id/tv_getyzm"
-                    android:layout_width="80dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:background="@drawable/et_bg_yanzhengma"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="获取验证码"
-                    android:textColor="@color/WHITE"
-                    android:textSize="12sp"
-                    android:visibility="visible" />
-
-                <TextView
-                    android:id="@+id/tv_cxfasong"
-                    android:layout_width="79dp"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:gravity="center"
-                    android:singleLine="true"
-                    android:text="重新发送"
-                    android:textColor="@color/gray"
-                    android:textSize="10sp"
-                    android:visibility="invisible" />
-
-                <TextView
-                    android:layout_width="1dp"
-                    android:layout_height="38dp"
-                    android:layout_toLeftOf="@id/tv_cxfasong"
-                    android:background="@color/gray_z" />
-            </RelativeLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/wt_login_default_margin_left"
-            android:layout_marginRight="@dimen/wt_login_default_margin_right"
-            android:layout_marginTop="15dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/tv_register"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/wt_button_default_high"
-                android:background="@drawable/zhuxiao_press"
-                android:gravity="center"
-                android:text="注 册"
-                android:textColor="@color/WHITE"
-                android:textSize="@dimen/wt_button_default_text"
-                android:visibility="gone" />
-
-            <TextView
-                android:id="@+id/tv_next"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/wt_button_default_high"
-                android:background="@drawable/bg_graybutton"
-                android:gravity="center"
-                android:text="注册"
-                android:textColor="@color/WHITE"
-                android:textSize="@dimen/wt_button_default_text" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/lin_agreement"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="10dp"
-            android:layout_marginTop="15dp"
-            android:gravity="left|center"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/image_all_check" />
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
+                android:layout_marginTop="10dp"
                 android:orientation="vertical">
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/wt_login_default_margin_left"
+                    android:layout_marginRight="@dimen/wt_login_default_margin_right"
+                    android:gravity="left|center"
+                    android:orientation="horizontal"
+                    android:padding="5dip">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="账        号"
+                        android:textSize="16sp" />
+
+
+                    <EditText
+                        android:id="@+id/edittext_userphone"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/wt_edittext_default_high"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_edittext_normal"
+                        android:ems="10"
+                        android:gravity="left|center"
+                        android:hint="请输入手机号"
+                        android:inputType="phone"
+                        android:maxLength="11"
+                        android:paddingLeft="10dp"
+                        android:singleLine="true"
+                        android:textColor="@color/wt_login_third"
+                        android:textColorHint="@color/gray"
+                        android:textCursorDrawable="@drawable/wt_edittext_cursor"
+                        android:textSize="@dimen/wt_edittext_default_text"></EditText>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/wt_login_default_margin_left"
+                    android:layout_marginRight="@dimen/wt_login_default_margin_right"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left|center"
+                    android:orientation="horizontal"
+                    android:padding="5dip">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="用  户  名"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/edittext_username"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/wt_edittext_default_high"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_edittext_normal"
+                        android:ems="10"
+                        android:gravity="left|center"
+                        android:hint="请输入至少3位用户名"
+                        android:maxLength="100"
+                        android:maxLines="1"
+                        android:paddingLeft="10dp"
+                        android:singleLine="true"
+                        android:textColor="@color/wt_login_third"
+                        android:textColorHint="@color/gray"
+                        android:textCursorDrawable="@drawable/wt_edittext_cursor"
+                        android:textSize="@dimen/wt_edittext_default_text"></EditText>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/wt_login_default_margin_left"
+                    android:layout_marginRight="@dimen/wt_login_default_margin_right"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left|center"
+                    android:orientation="horizontal"
+                    android:padding="5dip">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="设置密码"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/edittext_password"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/wt_edittext_default_high"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_edittext_normal"
+                        android:ems="10"
+                        android:gravity="left|center"
+                        android:hint="请输入至少6位密码"
+                        android:maxLength="100"
+                        android:maxLines="1"
+                        android:paddingLeft="10dp"
+                        android:password="true"
+                        android:singleLine="true"
+                        android:textColor="@color/wt_login_third"
+                        android:textColorHint="@color/gray"
+                        android:textCursorDrawable="@drawable/wt_edittext_cursor"
+                        android:textSize="@dimen/wt_edittext_default_text" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/wt_login_default_margin_left"
+                    android:layout_marginRight="@dimen/wt_login_default_margin_right"
+                    android:layout_marginTop="5dp"
+                    android:gravity="left|center"
+                    android:orientation="horizontal"
+                    android:padding="5dip">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="确认密码"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/edittext_passwordT"
+                        android:layout_width="0dp"
+                        android:layout_height="@dimen/wt_edittext_default_high"
+                        android:layout_marginLeft="10dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_edittext_normal"
+                        android:ems="10"
+                        android:gravity="left|center"
+                        android:hint="请再次输入相同密码"
+                        android:maxLength="100"
+                        android:maxLines="1"
+                        android:paddingLeft="10dp"
+                        android:password="true"
+                        android:singleLine="true"
+                        android:textColor="@color/wt_login_third"
+                        android:textColorHint="@color/gray"
+                        android:textCursorDrawable="@drawable/wt_edittext_cursor"
+                        android:textSize="@dimen/wt_edittext_default_text" />
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginLeft="@dimen/wt_login_default_margin_left"
+                    android:layout_marginRight="@dimen/wt_login_default_margin_right"
+                    android:layout_marginTop="5dp"
+                    android:orientation="horizontal"
+                    android:padding="5dp">
+
+                    <TextView
+                        android:id="@+id/tv_nameyzm"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_centerInParent="true"
+                        android:text="验  证  码"
+                        android:textSize="16sp" />
+
+                    <EditText
+                        android:id="@+id/et_yzm"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/wt_edittext_default_high"
+                        android:layout_marginLeft="10dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_toRightOf="@id/tv_nameyzm"
+                        android:background="@drawable/bg_edittext_normal"
+                        android:hint="请输入验证码"
+                        android:inputType="number"
+                        android:maxLength="6"
+                        android:paddingLeft="10dp"
+                        android:textColor="@color/wt_login_third"
+                        android:textColorHint="@color/gray"
+                        android:textCursorDrawable="@drawable/wt_edittext_cursor"
+                        android:textSize="@dimen/wt_edittext_default_text" />
+
+
+                    <TextView
+                        android:id="@+id/tv_getyzm"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/et_bg_yanzhengma"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="获取验证码"
+                        android:textColor="@color/WHITE"
+                        android:textSize="12sp"
+                        android:visibility="visible" />
+
+                    <TextView
+                        android:id="@+id/tv_cxfasong"
+                        android:layout_width="79dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="重新发送"
+                        android:textColor="@color/gray"
+                        android:textSize="10sp"
+                        android:visibility="invisible" />
+
+                    <TextView
+                        android:layout_width="1dp"
+                        android:layout_height="38dp"
+                        android:layout_toLeftOf="@id/tv_cxfasong"
+                        android:background="@color/gray_z" />
+                </RelativeLayout>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/wt_login_default_margin_left"
+                android:layout_marginRight="@dimen/wt_login_default_margin_right"
+                android:layout_marginTop="15dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tv_register"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/wt_button_default_high"
+                    android:background="@drawable/zhuxiao_press"
+                    android:gravity="center"
+                    android:text="注 册"
+                    android:textColor="@color/WHITE"
+                    android:textSize="@dimen/wt_button_default_text"
+                    android:visibility="gone" />
+
+                <TextView
+                    android:id="@+id/tv_next"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/wt_button_default_high"
+                    android:background="@drawable/bg_graybutton"
+                    android:gravity="center"
+                    android:text="注册"
+                    android:textColor="@color/WHITE"
+                    android:textSize="@dimen/wt_button_default_text" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/lin_agreement"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="10dp"
+                android:layout_marginTop="5dp"
+                android:gravity="left|center"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/image_all_check" />
+
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
                     android:gravity="center"
-                    android:orientation="horizontal">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="8dp"
-                    android:gravity="center"
-                    android:text="我已同意"
-                    android:textColor="@color/black"
-                    android:textSize="11sp" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="《我听用户协议》"
-                    android:textColor="@color/black"
-                    android:textSize="10sp" />
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:gravity="center"
+                            android:text="我已同意"
+                            android:textColor="@color/black"
+                            android:textSize="11sp" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="《我听用户协议》"
+                            android:textColor="@color/black"
+                            android:textSize="10sp" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:layout_marginTop="1dp"
+                        android:background="@color/black" />
                 </LinearLayout>
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="0.5dp"
-                    android:layout_marginLeft="8dp"
-                    android:layout_marginTop="1dp"
-                    android:background="@color/black" />
             </LinearLayout>
         </LinearLayout>
-    </LinearLayout>
+    </ScrollView>
 
 </LinearLayout>

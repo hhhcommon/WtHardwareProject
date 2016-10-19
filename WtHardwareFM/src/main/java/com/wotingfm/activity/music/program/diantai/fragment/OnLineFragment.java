@@ -57,7 +57,6 @@ import java.util.List;
 
 /**
  * 电台主页
- *
  * @author 辛龙 2016年2月26日
  */
 public class OnLineFragment extends Fragment implements OnClickListener {
@@ -84,6 +83,11 @@ public class OnLineFragment extends Fragment implements OnClickListener {
     private String cityName;
     private String tag = "ONLINE_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
+
+    // 初始化数据库命令执行对象
+    private void initDao() {
+        dbDao = new SearchPlayerHistoryDao(context);
+    }
 
     @Override
     public void onClick(View v) {
@@ -146,13 +150,12 @@ public class OnLineFragment extends Fragment implements OnClickListener {
             textName = (TextView) headView.findViewById(R.id.tv_name);
             gridView = (GridView) headView.findViewById(R.id.gridView);
 
-            headView.findViewById(R.id.lin_head_more).setOnClickListener(this);
-            headView.findViewById(R.id.lin_country).setOnClickListener(this);// 国家台
-            headView.findViewById(R.id.lin_province).setOnClickListener(this);// 省市台
-            headView.findViewById(R.id.lin_internet).setOnClickListener(this);// 网络台
+            headView.findViewById(R.id.lin_head_more).setOnClickListener(this); // 更多
+            headView.findViewById(R.id.lin_country).setOnClickListener(this);   // 国家台
+            headView.findViewById(R.id.lin_province).setOnClickListener(this);  // 省市台
+            headView.findViewById(R.id.lin_internet).setOnClickListener(this);  // 网络台
 
-            // 取消默认selector
-            gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+            gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));         // 取消默认 selector
             mPullToRefreshLayout = (PullToRefreshLayout) rootView.findViewById(R.id.refresh_view);
             setView();
             listViewMain.addHeaderView(headView);
@@ -166,34 +169,9 @@ public class OnLineFragment extends Fragment implements OnClickListener {
         return rootView;
     }
 
-    class MessageReceiver extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(BroadcastConstant.CITY_CHANGE)) {
-                if (GlobalConfig.CityName != null) {
-                    cityName = GlobalConfig.CityName;
-                }
-                textName.setText(cityName);
-                page = 1;
-                beginCatalogId = "";
-                refreshType = 1;
-                getCity();
-                send();
-                Editor et = BSApplication.SharedPreferences.edit();
-                et.putString(StringConstant.CITYTYPE, "false");
-                if(!et.commit()) {
-                    L.w("数据 commit 失败!");
-                }
-            }
-        }
-
-    }
-
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        // 发送网络请求
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             refreshType = 1;
             beginCatalogId = "";
@@ -206,11 +184,6 @@ public class OnLineFragment extends Fragment implements OnClickListener {
           /*  mPullToRefreshLayout.loadmoreFinish(PullToRefreshLayout.FAIL);*/
             ToastUtils.show_short(context, "网络失败，请检查网络");
         }
-    }
-
-    // 初始化数据库命令执行对象
-    private void initDao() {
-        dbDao = new SearchPlayerHistoryDao(context);
     }
 
     private void setView() {
@@ -280,12 +253,13 @@ public class OnLineFragment extends Fragment implements OnClickListener {
                 }
                 try {
                     returnType = result.getString("ReturnType");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
                     if (returnType != null && returnType.equals("1001")) {
-                        String ResultList = result.getString("ResultList");
-                        JSONTokener jsonParser = new JSONTokener(ResultList);
-                        JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                        String MainList = arg1.getString("List");
-                        mainListS = new Gson().fromJson(MainList, new TypeToken<List<RankInfo>>() {}.getType());
+                        JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
+                        mainListS = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
                         if (adapters == null) {
                             gridView.setAdapter(adapters = new citynewsadapter(context, mainListS));
                         } else {
@@ -493,6 +467,30 @@ public class OnLineFragment extends Fragment implements OnClickListener {
             et.putString(StringConstant.CITYTYPE, "false");
             if(!et.commit()) {
                 L.w("数据 commit 失败!");
+            }
+        }
+    }
+
+    class MessageReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BroadcastConstant.CITY_CHANGE)) {
+                if (GlobalConfig.CityName != null) {
+                    cityName = GlobalConfig.CityName;
+                }
+                textName.setText(cityName);
+                page = 1;
+                beginCatalogId = "";
+                refreshType = 1;
+                getCity();
+                send();
+                Editor et = BSApplication.SharedPreferences.edit();
+                et.putString(StringConstant.CITYTYPE, "false");
+                if(!et.commit()) {
+                    L.w("数据 commit 失败!");
+                }
             }
         }
     }
