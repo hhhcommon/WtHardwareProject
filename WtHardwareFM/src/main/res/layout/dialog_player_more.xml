@@ -7,13 +7,13 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="280dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical" >
         
         <GridView
         android:id="@+id/gv_more"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:layout_gravity="center"
