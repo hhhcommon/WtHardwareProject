@@ -3,12 +3,11 @@ package com.wotingfm.activity.mine.about;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.shenstec.activity.BaseActivity;
+
 import com.wotingfm.R;
-import com.wotingfm.manager.MyActivityManager;
+import com.wotingfm.activity.common.baseactivity.BaseActivity;
 import com.wotingfm.util.PhoneMessage;
 
 /**
@@ -24,26 +23,21 @@ public class AboutActivity extends BaseActivity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_about);
 		context = this;
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		// 透明状态栏
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	// 透明导航栏
-		MyActivityManager mam = MyActivityManager.getInstance();
-		mam.pushOneActivity(context);
-		setview();		//设置界面
+		setView();		//设置界面
 	}
 
 	/**
 	 * 初始化视图
 	 */
-	private void setview() {
+	private void setView() {
 		LinearLayout head_left_btn=(LinearLayout)findViewById(R.id.head_left_btn);	// 返回
 		head_left_btn.setOnClickListener(context);
-		TextView tv_verson=(TextView)findViewById(R.id.tv_verson);					// 版本号
-		tv_verson.setText(PhoneMessage.appVersonName);
+		TextView tv_version=(TextView)findViewById(R.id.tv_verson);					// 版本号
+		tv_version.setText(PhoneMessage.appVersonName);
 	}
 
 	@Override
 	public void onClick(View v) {
-		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.head_left_btn:	// 返回
 			finish();
@@ -54,8 +48,6 @@ public class AboutActivity extends BaseActivity implements OnClickListener {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		MyActivityManager mam = MyActivityManager.getInstance();
-		mam.popOneActivity(context);
 		context = null;
 		setContentView(R.layout.activity_null);
 	}

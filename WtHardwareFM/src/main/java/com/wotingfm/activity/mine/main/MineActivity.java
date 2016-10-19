@@ -142,28 +142,6 @@ public class MineActivity extends Activity implements OnClickListener {
         initCache();
     }
 
-    // 获取蓝牙状态
-    private void getBluetoothState(){
-        if(blueAdapter.isEnabled()){
-            textBluetoothState.setText("打开");
-        } else {
-            textBluetoothState.setText("关闭");
-        }
-    }
-
-    // 登陆状态下 用户设置头像对话框
-    private void imageDialog() {
-        final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_imageupload, null);
-        TextView textGallery = (TextView) dialog.findViewById(R.id.tv_gallery);
-        textGallery.setOnClickListener(this);
-        TextView textCamera = (TextView) dialog.findViewById(R.id.tv_camera);
-        textCamera.setOnClickListener(this);
-        imageDialog = new Dialog(context, R.style.MyDialog);
-        imageDialog.setContentView(dialog);
-        imageDialog.setCanceledOnTouchOutside(true);
-        imageDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-    }
-
     // 设置 view
     private void setView() {
         Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.img_person_background);
@@ -272,7 +250,7 @@ public class MineActivity extends Activity implements OnClickListener {
                     dialog = DialogUtils.Dialogph(context, "通讯中...");
                     sendRequestUpdate();
                 } else {
-                    ToastUtils.show_short(context, "网络失败，请检查网络");
+                    ToastUtils.show_always(context, "网络失败，请检查网络");
                 }
                 break;
             case R.id.cache_set:                // 清除缓存
@@ -317,6 +295,28 @@ public class MineActivity extends Activity implements OnClickListener {
                 startActivity(new Intent(context, FMConnectActivity.class));
                 break;
         }
+    }
+
+    // 获取蓝牙状态
+    private void getBluetoothState(){
+        if(blueAdapter.isEnabled()){
+            textBluetoothState.setText("打开");
+        } else {
+            textBluetoothState.setText("关闭");
+        }
+    }
+
+    // 登陆状态下 用户设置头像对话框
+    private void imageDialog() {
+        final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_imageupload, null);
+        TextView textGallery = (TextView) dialog.findViewById(R.id.tv_gallery);
+        textGallery.setOnClickListener(this);
+        TextView textCamera = (TextView) dialog.findViewById(R.id.tv_camera);
+        textCamera.setOnClickListener(this);
+        imageDialog = new Dialog(context, R.style.MyDialog);
+        imageDialog.setContentView(dialog);
+        imageDialog.setCanceledOnTouchOutside(true);
+        imageDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
     }
 
     // 获取用户的登陆状态   登陆 OR 未登录
@@ -408,18 +408,8 @@ public class MineActivity extends Activity implements OnClickListener {
     // 注销数据交互
     private void sendRequestLogout(){
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
-        try {
-            String userId = BSApplication.SharedPreferences.getString(StringConstant.USERID, "");
-            if (!userId.equals("")) {
-                jsonObject.put("UserId", CommonUtils.getUserId(context));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
         VolleyRequest.RequestPost(GlobalConfig.logoutUrl, tag, jsonObject, new VolleyCallback() {
             private String ReturnType;
-
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) {
@@ -669,12 +659,15 @@ public class MineActivity extends Activity implements OnClickListener {
                     imageNum = 1;
                     Uri uri = data.getData();
                     int sdkVersion = Integer.valueOf(Build.VERSION.SDK);
-                    if (sdkVersion >= 19) {
+                    if (sdkVersion >= 19) {  // 或者 android.os.Build.VERSION_CODES.KITKAT这个常量的值是19
+//					path = uri.getPath();//5.0直接返回的是图片路径 Uri.getPath is ：  /document/image:46 ，5.0以下是一个和数据库有关的索引值
+                        // path_above19:/storage/emulated/0/girl.jpg 这里才是获取的图片的真实路径
                         path = getPath_above19(context, uri);
+                        startPhotoZoom(Uri.parse(path));
                     } else {
                         path = getFilePath_below19(uri);
+                        startPhotoZoom(Uri.parse(path));
                     }
-                    startPhotoZoom(Uri.parse(path));
                 }
                 break;
             case TO_CAMERA:
@@ -786,7 +779,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 } catch (Exception e) {        // 异常处理
                     e.printStackTrace();
                     if (e.getMessage() != null) {
-                        msg.obj = "异常" + e.getMessage();
+                        msg.obj = "异常" + e.getMessage().toString();
                         L.e("图片上传返回值异常", "" + e.getMessage());
                     } else {
                         L.e("图片上传返回值异常", "" + e);

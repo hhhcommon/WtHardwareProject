@@ -1,12 +1,10 @@
 package com.wotingfm.activity.mine.help;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebSettings;
@@ -15,15 +13,15 @@ import android.webkit.WebViewClient;
 import android.widget.LinearLayout;
 
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.BaseActivity;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.DialogUtils;
 /**
  * 帮助--h5
  * @author 辛龙
  *2016年8月8日
  */
-public class HelpActivity extends Activity implements OnClickListener{
+public class HelpActivity extends BaseActivity implements OnClickListener{
 	private WebView webview;
 	private LinearLayout head_left_btn;
 	private String url;
@@ -35,23 +33,19 @@ public class HelpActivity extends Activity implements OnClickListener{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_help);
 		context = this;
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		// 透明状态栏
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	// 透明导航栏
-		MyActivityManager mam = MyActivityManager.getInstance();
-		mam.pushOneActivity(context);
 		dialog = DialogUtils.Dialogph(this, "正在加载");
-		setview();
-		setweb();
+		setView();
+		setWeb();
 	}
 
-	private void setview() {
+	private void setView() {
 		head_left_btn=(LinearLayout)findViewById(R.id.head_left_btn);
 		webview=(WebView)findViewById(R.id.webView);
 		head_left_btn.setOnClickListener(this);
 		webview.setOnClickListener(this);
 	}
 
-	private void setweb() {
+	private void setWeb() {
 		url = GlobalConfig.wthelpUrl;
 		WebSettings setting = webview.getSettings();  
 		setting.setJavaScriptEnabled(true);								//支持js  
@@ -105,8 +99,6 @@ public class HelpActivity extends Activity implements OnClickListener{
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		MyActivityManager mam = MyActivityManager.getInstance();
-		mam.popOneActivity(context);
 		head_left_btn = null;
 		webview = null;
 		context = null;
