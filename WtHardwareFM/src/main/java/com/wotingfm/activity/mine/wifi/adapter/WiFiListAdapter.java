@@ -61,9 +61,11 @@ public class WiFiListAdapter extends BaseAdapter {
         }
         ScanResult result = list.get(position);
         holder.textWiFiName.setText(result.SSID);
-//        holder.textWiFiState.setText(result.get);
         String connWiFiName = MineActivity.wifiManager.getConnectionInfo().getSSID();
-        if(result.SSID.equals(connWiFiName.substring(1, connWiFiName.length() - 1))) {
+        if(connWiFiName.startsWith("\"")) {
+            connWiFiName = connWiFiName.substring(1, connWiFiName.length() - 1);
+        }
+        if(result.SSID.equals(connWiFiName)) {
             holder.textWiFiState.setText("已连接");
             holder.textWiFiName.setTextColor(context.getResources().getColor(R.color.green));
         } else {
