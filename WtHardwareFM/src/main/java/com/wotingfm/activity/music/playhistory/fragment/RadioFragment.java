@@ -2,6 +2,7 @@ package com.wotingfm.activity.music.playhistory.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,10 +13,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.wotingfm.R;
+import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
+import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.playhistory.activity.PlayHistoryActivity;
 import com.wotingfm.activity.music.playhistory.adapter.PlayHistoryAdapter;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.ToastUtils;
 
@@ -191,22 +195,20 @@ public class RadioFragment extends Fragment{
                         dbDao.deleteHistory(playerurl);
                         dbDao.addHistory(history);
 						
-//						if(PlayerFragment.context != null){
-//							MainActivity.change();
-//							HomeActivity.UpdateViewPager();
-//							String s = playList.get(position).getPlayerName();
-//							PlayerFragment.SendTextRequest(s, context);
-//							getActivity().finish();
-//						}else{
-//							SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
-//							Editor et = sp.edit();
-//							et.putString(StringConstant.PLAYHISTORYENTER, "true");
-//							et.putString(StringConstant.PLAYHISTORYENTERNEWS, subList.get(position).getPlayerName());
-//							et.commit();
-//							MainActivity.change();
-//							HomeActivity.UpdateViewPager();
-//							getActivity().finish();
-//						}
+						if(PlayerFragment.context != null){
+						    HomeActivity.UpdateViewPager();
+							String s = playList.get(position).getPlayerName();
+							PlayerFragment.SendTextRequest(s, context);
+							getActivity().finish();
+						}else{
+							SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
+						    SharedPreferences.Editor et = sp.edit();
+						    et.putString(StringConstant.PLAYHISTORYENTER, "true");
+							et.putString(StringConstant.PLAYHISTORYENTERNEWS, playList.get(position).getPlayerName());
+							et.commit();
+							HomeActivity.UpdateViewPager();
+							getActivity().finish();
+						}
 					}
 				}
 			}

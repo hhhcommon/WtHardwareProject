@@ -78,7 +78,6 @@ import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.helper.CommonHelper;
 import com.wotingfm.helper.ImageLoader;
 import com.wotingfm.service.timeroffservice;
-import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.PlayermoreUtil;
@@ -146,7 +145,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     protected String sequdesc;
     private int stepVolume;
     private int curVolume;
-    private Bitmap bmppresss;
     private Bitmap bmp;
     private int screenw;
     // 其它
@@ -156,8 +154,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private Dialog shareDialog;
     private Dialog dialog1;
     private static Handler mHandler;
-    // 标识参数
-    public static int JudgeTextRequest = -1;
     private static int sendtype;// 第一次获取数据是有分页加载的
     private int page = 1;
     private int RefreshType;// 是不是第一次请求数据
@@ -171,7 +167,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private GridView gv_more;
     private Dialog moredialog;
     private LinearLayout lin_more;
-    private LinearLayout lin_sequ;
+    private static LinearLayout lin_sequ;
     private static TextView tv_like;
     private final static int TIME_UI = 10;
     private final static int VOICE_UI = 11;
@@ -183,14 +179,16 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private static String playmtype;// 当前播放的媒体类型
     private Boolean IsSequ=false;
     private static List<PlayerHistory> historydatabaselist;
+    private static LinearLayout lin_schedule;
+    private static int moreType=1;//1为非电台类节目 0为电台节目 对应更多按钮弹出的不同布局而定
+    private List<sharemodel> mylist;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this.getActivity();
         imageLoader = new ImageLoader(context);
-        bmppresss = BitmapUtils.readBitMap(context, R.mipmap.wt_duijiang_button_pressed);
-        bmp = BitmapUtils.readBitMap(context, R.mipmap.talknormal);
         RefreshType = 0;
         if (Receiver == null) {
             Receiver = new MessageReceiver();
@@ -208,8 +206,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
         // 初始化语音配置对象
         SpeechUtility.createUtility(context, SpeechConstant.APPID + "=56275014");
-        // 创建SpeechRecognizer对象，第二个参数：本地听写时传InitListener
-        //mVoiceRecognizer=VoiceRecognizer.getInstance(context,BroadcastConstants.PLAYERVOICE);
         initDao();// 初始化数据库命令执行对象
         UMShareAPI.get(context);// 初始化友盟
         audioMgr = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
@@ -226,12 +222,49 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         setListener(); // 设置监听
         WifiDialog(); // wifi提示dialog
         shareDialog(); // 分享dialog
-        moreDialog();//更多
         return rootView;
     }
 
 
     private void callMore(int position) {
+        if(moreType==0){
+            //电台调用
+            switch (position){
+                case 0://定时关闭
+                    startActivity(new Intent(context,TimerPowerOffActivity.class));
+                    break;
+                case 1://播放历史
+                    startActivity(new Intent(context,PlayHistoryActivity.class));
+                    break;
+                case 2://我喜欢的
+                    startActivity(new Intent(context,FavoriteActivity.class));
+                    break;
+                case 3://预定节目单
+                   /* startActivity(new Intent(context,TimerPowerOffActivity.class));*/
+                    ToastUtils.show_always(context,"节目单");
+                    break;
+                case 4://实时路况
+                    if (audioplay == null) {
+                        audioplay = TtsPlayer.getInstance(context);
+                    } else {
+                        // 不为空
+                        if (audioplay.mark().equals("VLC")) {
+                            audioplay.pause();
+                        }
+                        audioplay = TtsPlayer.getInstance(context);
+                    }
+                    ToastUtils.show_always(context, "点击了路况TTS按钮");
+                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                        dialogs = DialogUtils.Dialogph(context, "通讯中");
+                        getLuKuangTTS();// 获取路况数据播报
+                    } else {
+                        ToastUtils.show_always(context, "网络连接失败，请稍后重试");
+                    }
+                    break;
+            }
+
+        }else{
+            //节目类调用
         switch(position){
             case 0://定时关闭
                 startActivity(new Intent(context,TimerPowerOffActivity.class));
@@ -389,6 +422,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 break;
 
         }
+        }
     }
 
     private void setView() {
@@ -406,6 +440,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         img_play = (ImageView) headview.findViewById(R.id.img_play);
         lin_more= (LinearLayout) headview.findViewById(R.id.lin_more);//更多
         lin_sequ= (LinearLayout) headview.findViewById(R.id.lin_sequ);//专辑
+        lin_schedule=(LinearLayout) headview.findViewById(R.id.lin_schedule);//节目单
         lin_left = (LinearLayout) headview.findViewById(R.id.lin_left);
         tv_name = (TextView) headview.findViewById(R.id.tv_name);
         seekBar = (SeekBar) headview.findViewById(R.id.seekBar);
@@ -435,6 +470,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         lin_share.setOnClickListener(this);
         lin_more.setOnClickListener(this);
         lin_sequ.setOnClickListener(this);
+        lin_schedule.setOnClickListener(this);
 
         imageView_voice.setOnTouchListener(new OnTouchListener() {
             @Override
@@ -634,7 +670,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     }
                     audioplay = VlcPlayer.getInstance(context);
                 }
-                if (alllist.get(number).getContentPlay() != null) {
+                if (alllist.get(number)!= null&&alllist.get(number).getContentPlay() != null) {
                     img_play.setImageResource(R.mipmap.wt_play_play);
                     if (alllist.get(number).getContentName() != null) {
                         tv_name.setText(alllist.get(number).getContentName());
@@ -663,7 +699,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     } else {
                         musicPlay(alllist.get(number).getContentPlay());
                     }
-
                     GlobalConfig.playerobject = alllist.get(number);
                     resetHeadView();
                     num = number;
@@ -671,8 +706,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     ToastUtils.show_short(context, "暂不支持播放");
                 }
             } else if (playmtype.equals("TTS")) {
-                if (alllist.get(number).getContentURI() != null
-                        && alllist.get(number).getContentURI().trim().length() > 0) {
+                if (alllist.get(number)!= null && alllist.get(number).getContentURI() != null &&alllist.get(number).getContentURI().trim().length() > 0) {
                     if (audioplay == null) {
                         audioplay = TtsPlayer.getInstance(context);
                     } else {
@@ -683,31 +717,37 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                         audioplay = TtsPlayer.getInstance(context);
                     }
                     img_play.setImageResource(R.mipmap.wt_play_play);
-                    if (alllist.get(number).getContentName() != null) {
-                        tv_name.setText(alllist.get(number).getContentName());
-                    } else {
-                        tv_name.setText("wotingkeji");
-                    }
-                    if (alllist.get(number).getContentImg() != null) {
-                        String url;
-                        if (alllist.get(number).getContentImg().startsWith("http")) {
-                            url = alllist.get(number).getContentImg();
+                    if(alllist.get(number)!=null){
+                        if (alllist.get(number).getContentName() != null) {
+                            tv_name.setText(alllist.get(number).getContentName());
                         } else {
-                            url = GlobalConfig.imageurl + alllist.get(number).getContentImg();
+                            tv_name.setText("wotingkeji");
                         }
-                        imageLoader.DisplayImage(url.replace("\\/", "/"), img_news, false, false, null, null);
-                    } else {
-                        img_news.setImageResource(R.mipmap.wt_image_playertx);
+                        if (alllist.get(number).getContentImg() != null) {
+                            String url;
+                            if (alllist.get(number).getContentImg().startsWith("http")) {
+                                url = alllist.get(number).getContentImg();
+                            } else {
+                                url = GlobalConfig.imageurl + alllist.get(number).getContentImg();
+                            }
+                            imageLoader.DisplayImage(url.replace("\\/", "/"), img_news, false, false, null, null);
+                        } else {
+                            img_news.setImageResource(R.mipmap.wt_image_playertx);
+                        }
+                        for (int i = 0; i < alllist.size(); i++) {
+                            alllist.get(i).setType("1");
+                        }
+                        alllist.get(number).setType("2");
+                        adapter.notifyDataSetChanged();
+                        adddb(alllist.get(number));
+                        musicPlay(alllist.get(number).getContentURI());
+                        GlobalConfig.playerobject = alllist.get(number);
+                        resetHeadView();
+                        num = number;
+                    }else{
+                        Log.e("","TTS播放数据异常");
                     }
-                    for (int i = 0; i < alllist.size(); i++) {
-                        alllist.get(i).setType("1");
-                    }
-                    alllist.get(number).setType("2");
-                    adapter.notifyDataSetChanged();
-                    musicPlay(alllist.get(number).getContentURI());
-                    GlobalConfig.playerobject = alllist.get(number);
-                    resetHeadView();
-                    num = number;
+
                 } else {
                     getContentNews(alllist.get(number).getContentId(), number);
                 }
@@ -722,6 +762,8 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             if (wifiset != null && !wifiset.trim().equals("") && wifiset.equals("true")) {
                 // 开启网络播放数据连接提醒
                 CommonHelper.checkNetworkStatus(context);// 网络设置获取
+                GlobalConfig.playerobject=alllist.get(number);
+                resetHeadView();
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                     if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == 1) {
                         play(number);
@@ -761,7 +803,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 if(moredialog.isShowing()){
                     moredialog.dismiss();
                 }
-               shareDialog.show();
+                    shareDialog.show();
                 break;
             case R.id.lin_like:
                 String s=GlobalConfig.playerobject.getContentFavorite();
@@ -778,6 +820,9 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             case R.id.lin_center:
                 enterCenter();
                 stopCurrentTimer();
+                break;
+            case R.id.lin_schedule:
+                ToastUtils.show_always(context,"跳转到节目单页");
                 break;
             case R.id.lin_right:
                 if (alllist != null && alllist.size() > 0) {
@@ -796,6 +841,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 if(shareDialog.isShowing()){
                     shareDialog.dismiss();
                 }
+                moreDialog();
                 moredialog.show();
                 break;
             case R.id.lin_sequ:
@@ -822,10 +868,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     Intent intent = new Intent(context, AlbumActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "player");
-                    bundle.putString("conentname",sequname);
-                    bundle.putString("conentdesc",sequdesc);
-                    bundle.putString("conentid",sequid);
-                    bundle.putString("contentimg",sequimage);
+                    bundle.putString("contentName",sequname);
+                    bundle.putString("contentDesc",sequdesc);
+                    bundle.putString("contentId",sequid);
+                    bundle.putString("contentImg",sequimage);
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }else{
@@ -1057,22 +1103,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 String message = intent.getStringExtra("outmessage");
                 if (GlobalConfig.playerobject != null) {
                     if (message != null && message.equals("1")) {
-						/*
-						 * // 暂停音乐播放 if
-						 * (GlobalConfig.playerobject.getMediaType()
-						 * .equals("AUDIO") ||
-						 * GlobalConfig.playerobject.getMediaType
-						 * ().equals("RADIO")) { if (mPlayerStatus ==
-						 * PLAYER_STATUS.PLAYER_PLAYING) {
-						 * img_play.setImageResource(R.drawable.wt_play_stop);
-						 * } } else { if (TTSPlayerStatus ==
-						 * PLAYER_STATUS.TTS_PLAYING) {
-						 * img_play.setImageResource(R.drawable.wt_play_stop);
-						 * } }
-						 */
-						/* playNext(); */
                     } else {
-
                     }
                 }
             } else if (action.equals(BroadcastConstant.TIMER_UPDATE)) {
@@ -1146,10 +1177,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                         if (audioplay.isPlaying()) {
                             seekBar.setProgress((int) currPosition);
                         }
-					/*	if (duration > 0 && currPosition >= (duration - 1000)) {
-						playNext();
-						Log.e("播放器播放", "开始播放下一首");
-					}	*/
                     } else if (GlobalConfig.playerobject != null
                             && GlobalConfig.playerobject.getMediaType() != null
                             && GlobalConfig.playerobject.getMediaType().trim().length() > 0
@@ -1172,13 +1199,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                         updateTextViewWithTimeFormat(time_end, _duration);
                         seekBar.setMax(_duration);
                         seekBar.setProgress(_currPosition);
-					/*	int _currPosition = TTS_SpeakProgress;
-					int _duration = (int) (TTSNews.length() / 4.15);
-					updateTextViewWithTimeFormat(time_start, _currPosition);
-					updateTextViewWithTimeFormat(time_end, _duration);
-					seekBar.setMax(_duration);
-					seekBar.setProgress(_currPosition);
-					TTS_SpeakProgress++;*/
                     }
                     mUIHandler.sendEmptyMessageDelayed(TIME_UI, 1000);
                     break;
@@ -1212,24 +1232,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         view.setText(strTemp);
     }
 
-    /**
-     * 播放 方法处理类 mUIHandler
-     */
-	/*
-	 * static String local;//存放当前播放的状态 private static void musicPlay(String s) {
-	 * if(local==null){ local=s; audioplay.play(s);//首次播放
-	 * img_play.setImageResource(R.drawable.wt_play_play); }else{ //不等于空
-	 * if(local.equals(s)){ //里面可以根据播放类型判断继续播放或者停止 if(audioplay.isPlaying()){
-	 * //播放状态，对应暂停方法，播放图 audioplay.pause();
-	 * img_play.setImageResource(R.drawable.wt_play_stop); }else{
-	 * //暂停状态，对应播放方法，暂停图 audioplay.continuePlay();
-	 * img_play.setImageResource(R.drawable.wt_play_play); } }else{
-	 * audioplay.play(s);//首次播放 local=s;
-	 * img_play.setImageResource(R.drawable.wt_play_play); } } if (playmtype!=
-	 * null && playmtype.trim().length() > 0 && playmtype.equals("AUDIO")) {
-	 * seekBar.setEnabled(true); mUIHandler.sendEmptyMessage(TIME_UI); } else {
-	 * seekBar.setEnabled(false); mUIHandler.sendEmptyMessage(TIME_UI); } }
-	 */static String local;
+    static String local;
 
     private static void musicPlay(String s) {
         if (local == null) {
@@ -1264,7 +1267,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 setPlayingType();
             }
         }
-
         if (playmtype != null && playmtype.trim().length() > 0 && playmtype.equals("AUDIO")) {
             seekBar.setEnabled(true);
             mUIHandler.sendEmptyMessage(TIME_UI);
@@ -1666,16 +1668,27 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         mlistView.stopRefresh();
     }
 
-    protected static void resetHeadView() {
+    //对headview头部进行控制的类
+    private static void resetHeadView() {
         if (GlobalConfig.playerobject != null) {
-            if (GlobalConfig.playerobject.getMediaType().equals("Radio")) {
+            if (GlobalConfig.playerobject.getMediaType().equals("RADIO")) {
                 // 不支持分享
-                ToastUtils.show_always(context, "电台节目目前不支持分享");
+                /*ToastUtils.show_always(context, "电台节目目前不支持分享");*/
+                if(moreType==1){
+                moreType=0;
+                }
+                lin_sequ.setVisibility(View.GONE);
+                lin_schedule.setVisibility(View.VISIBLE);
                 return;
                 // 设置灰色界面
             } else {
                 // 支持分享
                 // 设置回界面
+                if(moreType==0){
+                    moreType=1;
+                }
+                lin_schedule.setVisibility(View.GONE);
+                lin_sequ.setVisibility(View.VISIBLE);
             }
             if (GlobalConfig.playerobject.getContentFavorite() != null
                     && !GlobalConfig.playerobject.equals("")) {
@@ -1983,7 +1996,13 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         window.setWindowAnimations(R.style.sharestyle);
         moredialog.setCanceledOnTouchOutside(true);
         moredialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-        final List<sharemodel> mylist = PlayermoreUtil.getPlayMoreList();
+        if(moreType==0){
+            //电台
+         mylist = PlayermoreUtil.getPlayMoreList("RADIO");
+        }else{
+            //非电台类内容
+            mylist = PlayermoreUtil.getPlayMoreList("AUDIO");
+        }
         gv_more_adapter shareadapter = new gv_more_adapter(context, mylist);
         gv_more.setAdapter(shareadapter);
         gv_more.setSelector(new ColorDrawable(Color.TRANSPARENT));
@@ -2047,6 +2066,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             }
         });
     }
+
     /**
      * 设置当前为播放状态
      */

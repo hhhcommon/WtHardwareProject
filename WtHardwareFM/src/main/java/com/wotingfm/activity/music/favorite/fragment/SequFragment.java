@@ -22,6 +22,7 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.favorite.activity.FavoriteActivity;
 import com.wotingfm.activity.music.favorite.adapter.FavorListAdapter;
+import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -149,13 +150,13 @@ public class SequFragment extends Fragment {
 				} else {
 					if (newlist != null && newlist.get(position - 1) != null
 							&& newlist.get(position - 1).getMediaType() != null) {
-//						Intent intent = new Intent(context, AlbumActivity.class);
-//						Bundle bundle = new Bundle();
-//						bundle.putString("type", "recommend");
-//						bundle.putSerializable("list", newlist.get(position - 1));
-//						intent.putExtras(bundle);
-//						startActivity(intent);
-//						context.finish();
+						Intent intent = new Intent(context, AlbumActivity.class);
+						Bundle bundle = new Bundle();
+						bundle.putString("type", "radiolistactivity");
+						bundle.putSerializable("list", newlist.get(position - 1));
+						intent.putExtras(bundle);
+						startActivity(intent);
+						context.finish();
 					}
 				}
 			}

@@ -28,8 +28,44 @@ public class PlayerHistory implements Serializable{
 	private String ContentID;
 	private String ContentPub;
 
-	private String localurl;
-	
+	private String localurl;// 本地播放地址
+	private String sequId;//专辑ID
+	private String sequImg;//专辑图片
+	private String sequDesc;//专辑描述
+	private String sequName;//专辑名称
+
+	public String getSequImg() {
+		return sequImg;
+	}
+
+	public void setSequImg(String sequImg) {
+		this.sequImg = sequImg;
+	}
+
+	public String getSequDesc() {
+		return sequDesc;
+	}
+
+	public void setSequDesc(String sequDesc) {
+		this.sequDesc = sequDesc;
+	}
+
+	public String getSequName() {
+		return sequName;
+	}
+
+	public void setSequName(String sequName) {
+		this.sequName = sequName;
+	}
+
+	public String getSequId() {
+		return sequId;
+	}
+
+	public void setSequId(String sequId) {
+		this.sequId = sequId;
+	}
+
 	public String getLocalurl() {
 		return localurl;
 	}

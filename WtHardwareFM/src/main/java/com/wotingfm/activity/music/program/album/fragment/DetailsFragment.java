@@ -61,10 +61,7 @@ public class DetailsFragment extends Fragment implements OnClickListener{
 	private String ContentImg;
 	private String ContentName;
 	private ImageView img_album;
-
-
 	@Override
-
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		context = getActivity();

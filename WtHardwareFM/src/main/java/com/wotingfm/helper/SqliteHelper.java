@@ -44,7 +44,7 @@ public class SqliteHelper extends SQLiteOpenHelper {
 		db.execSQL("create table IF NOT EXISTS fileinfo(_id integer primary key autoincrement,"
 				+ "start integer,end integer,url varchar(200),imageurl varchar(200), finished varchar(10),"
 				+ "author varchar(50),playcontent varchar(50),filename varchar(50),localurl varchar(100),"
-				+ "sequname varchar(50),sequimgurl varchar(200),sequdesc varchar(150),sequid varchar(50),userid varchar(20),downloadtype varchar(10),playshareurl varchar(100),playfavorite varchar(100),contentid varchar(50))");
+				+ "sequname varchar(50),sequimgurl varchar(200),sequdesc varchar(150),sequid varchar(50),userid varchar(50),downloadtype varchar(10),playshareurl varchar(100),playfavorite varchar(100),contentid varchar(50))");
 
 		// 城市表
 				db.execSQL("create table IF NOT EXISTS cityinfo(_id integer primary key autoincrement,"
