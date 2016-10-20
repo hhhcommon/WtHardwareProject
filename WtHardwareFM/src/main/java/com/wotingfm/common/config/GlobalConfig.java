@@ -43,7 +43,7 @@ public class GlobalConfig {
     // 此时的语音搜索界面
     public static String voicerecognizer;
     // 是否吐司
-    public static boolean istusi = false;
+    public static boolean istusi = true;
     // PersonClientDevice(个人客户端设备) 终端类型1=app,2=设备，3=pc
     public static int PCDType = 2;
     // 是否活跃状态，有活跃状态才能播放声音，否则即使收到音频包也不播放
@@ -59,7 +59,7 @@ public class GlobalConfig {
     // http请求总url
 //    public static final String baseUrl = "http://182.92.175.134:808/";//生产服务器地址
      public static final String baseUrl = "http://123.56.254.75:808/";//测试服务器地址
-   //  public static final String baseUrl = "http://192.168.1.3:808/";//
+//     public static final String baseUrl = "http://192.168.1.3:808/";//
     // image请求路径前缀
     public static final String imageurl = baseUrl + "wt/";// 服务器
 

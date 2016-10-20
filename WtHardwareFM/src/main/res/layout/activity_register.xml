@@ -62,7 +62,7 @@
                         android:textColor="@color/wt_login_third"
                         android:textColorHint="@color/gray"
                         android:textCursorDrawable="@drawable/wt_edittext_cursor"
-                        android:textSize="@dimen/wt_edittext_default_text"></EditText>
+                        android:textSize="@dimen/wt_edittext_default_text"/>
                 </LinearLayout>
 
                 <LinearLayout

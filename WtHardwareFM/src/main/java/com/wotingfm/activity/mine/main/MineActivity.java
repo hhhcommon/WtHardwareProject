@@ -25,7 +25,6 @@ import android.os.Message;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.text.Html;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -100,7 +99,6 @@ public class MineActivity extends Activity implements OnClickListener {
     private RelativeLayout relativeStatusUnLogin;   // 未登录状态
     private RelativeLayout relativeStatusLogin;     // 登录状态
     private ImageView userHead;                     // 用户头像
-//    private ImageView imageAuxSet;
     private TextView textWifiName;
     private TextView textBluetoothState;            // 蓝牙状态 打开 OR 关闭
     private TextView textCache;                     // 缓存统计
@@ -144,32 +142,7 @@ public class MineActivity extends Activity implements OnClickListener {
         initCache();
     }
 
-    // 获取蓝牙状态
-    private void getBluetoothState(){
-        if(blueAdapter.isEnabled()){
-            textBluetoothState.setText("打开");
-            Intent intent = new Intent();
-            intent.setAction(StringConstant.UPDATE_BLUETO0TH_TIME);
-            sendBroadcast(intent);
-        } else {
-            textBluetoothState.setText("关闭");
-        }
-    }
-
-    // 登陆状态下 用户设置头像对话框
-    private void imageDialog() {
-        final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_imageupload, null);
-        TextView textGallery = (TextView) dialog.findViewById(R.id.tv_gallery);
-        textGallery.setOnClickListener(this);
-        TextView textCamera = (TextView) dialog.findViewById(R.id.tv_camera);
-        textCamera.setOnClickListener(this);
-        imageDialog = new Dialog(context, R.style.MyDialog);
-        imageDialog.setContentView(dialog);
-        imageDialog.setCanceledOnTouchOutside(true);
-        imageDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-    }
-
-    // 设置view
+    // 设置 view
     private void setView() {
         Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.img_person_background);
         ImageView loginBackgroundImage = (ImageView) findViewById(R.id.lin_image);      // 登录背景图片
@@ -277,7 +250,7 @@ public class MineActivity extends Activity implements OnClickListener {
                     dialog = DialogUtils.Dialogph(context, "通讯中...");
                     sendRequestUpdate();
                 } else {
-                    ToastUtils.show_short(context, "网络失败，请检查网络");
+                    ToastUtils.show_always(context, "网络失败，请检查网络");
                 }
                 break;
             case R.id.cache_set:                // 清除缓存
@@ -324,6 +297,28 @@ public class MineActivity extends Activity implements OnClickListener {
         }
     }
 
+    // 获取蓝牙状态
+    private void getBluetoothState(){
+        if(blueAdapter.isEnabled()){
+            textBluetoothState.setText("打开");
+        } else {
+            textBluetoothState.setText("关闭");
+        }
+    }
+
+    // 登陆状态下 用户设置头像对话框
+    private void imageDialog() {
+        final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_imageupload, null);
+        TextView textGallery = (TextView) dialog.findViewById(R.id.tv_gallery);
+        textGallery.setOnClickListener(this);
+        TextView textCamera = (TextView) dialog.findViewById(R.id.tv_camera);
+        textCamera.setOnClickListener(this);
+        imageDialog = new Dialog(context, R.style.MyDialog);
+        imageDialog.setContentView(dialog);
+        imageDialog.setCanceledOnTouchOutside(true);
+        imageDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+    }
+
     // 获取用户的登陆状态   登陆 OR 未登录
     private void getLoginStatus() {
         if(isFirst) {
@@ -368,9 +363,6 @@ public class MineActivity extends Activity implements OnClickListener {
 
             IntentFilter filterWiFi = new IntentFilter(WifiManager.WIFI_STATE_CHANGED_ACTION);
             registerReceiver(mDevice, filterWiFi);
-
-            IntentFilter filterUpdate = new IntentFilter("UPDATE_VIEW");
-            registerReceiver(mDevice, filterUpdate);
         }
         super.onStart();
     }
@@ -381,28 +373,23 @@ public class MineActivity extends Activity implements OnClickListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action =intent.getAction();
-            if(BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)){    // 搜索到新设备
-                if(blueAdapter.getState() == BluetoothAdapter.STATE_OFF){
+            if(BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)){    // 蓝牙状态发生改变
+                if(blueAdapter.getState() == BluetoothAdapter.STATE_OFF){// 蓝牙关闭
                     textBluetoothState.setText("关闭");
-                    Intent intentUpdateTime = new Intent();
-                    intentUpdateTime.setAction(StringConstant.UPDATE_BLUETO0TH_TIME_OFF);
-                    sendBroadcast(intentUpdateTime);
-                } else if(blueAdapter.getState() == BluetoothAdapter.STATE_ON){
+                } else if(blueAdapter.getState() == BluetoothAdapter.STATE_ON){// 蓝牙打开
                     textBluetoothState.setText("打开");
-                    Intent intentUpdateTime = new Intent();
-                    intentUpdateTime.setAction(StringConstant.UPDATE_BLUETO0TH_TIME);
-                    sendBroadcast(intentUpdateTime);
                 }
             } else if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(intent.getAction())) {// 这个监听wifi的打开与关闭，与wifi的连接无关
-                sendBroadcast(new Intent("UPDATE_VIEW"));
-            } else if("UPDATE_VIEW".equals(intent.getAction())) {
                 if(wifiManager.isWifiEnabled()) {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             String  SSIDWiFi = wifiManager.getConnectionInfo().getSSID();
-                            Log.e("SSIDWiFi",SSIDWiFi+"");
-//                    textWifiName.setText(SSIDWiFi.substring(1, SSIDWiFi.length() - 1));
+                            L.v("SSIDWiFi", SSIDWiFi);
+                            if(SSIDWiFi.startsWith("\"")) {
+                                SSIDWiFi = SSIDWiFi.substring(1, SSIDWiFi.length() - 1);
+                            }
+                            textWifiName.setText(SSIDWiFi);
                         }
                     }, 2000);
                 } else {
@@ -421,18 +408,8 @@ public class MineActivity extends Activity implements OnClickListener {
     // 注销数据交互
     private void sendRequestLogout(){
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
-        try {
-            String userId = BSApplication.SharedPreferences.getString(StringConstant.USERID, "");
-            if (!userId.equals("")) {
-                jsonObject.put("UserId", CommonUtils.getUserId(context));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
         VolleyRequest.RequestPost(GlobalConfig.logoutUrl, tag, jsonObject, new VolleyCallback() {
             private String ReturnType;
-
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) {
@@ -449,7 +426,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 }
                 if(ReturnType != null && ReturnType.equals("1001")){        // 正常注销成功
                     Intent pushIntent = new Intent("push_down_completed");  // 发送广播 更新已下载和未下载界面
-                    context.sendBroadcast(pushIntent);
+                    sendBroadcast(pushIntent);
                 } else if (ReturnType != null && ReturnType.equals("200")) {// 还未登录，注销成功
                     L.w(ReturnType + "--->  还未登录，注销成功");
                 } else if (ReturnType != null && ReturnType.equals("0000")) {// 无法获取相关的参数，注销成功
@@ -536,9 +513,7 @@ public class MineActivity extends Activity implements OnClickListener {
         });
     }
 
-    /*
-	 * 检查版本更新
-	 */
+    // 检查版本更新
     protected void dealVersion(String ResultList, String mastUpdate) {
         String Version = "0.1.0.X.0";
         String Descn = null;
@@ -968,10 +943,8 @@ public class MineActivity extends Activity implements OnClickListener {
         new TotalCache().start();
     }
 
-    /*
-	 * 统计缓存线程
-	 */
-    private class TotalCache extends Thread implements Runnable {
+    // 统计缓存线程
+    class TotalCache extends Thread implements Runnable {
         @Override
         public void run() {
             cachePath = Environment.getExternalStorageDirectory() + "/woting/image";
@@ -990,15 +963,15 @@ public class MineActivity extends Activity implements OnClickListener {
         }
     }
 
-    /*
-	 * 清除缓存异步任务
-	 */
+    // 清除缓存异步任务
     private class ClearCacheTask extends AsyncTask<Void, Void, Void> {
         private boolean clearResult;
+
         @Override
         protected void onPreExecute() {
             dialog = DialogUtils.Dialogph(context, "正在清除缓存");
         }
+
         @Override
         protected Void doInBackground(Void... params) {
             clearResult = CacheManager.delAllFile(cachePath);
@@ -1037,6 +1010,10 @@ public class MineActivity extends Activity implements OnClickListener {
         isCancelRequest = VolleyRequest.cancelRequest(tag);
         if(blueAdapter != null && blueAdapter.isDiscovering()){
             blueAdapter.cancelDiscovery();
+        }
+        if(hasRegister) {
+            hasRegister = false;
+            unregisterReceiver(mDevice);
         }
     }
 }

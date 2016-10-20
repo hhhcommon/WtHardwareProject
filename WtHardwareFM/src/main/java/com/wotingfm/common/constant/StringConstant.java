@@ -73,24 +73,18 @@ public class StringConstant {
 
     public static final String FIND_CONTENT_TO_RESULT = "searchstr";
 
-    // AUX状态
-    public static final String AUX_SET = "AUX_SET";
-
     // 蓝牙的设置状态
     public static final String BLUETOOTH_SET = "BLUETOOTH_SET";
 
     // 保存蓝牙是否开放检测状态
     public static final String BLUETOOTH_OPEN_DETECTION_SET = "BLUETOOTH_OPEN_DETECTION_SET";
 
-    // 更新蓝牙开放时间倒计时
-    public static final String UPDATE_BLUETO0TH_TIME = "UPDATE_BLUETOTH_TIME";
-
-    // 关闭蓝牙开放时间倒计时
-    public static final String UPDATE_BLUETO0TH_TIME_OFF = "UPDATE_BLUETO0TH_TIME_OFF";
-
     // 标记 FM是否打开
     public static final String FM_IS_OPEN = "FM_IS_OPEN";
 
-    // 蓝牙连接UUID
+    // 蓝牙连接 UUID
     public static final String SPP_UUID = "00001101-0000-1000-8000-00805F9B34FB";
+
+    // 传递数据 WiFi 名字
+    public static final String WIFI_NAME = "WIFI_NAME";
 }

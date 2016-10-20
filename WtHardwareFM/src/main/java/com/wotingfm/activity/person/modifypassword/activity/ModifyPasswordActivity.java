@@ -117,7 +117,7 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
     // 验证手机号正确就获取验证码
     private void checkVerificationCode() {
         phoneNum = editPhoneNumber.getText().toString().trim();     // 用户手机号
-        if ("".equalsIgnoreCase(phoneNum) || phoneNum.length() != 11) { // 检查输入数字是否为手机号
+        if ("".equalsIgnoreCase(phoneNum) || phoneNum.length() != 11) {             // 检查输入数字是否为手机号
             ToastUtils.show_always(context, "请输入正确的手机号码!");
             return ;
         }
@@ -243,6 +243,7 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
         try {
             jsonObject.put("PhoneNum", phoneNum);
             jsonObject.put("CheckCode", verificationCode);
+            jsonObject.put("NeedUserId", "true");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -392,8 +393,10 @@ public class ModifyPasswordActivity extends AppBaseActivity implements OnClickLi
                 if(verificationCode.equals("") || verificationCode.length() != 6) {
                     return ;
                 }
-                modifyType = 2;
-                btnModifyPassword.setEnabled(true);
+                if(sendType == 2) {
+                    modifyType = 2;
+                    btnModifyPassword.setEnabled(true);
+                }
             }
         }
     }

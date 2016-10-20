@@ -1,6 +1,7 @@
 package com.wotingfm.activity.im.interphone.linkman.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,12 +10,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
-import com.wotingfm.R;
 
-import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
+import com.squareup.picasso.Picasso;
+import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.helper.ImageLoader;
+import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
 
@@ -57,10 +59,10 @@ public class SortGroupMemberAdapter extends BaseAdapter implements SectionIndexe
 	}
 
 	public View getView(final int position, View convertView, ViewGroup arg2) {
-		ViewHolder holder = null;
+		ViewHolder holder ;
 		if (convertView == null) {
-			convertView=LayoutInflater.from(mContext).inflate(R.layout.adapter_talk_person, null);
 			holder = new ViewHolder();
+			convertView=LayoutInflater.from(mContext).inflate(R.layout.adapter_talk_person, null);
 			holder.tv_name = (TextView)convertView.findViewById(R.id.tv_name);//名
 			holder.tv_b_name = (TextView)convertView.findViewById(R.id.tv_b_name);//名
 			holder.imageView_touxiang=(ImageView)convertView.findViewById(R.id.image);
@@ -97,14 +99,19 @@ public class SortGroupMemberAdapter extends BaseAdapter implements SectionIndexe
 			}
 			
 			if(lists.getPortraitMini()==null||lists.getPortraitMini().equals("")||lists.getPortraitMini().equals("null")||lists.getPortraitMini().trim().equals("")){
-				holder.imageView_touxiang.setImageResource(R.mipmap.wt_image_tx_hy);
+				Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.wt_image_tx_hy);
+				holder.imageView_touxiang.setImageBitmap(bmp);
 			}else{
-				if(lists.getPortraitMini().startsWith("http:")){
-					url=lists.getPortraitMini();
-				}else{
-					url = GlobalConfig.imageurl+lists.getPortraitMini();
+//				Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.wt_image_tx_hy);
+//				holder.imageView_touxiang.setImageBitmap(bmp);
+				//将图片切成长宽都是100 加载到控件上，适合确定控件长宽
+				if (lists.getPortraitMini().startsWith("http:")) {
+					url = lists.getPortraitMini();
+				} else {
+					url = GlobalConfig.imageurl + lists.getPortraitMini();
 				}
-				imageLoader.DisplayImage(url.replace( "\\/", "/"), holder.imageView_touxiang, false, false,null, null);
+				Picasso.with(mContext).load(url.replace( "\\/", "/")).resize(100, 100).centerCrop().into(holder.imageView_touxiang);
+//				imageLoader.DisplayImage(url.replace( "\\/", "/"), holder.imageView_touxiang, false, false,null, null);
 			}
 		
 		holder.lin_add.setOnClickListener(new View.OnClickListener() {
