@@ -180,13 +180,16 @@ public class TTSFragment extends Fragment {
                         String playShareUrl = playList.get(position).getPlayContentShareUrl();
                         String contentId = playList.get(position).getContentID();
                         String localUrl = playList.get(position).getLocalurl();
-
+                        String sequname = playList.get(position).getSequName();
+                        String sequid = playList.get(position).getSequId();
+                        String sequdesc =playList.get(position).getSequDesc();
+                        String sequimg =playList.get(position).getSequImg();
                         //如果该数据已经存在数据库则删除原有数据，然后添加最新数据
                         PlayerHistory history = new PlayerHistory(
                                 playerName, playerImage, playerUrl, playerUri, playerMediaType,
                                 playerAllTime, playerInTime, playerContentDesc, playerNum,
                                 playerZanType, playerFrom, playerFromId, playerFromUrl,
-                                playerAddTime, bjUserId, playShareUrl, contentFavorite, contentId, localUrl);
+                                playerAddTime, bjUserId, playShareUrl, contentFavorite, contentId, localUrl,sequname,sequid,sequdesc,sequimg);
                         dbDao.deleteHistory(playerUrl);
                         dbDao.addHistory(history);
 //						if(PlayerFragment.context!=null){

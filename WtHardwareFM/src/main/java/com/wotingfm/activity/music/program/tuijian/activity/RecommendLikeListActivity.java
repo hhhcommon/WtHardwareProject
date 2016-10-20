@@ -241,12 +241,16 @@ public class RecommendLikeListActivity extends AppBaseActivity {
 						String ContentFavorite= newList.get(position - 1).getContentFavorite();
 						String ContentId= newList.get(position-1).getContentId();
 						String localurl=newList.get(position-1).getLocalurl();
+						String sequname = newList.get(position - 1).getSequName();
+						String sequid = newList.get(position - 1).getSequId();
+						String sequdesc =newList.get(position - 1).getSequDesc();
+						String sequimg =newList.get(position - 1).getSequImg();
 						
 						// 如果该数据已经存在数据库则删除原有数据，然后添加最新数据
 						PlayerHistory history = new PlayerHistory(
 								playername,  playerimage, playerurl,playerurI, playermediatype, 
 								 plaplayeralltime, playerintime, playercontentdesc, playernum,
-								 playerzantype,  playerfrom, playerfromid,playerfromurl, playeraddtime,bjuserid,playcontentshareurl,ContentFavorite,ContentId,localurl);
+								 playerzantype,  playerfrom, playerfromid,playerfromurl, playeraddtime,bjuserid,playcontentshareurl,ContentFavorite,ContentId,localurl,sequname,sequid,sequdesc,sequimg);
                         dbDao.deleteHistory(playerurl);
                         dbDao.addHistory(history);
 						

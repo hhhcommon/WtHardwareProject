@@ -329,11 +329,16 @@ public class TotalFragment extends Fragment {
 					String ContentFavorite=list.get(groupPosition).getList().get(childPosition).getContentFavorite();
 					String ContentId=list.get(groupPosition).getList().get(childPosition).getContentId();
 					String localurl=list.get(groupPosition).getList().get(childPosition).getLocalurl();
+					String sequname =list.get(groupPosition).getList().get(childPosition).getSequName();
+					String sequid =list.get(groupPosition).getList().get(childPosition).getSequId();
+					String sequdesc =list.get(groupPosition).getList().get(childPosition).getSequDesc();
+					String sequimg =list.get(groupPosition).getList().get(childPosition).getSequImg();
+
 					//如果该数据已经存在数据库则删除原有数据，然后添加最新数据
 					PlayerHistory history = new PlayerHistory(
 							playername,  playerimage, playerurl,playerurI, playermediatype, 
 							plaplayeralltime, playerintime, playercontentdesc, playernum,
-							playerzantype,  playerfrom, playerfromid, playerfromurl,playeraddtime,bjuserid,playcontentshareurl,ContentFavorite,ContentId,localurl);	
+							playerzantype,  playerfrom, playerfromid, playerfromurl,playeraddtime,bjuserid,playcontentshareurl,ContentFavorite,ContentId,localurl,sequname,sequid,sequdesc,sequimg);
 					dbdao.deleteHistory(playerurl);
 					dbdao.addHistory(history);
 					MainActivity.changeToMusic();

@@ -582,6 +582,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             historynews.setContentShareURL(historynew.getPlayContentShareUrl());
             historynews.setContentFavorite(historynew.getContentFavorite());
             historynews.setLocalurl(historynew.getLocalurl());
+            historynews.setSequId(historynew.getSequId());
+            historynews.setSequName(historynew.getSequName());
+            historynews.setSequDesc(historynew.getSequDesc());
+            historynews.setSequImg(historynew.getSequImg());
         }
         return historynews;
     }
@@ -596,6 +600,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
      *
      * @param languageSearchInside
      */
+    private static String ContentFavorite;
     private static void adddb(LanguageSearchInside languageSearchInside) {
         String playername = languageSearchInside.getContentName();
         String playerimage = languageSearchInside.getContentImg();
@@ -613,14 +618,26 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         String playerfromurl = "";
         String playeraddtime = Long.toString(System.currentTimeMillis());
         String bjuserid = CommonUtils.getUserId(context);
-        String ContentFavorite = languageSearchInside.getContentFavorite();
+        if(GlobalConfig.playerobject!=null){
+            String contentFavorite=GlobalConfig.playerobject.getContentFavorite();
+            if(contentFavorite.equals("0")||contentFavorite.equals("1")){
+                ContentFavorite=contentFavorite;
+            }
+        }else {
+            ContentFavorite = languageSearchInside.getContentFavorite();
+        }
         String ContentID = languageSearchInside.getContentId();
         String localurl = languageSearchInside.getLocalurl();
+        String sequname = languageSearchInside.getSequName();
+        String sequid = languageSearchInside.getSequId();
+        String sequdesc = languageSearchInside.getSequDesc();
+        String sequimg =languageSearchInside.getSequImg();
+
         PlayerHistory history = new PlayerHistory(playername, playerimage,
                 playerurl, playerurI, playermediatype, playeralltime,
                 playerintime, playercontentdesc, playernum, playerzantype,
                 playerfrom, playerfromid, playerfromurl, playeraddtime,
-                bjuserid, playcontentshareurl, ContentFavorite, ContentID, localurl);
+                bjuserid, playcontentshareurl, ContentFavorite, ContentID, localurl,sequname,sequid,sequdesc,sequimg);
 
         if (playermediatype != null && playermediatype.trim().length() > 0&& playermediatype.equals("TTS")) {
             dbdao.deleteHistoryById(ContentID);
@@ -654,7 +671,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             String s=alllist.get(number).getContentFavorite();
             String s1=alllist.get(number).getContentName();
             String s2=alllist.get(number).getContentURI();
-            adddb(alllist.get(number));
             playmtype = alllist.get(number).getMediaType();
             if (playmtype.equals("AUDIO") || playmtype.equals("RADIO")) {
                 // 首先判断audioplay是否为空
@@ -763,6 +779,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 // 开启网络播放数据连接提醒
                 CommonHelper.checkNetworkStatus(context);// 网络设置获取
                 GlobalConfig.playerobject=alllist.get(number);
+                adddb(alllist.get(number));
                 resetHeadView();
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                     if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == 1) {
@@ -807,8 +824,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 break;
             case R.id.lin_like:
                 String s=GlobalConfig.playerobject.getContentFavorite();
-                if (GlobalConfig.playerobject.getContentFavorite() != null
-                        && !GlobalConfig.playerobject.getContentFavorite().equals("")) {
+                if (GlobalConfig.playerobject.getContentFavorite() != null && !GlobalConfig.playerobject.getContentFavorite().equals("")) {
                     sendfavorite();
                 } else {
                     ToastUtils.show_long(context, "本节目信息获取有误，暂时不支持喜欢");
@@ -847,6 +863,17 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             case R.id.lin_sequ:
                 if(GlobalConfig.playerobject!=null){
                   try {
+                      if(GlobalConfig.playerobject.getSequId()!=null){
+                          if(GlobalConfig.playerobject.getSequId()!=null){
+                              sequid = GlobalConfig.playerobject.getSequId();
+                              sequdesc = GlobalConfig.playerobject.getSequDesc();
+                              sequimage = GlobalConfig.playerobject.getSequImg();
+                              sequname = GlobalConfig.playerobject.getSequName();
+                              IsSequ=true;
+                          }else{
+                              IsSequ=false;
+                          }
+                      } else{
                       if(GlobalConfig.playerobject.getSeqInfo()!=null){
                           if(GlobalConfig.playerobject.getSeqInfo().getContentId()!=null){
                           sequid = GlobalConfig.playerobject.getSeqInfo().getContentId();
@@ -859,6 +886,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                           }
                       }else{
                           IsSequ=false;
+                      }
                       }
                   }catch (Exception e){
                       e.printStackTrace();
@@ -885,8 +913,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         if (num - 1 >= 0) {
             Log.e("点击num===============", num + "");
             num = num - 1;
-            getnetwork(num, context);
-            adddb(alllist.get(num));//当播放下一首或者上一首时需要将此播放内容放到数据库当中
+            getnetwork(num, context);//当播放下一首或者上一首时需要将此播放内容放到数据库当中
             stopCurrentTimer();
         } else {
             ToastUtils.show_always(context, "已经是第一条数据了");
@@ -1145,8 +1172,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         int a=alllist.size();
         if (num + 1 < alllist.size()) {
             // 此时自动播放下一首
-            num = num + 1;
-            adddb(alllist.get(num));//当播放下一首或者上一首时需要将此播放内容放到数据库当中
+            num = num + 1;//当播放下一首或者上一首时需要将此播放内容放到数据库当中
             getnetwork(num, context);
             stopCurrentTimer();
         } else {
@@ -1689,9 +1715,11 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 }
                 lin_schedule.setVisibility(View.GONE);
                 lin_sequ.setVisibility(View.VISIBLE);
-            }
-            if (GlobalConfig.playerobject.getContentFavorite() != null
-                    && !GlobalConfig.playerobject.equals("")) {
+            }//调试信息
+
+            String Name=GlobalConfig.playerobject.getContentName();
+            String Content=GlobalConfig.playerobject.getContentFavorite();
+            if (GlobalConfig.playerobject.getContentFavorite() != null && !GlobalConfig.playerobject.equals("")) {
 
                 Log.w("ContentFavorite", "--- > > > ContentFavorite = " + GlobalConfig.playerobject.getContentFavorite());
 
@@ -1774,7 +1802,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                         List<LanguageSearchInside> list = lists.getList();
                         if (list != null && list.size() != 0) {
                             for (int i = 0; i < list.size(); i++) {
-                                // String s = list.get(i).getContentPlay();
                                 if (list.get(i).getContentPlay() != null
                                         && !list.get(i).getContentPlay().equals("null")
                                         && !list.get(i).getContentPlay().equals("")
@@ -1933,8 +1960,13 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                             img_like.setImageResource(R.mipmap.wt_dianzan_select);
                             GlobalConfig.playerobject.setContentFavorite("1");
                             for (int i = 0; i < alllist.size(); i++) {
-                                if (alllist.get(i).getContentURI().equals(GlobalConfig.playerobject.getContentURI())) {
+                                if(alllist.get(i).getContentPlay()!=null&&GlobalConfig.playerobject.getContentPlay()!=null){
+                                    if (alllist.get(i).getContentPlay()!=null&&alllist.get(i).getContentPlay().equals(GlobalConfig.playerobject.getContentPlay())) {
                                     GlobalConfig.playerobject.setContentFavorite("1");
+                                    dbdao.updateFavorite(GlobalConfig.playerobject.getContentPlay(),"1");
+                                }
+                                }else{
+                                    Log.e("点赞处理异常","alllist"+alllist.get(i).getContentPlay()+"Global"+GlobalConfig.playerobject.getContentPlay());
                                 }
                             }
                         } else {
@@ -1942,8 +1974,13 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                             img_like.setImageResource(R.mipmap.wt_dianzan_nomal);
                             GlobalConfig.playerobject.setContentFavorite("0");
                             for (int i = 0; i < alllist.size(); i++) {
-                                if (alllist.get(i).getContentURI().equals(GlobalConfig.playerobject.getContentURI())) {
-                                    GlobalConfig.playerobject.setContentFavorite("0");
+                                if(alllist.get(i).getContentPlay()!=null&&GlobalConfig.playerobject.getContentPlay()!=null){
+                                    if (alllist.get(i).getContentPlay()!=null&&alllist.get(i).getContentPlay().equals(GlobalConfig.playerobject.getContentPlay())) {
+                                        GlobalConfig.playerobject.setContentFavorite("0");
+                                        dbdao.updateFavorite(GlobalConfig.playerobject.getContentPlay(),"0");
+                                    }
+                                }else{
+                                    Log.e("点赞处理异常","alllist"+alllist.get(i).getContentPlay()+"Global"+GlobalConfig.playerobject.getContentPlay());
                                 }
                             }
                         }

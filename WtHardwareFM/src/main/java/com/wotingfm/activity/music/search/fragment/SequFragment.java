@@ -161,12 +161,15 @@ public class SequFragment extends Fragment {
 						String ContentFavorite=newlist.get(position - 1).getContentFavorite();
 						String ContentId= newlist.get(position-1).getContentId();
 						String localurl=newlist.get(position-1).getLocalurl();
-						
+						String sequname =newlist.get(position-1).getSequName();
+						String sequid =newlist.get(position-1).getSequId();
+						String sequdesc =newlist.get(position-1).getSequDesc();
+						String sequimg =newlist.get(position-1).getSequImg();
 						//如果该数据已经存在数据库则删除原有数据，然后添加最新数据
 						PlayerHistory history = new PlayerHistory(
 								playername,  playerimage, playerurl, playerurI,playermediatype, 
 								plaplayeralltime, playerintime, playercontentdesc, playernum,
-								playerzantype,  playerfrom, playerfromid, playerfromurl,playeraddtime,bjuserid,playercontentshareurl,ContentFavorite,ContentId,localurl);	
+								playerzantype,  playerfrom, playerfromid, playerfromurl,playeraddtime,bjuserid,playercontentshareurl,ContentFavorite,ContentId,localurl,sequname,sequid,sequdesc,sequimg);
 						dbdao.deleteHistory(playerurl);
 						dbdao.addHistory(history);
 						MainActivity.changeToMusic();

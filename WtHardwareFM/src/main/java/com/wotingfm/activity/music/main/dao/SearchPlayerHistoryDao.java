@@ -32,15 +32,16 @@ public class SearchPlayerHistoryDao {
 	public void addHistory(PlayerHistory playerhistory) {
 		//通过helper的实现对象获取可操作的数据库db
 		SQLiteDatabase db = helper.getWritableDatabase();
-		String s=playerhistory.getPlayerContentDesc();
+		String s=playerhistory.getContentFavorite();
 		db.execSQL("insert into playerhistory(playername,playerimage,playerurl,playerurI,playermediatype,playeralltime"
-				+ ",playerintime,playercontentdesc,playernum,playerzantype,playerfrom,playerfromid,playeraddtime,bjuserid,playshareurl,playfavorite,contentid,localurl) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+				+ ",playerintime,playercontentdesc,playernum,playerzantype,playerfrom,playerfromid,playeraddtime,bjuserid,playshareurl,playfavorite,contentid,localurl,sequname,sequimg,sequdesc,sequid) values(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
 				new Object[] { playerhistory.getPlayerName(), playerhistory.getPlayerImage()
 						, playerhistory.getPlayerUrl(),playerhistory.getPlayerUrI(),  playerhistory.getPlayerMediaType()
 						, playerhistory.getPlayerAllTime(), playerhistory.getPlayerInTime()
 						, playerhistory.getPlayerContentDesc(), playerhistory.getPlayerNum()
 						, playerhistory.getPlayerZanType(), playerhistory.getPlayerFrom()
-						, playerhistory.getPlayerFromId(), playerhistory.getPlayerAddTime(), playerhistory.getBJUserid(),playerhistory.getPlayContentShareUrl(),playerhistory.getContentFavorite(),playerhistory.getContentID(),playerhistory.getLocalurl()});//sql语句
+						, playerhistory.getPlayerFromId(), playerhistory.getPlayerAddTime(), playerhistory.getBJUserid(),playerhistory.getPlayContentShareUrl(),playerhistory.getContentFavorite(),playerhistory.getContentID(),playerhistory.getLocalurl()
+						, playerhistory.getSequName(),playerhistory.getSequImg(),playerhistory.getSequDesc(),playerhistory.getSequId()});//sql语句
 		db.close();//关闭数据库对象
 	}
 
@@ -62,7 +63,7 @@ public class SearchPlayerHistoryDao {
 				String playername = cursor.getString(cursor.getColumnIndex("playername"));
 				String playerimage =cursor.getString(cursor.getColumnIndex("playerimage"));
 				String playerurl = cursor.getString(cursor.getColumnIndex("playerurl"));
-				String	playerurI= cursor.getString(cursor.getColumnIndex("playerurI"));
+				String playerurI= cursor.getString(cursor.getColumnIndex("playerurI"));
 				String playermediatype = cursor.getString(cursor.getColumnIndex("playermediatype"));
 				String playeralltime =cursor.getString(cursor.getColumnIndex("playeralltime"));
 				String playerintime =cursor.getString(cursor.getColumnIndex("playerintime "));
@@ -78,8 +79,17 @@ public class SearchPlayerHistoryDao {
 				String ContentFavorite =cursor.getString(cursor.getColumnIndex("playfavorite"));
 				String ContentID=cursor.getString(cursor.getColumnIndex("contentid"));
 				String localurl=cursor.getString(cursor.getColumnIndex("localurl"));
+				String sequname=cursor.getString(cursor.getColumnIndex("sequname"));
+				String sequid=cursor.getString(cursor.getColumnIndex("sequid"));
+				String sequdesc=cursor.getString(cursor.getColumnIndex("sequdesc"));
+				String sequimg=cursor.getString(cursor.getColumnIndex("sequimg"));
+
+
 				PlayerHistory h = new PlayerHistory(playername, playerimage, playerurl,playerurI, playermediatype, playeralltime,
-						playerintime, playercontentdesc, playernum, playerzantype, playerfrom, playerfromid,playerfromurl,playeraddtime,bjuserid,playcontentshareurl,ContentFavorite,ContentID,localurl);
+						playerintime, playercontentdesc, playernum, playerzantype, playerfrom, playerfromid,playerfromurl,playeraddtime,bjuserid,playcontentshareurl,ContentFavorite,ContentID
+						,localurl,sequname,sequid,sequdesc,sequimg);
+
+
 				mylist.add(h);
 			}
 		} catch (Exception e) {
@@ -125,8 +135,13 @@ public class SearchPlayerHistoryDao {
 				String ContentFavorite=cursor.getString(17);
 				String ContentID=cursor.getString(18);
 				String localurl=cursor.getString(19);
-				PlayerHistory h = new PlayerHistory(playername, playerimage, playerurl, playerurI,playermediatype, playeralltime,
-						playerintime, playercontentdesc, playernum, playerzantype, playerfrom, playerfromid,playerfromurl,playeraddtime,bjuserid,playcontentshareurl,ContentFavorite,ContentID,localurl);
+				String sequname=cursor.getString(cursor.getColumnIndex("sequname"));
+				String sequid=cursor.getString(cursor.getColumnIndex("sequid"));
+				String sequdesc=cursor.getString(cursor.getColumnIndex("sequdesc"));
+				String sequimg=cursor.getString(cursor.getColumnIndex("sequimg"));
+				PlayerHistory h = new PlayerHistory(playername, playerimage, playerurl,playerurI, playermediatype, playeralltime,
+						playerintime, playercontentdesc, playernum, playerzantype, playerfrom, playerfromid,playerfromurl,playeraddtime,bjuserid,playcontentshareurl,ContentFavorite,ContentID
+						,localurl,sequname,sequid,sequdesc,sequimg);
 				mylist.add(h);
 			}
 		} catch (Exception e) {
@@ -173,8 +188,13 @@ public class SearchPlayerHistoryDao {
 				String ContentFavorite=cursor.getString(17);
 				String ContentID=cursor.getString(18);
 				String localurl=cursor.getString(19);
-				PlayerHistory h = new PlayerHistory(playername, playerimage, playerurl, playerurI,playermediatype, playeralltime,
-						playerintime, playercontentdesc, playernum, playerzantype, playerfrom, playerfromid,playerfromurl,playeraddtime,bjuserid,playcontentshareurl,ContentFavorite,ContentID,localurl);
+				String sequname=cursor.getString(cursor.getColumnIndex("sequname"));
+				String sequid=cursor.getString(cursor.getColumnIndex("sequid"));
+				String sequdesc=cursor.getString(cursor.getColumnIndex("sequdesc"));
+				String sequimg=cursor.getString(cursor.getColumnIndex("sequimg"));
+				PlayerHistory h = new PlayerHistory(playername, playerimage, playerurl,playerurI, playermediatype, playeralltime,
+						playerintime, playercontentdesc, playernum, playerzantype, playerfrom, playerfromid,playerfromurl,playeraddtime,bjuserid,playcontentshareurl,ContentFavorite,ContentID
+						,localurl,sequname,sequid,sequdesc,sequimg);
 				mylist.add(h);
 			}
 		} catch (Exception e) {
@@ -226,7 +246,22 @@ public class SearchPlayerHistoryDao {
 				new Object[] { date,url });
 		db.close();
 	}
-	
+	/**
+	 * 修改数据库当中某个单体节目的喜欢类型
+	 */
+	public void updateFavorite(String url,String contentFavorite) {
+		SQLiteDatabase	db = helper.getWritableDatabase();
+		String userid=CommonUtils.getUserId(context);
+		if(userid!=null&&!userid.equals("")){
+			db.execSQL("update playerhistory set playfavorite=? where bjuserid=? and playerurl=?",new Object[]{contentFavorite,userid,url});
+		}else{
+			db.execSQL("update playerhistory set playfavorite=? where playerurl=?",new Object[]{contentFavorite,url});
+		}
+		db.close();
+	}
+
+
+
 	/**
 	 * 关闭目前打开的所有数据库对象
 	 */	

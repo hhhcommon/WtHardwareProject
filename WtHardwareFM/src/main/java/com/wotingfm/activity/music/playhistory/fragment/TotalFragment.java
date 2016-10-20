@@ -196,12 +196,16 @@ public class TotalFragment extends Fragment {
 					String playShareUrl = list.get(groupPosition).getHistoryList().get(childPosition).getPlayContentShareUrl();
 					String contentId = list.get(groupPosition).getHistoryList().get(childPosition).getContentID();
 					String localUrl = list.get(groupPosition).getHistoryList().get(childPosition).getLocalurl();
+					String sequname = list.get(groupPosition).getList().get(childPosition).getSequName();
+					String sequid = list.get(groupPosition).getList().get(childPosition).getSequId();
+					String sequdesc = list.get(groupPosition).getList().get(childPosition).getSequDesc();
+					String sequimg = list.get(groupPosition).getList().get(childPosition).getSequImg();
 
 					PlayerHistory history = new PlayerHistory(
                             playerName, playerImage, playerUrl, playerUri, playerMediaType,
                             playerAllTime, playerInTime, playerContentDesc, playerNum,
                             playerZanType,  playerFrom, playerFromId, playerFromUrl,
-                            playerAddTime, bjUserId, playShareUrl, contentFavorite, contentId, localUrl);
+                            playerAddTime, bjUserId, playShareUrl, contentFavorite, contentId, localUrl,sequname,sequid,sequdesc,sequimg);
 
 					//如果该数据已经存在数据库则删除原有数据，然后添加最新数据
 					if(playerMediaType != null && playerMediaType.equals("TTS")){
