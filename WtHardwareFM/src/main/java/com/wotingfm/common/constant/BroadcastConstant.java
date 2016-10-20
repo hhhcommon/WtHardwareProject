@@ -55,11 +55,11 @@ public class BroadcastConstant {
 	//PUSH_REFRESHNEWS-----push_refreshnews
 	public static final String PUSH_REFRESHNEWS="PUSH_REFRESHNEWS";
 
-
-
 	//PUSH_NOTIFICATION-----pushnnn
 	public static final String PUSH_NOTIFICATION="PUSH_NOTIFICATION";
 
     // 更新 WiFi 列表
     public static final String UPDATE_WIFI_LIST = "UPDATE_WIFI_LIST";
+
+    public static final String SEARCH_VIEW_UPDATE = "SEARCH_VIEW_UPDATE";
 }

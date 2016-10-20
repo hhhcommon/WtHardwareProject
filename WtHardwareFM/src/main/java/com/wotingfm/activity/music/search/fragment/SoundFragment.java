@@ -27,8 +27,8 @@ import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
-import com.wotingfm.activity.music.search.activity.SearchLikeActivity;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
@@ -47,7 +47,7 @@ public class SoundFragment extends Fragment {
 	private Dialog dialog;
 	private List<RankInfo> SubList;
 	private ListView mlistView;
-	private ArrayList<RankInfo> newlist = new ArrayList<RankInfo>();
+	private ArrayList<RankInfo> newlist = new ArrayList<>();
 //	private boolean flag;
 	private View rootView;
 	protected FavorListAdapter adapter;
@@ -67,7 +67,7 @@ public class SoundFragment extends Fragment {
 //		flag = true;// 设置等待提示是否展示
 		//数据变化后广播
 		mintent = new Intent();
-		mintent.setAction(SearchLikeActivity.SEARCH_VIEW_UPDATE);
+		mintent.setAction(BroadcastConstant.SEARCH_VIEW_UPDATE);
 		initDao();
 	}
 
@@ -78,7 +78,7 @@ public class SoundFragment extends Fragment {
 			mlistView = (ListView) rootView.findViewById(R.id.listView);
 			mlistView.setSelector(new ColorDrawable(Color.TRANSPARENT));
 			IntentFilter myfileter = new IntentFilter();
-			myfileter.addAction(SearchLikeActivity.SEARCH_VIEW_UPDATE);
+			myfileter.addAction(BroadcastConstant.SEARCH_VIEW_UPDATE);
 			context.registerReceiver(mBroadcastReceiver, myfileter);
 		}
 		return rootView;
@@ -223,16 +223,13 @@ public class SoundFragment extends Fragment {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			if (action.equals(SearchLikeActivity.SEARCH_VIEW_UPDATE)) {
+			if (action.equals(BroadcastConstant.SEARCH_VIEW_UPDATE)) {
 				if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
 					searchstr=intent.getStringExtra("SearchStr");
 					if(searchstr!=null&&!searchstr.equals("")){
 						dialog = DialogUtils.Dialogph(context, "通讯中");
 						sendRequest();
-					}else{
-					/*	ToastUtil.show_allways(context, "搜索字符串获取异常");*/
 					}
-					
 				} else {
 					ToastUtils.show_always(context, "网络失败，请检查网络");
 				}

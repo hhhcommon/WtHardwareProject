@@ -75,40 +75,30 @@ import java.util.List;
 public class SearchLikeActivity extends FragmentActivity implements
         View.OnClickListener, TagFlowLayout.OnTagClickListener, AdapterView.OnItemClickListener {
 
-    private static SearchLikeActivity context;
+    private SearchLikeActivity context;
     private SearchHistoryDao shd;               // 搜索数据库
     private History history;                    // 数据库信息
     private SearchKeyAdapter searchKeyAdapter;
-
-//    private AudioManager audioMgr;
-//    private SearchHistoryAdapter historyAdapter;
-//    private VoiceRecognizer mVoiceRecognizer;
-//    private Bitmap bmp;
-//    private Bitmap bmpPress;
-//    private Dialog yuYinDialog;                 // 语音搜索对话框
 
     private Dialog dialog;                      // 加载数据对话框
     private TagFlowLayout flowTopSearch;        // 热门搜索内容
     private RelativeLayout linearHistory;       // 搜索历史
     private LinearLayout linearStatusFirst;     // 搜索初始化状态
     private LinearLayout linearStatusThird;     // 搜索结束展示搜索结果状态
-//    private LinearLayout linearVoice;           // 语音搜索视图
 
-    private static ViewPager mPager;
-    private static TextView textTotal;          // 全部
-    private static TextView textSequ;           // 专辑
-    private static TextView textSound;          // 声音
-    private static TextView textRadio;          // 电台
-    private static TextView textTts;            // TTS
+    private ViewPager mPager;
+    private TextView textTotal;          // 全部
+    private TextView textSequ;           // 专辑
+    private TextView textSound;          // 声音
+    private TextView textRadio;          // 电台
+    private TextView textTts;            // TTS
     private TextView linearTopTitle;            // 展示 "热门搜索"
 
     private ListView mListView;                 // 搜索联想词列表 搜索中的状态
     private GridView gridHistory;               // 搜索历史内容
     private EditText mEtSearchContent;          // 输入  搜索内容
     private ImageView imageEditClear;           // 清除搜索框中输入的内容 搜索框有内容是显示
-//    private ImageView imageEditNormal;          // 显示语音对话框按钮 搜索框没有输入内容时显示
     private ImageView image;                    // 页面指示器 图片
-//    private TextView textSpeakContent;
     private TextView textSpeakStatus;           // 显示语音搜索的状态
 
     private List<History> historyDatabaseList;
@@ -117,9 +107,7 @@ public class SearchLikeActivity extends FragmentActivity implements
 
     private int bmpW;
     public int offset;
-//    private int stepVolume;                     // 音量
-//    protected int curVolume;                    // 记录当前音量
-    public static String SEARCH_VIEW_UPDATE = "SEARCH_VIEW_UPDATE";
+//    public static String SEARCH_VIEW_UPDATE = "SEARCH_VIEW_UPDATE";
     private String tag = "SEARCH_LIKE_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
 
@@ -174,20 +162,10 @@ public class SearchLikeActivity extends FragmentActivity implements
                 mEtSearchContent.setText("");
                 mListView.setVisibility(View.GONE);
                 linearStatusFirst.setVisibility(View.VISIBLE);
-//                imageEditNormal.setVisibility(View.GONE);
                 linearStatusThird.setVisibility(View.GONE);
                 imageEditClear.setVisibility(View.GONE);
                 getHistoryListNow();
                 break;
-//            case R.id.img_edit_normal:  // 语音对话框
-//                yuYinDialog.show();
-//                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-//                imm.hideSoftInputFromWindow(linearVoice.getWindowToken(), 0);
-//                break;
-//            case R.id.tv_cancle:        // 取消
-//                yuYinDialog.dismiss();
-//                textSpeakContent.setVisibility(View.GONE);
-//                break;
         }
     }
 
@@ -201,17 +179,12 @@ public class SearchLikeActivity extends FragmentActivity implements
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         MyActivityManager mam = MyActivityManager.getInstance();
         mam.pushOneActivity(context);
-//        initBitmap();
 
         initViews();            // 初始化视图
-//        yuYinDialog();          // 初始化语音搜索框
         initImage();            // 初始化指示器图片
         initDao();              // 初始化数据库命令执行对象
         initTextWatcher();      // 输入框监听
         initViewPager();
-
-//        audioMgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-//        stepVolume = audioMgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC) / 100;       // 调整音量大概为最大音量的 1 / 100
 
         // 获取热门搜索对应接口 HotKey
         dialog = DialogUtils.Dialogph(context, "通讯中");
@@ -247,7 +220,6 @@ public class SearchLikeActivity extends FragmentActivity implements
         linearHistory = (RelativeLayout) findViewById(R.id.lin_history);                    // 搜索历史
 
         mEtSearchContent = (EditText) findViewById(R.id.et_searchlike);                     // 搜索框输入的内容
-//        mEtSearchContent.setOnFocusChangeListener(new MyFocusChangeLis());
 
         flowTopSearch = (TagFlowLayout) findViewById(R.id.gv_topsearch);                    // 展示热门搜索词
         flowTopSearch.setOnTagClickListener(this);
@@ -258,13 +230,11 @@ public class SearchLikeActivity extends FragmentActivity implements
 
         mListView = (ListView) findViewById(R.id.lv_searchlike_status_second);              // 搜索时的联想词 搜索中状态
         mListView.setSelector(new ColorDrawable(Color.TRANSPARENT));                        // 取消默认背景颜色
+        setListItemListener();
         
         imageEditClear = (ImageView) findViewById(R.id.img_edit_clear);                     // 清理 editText 内容
         imageEditClear.setOnClickListener(this);
         
-//        imageEditNormal = (ImageView) findViewById(R.id.img_edit_normal);                   // 正常状态
-//        imageEditNormal.setOnClickListener(this);
-
         textTotal = (TextView) findViewById(R.id.tv_total);                                 // 全部
         textTotal.setOnClickListener(new txListener(0));
 
@@ -283,18 +253,6 @@ public class SearchLikeActivity extends FragmentActivity implements
         mPager = (ViewPager) findViewById(R.id.viewpager);
         mPager.setOffscreenPageLimit(1);
     }
-
-    // 关闭语音搜索对话框
-//    private void closeYuYinDialog() {
-//        new Handler().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (yuYinDialog != null) {
-//                    yuYinDialog.dismiss();
-//                }
-//            }
-//        }, 2000);
-//    }
 
     // 初始化数据库
     private void initDao() {
@@ -323,13 +281,11 @@ public class SearchLikeActivity extends FragmentActivity implements
                     sendKey(s.toString());// 发送搜索变更内容
 
                     imageEditClear.setVisibility(View.VISIBLE);
-//                    imageEditNormal.setVisibility(View.GONE);
                     linearStatusFirst.setVisibility(View.GONE);
                     mListView.setVisibility(View.VISIBLE);
                     linearStatusThird.setVisibility(View.GONE);
                 } else {
                     imageEditClear.setVisibility(View.GONE);
-//                    imageEditNormal.setVisibility(View.GONE);
                     mListView.setVisibility(View.GONE);
                     linearStatusFirst.setVisibility(View.VISIBLE);
                 }
@@ -349,9 +305,12 @@ public class SearchLikeActivity extends FragmentActivity implements
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ToastUtils.show_always(context, "点击了 --- > > " + position);
                 String s = topSearchList.get(position);
                 if (s != null && !s.equals("")) {
                     checkEdit(topSearchList.get(position));
+
+                    L.v("点击了 --- > > " + position);
                 }
             }
         });
@@ -384,14 +343,10 @@ public class SearchLikeActivity extends FragmentActivity implements
 
     private void checkEdit(String str) {
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-//            closeYuYinDialog();
-//            imageEditNormal.setVisibility(View.GONE);
-
-            imageEditClear.setVisibility(View.VISIBLE);
             linearStatusThird.setVisibility(View.VISIBLE);
 
             Intent mIntent = new Intent();
-            mIntent.setAction(SearchLikeActivity.SEARCH_VIEW_UPDATE);
+            mIntent.setAction(BroadcastConstant.SEARCH_VIEW_UPDATE);
             mIntent.putExtra("SearchStr", str);
             if (CommonUtils.getUserId(context) == null) {
                 history = new History("wotingkeji", str);
@@ -456,7 +411,6 @@ public class SearchLikeActivity extends FragmentActivity implements
                             } else {
                                 searchKeyAdapter.notifyDataSetChanged();
                             }
-                            setListItemListener();
                         }
                     } else {
                         ToastUtils.show_always(getApplicationContext(), "没有查询到内容");
@@ -552,8 +506,7 @@ public class SearchLikeActivity extends FragmentActivity implements
         });
     }
 
-
-    public static void viewChange(int index) {
+    private void viewChange(int index) {
         if (index == 0) {
             textTotal.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
             textSequ.setTextColor(context.getResources().getColor(R.color.group_item_text2));
@@ -587,7 +540,7 @@ public class SearchLikeActivity extends FragmentActivity implements
         }
     }
 
-    public static void updateViewPager(String mediaType) {
+    public void updateViewPager(String mediaType) {
         int index = 0;
         if (mediaType != null && !mediaType.equals("")) {
             switch (mediaType) {
@@ -711,71 +664,4 @@ public class SearchLikeActivity extends FragmentActivity implements
         context = null;
         setContentView(R.layout.activity_null);
     }
-
-    // 语音搜索按钮的 OnTouch 监听
-//    class MyTouchLis implements View.OnTouchListener {
-//        @Override
-//        public boolean onTouch(View v, MotionEvent event) {
-//            switch (event.getAction()) {
-//                case MotionEvent.ACTION_DOWN:
-//                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-//                        curVolume = audioMgr.getStreamVolume(AudioManager.STREAM_MUSIC);
-//                        audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, stepVolume, AudioManager.FLAG_PLAY_SOUND);
-//
-//					    mVoiceRecognizer = VoiceRecognizer.getInstance(context, BroadcastConstant.SEARCHVOICE);
-//						mVoiceRecognizer.startListen();
-//						textSpeakStatus.setText("开始语音转换");
-//						imageVoice.setImageBitmap(bmpPress);
-//						textSpeakContent.setVisibility(View.GONE);
-//                    } else {
-//                        ToastUtils.show_short(context, "网络失败，请检查网络");
-//                    }
-//                    break;
-//                case MotionEvent.ACTION_UP:
-//                    audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, curVolume, AudioManager.FLAG_PLAY_SOUND);
-//                    mVoiceRecognizer.stopListen();
-//                    imageVoice.setImageBitmap(bmp);
-//                    textSpeakStatus.setText("正在查询请稍等");
-//                    break;
-//            }
-//            return true;
-//        }
-//    }
-
-    // mEtSearchContent 输入框
-//    class MyFocusChangeLis implements View.OnFocusChangeListener {
-//
-//        @Override
-//        public void onFocusChange(View v, boolean hasFocus) {
-//            if (hasFocus) {
-//                closeYuYinDialog();
-//            }
-//        }
-//    }
-
-//    private void initBitmap() {
-//        bmp = BitmapUtils.readBitMap(context, R.mipmap.talknormal);
-//        bmpPress = BitmapUtils.readBitMap(context, R.mipmap.wt_duijiang_button_pressed);
-//    }
-
-    // 语音搜索框
-//    private void yuYinDialog() {
-//        View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_yuyin_search, null);
-//        linearVoice = (LinearLayout) dialog.findViewById(R.id.rl_voice);
-//        textSpeakStatus = (TextView) dialog.findViewById(R.id.tv_speak_status);
-//        textSpeakContent = (TextView) dialog.findViewById(R.id.text_speak_content);
-//        dialog.findViewById(R.id.tv_cancle).setOnClickListener(this);
-//        dialog.findViewById(R.id.imageView_voice).setOnTouchListener(new MyTouchLis());
-//        yuYinDialog = new Dialog(context, R.style.MyDialog);
-//        yuYinDialog.setContentView(dialog);
-//        Window window = yuYinDialog.getWindow();
-//        DisplayMetrics dm = new DisplayMetrics();
-//        getWindowManager().getDefaultDisplay().getMetrics(dm);
-//        int scrEnw = dm.widthPixels;
-//        LayoutParams params = dialog.getLayoutParams();
-//        params.width = scrEnw;
-//        dialog.setLayoutParams(params);
-//        window.setGravity(Gravity.BOTTOM);
-//        window.setWindowAnimations(R.style.sharestyle);
-//    }
 }
