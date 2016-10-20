@@ -9,8 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="2dp"
-        android:layout_marginLeft="2dp"
         >
 
         <LinearLayout
@@ -23,11 +21,13 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="158dp"
+                android:paddingLeft="8dp"
                 android:background="@color/dinglan_orange"
                 android:orientation="vertical" >
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+
                     android:text="详情"
                     android:textSize="@dimen/text_size_13"
                     android:textColor="@color/beijing"/>
@@ -121,11 +121,13 @@
             android:layout_height="wrap_content"
             android:text="主播介绍"
             android:textSize="@dimen/text_size_13"
+            android:paddingLeft="8dp"
             android:textColor="@color/beijing"/>
         
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:paddingLeft="8dp"
             android:layout_marginTop="18dp">
 
             <ImageView
@@ -185,6 +187,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="内容介绍"
+            android:paddingLeft="8dp"
             android:textSize="@dimen/text_size_13"
             android:textColor="@color/beijing"
             android:layout_marginTop="30dp"/>
@@ -193,6 +196,7 @@
             android:id="@+id/text_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:paddingLeft="8dp"
             android:text="我听我享听"
             android:textSize="@dimen/list_text_size"
             android:textColor="@color/wt_login_third"
@@ -203,6 +207,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="标签"
+            android:paddingLeft="8dp"
             android:textSize="@dimen/text_size_13"
             android:textColor="@color/beijing"
             android:layout_marginTop="30dp"/>
@@ -211,6 +216,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="我听我享听"
+            android:paddingLeft="8dp"
             android:textSize="@dimen/list_text_size"
             android:textColor="@color/wt_login_third"
             android:layout_marginTop="18dp"/>

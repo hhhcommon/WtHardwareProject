@@ -868,10 +868,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     Intent intent = new Intent(context, AlbumActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "player");
-                    bundle.putString("conentname",sequname);
-                    bundle.putString("conentdesc",sequdesc);
-                    bundle.putString("conentid",sequid);
-                    bundle.putString("contentimg",sequimage);
+                    bundle.putString("contentName",sequname);
+                    bundle.putString("contentDesc",sequdesc);
+                    bundle.putString("contentId",sequid);
+                    bundle.putString("contentImg",sequimage);
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }else{
@@ -1670,7 +1670,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
 
     //对headview头部进行控制的类
     private static void resetHeadView() {
-
         if (GlobalConfig.playerobject != null) {
             if (GlobalConfig.playerobject.getMediaType().equals("RADIO")) {
                 // 不支持分享

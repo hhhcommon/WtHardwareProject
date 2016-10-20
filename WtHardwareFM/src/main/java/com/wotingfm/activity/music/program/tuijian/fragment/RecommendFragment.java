@@ -174,10 +174,10 @@ public class RecommendFragment extends Fragment {
                         Intent intent = new Intent(context, AlbumActivity.class);
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "player");
-                        bundle.putString("conentname", newList.get(position - 2).getContentName());
-                        bundle.putString("conentdesc", newList.get(position - 2).getContentDesc());
-                        bundle.putString("conentid", newList.get(position - 2).getContentId());
-                        bundle.putString("contentimg", newList.get(position - 2).getContentImg());
+                        bundle.putString("contentName", newList.get(position - 2).getContentName());
+                        bundle.putString("contentDesc", newList.get(position - 2).getContentDesc());
+                        bundle.putString("contentId", newList.get(position - 2).getContentId());
+                        bundle.putString("contentImg", newList.get(position - 2).getContentImg());
                         intent.putExtras(bundle);
                         startActivity(intent);
                     } else {

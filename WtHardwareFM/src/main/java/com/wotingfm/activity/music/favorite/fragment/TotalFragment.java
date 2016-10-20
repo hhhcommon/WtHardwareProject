@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -24,13 +25,16 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.favorite.activity.FavoriteActivity;
+import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
+import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.activity.music.search.adapter.SearchContentAdapter;
 import com.wotingfm.activity.music.search.model.SuperRankInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
@@ -448,21 +452,19 @@ public class TotalFragment extends Fragment {
                             playcontentshareurl, ContentFavorite, ContentId, localurl);
                     dbdao.deleteHistory(playerurl);
                     dbdao.addHistory(history);
-//					if (PlayerFragment.context != null) {
-//						MainActivity.change();
-//						HomeActivity.UpdateViewPager();
-//						PlayerFragment.SendTextRequest(list.get(groupPosition).getList().get(childPosition).getContentName(), context);
-//						getActivity().finish();
-//					} else {
-//						SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
-//						Editor et = sp.edit();
-//						et.putString(StringConstant.PLAYHISTORYENTER, "true");
-//						et.putString(StringConstant.PLAYHISTORYENTERNEWS, list.get(groupPosition).getList().get(childPosition).getContentName());
-//						et.commit();
-//						MainActivity.change();
-//						HomeActivity.UpdateViewPager();
-//						getActivity().finish();
-//					}
+					if (PlayerFragment.context != null) {
+						HomeActivity.UpdateViewPager();
+						PlayerFragment.SendTextRequest(list.get(groupPosition).getList().get(childPosition).getContentName(), context);
+						getActivity().finish();
+					} else {
+						SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
+						SharedPreferences.Editor et = sp.edit();
+						et.putString(StringConstant.PLAYHISTORYENTER, "true");
+						et.putString(StringConstant.PLAYHISTORYENTERNEWS, list.get(groupPosition).getList().get(childPosition).getContentName());
+						et.commit();
+						HomeActivity.UpdateViewPager();
+						getActivity().finish();
+					}
                 } else if (MediaType.equals("SEQU")) {
 					Intent intent = new Intent(context, AlbumActivity.class);
 					Bundle bundle = new Bundle();

@@ -10,7 +10,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
-        android:background="@color/white"
+        android:background="@color/dinglan_orange"
         android:gravity="center_vertical">
 
         <LinearLayout
@@ -25,7 +25,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="@string/back"
-                android:textColor="@color/BLACK"
+                android:textColor="@color/white"
                 android:textSize="@dimen/activity_head_right"/>
         </LinearLayout>
 
@@ -43,7 +43,7 @@
                 android:gravity="center"
                 android:singleLine="true"
                 android:text="详细资料"
-                android:textColor="@color/BLACK"
+                android:textColor="@color/white"
                 android:textSize="@dimen/activity_head_center_s"/>
         </LinearLayout>
 

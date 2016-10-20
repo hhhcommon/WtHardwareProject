@@ -161,12 +161,6 @@ public class DownLoadListActivity extends Activity implements OnClickListener {
 		adapter.setonListener(new DownLoadListAdapter.downloadlist() {
 			@Override
 			public void checkposition(int position) {
-				/*
-				 * if(fileinfolist.get(position).getChecktype()==0){
-				 * fileinfolist.get(position).setChecktype(1); Toast }else{
-				 * fileinfolist.get(position).setChecktype(0); }
-				 */
-				/* ToastUtil.show_always(context, "此处弹窗确认是否删除"); */
 				deleteConfirmDialog(position);
 				confirmdialog1.show();
 			}
