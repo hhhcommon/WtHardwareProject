@@ -26,7 +26,7 @@ import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
-import com.wotingfm.activity.music.search.activity.SearchLikeAcitvity;
+import com.wotingfm.activity.music.search.activity.SearchLikeActivity;
 import com.wotingfm.activity.music.search.adapter.SearchContentAdapter;
 import com.wotingfm.activity.music.search.model.SuperRankInfo;
 import com.wotingfm.common.config.GlobalConfig;
@@ -70,7 +70,7 @@ public class TotalFragment extends Fragment {
 //		flag = true;
 		initDao();
 		mintent = new Intent();
-		mintent.setAction(SearchLikeAcitvity.SEARCH_VIEW_UPDATE);
+		mintent.setAction(SearchLikeActivity.SEARCH_VIEW_UPDATE);
 	}
 
 	@Override
@@ -78,11 +78,11 @@ public class TotalFragment extends Fragment {
 		if(rootView == null){
 			rootView = inflater.inflate(R.layout.fragment_favorite_total, container, false);
 			ex_listview=(ExpandableListView)rootView.findViewById(R.id.ex_listview);
-			// 去除indicator
+			// 去除 indicator
 			ex_listview.setGroupIndicator(null);
 			setListener();
 			IntentFilter myfileter = new IntentFilter();
-			myfileter.addAction(SearchLikeAcitvity.SEARCH_VIEW_UPDATE);
+			myfileter.addAction(SearchLikeActivity.SEARCH_VIEW_UPDATE);
 			context.registerReceiver(mBroadcastReceiver, myfileter);
 		}
 		return rootView;
@@ -93,11 +93,11 @@ public class TotalFragment extends Fragment {
 	}
 
 	private void setListener() {
-		//屏蔽group点击事件
+		// 屏蔽group点击事件
 		ex_listview.setOnGroupClickListener(new OnGroupClickListener() {
 			@Override
 			public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {		
-				SearchLikeAcitvity.updateviewpageer(list.get(groupPosition).getKey());
+				SearchLikeActivity.updateViewPager(list.get(groupPosition).getKey());
 				return true;
 			}
 		});	
@@ -105,7 +105,6 @@ public class TotalFragment extends Fragment {
 
 	private void sendRequest(){
 		VolleyRequest.RequestPost(GlobalConfig.getSearchByText, tag, setParam(), new VolleyCallback() {
-//			private String SessionId;
 			private String ReturnType;
 			private String Message;
 			private String resultlist;
@@ -121,13 +120,13 @@ public class TotalFragment extends Fragment {
 					return ;
 				}
 				try {
-//					SessionId = result.getString("SessionId");
 					ReturnType = result.getString("ReturnType");
 					Message = result.getString("Message");
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 				if (ReturnType != null && ReturnType.equals("1001")) {
+                    ((SearchLikeActivity)context).setVisible();// 有数据则显示
 					try {
 						resultlist = result.getString("ResultList");
 						JSONTokener jsonParser = new JSONTokener(resultlist);
@@ -150,7 +149,7 @@ public class TotalFragment extends Fragment {
 							if (SubList.get(i).getMediaType() != null && !SubList.get(i).getMediaType().equals("")) {
 								if (SubList.get(i).getMediaType().equals("AUDIO")) {
 									if (playlist == null) {
-										playlist = new ArrayList<RankInfo>();
+										playlist = new ArrayList<>();
 										playlist.add(SubList.get(i));
 									} else {
 										if(playlist.size()<3){
@@ -159,7 +158,7 @@ public class TotalFragment extends Fragment {
 									}
 								} else if (SubList.get(i).getMediaType().equals("SEQU")) {
 									if (sequlist == null) {
-										sequlist = new ArrayList<RankInfo>();
+										sequlist = new ArrayList<>();
 										sequlist.add(SubList.get(i));
 									} else {
 										if(sequlist.size()<3){
@@ -168,7 +167,7 @@ public class TotalFragment extends Fragment {
 									}
 								}else if (SubList.get(i).getMediaType().equals("TTS")) {
 									if (ttslist == null) {
-										ttslist = new ArrayList<RankInfo>();
+										ttslist = new ArrayList<>();
 										ttslist.add(SubList.get(i));
 									} else {
 										if(ttslist.size()<3){
@@ -177,7 +176,7 @@ public class TotalFragment extends Fragment {
 									}
 								}else if (SubList.get(i).getMediaType().equals("RADIO")) {
 									if (radiolist == null) {
-										radiolist = new ArrayList<RankInfo>();
+										radiolist = new ArrayList<>();
 										radiolist.add(SubList.get(i));
 									} else {
 										if(radiolist.size()<3){
@@ -361,7 +360,7 @@ public class TotalFragment extends Fragment {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			if (action.equals(SearchLikeAcitvity.SEARCH_VIEW_UPDATE)) {
+			if (action.equals(SearchLikeActivity.SEARCH_VIEW_UPDATE)) {
 				if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
 					searchstr=intent.getStringExtra("SearchStr");
 					if(searchstr!=null&&!searchstr.equals("")){

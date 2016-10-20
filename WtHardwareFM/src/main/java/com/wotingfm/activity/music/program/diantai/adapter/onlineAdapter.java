@@ -2,7 +2,6 @@ package com.wotingfm.activity.music.program.diantai.adapter;
 
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +18,7 @@ import com.wotingfm.activity.music.program.fmlist.activity.FMListActivity;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.helper.ImageLoader;
-import com.wotingfm.util.BitmapUtils;
-import com.wotingfm.util.ToastUtils;
+import com.wotingfm.util.L;
 
 import java.util.List;
 
@@ -82,21 +80,21 @@ public class onlineAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fragment_radio_list, parent, false);
             holder = new ViewHolder();
-            holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
-            holder.lin_more = (LinearLayout) convertView.findViewById(R.id.lin_head_more);
+            holder.textName = (TextView) convertView.findViewById(R.id.tv_name);
+            holder.linearMore = (LinearLayout) convertView.findViewById(R.id.lin_head_more);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         final RadioPlay lists = group.get(groupPosition);
         if (lists.getCatalogName() == null || lists.getCatalogName().equals("")) {
-            holder.tv_name.setText("未知");
+            holder.textName.setText("未知");
         } else {
-            holder.tv_name.setText(lists.getCatalogName());
+            holder.textName.setText(lists.getCatalogName());
         }
 
         // 判断回调对象决定是哪个fragment的对象调用的词adapter 从而实现多种布局
-        holder.lin_more.setOnClickListener(new OnClickListener() {
+        holder.linearMore.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(context, FMListActivity.class);
@@ -119,12 +117,11 @@ public class onlineAdapter extends BaseExpandableListAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_rankinfo, null);
-            holder.textview_ranktitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
-            holder.textview_rankplaying = (TextView) convertView.findViewById(R.id.RankPlaying);// 正在播放的节目
-            holder.imageview_rankimage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
-            holder.mTv_number = (TextView) convertView.findViewById(R.id.tv_num);
-            //			holder.mImg_play = (ImageView) convertView.findViewById(R.id.img_play);
-            holder.lin_CurrentPlay = (LinearLayout) convertView.findViewById(R.id.lin_currentplay);
+            holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);     // 台名
+            holder.textRankPlaying = (TextView) convertView.findViewById(R.id.RankPlaying); // 正在播放的节目
+            holder.imageRankImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
+            holder.textNumber = (TextView) convertView.findViewById(R.id.tv_num);
+            holder.linearCurrentPlay = (LinearLayout) convertView.findViewById(R.id.lin_currentplay);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -132,94 +129,47 @@ public class onlineAdapter extends BaseExpandableListAdapter {
         RankInfo lists = group.get(groupPosition).getList().get(childPosition);
         if (lists != null) {
             if (lists.getMediaType() != null && !lists.getMediaType().equals("")) {
-                if (lists.getMediaType().equals("RADIO")) {
-                    if (lists.getContentName() == null || lists.getContentName().equals("")) {
-                        holder.textview_ranktitle.setText("未知");
+                if (lists.getContentName() != null && !lists.getContentName().equals("")) {
+                    holder.textRankTitle.setText(lists.getContentName());
+                }
+                if (lists.getContentPub() != null && !lists.getContentPub().equals("")) {
+                    holder.textRankPlaying.setText("正在直播：" + lists.getContentPub());
+                }
+                if (lists.getContentImg() != null
+                        && !lists.getContentImg().equals("null") && !lists.getContentImg().trim().equals("")) {
+
+                    String url;
+                    if (lists.getContentImg().startsWith("http")) {
+                        url = lists.getContentImg();
                     } else {
-                        holder.textview_ranktitle.setText(lists.getContentName());
+                        url = GlobalConfig.imageurl + lists.getContentImg();
                     }
-                    if (lists.getContentPub() == null || lists.getContentPub().equals("")) {
-                        holder.textview_rankplaying.setText("未知");
-                    } else {
-                        holder.textview_rankplaying.setText(lists.getContentPub());
-                    }
-                    if (lists.getContentImg() == null
-                            || lists.getContentImg().equals("")
-                            || lists.getContentImg().equals("null")
-                            || lists.getContentImg().trim().equals("")) {
-                        Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
-                        holder.imageview_rankimage.setImageBitmap(bmp);
-                    } else {
-                        String url;
-                        if (lists.getContentImg().startsWith("http")) {
-                            url = lists.getContentImg();
-                        } else {
-                            url = GlobalConfig.imageurl + lists.getContentImg();
-                        }
-                        imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageview_rankimage, false, false, null, null);
-                    }
-                } else {// 判断mediaType==AUDIO的情况
-                    if (lists.getContentName() == null || lists.getContentName().equals("")) {
-                        holder.textview_ranktitle.setText("未知");
-                    } else {
-                        holder.textview_ranktitle.setText(lists.getContentName());
-                    }
-                    if (lists.getContentImg() == null
-                            || lists.getContentImg().equals("")
-                            || lists.getContentImg().equals("null")
-                            || lists.getContentImg().trim().equals("")) {
-                        Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
-                        holder.imageview_rankimage.setImageBitmap(bmp);
-                    } else {
-                        String url;
-                        if (lists.getContentImg().startsWith("http")) {
-                            url = lists.getContentImg();
-                        } else {
-                            url = GlobalConfig.imageurl + lists.getContentImg();
-                        }
-                        imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageview_rankimage, false, false, null, null);
-                    }
-                    holder.lin_CurrentPlay.setVisibility(View.INVISIBLE);
+                    imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageRankImage, false, false, null, null);
+                }
+                if (lists.getWatchPlayerNum() != null
+                        && !lists.getWatchPlayerNum().equals("") && !lists.getWatchPlayerNum().equals("null")) {
+
+                    holder.textNumber.setText(lists.getWatchPlayerNum());
+                }
+                if (!lists.getMediaType().equals("RADIO")) {// 判断 mediaType == AUDIO 的情况
+                    holder.linearCurrentPlay.setVisibility(View.INVISIBLE);
                 }
             } else {
-                ToastUtils.show_always(context, "服务器返回数据MediaType为空");
-            }
-            if (lists.getWatchPlayerNum() == null
-                    || lists.getWatchPlayerNum().equals("")
-                    || lists.getWatchPlayerNum().equals("null")) {
-                holder.mTv_number.setText("8000");
-            } else {
-                holder.mTv_number.setText(lists.getWatchPlayerNum());
+                L.w("服务器返回数据MediaType为空");
             }
         }
-        //		if (lists.getType() == 1) {
-        //			holder.mImg_play.setImageResource(R.drawable.album_play);
-        //		} else {
-        //			holder.mImg_play.setImageResource(R.drawable.album_pause);
-        //		}
-        //		holder.mImg_play.setOnClickListener(this);
-        //		holder.mImg_play.setTag(R.id.tag_groupname, groupPosition);
-        //		holder.mImg_play.setTag(R.id.tag_childname, childPosition);
         return convertView;
 
     }
 
-    // 定义的接口
-    public interface CallBackOnline {
-        void click(View v);
-    }
-
-
     class ViewHolder {
-        public ImageView imageview_rankimage;
-        //		public ImageView mImg_play;
-//		public TextView textview_rankplayingnumber;
-        public TextView textview_rankplaying;
-        public TextView textview_ranktitle;
-        public TextView tv_name;
-        public LinearLayout lin_more;
-        public TextView mTv_number;
-        public LinearLayout lin_CurrentPlay;
+        public ImageView imageRankImage;
+        public TextView textRankPlaying;
+        public TextView textRankTitle;
+        public TextView textName;
+        public LinearLayout linearMore;
+        public TextView textNumber;
+        public LinearLayout linearCurrentPlay;
     }
 
     @Override

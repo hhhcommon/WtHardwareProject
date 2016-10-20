@@ -18,7 +18,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.activity.music.program.fenlei.adapter.fenleigridAdapter;
+import com.wotingfm.activity.music.program.fenlei.adapter.FLeiGridAdapter;
 import com.wotingfm.activity.music.program.fenlei.model.fenLei;
 import com.wotingfm.activity.music.program.fenlei.model.fenLeiName;
 import com.wotingfm.activity.music.program.radiolist.activity.RadioListActivity;
@@ -40,7 +40,7 @@ import java.util.List;
  */
 public class FenLeiFragment extends Fragment {
     private FragmentActivity context;
-    private fenleigridAdapter adapter;
+    private FLeiGridAdapter adapter;
 
     private Dialog dialog;
     private View rootView;
@@ -112,7 +112,7 @@ public class FenLeiFragment extends Fragment {
                         subList = subListAll.getSubCata();
                         if (subList != null && subList.size() != 0) {
                             if (adapter == null) {
-                                gridFenLei.setAdapter(adapter = new fenleigridAdapter(context, subList));
+                                gridFenLei.setAdapter(adapter = new FLeiGridAdapter(context, subList));
                             } else {
                                 adapter.notifyDataSetChanged();
                             }

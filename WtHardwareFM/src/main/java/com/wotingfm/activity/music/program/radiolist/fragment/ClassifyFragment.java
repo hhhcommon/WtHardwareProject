@@ -60,7 +60,7 @@ public class ClassifyFragment extends Fragment{
 
     private int page = 1;					// 页码
     private int pageSizeNumber;
-	private int refreshType = 1;			// refreshtype 1为下拉加载 2为上拉加载更多
+	private int refreshType = 1;			// refreshType 1为下拉加载 2为上拉加载更多
 	private String catalogId;
 	private String catalogType;
 
@@ -93,7 +93,6 @@ public class ClassifyFragment extends Fragment{
             View headView = LayoutInflater.from(context).inflate(R.layout.headview_acitivity_radiolist, null);
 			// 轮播图
             RollPagerView mLoopViewPager= (RollPagerView) headView.findViewById(R.id.slideshowView);
-//	        mLoopViewPager.setPlayDelay(5000);
 			mLoopViewPager.setAdapter(new LoopAdapter(mLoopViewPager));
 			mLoopViewPager.setHintView(new IconHintView(context,R.mipmap.indicators_now,R.mipmap.indicators_default));
             mListView = (XListView) rootView.findViewById(R.id.listview_fm);

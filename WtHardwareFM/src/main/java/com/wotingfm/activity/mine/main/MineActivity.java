@@ -132,14 +132,14 @@ public class MineActivity extends Activity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine);
         context = this;
-        wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
+        wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);             // 获取 WiFi 服务
         imageLoader = new ImageLoader(context);
-        clearCacheDialog();
-        exitLoginDialog();
-        setView();           // 设置界面
-        imageDialog();
-        getBluetoothState();
-        initCache();
+        clearCacheDialog();     // 清除缓存对话框
+        exitLoginDialog();      // 退出登录对话框
+        setView();              // 设置界面
+        imageDialog();          // 更换头像对话框
+        getBluetoothState();    // 获取蓝牙的打开关闭状态
+        initCache();            // 启动统计缓存的线程
     }
 
     // 设置 view
@@ -384,7 +384,7 @@ public class MineActivity extends Activity implements OnClickListener {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
-                            String  SSIDWiFi = wifiManager.getConnectionInfo().getSSID();
+                            String SSIDWiFi = wifiManager.getConnectionInfo().getSSID();
                             L.v("SSIDWiFi", SSIDWiFi);
                             if(SSIDWiFi.startsWith("\"")) {
                                 SSIDWiFi = SSIDWiFi.substring(1, SSIDWiFi.length() - 1);
@@ -403,6 +403,21 @@ public class MineActivity extends Activity implements OnClickListener {
     protected void onResume() {
         super.onResume();
         getLoginStatus();
+        if(wifiManager.isWifiEnabled()) {
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    String SSIDWiFi = wifiManager.getConnectionInfo().getSSID();
+                    L.v("SSIDWiFi", SSIDWiFi);
+                    if(SSIDWiFi.startsWith("\"")) {
+                        SSIDWiFi = SSIDWiFi.substring(1, SSIDWiFi.length() - 1);
+                    }
+                    textWifiName.setText(SSIDWiFi);
+                }
+            }, 2000);
+        } else {
+            textWifiName.setText("关闭");
+        }
     }
 
     // 注销数据交互

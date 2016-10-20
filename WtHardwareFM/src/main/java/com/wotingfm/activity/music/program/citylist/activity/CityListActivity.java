@@ -45,14 +45,13 @@ import java.util.List;
 
 /**
  * 城市列表
- *
  * @author 辛龙
  *         2016年4月7日
  */
 public class CityListActivity extends AppBaseActivity {
+    private CharacterParser characterParser = CharacterParser.getInstance();// 实例化汉字转拼音类
+    private PinyinComparator_d pinyinComparator = new PinyinComparator_d();
     private CityListAdapter adapter;
-    private CharacterParser characterParser;
-    private PinyinComparator_d pinyinComparator;
 
     private Dialog dialog;
     private SideBar sideBar;
@@ -75,11 +74,8 @@ public class CityListActivity extends AppBaseActivity {
     @Override
     protected void init() {
         setTitle("省市台");
-
-        characterParser = CharacterParser.getInstance();                                // 实例化汉字转拼音类
-        pinyinComparator = new PinyinComparator_d();
         setView();
-        setListener();
+
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             dialog = DialogUtils.Dialogph(context, "正在获取信息");
             sendRequest();
@@ -96,82 +92,45 @@ public class CityListActivity extends AppBaseActivity {
         sideBar = (SideBar) findViewById(R.id.sidrbar);
         sideBar.setTextView(dialogs);
 
-        listView = (ListView) findViewById(R.id.country_lvcountry);        // listView
+        listView = (ListView) findViewById(R.id.country_lvcountry);         // listView
         editSearchContent = (EditText) findViewById(R.id.et_search);        // 搜索控件
         imageClear = (ImageView) findViewById(R.id.image_clear);
+
+        setListener();
     }
 
     // 发送网络请求获取数据列表
     private void sendRequest() {
         VolleyRequest.RequestPost(GlobalConfig.getCatalogUrl, tag, setParam(), new VolleyCallback() {
-            private String ReturnType;
-//            private fenLeiName mFenleiname;
 
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
-                // 如果网络请求已经执行取消操作  就表示就算请求成功也不需要数据返回了  所以方法就此结束
                 if (isCancelRequest) {
                     return;
                 }
-
                 try {
-                    ReturnType = result.getString("ReturnType");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+                    String returnType = result.getString("ReturnType");
+                    L.w("returnType -- > > " + returnType);
 
-                // 根据返回值来对程序进行解析
-                if (ReturnType != null && ReturnType.equals("1001")) {
-                    try {
+                    if (returnType != null && returnType.equals("1001")) {
                         fenLei subListAll = new Gson().fromJson(result.getString("CatalogData"), new TypeToken<fenLei>() {}.getType());
                         srcList = subListAll.getSubCata();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
+                        if (srcList != null && srcList.size() > 0) {
+                            userList.clear();
+                            userList.addAll(srcList);
+                            filledData(userList);
+                            Collections.sort(userList, pinyinComparator);
+                            listView.setAdapter(adapter = new CityListAdapter(context, userList));
+                            setInterface();
+                        }
+                    }else {
+                        ToastUtils.show_always(context, "数据获取异常，请稍候重试");
                     }
-
-                    if (srcList.size() == 0) {
-                        ToastUtils.show_always(context, "获取分类列表为空");
-                    } else {
-                        userList.clear();
-                        userList.addAll(srcList);
-                        filledData(userList);
-                        Collections.sort(userList, pinyinComparator);
-                        listView.setAdapter(adapter = new CityListAdapter(context, userList));
-                        setInterface();
-						  /*  //将数据写入数据库
-						    List<fenLeiName> mlist=new ArrayList<fenLeiName>();
-						    for(int i=0;i<srclist.size();i++){
-						    	 mFenleiname=new fenLeiName();
-						    	 mFenleiname.setCatalogId(srclist.get(i).getCatalogId());
-						    	 mFenleiname.setCatalogName(srclist.get(i).getCatalogName());
-						    	 mlist.add(mFenleiname);
-						    	 // 暂时只解析一层 不向下解析了
-						    	 if(srclist.get(i).getSubCata()!=null&&srclist.get(i).getSubCata().size()>0){
-						    		 for(int j=0;j<srclist.get(i).getSubCata().size();j++){
-						    			 mFenleiname=new fenLeiName();
-								    	 mFenleiname.setCatalogId(srclist.get(i).getSubCata().get(j).getCatalogId());
-								    	 mFenleiname.setCatalogName(srclist.get(i).getSubCata().get(j).getCatalogName());
-								    	 mlist.add(mFenleiname);
-						    		 }
-						    	 }
-						    }
-						    if(mlist.size()!=0){
-						    	CID.InsertCityInfo(mlist);
-						    } */
-                    }
-                } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_always(context, "无此分类信息");
-                } else if (ReturnType != null && ReturnType.equals("1003")) {
-                    ToastUtils.show_always(context, "分类不存在");
-                } else if (ReturnType != null && ReturnType.equals("1011")) {
-                    ToastUtils.show_always(context, "当前暂无分类");
-                } else if (ReturnType != null && ReturnType.equals("T")) {
-                    ToastUtils.show_always(context, "获取列表异常");
-                }else {
-                    ToastUtils.show_always(context, "数据获取异常，请稍候重试");
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -228,7 +187,7 @@ public class CityListActivity extends AppBaseActivity {
                     et.putString(StringConstant.CITYNAME, userList.get(position).getCatalogName());
                     GlobalConfig.CityName = userList.get(position).getCatalogName();
                 }
-                if(!et.commit()) {
+                if (!et.commit()) {
                     L.w("数据 commit 失败!");
                 }
                 sendBroadcast(new Intent(BroadcastConstant.CITY_CHANGE));// 发送广播更新城市信息
@@ -307,8 +266,7 @@ public class CityListActivity extends AppBaseActivity {
             filterDateList.clear();
             for (fenLeiName sortModel : userList) {
                 String name = sortModel.getName();
-                if (name.indexOf(search_name) != -1
-                        || characterParser.getSelling(name).startsWith(search_name)) {
+                if (name.indexOf(search_name) != -1 || characterParser.getSelling(name).startsWith(search_name)) {
                     filterDateList.add(sortModel);
                 }
             }

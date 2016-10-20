@@ -27,7 +27,7 @@ import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
-import com.wotingfm.activity.music.search.activity.SearchLikeAcitvity;
+import com.wotingfm.activity.music.search.activity.SearchLikeActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -68,7 +68,7 @@ public class RadioFragment extends Fragment {
 //		flag = true;	// 设置等待提示是否展示
 		//数据变化后广播
 		mintent = new Intent();
-		mintent.setAction(SearchLikeAcitvity.SEARCH_VIEW_UPDATE);
+		mintent.setAction(SearchLikeActivity.SEARCH_VIEW_UPDATE);
 		initDao();
 	}
 
@@ -79,7 +79,7 @@ public class RadioFragment extends Fragment {
 			mlistView = (XListView) rootView.findViewById(R.id.listView);
 			mlistView.setSelector(new ColorDrawable(Color.TRANSPARENT));
 			IntentFilter myfileter = new IntentFilter();
-			myfileter.addAction(SearchLikeAcitvity.SEARCH_VIEW_UPDATE);
+			myfileter.addAction(SearchLikeActivity.SEARCH_VIEW_UPDATE);
 			context.registerReceiver(mBroadcastReceiver, myfileter);
 		}
 		return rootView;
@@ -236,7 +236,7 @@ public class RadioFragment extends Fragment {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			if (action.equals(SearchLikeAcitvity.SEARCH_VIEW_UPDATE)) {
+			if (action.equals(SearchLikeActivity.SEARCH_VIEW_UPDATE)) {
 				if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
 					searchstr=intent.getStringExtra("SearchStr");
 					if(searchstr!=null&&!searchstr.equals("")){

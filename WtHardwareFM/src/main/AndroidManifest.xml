@@ -314,7 +314,7 @@
 
         <!-- 搜索界面 -->
         <activity
-            android:name=".activity.music.search.activity.SearchLikeAcitvity"
+            android:name=".activity.music.search.activity.SearchLikeActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
