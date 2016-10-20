@@ -160,7 +160,7 @@ public class PlayerHistory implements Serializable{
 	public PlayerHistory(String playername,String  playerimage,String playerurl,String playerurI,String playermediatype, 
 			String playeralltime,String playerintime,String playercontentdesc,String playernum,
 			String playerzantype,String  playerfrom,String playerfromid,String Playerfromurl,
-			String playeraddtime,String bjuserid,String playcontentshareurl,String ContentFavorite,String ContentID,String localurl) {
+			String playeraddtime,String bjuserid,String playcontentshareurl,String ContentFavorite,String ContentID,String localurl,String sequName,String sequId,String sequDesc,String sequImg) {
 		super();
 		PlayerName = playername;
 		PlayerImage = playerimage;
@@ -178,6 +178,10 @@ public class PlayerHistory implements Serializable{
 		PlayerAddTime=playeraddtime;
 		BJUserid=bjuserid;
 		PlayContentShareUrl=playcontentshareurl;
+		this.sequName=sequName;
+		this.sequDesc=sequDesc;
+		this.sequId=sequId;
+		this.sequImg=sequImg;
 		this.ContentFavorite=ContentFavorite;
 		this.ContentID=ContentID;
 		this.localurl=localurl;

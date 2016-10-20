@@ -27,7 +27,43 @@ public class LanguageSearchInside implements Serializable{
 	private String ContentShareURL;
 	private String ContentFavorite;
 	private String localurl;
-	
+	private String sequId;//专辑ID
+	private String sequImg;//专辑图片
+	private String sequDesc;//专辑描述
+	private String sequName;//专辑名称
+
+	public String getSequId() {
+		return sequId;
+	}
+
+	public void setSequId(String sequId) {
+		this.sequId = sequId;
+	}
+
+	public String getSequImg() {
+		return sequImg;
+	}
+
+	public void setSequImg(String sequImg) {
+		this.sequImg = sequImg;
+	}
+
+	public String getSequDesc() {
+		return sequDesc;
+	}
+
+	public void setSequDesc(String sequDesc) {
+		this.sequDesc = sequDesc;
+	}
+
+	public String getSequName() {
+		return sequName;
+	}
+
+	public void setSequName(String sequName) {
+		this.sequName = sequName;
+	}
+
 	public String getPlayCount() {
 		return PlayCount;
 	}

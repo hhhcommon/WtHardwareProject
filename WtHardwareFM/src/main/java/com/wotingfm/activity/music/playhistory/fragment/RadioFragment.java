@@ -185,13 +185,17 @@ public class RadioFragment extends Fragment{
 						String  playshareurl=playList.get(position).getPlayContentShareUrl();
 						String ContentId= playList.get(position).getContentID();
 						String localurl=playList.get(position).getLocalurl();
-						
+						String sequname =playList.get(position).getSequName();
+						String sequid = playList.get(position).getSequId();
+						String sequdesc =playList.get(position).getSequDesc();
+						String sequimg =playList.get(position).getSequImg();
+
 						//删除原有数据  添加最新数据
-						PlayerHistory history = new PlayerHistory( 
+						PlayerHistory history = new PlayerHistory(
 								playername,  playerimage, playerurl, playerurI, playermediatype,
 								plaplayeralltime, playerintime, playercontentdesc, playernum,
 								playerzantype,  playerfrom, playerfromid, playerfromurl,
-								playeraddtime, bjuserid, playshareurl, ContentFavorite, ContentId, localurl);
+								playeraddtime, bjuserid, playshareurl, ContentFavorite, ContentId, localurl,sequname,sequid,sequdesc,sequimg);
                         dbDao.deleteHistory(playerurl);
                         dbDao.addHistory(history);
 						

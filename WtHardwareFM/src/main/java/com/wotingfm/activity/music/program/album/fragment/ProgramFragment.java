@@ -169,8 +169,8 @@ public class ProgramFragment extends Fragment implements OnClickListener {
 						PlayerHistory history = new PlayerHistory(playername, playerimage, playerurl, playerurI,
 								playermediatype, plaplayeralltime, playerintime, playercontentdesc, playernum,
 								playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid,
-								playcontentshareurl, ContentFavorite, contentid,localurl);
-						if(sequId!=null){
+								playcontentshareurl, ContentFavorite, contentid,localurl,sequName,sequId,sequDesc,sequImg);
+						/*if(sequId!=null){
                            history.setSequId(sequId);
 						}
 						if(sequName!=null){
@@ -181,7 +181,7 @@ public class ProgramFragment extends Fragment implements OnClickListener {
 						}
 						if(sequImg!=null){
                             history.setSequImg(sequImg);
-						}
+						}*/
 						dbdao.deleteHistory(playerurl);
 						dbdao.addHistory(history);
 						if(PlayerFragment.context!=null){

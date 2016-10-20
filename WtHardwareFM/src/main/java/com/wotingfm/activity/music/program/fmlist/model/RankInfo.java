@@ -22,6 +22,10 @@ public class RankInfo implements Serializable {
 	private String ContentPub;
 	private String ContentSubCount;
 	private String PlayCount;
+	private String sequId;//专辑ID
+	private String sequImg;//专辑图片
+	private String sequDesc;//专辑描述
+	private String sequName;//专辑名称
 
 	//界面展示状态
 	private int viewtype=0;//界面决定组件 1为显示点选框 0是没有
@@ -160,10 +164,36 @@ public class RankInfo implements Serializable {
 	public void setContentImg(String contentImg) {
 		ContentImg = contentImg;
 	}
-	//	public String getContentURI() {
-	//		return ContentURI;
-	//	}
-	//	public void setContentURI(String contentURI) {
-	//		ContentURI = contentURI;
-	//	}
+
+	public String getSequId() {
+		return sequId;
+	}
+
+	public void setSequId(String sequId) {
+		this.sequId = sequId;
+	}
+
+	public String getSequImg() {
+		return sequImg;
+	}
+
+	public void setSequImg(String sequImg) {
+		this.sequImg = sequImg;
+	}
+
+	public String getSequDesc() {
+		return sequDesc;
+	}
+
+	public void setSequDesc(String sequDesc) {
+		this.sequDesc = sequDesc;
+	}
+
+	public String getSequName() {
+		return sequName;
+	}
+
+	public void setSequName(String sequName) {
+		this.sequName = sequName;
+	}
 }

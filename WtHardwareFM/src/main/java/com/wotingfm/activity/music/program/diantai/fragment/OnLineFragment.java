@@ -360,12 +360,16 @@ public class OnLineFragment extends Fragment implements OnClickListener {
                 String ContentFavorite = list.get(position).getContentFavorite();
                 String ContentId = list.get(position).getContentId();
                 String localurl = list.get(position).getLocalurl();
-
+                String sequname =  list.get(position).getSequName();
+                String sequid =  list.get(position).getSequId();
+                String sequdesc = list.get(position).getSequDesc();
+                String sequimg = list.get(position).getSequImg();
                 // 如果该数据已经存在数据库则删除原有数据，然后添加最新数据
                 PlayerHistory history = new PlayerHistory(
                         playername, playerimage, playerurl, playerurI, playermediatype,
                         plaplayeralltime, playerintime, playercontentdesc, playernum,
-                        playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid, playcontentshareurl, ContentFavorite, ContentId, localurl);
+                        playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid, playcontentshareurl, ContentFavorite, ContentId,
+                        localurl,sequname,sequid,sequdesc,sequimg);
                 dbDao.deleteHistory(playerurl);
                 dbDao.addHistory(history);
                 PlayerFragment.SendTextRequest(list.get(position).getContentName(), context);
