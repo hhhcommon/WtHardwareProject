@@ -65,6 +65,7 @@ import com.wotingfm.activity.music.player.model.sharemodel;
 import com.wotingfm.activity.music.playhistory.activity.PlayHistoryActivity;
 import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.album.model.ContentInfo;
+import com.wotingfm.activity.music.program.schedule.activity.ScheduleActivity;
 import com.wotingfm.activity.music.timeset.activity.TimerPowerOffActivity;
 import com.wotingfm.activity.music.video.TtsPlayer;
 import com.wotingfm.activity.music.video.VlcPlayer;
@@ -240,8 +241,14 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     startActivity(new Intent(context,FavoriteActivity.class));
                     break;
                 case 3://预定节目单
-                   /* startActivity(new Intent(context,TimerPowerOffActivity.class));*/
-                    ToastUtils.show_always(context,"节目单");
+                    Intent intent =new Intent(context,ScheduleActivity.class);
+                    if(GlobalConfig.playerobject.getContentName()!=null){
+                    intent.putExtra("ContentName",GlobalConfig.playerobject.getContentName());
+                    }
+                    if(GlobalConfig.playerobject.getContentId()!=null){
+                        intent.putExtra("ContentId",GlobalConfig.playerobject.getContentId());
+                    }
+                    startActivity(intent);
                     break;
                 case 4://实时路况
                     if (audioplay == null) {
@@ -838,7 +845,14 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 stopCurrentTimer();
                 break;
             case R.id.lin_schedule:
-                ToastUtils.show_always(context,"跳转到节目单页");
+                Intent intent1 =new Intent(context,ScheduleActivity.class);
+                if(GlobalConfig.playerobject.getContentName()!=null){
+                    intent1.putExtra("ContentName",GlobalConfig.playerobject.getContentName());
+                }
+                if(GlobalConfig.playerobject.getContentId()!=null){
+                    intent1.putExtra("ContentId",GlobalConfig.playerobject.getContentId());
+                }
+                startActivity(intent1);
                 break;
             case R.id.lin_right:
                 if (alllist != null && alllist.size() > 0) {
