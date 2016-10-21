@@ -61,5 +61,6 @@ public class BroadcastConstant {
     // 更新 WiFi 列表
     public static final String UPDATE_WIFI_LIST = "UPDATE_WIFI_LIST";
 
+    // 搜索
     public static final String SEARCH_VIEW_UPDATE = "SEARCH_VIEW_UPDATE";
 }

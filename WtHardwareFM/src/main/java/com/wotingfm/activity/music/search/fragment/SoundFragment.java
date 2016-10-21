@@ -25,6 +25,7 @@ import com.wotingfm.activity.common.main.MainActivity;
 import com.wotingfm.activity.music.favorite.adapter.FavorListAdapter;
 import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
+import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
@@ -33,6 +34,7 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -43,231 +45,203 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SoundFragment extends Fragment {
-	private FragmentActivity context;
-	private Dialog dialog;
-	private List<RankInfo> SubList;
-	private ListView mlistView;
-	private ArrayList<RankInfo> newlist = new ArrayList<>();
-//	private boolean flag;
-	private View rootView;
-	protected FavorListAdapter adapter;
-//	private List<String> dellist;
-//	private String ReturnType;
-	private Intent mintent;
-	private SearchPlayerHistoryDao dbdao;
-	protected Integer pagesize;
-	protected String searchstr;
-	private String tag = "SOUND_VOLLEY_REQUEST_CANCEL_TAG";
-	private boolean isCancelRequest;
-	
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		context = this.getActivity();
-//		flag = true;// 设置等待提示是否展示
-		//数据变化后广播
-		mintent = new Intent();
-		mintent.setAction(BroadcastConstant.SEARCH_VIEW_UPDATE);
-		initDao();
-	}
+    private FragmentActivity context;
+    private SearchPlayerHistoryDao dbDao;
+    protected FavorListAdapter adapter;
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-		if(rootView == null){
-			rootView = inflater.inflate(R.layout.fragment_search_sound, container, false);
-			mlistView = (ListView) rootView.findViewById(R.id.listView);
-			mlistView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-			IntentFilter myfileter = new IntentFilter();
-			myfileter.addAction(BroadcastConstant.SEARCH_VIEW_UPDATE);
-			context.registerReceiver(mBroadcastReceiver, myfileter);
-		}
-		return rootView;
-	}
-	
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-	}
-	
-	private void initDao() {
-		dbdao = new SearchPlayerHistoryDao(context);
-	}
+    private Dialog dialog;
+    private View rootView;
+    private ListView mListView;
 
-	private void setListener() {		
-		mlistView.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-				if(newlist != null && newlist.get(position - 1) != null && newlist.get(position - 1).getMediaType() != null){
-					String MediaType = newlist.get(position - 1).getMediaType();
-					if (MediaType.equals("RADIO") || MediaType.equals("AUDIO")) {
-						String playername = newlist.get(position - 1).getContentName();
-						String playerimage = newlist.get(position - 1).getContentImg();
-						String playerurl = newlist.get(position - 1).getContentPlay();
-						String playerurI = newlist.get(position - 1).getContentURI();
-						String playermediatype = newlist.get(position - 1).getMediaType();
-						String playercontentshareurl = newlist.get(position - 1).getContentShareURL();
-						String plaplayeralltime = "0";
-						String playerintime = "0";
-						String playercontentdesc = newlist.get(position - 1).getCurrentContent();
-						String playernum = newlist.get(position - 1).getWatchPlayerNum();
-						String playerzantype = "0";
-						String playerfrom = "";
-						String playerfromid = "";
-						String playerfromurl = "";
-						String playeraddtime = Long.toString(System.currentTimeMillis());
-						String bjuserid = CommonUtils.getUserId(context);
-						String ContentFavorite = newlist.get(position - 1).getContentFavorite();
-						String ContentId = newlist.get(position-1).getContentId();
-						String localurl = newlist.get(position-1).getLocalurl();
-						String sequname =newlist.get(position-1).getSequName();
-						String sequid =newlist.get(position-1).getSequId();
-						String sequdesc =newlist.get(position-1).getSequDesc();
-						String sequimg =newlist.get(position-1).getSequImg();
-						//如果该数据已经存在数据库则删除原有数据，然后添加最新数据
-						//如果该数据已经存在数据库则删除原有数据，然后添加最新数据
-						PlayerHistory history = new PlayerHistory(
-								playername,  playerimage, playerurl, playerurI,playermediatype,
-								plaplayeralltime, playerintime, playercontentdesc, playernum,
-								playerzantype,  playerfrom, playerfromid, playerfromurl,playeraddtime,bjuserid,playercontentshareurl,ContentFavorite,ContentId,localurl,sequname,sequid,sequdesc,sequimg);
-						dbdao.deleteHistory(playerurl);
-						dbdao.addHistory(history);
-						MainActivity.changeToMusic();
-						HomeActivity.UpdateViewPager();
-//						PlayerFragment.SendTextRequest(newlist.get(position - 1).getContentName(),context);
-						context.finish();
-					}  else {
-						ToastUtils.show_short(context, "暂不支持的Type类型");
-					}
-				}
-			}
-		});
-	}
+    private List<RankInfo> subList;
+    private ArrayList<RankInfo> newList = new ArrayList<>();
 
-	private void sendRequest(){
-		VolleyRequest.RequestPost(GlobalConfig.getSearchByText, tag, setParam(), new VolleyCallback() {
-			private String ResultList;
-			private String StringSubList;
-			private String ReturnType;
+    protected String searchString;
+    private String tag = "SOUND_VOLLEY_REQUEST_CANCEL_TAG";
+    private boolean isCancelRequest;
 
-			@Override
-			protected void requestSuccess(JSONObject result) {
-				if (dialog != null) {
-					dialog.dismiss();
-				}
-				if(isCancelRequest){
-					return ;
-				}
-				try {
-					ReturnType = result.getString("ReturnType");
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				if (ReturnType != null) {
-					if (ReturnType.equals("1001")) {
-						try {
-							// 获取列表
-							ResultList = result.getString("ResultList");
-							JSONTokener jsonParser = new JSONTokener(ResultList);
-							JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-							StringSubList = arg1.getString("List");
-						} catch (JSONException e) {
-							e.printStackTrace();
-						}
-						SubList = new Gson().fromJson(StringSubList,new TypeToken<List<RankInfo>>() {}.getType());
-						newlist.clear();
-						newlist.addAll(SubList);
-						if(adapter == null){
-							adapter = new FavorListAdapter(context, newlist);
-							mlistView.setAdapter(adapter);
-						}else{
-							adapter.notifyDataSetChanged();
-						}
-						setListener();			
-					} else {
-						if (ReturnType.equals("0000")) {
-							ToastUtils.show_short(context, "无法获取相关的参数");
-						} else if (ReturnType.equals("1002")) {
-							ToastUtils.show_short(context, "无此分类信息");
-						} else if (ReturnType.equals("1003")) {
-							ToastUtils.show_short(context, "无法获得列表");
-						} else if (ReturnType.equals("1011")) {
-							ToastUtils.show_short(context, "无数据");
-							mlistView.setVisibility(View.GONE);
-						}
-					}
-				} else {
-					ToastUtils.show_short(context, "ReturnType不能为空");
-				}
-			}
-			
-			@Override
-			protected void requestError(VolleyError error) {
-				if (dialog != null) {
-					dialog.dismiss();
-				}
-			}
-		});
-	}
-	
-	private JSONObject setParam(){
-		JSONObject jsonObject =VolleyRequest.getJsonObject(context);
-		try {
-			jsonObject.put("MediaType", "AUDIO");
-			if(searchstr!=null&&!searchstr.equals("")){
-				jsonObject.put("SearchStr", searchstr);
-			}
-		} catch (JSONException e) {
-			e.printStackTrace();  
-		}
-		return jsonObject;
-	}
-	
-	private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-		
-		@Override
-		public void onReceive(Context context, Intent intent) {
-			String action = intent.getAction();
-			if (action.equals(BroadcastConstant.SEARCH_VIEW_UPDATE)) {
-				if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-					searchstr=intent.getStringExtra("SearchStr");
-					if(searchstr!=null&&!searchstr.equals("")){
-						dialog = DialogUtils.Dialogph(context, "通讯中");
-						sendRequest();
-					}
-				} else {
-					ToastUtils.show_always(context, "网络失败，请检查网络");
-				}
-			} 
-		}
-		};
+    // 初始化数据库
+    private void initDao() {
+        dbDao = new SearchPlayerHistoryDao(context);
+    }
 
-	@Override
-	public void onDestroyView() {
-		super .onDestroyView(); 
-		if (null != rootView) {
-			((ViewGroup) rootView.getParent()).removeView(rootView);   
-		}
-	}
-	
-	@Override
-	public void onDestroy() {
-		super.onDestroy();
-		isCancelRequest = VolleyRequest.cancelRequest(tag);
-		mlistView = null;
-		context.unregisterReceiver(mBroadcastReceiver);
-		context = null;
-		dialog = null;
-		SubList = null;
-		newlist = null;
-		rootView = null;
-		adapter = null;
-		mintent = null;
-		pagesize = null;
-		searchstr = null;
-		tag = null;
-		if(dbdao != null){
-			dbdao.closedb();
-			dbdao = null;
-		}
-	}
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = getActivity();
+        IntentFilter mFilter = new IntentFilter();
+        mFilter.addAction(BroadcastConstant.SEARCH_VIEW_UPDATE);
+        context.registerReceiver(mBroadcastReceiver, mFilter);
+        initDao();
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_search_sound, container, false);
+            mListView = (ListView) rootView.findViewById(R.id.listView);
+            mListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        }
+        return rootView;
+    }
+
+    private void setListener() {
+        mListView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (newList != null && newList.get(position - 1) != null && newList.get(position - 1).getMediaType() != null) {
+                    String MediaType = newList.get(position - 1).getMediaType();
+                    if (MediaType.equals("RADIO") || MediaType.equals("AUDIO")) {
+                        String playername = newList.get(position - 1).getContentName();
+                        String playerimage = newList.get(position - 1).getContentImg();
+                        String playerurl = newList.get(position - 1).getContentPlay();
+                        String playerurI = newList.get(position - 1).getContentURI();
+                        String playermediatype = newList.get(position - 1).getMediaType();
+                        String playercontentshareurl = newList.get(position - 1).getContentShareURL();
+                        String plaplayeralltime = "0";
+                        String playerintime = "0";
+                        String playercontentdesc = newList.get(position - 1).getCurrentContent();
+                        String playernum = newList.get(position - 1).getWatchPlayerNum();
+                        String playerzantype = "0";
+                        String playerfrom = "";
+                        String playerfromid = "";
+                        String playerfromurl = "";
+                        String playeraddtime = Long.toString(System.currentTimeMillis());
+                        String bjuserid = CommonUtils.getUserId(context);
+                        String ContentFavorite = newList.get(position - 1).getContentFavorite();
+                        String ContentId = newList.get(position - 1).getContentId();
+                        String localurl = newList.get(position - 1).getLocalurl();
+                        String sequname = newList.get(position - 1).getSequName();
+                        String sequid = newList.get(position - 1).getSequId();
+                        String sequdesc = newList.get(position - 1).getSequDesc();
+                        String sequimg = newList.get(position - 1).getSequImg();
+
+                        //如果该数据已经存在数据库则删除原有数据，然后添加最新数据
+                        PlayerHistory history = new PlayerHistory(
+                                playername, playerimage, playerurl, playerurI, playermediatype,
+                                plaplayeralltime, playerintime, playercontentdesc, playernum,
+                                playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid,
+                                playercontentshareurl, ContentFavorite, ContentId, localurl, sequname, sequid, sequdesc, sequimg);
+                        dbDao.deleteHistory(playerurl);
+                        dbDao.addHistory(history);
+                        MainActivity.changeToMusic();
+                        HomeActivity.UpdateViewPager();
+                        PlayerFragment.SendTextRequest(newList.get(position - 1).getContentName(), context);
+                        context.finish();
+                    } else {
+                        ToastUtils.show_short(context, "暂不支持的Type类型");
+                    }
+                }
+            }
+        });
+    }
+
+    private void sendRequest() {
+        VolleyRequest.RequestPost(GlobalConfig.getSearchByText, tag, setParam(), new VolleyCallback() {
+            private String ReturnType;
+
+            @Override
+            protected void requestSuccess(JSONObject result) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                if (isCancelRequest) {
+                    return;
+                }
+                mListView.setVisibility(View.GONE);
+                try {
+                    ReturnType = result.getString("ReturnType");
+                    L.w("ReturnType -- > > " + ReturnType);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (ReturnType != null && ReturnType.equals("1001")) {
+                    try {
+                        JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
+                        subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    newList.clear();
+                    newList.addAll(subList);
+                    if (adapter == null) {
+                        mListView.setAdapter(adapter = new FavorListAdapter(context, newList));
+                    } else {
+                        adapter.notifyDataSetChanged();
+                    }
+                    setListener();
+                    mListView.setVisibility(View.VISIBLE);
+                } else {
+                    ToastUtils.show_always(context, "无数据");
+                }
+            }
+
+            @Override
+            protected void requestError(VolleyError error) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+            }
+        });
+    }
+
+    private JSONObject setParam() {
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
+        try {
+            jsonObject.put("MediaType", "AUDIO");
+            if (searchString != null && !searchString.equals("")) {
+                jsonObject.put("SearchStr", searchString);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return jsonObject;
+    }
+
+    private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BroadcastConstant.SEARCH_VIEW_UPDATE)) {
+                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                    searchString = intent.getStringExtra("SearchStr");
+                    if (searchString != null && !searchString.equals("")) {
+                        dialog = DialogUtils.Dialogph(context, "通讯中");
+                        sendRequest();
+                    }
+                } else {
+                    ToastUtils.show_always(context, "网络失败，请检查网络");
+                }
+            }
+        }
+    };
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (null != rootView) {
+            ((ViewGroup) rootView.getParent()).removeView(rootView);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        isCancelRequest = VolleyRequest.cancelRequest(tag);
+        mListView = null;
+        context.unregisterReceiver(mBroadcastReceiver);
+        context = null;
+        dialog = null;
+        subList = null;
+        newList = null;
+        rootView = null;
+        adapter = null;
+        searchString = null;
+        tag = null;
+        if (dbDao != null) {
+            dbDao.closedb();
+            dbDao = null;
+        }
+    }
 }

@@ -53,10 +53,10 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
     private Dialog dialog;
     private ExpandableListView expandListView;
 
-    private ArrayList<RankInfo> playList;// 节目list
-    private ArrayList<RankInfo> sequList;// 专辑list
-    private ArrayList<RankInfo> ttsList;// tts
-    private ArrayList<RankInfo> radioList;// radio
+    private ArrayList<RankInfo> playList;       // 节目list
+    private ArrayList<RankInfo> sequList;       // 专辑list
+    private ArrayList<RankInfo> ttsList;        // tts
+    private ArrayList<RankInfo> radioList;      // radio
     private ArrayList<SuperRankInfo> list = new ArrayList<>();// 返回的节目list，拆分之前的list
     private List<RankInfo> subList;
 
@@ -103,11 +103,16 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                 String ContentFavorite = list.get(groupPosition).getList().get(childPosition).getContentFavorite();
                 String ContentId = list.get(groupPosition).getList().get(childPosition).getContentId();
                 String localurl = list.get(groupPosition).getList().get(childPosition).getLocalurl();
+                String sequname =list.get(groupPosition).getList().get(childPosition).getSequName();
+                String sequid =list.get(groupPosition).getList().get(childPosition).getSequId();
+                String sequdesc =list.get(groupPosition).getList().get(childPosition).getSequDesc();
+                String sequimg =list.get(groupPosition).getList().get(childPosition).getSequImg();
                 //如果该数据已经存在数据库则删除原有数据，然后添加最新数据
                 PlayerHistory history = new PlayerHistory(
-                        playername, playerimage, playerurl, playerurI, playermediatype,
+                        playername,  playerimage, playerurl, playerurI,playermediatype,
                         plaplayeralltime, playerintime, playercontentdesc, playernum,
-                        playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid, playcontentshareurl, ContentFavorite, ContentId, localurl);
+                        playerzantype,  playerfrom, playerfromid, playerfromurl,playeraddtime,bjuserid,
+                        playcontentshareurl,ContentFavorite,ContentId,localurl,sequname,sequid,sequdesc,sequimg);
                 dbDao.deleteHistory(playerurl);
                 dbDao.addHistory(history);
                 MainActivity.changeToMusic();
@@ -139,6 +144,9 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
+        IntentFilter mFilter = new IntentFilter();
+        mFilter.addAction(BroadcastConstant.SEARCH_VIEW_UPDATE);
+        context.registerReceiver(mBroadcastReceiver, mFilter);
         initDao();
     }
 
@@ -150,10 +158,6 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
             expandListView.setGroupIndicator(null);// 去除 indicator
             expandListView.setOnGroupClickListener(this);
             expandListView.setOnChildClickListener(this);
-
-            IntentFilter mFilter = new IntentFilter();
-            mFilter.addAction(BroadcastConstant.SEARCH_VIEW_UPDATE);
-            context.registerReceiver(mBroadcastReceiver, mFilter);
         }
         return rootView;
     }
@@ -171,6 +175,7 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                 if (isCancelRequest) {
                     return;
                 }
+                expandListView.setVisibility(View.GONE);
                 try {
                     ReturnType = result.getString("ReturnType");
                     Message = result.getString("Message");
@@ -178,11 +183,9 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                     e.printStackTrace();
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
-                    ((SearchLikeActivity) context).setVisible();// 有数据则显示
                     try {
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
-                        subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {
-                        }.getType());
+                        subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -239,63 +242,24 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                         if (playList != null && playList.size() != 0) {
                             SuperRankInfo mSuperRankInfo = new SuperRankInfo();
                             mSuperRankInfo.setKey(playList.get(0).getMediaType());
-                            //							if (playList.size() > 3) {
-                            //								List<RankInfo> list = new ArrayList<RankInfo>();
-                            //								for (int i = 0; i < 3; i++) {
-                            //									list.add(playList.get(i));
-                            //								}
-                            //								mSuperRankInfo.setList(list);
-                            //							} else {
-                            //								mSuperRankInfo.setList(playList);
-                            //							}
                             mSuperRankInfo.setList(playList);
                             list.add(mSuperRankInfo);
                         }
                         if (sequList != null && sequList.size() != 0) {
                             SuperRankInfo mSuperRankInfo1 = new SuperRankInfo();
                             mSuperRankInfo1.setKey(sequList.get(0).getMediaType());
-                            //不加限制
-                            //							if (sequList.size() > 3) {
-                            //								List<RankInfo> list = new ArrayList<RankInfo>();
-                            //								for (int i = 0; i < 3; i++) {
-                            //									list.add(sequList.get(i));
-                            //								}
-                            //								mSuperRankInfo1.setList(list);
-                            //							} else {
-                            //								mSuperRankInfo1.setList(sequList);
-                            //							}
                             mSuperRankInfo1.setList(sequList);
                             list.add(mSuperRankInfo1);
                         }
                         if (ttsList != null && ttsList.size() != 0) {
                             SuperRankInfo mSuperRankInfo1 = new SuperRankInfo();
                             mSuperRankInfo1.setKey(ttsList.get(0).getMediaType());
-                            //不加限制
-                            //							if (ttsList.size() > 3) {
-                            //								List<RankInfo> list = new ArrayList<RankInfo>();
-                            //								for (int i = 0; i < 3; i++) {
-                            //									list.add(ttsList.get(i));
-                            //								}
-                            //								mSuperRankInfo1.setList(list);
-                            //							} else {
-                            //								mSuperRankInfo1.setList(ttsList);
-                            //							}
                             mSuperRankInfo1.setList(ttsList);
                             list.add(mSuperRankInfo1);
                         }
                         if (radioList != null && radioList.size() != 0) {
                             SuperRankInfo mSuperRankInfo1 = new SuperRankInfo();
                             mSuperRankInfo1.setKey(radioList.get(0).getMediaType());
-                            //不加限制
-                            //							if (radioList.size() > 3) {
-                            //								List<RankInfo> list = new ArrayList<RankInfo>();
-                            //								for (int i = 0; i < 3; i++) {
-                            //									list.add(radioList.get(i));
-                            //								}
-                            //								mSuperRankInfo1.setList(list);
-                            //							} else {
-                            //								mSuperRankInfo1.setList(radioList);
-                            //							}
                             mSuperRankInfo1.setList(radioList);
                             list.add(mSuperRankInfo1);
                         }
@@ -305,6 +269,7 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                             for (int i = 0; i < list.size(); i++) {
                                 expandListView.expandGroup(i);
                             }
+                            expandListView.setVisibility(View.VISIBLE);
                         } else {
                             ToastUtils.show_short(context, "没有数据");
                         }
@@ -352,14 +317,10 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(BroadcastConstant.SEARCH_VIEW_UPDATE)) {
-                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    searchString = intent.getStringExtra("SearchStr");
-                    if (searchString != null && !searchString.equals("")) {
-                        dialog = DialogUtils.Dialogph(context, "通讯中");
-                        sendRequest();
-                    }
-                } else {
-                    ToastUtils.show_always(context, "网络失败，请检查网络");
+                searchString = intent.getStringExtra("SearchStr");
+                if (searchString != null && !searchString.equals("")) {
+                    dialog = DialogUtils.Dialogph(context, "通讯中");
+                    sendRequest();
                 }
             }
         }

@@ -179,7 +179,7 @@
         android:layout_height="match_parent"
         android:background="@color/WHITE"
         android:orientation="vertical"
-        android:visibility="gone" >
+        android:visibility="invisible" >
 
         <LinearLayout
             android:layout_width="match_parent"

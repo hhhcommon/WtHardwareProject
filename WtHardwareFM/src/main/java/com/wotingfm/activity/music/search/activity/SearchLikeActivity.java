@@ -87,11 +87,11 @@ public class SearchLikeActivity extends FragmentActivity implements
     private LinearLayout linearStatusThird;     // 搜索结束展示搜索结果状态
 
     private ViewPager mPager;
-    private TextView textTotal;          // 全部
-    private TextView textSequ;           // 专辑
-    private TextView textSound;          // 声音
-    private TextView textRadio;          // 电台
-    private TextView textTts;            // TTS
+    private TextView textTotal;                 // 全部
+    private TextView textSequ;                  // 专辑
+    private TextView textSound;                 // 声音
+    private TextView textRadio;                 // 电台
+    private TextView textTts;                   // TTS
     private TextView linearTopTitle;            // 展示 "热门搜索"
 
     private ListView mListView;                 // 搜索联想词列表 搜索中的状态
@@ -162,7 +162,7 @@ public class SearchLikeActivity extends FragmentActivity implements
                 mEtSearchContent.setText("");
                 mListView.setVisibility(View.GONE);
                 linearStatusFirst.setVisibility(View.VISIBLE);
-                linearStatusThird.setVisibility(View.GONE);
+                linearStatusThird.setVisibility(View.INVISIBLE);
                 imageEditClear.setVisibility(View.GONE);
                 getHistoryListNow();
                 break;
@@ -278,10 +278,9 @@ public class SearchLikeActivity extends FragmentActivity implements
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (!s.toString().trim().equals("")) {
-                    sendKey(s.toString());// 发送搜索变更内容
-
                     imageEditClear.setVisibility(View.VISIBLE);
                     linearStatusFirst.setVisibility(View.GONE);
+                    sendKey(s.toString());// 发送搜索变更内容
                     mListView.setVisibility(View.VISIBLE);
                     linearStatusThird.setVisibility(View.GONE);
                 } else {
@@ -305,12 +304,9 @@ public class SearchLikeActivity extends FragmentActivity implements
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ToastUtils.show_always(context, "点击了 --- > > " + position);
                 String s = topSearchList.get(position);
                 if (s != null && !s.equals("")) {
                     checkEdit(topSearchList.get(position));
-
-                    L.v("点击了 --- > > " + position);
                 }
             }
         });
@@ -333,16 +329,10 @@ public class SearchLikeActivity extends FragmentActivity implements
         }
     }
 
-    /**
-     * 有数据再隐藏
-     */
-    public void setVisible() {
-        mListView.setVisibility(View.GONE);
-        linearStatusFirst.setVisibility(View.GONE);
-    }
-
     private void checkEdit(String str) {
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+            linearStatusFirst.setVisibility(View.GONE);
+            mListView.setVisibility(View.GONE);
             linearStatusThird.setVisibility(View.VISIBLE);
 
             Intent mIntent = new Intent();
