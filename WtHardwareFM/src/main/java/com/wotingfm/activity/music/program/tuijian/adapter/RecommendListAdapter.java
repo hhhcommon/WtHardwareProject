@@ -9,10 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.helper.ImageLoader;
 import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
@@ -20,14 +20,12 @@ import java.util.List;
 public class RecommendListAdapter extends BaseAdapter {
     private List<RankInfo> list;
     private Context context;
-    private ImageLoader imageLoader;
     private Bitmap bmp;
     private boolean isHintVisibility;
 
     public RecommendListAdapter(Context context, List<RankInfo> list, boolean isHintVisibility) {
         this.context = context;
         this.list = list;
-        imageLoader = new ImageLoader(context);
 //        this.isHintVisibility = isHintVisibility;
     }
 
@@ -73,7 +71,6 @@ public class RecommendListAdapter extends BaseAdapter {
         }
         if (lists.getContentImg() == null
                 || lists.getContentImg().equals("null") || lists.getContentImg().trim().equals("")) {
-
             holder.imageViewRankImage.setImageBitmap(bmp);
         } else {
             String url;
@@ -82,7 +79,7 @@ public class RecommendListAdapter extends BaseAdapter {
             } else {
                 url = GlobalConfig.imageurl + lists.getContentImg();
             }
-            imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageViewRankImage, false, false, null, null);
+            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageViewRankImage);
         }
         if (lists.getMediaType() != null) {
             if (lists.getMediaType().equals("SEQU")) {

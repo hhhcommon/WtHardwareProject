@@ -2,6 +2,7 @@ package com.wotingfm.activity.music.program.album.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,6 +16,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.album.model.ContentCatalogs;
@@ -22,7 +24,7 @@ import com.wotingfm.activity.music.program.album.model.ContentInfo;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.helper.ImageLoader;
+import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
@@ -49,7 +51,6 @@ public class DetailsFragment extends Fragment implements OnClickListener{
 	private List<ContentInfo> SubList;	// 请求返回的网络数据值
 	private String contentDesc;
 	private TextView textConcern;		// text_concern
-	private ImageLoader imageLoader;
 	private LinearLayout lin_share;
 	private LinearLayout lin_favorite;
 	public static String ContentFavorite;		// 从网络获取的当前值，如果为空，表示页面并未获取到此值
@@ -65,7 +66,6 @@ public class DetailsFragment extends Fragment implements OnClickListener{
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		context = getActivity();
-		imageLoader=new ImageLoader(context);
 	}
 	
 	@Override
@@ -289,7 +289,8 @@ public class DetailsFragment extends Fragment implements OnClickListener{
 								textAnchor.setText("我听我享听");
 							}
 							if (AlbumActivity.ContentImg == null || AlbumActivity.ContentImg.equals("")) {
-								img_album.setImageResource(R.mipmap.wt_image_playertx);
+								Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
+								img_album.setImageBitmap(bmp);
 							} else {
 								String url;
 								if (ContentImg.startsWith("http")) {
@@ -297,10 +298,7 @@ public class DetailsFragment extends Fragment implements OnClickListener{
 								} else {
 									url = GlobalConfig.imageurl + AlbumActivity.ContentImg;
 								}
-							      imageLoader.DisplayImage(url.replace("\\/", "/"), img_album,
-										false, false, null, null);
-								  /*imageLoader.DisplayImage(url.replace("\\/", "/"), imageHead,
-										false, false, null, null);*/
+								Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(img_album);
 							}
 							 if (contentDesc != null && !contentDesc.equals("") && !contentDesc.equals("null")) {
 								 textContent.setText(contentDesc);

@@ -11,7 +11,7 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.shenstec.utils.image.ImageLoader;
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.download.model.FileInfo;
 import com.wotingfm.widget.CircleProgress;
@@ -22,13 +22,11 @@ import java.util.List;
 public class DownloadAdapter extends BaseAdapter {
     private List<FileInfo> list;
     private Context context;
-    private ImageLoader imageLoader;
     private DecimalFormat df;
 
     public DownloadAdapter(Context context, List<FileInfo> list) {
         this.context = context;
         this.list = list;
-        imageLoader = new ImageLoader(context);
         df = new DecimalFormat("0.00");
     }
 
@@ -77,7 +75,7 @@ public class DownloadAdapter extends BaseAdapter {
             holder.imageview_rankimage.setImageResource(R.mipmap.wt_bg_noimage);
         } else {
             String url = lists.getImageurl();
-            imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageview_rankimage, false, false, null);
+            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageview_rankimage);
         }
 
         if (lists.getAuthor() == null || lists.getAuthor().equals("") || lists.getAuthor().equals("null") || lists.getAuthor().trim().equals("") || lists.getAuthor().trim().equals("author")) {

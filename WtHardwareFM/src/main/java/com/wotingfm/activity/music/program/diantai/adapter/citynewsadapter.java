@@ -8,10 +8,9 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
-import com.wotingfm.helper.ImageLoader;
 import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
@@ -19,12 +18,10 @@ import java.util.List;
 public class citynewsadapter extends BaseAdapter {
 	private List<RankInfo> list;
 	private Context context;
-	private ImageLoader imageLoader;
 
 	public citynewsadapter(Context context, List<RankInfo> list) {
 		this.context = context;
 		this.list = list;
-		imageLoader = new ImageLoader(context);
 	}
 
 	@Override
@@ -63,7 +60,7 @@ public class citynewsadapter extends BaseAdapter {
 			holder.imageRankImage.setImageBitmap(bmp);
 		} else {
 			String url = lists.getContentImg();
-			imageLoader.DisplayImage(url.replace("\\/", "/"),holder.imageRankImage, false, false, null, null);
+			Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageRankImage);
 		}
 		return convertView;
 	}

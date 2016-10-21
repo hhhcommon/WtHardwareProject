@@ -2,6 +2,7 @@ package com.wotingfm.activity.music.program.diantai.adapter;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,12 +13,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.program.diantai.model.RadioPlay;
 import com.wotingfm.activity.music.program.fmlist.activity.FMListActivity;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.helper.ImageLoader;
+import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.L;
 
 import java.util.List;
@@ -28,12 +30,10 @@ import java.util.List;
 public class onlineAdapter extends BaseExpandableListAdapter {
     private Context context;
     private List<RadioPlay> group;
-    private ImageLoader imageLoader;
 
     public onlineAdapter(Context context, List<RadioPlay> group) {
         this.context = context;
         this.group = group;
-        imageLoader = new ImageLoader(context);
     }
 
     @Override
@@ -137,14 +137,16 @@ public class onlineAdapter extends BaseExpandableListAdapter {
                 }
                 if (lists.getContentImg() != null
                         && !lists.getContentImg().equals("null") && !lists.getContentImg().trim().equals("")) {
-
                     String url;
                     if (lists.getContentImg().startsWith("http")) {
                         url = lists.getContentImg();
                     } else {
                         url = GlobalConfig.imageurl + lists.getContentImg();
                     }
-                    imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageRankImage, false, false, null, null);
+                    Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageRankImage);
+                }else{
+                    Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_bg_noimage);
+                    holder.imageRankImage.setImageBitmap(bmp);
                 }
                 if (lists.getWatchPlayerNum() != null
                         && !lists.getWatchPlayerNum().equals("") && !lists.getWatchPlayerNum().equals("null")) {

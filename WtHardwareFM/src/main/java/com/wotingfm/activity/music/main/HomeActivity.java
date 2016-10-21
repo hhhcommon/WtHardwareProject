@@ -102,10 +102,10 @@ public class HomeActivity extends FragmentActivity {
 		mPager = (ViewPager) findViewById(R.id.viewpager);
 		mPager.setOffscreenPageLimit(1);
 		ArrayList<Fragment> fragmentList = new ArrayList<>();
-		PlayerFragment playfragment = new PlayerFragment();
-		ProgramFragment newsfragment = new ProgramFragment();
- 	    fragmentList.add(playfragment);
-		fragmentList.add(newsfragment);
+		PlayerFragment playFragment = new PlayerFragment();
+		ProgramFragment newsFragment = new ProgramFragment();
+ 	    fragmentList.add(playFragment);
+		fragmentList.add(newsFragment);
 		 //mPager.setAdapter(new MyFragmentChildPagerAdapter(getChildFragmentManager(), fragmentList));
 		mPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList));
 		mPager.setOnPageChangeListener(new MyOnPageChangeListener());	// 页面变化时的监听器

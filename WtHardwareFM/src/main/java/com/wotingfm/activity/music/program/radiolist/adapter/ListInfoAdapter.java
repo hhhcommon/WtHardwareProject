@@ -1,6 +1,7 @@
 package com.wotingfm.activity.music.program.radiolist.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,23 +9,22 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.program.radiolist.model.ListInfo;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.helper.ImageLoader;
+import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
 
 public class ListInfoAdapter extends BaseAdapter  {
 	private List<ListInfo> list;
 	private Context context;
-	private ImageLoader imageLoader;
 
 	public ListInfoAdapter(Context context, List<ListInfo> list) {
 		this.context = context;
 		this.list = list;
-		imageLoader = new ImageLoader(context);
-	} 
+	}
 
 	@Override
 	public int getCount() {
@@ -65,7 +65,8 @@ public class ListInfoAdapter extends BaseAdapter  {
 		if (lists.getContentImg() == null || lists.getContentImg().equals("")
 				|| lists.getContentImg().equals("null")
 				|| lists.getContentImg().trim().equals("")) {
-
+			Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_bg_noimage);
+			holder.imageRank.setImageBitmap(bmp);
 		} else {
 			String url;
 			if(lists.getContentImg().startsWith("http")){
@@ -73,7 +74,7 @@ public class ListInfoAdapter extends BaseAdapter  {
 			}else{
 				 url = GlobalConfig.imageurl + lists.getContentImg();
 			}
-			imageLoader.DisplayImage(url.replace("\\/", "/"),holder.imageRank, false, false, null, null);
+			Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageRank);
 		}
 		if (lists.getPlayCount() == null
 				|| lists.getPlayCount().equals("")

@@ -8,24 +8,20 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.wotingfm.R;
 import com.wotingfm.activity.music.player.model.sharemodel;
-import com.wotingfm.helper.ImageLoader;
 
 import java.util.List;
 
 public class ImageAdapter extends BaseAdapter{
 	private List<sharemodel> list;
 	private Context context;
-	private ImageLoader imageLoader;
 	private sharemodel lists;
 
 	public ImageAdapter (Context context, List<sharemodel> list) {
 		super();
 		this.list = list;
 		this.context = context;
-		imageLoader = new ImageLoader(context);
 	}
 
 	@Override
@@ -45,7 +41,7 @@ public class ImageAdapter extends BaseAdapter{
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		ViewHolder holder = null;
+		ViewHolder holder ;
 		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_shareitem, null);

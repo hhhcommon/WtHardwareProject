@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
+import android.widget.LinearLayout;
 
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
@@ -38,7 +39,7 @@ import java.util.List;
  * @author 辛龙
  *         2016年3月31日
  */
-public class FenLeiFragment extends Fragment {
+public class FenLeiFragment extends Fragment implements View.OnClickListener{
     private FragmentActivity context;
     private FLeiGridAdapter adapter;
 
@@ -62,6 +63,8 @@ public class FenLeiFragment extends Fragment {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_fenlei_new, container, false);
             gridFenLei = (GridView) rootView.findViewById(R.id.gv_fenlei);
+            LinearLayout lin_second = (LinearLayout) rootView.findViewById(R.id.lin_second);
+            lin_second.setOnClickListener(this);
             gridFenLei.setSelector(new ColorDrawable(Color.TRANSPARENT));   // 取消默认背景选择器
             if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {            // 发送网络请求
                 sendRequest();
@@ -70,6 +73,20 @@ public class FenLeiFragment extends Fragment {
             }
         }
         return rootView;
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()){
+           case R.id.lin_second:
+               if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {            // 发送网络请求
+                   sendRequest();
+               } else {
+                   ToastUtils.show_short(context, "网络失败，请检查网络");
+               }
+               break;
+
+        }
     }
 
     // GridView 点击事件 跳转到具体的分类中

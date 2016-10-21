@@ -1,6 +1,7 @@
 package com.wotingfm.activity.music.favorite.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -10,24 +11,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.shenstec.utils.image.ImageLoader;
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
 
 public class FavorListAdapter extends BaseAdapter {
     private List<RankInfo> list;
     private Context context;
-    private ImageLoader imageLoader;
     private favorCheck favorcheck;
     private String url;
 
     public FavorListAdapter(Context context, List<RankInfo> list) {
         this.context = context;
         this.list = list;
-        imageLoader = new ImageLoader(context);
     }
 
     @Override
@@ -73,14 +73,15 @@ public class FavorListAdapter extends BaseAdapter {
         if (lists.getContentImg() == null || lists.getContentImg().equals("")
                 || lists.getContentImg().equals("null")
                 || lists.getContentImg().trim().equals("")) {
-            holder.imageview_rankimage.setImageResource(R.mipmap.wt_bg_noimage);
+            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_bg_noimage);
+            holder.imageview_rankimage.setImageBitmap(bmp);
         } else {
             if (lists.getContentImg().startsWith("http:")) {
                 url = lists.getContentImg();
             } else {
                 url = GlobalConfig.imageurl + lists.getContentImg();
             }
-            imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageview_rankimage, false, false, null);
+            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageview_rankimage);
         }
         if (lists.getContentDesc() == null || lists.getContentDesc().equals("")) {
             holder.tv_RankContent.setText("未知");
@@ -94,9 +95,11 @@ public class FavorListAdapter extends BaseAdapter {
             // 1状态 此时设置choicetype生效
             holder.lin_check.setVisibility(View.VISIBLE);
             if (lists.getChecktype() == 0) {
-                holder.img_check.setImageResource(R.mipmap.wt_group_nochecked);     // 未点击状态
+                Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_group_nochecked);// 未点击状态
+                holder.img_check.setImageBitmap(bmp);
             } else {
-                holder.img_check.setImageResource(R.mipmap.wt_group_checked);       // 点击状态
+                Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_group_checked); // 点击状态
+                holder.img_check.setImageBitmap(bmp);
             }
         }
         holder.lin_check.setOnClickListener(new OnClickListener() {

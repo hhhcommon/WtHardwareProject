@@ -38,8 +38,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.shenstec.http.MyHttp;
-import com.shenstec.utils.file.FileManager;
+import com.squareup.picasso.Picasso;
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.preference.activity.PreferenceActivity;
@@ -62,8 +61,9 @@ import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.helper.ImageLoader;
+import com.wotingfm.helper.MyHttp;
 import com.wotingfm.manager.CacheManager;
+import com.wotingfm.manager.FileManager;
 import com.wotingfm.manager.UpdateManager;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
@@ -88,7 +88,6 @@ public class MineActivity extends Activity implements OnClickListener {
     public static BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
     public static WifiManager wifiManager;
     private UserPortaitInside UserPortait;
-    private ImageLoader imageLoader;
 
     private Dialog dialog;                          // 加载数据对话框
     protected Dialog imageDialog;                   // 修改头像对话框
@@ -133,7 +132,6 @@ public class MineActivity extends Activity implements OnClickListener {
         setContentView(R.layout.activity_mine);
         context = this;
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);             // 获取 WiFi 服务
-        imageLoader = new ImageLoader(context);
         clearCacheDialog();     // 清除缓存对话框
         exitLoginDialog();      // 退出登录对话框
         setView();              // 设置界面
@@ -342,7 +340,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 } else {
                     url = GlobalConfig.imageurl + imageUrl;
                 }
-                imageLoader.DisplayImage(url.replace("\\", "/"),userHead, false, false, null, null);
+                Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(userHead);
             } else {
                 userHead.setImageResource(0);
             }
@@ -727,7 +725,7 @@ public class MineActivity extends Activity implements OnClickListener {
                     }
                     et.putString(StringConstant.IMAGEURL, imageUrl);
                     // 正常切可用代码 已从服务器获得返回值，但是无法正常显示
-                    imageLoader.DisplayImage(imageUrl.replace("\\", "/"), userHead, false, false, null, null);
+                    Picasso.with(context).load(imageUrl.replace("\\/", "/")).resize(100, 100).centerCrop().into(userHead);
                 } else if (msg.what == 0) {
                     ToastUtils.show_always(context, "头像保存失败，请稍后再试");
                 } else if (msg.what == -1) {

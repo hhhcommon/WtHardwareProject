@@ -5,9 +5,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
-import com.shenstec.activity.BaseActivity;
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.BaseActivity;
 import com.wotingfm.activity.music.common.service.DownloadService;
 
 /**

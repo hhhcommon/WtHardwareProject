@@ -5,8 +5,8 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
 
-import com.shenstec.activity.BaseActivity;
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.BaseActivity;
 
 /**
  * 联系我们界面
@@ -34,7 +34,6 @@ public class ContactUsActivity extends BaseActivity implements OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		super.onClick(v);
 		switch (v.getId()) {
 		case R.id.head_left_btn:	// 返回
 			finish();

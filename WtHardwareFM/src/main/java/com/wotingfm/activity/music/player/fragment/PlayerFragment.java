@@ -43,6 +43,7 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
+import com.squareup.picasso.Picasso;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.ShareAction;
 import com.umeng.socialize.UMShareAPI;
@@ -77,8 +78,8 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.helper.CommonHelper;
-import com.wotingfm.helper.ImageLoader;
 import com.wotingfm.service.timeroffservice;
+import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.PlayermoreUtil;
@@ -106,7 +107,6 @@ import java.util.TimeZone;
 public class PlayerFragment extends Fragment implements OnClickListener, XListView.IXListViewListener {
     public static FragmentActivity context;
     // 功能性
-    private static ImageLoader imageLoader;
     private static SimpleDateFormat format;
     private static SearchPlayerHistoryDao dbdao;
     private FileInfoDao FID;
@@ -189,7 +189,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this.getActivity();
-        imageLoader = new ImageLoader(context);
         RefreshType = 0;
         if (Receiver == null) {
             Receiver = new MessageReceiver();
@@ -707,9 +706,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                         } else {
                             url = GlobalConfig.imageurl+ alllist.get(number).getContentImg();
                         }
-                        imageLoader.DisplayImage(url.replace("\\/", "/"),img_news, false, false, null, null);
+                        Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(img_news);
                     } else {
-                        img_news.setImageResource(R.mipmap.wt_image_playertx);
+                        Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
+                        img_news.setImageBitmap(bmp);
                     }
                     for (int i = 0; i < alllist.size(); i++) {
                         alllist.get(i).setType("1");
@@ -753,9 +753,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                             } else {
                                 url = GlobalConfig.imageurl + alllist.get(number).getContentImg();
                             }
-                            imageLoader.DisplayImage(url.replace("\\/", "/"), img_news, false, false, null, null);
+                            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(img_news);
                         } else {
-                            img_news.setImageResource(R.mipmap.wt_image_playertx);
+                            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
+                            img_news.setImageBitmap(bmp);
                         }
                         for (int i = 0; i < alllist.size(); i++) {
                             alllist.get(i).setType("1");
@@ -1009,9 +1010,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                         } else {
                             url = GlobalConfig.imageurl+ GlobalConfig.playerobject.getContentImg();
                         }
-                        imageLoader.DisplayImage(url.replace("\\/", "/"),img_news, false, false, null, null);
+                        Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(img_news);
                     } else {
-                        img_news.setImageResource(R.mipmap.wt_image_playertx);
+                        Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
+                        img_news.setImageBitmap(bmp);
                     }
                     for (int i = 0; i < alllist.size(); i++) {
                         alllist.get(i).setType("1");
@@ -1053,9 +1055,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                         } else {
                             url = GlobalConfig.imageurl+ GlobalConfig.playerobject.getContentImg();
                         }
-                        imageLoader.DisplayImage(url.replace("\\/", "/"),img_news, false, false, null, null);
+                        Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(img_news);
                     } else {
-                        img_news.setImageResource(R.mipmap.wt_image_playertx);
+                        Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
+                        img_news.setImageBitmap(bmp);
                     }
                     for (int i = 0; i < alllist.size(); i++) {
                         alllist.get(i).setType("1");
@@ -1647,9 +1650,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             } else {
                 url = GlobalConfig.imageurl + flist.getContentImg();
             }
-            imageLoader.DisplayImage(url.replace("\\/", "/"), img_news, false, false, null, null);
+            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(img_news);
         } else {
-            img_news.setImageResource(R.mipmap.wt_image_playertx);
+            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
+            img_news.setImageBitmap(bmp);
         }
         alllist.clear();
         alllist.addAll(list);
@@ -1691,9 +1695,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             } else {
                 url = GlobalConfig.imageurl + list.get(0).getContentImg();
             }
-            imageLoader.DisplayImage(url.replace("\\/", "/"), img_news, false, false, null, null);
+            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(img_news);
         } else {
-            img_news.setImageResource(R.mipmap.wt_image_playertx);
+            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
+            img_news.setImageBitmap(bmp);
         }
         alllist.clear();
         alllist.addAll(list);
@@ -1902,9 +1907,11 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                                 } else {
                                     url = GlobalConfig.imageurl + alllist.get(number).getContentImg();
                                 }
-                                imageLoader.DisplayImage(url.replace("\\/", "/"), img_news, false, false, null, null);
+                                Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(img_news);
+
                             } else {
-                                img_news.setImageResource(R.mipmap.wt_image_playertx);
+                                Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
+                                img_news.setImageBitmap(bmp);
                             }
                             for (int i = 0; i < alllist.size(); i++) {
                                 alllist.get(i).setType("1");

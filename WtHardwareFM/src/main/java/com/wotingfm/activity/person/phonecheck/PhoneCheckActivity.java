@@ -14,8 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.shenstec.activity.BaseActivity;
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.BaseActivity;
 import com.wotingfm.activity.person.modifypassword.ModifyPasswordActivity;
 import com.wotingfm.activity.person.register.RegisterActivity;
 import com.wotingfm.common.config.GlobalConfig;
