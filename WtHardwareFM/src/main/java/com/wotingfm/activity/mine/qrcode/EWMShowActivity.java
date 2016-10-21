@@ -5,12 +5,12 @@ import android.graphics.Bitmap;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.helper.CreatQRImageHelper;
-import com.wotingfm.helper.ImageLoader;
 import com.wotingfm.util.BitmapUtils;
 
 /**
@@ -23,7 +23,6 @@ public class EWMShowActivity extends AppBaseActivity {
 	private ImageView imageHead;
 	private TextView textName;
 	private TextView textNews;
-	private ImageLoader imageLoader;
 	private String url;
 	private Bitmap bitmap, bmp;
 
@@ -35,7 +34,6 @@ public class EWMShowActivity extends AppBaseActivity {
     @Override
     protected void init() {
         setTitle("二维码");
-        imageLoader = new ImageLoader(context);
         Intent data = getIntent();
         if(data != null){
             String news = data.getStringExtra("news");
@@ -74,14 +72,15 @@ public class EWMShowActivity extends AppBaseActivity {
             textNews.setText(news);
         }
         if (imageUrl == null || imageUrl.equals("") || imageUrl.equals("null")|| imageUrl.trim().equals("")) {
-            imageHead.setImageResource(R.mipmap.wt_image_tx_qz);
+            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_qz);
+            imageHead.setImageBitmap(bmp);
         } else {
             if(imageUrl.startsWith("http:")){
                 url=imageUrl;
             }else{
                 url = GlobalConfig.imageurl + imageUrl;
             }
-            imageLoader.DisplayImage(url.replace("\\/", "/"), imageHead, false, false, null, null);
+            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(imageHead);
         }
         bitmap = CreatQRImageHelper.getInstance().createQRImage(type, userInfo, 220, 220);
         if(bitmap != null){
@@ -99,7 +98,6 @@ public class EWMShowActivity extends AppBaseActivity {
         imageHead = null;
         textName = null;
         textNews = null;
-		imageLoader = null;
 		url = null;
 		if(bitmap != null){
             bitmap.recycle();

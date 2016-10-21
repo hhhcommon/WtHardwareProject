@@ -1,6 +1,7 @@
 package com.wotingfm.activity.im.interphone.message.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.message.model.MessageInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.util.BitmapUtils;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -120,7 +122,6 @@ public class NewsAdapter extends BaseAdapter {
                 }
                 if (lists.getProtraitMini() != null && !lists.getProtraitMini().equals("")
                         && !lists.getProtraitMini().equals("null")) {
-//                    holder.Image.setImageResource(R.drawable.wt_image_tx_qz);
                     String url;
                     if (lists.getProtraitMini().startsWith("http:")) {
                         url = lists.getProtraitMini();
@@ -128,7 +129,9 @@ public class NewsAdapter extends BaseAdapter {
                         url = GlobalConfig.imageurl + lists.getProtraitMini();
                     }
                     Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.Image);
-
+                }else{
+                    Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_hy);
+                    holder.Image.setImageBitmap(bmp);
                 }
             }
         }

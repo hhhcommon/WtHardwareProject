@@ -170,7 +170,6 @@ public class SocketService extends Service  {
 	public static void addSendMsg(Message msg) {
 		try {
 			sendMsgQueue.add(msg.toBytes());
-			Log.i("", msg+"");
 			Log.i("发送数据队列", "发送队列添加一条新数据==数据个数=【"+(sendMsgQueue.size()+1)+"】");
 		} catch (Exception e) {
 			Log.e("添加数据到消息队列出异常了", e.toString()+"");
@@ -352,7 +351,7 @@ public class SocketService extends Service  {
 								out.flush();
 								long sendTime = System.currentTimeMillis();
 								oversendMsgQueue.add(sendTime+mBytes.toString());
-								Log.i("前端已经发送的消息",JsonEncloseUtils.btToString(mBytes));
+								Log.e("前端已经发送的消息",JsonEncloseUtils.btToString(mBytes));
 								Log.i("发送数据队列", "【等待】发送==数据个数=【"+sendMsgQueue.size()+"】");
 							} catch (Exception e) {
 								Log.e("发送消息线程out流异常", e.toString()+"");
@@ -397,7 +396,7 @@ public class SocketService extends Service  {
 		private int _headLen=36;
 		public void run() { 
 			byte[] ba=new byte[2048];
-			byte[] mba=null;
+			byte[] mba;
 			int i=0;
 			short _dataLen=-4;
 			boolean hasBeginMsg=false; //是否开始了一个消息

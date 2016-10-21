@@ -139,7 +139,7 @@ public class DownloadActivity extends FragmentActivity {
 
         // 利用formatFileSize函数把字节转换为用户等看懂的大小数值单位
         String totalText = Formatter.formatFileSize(getBaseContext(), blockSize * totalBlocks);
-//        String availableText = Formatter.formatFileSize(getBaseContext(), blockSize * availableBlocks);
+        // String availableText = Formatter.formatFileSize(getBaseContext(), blockSize * availableBlocks);
         String userText = Formatter.formatFileSize(getBaseContext(), (blockSize * totalBlocks) - (blockSize * availableBlocks));
         textMemory.setText("已用" + userText + "/总容量" + totalText);
     }

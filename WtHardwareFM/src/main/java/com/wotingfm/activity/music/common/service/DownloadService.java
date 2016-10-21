@@ -27,7 +27,7 @@ public class DownloadService extends Service {
 	private static String TAG = "DownloadService";
 	private static DownloadService context;
 	private static DownloadTask mTask;
-	private static FileInfo filetemp = null;
+	private static FileInfo fileTemp = null;
 
 	@Override
 	public void onCreate() {
@@ -37,12 +37,12 @@ public class DownloadService extends Service {
 	public static void workStart(FileInfo fileInfo) {
 		/*		Log.i(TAG, "Start:" + fileInfo.toString());*/
 		// 启动初始化线程
-		String s=fileInfo.getFileName();
-		String s1=fileInfo.getUrl();
+		// String s=fileInfo.getFileName();
+        // String s1=fileInfo.getUrl();
 		new InitThread(fileInfo).start();//http://audio.xmcdn.com/group13/M05/02/9E/wKgDXVbBJY3QZQkmABblyjUSkbI912.m4a
 	}
 
-	public static void workStop(FileInfo fileInfo) {
+	public static void workStop(FileInfo fileInFo) {
 		/*	Log.i(TAG, "Stop:" + fileInfo.toString());*/
 		if (mTask != null) {
 			DownloadTask.isPause = true;
@@ -62,12 +62,12 @@ public class DownloadService extends Service {
 				Log.i(TAG, "Init:" + fileInfo);
 				// 启动下载任务
 				DownloadTask.isPause = false;
-				if(filetemp==null){
-					filetemp=fileInfo;
+				if(fileTemp==null){
+					fileTemp=fileInfo;
 					mTask = new DownloadTask(context, fileInfo);
 					mTask.downLoad();
 				}else{
-					if(filetemp.getUrl().equals(fileInfo.getUrl())){
+					if(fileTemp.getUrl().equals(fileInfo.getUrl())){
 
 					}else{
 						if (mTask != null) {
@@ -89,8 +89,8 @@ public class DownloadService extends Service {
 
 	private static class InitThread extends Thread {
 		private FileInfo mFileInfo =null;
-		public InitThread(FileInfo mFileInfos) {
-			mFileInfo = mFileInfos;
+		public InitThread(FileInfo mFileInFos) {
+			mFileInfo = mFileInFos;
 		}
 		@Override
 		public void run() {
