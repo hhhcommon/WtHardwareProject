@@ -1,13 +1,13 @@
 package com.wotingfm.activity.im.interphone.linkman.view;
 
 
-import com.wotingfm.activity.music.program.fenlei.model.FLeiName;
+import com.wotingfm.activity.music.program.fenlei.model.FenLeiName;
 
 import java.util.Comparator;
 
-public class PinyinComparator_d implements Comparator<FLeiName> {
+public class PinyinComparator_d implements Comparator<FenLeiName> {
 
-	public int compare(FLeiName o1, FLeiName o2) {
+	public int compare(FenLeiName o1, FenLeiName o2) {
 		if (o1.getSortLetters().equals("@")
 				|| o2.getSortLetters().equals("#")) {
 			return -1;

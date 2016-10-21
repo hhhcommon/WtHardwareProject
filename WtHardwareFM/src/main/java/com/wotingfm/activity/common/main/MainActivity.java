@@ -30,8 +30,8 @@ import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
 import com.wotingfm.activity.mine.main.MineActivity;
 import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.program.citylist.dao.CityInfoDao;
-import com.wotingfm.activity.music.program.fenlei.model.FLei;
-import com.wotingfm.activity.music.program.fenlei.model.FLeiName;
+import com.wotingfm.activity.music.program.fenlei.model.FenLei;
+import com.wotingfm.activity.music.program.fenlei.model.FenLeiName;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstant;
@@ -68,7 +68,7 @@ public class MainActivity extends TabActivity {
     private String mPageName = "MainActivity";
     private int upDataType = 1;      // 1,不需要强制升级2，需要强制升级
     private boolean isCancelRequest;
-    private List<FLeiName> list;
+    private List<FenLeiName> list;
 
     private CityInfoDao CID;         // 城市列表数据库
 
@@ -235,20 +235,20 @@ public class MainActivity extends TabActivity {
                             try {
                                 // 获取列表
                                 String ResultList = result.getString("CatalogData");
-                                FLei SubList_all = new Gson().fromJson(ResultList, new TypeToken<FLei>() {
+                                FenLei SubList_all = new Gson().fromJson(ResultList, new TypeToken<FenLei>() {
                                 }.getType());
-                                List<FLeiName> srcList = SubList_all.getSubCata();
+                                List<FenLeiName> srcList = SubList_all.getSubCata();
                                 if (srcList != null) {
                                     if (srcList.size() == 0) {
                                         ToastUtils.show_short(context, "获取城市列表为空");
                                     } else {
                                         //组装从后台获取到的数据
-                                        List<FLeiName> mList = new ArrayList<FLeiName>();
+                                        List<FenLeiName> mList = new ArrayList<FenLeiName>();
                                         for (int i = 0; i < srcList.size(); i++) {
-                                            FLeiName mFLeiName = new FLeiName();
-                                            mFLeiName.setCatalogId(srcList.get(i).getCatalogId());
-                                            mFLeiName.setCatalogName(srcList.get(i).getCatalogName());
-                                            mList.add(mFLeiName);
+                                            FenLeiName mFenLeiName = new FenLeiName();
+                                            mFenLeiName.setCatalogId(srcList.get(i).getCatalogId());
+                                            mFenLeiName.setCatalogName(srcList.get(i).getCatalogName());
+                                            mList.add(mFenLeiName);
                                         }
                                         //获取数据库中的地理位置数据
                                         list = CID.queryCityInfo();

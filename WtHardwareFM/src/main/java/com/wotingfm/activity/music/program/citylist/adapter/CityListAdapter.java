@@ -10,7 +10,7 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.music.program.fenlei.model.FLeiName;
+import com.wotingfm.activity.music.program.fenlei.model.FenLeiName;
 
 import java.util.List;
 
@@ -20,17 +20,17 @@ import java.util.List;
  * 2016年3月25日
  */
 public class CityListAdapter extends BaseAdapter implements SectionIndexer{
-	private List<FLeiName> list;
+	private List<FenLeiName> list;
 	private Context context;
 //	private ImageLoader imageLoader;
-	private FLeiName lists;
-	public CityListAdapter(Context context,List<FLeiName> list) {
+	private FenLeiName lists;
+	public CityListAdapter(Context context,List<FenLeiName> list) {
 		super();
 		this.list = list;
 		this.context = context;
 //		imageLoader=new ImageLoader(context);
 	}
-	public void ChangeDate(List<FLeiName> list){
+	public void ChangeDate(List<FenLeiName> list){
 		this.list = list;
 		this.notifyDataSetChanged();
 	}

@@ -11,7 +11,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
-import com.wotingfm.activity.music.program.fenlei.model.FLeiName;
+import com.wotingfm.activity.music.program.fenlei.model.FenLeiName;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.util.BitmapUtils;
 
@@ -21,10 +21,10 @@ import java.util.List;
  * 分类 GridView 的数据适配
  */
 public class FLeiGridAdapter extends BaseAdapter {
-	private List<FLeiName> list;
+	private List<FenLeiName> list;
 	private Context context;
 
-	public FLeiGridAdapter(Context context, List<FLeiName> list) {
+	public FLeiGridAdapter(Context context, List<FenLeiName> list) {
 		super();
 		this.list = list;
 		this.context = context;
@@ -57,7 +57,7 @@ public class FLeiGridAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		FLeiName lists = list.get(position);
+		FenLeiName lists = list.get(position);
 		holder.textName.setText(lists.getCatalogName());
 
 		if(lists.getPortraitMini()==null||lists.getPortraitMini().equals("")||lists.getPortraitMini().equals("null")||lists.getPortraitMini().trim().equals("")){

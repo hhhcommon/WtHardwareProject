@@ -3,7 +3,7 @@ package com.wotingfm.activity.music.program.fenlei.model;
 import java.io.Serializable;
 import java.util.List;
 
-public class FLeiName implements Serializable {
+public class FenLeiName implements Serializable {
     private String name;   //显示的数据
     private String sortLetters;  //显示数据拼音的首字母
     private String pinYinName;
@@ -12,7 +12,7 @@ public class FLeiName implements Serializable {
     private String CatalogType;
     private String PortraitMini;    //
     private String truename;
-    private List<FLeiName> SubCata;
+    private List<FenLeiName> SubCata;
 
     public String getPortraitMini() {
         return PortraitMini;
@@ -22,11 +22,11 @@ public class FLeiName implements Serializable {
         PortraitMini = portraitMini;
     }
 
-    public List<FLeiName> getSubCata() {
+    public List<FenLeiName> getSubCata() {
         return SubCata;
     }
 
-    public void setSubCata(List<FLeiName> subCata) {
+    public void setSubCata(List<FenLeiName> subCata) {
         SubCata = subCata;
     }
 
