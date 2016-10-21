@@ -11,11 +11,11 @@ import com.wotingfm.R;
 
 import java.util.List;
 
-public class searchhotkeyadapter extends BaseAdapter {
+public class SearchKeyAdapter extends BaseAdapter {
 	private Context context;
 	private List<String> list;
 
-	public searchhotkeyadapter(Context context, List<String> list) {
+	public SearchKeyAdapter(Context context, List<String> list) {
 		this.context = context;
 		this.list = list;
 	}

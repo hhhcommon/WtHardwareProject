@@ -173,8 +173,6 @@ public class RecommendFragment extends Fragment {
                                 mListView.setPullLoadEnable(false);
                             } else{
                                 mListView.setPullLoadEnable(true);
-
-                                // 先求余 如果等于0 最后结果不加1 如果不等于0 结果加一
                                 if (allCountInt % pageSizeInt == 0) {
                                     pageSizeNum = allCountInt / pageSizeInt;
                                 } else {

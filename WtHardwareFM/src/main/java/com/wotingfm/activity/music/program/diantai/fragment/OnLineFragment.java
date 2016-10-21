@@ -75,7 +75,7 @@ public class OnLineFragment extends Fragment implements OnClickListener {
     private List<RadioPlay> newList = new ArrayList<>();
 
     private int refreshType = 1;    // refreshType 1为下拉加载 2为上拉加载更多
-    private int page = 1;       // 数的问题
+    private int page = 1;           // 数的问题
     private String beginCatalogId = "";
     private String returnType;
     private String cityId;
@@ -378,6 +378,7 @@ public class OnLineFragment extends Fragment implements OnClickListener {
         }
     }
 
+    // 用户选择的城市发生变化时同步更新城市电台和分类电台的广播
     class MessageReceiver extends BroadcastReceiver {
 
         @Override

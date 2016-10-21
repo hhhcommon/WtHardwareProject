@@ -17,7 +17,7 @@ import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.activity.im.interphone.notify.activity.NotifyNewActivity;
 import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.program.main.ProgramFragment;
-import com.wotingfm.activity.music.search.activity.SearchLikeAcitvity;
+import com.wotingfm.activity.music.search.activity.SearchLikeActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.util.ToastUtils;
 
@@ -54,7 +54,7 @@ public class HomeActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				// 跳转到搜索界面  原来的代码 要加在这里
-				startActivity(new Intent(context, SearchLikeAcitvity.class));
+				startActivity(new Intent(context, SearchLikeActivity.class));
 			}
 		});
 

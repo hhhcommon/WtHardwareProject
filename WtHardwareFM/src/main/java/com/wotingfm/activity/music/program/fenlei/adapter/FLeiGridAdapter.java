@@ -12,12 +12,14 @@ import com.wotingfm.activity.music.program.fenlei.model.fenLeiName;
 
 import java.util.List;
 
-public class fenleigridAdapter extends BaseAdapter {
+/**
+ * 分类 GridView 的数据适配
+ */
+public class FLeiGridAdapter extends BaseAdapter {
 	private List<fenLeiName> list;
 	private Context context;
-	private ViewHolder holder;
 
-	public fenleigridAdapter(Context context, List<fenLeiName> list) {
+	public FLeiGridAdapter(Context context, List<fenLeiName> list) {
 		super();
 		this.list = list;
 		this.context = context;
@@ -40,19 +42,20 @@ public class fenleigridAdapter extends BaseAdapter {
 
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
 		if (convertView == null) {
 			holder = new ViewHolder();
-			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fenlei_child_grid, null);
-			holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);// 台名
+			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fenlei_child_grid, parent, false);
+			holder.textName = (TextView) convertView.findViewById(R.id.tv_name);// 台名
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		holder.tv_name.setText(list.get(position).getCatalogName());
+		holder.textName.setText(list.get(position).getCatalogName());
 		return convertView;
 	}
 
 	class ViewHolder {
-		public TextView tv_name;
+		public TextView textName;
 	}
 }
