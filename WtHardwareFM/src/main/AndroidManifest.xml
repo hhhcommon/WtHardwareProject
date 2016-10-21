@@ -559,7 +559,6 @@
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
-
         <service android:name="com.wotingfm.service.SubclassService" />
         <service android:name="com.wotingfm.service.NotificationService" />
         <service android:name="com.wotingfm.service.timeroffservice" />
