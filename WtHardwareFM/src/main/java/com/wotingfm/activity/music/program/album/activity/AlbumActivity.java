@@ -155,6 +155,7 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
 			ToastUtils.show_short(context, "没有数据");
 		}
 	}
+
 	private void setlistener() {
 		mback.setOnClickListener(context);
 	}
@@ -247,6 +248,7 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
 
 		}
 	}
+
 	public class AlbumChangeClickListener implements OnClickListener {
 
 
