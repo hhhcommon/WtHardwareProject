@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -24,13 +25,16 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.favorite.activity.FavoriteActivity;
+import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
+import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.activity.music.search.adapter.SearchContentAdapter;
 import com.wotingfm.activity.music.search.model.SuperRankInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
@@ -388,7 +392,7 @@ public class TotalFragment extends Fragment {
                 } else if (ReturnType != null && ReturnType.equals("1002")) {
                     ToastUtils.show_always(context, "" + Message);
                 } else if (ReturnType != null && ReturnType.equals("1011")) {
-                    ToastUtils.show_always(context, "" + Message);
+                    ToastUtils.show_always(context,"没有喜欢的节目");
                     ex_listview.setVisibility(View.GONE);
                 } else {
                     if (Message != null && !Message.trim().equals("")) {
@@ -440,29 +444,31 @@ public class TotalFragment extends Fragment {
                     String ContentFavorite = list.get(groupPosition).getList().get(childPosition).getContentFavorite();
                     String ContentId = list.get(groupPosition).getList().get(childPosition).getContentId();
                     String localurl = list.get(groupPosition).getList().get(childPosition).getLocalurl();
+                    String sequname = list.get(groupPosition).getList().get(childPosition).getSequName();
+                    String sequid = list.get(groupPosition).getList().get(childPosition).getSequId();
+                    String sequdesc = list.get(groupPosition).getList().get(childPosition).getSequDesc();
+                    String sequimg = list.get(groupPosition).getList().get(childPosition).getSequImg();
 
                     // 如果该数据已经存在数据库则删除原有数据，然后添加最新数据
                     PlayerHistory history = new PlayerHistory(playername, playerimage, playerurl, playerurI,
                             playermediatype, plaplayeralltime, playerintime, playercontentdesc, playernum,
                             playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid,
-                            playcontentshareurl, ContentFavorite, ContentId, localurl);
+                            playcontentshareurl, ContentFavorite, ContentId, localurl,sequname,sequid,sequdesc,sequimg);
                     dbdao.deleteHistory(playerurl);
                     dbdao.addHistory(history);
-//					if (PlayerFragment.context != null) {
-//						MainActivity.change();
-//						HomeActivity.UpdateViewPager();
-//						PlayerFragment.SendTextRequest(list.get(groupPosition).getList().get(childPosition).getContentName(), context);
-//						getActivity().finish();
-//					} else {
-//						SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
-//						Editor et = sp.edit();
-//						et.putString(StringConstant.PLAYHISTORYENTER, "true");
-//						et.putString(StringConstant.PLAYHISTORYENTERNEWS, list.get(groupPosition).getList().get(childPosition).getContentName());
-//						et.commit();
-//						MainActivity.change();
-//						HomeActivity.UpdateViewPager();
-//						getActivity().finish();
-//					}
+					if (PlayerFragment.context != null) {
+						HomeActivity.UpdateViewPager();
+						PlayerFragment.SendTextRequest(list.get(groupPosition).getList().get(childPosition).getContentName(), context);
+						getActivity().finish();
+					} else {
+						SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
+						SharedPreferences.Editor et = sp.edit();
+						et.putString(StringConstant.PLAYHISTORYENTER, "true");
+						et.putString(StringConstant.PLAYHISTORYENTERNEWS, list.get(groupPosition).getList().get(childPosition).getContentName());
+						et.commit();
+						HomeActivity.UpdateViewPager();
+						getActivity().finish();
+					}
                 } else if (MediaType.equals("SEQU")) {
 					Intent intent = new Intent(context, AlbumActivity.class);
 					Bundle bundle = new Bundle();

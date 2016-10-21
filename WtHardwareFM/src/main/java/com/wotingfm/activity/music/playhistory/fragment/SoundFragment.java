@@ -2,6 +2,7 @@ package com.wotingfm.activity.music.playhistory.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,10 +13,13 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.wotingfm.R;
+import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
+import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.playhistory.activity.PlayHistoryActivity;
 import com.wotingfm.activity.music.playhistory.adapter.PlayHistoryAdapter;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.ToastUtils;
 
@@ -202,31 +206,33 @@ public class SoundFragment extends Fragment{
 						String playShareUrl = playList.get(position).getPlayContentShareUrl();
 						String contentId = playList.get(position).getContentID();
 						String localUrl = playList.get(position).getLocalurl();
+						String sequname = playList.get(position - 1).getSequName();
+						String sequid = playList.get(position - 1).getSequId();
+						String sequdesc =playList.get(position - 1).getSequDesc();
+						String sequimg = playList.get(position - 1).getSequImg();
 						
 						//如果该数据已经存在数据库则删除原有数据，然后添加最新数据
 						PlayerHistory history = new PlayerHistory(
                                 playerName, playerImage, playerUrl, playerUri, playerMediaType,
                                 playerAllTime, playerInTime, playerContentDesc, playerNum,
                                 playerZanType, playerFrom, playerFromId, playerFromUrl,
-                                playerAddTime, bjUserId, playShareUrl, contentFavorite, contentId, localUrl);
+                                playerAddTime, bjUserId, playShareUrl, contentFavorite, contentId, localUrl,sequname,sequid,sequdesc,sequimg);
                         dbDao.deleteHistory(playerUrl);
                         dbDao.addHistory(history);
-//						if(PlayerFragment.context!=null){
-//							MainActivity.change();
-//							HomeActivity.UpdateViewPager();
-//							String s = playList.get(position).getPlayerName();
-//							PlayerFragment.SendTextRequest(s, context);
-//							getActivity().finish();
-//						}else{
-//							SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
-//							Editor et = sp.edit();
-//							et.putString(StringConstant.PLAYHISTORYENTER, "true");
-//							et.putString(StringConstant.PLAYHISTORYENTERNEWS, subList.get(position).getPlayerName());
-//							et.commit();
-//							MainActivity.change();
-//							HomeActivity.UpdateViewPager();
-//							getActivity().finish();
-//						}
+						if(PlayerFragment.context != null){
+							HomeActivity.UpdateViewPager();
+							String s = playList.get(position).getPlayerName();
+							PlayerFragment.SendTextRequest(s, context);
+							getActivity().finish();
+						}else{
+							SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
+							SharedPreferences.Editor et = sp.edit();
+							et.putString(StringConstant.PLAYHISTORYENTER, "true");
+							et.putString(StringConstant.PLAYHISTORYENTERNEWS, playList.get(position).getPlayerName());
+							et.commit();
+							HomeActivity.UpdateViewPager();
+							getActivity().finish();
+						}
 					}
 				}
 			}

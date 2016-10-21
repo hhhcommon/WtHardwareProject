@@ -5,6 +5,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -22,10 +23,13 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.favorite.activity.FavoriteActivity;
 import com.wotingfm.activity.music.favorite.adapter.FavorListAdapter;
+import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
+import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
@@ -176,30 +180,32 @@ public class RadioFragment extends Fragment {
 							String ContentFavorite = newlist.get(position - 1).getContentFavorite();
 							String ContentId = newlist.get(position - 1).getContentId();
 							String localurl = newlist.get(position - 1).getLocalurl();
+							String sequname = newlist.get(position - 1).getSequName();
+							String sequid = newlist.get(position - 1).getSequId();
+							String sequdesc =newlist.get(position - 1).getSequDesc();
+							String sequimg = newlist.get(position - 1).getSequImg();
 
 							// 如果该数据已经存在数据库则删除原有数据，然后添加最新数据
 							PlayerHistory history = new PlayerHistory(playername, playerimage, playerurl, playerurI,
 									playermediatype, plaplayeralltime, playerintime, playercontentdesc, playernum,
 									playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid,
-									playercontentshareurl, ContentFavorite, ContentId, localurl);
+									playercontentshareurl, ContentFavorite, ContentId, localurl,sequname,sequid,sequdesc,sequimg);
 							dbdao.deleteHistory(playerurl);
 							dbdao.addHistory(history);
 
-//							if (PlayerFragment.context != null) {
-//								MainActivity.change();
-//								HomeActivity.UpdateViewPager();
-//								PlayerFragment.SendTextRequest(newlist.get(position - 1).getContentName(), context);
-//								getActivity().finish();
-//							} else {
-//								SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
-//								Editor et = sp.edit();
-//								et.putString(StringConstant.PLAYHISTORYENTER, "true");
-//								et.putString(StringConstant.PLAYHISTORYENTERNEWS, newlist.get(position - 1).getContentName());
-//								et.commit();
-//								MainActivity.change();
-//								HomeActivity.UpdateViewPager();
-//								getActivity().finish();
-//							}
+							if (PlayerFragment.context != null) {
+								HomeActivity.UpdateViewPager();
+								PlayerFragment.SendTextRequest(newlist.get(position - 1).getContentName(), context);
+								getActivity().finish();
+							} else {
+								SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
+								SharedPreferences.Editor et = sp.edit();
+								et.putString(StringConstant.PLAYHISTORYENTER, "true");
+								et.putString(StringConstant.PLAYHISTORYENTERNEWS, newlist.get(position - 1).getContentName());
+								et.commit();
+								HomeActivity.UpdateViewPager();
+								getActivity().finish();
+							}
 						} else {
 							ToastUtils.show_short(context, "暂不支持的Type类型");
 						}

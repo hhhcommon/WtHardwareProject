@@ -79,6 +79,10 @@ public class ProgramFragment extends Fragment implements OnClickListener {
 	private String userid;
 	private boolean isCancelRequest;
 	private String tag = "PROGRAM_VOLLEY_REQUEST_CANCEL_TAG";
+	private String sequId;
+	private String sequDesc;
+	private String sequName;
+	private String sequImg;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -160,12 +164,24 @@ public class ProgramFragment extends Fragment implements OnClickListener {
 						String bjuserid = CommonUtils.getUserId(context);
 						String ContentFavorite = SubList.get(position).getContentFavorite();
 						String localurl=SubList.get(position).getLocalurl();
-						
+
 						// 如果该数据已经存在数据库则删除原有数据，然后添加最新数据
 						PlayerHistory history = new PlayerHistory(playername, playerimage, playerurl, playerurI,
 								playermediatype, plaplayeralltime, playerintime, playercontentdesc, playernum,
 								playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid,
-								playcontentshareurl, ContentFavorite, contentid,localurl);
+								playcontentshareurl, ContentFavorite, contentid,localurl,sequName,sequId,sequDesc,sequImg);
+						/*if(sequId!=null){
+                           history.setSequId(sequId);
+						}
+						if(sequName!=null){
+							history.setSequName(sequName);
+						}
+						if(sequDesc!=null){
+                            history.setSequName(sequDesc);
+						}
+						if(sequImg!=null){
+                            history.setSequImg(sequImg);
+						}*/
 						dbdao.deleteHistory(playerurl);
 						dbdao.addHistory(history);
 						if(PlayerFragment.context!=null){
@@ -192,7 +208,7 @@ public class ProgramFragment extends Fragment implements OnClickListener {
 	}
 
 	/**
-	 * 向服务器发送请求
+	 * 获取专辑列表
 	 */
 	public void send() {
 		VolleyRequest.RequestPost(GlobalConfig.getContentById, tag, setParam(), new VolleyCallback() {
@@ -224,6 +240,10 @@ public class ProgramFragment extends Fragment implements OnClickListener {
 
 							// 此处后期需要用typetoken将字符串StringSubList 转化成为一个list集合
 							StringSubList = arg1.getString("SubList");
+							sequDesc=arg1.getString("ContentDesc");
+							sequId=arg1.getString("ContentId");
+							sequImg=arg1.getString("ContentImg");
+							sequName=arg1.getString("ContentName");
 							Gson gson = new Gson();
 							SubList = gson.fromJson(StringSubList, new TypeToken<List<ContentInfo>>() {}.getType());
 							if (SubList != null && SubList.size() > 0) {

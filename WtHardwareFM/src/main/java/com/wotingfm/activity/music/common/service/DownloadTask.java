@@ -104,10 +104,6 @@ public class DownloadTask{
 						mFinised += len;
 						if (System.currentTimeMillis() - time > 100){
 							time = System.currentTimeMillis();
-						/*	intent.putExtra("finished", mFinised * 100 / mThreadInfo.getEnd());*/
-//						    String s =mThreadInfo.getUrl();
-//						    int start1=mFinised;
-//							int end=mThreadInfo.getEnd();
 							intent.putExtra("url",mThreadInfo.getUrl() );
 							intent.putExtra("start", mFinised);
 							intent.putExtra("end",mThreadInfo.getEnd());

@@ -405,6 +405,13 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
+        <!-- 节目单页 -->
+        <activity
+            android:name=".activity.music.program.schedule.activity.ScheduleActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
         <!-- 下载列表 -->
         <activity
             android:name=".activity.music.download.downloadlist.activity.DownLoadListActivity"
@@ -528,10 +535,8 @@
             android:noHistory="true" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-
                 <data android:scheme="tencent1105341370" />
             </intent-filter>
         </activity>

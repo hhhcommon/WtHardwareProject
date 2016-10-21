@@ -161,12 +161,6 @@ public class DownLoadListActivity extends Activity implements OnClickListener {
 		adapter.setonListener(new DownLoadListAdapter.downloadlist() {
 			@Override
 			public void checkposition(int position) {
-				/*
-				 * if(fileinfolist.get(position).getChecktype()==0){
-				 * fileinfolist.get(position).setChecktype(1); Toast }else{
-				 * fileinfolist.get(position).setChecktype(0); }
-				 */
-				/* ToastUtil.show_always(context, "此处弹窗确认是否删除"); */
 				deleteConfirmDialog(position);
 				confirmdialog1.show();
 			}
@@ -235,13 +229,17 @@ public class DownLoadListActivity extends Activity implements OnClickListener {
 							String bjuserid = CommonUtils.getUserId(context);
 							String ContentFavorite = mFileInfo.getContentFavorite();
 							String ContentId = mFileInfo.getContentId();
-							//							String localurl = mFileInfo.getLocalurl();
+							String sequName=mFileInfo.getSequname();
+							String sequId=mFileInfo.getSequid();
+							String sequImg=mFileInfo.getSequimgurl();
+							String sequDesc=mFileInfo.getSequdesc();
 
 							//如果该数据已经存在数据库则删除原有数据，然后添加最新数据
 							PlayerHistory history = new PlayerHistory(
 									playername,  playerimage, playerurl, playerurI,playermediatype, 
 									plaplayeralltime, playerintime, playercontentdesc, playernum,
-									playerzantype,  playerfrom, playerfromid, playerfromurl,playeraddtime,bjuserid,playercontentshareurl,ContentFavorite,ContentId,playlocalrurl);	
+									playerzantype,  playerfrom, playerfromid, playerfromurl,playeraddtime,bjuserid,playercontentshareurl,ContentFavorite,
+									ContentId,playlocalrurl,sequName,sequId,sequDesc,sequImg);
 							dbdao.deleteHistory(playerurl);
 							dbdao.addHistory(history);
 							if(PlayerFragment.context != null){

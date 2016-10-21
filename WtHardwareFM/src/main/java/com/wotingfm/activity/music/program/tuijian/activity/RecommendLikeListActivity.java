@@ -96,7 +96,6 @@ public class RecommendLikeListActivity extends AppBaseActivity {
                 if (page <= pageSizeNum) {
                     refreshType = 2;
                     sendRequest();
-                    ToastUtils.show_always(context, "正在请求" + page + "页信息");
                 } else {
                     mListView.stopLoadMore();
                     ToastUtils.show_always(context, "已经没有最新的数据了");
@@ -110,6 +109,8 @@ public class RecommendLikeListActivity extends AppBaseActivity {
         // 以下操作需要网络支持
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
             ToastUtils.show_always(context, "网络连接失败，请稍后重试!");
+            mListView.stopRefresh();
+            mListView.stopLoadMore();
             return ;
         }
 
@@ -240,12 +241,16 @@ public class RecommendLikeListActivity extends AppBaseActivity {
 						String ContentFavorite= newList.get(position - 1).getContentFavorite();
 						String ContentId= newList.get(position-1).getContentId();
 						String localurl=newList.get(position-1).getLocalurl();
+						String sequname = newList.get(position - 1).getSequName();
+						String sequid = newList.get(position - 1).getSequId();
+						String sequdesc =newList.get(position - 1).getSequDesc();
+						String sequimg =newList.get(position - 1).getSequImg();
 						
 						// 如果该数据已经存在数据库则删除原有数据，然后添加最新数据
 						PlayerHistory history = new PlayerHistory(
 								playername,  playerimage, playerurl,playerurI, playermediatype, 
 								 plaplayeralltime, playerintime, playercontentdesc, playernum,
-								 playerzantype,  playerfrom, playerfromid,playerfromurl, playeraddtime,bjuserid,playcontentshareurl,ContentFavorite,ContentId,localurl);
+								 playerzantype,  playerfrom, playerfromid,playerfromurl, playeraddtime,bjuserid,playcontentshareurl,ContentFavorite,ContentId,localurl,sequname,sequid,sequdesc,sequimg);
                         dbDao.deleteHistory(playerurl);
                         dbDao.addHistory(history);
 						

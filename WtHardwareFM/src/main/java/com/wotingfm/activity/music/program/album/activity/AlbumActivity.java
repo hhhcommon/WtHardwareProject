@@ -182,6 +182,7 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
 			ContentName = list.getContentName();
 			ContentDesc=list.getContentDesc();
 			id = list.getContentId();
+			ContentImg=list.getContentImg();
 		} else if (type != null && type.trim().equals("recommend")) {
 			ContentName=this.getIntent().getStringExtra("conentname");
 			ContentDesc=this.getIntent().getStringExtra("conentname");
@@ -192,16 +193,23 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
 			ContentName = list.getContentName();
 			ContentDesc=list.getContentDesc();
 			id = list.getContentId();
+			ContentImg=list.getContentImg();
 		} else if (type != null && type.trim().equals("main")) {
 			//congmainlaide 再做一个
 			ContentName = this.getIntent().getStringExtra("conentname");
 			id = this.getIntent().getStringExtra("id");
+
 		} else if(type != null && type.trim().equals("player")){
-			ContentName=this.getIntent().getStringExtra("conentname");
-			ContentDesc=this.getIntent().getStringExtra("conentname");
-			id=this.getIntent().getStringExtra("conentid");
-			ContentImg=this.getIntent().getStringExtra("contentimg");
-		}else {
+			ContentName=this.getIntent().getStringExtra("contentName");
+			ContentDesc=this.getIntent().getStringExtra("contentDesc");
+			id=this.getIntent().getStringExtra("contentId");
+			ContentImg=this.getIntent().getStringExtra("contentImg");
+		}else if(type != null && type.trim().equals("total")){
+			ContentName=this.getIntent().getStringExtra("contentName");
+			ContentDesc=this.getIntent().getStringExtra("contentDesc");
+			id=this.getIntent().getStringExtra("conentId");
+			ContentImg=this.getIntent().getStringExtra("contentImg");
+		} else {
 			LanguageSearchInside list = (LanguageSearchInside) getIntent().getSerializableExtra("list");
 			ContentName = list.getContentName();
 			ContentDesc=list.getContentDesc();

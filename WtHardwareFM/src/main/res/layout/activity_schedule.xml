@@ -11,66 +11,61 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/dinglan_orange"
-        android:gravity="center_vertical">
+        android:gravity="center_vertical" >
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical">
+            android:orientation="vertical" >
 
-            <TextView
-                android:id="@+id/wt_back"
+            <LinearLayout
+                android:id="@+id/head_left_btn"
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
-                android:gravity="center"
-                android:text="@string/back"
-                android:textColor="@color/white"
-                android:textSize="@dimen/activity_head_right"/>
+                android:background="@drawable/head_press"
+                android:gravity="left|center">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@mipmap/back_images"
+                    android:layout_marginLeft="6dp"/>
+            </LinearLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center" >
 
             <TextView
-                android:id="@+id/tv_head_name"
+                android:id="@+id/head_name_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:gravity="center"
                 android:singleLine="true"
-                android:text="详细资料"
-                android:textColor="@color/white"
-                android:textSize="@dimen/activity_head_center_s"/>
+                android:text="群组信息"
+                android:textColor="@color/WHITE_1"
+                android:textSize="@dimen/activity_head_center_s" />
         </LinearLayout>
 
-        <ImageView
-            android:id="@+id/img_head_right"
+        <View
             android:layout_width="0dp"
             android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:paddingLeft="65dp"
-            android:paddingTop="10dp"
-            android:paddingBottom="10dp"
-            android:src="@mipmap/wt_image_group_verification"
-            />
+            android:layout_weight="1"/>
+        
     </LinearLayout>
-<android.support.v4.view.ViewPager
-    android:id="@+id/mpager"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/white"
-    >
 
-</android.support.v4.view.ViewPager>
-
-
-
-
-
-
+    <ListView
+        android:id="@+id/lv_main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/white"
+        android:scrollbars="none"
+        >
+    </ListView>
 
 </LinearLayout>
