@@ -184,6 +184,7 @@ public class SequFragment extends Fragment {
                 if (isCancelRequest) {
                     return;
                 }
+                mListView.setVisibility(View.GONE);
                 page++;
                 try {
                     ReturnType = result.getString("ReturnType");
@@ -220,9 +221,10 @@ public class SequFragment extends Fragment {
                         } else {
                             adapter.notifyDataSetChanged();
                         }
+                        mListView.setVisibility(View.VISIBLE);
                         setListener();
                     } else {
-                        ToastUtils.show_short(context, "ReturnType不能为空");
+                        ToastUtils.show_short(context, "无数据");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

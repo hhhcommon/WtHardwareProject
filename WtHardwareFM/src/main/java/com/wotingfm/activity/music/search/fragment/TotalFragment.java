@@ -35,6 +35,7 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -179,6 +180,7 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                 try {
                     ReturnType = result.getString("ReturnType");
                     Message = result.getString("Message");
+                    L.v("Message -- > > " + Message);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -271,20 +273,13 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                             }
                             expandListView.setVisibility(View.VISIBLE);
                         } else {
-                            ToastUtils.show_short(context, "没有数据");
+                            ToastUtils.show_short(context, "无数据");
                         }
                     } else {
                         ToastUtils.show_short(context, "数据获取异常");
                     }
-                } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_always(context, "" + Message);
-                } else if (ReturnType != null && ReturnType.equals("1011")) {
-                    ToastUtils.show_always(context, "" + Message);
-                    expandListView.setVisibility(View.GONE);
                 } else {
-                    if (Message != null && !Message.trim().equals("")) {
-                        ToastUtils.show_always(context, Message + "");
-                    }
+                    ToastUtils.show_short(context, "无数据");
                 }
             }
 

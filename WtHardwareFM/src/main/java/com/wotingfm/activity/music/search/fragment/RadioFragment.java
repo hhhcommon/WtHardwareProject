@@ -166,6 +166,7 @@ public class RadioFragment extends Fragment {
                 if (isCancelRequest) {
                     return;
                 }
+                mListView.setVisibility(View.GONE);
                 try {
                     ReturnType = result.getString("ReturnType");
                     L.w("ReturnType -- > > " + ReturnType);
@@ -180,6 +181,7 @@ public class RadioFragment extends Fragment {
                         } else {
                             adapter.notifyDataSetChanged();
                         }
+                        mListView.setVisibility(View.VISIBLE);
                         setListener();
                     } else {
                         ToastUtils.show_short(context, "无数据");

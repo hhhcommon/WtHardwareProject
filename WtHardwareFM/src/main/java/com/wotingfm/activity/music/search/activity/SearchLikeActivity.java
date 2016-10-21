@@ -403,7 +403,7 @@ public class SearchLikeActivity extends FragmentActivity implements
                             }
                         }
                     } else {
-                        ToastUtils.show_always(getApplicationContext(), "没有查询到内容");
+                        L.w("没有查询到内容");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
