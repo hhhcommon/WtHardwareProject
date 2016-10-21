@@ -24,8 +24,8 @@ import com.wotingfm.activity.im.interphone.linkman.view.CharacterParser;
 import com.wotingfm.activity.im.interphone.linkman.view.PinyinComparator_d;
 import com.wotingfm.activity.im.interphone.linkman.view.SideBar;
 import com.wotingfm.activity.music.program.citylist.adapter.CityListAdapter;
-import com.wotingfm.activity.music.program.fenlei.model.fenLei;
-import com.wotingfm.activity.music.program.fenlei.model.fenLeiName;
+import com.wotingfm.activity.music.program.fenlei.model.FLei;
+import com.wotingfm.activity.music.program.fenlei.model.FLeiName;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstant;
@@ -60,8 +60,8 @@ public class CityListActivity extends AppBaseActivity {
     private EditText editSearchContent;
     private ImageView imageClear;
 
-    private List<fenLeiName> userList = new ArrayList<>();
-    private List<fenLeiName> srcList;
+    private List<FLeiName> userList = new ArrayList<>();
+    private List<FLeiName> srcList;
 
     private String tag = "CITY_LIST_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
@@ -116,7 +116,7 @@ public class CityListActivity extends AppBaseActivity {
                     L.w("returnType -- > > " + returnType);
 
                     if (returnType != null && returnType.equals("1001")) {
-                        fenLei subListAll = new Gson().fromJson(result.getString("CatalogData"), new TypeToken<fenLei>() {}.getType());
+                        FLei subListAll = new Gson().fromJson(result.getString("CatalogData"), new TypeToken<FLei>() {}.getType());
                         srcList = subListAll.getSubCata();
                         if (srcList != null && srcList.size() > 0) {
                             userList.clear();
@@ -158,7 +158,7 @@ public class CityListActivity extends AppBaseActivity {
         return jsonObject;
     }
 
-    private void filledData(List<fenLeiName> person) {
+    private void filledData(List<FLeiName> person) {
         for (int i = 0; i < person.size(); i++) {
             person.get(i).setName(person.get(i).getCatalogName());
             // 汉字转换成拼音
@@ -258,13 +258,13 @@ public class CityListActivity extends AppBaseActivity {
 
     // 根据输入框中的值来过滤数据并更新ListView
     private void search(String search_name) {
-        List<fenLeiName> filterDateList = new ArrayList<>();
+        List<FLeiName> filterDateList = new ArrayList<>();
         if (TextUtils.isEmpty(search_name)) {
             filterDateList = userList;
             textNoFriend.setVisibility(View.GONE);
         } else {
             filterDateList.clear();
-            for (fenLeiName sortModel : userList) {
+            for (FLeiName sortModel : userList) {
                 String name = sortModel.getName();
                 if (name.indexOf(search_name) != -1 || characterParser.getSelling(name).startsWith(search_name)) {
                     filterDateList.add(sortModel);

@@ -6,9 +6,9 @@ import java.util.List;
 /**
  * 城市分类
  */
-public class fenLei implements Serializable{
+public class FLei implements Serializable{
 	private String CatalogName;
-	private List<fenLeiName> SubCata;
+	private List<FLeiName> SubCata;
 	private String CatalogType;
 	public String getCatalogName() {
 		return CatalogName;
@@ -22,10 +22,10 @@ public class fenLei implements Serializable{
 	public void setCatalogType(String catalogType) {
 		CatalogType = catalogType;
 	}
-	public List<fenLeiName> getSubCata() {
+	public List<FLeiName> getSubCata() {
 		return SubCata;
 	}
-	public void setSubCata(List<fenLeiName> subCata) {
+	public void setSubCata(List<FLeiName> subCata) {
 		SubCata = subCata;
 	}
 }
