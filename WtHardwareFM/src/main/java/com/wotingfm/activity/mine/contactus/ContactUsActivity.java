@@ -3,17 +3,15 @@ package com.wotingfm.activity.mine.contactus;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.LinearLayout;
 
 import com.shenstec.activity.BaseActivity;
 import com.wotingfm.R;
-import com.wotingfm.manager.MyActivityManager;
 
 /**
  * 联系我们界面
- * @author 辛龙
- *2016年8月8日
+ * 作者：xinlong on 2016/8/8
+ * 邮箱：645700751@qq.com
  */
 public class ContactUsActivity extends BaseActivity implements OnClickListener {
 	private ContactUsActivity context;
@@ -23,10 +21,6 @@ public class ContactUsActivity extends BaseActivity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_contactus);
 		context = this;
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		// 透明状态栏
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	// 透明导航栏
-		MyActivityManager mam = MyActivityManager.getInstance();
-		mam.pushOneActivity(context);
 		setView();	// 设置界面
 	}
 
@@ -51,8 +45,6 @@ public class ContactUsActivity extends BaseActivity implements OnClickListener {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		MyActivityManager mam = MyActivityManager.getInstance();
-		mam.popOneActivity(context);
 		context = null;
 		setContentView(R.layout.activity_null);
 	}

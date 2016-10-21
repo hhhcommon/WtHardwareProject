@@ -1,8 +1,7 @@
 package com.wotingfm.activity.im.interphone.groupmanage.memberadd.adapter;
 
-import java.util.List;
-
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,25 +12,26 @@ import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import com.shenstec.utils.image.ImageLoader;
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.util.BitmapUtils;
+
+import java.util.List;
 
 
-public class CreateGroupMembersAddAdapter extends BaseAdapter  implements SectionIndexer{
+public class MembersAddAdapter extends BaseAdapter  implements SectionIndexer{
 	private List<UserInfo> list;
 	private Context context;
-	private ImageLoader imageLoader;
 	private UserInfo lists;
 	private String url;
 	private friendCheck friendcheck;
 
-	public CreateGroupMembersAddAdapter(Context context, List<UserInfo> list) {
+	public MembersAddAdapter(Context context, List<UserInfo> list) {
 		super();
 		this.list = list;
 		this.context = context;
-		imageLoader = new ImageLoader(context);
 	}
 
 	public void ChangeDate(List<UserInfo> list) {
@@ -60,7 +60,7 @@ public class CreateGroupMembersAddAdapter extends BaseAdapter  implements Sectio
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		ViewHolder holder = null;
+		ViewHolder holder;
 		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_group_membersadd, null);
@@ -96,23 +96,22 @@ public class CreateGroupMembersAddAdapter extends BaseAdapter  implements Sectio
 					|| lists.getPortraitMini().equals("")
 					|| lists.getPortraitMini().equals("null")
 					|| lists.getPortraitMini().trim().equals("")) {
-				holder.imageView_touxiang
-						.setImageResource(R.mipmap.wt_image_tx_hy);
+				Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_hy);
+				holder.imageView_touxiang.setImageBitmap(bmp);
 			} else {
 				if(lists.getPortraitMini().startsWith("http:")){
 					 url=lists.getPortraitMini();
 				}else{
 					 url = GlobalConfig.imageurl+lists.getPortraitMini();
 				}
-				imageLoader.DisplayImage(url.replace("\\/", "/"),
-						holder.imageView_touxiang, false, false, null);
+				Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageView_touxiang);
 			}
 			if (lists.getCheckType() == 2) {
-				holder.imageView_check
-						.setImageResource(R.mipmap.image_all_check);
+				Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.image_all_check);
+				holder.imageView_check.setImageBitmap(bmp);
 			} else {
-				holder.imageView_check
-						.setImageResource(R.mipmap.image_not_all_check);
+				Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.image_not_all_check);
+				holder.imageView_check.setImageBitmap(bmp);
 			}
 			holder.imageView_check.setOnClickListener(new OnClickListener() {
 				@Override

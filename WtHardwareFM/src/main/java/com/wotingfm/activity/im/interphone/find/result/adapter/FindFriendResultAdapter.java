@@ -1,6 +1,7 @@
 package com.wotingfm.activity.im.interphone.find.result.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,24 +9,22 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.find.result.model.UserInviteMeInside;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.helper.ImageLoader;
+import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
 
 public class FindFriendResultAdapter extends BaseAdapter {
     private List<UserInviteMeInside> list;
     private Context context;
-    private ImageLoader imageLoader;
-//    private String url;
 
     public FindFriendResultAdapter(Context context, List<UserInviteMeInside> list) {
         super();
         this.list = list;
         this.context = context;
-        imageLoader = new ImageLoader(context);
     }
 
     public void ChangeData(List<UserInviteMeInside> list) {
@@ -76,14 +75,15 @@ public class FindFriendResultAdapter extends BaseAdapter {
         }
         if (Inviter.getPortraitMini() == null || Inviter.getPortraitMini().equals("")
                 || Inviter.getPortraitMini().equals("null") || Inviter.getPortraitMini().trim().equals("")) {
-            holder.imageInviteImage.setImageResource(R.mipmap.wt_image_tx_hy);
+            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_hy);
+            holder.imageInviteImage.setImageBitmap(bmp);
         } else {
             if (Inviter.getPortraitMini().startsWith("http:")) {
                 url = Inviter.getPortraitMini();
             } else {
                 url = GlobalConfig.imageurl + Inviter.getPortraitMini();
             }
-            imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageInviteImage, false, false, null, null);
+            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageInviteImage);
         }
         return convertView;
     }

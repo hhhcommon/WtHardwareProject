@@ -21,7 +21,7 @@ import com.wotingfm.activity.im.common.message.MsgNormal;
 import com.wotingfm.activity.im.common.message.content.MapContent;
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.im.interphone.linkman.dao.NotifyHistoryDao;
-import com.wotingfm.activity.im.interphone.linkman.model.DBNotifyHistorary;
+import com.wotingfm.activity.im.interphone.linkman.model.DBNotifyHistory;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.util.CommonUtils;
@@ -63,7 +63,7 @@ public  class NotificationService   extends  Service{
 	public void add(String type,String imageurl,String content,String title,String dealtime) {
 		String addtime = Long.toString(System.currentTimeMillis());
 		String bjuserid =CommonUtils.getUserId(context);
-		DBNotifyHistorary history =new  DBNotifyHistorary( bjuserid,  type,  imageurl, content,
+		DBNotifyHistory history =new DBNotifyHistory( bjuserid,  type,  imageurl, content,
 				title,  dealtime, addtime);		
 		dbdao.addNotifyHistory(history);
 	}

@@ -11,9 +11,9 @@ import com.wotingfm.activity.common.baseactivity.BaseActivity;
 import com.wotingfm.util.PhoneMessage;
 
 /**
- * 关于 
- * @author 辛龙
- * 2016年3月9日
+ * 关于
+ * 作者：xinlong on 2016/3/9
+ * 邮箱：645700751@qq.com
  */
 public class AboutActivity extends BaseActivity implements OnClickListener {
 	private AboutActivity context;

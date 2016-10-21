@@ -15,6 +15,8 @@ import com.wotingfm.util.BitmapUtils;
 
 /**
  * 展示二维码
+ * 作者：xinlong on 2016/3/9
+ * 邮箱：645700751@qq.com
  */
 public class EWMShowActivity extends AppBaseActivity {
 	private ImageView imageViewEwm;

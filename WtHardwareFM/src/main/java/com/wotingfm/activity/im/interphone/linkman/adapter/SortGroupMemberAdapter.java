@@ -15,7 +15,6 @@ import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.helper.ImageLoader;
 import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
@@ -24,14 +23,12 @@ public class SortGroupMemberAdapter extends BaseAdapter implements SectionIndexe
 	private List<TalkPersonInside> list = null;
 	private Context mContext;
 	private TalkPersonInside lists;
-	private ImageLoader imageLoader;
 	private OnListeners onListeners;
 	private String url;
 
 	public SortGroupMemberAdapter(Context mContext, List<TalkPersonInside> list) {
 		this.mContext = mContext;
 		this.list = list;
-		imageLoader=new ImageLoader(mContext);
 	}
 	
 	public void setOnListeners(OnListeners onListener) {
@@ -111,7 +108,6 @@ public class SortGroupMemberAdapter extends BaseAdapter implements SectionIndexe
 					url = GlobalConfig.imageurl + lists.getPortraitMini();
 				}
 				Picasso.with(mContext).load(url.replace( "\\/", "/")).resize(100, 100).centerCrop().into(holder.imageView_touxiang);
-//				imageLoader.DisplayImage(url.replace( "\\/", "/"), holder.imageView_touxiang, false, false,null, null);
 			}
 		
 		holder.lin_add.setOnClickListener(new View.OnClickListener() {

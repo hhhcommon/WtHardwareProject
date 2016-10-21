@@ -17,9 +17,8 @@ import com.wotingfm.util.L;
 
 /**
  * 扫描结果界面
- *
- * @author 辛龙
- *         2016年8月8日
+ * 作者：xinlong on 2016/1/21
+ * 邮箱：645700751@qq.com
  */
 public class ResultActivity extends AppBaseActivity {
 

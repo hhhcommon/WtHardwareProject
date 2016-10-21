@@ -1,4 +1,4 @@
-package com.wotingfm.activity.person.modifypassword.activity;
+package com.wotingfm.activity.person.modifypassword;
 
 import android.app.Dialog;
 import android.os.CountDownTimer;

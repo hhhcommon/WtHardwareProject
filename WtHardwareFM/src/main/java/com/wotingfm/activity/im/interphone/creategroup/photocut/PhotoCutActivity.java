@@ -1,7 +1,6 @@
-package com.wotingfm.activity.im.interphone.creategroup.photocut.activity;
+package com.wotingfm.activity.im.interphone.creategroup.photocut;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -9,10 +8,10 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.BaseActivity;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.widget.photocut.ClipImageLayout;
 
@@ -23,7 +22,7 @@ import java.io.FileOutputStream;
 /**
  * 图片剪裁页面
  */
-public class PhotoCutActivity extends Activity {
+public class PhotoCutActivity extends BaseActivity {
     private Bitmap bitmap;
     private ClipImageLayout mClipImageLayout;
     private TextView textSave;
@@ -34,10 +33,6 @@ public class PhotoCutActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_photo_cut);
-
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
-
         initView();
     }
 
@@ -95,7 +90,6 @@ public class PhotoCutActivity extends Activity {
     private void initView() {
         mClipImageLayout = (ClipImageLayout) findViewById(R.id.id_clipImageLayout);
         textSave = (TextView) findViewById(R.id.text_save);
-
         handleIntent();
     }
 

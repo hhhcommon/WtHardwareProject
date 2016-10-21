@@ -2,7 +2,7 @@ package com.wotingfm.activity.im.interphone.linkman.model;
 
 import java.io.Serializable;
 
-public class DBNotifyHistorary implements Serializable{
+public class DBNotifyHistory implements Serializable{
 	private String BJUserId;    // 本机userId
 	private String TyPe;        // 通知类型
 	private String ImageUrl;    // 图片路径
@@ -20,11 +20,11 @@ public class DBNotifyHistorary implements Serializable{
         this.state = state;
     }
 
-    public DBNotifyHistorary(){
+    public DBNotifyHistory(){
 
 	}
-	public DBNotifyHistorary(String bjuserid, String type, 
-			String imageurl,String content, String title, String dealtime,String addtime) {
+	public DBNotifyHistory(String bjuserid, String type,
+						   String imageurl, String content, String title, String dealtime, String addtime) {
 		super();
 		BJUserId = bjuserid;
 		TyPe = type;

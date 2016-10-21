@@ -1,6 +1,5 @@
 package com.wotingfm.activity.im.interphone.groupmanage.groupperson;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,14 +10,15 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.BaseActivity;
 import com.wotingfm.activity.im.interphone.alert.CallAlertActivity;
 import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.activity.im.interphone.chat.model.GroupTalkInside;
@@ -26,13 +26,14 @@ import com.wotingfm.activity.im.interphone.chat.model.TalkListGP;
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
 import com.wotingfm.activity.im.interphone.message.model.UserInviteMeInside;
+import com.wotingfm.activity.mine.qrcode.EWMShowActivity;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.helper.CreatQRImageHelper;
-import com.wotingfm.helper.ImageLoader;
-import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
@@ -41,13 +42,14 @@ import com.wotingfm.util.ToastUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-/*
+/**
  * 是我的好友的界面，通过群界面登入
+ * 作者：xinlong on 2016/4/13
+ * 邮箱：645700751@qq.com
  */
-public class GroupPersonActivity extends Activity {
-    private ImageLoader imageLoader;
+public class GroupPersonActivity extends BaseActivity {
     private String name;
-    private String imageurl;
+    private String imageUrl;
     private String id;
     private LinearLayout head_left_btn;
     private ImageView image_add;
@@ -58,7 +60,7 @@ public class GroupPersonActivity extends Activity {
     private TextView tv_id;
     private LinearLayout lin_person_xiugai;
     private GroupPersonActivity context;
-    private Dialog confirmdialog;
+    private Dialog confirmDialog;
     private Dialog dialogs;
     private EditText et_groupSignature;
     private EditText et_b_name;
@@ -69,11 +71,11 @@ public class GroupPersonActivity extends Activity {
     private ImageView imageView_ewm;
     private LinearLayout lin_ewm;
 
-    private int Viewtype = -1;//=1时代表来自groupmembers
-    private String groupid;
+    private int viewType = -1;//=1时代表来自groupmembers
+    private String groupId;
     private String url12;
     private Bitmap bmp;
-    private Bitmap bmps;
+    private Bitmap bmpS;
     private String tag = "TALK_PERSON_NEWS_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
     private String url;
@@ -84,51 +86,49 @@ public class GroupPersonActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_group_person);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		// 透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	// 透明导航栏
         context = this;
-        update = false;	// 此时修改的状态
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.pushOneActivity(context);
+        update = false;    // 此时修改的状态
         setView();
         handleIntent();
-        setdate();
+        setData();
         setListener();
-        dialogdelete();
-        if(Receiver==null) {
-            Receiver=new MessageReceivers();
-            IntentFilter filters=new IntentFilter();
+        dialogDelete();
+        if (Receiver == null) {
+            Receiver = new MessageReceivers();
+            IntentFilter filters = new IntentFilter();
             filters.addAction("GROUP_DETAIL_CHANGE");
             context.registerReceiver(Receiver, filters);
         }
     }
+
     class MessageReceivers extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String action=intent.getAction();
-            if(action.equals("GROUP_DETAIL_CHANGE")){
+            String action = intent.getAction();
+            if (action.equals("GROUP_DETAIL_CHANGE")) {
                 send();
             }
         }
     }
-    private void dialogdelete() {
+
+    private void dialogDelete() {
         final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_exit_confirm, null);
-        TextView tv_cancle = (TextView) dialog.findViewById(R.id.tv_cancle);
+        TextView tv_cancel = (TextView) dialog.findViewById(R.id.tv_cancle);
         TextView tv_confirm = (TextView) dialog.findViewById(R.id.tv_confirm);
         TextView tv_title = (TextView) dialog.findViewById(R.id.tv_title);
         tv_title.setText("确定要删除该好友？");
-        confirmdialog = new Dialog(context, R.style.MyDialog);
-        confirmdialog.setContentView(dialog);
-        confirmdialog.setCanceledOnTouchOutside(true);
-        confirmdialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-		/*
-		 * LayoutParams pr2 = (LayoutParams)(confirmdialog.getLayoutParams()); 
+        confirmDialog = new Dialog(context, R.style.MyDialog);
+        confirmDialog.setContentView(dialog);
+        confirmDialog.setCanceledOnTouchOutside(true);
+        confirmDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+        /*
+         * LayoutParams pr2 = (LayoutParams)(confirmdialog.getLayoutParams());
 		 * pr2.width = PhoneMessage.ScreenWidth - 120;
 		 */
-        tv_cancle.setOnClickListener(new View.OnClickListener() {
+        tv_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmdialog.dismiss();
+                confirmDialog.dismiss();
             }
         });
 
@@ -137,22 +137,20 @@ public class GroupPersonActivity extends Activity {
             public void onClick(View v) {
                 if (id != null && !id.equals("")) {
                     if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                        confirmdialog.dismiss();
-						/* ToastUtil.show_short(context, "我是send"); */
-                        dialogs = DialogUtils.Dialogph(context,"正在获取数据");
+                        confirmDialog.dismiss();
+                        dialogs = DialogUtils.Dialogph(context, "正在获取数据");
                         send();
                     } else {
                         ToastUtils.show_always(context, "网络失败，请检查网络");
                     }
                 } else {
-                    ToastUtils.show_always(context,"用户ID为空，无法删除该好友，请稍后重试");
+                    ToastUtils.show_always(context, "用户ID为空，无法删除该好友，请稍后重试");
                 }
             }
         });
     }
 
     private void setView() {
-        imageLoader = new ImageLoader(this);
         image_touxiang = (ImageView) findViewById(R.id.image_touxiang);
         tv_name = (TextView) findViewById(R.id.tv_name);
         et_b_name = (EditText) findViewById(R.id.et_b_name);
@@ -175,7 +173,7 @@ public class GroupPersonActivity extends Activity {
         } else if (type.equals("talkoldlistfragment")) {
             TalkListGP data = (TalkListGP) this.getIntent().getSerializableExtra("data");
             name = data.getName();
-            imageurl = data.getPortrait();
+            imageUrl = data.getPortrait();
             id = data.getId();
             descn = data.getDescn();
             num = data.getUserNum();
@@ -183,38 +181,38 @@ public class GroupPersonActivity extends Activity {
         } else if (type.equals("talkoldlistfragment_p")) {
             GroupTalkInside data = (GroupTalkInside) this.getIntent().getSerializableExtra("data");
             name = data.getUserName();
-            imageurl = data.getPortraitMini();
+            imageUrl = data.getPortraitMini();
             id = data.getUserId();
             descn = data.getDescn();
             num = data.getUserNum();
             b_name = data.getUserAliasName();
 
-        }  else if (type.equals("findActivity")) {
+        } else if (type.equals("findActivity")) {
             // 处理组邀请时进入
             UserInviteMeInside data = (UserInviteMeInside) this.getIntent().getSerializableExtra("data");
-            name =data.getUserName();
-            imageurl = data.getPortrait();
-            id =data.getUserId();
+            name = data.getUserName();
+            imageUrl = data.getPortrait();
+            id = data.getUserId();
             descn = data.getDescn();
             num = data.getUserNum();
             b_name = data.getUserAliasName();
             tv_delete.setVisibility(View.GONE);
             lin_person_xiugai.setVisibility(View.INVISIBLE);
-        } else if(type.equals("GroupMemers")){
+        } else if (type.equals("GroupMemers")) {
             TalkPersonInside data = (TalkPersonInside) this.getIntent().getSerializableExtra("data");
-            groupid = this.getIntent().getStringExtra("id");
+            groupId = this.getIntent().getStringExtra("id");
             name = data.getUserName();
-            imageurl = data.getPortraitMini();
+            imageUrl = data.getPortraitMini();
             id = data.getUserId();
             descn = data.getDescn();
             b_name = data.getUserAliasName();
             num = data.getUserNum();
             b_name = data.getUserAliasName();
-            Viewtype = 1;
-        }else{
+            viewType = 1;
+        } else {
             UserInfo data = (UserInfo) this.getIntent().getSerializableExtra("data");
             name = data.getUserName();
-            imageurl = data.getPortraitMini();
+            imageUrl = data.getPortraitMini();
             id = data.getUserId();
             descn = data.getDescn();
             b_name = data.getUserAliasName();
@@ -223,21 +221,21 @@ public class GroupPersonActivity extends Activity {
         }
     }
 
-    private void setdate() {
+    private void setData() {
         if (name == null || name.equals("")) {
             tv_name.setText("我听科技");
         } else {
             tv_name.setText(name);
         }
         if (num == null || num.equals("")) {
-            num="0000";
+            num = "0000";
             tv_id.setVisibility(View.GONE);
         } else {
             tv_id.setVisibility(View.VISIBLE);
             tv_id.setText(num);
         }
         if (descn == null || descn.equals("")) {
-            descn="这家伙很懒，什么都没写";
+            descn = "这家伙很懒，什么都没写";
             et_groupSignature.setText(descn);
         } else {
             et_groupSignature.setText(descn);
@@ -247,27 +245,28 @@ public class GroupPersonActivity extends Activity {
         } else {
             et_b_name.setText(b_name);
         }
-        if (imageurl == null || imageurl.equals("") || imageurl.equals("null")
-                || imageurl.trim().equals("")) {
-            image_touxiang.setImageResource(R.mipmap.wt_image_tx_hy);
+        if (imageUrl == null || imageUrl.equals("") || imageUrl.equals("null")
+                || imageUrl.trim().equals("")) {
+            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_hy);
+            image_touxiang.setImageBitmap(bmp);
         } else {
-            if(imageurl.startsWith("http:")){
-                url12=imageurl;
-            }else{
-                url12 = GlobalConfig.imageurl+imageurl;
+            if (imageUrl.startsWith("http:")) {
+                url12 = imageUrl;
+            } else {
+                url12 = GlobalConfig.imageurl + imageUrl;
             }
-            imageLoader.DisplayImage(url12.replace("\\/", "/"), image_touxiang, false, false, null, null);
+            Picasso.with(context).load(url12.replace("\\/", "/")).resize(100, 100).centerCrop().into(image_touxiang);
         }
         news = new UserInfo();
-        news.setPortraitMini(imageurl);
+        news.setPortraitMini(imageUrl);
         news.setUserId(id);
         news.setUserName(name);
-        bmp = CreatQRImageHelper.getInstance().createQRImage( 1,news,300, 300);
-        if(bmp!=null){
+        bmp = CreatQRImageHelper.getInstance().createQRImage(1, news, 300, 300);
+        if (bmp != null) {
             imageView_ewm.setImageBitmap(bmp);
-        }else{
-            bmps = BitmapUtils.readBitMap(context, R.mipmap.ewm);
-            imageView_ewm.setImageBitmap(bmps);
+        } else {
+            bmpS = BitmapUtils.readBitMap(context, R.mipmap.ewm);
+            imageView_ewm.setImageBitmap(bmpS);
         }
     }
 
@@ -275,17 +274,16 @@ public class GroupPersonActivity extends Activity {
         lin_ewm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            /*    Intent intent = new Intent(context,EWMShowActivity.class);
+                Intent intent = new Intent(context, EWMShowActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("type", "1");
                 bundle.putString("id", num);
-//				String s = imageurl;
-                bundle.putString("image", imageurl);
-                bundle.putString("news",descn);
+                bundle.putString("image", imageUrl);
+                bundle.putString("news", descn);
                 bundle.putString("name", name);
                 bundle.putSerializable("person", news);
                 intent.putExtras(bundle);
-                startActivity(intent);*/
+                startActivity(intent);
             }
         });
 
@@ -334,7 +332,8 @@ public class GroupPersonActivity extends Activity {
                     et_b_name.setTextColor(context.getResources().getColor(R.color.white));
                     et_groupSignature.setBackgroundColor(context.getResources().getColor(R.color.dinglan_orange));
                     et_groupSignature.setTextColor(context.getResources().getColor(R.color.white));
-                    image_xiugai.setImageResource(R.mipmap.xiugai);
+                    Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.xiugai);
+                    image_xiugai.setImageBitmap(bmp);
                     update = false;
                 } else {
                     // 此时是未编辑状态
@@ -350,9 +349,10 @@ public class GroupPersonActivity extends Activity {
                         // 此时我不是我本人
                         et_b_name.setEnabled(true);
                         et_b_name.setBackgroundColor(context.getResources().getColor(R.color.white));
-                        et_b_name.setTextColor(context.getResources().getColor(	R.color.gray));
+                        et_b_name.setTextColor(context.getResources().getColor(R.color.gray));
                     }
-                    image_xiugai.setImageResource(R.mipmap.wancheng);
+                    Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wancheng);
+                    image_xiugai.setImageBitmap(bmp);
                     update = true;
                 }
             }
@@ -370,14 +370,12 @@ public class GroupPersonActivity extends Activity {
             @Override
             public void onClick(View v) {
                 call(id);
-                // ToastUtil.show_short(TalkPersonNewsActivity.this, "添加好友到活跃状态");
             }
         });
-
         tv_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                confirmdialog.show();
+                confirmDialog.show();
             }
         });
     }
@@ -386,17 +384,15 @@ public class GroupPersonActivity extends Activity {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             // 公共请求属性
-
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
-            if(Viewtype==-1){
+            if (viewType == -1) {
                 jsonObject.put("FriendUserId", id);
-                jsonObject.put("FriendAliasName",  b_name2 );
+                jsonObject.put("FriendAliasName", b_name2);
                 jsonObject.put("FriendAliasDescn", groupSignature);
                 url = GlobalConfig.updateFriendnewsUrl;
-            }else{
-                jsonObject.put("GroupId", groupid);
+            } else {
+                jsonObject.put("GroupId", groupId);
                 jsonObject.put("UpdateUserId", id);
-                jsonObject.put("UserAliasName",  b_name2 );
+                jsonObject.put("UserAliasName", b_name2);
                 jsonObject.put("UserAliasDescn", groupSignature);
                 url = GlobalConfig.updategroupFriendnewsUrl;
             }
@@ -405,57 +401,45 @@ public class GroupPersonActivity extends Activity {
         }
 
         VolleyRequest.RequestPost(url, groupSignature, jsonObject, new VolleyCallback() {
-            //			private String SessionId;
-            private String ReturnType;
-//			private String Message;
-
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (dialogs != null) {
-                    dialogs.dismiss();
-                }
-                if(isCancelRequest){
-                    return ;
-                }
+                if (dialogs != null) dialogs.dismiss();
+                if (isCancelRequest) return;
                 try {
-                    ReturnType = result.getString("ReturnType");
-//					SessionId = result.getString("SessionId");
-//					Message = result.getString("Message");
+                    String ReturnType = result.getString("ReturnType");
+                    // 根据返回值来对程序进行解析
+                    if (ReturnType != null) {
+                        if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
+                            et_b_name.setText(b_name2);
+                            context.sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
+                            context.sendBroadcast(new Intent("GROUP_DETAIL_CHANGE"));
+                            ToastUtils.show_always(context, "修改成功");
+                        } else if (ReturnType.equals("0000")) {
+                            ToastUtils.show_always(context, "无法获取相关的参数");
+                        } else if (ReturnType.equals("1002")) {
+                            ToastUtils.show_always(context, "无法获取用ID");
+                        } else if (ReturnType.equals("1003")) {
+                            ToastUtils.show_always(context, "好友Id无法获取");
+                        } else if (ReturnType.equals("1004")) {
+                            ToastUtils.show_always(context, "好友不存在");
+                        } else if (ReturnType.equals("1005")) {
+                            ToastUtils.show_always(context, "好友为自己无法修改");
+                        } else if (ReturnType.equals("1006")) {
+                            ToastUtils.show_always(context, "没有可修改信息");
+                        } else if (ReturnType.equals("1007")) {
+                            ToastUtils.show_always(context, "不是好友，无法修改");
+                        } else if (ReturnType.equals("1008")) {
+                            ToastUtils.show_always(context, "修改失败");
+                        } else if (ReturnType.equals("T")) {
+                            ToastUtils.show_always(context, "获取列表异常");
+                        } else if (ReturnType.equals("200")) {
+                            ToastUtils.show_always(context, "您没有登录");
+                        }
+                    } else {
+                        ToastUtils.show_always(context, "列表处理异常");
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
-                // 根据返回值来对程序进行解析
-                if (ReturnType != null) {
-                    if (ReturnType.equals("1001")||ReturnType.equals("10011")) {
-                        et_b_name.setText(b_name2);
-                        Intent pushintent=new Intent("push_refreshlinkman");
-                        Intent groupintent=new Intent("GROUP_DETAIL_CHANGE");
-                        context. sendBroadcast(pushintent);
-                        context.sendBroadcast(groupintent);
-                        ToastUtils.show_always(context, "修改成功");
-                    } else if (ReturnType.equals("0000")) {
-                        ToastUtils.show_always(context, "无法获取相关的参数");
-                    } else if (ReturnType.equals("1002")) {
-                        ToastUtils.show_always(context, "无法获取用ID");
-                    } else if (ReturnType.equals("1003")) {
-                        ToastUtils.show_always(context, "好友Id无法获取");
-                    } else if (ReturnType.equals("1004")) {
-                        ToastUtils.show_always(context, "好友不存在");
-                    } else if (ReturnType.equals("1005")) {
-                        ToastUtils.show_always(context, "好友为自己无法修改");
-                    }else if (ReturnType.equals("1006")) {
-                        ToastUtils.show_always(context, "没有可修改信息");
-                    }else if (ReturnType.equals("1007")) {
-                        ToastUtils.show_always(context, "不是好友，无法修改");
-                    }else if (ReturnType.equals("1008")) {
-                        ToastUtils.show_always(context, "修改失败");
-                    } else if (ReturnType.equals("T")) {
-                        ToastUtils.show_always(context, "获取列表异常");
-                    }else if (ReturnType.equals("200")) {
-                        ToastUtils.show_always(context, "您没有登录");
-                    }
-                } else {
-                    ToastUtils.show_always(context, "列表处理异常");
                 }
             }
 
@@ -471,62 +455,49 @@ public class GroupPersonActivity extends Activity {
     private void send() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
             jsonObject.put("FriendUserId", id);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         VolleyRequest.RequestPost(GlobalConfig.delFriendUrl, tag, jsonObject, new VolleyCallback() {
-            //			private String SessionId;
-            private String ReturnType;
-//			private String Message;
-
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (dialogs != null) {
-                    dialogs.dismiss();
-                }
-                if(isCancelRequest){
-                    return ;
-                }
+                if (dialogs != null) dialogs.dismiss();
+                if (isCancelRequest) return;
                 try {
-                    ReturnType = result.getString("ReturnType");
-//					SessionId = result.getString("SessionId");
-//					Message = result.getString("Message");
+                    String ReturnType = result.getString("ReturnType");
+                    // 根据返回值来对程序进行解析
+                    if (ReturnType != null) {
+                        if (ReturnType.equals("1001")) {
+                            context.sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
+                            if (ChatFragment.context != null &&
+                                    ChatFragment.interPhoneId != null && ChatFragment.interPhoneId.equals(id)) {
+                                // 保存通讯录是否刷新的属性
+                                SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+                                et.putString(StringConstant.PERSONREFRESHB, "true");
+                                et.commit();
+                            }
+                            ToastUtils.show_always(context, "已经删除成功");
+                            finish();
+                        } else if (ReturnType.equals("0000")) {
+                            ToastUtils.show_always(context, "无法获取相关的参数");
+                        } else if (ReturnType.equals("1002")) {
+                            ToastUtils.show_always(context, "无法获取用ID");
+                        } else if (ReturnType.equals("1003")) {
+                            ToastUtils.show_always(context, "好友Id无法获取");
+                        } else if (ReturnType.equals("1004")) {
+                            ToastUtils.show_always(context, "好友不存在");
+                        } else if (ReturnType.equals("1005")) {
+                            ToastUtils.show_always(context, "不是好友，不必删除");
+                        } else if (ReturnType.equals("T")) {
+                            ToastUtils.show_always(context, "获取列表异常");
+                        }
+                    } else {
+                        ToastUtils.show_always(context, "列表处理异常");
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
-                // 根据返回值来对程序进行解析
-                if (ReturnType != null) {
-                    if (ReturnType.equals("1001")) {
-                        Intent pushintent=new Intent("push_refreshlinkman");
-                        context. sendBroadcast(pushintent);
-                        if(ChatFragment.context != null &&
-                                ChatFragment.interphoneid != null && ChatFragment.interphoneid.equals(id)){
-                            SharedPreferences sp = getSharedPreferences("wotingfm",Context.MODE_PRIVATE);
-                            // 保存通讯录是否刷新的属性
-                            SharedPreferences.Editor et = sp.edit();
-                            et.putString(StringConstant.PERSONREFRESHB, "true");
-                            et.commit();
-                        }
-                        ToastUtils.show_always(context, "已经删除成功");
-                        finish();
-                    } else if (ReturnType.equals("0000")) {
-                        ToastUtils.show_always(context, "无法获取相关的参数");
-                    } else if (ReturnType.equals("1002")) {
-                        ToastUtils.show_always(context, "无法获取用ID");
-                    } else if (ReturnType.equals("1003")) {
-                        ToastUtils.show_always(context, "好友Id无法获取");
-                    } else if (ReturnType.equals("1004")) {
-                        ToastUtils.show_always(context, "好友不存在");
-                    } else if (ReturnType.equals("1005")) {
-                        ToastUtils.show_always(context, "不是好友，不必删除");
-                    } else if (ReturnType.equals("T")) {
-                        ToastUtils.show_always(context, "获取列表异常");
-                    }
-                } else {
-                    ToastUtils.show_always(context, "列表处理异常");
                 }
             }
 
@@ -551,27 +522,24 @@ public class GroupPersonActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(Receiver != null){
+        if (Receiver != null) {
             context.unregisterReceiver(Receiver);
             Receiver = null;
         }
         isCancelRequest = VolleyRequest.cancelRequest(tag);
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.popOneActivity(context);
-        if(bmp != null && !bmp.isRecycled()) {
+        if (bmp != null && !bmp.isRecycled()) {
             bmp.recycle();
             bmp = null;
         }
-        if(bmps != null && !bmps.isRecycled()) {
-            bmps.recycle();
-            bmps = null;
+        if (bmpS != null && !bmpS.isRecycled()) {
+            bmpS.recycle();
+            bmpS = null;
         }
         news = null;
-        imageLoader = null;
-        confirmdialog = null;
+        confirmDialog = null;
         context = null;
         name = null;
-        imageurl = null;
+        imageUrl = null;
         id = null;
         head_left_btn = null;
         image_add = null;
@@ -589,7 +557,7 @@ public class GroupPersonActivity extends Activity {
         b_name = null;
         imageView_ewm = null;
         lin_ewm = null;
-        groupid = null;
+        groupId = null;
         url12 = null;
         tag = null;
         url = null;

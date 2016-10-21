@@ -13,15 +13,15 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.im.interphone.message.adapter.NewsAdapter;
 import com.wotingfm.activity.im.interphone.message.model.GroupInfo;
 import com.wotingfm.activity.im.interphone.message.model.MessageInfo;
 import com.wotingfm.activity.im.interphone.message.model.UserInviteMeInside;
-import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
@@ -58,7 +58,7 @@ public class NewsActivity extends AppBaseActivity {
         setTitle("新的朋友");
         dealMessageList = findView(R.id.deal_message_list_view);
         //发送广播到linkmanfragment界面,来更新按钮为====新的朋友
-        Intent pushIntent = new Intent("push_newperson");
+        Intent pushIntent = new Intent(BroadcastConstant.PUSH_NEWPERSON);
         Bundle bundle = new Bundle();
         bundle.putString("outmessage", "");
         pushIntent.putExtras(bundle);
@@ -78,47 +78,28 @@ public class NewsActivity extends AppBaseActivity {
      * 获取个人消息
      */
     private void sendPerson() {
-        String url = null;
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
-        try {
-            jsonObject.put("UserId", CommonUtils.getUserId(this));
-            url = GlobalConfig.getInvitedMeListUrl;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if (url == null) {
-            Toast.makeText(context, "请求链接错误", Toast.LENGTH_SHORT).show();
-            return;
-        }
-        VolleyRequest.RequestPost(url, tag, jsonObject, new VolleyCallback() {
-            private String ReturnType;
-            private String Message;
-
+        VolleyRequest.RequestPost(GlobalConfig.getInvitedMeListUrl, tag, jsonObject, new VolleyCallback() {
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (isCancelRequest) {
-                    return;
-                }
-                String ContactMeString = null;
+                if (isCancelRequest) return;
                 try {
-                    ReturnType = result.getString("ReturnType");
-                    Message = result.getString("Message");
+                    String ReturnType = result.getString("ReturnType");
+                    if (ReturnType != null && ReturnType.equals("1001")) {
+                        try {
+                            String ContactMeString = result.getString("UserList");
+                            userList = new Gson().fromJson(ContactMeString, new TypeToken<List<UserInviteMeInside>>() {
+                            }.getType());
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
+                    } else if (ReturnType != null && ReturnType.equals("1002")) {
+                        L.e("邀请信息", "页面加载失败");
+                    } else if (ReturnType != null && ReturnType.equals("1011")) {
+                        L.e("邀请信息", "所有的邀请信息都已经处理完毕");
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
-                if (ReturnType != null && ReturnType.equals("1001")) {
-                    try {
-                        ContactMeString = result.getString("UserList");
-                    } catch (JSONException e1) {
-                        e1.printStackTrace();
-                    }
-                    userList = new Gson().fromJson(ContactMeString, new TypeToken<List<UserInviteMeInside>>() {}.getType());
-                } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    L.e("邀请信息", "页面加载失败，失败原因" + Message);
-                } else if (ReturnType != null && ReturnType.equals("1011")) {
-                    L.e("邀请信息", "所有的邀请信息都已经处理完毕");
-                } else if (Message != null && !Message.trim().equals("")) {
-                    L.e("邀请信息", "页面加载失败，失败原因" + Message);
                 }
                 sendGroup();
             }
@@ -134,48 +115,29 @@ public class NewsActivity extends AppBaseActivity {
      * 获取群组消息
      */
     private void sendGroup() {
-        String url = null;
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
-        try {
-            jsonObject.put("UserId", CommonUtils.getUserId(this));
-            url = GlobalConfig.getInvitedMeGroupListUrl;
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-        if (url == null) {
-            Toast.makeText(context, "请求链接错误", Toast.LENGTH_SHORT).show();
-            return;
-        }
-
-        VolleyRequest.RequestPost(url, tag, jsonObject, new VolleyCallback() {
-            private String ReturnType;
-            private String Message;
+        VolleyRequest.RequestPost(GlobalConfig.getInvitedMeGroupListUrl, tag, jsonObject, new VolleyCallback() {
 
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (isCancelRequest) {
-                    return;
-                }
-                String ContactMeString = null;
+                if (isCancelRequest) return;
                 try {
-                    ReturnType = result.getString("ReturnType");
-                    Message = result.getString("Message");
+                    String ReturnType = result.getString("ReturnType");
+                    if (ReturnType != null && ReturnType.equals("1001")) {
+                        try {
+                            String ContactMeString = result.getString("GroupList");
+                            groupList = new Gson().fromJson(ContactMeString, new TypeToken<List<GroupInfo>>() {
+                            }.getType());
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
+                    } else if (ReturnType != null && ReturnType.equals("1002")) {
+                        L.e("邀请信息", "页面加载失败");
+                    } else if (ReturnType != null && ReturnType.equals("1011")) {
+                        L.e("邀请信息", "无邀请我的用户组");
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
-                if (ReturnType != null && ReturnType.equals("1001")) {
-                    try {
-                        ContactMeString = result.getString("GroupList");
-                    } catch (JSONException e1) {
-                        e1.printStackTrace();
-                    }
-                    groupList = new Gson().fromJson(ContactMeString, new TypeToken<List<GroupInfo>>() {}.getType());
-                } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    L.e("邀请信息", "页面加载失败，失败原因" + Message);
-                } else if (ReturnType != null && ReturnType.equals("1011")) {
-                    L.e("邀请信息", "无邀请我的用户组");
-                } else if (Message != null && !Message.trim().equals("")) {
-                    L.e("邀请信息", "页面加载失败，失败原因" + Message);
                 }
                 DialogUtils.closeDialog();
                 setData();
@@ -230,7 +192,7 @@ public class NewsActivity extends AppBaseActivity {
     }
 
     // 测试数据  可删除 ------------------------------------------------------------------------------------------------
-    private void testData(){
+    private void testData() {
         MessageInfo messageInfo1 = new MessageInfo();
         messageInfo1.setMSType("person");
         messageInfo1.setInviteMesage("添加好友");
@@ -321,7 +283,6 @@ public class NewsActivity extends AppBaseActivity {
         String url = null;
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("UserId", CommonUtils.getUserId(this));
             if (messageInfo.getMSType().equals("person")) {
                 jsonObject.put("InviteUserId", messageInfo.getUserId());
                 if (type == 1) {
@@ -355,9 +316,7 @@ public class NewsActivity extends AppBaseActivity {
             @Override
             protected void requestSuccess(JSONObject result) {
                 DialogUtils.closeDialog();
-                if (isCancelRequest) {
-                    return;
-                }
+                if (isCancelRequest) return;
                 try {
                     ReturnType = result.getString("ReturnType");
                     Message = result.getString("Message");
@@ -369,11 +328,11 @@ public class NewsActivity extends AppBaseActivity {
                         if (ReturnType != null && ReturnType.equals("1001")) {
                             ToastUtils.show_always(context, "添加成功");
                             /*
-							 * 此处删除该条数据
+                             * 此处删除该条数据
 							 */
                             message.remove(index);
                             adapter.notifyDataSetChanged();
-                            Intent pushIntent = new Intent("push_refreshlinkman");
+                            Intent pushIntent = new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
                             context.sendBroadcast(pushIntent);
                         } else if (ReturnType != null && ReturnType.equals("1002")) {
                             ToastUtils.show_always(context, "添加失败，" + Message);
@@ -385,8 +344,8 @@ public class NewsActivity extends AppBaseActivity {
                             }
                         }
                     } else {
-						/*
-						 * 不管拒绝结果如何此条数据需要删除
+                        /*
+                         * 不管拒绝结果如何此条数据需要删除
 						 * 此处删除该条数据
 						 */
                         ToastUtils.show_always(context, "已拒绝");
@@ -402,7 +361,7 @@ public class NewsActivity extends AppBaseActivity {
 							 */
                             message.remove(index);
                             adapter.notifyDataSetChanged();
-                            Intent pushIntent = new Intent("push_refreshlinkman");
+                            Intent pushIntent = new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
                             context.sendBroadcast(pushIntent);
                         } else if (ReturnType != null && ReturnType.equals("1002")) {
                             ToastUtils.show_always(context, "添加失败，" + Message);

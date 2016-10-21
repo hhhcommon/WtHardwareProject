@@ -139,7 +139,7 @@
 
         <!-- 头像剪裁界面 -->
         <activity
-            android:name=".activity.im.interphone.creategroup.photocut.activity.PhotoCutActivity"
+            android:name=".activity.im.interphone.creategroup.photocut.PhotoCutActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -235,7 +235,7 @@
 
         <!-- 修改个人资料 -->
         <activity
-            android:name=".activity.mine.update.activity.UpdatePersonActivity"
+            android:name=".activity.mine.update.UpdatePersonActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -254,7 +254,7 @@
 
         <!-- 登录 -->
         <activity
-            android:name=".activity.person.login.activity.LoginActivity"
+            android:name=".activity.person.login.LoginActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
@@ -262,7 +262,7 @@
 
         <!-- 注册 -->
         <activity
-            android:name=".activity.person.register.activity.RegisterActivity"
+            android:name=".activity.person.register.RegisterActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
@@ -270,7 +270,7 @@
 
         <!-- 忘记密码 -->
         <activity
-            android:name=".activity.person.forgetpassword.activity.ForgetPasswordActivity"
+            android:name=".activity.person.forgetpassword.ForgetPasswordActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
@@ -278,7 +278,7 @@
 
         <!--修改密码-->
         <activity
-            android:name=".activity.person.modifypassword.activity.ModifyPasswordActivity"
+            android:name=".activity.person.modifypassword.ModifyPasswordActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
@@ -324,7 +324,7 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity"
+            android:name=".activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />

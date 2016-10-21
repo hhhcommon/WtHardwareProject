@@ -36,6 +36,8 @@ import com.wotingfm.util.ToastUtils;
 
 /**
  * 查找好友或查找群组
+ * 作者：xinlong on 2016/1/19 21:18
+ * 邮箱：645700751@qq.com
  */
 public class FindActivity extends AppBaseActivity implements View.OnClickListener {
     private EditText editContent;           // 输入的内容

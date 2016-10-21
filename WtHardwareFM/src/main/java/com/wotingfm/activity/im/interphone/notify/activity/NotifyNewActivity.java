@@ -15,8 +15,9 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.im.interphone.linkman.dao.NotifyHistoryDao;
-import com.wotingfm.activity.im.interphone.linkman.model.DBNotifyHistorary;
+import com.wotingfm.activity.im.interphone.linkman.model.DBNotifyHistory;
 import com.wotingfm.activity.im.interphone.notify.adapter.NotifyListAdapter;
+import com.wotingfm.common.constant.BroadcastConstant;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,6 +26,8 @@ import java.util.Locale;
 
 /**
  * 通知消息
+ * 作者：xinlong on 2016/3/9
+ * 邮箱：645700751@qq.com
  */
 public class NotifyNewActivity extends AppBaseActivity implements View.OnClickListener{
     private MessageReceiver receiver;           // 更新通知列表的广播
@@ -33,7 +36,7 @@ public class NotifyNewActivity extends AppBaseActivity implements View.OnClickLi
     private NotifyListAdapter adapter;
 
     private ListView notifyListView;            // 显示通知列表
-    private List<DBNotifyHistorary> list;       // 通知列表
+    private List<DBNotifyHistory> list;       // 通知列表
 
     private int count;                          // 选中的数量
     private boolean isDelete;                   // 是否删除状态
@@ -81,7 +84,7 @@ public class NotifyNewActivity extends AppBaseActivity implements View.OnClickLi
         if(receiver == null) {		// 注册广播
             receiver = new MessageReceiver();
             IntentFilter filter = new IntentFilter();
-            filter.addAction("push_refreshnews");
+            filter.addAction(BroadcastConstant.PUSH_REFRESHNEWS);
             registerReceiver(receiver, filter);
         }
         initDao();
@@ -168,7 +171,7 @@ public class NotifyNewActivity extends AppBaseActivity implements View.OnClickLi
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if(action.equals("push_refreshnews")){
+            if(action.equals(BroadcastConstant.PUSH_REFRESHNEWS)){
                 getDate();
             }
         }
@@ -203,12 +206,12 @@ public class NotifyNewActivity extends AppBaseActivity implements View.OnClickLi
     }
 
     // 获取消息列表
-    private List<DBNotifyHistorary> getNotifyNew(){
+    private List<DBNotifyHistory> getNotifyNew(){
         // 测试数据 -------------------------------------------
-        List<DBNotifyHistorary> list = new ArrayList<>();
-        DBNotifyHistorary notifyNewData;
+        List<DBNotifyHistory> list = new ArrayList<>();
+        DBNotifyHistory notifyNewData;
         for(int i=0; i<10; i++){
-            notifyNewData = new DBNotifyHistorary();
+            notifyNewData = new DBNotifyHistory();
             notifyNewData.setTitle("消息标题_" + i);
             notifyNewData.setContent("测试数据，看到效果就可以删除测试数据，看到效果就可以删除测试数据，看到效果就可以删除_" + i);
             notifyNewData.setAddTime(new SimpleDateFormat("hh:mm", Locale.CHINA).format(System.currentTimeMillis()));

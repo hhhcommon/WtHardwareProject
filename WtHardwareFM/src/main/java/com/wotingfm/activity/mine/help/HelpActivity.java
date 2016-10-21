@@ -18,21 +18,19 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.util.DialogUtils;
 /**
  * 帮助--h5
- * @author 辛龙
- *2016年8月8日
+ * 作者：xinlong on 2016/3/9
+ * 邮箱：645700751@qq.com
  */
 public class HelpActivity extends BaseActivity implements OnClickListener{
 	private WebView webview;
 	private LinearLayout head_left_btn;
 	private String url;
 	private Dialog dialog;
-	private HelpActivity context;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_help);
-		context = this;
 		dialog = DialogUtils.Dialogph(this, "正在加载");
 		setView();
 		setWeb();
@@ -101,7 +99,6 @@ public class HelpActivity extends BaseActivity implements OnClickListener{
 		super.onDestroy();
 		head_left_btn = null;
 		webview = null;
-		context = null;
 		setContentView(R.layout.activity_null);
 	}
 }
