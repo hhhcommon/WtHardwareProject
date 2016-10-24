@@ -1,12 +1,16 @@
 package com.wotingfm.activity.music.favorite.activity;
 
+import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -44,6 +48,19 @@ import java.util.ArrayList;
  */
 public class FavoriteActivity extends FragmentActivity implements OnClickListener {
     private static FavoriteActivity context;
+    private MyBroadcast mBroadcast;
+    private TotalFragment totalFragment;
+    private SequFragment sequfragment;
+    private SoundFragment soundfragment;
+    private RadioFragment radiofragment;
+    private TTSFragment ttsfragment;
+
+
+    private Dialog confirmDialog;
+    private Dialog delDialog;
+    private LinearLayout head_left;
+    private ImageView image;
+    private ImageView imgQXuan;
     private static TextView tv_total;
     private static TextView tv_sequ;
     private static TextView tv_sound;
@@ -52,32 +69,22 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
     private static ViewPager mPager;
     private static TextView tv_qingkong;
     private static TextView tv_bianji;// 加一个bol值，如果key值为0是为编辑状态，为1时显示完成
-    private static int lastindex = -1;
-    private static int currentindex = 0;// 标记当前viewpager显示的页面
-    public static final String VIEW_UPDATE = "VIEW_UPDATE";
-    public static final String SET_ALL_IMAGE = "com.woting.action.SET_ALL_IMAGE";// 全选
-    public static final String SET_NOT_ALL_IMAGE = "com.woting.action.SET_NOT_ALL_IMAGE";// 非全选
-    public static final String SET_NOT_LOAD_REFRESH = "com.woting.action.SET_NOT_LOAD_REFRESH";// 禁止刷新加载
-    public static final String SET_LOAD_REFRESH = "com.woting.action.SET_LOAD_REFRESH";// 允许刷新加载
-    private ImageView image;
-    private ViewGroup.LayoutParams lp;
-    private LinearLayout head_left;
+
     private int bmpW;
     private int offset;
-    private int dialogflag = 0;// 编辑全选状态的变量0为未选中，1为选中
-    private int textflag = 0;// 标记右上角text的状态0为编辑，1为取消
-    private int screenw;
-    private TotalFragment totalFragment;
-    private SequFragment sequfragment;
-    private SoundFragment soundfragment;
-    private RadioFragment radiofragment;
-    private ImageView img_quanxuan;
-    private TTSFragment ttsfragment;
-    private Dialog confirmDialog;
-    private Dialog DelDialog;
-    public static boolean isEdit = false;// 是否为编辑状态
-    private MyBroadcast mBroadcast;
+    private int dialogFlag = 0;// 编辑全选状态的变量0为未选中，1为选中
+    private int textFlag = 0;// 标记右上角text的状态0为编辑，1为取消
+    private static int lastIndex = -1;
+    private static int currentIndex = 0;// 标记当前viewpager显示的页面
+    public static final String VIEW_UPDATE = "VIEW_UPDATE";
+    public static final String SET_ALL_IMAGE = "SET_ALL_IMAGE";// 全选
+    public static final String SET_NOT_ALL_IMAGE = "SET_NOT_ALL_IMAGE";// 非全选
+    public static final String SET_NOT_LOAD_REFRESH = "SET_NOT_LOAD_REFRESH";// 禁止刷新加载
+    public static final String SET_LOAD_REFRESH = "SET_LOAD_REFRESH";// 允许刷新加载
 
+    public static boolean isEdit = false;// 是否为编辑状态
+
+    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,23 +94,24 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         MyActivityManager mam = MyActivityManager.getInstance();
         mam.pushOneActivity(context);
+
+        // 注册广播
         mBroadcast = new MyBroadcast();
-        IntentFilter intentFileter = new IntentFilter();//注册广播
-        intentFileter.addAction(FavoriteActivity.SET_ALL_IMAGE);
-        intentFileter.addAction(FavoriteActivity.SET_NOT_ALL_IMAGE);
-        registerReceiver(mBroadcast, intentFileter);
-        setview();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(FavoriteActivity.SET_ALL_IMAGE);
+        intentFilter.addAction(FavoriteActivity.SET_NOT_ALL_IMAGE);
+        registerReceiver(mBroadcast, intentFilter);
+
+        setView();
         setListener();
-        InitImage();
-        InitViewPager();
-        DelDialog();
-        ConfirmDialog();
+        initImage();
+        initViewPager();
+        delDialog();
+        confirmDialog();
     }
 
-    /*
-     * 初始化 ViewPager
-     */
-    private void InitViewPager() {
+    // 初始化 ViewPager
+    private void initViewPager() {
         ArrayList<Fragment> fragmentList = new ArrayList<>();
         totalFragment = new TotalFragment();
         sequfragment = new SequFragment();
@@ -120,9 +128,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
         mPager.setCurrentItem(0);                                        // 设置当前显示标签页为第
     }
 
-    /*
-     * 页面变化时的监听器
-     */
+    // 页面变化时的监听器
     public class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
         private int one = offset * 2 + bmpW;    // 两个相邻页面的偏移量
         private int currIndex;
@@ -142,22 +148,22 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
             animation.setFillAfter(true);// 动画终止时停留在最后一帧，不然会回到没有执行前的状态
             animation.setDuration(200);// 动画持续时间0.2秒
             image.startAnimation(animation);// 是用ImageView来显示动画的
-            currentindex = currIndex;
-            if (lastindex == -1) {
-                lastindex = currentindex;
+            currentIndex = currIndex;
+            if (lastIndex == -1) {
+                lastIndex = currentIndex;
             } else {
-                if (lastindex != currentindex) {
+                if (lastIndex != currentIndex) {
                     handledata(2);
                     handledata(4);
-                    if (DelDialog.isShowing()) {
-                        DelDialog.dismiss();
-                        img_quanxuan.setImageResource(R.mipmap.wt_group_nochecked);
-                        dialogflag = 0;
+                    if (delDialog.isShowing()) {
+                        delDialog.dismiss();
+                        imgQXuan.setImageResource(R.mipmap.wt_group_nochecked);
+                        dialogFlag = 0;
                     }
-                    textflag = 0;
+                    textFlag = 0;
                     tv_bianji.setText("编辑");
                     isEdit = false;
-                    lastindex = currentindex;
+                    lastIndex = currentIndex;
                 }
             }
             viewChange(currIndex);
@@ -182,27 +188,25 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
         tv_bianji.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (textflag == 0) {
+                if (textFlag == 0) {
                     handledata(1);
                 } else {
                     isEdit = false;
-                    textflag = 0;
+                    textFlag = 0;
                     tv_bianji.setText("编辑");
                     handledata(2);
-                    if (DelDialog.isShowing()) {
-                        DelDialog.dismiss();
-                        img_quanxuan.setImageResource(R.mipmap.wt_group_nochecked);
-                        dialogflag = 0;
+                    if (delDialog.isShowing()) {
+                        delDialog.dismiss();
+                        imgQXuan.setImageResource(R.mipmap.wt_group_nochecked);
+                        dialogFlag = 0;
                     }
                 }
             }
         });
     }
 
-    /*
-     * 初始化视图
-     */
-    private void setview() {
+    // 初始化视图
+    private void setView() {
         head_left = (LinearLayout) findViewById(R.id.head_left_btn);// 返回按钮
         tv_total = (TextView) findViewById(R.id.tv_total);// 全部
         tv_sequ = (TextView) findViewById(R.id.tv_sequ);// 专辑
@@ -215,9 +219,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
         tv_bianji = (TextView) findViewById(R.id.tv_bianji);
     }
 
-    /*
-     * TextView 事件监听
-     */
+    // TextView 事件监听
     public class txListener implements OnClickListener {
         private int index = 0;
 
@@ -228,46 +230,46 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
         @Override
         public void onClick(View v) {
             mPager.setCurrentItem(index);
-            currentindex = index;
-            if (lastindex == -1) {
-                lastindex = currentindex;
+            currentIndex = index;
+            if (lastIndex == -1) {
+                lastIndex = currentIndex;
             } else {
-                if (lastindex != currentindex) {
+                if (lastIndex != currentIndex) {
                     handledata(2);
                     handledata(4);
-                    if (DelDialog.isShowing()) {
-                        DelDialog.dismiss();
-                        img_quanxuan.setImageResource(R.mipmap.wt_group_nochecked);
-                        dialogflag = 0;
+                    if (delDialog.isShowing()) {
+                        delDialog.dismiss();
+                        imgQXuan.setImageResource(R.mipmap.wt_group_nochecked);
+                        dialogFlag = 0;
                     }
-                    textflag = 0;
+                    textFlag = 0;
                     tv_bianji.setText("编辑");
-                    lastindex = currentindex;
+                    lastIndex = currentIndex;
                 }
             }
             viewChange(index);
         }
     }
 
-    public static void updateviewpageer(String mediatype) {
+    public static void updateViewPager(String mediaType) {
         int index = 0;
-        if (mediatype != null && !mediatype.equals("")) {
-            if (mediatype.equals("SEQU")) {
+        if (mediaType != null && !mediaType.equals("")) {
+            if (mediaType.equals("SEQU")) {
                 index = 1;
-            } else if (mediatype.equals("AUDIO")) {
+            } else if (mediaType.equals("AUDIO")) {
                 index = 2;
-            } else if (mediatype.equals("RADIO")) {
+            } else if (mediaType.equals("RADIO")) {
                 index = 3;
-            } else if (mediatype.equals("TTS")) {
+            } else if (mediaType.equals("TTS")) {
                 index = 4;
             } else {
-                ToastUtils.show_always(context, "mediatype不属于已经分类的四种类型");
+                ToastUtils.show_always(context, "mediaType不属于已经分类的四种类型");
             }
             mPager.setCurrentItem(index);
-            currentindex = index;
+            currentIndex = index;
             viewChange(index);
         } else {
-            ToastUtils.show_always(context, "传进来的mediatype值为空");
+            ToastUtils.show_always(context, "传进来的mediaType值为空");
 
         }
     }
@@ -275,9 +277,9 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
     /**
      * 动态设置cursor的宽
      */
-    public void InitImage() {
+    public void initImage() {
         image = (ImageView) findViewById(R.id.cursor);
-        lp = image.getLayoutParams();
+        ViewGroup.LayoutParams lp = image.getLayoutParams();
         lp.width = (PhoneMessage.ScreenWidth / 5);
         image.setLayoutParams(lp);
         bmpW = BitmapFactory.decodeResource(getResources(), R.mipmap.left_personal_bg).getWidth();
@@ -285,7 +287,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
         context.getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenW = dm.widthPixels;
         offset = (screenW / 5 - bmpW) / 2;
-        // imgageview设置平移，使下划线平移到初始位置（平移一个offset）
+        // imageView设置平移，使下划线平移到初始位置（平移一个offset）
         Matrix matrix = new Matrix();
         matrix.postTranslate(offset, 0);
         image.setImageMatrix(matrix);
@@ -300,13 +302,11 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
         }
     }
 
-    /**
-     * 四种参数 1为打开该界面的隐藏栏，0为收起隐藏栏，2为全选，3为取消全选
-     */
+    // 四种参数 1为打开该界面的隐藏栏，0为收起隐藏栏，2为全选，3为取消全选
     private void handledata(int type) {
-        if (currentindex == 0) {
+        if (currentIndex == 0) {
             // 全部 //1：先调total的查询全部方法 返回是否有值的弹窗
-            int sum = totalFragment.getdelitemsum();
+            int sum = totalFragment.getDelItemSum();
             if (type == 0) {
                 if (sum != 0) {
                     confirmDialog.show();
@@ -314,17 +314,17 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                     ToastUtils.show_always(context, "您还没有喜欢的数据");
                 }
             }
-        } else if (currentindex == 1) {
+        } else if (currentIndex == 1) {
             if (type == 1) {// 打开view
                 boolean flag = sequfragment.changeviewtype(1);
-                if (flag == true) {
+                if (flag) {
                     isEdit = true;
                     sequfragment.setViewVisibility();
                     sendBroadcast(new Intent(FavoriteActivity.SET_NOT_LOAD_REFRESH));
-                    textflag = 1;
+                    textFlag = 1;
                     tv_bianji.setText("取消");
-                    if (DelDialog != null) {
-                        DelDialog.show();
+                    if (delDialog != null) {
+                        delDialog.show();
                     }
                 } else {
                     ToastUtils.show_always(context, "当前页无数据");
@@ -342,29 +342,29 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                     ToastUtils.show_always(context, "请选择您要删除的数据");
                     return;
                 }
-                if (DelDialog.isShowing()) {
-                    DelDialog.dismiss();
-                    img_quanxuan.setImageResource(R.mipmap.wt_group_nochecked);
-                    dialogflag = 0;
+                if (delDialog.isShowing()) {
+                    delDialog.dismiss();
+                    imgQXuan.setImageResource(R.mipmap.wt_group_nochecked);
+                    dialogFlag = 0;
                 }
-                textflag = 0;
+                textFlag = 0;
                 tv_bianji.setText("编辑");
                 sequfragment.delitem();
                 sequfragment.setViewHint();
                 sendBroadcast(new Intent(FavoriteActivity.SET_LOAD_REFRESH));
             }
-        } else if (currentindex == 2) {
+        } else if (currentIndex == 2) {
             // 声音
             if (type == 1) {// 打开view
                 boolean flag = soundfragment.changeviewtype(1);
-                if (flag == true) {
+                if (flag) {
                     isEdit = true;
                     soundfragment.setViewVisibility();
                     sendBroadcast(new Intent(FavoriteActivity.SET_NOT_LOAD_REFRESH));
-                    textflag = 1;
+                    textFlag = 1;
                     tv_bianji.setText("取消");
-                    if (DelDialog != null) {
-                        DelDialog.show();
+                    if (delDialog != null) {
+                        delDialog.show();
                     }
                 } else {
                     ToastUtils.show_always(context, "当前页无数据");
@@ -382,29 +382,29 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                     ToastUtils.show_always(context, "请选择您要删除的数据");
                     return;
                 }
-                if (DelDialog.isShowing()) {
-                    DelDialog.dismiss();
-                    img_quanxuan.setImageResource(R.mipmap.wt_group_nochecked);
-                    dialogflag = 0;
+                if (delDialog.isShowing()) {
+                    delDialog.dismiss();
+                    imgQXuan.setImageResource(R.mipmap.wt_group_nochecked);
+                    dialogFlag = 0;
                 }
-                textflag = 0;
+                textFlag = 0;
                 tv_bianji.setText("编辑");
                 soundfragment.delitem();
                 soundfragment.setViewHint();
                 sendBroadcast(new Intent(FavoriteActivity.SET_LOAD_REFRESH));
             }
-        } else if (currentindex == 3) {
+        } else if (currentIndex == 3) {
             // 电台
             if (type == 1) {// 打开view
                 boolean flag = radiofragment.changeviewtype(1);
-                if (flag == true) {
+                if (flag) {
                     isEdit = true;
                     radiofragment.setViewVisibility();
                     sendBroadcast(new Intent(FavoriteActivity.SET_NOT_LOAD_REFRESH));
-                    textflag = 1;
+                    textFlag = 1;
                     tv_bianji.setText("取消");
-                    if (DelDialog != null) {
-                        DelDialog.show();
+                    if (delDialog != null) {
+                        delDialog.show();
                     }
                 } else {
                     ToastUtils.show_always(context, "当前页无数据");
@@ -422,29 +422,29 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                     ToastUtils.show_always(context, "请选择您要删除的数据");
                     return;
                 }
-                if (DelDialog.isShowing()) {
-                    DelDialog.dismiss();
-                    img_quanxuan.setImageResource(R.mipmap.wt_group_nochecked);
-                    dialogflag = 0;
+                if (delDialog.isShowing()) {
+                    delDialog.dismiss();
+                    imgQXuan.setImageResource(R.mipmap.wt_group_nochecked);
+                    dialogFlag = 0;
                 }
-                textflag = 0;
+                textFlag = 0;
                 tv_bianji.setText("编辑");
                 radiofragment.delitem();
                 radiofragment.setViewHint();
                 sendBroadcast(new Intent(FavoriteActivity.SET_LOAD_REFRESH));
             }
-        } else if (currentindex == 4) {
+        } else if (currentIndex == 4) {
             // TTS
             if (type == 1) {// 打开view
                 boolean flag = ttsfragment.changeviewtype(1);
-                if (flag == true) {
+                if (flag) {
                     isEdit = true;
                     ttsfragment.setViewVisibility();
                     sendBroadcast(new Intent(FavoriteActivity.SET_NOT_LOAD_REFRESH));
-                    textflag = 1;
+                    textFlag = 1;
                     tv_bianji.setText("取消");
-                    if (DelDialog != null) {
-                        DelDialog.show();
+                    if (delDialog != null) {
+                        delDialog.show();
                     }
                 } else {
                     ToastUtils.show_always(context, "当前页无数据");
@@ -462,12 +462,12 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                     ToastUtils.show_always(context, "请选择您要删除的数据");
                     return;
                 }
-                if (DelDialog.isShowing()) {
-                    DelDialog.dismiss();
-                    img_quanxuan.setImageResource(R.mipmap.wt_group_nochecked);
-                    dialogflag = 0;
+                if (delDialog.isShowing()) {
+                    delDialog.dismiss();
+                    imgQXuan.setImageResource(R.mipmap.wt_group_nochecked);
+                    dialogFlag = 0;
                 }
-                textflag = 0;
+                textFlag = 0;
                 tv_bianji.setText("编辑");
                 ttsfragment.delitem();
                 ttsfragment.setViewHint();
@@ -476,10 +476,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
         }
     }
 
-    /*
-     * 界面更新
-     * @param index
-     */
+    // 界面更新
     public static void viewChange(int index) {
         if (index == 0) {
             tv_total.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
@@ -524,43 +521,42 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
         }
     }
 
-    // DelDialog 初始化
-    private void DelDialog() {
+    // delDialog 初始化
+    private void delDialog() {
         final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_fravorite, null);
-        LinearLayout lin_favorite_quanxuan = (LinearLayout) dialog.findViewById(R.id.lin_favorite_quanxuan);
-        LinearLayout lin_favorite_shanchu = (LinearLayout) dialog.findViewById(R.id.lin_favorite_shanchu);
-        img_quanxuan = (ImageView) dialog.findViewById(R.id.img_fravorite_quanxuan);
-        DelDialog = new Dialog(context, R.style.MyDialog_duijiang);
-        // 从底部上升到一个位置
-        DelDialog.setContentView(dialog);
-        Window window = DelDialog.getWindow();
+        imgQXuan = (ImageView) dialog.findViewById(R.id.img_fravorite_quanxuan);
+        delDialog = new Dialog(context, R.style.MyDialog_duijiang);
+        delDialog.setContentView(dialog);
+        Window window = delDialog.getWindow();
         DisplayMetrics dm = new DisplayMetrics();
         context.getWindowManager().getDefaultDisplay().getMetrics(dm);
-        screenw = dm.widthPixels;
+        int scrEnw = dm.widthPixels;
         ViewGroup.LayoutParams params = dialog.getLayoutParams();
-        params.width = screenw;
+        params.width = scrEnw;
         dialog.setLayoutParams(params);
         window.setGravity(Gravity.BOTTOM);
         window.setWindowAnimations(R.style.sharestyle);
-        // 设置dialog不获取焦点
         window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
-        DelDialog.setCanceledOnTouchOutside(false);
-        lin_favorite_quanxuan.setOnClickListener(new OnClickListener() {
+        delDialog.setCanceledOnTouchOutside(false);
+
+        // 全选
+        dialog.findViewById(R.id.lin_favorite_quanxuan).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (dialogflag == 0) {
-                    img_quanxuan.setImageResource(R.mipmap.wt_group_checked);
-                    dialogflag = 1;
+                if (dialogFlag == 0) {
+                    imgQXuan.setImageResource(R.mipmap.wt_group_checked);
+                    dialogFlag = 1;
                     handledata(3);
                 } else {
-                    img_quanxuan.setImageResource(R.mipmap.wt_group_nochecked);
-                    dialogflag = 0;
+                    imgQXuan.setImageResource(R.mipmap.wt_group_nochecked);
+                    dialogFlag = 0;
                     handledata(4);
                 }
             }
         });
 
-        lin_favorite_shanchu.setOnClickListener(new OnClickListener() {
+        // 删除
+        dialog.findViewById(R.id.lin_favorite_shanchu).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 handledata(5);
@@ -568,43 +564,42 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
         });
     }
 
-    //ConfirmDialog 初始化
-    private void ConfirmDialog() {
+    // confirmDialog 初始化
+    private void confirmDialog() {
         final View dialog1 = LayoutInflater.from(context).inflate(R.layout.dialog_exit_confirm, null);
-        TextView tv_cancle = (TextView) dialog1.findViewById(R.id.tv_cancle);
-        TextView tv_title = (TextView) dialog1.findViewById(R.id.tv_title);
-        TextView tv_confirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
-        tv_title.setText("是否删除所有的喜欢数据?");
+        TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);
+        textTitle.setText("是否删除所有的喜欢数据?");
         confirmDialog = new Dialog(context, R.style.MyDialog);
         confirmDialog.setContentView(dialog1);
         confirmDialog.setCanceledOnTouchOutside(false);
         confirmDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-        tv_cancle.setOnClickListener(new OnClickListener() {
+
+        dialog1.findViewById(R.id.tv_cancle).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 confirmDialog.dismiss();
             }
         });
 
-        tv_confirm.setOnClickListener(new OnClickListener() {
+        dialog1.findViewById(R.id.tv_confirm).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                totalFragment.delitem();
+                totalFragment.delItem();
                 confirmDialog.dismiss();
             }
         });
     }
 
-    //广播接收  用于更新全选
+    // 广播接收  用于更新全选
     private class MyBroadcast extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(SET_ALL_IMAGE)) {
-                img_quanxuan.setImageResource(R.mipmap.wt_group_checked);
-                dialogflag = 1;
+                imgQXuan.setImageResource(R.mipmap.wt_group_checked);
+                dialogFlag = 1;
             } else if (intent.getAction().equals(SET_NOT_ALL_IMAGE)) {
-                img_quanxuan.setImageResource(R.mipmap.wt_group_nochecked);
-                dialogflag = 0;
+                imgQXuan.setImageResource(R.mipmap.wt_group_nochecked);
+                dialogFlag = 0;
             }
         }
     }
@@ -615,12 +610,12 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
             if (isEdit) {
                 handledata(2);
                 handledata(4);
-                if (DelDialog.isShowing()) {
-                    DelDialog.dismiss();
-                    img_quanxuan.setImageResource(R.mipmap.wt_group_nochecked);
-                    dialogflag = 0;
+                if (delDialog.isShowing()) {
+                    delDialog.dismiss();
+                    imgQXuan.setImageResource(R.mipmap.wt_group_nochecked);
+                    dialogFlag = 0;
                 }
-                textflag = 0;
+                textFlag = 0;
                 tv_bianji.setText("编辑");
                 isEdit = false;
             } else {
@@ -630,6 +625,17 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    // 设置android app 的字体大小不受系统字体大小改变的影响
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        return res;
+    }
+
 
     @Override
     protected void onDestroy() {
@@ -646,9 +652,9 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
         tv_qingkong = null;
         tv_bianji = null;
         head_left = null;
-        img_quanxuan = null;
+        imgQXuan = null;
         mPager = null;
-        DelDialog = null;
+        delDialog = null;
         confirmDialog = null;
         totalFragment = null;
         sequfragment = null;
