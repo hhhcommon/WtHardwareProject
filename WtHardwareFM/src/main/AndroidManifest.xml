@@ -562,7 +562,6 @@
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
-
         <service android:name=".service.SubclassService" />
         <service android:name=".service.NotificationService" />
         <service android:name=".service.timeroffservice" />
@@ -573,8 +572,8 @@
         <service android:name=".service.FloatingWindowService" />
         <service android:name=".service.LocationService" />
         <service android:name="com.amap.api.location.APSService" />
-
         <activity android:name=".activity.im.interphone.analog.AnalogueActivity"></activity>
+
     </application>
 
 </manifest>
