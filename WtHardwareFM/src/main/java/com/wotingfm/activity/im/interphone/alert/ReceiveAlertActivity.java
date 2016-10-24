@@ -1,5 +1,6 @@
 package com.wotingfm.activity.im.interphone.alert;
 
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
@@ -7,7 +8,8 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.shenstec.utils.image.ImageLoader;
+
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.BaseActivity;
 import com.wotingfm.activity.common.main.MainActivity;
@@ -19,6 +21,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.service.SubclassService;
+import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
 
 
@@ -28,11 +31,10 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
 	private TextView tv_name;
 	private LinearLayout lin_call;
 	private LinearLayout lin_guaduan;
-	private ImageLoader imageLoader;
 	private String image;
 	private String name;
 //	private TextView tv_news;
-	private SearchTalkHistoryDao dbdao;
+	private SearchTalkHistoryDao dbDao;
 	private String id;
 
 	@Override
@@ -40,7 +42,6 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dialog_receivecall);
 		instance = this;
-		imageLoader = new ImageLoader(instance);
 		//设置界面
 //		tv_news = (TextView) findViewById(R.id.tv_news);	
 		imageview = (ImageView) findViewById(R.id.image);	
@@ -67,10 +68,11 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
 		//适配好友展示信息
 		tv_name.setText(name);
 		if(image==null||image.equals("")||image.equals("null")||image.trim().equals("")){
-			imageview.setImageResource(R.mipmap.wt_image_tx_hy);
+			Bitmap bmp = BitmapUtils.readBitMap(instance, R.mipmap.wt_image_tx_hy);
+			imageview.setImageBitmap(bmp);
 		}else{
 			String url = GlobalConfig.imageurl+image;
-			imageLoader.DisplayImage(url.replace( "\\/", "/"), imageview, false, false,null);
+			Picasso.with(instance).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(imageview);
 		}
 		
 		//设置监听
@@ -80,7 +82,7 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
 	}
 
 	private void initDao() {
-		dbdao = new SearchTalkHistoryDao(instance);
+		dbDao = new SearchTalkHistoryDao(instance);
 	}
 
 	@Override
@@ -93,12 +95,12 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
 				SubclassService.musicPlayer.stop();
 				SubclassService.musicPlayer = null;
 			}
-			ChatFragment.iscalling=true;
+			ChatFragment.isCalling=true;
 //			Intent intent = new Intent(getApplicationContext(),MainActivity.class);
 //			//intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_SINGLE_TOP);
 //			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
 //			startActivity(intent);
-			adduser();
+			addUser();
 			break;
 		case R.id.lin_guaduan:
 			SubclassService.isallow=true;
@@ -112,16 +114,16 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
 		}
 	}
 
-	public void adduser() {
+	public void addUser() {
 		//获取最新激活状态的数据
-		String addtime = Long.toString(System.currentTimeMillis());
-		String bjuserid =CommonUtils.getUserId(instance);
+		String addTime = Long.toString(System.currentTimeMillis());
+		String bjUserId =CommonUtils.getUserId(instance);
 		//如果该数据已经存在数据库则删除原有数据，然后添加最新数据
-		dbdao.deleteHistory(id);
-		DBTalkHistorary history = new DBTalkHistorary( bjuserid,  "user",  id, addtime);
-		dbdao.addTalkHistory(history);
-		DBTalkHistorary talkdb = dbdao.queryHistory().get(0);//得到数据库里边数据
-		ChatFragment.zhiDingPerson(talkdb);
+		dbDao.deleteHistory(id);
+		DBTalkHistorary history = new DBTalkHistorary( bjUserId,  "user",  id, addTime);
+		dbDao.addTalkHistory(history);
+		DBTalkHistorary talkDb = dbDao.queryHistory().get(0);//得到数据库里边数据
+		ChatFragment.zhiDingPerson(talkDb);
 		MyActivityManager mam = MyActivityManager.getInstance();
 		mam.finishAllActivity();
 		//对讲主页界面更新
@@ -153,12 +155,11 @@ public class ReceiveAlertActivity extends BaseActivity implements OnClickListene
 		tv_name = null;
 		lin_call = null;
 		lin_guaduan = null;
-		imageLoader = null;
 		image = null;
 		name = null;
 		id = null;
-		if(dbdao != null){
-			dbdao = null;
+		if(dbDao != null){
+			dbDao = null;
 		}
 		setContentView(R.layout.activity_null);
 	}

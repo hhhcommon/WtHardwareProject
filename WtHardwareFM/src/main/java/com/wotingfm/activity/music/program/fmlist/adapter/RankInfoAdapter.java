@@ -1,6 +1,7 @@
 package com.wotingfm.activity.music.program.fmlist.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,26 +9,23 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.helper.ImageLoader;
+import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
 
-//这个代码写完了 然后要求对应着代码加载看看
+// 这个代码写完了 然后要求对应着代码加载看看
 public class RankInfoAdapter extends BaseAdapter   {
 	private List<RankInfo> list;
 	private Context context;
-	private ImageLoader imageLoader;
-//	private RankInfo rank;
-//	private String url;
 
 	public RankInfoAdapter(Context context, List<RankInfo> list) {
 		super();
 		this.list = list;
 		this.context = context;
-		imageLoader = new ImageLoader(context);
 	}
 
 	@Override
@@ -47,14 +45,14 @@ public class RankInfoAdapter extends BaseAdapter   {
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		ViewHolder holder = null;
+		ViewHolder holder;
 		if (convertView == null) {
 			holder = new ViewHolder();
-			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_rankinfo, null);
-			holder.textview_ranktitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
-			holder.imageview_rankimage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
-			holder.mTv_number = (TextView) convertView.findViewById(R.id.tv_num);
-			holder.textview_rankplaying=(TextView)convertView.findViewById(R.id.RankPlaying);
+			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_rankinfo, parent, false);
+			holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);     // 台名
+			holder.imageRankImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
+			holder.textNumber = (TextView) convertView.findViewById(R.id.tv_num);
+			holder.textRankPlaying=(TextView)convertView.findViewById(R.id.RankPlaying);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -62,18 +60,19 @@ public class RankInfoAdapter extends BaseAdapter   {
 		RankInfo lists = list.get(position);
 
 		if (lists.getContentName() == null || lists.getContentName().equals("")) {
-			holder.textview_ranktitle.setText("未知");
+			holder.textRankTitle.setText("未知");
 		} else {
-			holder.textview_ranktitle.setText(lists.getContentName());
+			holder.textRankTitle.setText(lists.getContentName());
 		}
 		if(lists.getContentPub()== null|| lists.getContentPub().equals("")){
-			holder.textview_rankplaying.setText("未知");
+			holder.textRankPlaying.setText("未知");
 		}else{
-			holder.textview_rankplaying.setText(lists.getContentPub());
+			holder.textRankPlaying.setText("正在直播：" + lists.getContentPub());
 		}
 		if (lists.getContentImg() == null || lists.getContentImg().equals("")
 				|| lists.getContentImg().equals("null") || lists.getContentImg().trim().equals("")) {
-			holder.imageview_rankimage.setImageResource(R.mipmap.wt_image_playertx);
+			Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
+			holder.imageRankImage.setImageBitmap(bmp);
 		} else {
 			String url;
 			if(lists.getContentImg().startsWith("http")){
@@ -81,21 +80,21 @@ public class RankInfoAdapter extends BaseAdapter   {
 			}else{
 				 url = GlobalConfig.imageurl + lists.getContentImg();
 			}
-			imageLoader.DisplayImage(url.replace("\\/", "/"),holder.imageview_rankimage, false, false, null, null);
+			Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageRankImage);
 		}
 		if (lists.getWatchPlayerNum() == null
 				|| lists.getWatchPlayerNum().equals("") || lists.getWatchPlayerNum().equals("null")) {
-			holder.mTv_number.setText("8000");
+			holder.textNumber.setText("8000");
 		} else {
-			holder.mTv_number.setText(lists.getWatchPlayerNum());
+			holder.textNumber.setText(lists.getWatchPlayerNum());
 		}
 		return convertView;
 	}
 
 	class ViewHolder {
-		public ImageView imageview_rankimage;
-		public TextView textview_ranktitle;
-		public TextView mTv_number;
-		public TextView textview_rankplaying;
+		public ImageView imageRankImage;
+		public TextView textRankTitle;
+		public TextView textNumber;
+		public TextView textRankPlaying;
 	}
 }

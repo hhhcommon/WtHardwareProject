@@ -1,6 +1,5 @@
 package com.wotingfm.activity.im.interphone.groupmanage.transferauthority;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -8,9 +7,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -20,16 +17,15 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.activity.im.interphone.groupmanage.memberadd.adapter.CreateGroupMembersAddAdapter;
+import com.wotingfm.activity.common.baseactivity.BaseActivity;
+import com.wotingfm.activity.im.interphone.groupmanage.memberadd.adapter.MembersAddAdapter;
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.im.interphone.linkman.view.SideBar;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.CharacterParser;
-import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.PinyinComparator_a;
 import com.wotingfm.util.ToastUtils;
@@ -41,52 +37,54 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class TransferAuthority extends Activity implements View.OnClickListener{
+/**
+ * 移交管理员权限
+ * 作者：xinlong on 2016/3/9
+ * 邮箱：645700751@qq.com
+ */
+public class TransferAuthority extends BaseActivity implements View.OnClickListener {
     private Context context;
-    private TextView mback;
-    private String groupid;
+    private TextView mBack;
+    private String groupId;
     private CharacterParser characterParser;
     private PinyinComparator_a pinyinComparator;
     private boolean isCancelRequest;
-    private String  tag="TRANSFERAUTHORITY_VOLLEY_REQUEST_CANCEL_TAG";
+    private String tag = "TRANSFERAUTHORITY_VOLLEY_REQUEST_CANCEL_TAG";
     private Dialog dialog;
-    private TextView tvNofriends;
+    private TextView tvNoFriends;
     private SideBar sideBar;
     private TextView dialogs;
     private ListView listView;
     private EditText et_searh_content;
     private ImageView image_clear;
-    private List<UserInfo> userlist;//获取的userlist
-    private List<UserInfo> userlist2=new ArrayList<UserInfo>();
-    private int sum=0;// 统计点选的人数
+    private List<UserInfo> userList;//获取的userList
+    private List<UserInfo> userList2 = new ArrayList<UserInfo>();
+    private int sum = 0;// 统计点选的人数
     private TextView tv_head_name;
-    private TextView tv_right;
-    private CreateGroupMembersAddAdapter adapter;
+    private MembersAddAdapter adapter;
     private TextView tv_head_right;
-    private List<String> addlist = new ArrayList<String>();
-    private boolean ishave = false;
-    private String touserid;
+    private boolean isHave = false;
+    private String toUserId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transfer_authority);
-        context=this;
-        InitActivity();// 初始化透明状态栏，统一回收的方法
-        InitcharacterParser();//初始化汉字转拼音类
+        context = this;
+        initCharacterParser();//初始化汉字转拼音类
         handleIntent();// 处理其他页面传入的数据
-        setview();// 设置界面
-        setlistener();// 设置监听
-     /*   if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {*/
-        if(groupid!=null){
-            dialog = DialogUtils.Dialogph(context, "正在获取群成员信息");
-            send();
-        }else{
-            ToastUtils.show_always(context,"获取组ID失败");
-        }
-       /* } else {
+        setView();// 设置界面
+        setListener();// 设置监听
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+            if (groupId != null) {
+                dialog = DialogUtils.Dialogph(context, "正在获取群成员信息");
+                send();
+            } else {
+                ToastUtils.show_always(context, "获取组ID失败");
+            }
+        } else {
             ToastUtils.show_always(context, "网络失败，请检查网络");
-        }*/
+        }
     }
 
     @Override
@@ -98,75 +96,69 @@ public class TransferAuthority extends Activity implements View.OnClickListener{
     private void send() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            // 模块属性
-            jsonObject.put("GroupId", groupid);
-            jsonObject.put("UserId",CommonUtils.getUserId(context));
+            jsonObject.put("GroupId", groupId);// 模块属性
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         VolleyRequest.RequestPost(GlobalConfig.grouptalkUrl, tag, jsonObject, new VolleyCallback() {
-            private String ReturnType;
-            private String Message;
-
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                Log.e("获取群成员返回值",""+result.toString());
-                if(isCancelRequest){
-                    return ;
-                }
-                String userlist1 = null;
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return;
                 try {
-                    ReturnType = result.getString("ReturnType");
-                    userlist1 = result.getString("UserList");
-                    Message = result.getString("Message");
+                    String ReturnType = result.getString("ReturnType");
+                    if (ReturnType != null && ReturnType.equals("1001")) {
+                        try {
+                            String userList1 = result.getString("UserList");
+                            userList = new Gson().fromJson(userList1, new TypeToken<List<UserInfo>>() {
+                            }.getType());
+                            int sum = userList.size();
+                            // 给计数项设置值
+                            userList2.clear();
+                            userList2.addAll(userList);
+                            filledData(userList2);
+                            Collections.sort(userList2, pinyinComparator);
+                            adapter = new MembersAddAdapter(context, userList2);
+                            listView.setAdapter(adapter);
+                            setInterFace();
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
+                        }
+                    } else if (ReturnType != null && ReturnType.equals("1002")) {
+                        if (userList == null || userList.size() == 0) {
+
+                        } else {
+                            int sum = userList.size();
+                            userList2.clear();
+                            userList2.addAll(userList);
+                            filledData(userList2);
+                            Collections.sort(userList2, pinyinComparator);
+                            adapter = new MembersAddAdapter(context, userList2);
+                            listView.setAdapter(adapter);
+                            setInterFace();
+                        }
+                    } else if (ReturnType != null && ReturnType.equals("1002")) {
+                        ToastUtils.show_always(context, "无法获取组Id");
+                    } else if (ReturnType != null && ReturnType.equals("T")) {
+                        ToastUtils.show_always(context, "异常返回值");
+                    } else if (ReturnType != null && ReturnType.equals("1011")) {
+                        ToastUtils.show_always(context, "组中无成员");
+                    } else {
+                        try {
+                            String Message = result.getString("Message");
+                            if (Message != null && !Message.trim().equals("")) {
+                                ToastUtils.show_always(context, Message + "");
+                            }
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                        }
+                    }
                 } catch (JSONException e1) {
                     e1.printStackTrace();
                 }
-                if (ReturnType != null && ReturnType.equals("1001")) {
-                    try {
-                        userlist = new Gson().fromJson(userlist1,new TypeToken<List<UserInfo>>() {}.getType());
-                    } catch (Exception e1) {
-                        e1.printStackTrace();
-                    }
-                    int sum = userlist.size();
-                    // 给计数项设置值
-                    userlist2.clear();
-                    userlist2.addAll(userlist);
-                    filledData(userlist2);
-                    Collections.sort(userlist2, pinyinComparator);
-                    adapter = new CreateGroupMembersAddAdapter(context, userlist2);
-                    listView.setAdapter(adapter);
-                    setinterface();
-                } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    if(userlist==null||userlist.size()==0){
-
-                    }else{
-                        int sum = userlist.size();
-                        userlist2.clear();
-                        userlist2.addAll(userlist);
-                        filledData(userlist2);
-                        Collections.sort(userlist2, pinyinComparator);
-                        adapter = new CreateGroupMembersAddAdapter(context, userlist2);
-                        listView.setAdapter(adapter);
-                        setinterface();
-                    }
-                }
-                if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_always(context, "无法获取组Id");
-                } else if (ReturnType != null && ReturnType.equals("T")) {
-                    ToastUtils.show_always(context, "异常返回值");
-                } else if (ReturnType != null && ReturnType.equals("1011")) {
-                    ToastUtils.show_always(context, "组中无成员");
-                } else {
-                    if (Message != null && !Message.trim().equals("")) {
-                        ToastUtils.show_always(context, Message + "");
-                    }
-                }
             }
+
             @Override
             protected void requestError(VolleyError error) {
                 if (dialog != null) {
@@ -177,83 +169,76 @@ public class TransferAuthority extends Activity implements View.OnClickListener{
     }
 
     // 实例化汉字转拼音类
-    private void InitcharacterParser() {
-        characterParser = CharacterParser.getInstance();	// 实例化汉字转拼音类
+    private void initCharacterParser() {
+        characterParser = CharacterParser.getInstance();    // 实例化汉字转拼音类
         pinyinComparator = new PinyinComparator_a();
-    }
-
-    // 初始化界面
-    private void InitActivity() {
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		//透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	//透明导航栏
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.pushOneActivity(this);
     }
 
     // 处理Intent
     private void handleIntent() {
-        groupid= this.getIntent().getStringExtra("GroupId");
+        groupId = this.getIntent().getStringExtra("GroupId");
     }
 
     //设置监听
-    private void setlistener() {
-        mback.setOnClickListener(this);
+    private void setListener() {
+        mBack.setOnClickListener(this);
         image_clear.setOnClickListener(this);
         tv_head_right.setOnClickListener(this);
-        // 当输入框输入过汉字，且回复0后就要调用使用userlist2的原表数据
+        // 当输入框输入过汉字，且回复0后就要调用使用userList2的原表数据
         et_searh_content.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onTextChanged(CharSequence s, int start, int before,
-                                      int count) {
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
+
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count,
-                                          int after) {
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
                 String search_name = s.toString();
-                if(userlist2!=null){
-                    if (search_name == null || search_name.equals("")|| search_name.trim().equals("")) {
+                if (userList2 != null) {
+                    if (search_name == null || search_name.equals("") || search_name.trim().equals("")) {
                         image_clear.setVisibility(View.INVISIBLE);
-                        tvNofriends.setVisibility(View.GONE);
+                        tvNoFriends.setVisibility(View.GONE);
                         // 关键词为空
-                        if (userlist == null || userlist.size() == 0) {
+                        if (userList == null || userList.size() == 0) {
                             listView.setVisibility(View.GONE);
                         } else {
                             listView.setVisibility(View.VISIBLE);
-                            userlist2.clear();
-                            userlist2.addAll(userlist);
-                            filledData(userlist2);
-                            Collections.sort(userlist2, pinyinComparator);
-                            adapter = new CreateGroupMembersAddAdapter(context, userlist2);
+                            userList2.clear();
+                            userList2.addAll(userList);
+                            filledData(userList2);
+                            Collections.sort(userList2, pinyinComparator);
+                            adapter = new MembersAddAdapter(context, userList2);
                             listView.setAdapter(adapter);
-                            setinterface();
+                            setInterFace();
                         }
                     } else {
-                        if(userlist2!=null&&userlist2.size()!=0){
-                            userlist2.clear();
-                            userlist2.addAll(userlist);
+                        if (userList2 != null && userList2.size() != 0) {
+                            userList2.clear();
+                            userList2.addAll(userList);
                             image_clear.setVisibility(View.VISIBLE);
                             search(search_name);
-                        }else{
-                            ToastUtils.show_always(context,"网络异常，没有获取导数据");
+                        } else {
+                            ToastUtils.show_always(context, "网络异常，没有获取导数据");
                         }
                     }
-                }else{
-                    ToastUtils.show_always(context,"网络异常，没有获取导数据");
+                } else {
+                    ToastUtils.show_always(context, "网络异常，没有获取导数据");
                 }
-            }});
+            }
+        });
     }
 
     private void search(String search_name) {
         List<UserInfo> filterDateList = new ArrayList<UserInfo>();
         if (TextUtils.isEmpty(search_name)) {
-            filterDateList = userlist2;
-            tvNofriends.setVisibility(View.GONE);
+            filterDateList = userList2;
+            tvNoFriends.setVisibility(View.GONE);
         } else {
             filterDateList.clear();
-            for (UserInfo sortModel : userlist2) {
+            for (UserInfo sortModel : userList2) {
                 String name = sortModel.getName();
                 if (name.indexOf(search_name.toString()) != -1
                         || characterParser.getSelling(name).startsWith(search_name.toString())) {
@@ -264,25 +249,24 @@ public class TransferAuthority extends Activity implements View.OnClickListener{
         // 根据a-z进行排序
         Collections.sort(filterDateList, pinyinComparator);
         adapter.ChangeDate(filterDateList);
-        userlist2.clear();
-        userlist2.addAll(filterDateList);
+        userList2.clear();
+        userList2.addAll(filterDateList);
         if (filterDateList.size() == 0) {
-            tvNofriends.setVisibility(View.VISIBLE);
+            tvNoFriends.setVisibility(View.VISIBLE);
         }
     }
 
-    private void setinterface() {
-
-        adapter.setOnListener(new CreateGroupMembersAddAdapter.friendCheck() {
+    private void setInterFace() {
+        adapter.setOnListener(new MembersAddAdapter.friendCheck() {
             @Override
             public void checkposition(int position) {
-                if(userlist2.get(position).getCheckType()==1){
-                    for(int i=0;i<userlist2.size();i++){
-                        userlist2.get(i).setCheckType(1);
+                if (userList2.get(position).getCheckType() == 1) {
+                    for (int i = 0; i < userList2.size(); i++) {
+                        userList2.get(i).setCheckType(1);
                     }
-                    userlist2.get(position).setCheckType(2);
-                }else{
-                    userlist2.get(position).setCheckType(1);
+                    userList2.get(position).setCheckType(2);
+                } else {
+                    userList2.get(position).setCheckType(1);
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -301,18 +285,19 @@ public class TransferAuthority extends Activity implements View.OnClickListener{
         });
 
     }
+
     //设置view
-    private void setview() {
-        mback=(TextView)findViewById(R.id.wt_back);
-        tvNofriends = (TextView) findViewById(R.id.title_layout_no_friends);
+    private void setView() {
+        mBack = (TextView) findViewById(R.id.wt_back);
+        tvNoFriends = (TextView) findViewById(R.id.title_layout_no_friends);
         sideBar = (SideBar) findViewById(R.id.sidebar);
         dialogs = (TextView) findViewById(R.id.dialog);
         sideBar.setTextView(dialogs);
         listView = (ListView) findViewById(R.id.country_lvcountry);
-        et_searh_content = (EditText) findViewById(R.id.et_search);			// 搜索控件
+        et_searh_content = (EditText) findViewById(R.id.et_search);            // 搜索控件
         image_clear = (ImageView) findViewById(R.id.image_clear);
-        tv_head_name=(TextView)findViewById(R.id.tv_head_name);
-        tv_head_right=(TextView)findViewById(R.id.tv_head_right);
+        tv_head_name = (TextView) findViewById(R.id.tv_head_name);
+        tv_head_right = (TextView) findViewById(R.id.tv_head_right);
 
     }
 
@@ -326,34 +311,35 @@ public class TransferAuthority extends Activity implements View.OnClickListener{
             case R.id.image_clear:
                 image_clear.setVisibility(View.INVISIBLE);
                 et_searh_content.setText("");
-                tvNofriends.setVisibility(View.GONE);
+                tvNoFriends.setVisibility(View.GONE);
                 break;
             case R.id.tv_head_right:
-                ishave=false;
-                if (userlist2!=null&&userlist2.size() > 0) {
-                    for (int i = 0; i < userlist2.size(); i++) {
-                        if (userlist2.get(i).getCheckType() == 2) {
-                            touserid=userlist2.get(i).getUserId();
-                            ishave=true;
+                isHave = false;
+                if (userList2 != null && userList2.size() > 0) {
+                    for (int i = 0; i < userList2.size(); i++) {
+                        if (userList2.get(i).getCheckType() == 2) {
+                            toUserId = userList2.get(i).getUserId();
+                            isHave = true;
                         }
                     }
                 }
                 // 防空
-                if (!ishave) {
+                if (!isHave) {
                     ToastUtils.show_always(context, "请您勾选您要移交权限的成员");
                     return;
                 }
                 // 变更管理员权限
-               /* if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    dialog = DialogUtils.Dialogph(context, "正在变更管理员");*/
-                    sendtransferauthority();
-               /* } else {
+                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                    dialog = DialogUtils.Dialogph(context, "正在变更管理员");
+                    sendTransFerautHority();
+                } else {
                     ToastUtils.show_always(context, "网络失败，请检查网络");
-                }*/
+                }
                 break;
         }
     }
-    private  void  filledData(List<UserInfo> person) {
+
+    private void filledData(List<UserInfo> person) {
         for (int i = 0; i < person.size(); i++) {
             person.get(i).setName(person.get(i).getUserName());
             // 汉字转换成拼音
@@ -368,61 +354,55 @@ public class TransferAuthority extends Activity implements View.OnClickListener{
         }
     }
 
-    private void sendtransferauthority() {
+    private void sendTransFerautHority() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
-            jsonObject.put("ToUserId", touserid);
-            // groupid由上一个界面传递而来
-            jsonObject.put("GroupId", groupid);
+            jsonObject.put("ToUserId", toUserId);
+            // groupId由上一个界面传递而来
+            jsonObject.put("GroupId", groupId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         VolleyRequest.RequestPost(GlobalConfig.changGroupAdminnerUrl, tag, jsonObject, new VolleyCallback() {
-            private String ReturnType;
-            private String Message;
-//			private String SessionId;
-
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                if(isCancelRequest){
-                    return ;
-                }
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return;
                 try {
-                    ReturnType = result.getString("ReturnType");
-//					SessionId = result.getString("SessionId");
-                    Message = result.getString("Message");
+                    String ReturnType = result.getString("ReturnType");
+                    if (ReturnType != null && ReturnType.equals("1001")) {
+                        ToastUtils.show_always(context, "管理员权限移交成功");
+                        sendBroadcast(new Intent(BroadcastConstant.REFRESH_GROUP));
+                        finish();
+                    } else if (ReturnType != null && ReturnType.equals("1002")) {
+                        ToastUtils.show_always(context, "无法获取用户Id");
+                    } else if (ReturnType != null && ReturnType.equals("1003")) {
+                        ToastUtils.show_always(context, "用户不存在");
+                    } else if (ReturnType != null && ReturnType.equals("10021")) {
+                        ToastUtils.show_always(context, "用户不是该组的管理员");
+                    } else if (ReturnType != null && ReturnType.equals("0000")) {
+                        ToastUtils.show_always(context, "无法获取相关的参数");
+                    } else if (ReturnType != null && ReturnType.equals("1004")) {
+                        ToastUtils.show_always(context, "无法获取移交用户Id");
+                    } else if (ReturnType != null && ReturnType.equals("10041")) {
+                        ToastUtils.show_always(context, "被移交用户不在该组");
+                    } else if (ReturnType != null && ReturnType.equals("T")) {
+                        ToastUtils.show_always(context, "异常返回值");
+                    } else if (ReturnType != null && ReturnType.equals("200")) {
+                        ToastUtils.show_always(context, "尚未登录");
+                    } else {
+                        try {
+                            String Message = result.getString("Message");
+                            if (Message != null && !Message.trim().equals("")) {
+                                ToastUtils.show_always(context, Message + "");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                }
-                if (ReturnType != null && ReturnType.equals("1001")) {
-                    ToastUtils.show_always(context, "管理员权限移交成功");
-                    sendBroadcast(new Intent(BroadcastConstant.REFRESH_GROUP));
-                    finish();
-                }else if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_always(context, "无法获取用户Id");
-                } else if (ReturnType != null && ReturnType.equals("1003")) {
-                    ToastUtils.show_always(context, "用户不存在");
-                } else if (ReturnType != null && ReturnType.equals("10021")) {
-                    ToastUtils.show_always(context, "用户不是该组的管理员");
-                } else if (ReturnType != null && ReturnType.equals("0000")) {
-                    ToastUtils.show_always(context, "无法获取相关的参数");
-                } else if (ReturnType != null && ReturnType.equals("1004")) {
-                    ToastUtils.show_always(context, "无法获取移交用户Id");
-                }  else if (ReturnType != null && ReturnType.equals("10041")) {
-                    ToastUtils.show_always(context, "被移交用户不在该组");
-                }  else if (ReturnType != null && ReturnType.equals("T")) {
-                    ToastUtils.show_always(context, "异常返回值");
-                } else if (ReturnType != null && ReturnType.equals("200")) {
-                    ToastUtils.show_always(context, "尚未登录");
-                }else {
-                    if (Message != null && !Message.trim().equals("")) {
-                        ToastUtils.show_always(context, Message + "");
-                    }
                 }
             }
 
@@ -439,18 +419,16 @@ public class TransferAuthority extends Activity implements View.OnClickListener{
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.popOneActivity(this);
-        mback=null;
+        mBack = null;
         pinyinComparator = null;
         characterParser = null;
-        tvNofriends= null;
-        sideBar= null;
-        dialogs= null;
-        listView= null;
-        et_searh_content = null;		// 搜索控件
+        tvNoFriends = null;
+        sideBar = null;
+        dialogs = null;
+        listView = null;
+        et_searh_content = null;        // 搜索控件
         image_clear = null;
         tv_head_name = null;
-        tv_head_right= null;
+        tv_head_right = null;
     }
 }

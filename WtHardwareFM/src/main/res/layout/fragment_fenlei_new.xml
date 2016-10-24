@@ -5,15 +5,49 @@
     android:background="@color/WHITE"
     android:orientation="vertical" >
 
-    <GridView
-        android:id="@+id/gv_fenlei"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_margin="10dp"
-        android:horizontalSpacing="10dp"
-        android:numColumns="3"
-        android:scrollbars="none"
-        android:verticalSpacing="18dp" >
-    </GridView>
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:id="@+id/lin_second"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:orientation="vertical" >
+
+            <ImageView
+                android:id="@+id/image_second"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/no_message_picture" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_marginTop="20dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/text_size_medium"
+                    android:text="加载失败,重新获取"
+                    android:textColor="@color/dinglan_orange"/>
+
+            </LinearLayout>
+        </LinearLayout>
+        <GridView
+            android:id="@+id/gv_fenlei"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="10dp"
+            android:horizontalSpacing="10dp"
+            android:numColumns="3"
+            android:background="@color/white"
+            android:scrollbars="none"
+            android:verticalSpacing="18dp" >
+        </GridView>
+    </RelativeLayout>
 
 </LinearLayout>

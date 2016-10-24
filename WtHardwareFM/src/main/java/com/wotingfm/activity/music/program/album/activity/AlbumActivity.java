@@ -1,12 +1,13 @@
 package com.wotingfm.activity.music.program.album.activity;
 
 import android.app.Dialog;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,9 +56,8 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
 	private TextView mback;
 	private ImageView img_right;
 	private ViewPager mpager;
-	public static String img_album;
 	private UMImage image;
-	public static Dialog Sharedialog;
+	public static Dialog shareDialog;
 	private int screenw;
 	private Dialog dialog1;
 
@@ -68,98 +68,19 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
 		context = this;
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);// 透明状态栏
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);// 透明导航栏
-		setview();            // 设置界面
+		setView();            // 设置界面
 		handleIntent();
-		setlistener();
+		setListener();
 		UMShareAPI.get(context);// 初始化友盟
-		sharedialog();
+		shareDialog();
 	}
 
-	private void sharedialog() {
-		final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_sharedialog, null);
-		GridView mgallery = (GridView) dialog.findViewById(R.id.share_gallery);
-		TextView tv_cancle = (TextView) dialog.findViewById(R.id.tv_cancle);
-		Sharedialog = new Dialog(context, R.style.MyDialog);
-		// 从底部上升到一个位置
-		Sharedialog.setContentView(dialog);
-		Window window = Sharedialog.getWindow();
-		DisplayMetrics dm = new DisplayMetrics();
-		context.getWindowManager().getDefaultDisplay().getMetrics(dm);
-		screenw = dm.widthPixels;
-		ViewGroup.LayoutParams params = dialog.getLayoutParams();
-		params.width = (int) screenw;
-		dialog.setLayoutParams(params);
-		window.setGravity(Gravity.BOTTOM);
-		window.setWindowAnimations(R.style.sharestyle);
-		Sharedialog.setCanceledOnTouchOutside(true);
-		Sharedialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-		 /* Sharedialog.show(); */
-		dialog1 = DialogUtils.Dialogphnoshow(context, "通讯中", dialog1);
-		Config.dialog = dialog1;
-		final List<sharemodel> mylist = ShareUtils.getShareModelList();
-		ImageAdapter shareadapter = new ImageAdapter(context, mylist);
-		mgallery.setAdapter(shareadapter);
-		mgallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				SHARE_MEDIA Platform = mylist.get(position).getSharePlatform();
-				CallShare(Platform);
-				Sharedialog.dismiss();
-			}
-		});
-		tv_cancle.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				if (Sharedialog.isShowing()) {
-					Sharedialog.dismiss();
-				}
-			}
-		});
-
-	}
-	protected void CallShare(SHARE_MEDIA Platform) {
-		String sharename;
-		String shareDesc;
-		String shareContentImg;
-		String shareurl;
-		if (GlobalConfig.playerobject != null) {
-			if (GlobalConfig.playerobject.getContentName() != null
-					&& !GlobalConfig.playerobject.getContentName().equals("")) {
-				sharename = GlobalConfig.playerobject.getContentName();
-			} else {
-				sharename = "我听我享听";
-			}
-			if (GlobalConfig.playerobject.getContentDesc() != null
-					&& !GlobalConfig.playerobject.getContentDesc().equals("")) {
-				shareDesc = GlobalConfig.playerobject.getContentDesc();
-			} else {
-				shareDesc = "暂无本节目介绍";
-			}
-			if (GlobalConfig.playerobject.getContentImg() != null
-					&& !GlobalConfig.playerobject.getContentImg().equals("")) {
-				shareContentImg = GlobalConfig.playerobject.getContentImg();
-				image = new UMImage(context, shareContentImg);
-			} else {
-				shareContentImg = "http://182.92.175.134/img/logo-web.png";
-				image = new UMImage(context, shareContentImg);
-			}
-			if (GlobalConfig.playerobject.getContentShareURL() != null
-					&& !GlobalConfig.playerobject.getContentShareURL().equals("")) {
-				shareurl = GlobalConfig.playerobject.getContentShareURL();
-			} else {
-				shareurl = "http://www.wotingfm.com/";
-			}
-			new ShareAction(context).setPlatform(Platform).withMedia(image)
-					.withText(shareDesc).withTitle(sharename).withTargetUrl(shareurl).share();
-		} else {
-			ToastUtils.show_short(context, "没有数据");
-		}
-	}
-	private void setlistener() {
+	private void setListener()
+	{
 		mback.setOnClickListener(context);
 	}
 
-	private void setview(){
+	private void setView(){
 		tv_album_name = (TextView) findViewById(R.id.tv_head_name);
 		mback=(TextView)findViewById(R.id.wt_back);
 		img_right=(ImageView)findViewById(R.id.img_head_right);
@@ -175,6 +96,7 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
 		mpager.setOffscreenPageLimit(1);
 		img_right.setOnClickListener(new AlbumChangeClickListener(1));
 	}
+
 	private void handleIntent() {
 		String type = this.getIntent().getStringExtra("type");
 		if (type != null && type.trim().equals("radiolistactivity")) {
@@ -195,10 +117,8 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
 			id = list.getContentId();
 			ContentImg=list.getContentImg();
 		} else if (type != null && type.trim().equals("main")) {
-			//congmainlaide 再做一个
 			ContentName = this.getIntent().getStringExtra("conentname");
 			id = this.getIntent().getStringExtra("id");
-
 		} else if(type != null && type.trim().equals("player")){
 			ContentName=this.getIntent().getStringExtra("contentName");
 			ContentDesc=this.getIntent().getStringExtra("contentDesc");
@@ -220,8 +140,6 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
 		} else {
 			tv_album_name.setText("未知");
 		}
-		Log.e("本节目的专辑ID为", id + "");
-
 	}
 
 	@Override
@@ -230,33 +148,124 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
 			case R.id.wt_back:
 				finish();
 				break;
+     	}
 	}
+
+	@Override
+	public Resources getResources() {
+		Resources res = super.getResources();
+		Configuration config = new Configuration();
+		config.setToDefaults();
+		res.updateConfiguration(config, res.getDisplayMetrics());
+		return res;
 	}
+
 	public class MyOnPageChangeListener implements ViewPager.OnPageChangeListener {
+		@Override
+		public void onPageScrolled(int arg0, float arg1, int arg2) {}
 
 		@Override
-		public void onPageScrolled(int arg0, float arg1, int arg2) {
-		}
+		public void onPageScrollStateChanged(int arg0) {}
 
 		@Override
-		public void onPageScrollStateChanged(int arg0) {
-		}
-
-		@Override
-		public void onPageSelected(int arg0) {
-
-		}
+		public void onPageSelected(int arg0) {}
 	}
+
 	public class AlbumChangeClickListener implements OnClickListener {
 
-
-		public AlbumChangeClickListener(int i) {
-
-		}
-
+		public AlbumChangeClickListener(int i) {}
 		@Override
 		public void onClick(View v) {
+
 			mpager.setCurrentItem(1);
+
 		}
+	}
+
+	protected void callShare(SHARE_MEDIA Platform) {
+		String sharename;
+		String shareDesc;
+		String shareContentImg;
+		String shareurl;
+		if (GlobalConfig.playerobject != null) {
+			if (GlobalConfig.playerobject.getContentName() != null&& !GlobalConfig.playerobject.getContentName().equals("")) {
+				sharename = GlobalConfig.playerobject.getContentName();
+			} else {
+				sharename = "我听我享听";
+			}
+			if (GlobalConfig.playerobject.getContentDesc() != null&& !GlobalConfig.playerobject.getContentDesc().equals("")) {
+				shareDesc = GlobalConfig.playerobject.getContentDesc();
+			} else {
+				shareDesc = "暂无本节目介绍";
+			}
+			if (GlobalConfig.playerobject.getContentImg() != null&& !GlobalConfig.playerobject.getContentImg().equals("")) {
+				shareContentImg = GlobalConfig.playerobject.getContentImg();
+				image = new UMImage(context, shareContentImg);
+			} else {
+				shareContentImg = "http://182.92.175.134/img/logo-web.png";
+				image = new UMImage(context, shareContentImg);
+			}
+			if (GlobalConfig.playerobject.getContentShareURL() != null&& !GlobalConfig.playerobject.getContentShareURL().equals("")) {
+				shareurl = GlobalConfig.playerobject.getContentShareURL();
+			} else {
+				shareurl = "http://www.wotingfm.com/";
+			}
+			new ShareAction(context).setPlatform(Platform).withMedia(image)
+					.withText(shareDesc).withTitle(sharename).withTargetUrl(shareurl).share();
+		} else {
+			ToastUtils.show_short(context, "没有数据");
+		}
+	}
+
+	private void shareDialog() {
+		final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_sharedialog, null);
+		GridView mgallery = (GridView) dialog.findViewById(R.id.share_gallery);
+		TextView tv_cancle = (TextView) dialog.findViewById(R.id.tv_cancle);
+		shareDialog = new Dialog(context, R.style.MyDialog);
+		// 从底部上升到一个位置
+		shareDialog.setContentView(dialog);
+		Window window =shareDialog.getWindow();
+		DisplayMetrics dm = new DisplayMetrics();
+		context.getWindowManager().getDefaultDisplay().getMetrics(dm);
+		screenw = dm.widthPixels;
+		ViewGroup.LayoutParams params = dialog.getLayoutParams();
+		params.width =  screenw;
+		dialog.setLayoutParams(params);
+		window.setGravity(Gravity.BOTTOM);
+		window.setWindowAnimations(R.style.sharestyle);
+		shareDialog.setCanceledOnTouchOutside(true);
+		shareDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+		dialog1 = DialogUtils.Dialogphnoshow(context, "通讯中", dialog1);
+		Config.dialog = dialog1;
+		final List<sharemodel> mylist = ShareUtils.getShareModelList();
+		ImageAdapter shareadapter = new ImageAdapter(context, mylist);
+		mgallery.setAdapter(shareadapter);
+		mgallery.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+			@Override
+			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+				SHARE_MEDIA Platform = mylist.get(position).getSharePlatform();
+				callShare(Platform);
+				shareDialog.dismiss();
+			}
+		});
+		tv_cancle.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (shareDialog.isShowing()) {
+					shareDialog.dismiss();
+				}
+			}
+		});
+
+	}
+
+	@Override
+	protected void onDestroy() {
+		super.onDestroy();
+		tv_album_name=null;
+		mback=null;
+		img_right=null;
+		mpager=null;
+		setContentView(R.layout.activity_null);
 	}
 }

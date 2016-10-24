@@ -1,6 +1,8 @@
 package com.wotingfm.activity.music.main;
 
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -17,7 +19,7 @@ import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.activity.im.interphone.notify.activity.NotifyNewActivity;
 import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.program.main.ProgramFragment;
-import com.wotingfm.activity.music.search.activity.SearchLikeAcitvity;
+import com.wotingfm.activity.music.search.activity.SearchLikeActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.util.ToastUtils;
 
@@ -54,7 +56,7 @@ public class HomeActivity extends FragmentActivity {
 			@Override
 			public void onClick(View v) {
 				// 跳转到搜索界面  原来的代码 要加在这里
-				startActivity(new Intent(context, SearchLikeAcitvity.class));
+				startActivity(new Intent(context, SearchLikeActivity.class));
 			}
 		});
 
@@ -102,10 +104,10 @@ public class HomeActivity extends FragmentActivity {
 		mPager = (ViewPager) findViewById(R.id.viewpager);
 		mPager.setOffscreenPageLimit(1);
 		ArrayList<Fragment> fragmentList = new ArrayList<>();
-		PlayerFragment playfragment = new PlayerFragment();
-		ProgramFragment newsfragment = new ProgramFragment();
- 	    fragmentList.add(playfragment);
-		fragmentList.add(newsfragment);
+		PlayerFragment playFragment = new PlayerFragment();
+		ProgramFragment newsFragment = new ProgramFragment();
+ 	    fragmentList.add(playFragment);
+		fragmentList.add(newsFragment);
 		 //mPager.setAdapter(new MyFragmentChildPagerAdapter(getChildFragmentManager(), fragmentList));
 		mPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList));
 		mPager.setOnPageChangeListener(new MyOnPageChangeListener());	// 页面变化时的监听器
@@ -161,6 +163,15 @@ public class HomeActivity extends FragmentActivity {
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
+	}
+
+	@Override
+	public Resources getResources() {
+		Resources res = super.getResources();
+		Configuration config = new Configuration();
+		config.setToDefaults();
+		res.updateConfiguration(config, res.getDisplayMetrics());
+		return res;
 	}
 
 }

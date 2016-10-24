@@ -2,6 +2,8 @@ package com.wotingfm.util;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 
 /**
@@ -44,8 +46,7 @@ public class CommonUtils {
 	 * @return
 	 */
 	public static String getSocketUserId(Context context){
-		SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
-		String UserId= sp.getString(StringConstant.USERID, "userid");
+		String UserId= BSApplication.SharedPreferences.getString(StringConstant.USERID, "userid");
 		if(UserId==null||UserId.equals("")||UserId.equals("userid")){
 			return null;
 		}else{

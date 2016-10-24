@@ -1,6 +1,5 @@
 package com.wotingfm.activity.im.interphone.scanning.activity;
 
-import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -27,6 +26,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.zxing.Result;
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.BaseActivity;
 import com.wotingfm.activity.im.interphone.find.add.FriendAddActivity;
 import com.wotingfm.activity.im.interphone.find.add.GroupAddActivity;
 import com.wotingfm.activity.im.interphone.find.result.model.FindGroupNews;
@@ -47,11 +47,10 @@ import java.lang.reflect.Field;
 /**
  * 这个活动打开相机和实际扫描一个背景线程。
  * 它吸引取景器来帮助用户把条码正确,显示了图像处理发生的反馈,然后覆盖当扫描结果是成功的。
- *
- * @author 辛龙
- *         2016年1月21日
+ * 作者：xinlong on 2016/1/21
+ * 邮箱：645700751@qq.com
  */
-public final class CaptureActivity extends Activity implements SurfaceHolder.Callback {
+public final class CaptureActivity extends BaseActivity implements SurfaceHolder.Callback {
     private static final String TAG = CaptureActivity.class.getSimpleName();
     private CameraManager cameraManager;
     private CaptureActivityHandler handler;

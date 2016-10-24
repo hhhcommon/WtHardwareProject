@@ -27,19 +27,20 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.shenstec.http.MyHttp;
-import com.shenstec.utils.file.FileManager;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.im.interphone.creategroup.model.GroupRation;
 import com.wotingfm.activity.im.interphone.creategroup.model.UserPortaitInside;
-import com.wotingfm.activity.im.interphone.creategroup.photocut.activity.PhotoCutActivity;
-import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailAcitivity;
+import com.wotingfm.activity.im.interphone.creategroup.photocut.PhotoCutActivity;
+import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailActivity;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.helper.MyHttp;
+import com.wotingfm.manager.FileManager;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ImageUploadReturnUtil;
@@ -73,7 +74,6 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
     private String spinnerString1;
     private String spinnerString2;
     private String outputFilePath;
-    //    private String imagePath;
     private String filePath;
     private String photoCutAfterImagePath;
     private String nick;                        // String 群组名称
@@ -200,7 +200,6 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
         try {
             jsonObject.put("GroupType", createGroupType);
             jsonObject.put("GroupSignature", sign);
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
             jsonObject.put("GroupName", nick);
             if (createGroupType == IntegerConstant.CREATE_GROUP_PRIVATE) {
                 jsonObject.put("GroupPwd", groupPassWord);
@@ -210,82 +209,81 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
         }
 
         VolleyRequest.RequestPost(GlobalConfig.talkgroupcreatUrl, tag, jsonObject, new VolleyCallback() {
-            private String returnType;
-            private String message;
-            private String groupInfo;
-            private GroupRation groupRation;
 
             @Override
             protected void requestSuccess(JSONObject result) {
                 DialogUtils.closeDialog();
-                if (isCancelRequest) {
-                    return;
-                }
+                if (isCancelRequest) return;
                 try {
-                    returnType = result.getString("ReturnType");
-                    message = result.getString("Message");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if (returnType != null && returnType.equals("1001")) {
-                    try {
-                        groupInfo = result.getString("GroupInfo");
-                        groupRation = new Gson().fromJson(groupInfo, new TypeToken<GroupRation>() {}.getType());
-                        groupRation.setAlternateChannel1(spinnerString1);// 备用频道 1
-                        groupRation.setAlternateChannel2(spinnerString2);// 备用频道 2
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    if (viewSuccess == 1) {
-                        dealt(groupRation);
-                    } else {      // 跳转到群组详情界面
-                        Intent pushIntent = new Intent("push_refreshlinkman");
-                        sendBroadcast(pushIntent);
-                        setResult(1);
-                        Intent intent = new Intent(context, GroupDetailAcitivity.class);
-                        intent.putExtra("GroupId", groupRation.getGroupId());
-                        intent.putExtra("ImageUrl", miniUri);
-                        startActivity(intent);
-                        finish();
-                    }
-                } else {
-                    if (returnType != null && returnType.equals("1002")) {
-                        Toast.makeText(context, "未登陆无法创建群组", Toast.LENGTH_SHORT).show();
-                        setTitle("创建失败");
-                        btnCommit.setVisibility(View.INVISIBLE);
-                    } else if (returnType != null && returnType.equals("1003")) {
-                        Toast.makeText(context, "无法得到用户分类" + message, Toast.LENGTH_SHORT).show();
-                        setTitle("创建失败");
-                        btnCommit.setVisibility(View.INVISIBLE);
-                    } else if (returnType != null && returnType.equals("1004")) {
-                        Toast.makeText(context, "无法得到组密码" + message, Toast.LENGTH_SHORT).show();
-                        setTitle("创建失败");
-                        btnCommit.setVisibility(View.INVISIBLE);
-                    } else if (returnType != null && returnType.equals("1005")) {
-                        Toast.makeText(context, "无法得到组员信息" + message, Toast.LENGTH_SHORT).show();
-                        setTitle("创建失败");
-                        btnCommit.setVisibility(View.INVISIBLE);
-                    } else if (returnType != null && returnType.equals("1006")) {
-                        Toast.makeText(context, "给定的组员信息不存在" + message, Toast.LENGTH_SHORT).show();
-                        setTitle("创建失败");
-                        btnCommit.setVisibility(View.INVISIBLE);
-                    } else if (returnType != null && returnType.equals("1007")) {
-                        Toast.makeText(context, "只有一个有效成员，无法构建用户组" + message, Toast.LENGTH_SHORT).show();
-                        setTitle("创建失败");
-                        btnCommit.setVisibility(View.INVISIBLE);
-                    } else if (returnType != null && returnType.equals("1008")) {
-                        Toast.makeText(context, "您所创建的组已达50个，不能再创建了" + message, Toast.LENGTH_SHORT).show();
-                        setTitle("创建失败");
-                        btnCommit.setVisibility(View.INVISIBLE);
-                    } else if (returnType != null && returnType.equals("1009")) {
-                        Toast.makeText(context, "20分钟内创建组不能超过5个" + message, Toast.LENGTH_SHORT).show();
-                        setTitle("创建失败");
-                        btnCommit.setVisibility(View.INVISIBLE);
+                    String returnType = result.getString("ReturnType");
+                    if (returnType != null && returnType.equals("1001")) {
+                        try {
+                            String groupInfo = result.getString("GroupInfo");
+                            GroupRation groupRation = new Gson().fromJson(groupInfo, new TypeToken<GroupRation>() {
+                            }.getType());
+                            groupRation.setAlternateChannel1(spinnerString1);// 备用频道 1
+                            groupRation.setAlternateChannel2(spinnerString2);// 备用频道 2
+                            if (viewSuccess == 1) {
+                                dealt(groupRation);
+                            } else {      // 跳转到群组详情界面
+                                sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
+                                setResult(1);
+                                Intent intent = new Intent(context, GroupDetailActivity.class);
+                                intent.putExtra("GroupId", groupRation.getGroupId());
+                                intent.putExtra("ImageUrl", miniUri);
+                                startActivity(intent);
+                                finish();
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     } else {
-                        if (message != null && !message.trim().equals("")) {
-                            Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                        try {
+                            String message = result.getString("Message");
+                            if (returnType != null && returnType.equals("1002")) {
+                                Toast.makeText(context, "未登陆无法创建群组", Toast.LENGTH_SHORT).show();
+                                setTitle("创建失败");
+                                btnCommit.setVisibility(View.INVISIBLE);
+                            } else if (returnType != null && returnType.equals("1003")) {
+                                Toast.makeText(context, "无法得到用户分类" + message, Toast.LENGTH_SHORT).show();
+                                setTitle("创建失败");
+                                btnCommit.setVisibility(View.INVISIBLE);
+                            } else if (returnType != null && returnType.equals("1004")) {
+                                Toast.makeText(context, "无法得到组密码" + message, Toast.LENGTH_SHORT).show();
+                                setTitle("创建失败");
+                                btnCommit.setVisibility(View.INVISIBLE);
+                            } else if (returnType != null && returnType.equals("1005")) {
+                                Toast.makeText(context, "无法得到组员信息" + message, Toast.LENGTH_SHORT).show();
+                                setTitle("创建失败");
+                                btnCommit.setVisibility(View.INVISIBLE);
+                            } else if (returnType != null && returnType.equals("1006")) {
+                                Toast.makeText(context, "给定的组员信息不存在" + message, Toast.LENGTH_SHORT).show();
+                                setTitle("创建失败");
+                                btnCommit.setVisibility(View.INVISIBLE);
+                            } else if (returnType != null && returnType.equals("1007")) {
+                                Toast.makeText(context, "只有一个有效成员，无法构建用户组" + message, Toast.LENGTH_SHORT).show();
+                                setTitle("创建失败");
+                                btnCommit.setVisibility(View.INVISIBLE);
+                            } else if (returnType != null && returnType.equals("1008")) {
+                                Toast.makeText(context, "您所创建的组已达50个，不能再创建了" + message, Toast.LENGTH_SHORT).show();
+                                setTitle("创建失败");
+                                btnCommit.setVisibility(View.INVISIBLE);
+                            } else if (returnType != null && returnType.equals("1009")) {
+                                Toast.makeText(context, "20分钟内创建组不能超过5个" + message, Toast.LENGTH_SHORT).show();
+                                setTitle("创建失败");
+                                btnCommit.setVisibility(View.INVISIBLE);
+                            } else {
+                                if (message != null && !message.trim().equals("")) {
+                                    Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
                         }
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -333,9 +331,9 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                 break;
             case R.id.btn_commit:       // 确定
                 Toast.makeText(context, "备用频道1: " + spinnerString1 + ", 备用频道2: " + spinnerString2, Toast.LENGTH_LONG).show();
-                if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
                     Toast.makeText(context, "网络失败，请检查网络", Toast.LENGTH_SHORT).show();
-                    return ;
+                    return;
                 }
                 nick = editGroupName.getText().toString().trim();
                 sign = editGroupAutograph.getText().toString().trim();
@@ -429,13 +427,12 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (msg.what == 1) {
-                    Intent pushIntent = new Intent("push_refreshlinkman");
-                    sendBroadcast(pushIntent);
+                    sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
                     setResult(1);
                     Toast.makeText(context, "创建成功", Toast.LENGTH_SHORT).show();
                     if (groupRation != null && !groupRation.equals("")) {
                         // 跳转到群组详情页面
-                        Intent intent = new Intent(context, GroupDetailAcitivity.class);
+                        Intent intent = new Intent(context, GroupDetailActivity.class);
                         intent.putExtra("GroupId", groupRation.getGroupId());
                         intent.putExtra("ImageUrl", miniUri);
                         startActivity(intent);
@@ -462,7 +459,7 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                     for (int i = 0; i < imageNum; i++) {
                         filePath = photoCutAfterImagePath;
                         String ExtName = filePath.substring(filePath.lastIndexOf("."));
-                        String TestURI = "http://182.92.175.134:808/wt/common/upload4App.do?FType=GroupP&ExtName=";
+                        String TestURI = GlobalConfig.baseUrl + "wt/common/upload4App.do?FType=GroupP&ExtName=";
                         String Response = MyHttp.postFile(new File(filePath), TestURI + ExtName + "&PCDType=" + GlobalConfig.PCDType + "&GroupId=" + groupRation.GroupId
                                 + "&IMEI=" + PhoneMessage.imei);
                         L.e("图片上传数据", TestURI + ExtName

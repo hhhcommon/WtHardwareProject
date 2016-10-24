@@ -141,12 +141,12 @@
             android:background="@color/view_color" />
 
              <RelativeLayout
-            android:id="@+id/listener_set"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/person_color"
-            android:clickable="true">
+                android:id="@+id/listener_set"
+                android:layout_width="match_parent"
+                android:layout_height="56dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/person_color"
+                android:clickable="true">
 
             <View
                 android:id="@+id/liner_view_2"

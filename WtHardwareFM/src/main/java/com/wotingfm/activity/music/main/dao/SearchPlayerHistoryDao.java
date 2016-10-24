@@ -50,7 +50,7 @@ public class SearchPlayerHistoryDao {
 	 * @return
 	 */
 	public List<PlayerHistory> queryHistory(PlayerHistory playerhistory) {
-		List<PlayerHistory> mylist = new ArrayList<PlayerHistory>();
+		List<PlayerHistory> myList = new ArrayList<PlayerHistory>();
 		SQLiteDatabase db = helper.getReadableDatabase();
 		String s = playerhistory.getPlayerUrl();
 		Cursor cursor = null;
@@ -90,7 +90,7 @@ public class SearchPlayerHistoryDao {
 						,localurl,sequname,sequid,sequdesc,sequimg);
 
 
-				mylist.add(h);
+				myList.add(h);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -102,7 +102,7 @@ public class SearchPlayerHistoryDao {
 				db.close();
 			}
 		}
-		return mylist;
+		return myList;
 	}
 
 	/**

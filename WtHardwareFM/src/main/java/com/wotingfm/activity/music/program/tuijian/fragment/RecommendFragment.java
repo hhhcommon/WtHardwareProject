@@ -16,6 +16,7 @@ import android.widget.ImageView;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
@@ -30,7 +31,6 @@ import com.wotingfm.activity.music.program.tuijian.adapter.RecommendListAdapter;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.helper.ImageLoader;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
@@ -173,8 +173,6 @@ public class RecommendFragment extends Fragment {
                                 mListView.setPullLoadEnable(false);
                             } else{
                                 mListView.setPullLoadEnable(true);
-
-                                // 先求余 如果等于0 最后结果不加1 如果不等于0 结果加一
                                 if (allCountInt % pageSizeInt == 0) {
                                     pageSizeNum = allCountInt / pageSizeInt;
                                 } else {
@@ -310,7 +308,7 @@ public class RecommendFragment extends Fragment {
             ImageView view = new ImageView(container.getContext());
             view.setScaleType(ImageView.ScaleType.FIT_XY);
             view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            new ImageLoader(context).DisplayImage(imgs[position % count], view, false, false, null, null);
+            Picasso.with(context).load(imgs[position % count]).resize(1080, 450).centerCrop().into(view);
             return view;
         }
 

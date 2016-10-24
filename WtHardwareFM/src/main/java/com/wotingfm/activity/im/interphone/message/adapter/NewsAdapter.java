@@ -1,6 +1,7 @@
 package com.wotingfm.activity.im.interphone.message.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +9,11 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.message.model.MessageInfo;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.helper.ImageLoader;
+import com.wotingfm.util.BitmapUtils;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
@@ -20,7 +22,6 @@ import java.util.List;
 public class NewsAdapter extends BaseAdapter {
     private List<MessageInfo> list;
     private Context context;
-    private ImageLoader imageLoader;
     private MessageInfo lists;
     private SimpleDateFormat format;
     protected OnListener onListener;
@@ -29,7 +30,6 @@ public class NewsAdapter extends BaseAdapter {
         super();
         this.list = list;
         this.context = context;
-        imageLoader = new ImageLoader(context);
         format = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     }
 
@@ -101,8 +101,7 @@ public class NewsAdapter extends BaseAdapter {
                     } else {
                         url = GlobalConfig.imageurl + lists.getPortrait();
                     }
-                    imageLoader.DisplayImage(url.replace("\\/", "/"), holder.Image, false, false, null, null);
-//					holder.Image.setImageResource(R.drawable.wt_image_tx_hy);
+                    Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.Image);
                 }
             } else {
                 if (lists.getGroupName() == null || lists.getGroupName().equals("")) {
@@ -123,14 +122,16 @@ public class NewsAdapter extends BaseAdapter {
                 }
                 if (lists.getProtraitMini() != null && !lists.getProtraitMini().equals("")
                         && !lists.getProtraitMini().equals("null")) {
-//                    holder.Image.setImageResource(R.drawable.wt_image_tx_qz);
                     String url;
                     if (lists.getProtraitMini().startsWith("http:")) {
                         url = lists.getProtraitMini();
                     } else {
                         url = GlobalConfig.imageurl + lists.getProtraitMini();
                     }
-                    imageLoader.DisplayImage(url.replace("\\/", "/"), holder.Image, false, false, null, null);
+                    Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.Image);
+                }else{
+                    Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_hy);
+                    holder.Image.setImageBitmap(bmp);
                 }
             }
         }

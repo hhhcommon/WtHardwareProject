@@ -19,6 +19,7 @@ import com.wotingfm.receiver.NetWorkChangeReceiver;
 import com.wotingfm.service.FloatingWindowService;
 import com.wotingfm.service.LocationService;
 import com.wotingfm.service.NotificationService;
+import com.wotingfm.service.SocketService;
 import com.wotingfm.service.SubclassService;
 import com.wotingfm.service.VoiceStreamPlayerService;
 import com.wotingfm.service.VoiceStreamRecordService;
@@ -36,18 +37,19 @@ public class BSApplication extends Application {
     private static Context instance;
     private static RequestQueue queues;
     private NetWorkChangeReceiver netWorkChangeReceiver = null;
-    public  static android.content.SharedPreferences SharedPreferences;
-    private static Intent Socket,VoiceStreamRecord,VoiceStreamPlayer,Location,Subclass,Download,Notification,FloatingWindow;
+    public static android.content.SharedPreferences SharedPreferences;
+    private static Intent Socket, VoiceStreamRecord, VoiceStreamPlayer, Location, Subclass, Download, Notification, FloatingWindow;
+
     @Override
     public void onCreate() {
         super.onCreate();
-        instance=this;
+        instance = this;
         SharedPreferences = this.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
         InitThird();
         queues = Volley.newRequestQueue(this);
         PhoneMessage.getPhoneInfo(instance);//获取手机信息
 
-        List<String> _l=new ArrayList<String>();//其中每个间隔要是0.5秒的倍数
+        List<String> _l = new ArrayList<String>();//其中每个间隔要是0.5秒的倍数
         _l.add("INTE::500");   //第1次检测到未连接成功，隔0.5秒重连
         _l.add("INTE::500");  //第2次检测到未连接成功，隔0.5秒重连
         _l.add("INTE::1000");  //第3次检测到未连接成功，隔1秒重连
@@ -60,10 +62,10 @@ public class BSApplication extends Application {
         _l.add("GOTO::8");//之后，调到第9步处理
         SocketClientConfig scc = new SocketClientConfig();
         scc.setReConnectWays(_l);
-        GlobalConfig.scc=scc;
+        GlobalConfig.scc = scc;
 
-/*       Socket = new Intent(this, SocketService.class);  //socket服务
-        startService(Socket);*/
+        Socket = new Intent(this, SocketService.class);  //socket服务
+        startService(Socket);
         VoiceStreamRecord = new Intent(this, VoiceStreamRecordService.class);  //录音服务
         startService(VoiceStreamRecord);
         VoiceStreamPlayer = new Intent(this, VoiceStreamPlayerService.class);//播放服务
@@ -80,7 +82,7 @@ public class BSApplication extends Application {
         CommonHelper.checkNetworkStatus(instance);//网络设置获取
         this.registerNetWorkChangeReceiver(new NetWorkChangeReceiver(this));// 注册网络状态及返回键监听
         WtDeviceControl mControl = new WtDeviceControl(instance);
-        GlobalConfig.device=mControl;
+        GlobalConfig.device = mControl;
 
         FloatingWindow = new Intent(this, FloatingWindowService.class);//启动全局弹出框服务
         startService(FloatingWindow);
@@ -89,10 +91,10 @@ public class BSApplication extends Application {
     private void InitThird() {
         PlatformConfig.setWeixin(KeyConstant.WEIXIN_KEY, KeyConstant.WEIXIN_SECRET);
         PlatformConfig.setQQZone(KeyConstant.QQ_KEY, KeyConstant.QQ_SECRET);
-        PlatformConfig.setSinaWeibo(KeyConstant.WEIBO_KEY,KeyConstant.WEIBO_SECRET);
+        PlatformConfig.setSinaWeibo(KeyConstant.WEIBO_KEY, KeyConstant.WEIBO_SECRET);
     }
 
-    public static Context getAppContext(){
+    public static Context getAppContext() {
         return instance;
     }
 
@@ -100,7 +102,9 @@ public class BSApplication extends Application {
         return queues;
     }
 
-    /*** 注册网络监听者 */
+    /***
+     * 注册网络监听者
+     */
     private void registerNetWorkChangeReceiver(NetWorkChangeReceiver netWorkChangeReceiver) {
         this.netWorkChangeReceiver = netWorkChangeReceiver;
         IntentFilter filter = new IntentFilter();
@@ -108,7 +112,9 @@ public class BSApplication extends Application {
         this.registerReceiver(netWorkChangeReceiver, filter);
     }
 
-    /** 取消网络变化监听者 */
+    /**
+     * 取消网络变化监听者
+     */
     private void unRegisterNetWorkChangeReceiver(NetWorkChangeReceiver netWorkChangeReceiver) {
         this.unregisterReceiver(netWorkChangeReceiver);
     }
@@ -116,7 +122,7 @@ public class BSApplication extends Application {
     /**
      * app退出时执行该操作
      */
-    public static void onStop(){
+    public static void onStop() {
         instance.stopService(Socket);
         instance.stopService(VoiceStreamRecord);
         instance.stopService(VoiceStreamPlayer);
@@ -125,7 +131,7 @@ public class BSApplication extends Application {
         instance.stopService(Download);
         instance.stopService(Notification);
         instance.stopService(FloatingWindow);
-        Log.e("app退出","app退出");
+        Log.e("app退出", "app退出");
     }
 
     @Override

@@ -1,6 +1,7 @@
 package com.wotingfm.activity.music.playhistory.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,10 +9,13 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.shenstec.utils.image.ImageLoader;
+
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.search.model.SuperRankInfo;
+import com.wotingfm.util.BitmapUtils;
+
 import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Locale;
@@ -19,13 +23,11 @@ import java.util.TimeZone;
 
 public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 	private Context context;
-	private ImageLoader imageLoader;
 	private List<SuperRankInfo> mSuperRankInfo;
 
 	public PlayHistoryExpandableAdapter(Context context,List<SuperRankInfo> mSuperRankInfo) {
 		this.context = context;
 		this.mSuperRankInfo = mSuperRankInfo;
-		imageLoader = new ImageLoader(context);
 	}
 	
 	@Override
@@ -136,10 +138,11 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 			}
 			if (lists.getPlayerImage() == null || lists.getPlayerImage().equals("") 
 					|| lists.getPlayerImage().equals("null") || lists.getPlayerImage().trim().equals("")) {
-				holder.imageViewPlayImage.setImageResource(R.mipmap.wt_image_playertx);
+				Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
+				holder.imageViewPlayImage.setImageBitmap(bmp);
 			} else {
 				url = lists.getPlayerImage();
-				imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageViewPlayImage, false, false, null);
+				Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageViewPlayImage);
 			}
 		} else if(lists.getPlayerMediaType().equals("AUDIO")){
 			if (lists.getPlayerName() == null || lists.getPlayerName().equals("")) {
@@ -168,10 +171,11 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 			}
 			if (lists.getPlayerImage() == null || lists.getPlayerImage().equals("") 
 					|| lists.getPlayerImage().equals("null") || lists.getPlayerImage().trim().equals("")) {
-				holder.imageViewPlayImage.setImageResource(R.mipmap.wt_image_playertx);
+				Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
+				holder.imageViewPlayImage.setImageBitmap(bmp);
 			} else {
 				url = lists.getPlayerImage();
-				imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageViewPlayImage, false, false, null);
+				Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageViewPlayImage);
 			}
 			
 		}else if(lists.getPlayerMediaType().equals("TTS")){
@@ -201,10 +205,11 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 			}
 			if (lists.getPlayerImage() == null || lists.getPlayerImage().equals("") 
 					|| lists.getPlayerImage().equals("null") || lists.getPlayerImage().trim().equals("")) {
-				holder.imageViewPlayImage.setImageResource(R.mipmap.wt_image_playertx);
+				Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
+				holder.imageViewPlayImage.setImageBitmap(bmp);
 			} else {
 				url = lists.getPlayerImage();
-				imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageViewPlayImage, false, false, null);
+				Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageViewPlayImage);
 			}
 		}
 		return convertView;

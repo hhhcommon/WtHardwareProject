@@ -9,10 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.player.model.LanguageSearchInside;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.helper.ImageLoader;
 import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
@@ -20,13 +20,11 @@ import java.util.List;
 public class PlayerListAdapter extends BaseAdapter {
 	private List<LanguageSearchInside> list;
 	private Context context;
-	private ImageLoader imageLoader;
 	private Bitmap bmp;
 
 	public PlayerListAdapter(Context context, List<LanguageSearchInside> list) {
 		this.context = context;
 		this.list = list;
-		imageLoader = new ImageLoader(context);
 		bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
 	}
 
@@ -98,7 +96,7 @@ public class PlayerListAdapter extends BaseAdapter {
 				}else{
 					url = GlobalConfig.imageurl + searchlist.getContentImg();
 				}
-				imageLoader.DisplayImage(url.replace( "\\/", "/"), holder.imageview_rankimage, false, false,null, null);
+				Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageview_rankimage);
 			}else{
 				holder.imageview_rankimage.setImageBitmap(bmp);
 			}

@@ -1,4 +1,4 @@
-package com.wotingfm.activity.music.program.fenlei.adapter;
+package com.wotingfm.activity.music.search.adapter;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -8,19 +8,16 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.music.program.fenlei.model.fenLeiName;
 
 import java.util.List;
 
-public class fenleigridAdapter extends BaseAdapter {
-	private List<fenLeiName> list;
+public class SearchKeyAdapter extends BaseAdapter {
 	private Context context;
-	private ViewHolder holder;
+	private List<String> list;
 
-	public fenleigridAdapter(Context context, List<fenLeiName> list) {
-		super();
-		this.list = list;
+	public SearchKeyAdapter(Context context, List<String> list) {
 		this.context = context;
+		this.list = list;
 	}
 
 	@Override
@@ -37,22 +34,23 @@ public class fenleigridAdapter extends BaseAdapter {
 	public long getItemId(int position) {
 		return position;
 	}
-
+	
 	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(final int position, View convertView, ViewGroup parent) {
+		ViewHolder holder;
 		if (convertView == null) {
+			convertView=LayoutInflater.from(context).inflate(R.layout.adapter_hotkeys, null);
 			holder = new ViewHolder();
-			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fenlei_child_grid, null);
-			holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);// 台名
+			holder.tv=(TextView)convertView.findViewById(R.id.RankTitle);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		holder.tv_name.setText(list.get(position).getCatalogName());
+		holder.tv.setText(list.get(position));		
 		return convertView;
 	}
 
-	class ViewHolder {
-		public TextView tv_name;
+	private class ViewHolder {
+		public TextView tv;
 	}
 }

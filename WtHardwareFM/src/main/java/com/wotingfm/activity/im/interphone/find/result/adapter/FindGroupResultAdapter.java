@@ -1,6 +1,7 @@
 package com.wotingfm.activity.im.interphone.find.result.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -8,24 +9,22 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.find.result.model.FindGroupNews;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.helper.ImageLoader;
+import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
 
 public class FindGroupResultAdapter extends BaseAdapter {
     private List<FindGroupNews> list;
     private Context context;
-    private ImageLoader imageLoader;
-//    private String url;
 
     public FindGroupResultAdapter(Context context, List<FindGroupNews> list) {
         super();
         this.list = list;
         this.context = context;
-        imageLoader = new ImageLoader(context);
     }
 
     public void ChangeData(List<FindGroupNews> list) {
@@ -76,14 +75,15 @@ public class FindGroupResultAdapter extends BaseAdapter {
         }
         if (invite.getGroupImg() == null || invite.getGroupImg().equals("")
                 || invite.getGroupImg().equals("null") || invite.getGroupImg().trim().equals("")) {
-            holder.imageInviteImage.setImageResource(R.mipmap.wt_image_tx_qz);
+            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_qz);
+            holder.imageInviteImage.setImageBitmap(bmp);
         } else {
             if (invite.getGroupImg().startsWith("http:")) {
                 url = invite.getGroupImg();
             } else {
                 url = GlobalConfig.imageurl + invite.getGroupImg();
             }
-            imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageInviteImage, false, false, null, null);
+            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageInviteImage);
         }
         return convertView;
     }

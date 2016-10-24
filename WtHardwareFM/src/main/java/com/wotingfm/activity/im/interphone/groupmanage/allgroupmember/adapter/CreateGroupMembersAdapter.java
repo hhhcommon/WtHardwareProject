@@ -1,6 +1,7 @@
 package com.wotingfm.activity.im.interphone.groupmanage.allgroupmember.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,17 +10,18 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
-import com.shenstec.utils.image.ImageLoader;
+
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
 
 public class CreateGroupMembersAdapter extends BaseAdapter implements SectionIndexer {
     private List<UserInfo> list;
     private Context context;
-    private ImageLoader imageLoader;
     private UserInfo lists;
     private String url;
 
@@ -27,7 +29,6 @@ public class CreateGroupMembersAdapter extends BaseAdapter implements SectionInd
         super();
         this.list = list;
         this.context = context;
-        imageLoader = new ImageLoader(context);
     }
 
     public void ChangeDate(List<UserInfo> list) {
@@ -49,12 +50,11 @@ public class CreateGroupMembersAdapter extends BaseAdapter implements SectionInd
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder ;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_group_members, null);
             holder = new ViewHolder();
             holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);//名
-            //holder.tv_b_name = (TextView)convertView.findViewById(R.id.tv_b_name);//名
             holder.image = (ImageView) convertView.findViewById(R.id.image);
             holder.indexLayut = (LinearLayout) convertView.findViewById(R.id.index);
             holder.contactLayut = (LinearLayout) convertView.findViewById(R.id.contactLayut);
@@ -67,7 +67,6 @@ public class CreateGroupMembersAdapter extends BaseAdapter implements SectionInd
         lists = list.get(position);
         // 根据position获取分类的首字母的Char ascii值
         int section = getSectionForPosition(position);
-        // 如果当前位置等于该分类首字母的Char的位置 ，则认为是第一次出现
         // 如果当前位置等于该分类首字母的Char的位置 ，则认为是第一次出现
         if (position == getPositionForSection(section)) {
             holder.indexLayut.setVisibility(View.VISIBLE);
@@ -92,23 +91,21 @@ public class CreateGroupMembersAdapter extends BaseAdapter implements SectionInd
         }
 
         if (lists.getPortraitMini() == null || lists.getPortraitMini().equals("") || lists.getPortraitMini().equals("null") || lists.getPortraitMini().trim().equals("")) {
-            holder.image.setImageResource(R.mipmap.wt_image_tx_hy);
+            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_hy);
+            holder.image.setImageBitmap(bmp);
         } else {
             if (lists.getPortraitMini().startsWith("http:")) {
                 url = lists.getPortraitMini();
             } else {
                 url = GlobalConfig.imageurl + lists.getPortraitMini();
             }
-            //og.e("url==================", url);
-            imageLoader.DisplayImage(url.replace("\\/", "/"), holder.image, false, false, null);
+            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.image);
         }
         return convertView;
     }
 
     class ViewHolder {
         public ImageView image;
-        public TextView tv_b_name;
-        public LinearLayout lin_add;
         public LinearLayout contactLayut;
         public TextView indexTv;
         public LinearLayout indexLayut;

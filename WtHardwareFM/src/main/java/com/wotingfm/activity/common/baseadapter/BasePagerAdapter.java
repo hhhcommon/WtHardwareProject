@@ -3,11 +3,14 @@ package com.wotingfm.activity.common.baseadapter;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.view.View;
-
 import java.util.ArrayList;
 import java.util.List;
 
-//引导页使用的pageview适配器
+/**
+ * 引导页使用的pageview适配器
+ * 作者：xinlong on 2016/10/20
+ * 邮箱：645700751@qq.com
+ */
 public class BasePagerAdapter extends PagerAdapter{
 	private List<View> views=new ArrayList<View>();
 

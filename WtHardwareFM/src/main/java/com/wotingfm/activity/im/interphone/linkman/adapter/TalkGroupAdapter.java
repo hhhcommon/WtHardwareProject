@@ -14,7 +14,6 @@ import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.helper.ImageLoader;
 import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
@@ -28,7 +27,6 @@ import java.util.List;
 public class TalkGroupAdapter extends BaseAdapter {
     private List<TalkGroupInside> list;
     private Context context;
-    private ImageLoader imageLoader;
     private OnListener onListener;
     private TalkGroupInside lists;
     private String url;
@@ -37,7 +35,6 @@ public class TalkGroupAdapter extends BaseAdapter {
         super();
         this.list = list;
         this.context = context;
-        imageLoader = new ImageLoader(context);
     }
 
     public void ChangeDate(List<TalkGroupInside> list) {
@@ -102,7 +99,6 @@ public class TalkGroupAdapter extends BaseAdapter {
                 url = GlobalConfig.imageurl + lists.getGroupImg();
             }
             Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageView_touxiang);
-//			imageLoader.DisplayImage(url.replace( "\\/", "/"), holder.imageView_touxiang, false, false,null, null);
         }
 
         holder.lin_add.setOnClickListener(new View.OnClickListener() {

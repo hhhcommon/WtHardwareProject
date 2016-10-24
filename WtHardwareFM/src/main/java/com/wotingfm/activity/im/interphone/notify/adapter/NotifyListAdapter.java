@@ -9,19 +9,19 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.im.interphone.linkman.model.DBNotifyHistorary;
+import com.wotingfm.activity.im.interphone.linkman.model.DBNotifyHistory;
 
 import java.util.List;
 
 /**
- * 消息列表
+ * 消息列表适配器
  * Created by Administrator on 2016/8/26 0026.
  */
 public class NotifyListAdapter extends BaseAdapter {
     private Context context;
-    private List<DBNotifyHistorary> list;
+    private List<DBNotifyHistory> list;
 
-    public NotifyListAdapter(Context context, List<DBNotifyHistorary> list){
+    public NotifyListAdapter(Context context, List<DBNotifyHistory> list){
         this.context = context;
         this.list = list;
     }
@@ -29,7 +29,7 @@ public class NotifyListAdapter extends BaseAdapter {
     /**
      * 设置列表为选择状态
      */
-    public void setCheckState(List<DBNotifyHistorary> list) {
+    public void setCheckState(List<DBNotifyHistory> list) {
         this.list = list;
         for(int i=0; i<list.size(); i++) {
             list.get(i).setState(0);
@@ -40,7 +40,7 @@ public class NotifyListAdapter extends BaseAdapter {
     /**
      * 设置列表为非选择状态
      */
-    public boolean setNoCheckState(List<DBNotifyHistorary> list) {
+    public boolean setNoCheckState(List<DBNotifyHistory> list) {
         this.list = list;
         if(list.size() == 0) {
             notifyDataSetChanged();
@@ -57,7 +57,7 @@ public class NotifyListAdapter extends BaseAdapter {
      * 检查列表中选中的数量
      * @return 选中的数量 count
      */
-    public int checkChooseNumber(List<DBNotifyHistorary> list) {
+    public int checkChooseNumber(List<DBNotifyHistory> list) {
         this.list = list;
         int count = 0;
         for(int i=0; i<list.size(); i++) {
@@ -71,7 +71,7 @@ public class NotifyListAdapter extends BaseAdapter {
     /**
      * 设置列表为点击 position 为选中或未选中状态
      */
-    public void setCheckChooseState(List<DBNotifyHistorary> list, int p) {
+    public void setCheckChooseState(List<DBNotifyHistory> list, int p) {
         this.list = list;
         if(list.get(p).getState() == 0) {
             list.get(p).setState(1);
@@ -110,7 +110,7 @@ public class NotifyListAdapter extends BaseAdapter {
         } else {
             viewHolder = (ViewHolder) convertView.getTag();
         }
-        DBNotifyHistorary notifyNewData = list.get(position);
+        DBNotifyHistory notifyNewData = list.get(position);
         viewHolder.textTitle.setText(notifyNewData.getTitle());
         viewHolder.textContent.setText(notifyNewData.getContent());
         viewHolder.textTime.setText(notifyNewData.getAddTime());

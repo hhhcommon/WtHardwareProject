@@ -9,9 +9,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.shenstec.utils.image.ImageLoader;
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
-
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.util.BitmapUtils;
@@ -21,7 +20,6 @@ import java.util.List;
 public class GroupTalkAdapter extends BaseAdapter {
     private List<UserInfo> list;
     private Context context;
-    private ImageLoader imageLoader;
     private UserInfo lists;
     private String url;
 
@@ -29,7 +27,6 @@ public class GroupTalkAdapter extends BaseAdapter {
         super();
         this.list = list;
         this.context = context;
-        imageLoader = new ImageLoader(context);
     }
 
     public void ChangeData(List<UserInfo> list) {
@@ -54,7 +51,7 @@ public class GroupTalkAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder = null;
+        ViewHolder holder ;
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_grouptalk, null);
@@ -78,14 +75,15 @@ public class GroupTalkAdapter extends BaseAdapter {
                 }
             }
             if (lists.getPortraitBig() == null || lists.getPortraitBig().equals("") || lists.getPortraitBig().equals("null") || lists.getPortraitBig().trim().equals("")) {
-                holder.imageView_touxiang.setImageResource(R.mipmap.wt_image_tx_hy);
+                Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_hy);
+                holder.imageView_touxiang.setImageBitmap(bmp);
             } else {
                 if (lists.getPortraitMini().startsWith("http:")) {
                     url = lists.getPortraitMini();
                 } else {
                     url = GlobalConfig.imageurl + lists.getPortraitMini();
                 }
-                imageLoader.DisplayImage(url.replace("\\/", "/"), holder.imageView_touxiang, false, false, null);
+                Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageView_touxiang);
             }
         } else if (lists.getType() == 2) {
             holder.tv_name.setText("添加");
@@ -102,7 +100,6 @@ public class GroupTalkAdapter extends BaseAdapter {
     }
 
     class ViewHolder {
-        public ImageView imageView;
         public ImageView imageView_touxiang;
         public TextView tv_name;
         public ImageView headFrame;

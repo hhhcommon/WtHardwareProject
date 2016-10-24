@@ -1,8 +1,5 @@
 package com.wotingfm.manager;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import android.content.Context;
 
 import com.wotingfm.activity.im.common.message.Message;
@@ -11,10 +8,12 @@ import com.wotingfm.activity.im.common.message.MsgNormal;
 import com.wotingfm.activity.im.common.message.content.MapContent;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.service.SocketService;
-import com.wotingfm.service.SubclassService;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.SequenceUUID;
+
+import java.util.HashMap;
+import java.util.Map;
 /**
  * 对讲机数据组装
  * @author 辛龙
@@ -52,7 +51,7 @@ public class InterPhoneControlManager {
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
-		if(CommonUtils.getUserId(context)!=null) msg.setUserId(CommonUtils.getUserId(context));
+		if(CommonUtils.getSocketUserId(context)!=null) msg.setUserId(CommonUtils.getSocketUserId(context));
 		msg.setIMEI(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("GroupId", groupid);
@@ -90,7 +89,7 @@ public class InterPhoneControlManager {
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
-		if(CommonUtils.getUserId(context)!=null) msg.setUserId(CommonUtils.getUserId(context));
+		if(CommonUtils.getSocketUserId(context)!=null) msg.setUserId(CommonUtils.getSocketUserId(context));
 		msg.setIMEI(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("GroupId", groupid);
@@ -128,7 +127,7 @@ public class InterPhoneControlManager {
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
-		if(CommonUtils.getUserId(context)!=null) msg.setUserId(CommonUtils.getUserId(context));
+		if(CommonUtils.getSocketUserId(context)!=null) msg.setUserId(CommonUtils.getSocketUserId(context));
 		msg.setIMEI(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("GroupId", groupid);
@@ -166,7 +165,7 @@ public class InterPhoneControlManager {
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
-		if(CommonUtils.getUserId(context)!=null) msg.setUserId(CommonUtils.getUserId(context));
+		if(CommonUtils.getSocketUserId(context)!=null) msg.setUserId(CommonUtils.getSocketUserId(context));
 		msg.setIMEI(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("GroupId", groupid);
@@ -206,7 +205,7 @@ public class InterPhoneControlManager {
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
-		if(CommonUtils.getUserId(context)!=null) msg.setUserId(CommonUtils.getUserId(context));
+		if(CommonUtils.getSocketUserId(context)!=null) msg.setUserId(CommonUtils.getSocketUserId(context));
 		msg.setIMEI(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("CallederId", id);
@@ -246,7 +245,7 @@ public class InterPhoneControlManager {
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
-		if(CommonUtils.getUserId(context)!=null) msg.setUserId(CommonUtils.getUserId(context));
+		if(CommonUtils.getSocketUserId(context)!=null) msg.setUserId(CommonUtils.getSocketUserId(context));
 		msg.setIMEI(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("CallerId", callerId);
@@ -261,7 +260,7 @@ public class InterPhoneControlManager {
 		//		map.put("MsgType", "-1");
 		//		map.put("BizType", "CALL_CTL");
 		//		map.put("IMEI", PhoneMessage.imei);
-		//		map.put("UserId", Utils.getUserId(context));
+		//		map.put("UserId", Utils.getSocketUserId(context));
 		//		map.put("CmdType", "CALL");
 		//		map.put("SendTime",  System.currentTimeMillis());
 		//		map.put("Command", "-b1");
@@ -302,7 +301,7 @@ public class InterPhoneControlManager {
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
-		if(CommonUtils.getUserId(context)!=null) msg.setUserId(CommonUtils.getUserId(context));
+		if(CommonUtils.getSocketUserId(context)!=null) msg.setUserId(CommonUtils.getSocketUserId(context));
 		msg.setIMEI(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("CallId", bdcallid);
@@ -339,7 +338,7 @@ public class InterPhoneControlManager {
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
-		if(CommonUtils.getUserId(context)!=null) msg.setUserId(CommonUtils.getUserId(context));
+		if(CommonUtils.getSocketUserId(context)!=null) msg.setUserId(CommonUtils.getSocketUserId(context));
 		msg.setIMEI(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("CallId", bdcallid);
@@ -376,7 +375,7 @@ public class InterPhoneControlManager {
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
-		if(CommonUtils.getUserId(context)!=null) msg.setUserId(CommonUtils.getUserId(context));
+		if(CommonUtils.getSocketUserId(context)!=null) msg.setUserId(CommonUtils.getSocketUserId(context));
 		msg.setIMEI(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("CallerId", callerId);
@@ -413,7 +412,7 @@ public class InterPhoneControlManager {
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
-		if(CommonUtils.getUserId(context)!=null) msg.setUserId(CommonUtils.getUserId(context));
+		if(CommonUtils.getSocketUserId(context)!=null) msg.setUserId(CommonUtils.getSocketUserId(context));
 		msg.setIMEI(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("CallerId", callerId);
@@ -449,7 +448,7 @@ public class InterPhoneControlManager {
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
-		if(CommonUtils.getUserId(context)!=null) msg.setUserId(CommonUtils.getUserId(context));
+		if(CommonUtils.getSocketUserId(context)!=null) msg.setUserId(CommonUtils.getSocketUserId(context));
 		msg.setIMEI(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("CallerId", callerId);
@@ -485,7 +484,7 @@ public class InterPhoneControlManager {
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
-		if(CommonUtils.getUserId(context)!=null) msg.setUserId(CommonUtils.getUserId(context));
+		if(CommonUtils.getSocketUserId(context)!=null) msg.setUserId(CommonUtils.getSocketUserId(context));
 		msg.setIMEI(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("CallId", callid);
@@ -520,7 +519,7 @@ public class InterPhoneControlManager {
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
-		if(CommonUtils.getUserId(context)!=null) msg.setUserId(CommonUtils.getUserId(context));
+		if(CommonUtils.getSocketUserId(context)!=null) msg.setUserId(CommonUtils.getSocketUserId(context));
 		msg.setIMEI(PhoneMessage.imei);
 		pullToSocket(msg);
 	}

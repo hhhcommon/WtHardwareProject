@@ -1,4 +1,4 @@
-package com.wotingfm.activity.mine.update.activity;
+package com.wotingfm.activity.mine.update;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -9,15 +9,15 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
-import com.wotingfm.activity.person.modifypassword.activity.ModifyPasswordActivity;
+import com.wotingfm.activity.person.modifypassword.ModifyPasswordActivity;
 import com.wotingfm.activity.person.modifyphonenumber.ModifyPhoneNumberActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 
 /**
  * 修改个人信息(还未完成，后台接口暂时没有)
- * @author 辛龙
- *         2016年7月19日
+ * 作者：xinlong on 2016/3/9
+ * 邮箱：645700751@qq.com
  */
 public class UpdatePersonActivity extends AppBaseActivity implements OnClickListener {
     private Dialog imageDialog;

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Bitmap;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
@@ -14,7 +15,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.shenstec.utils.image.ImageLoader;
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.BaseActivity;
 import com.wotingfm.activity.im.common.message.MessageUtils;
@@ -28,6 +29,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.manager.MyActivityManager;
+import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
 
 import java.util.Arrays;
@@ -44,28 +46,26 @@ public class CallAlertActivity extends BaseActivity implements OnClickListener{
 	private MessageReceiver Receiver;
 	private String image;
 	private String name;
-	private ImageLoader imageLoader;
 	private ImageView imageview;
-	private boolean iscall;
-	private SearchTalkHistoryDao dbdao;
+	private boolean isCall;
+	private SearchTalkHistoryDao dbDao;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.dialog_calling);
 		instance = this;
-		imageLoader = new ImageLoader(instance);
-		Intent intent = getIntent();
-		if(intent != null){
-			id = intent.getStringExtra("id");
-		}
-		for(int i=0; i<GlobalConfig.list_person.size(); i++){
-			if(id.equals(GlobalConfig.list_person.get(i).getUserId())){
-				image = GlobalConfig.list_person.get(i).getPortraitBig();
-				name = GlobalConfig.list_person.get(i).getUserName();
-				break;
+		String id = getIntent().getStringExtra("id");
+		if(id != null){
+			for(int i=0; i<GlobalConfig.list_person.size(); i++){
+				if(id.equals(GlobalConfig.list_person.get(i).getUserId())){
+					image = GlobalConfig.list_person.get(i).getPortraitBig();
+					name = GlobalConfig.list_person.get(i).getUserName();
+					break;
+				}
 			}
 		}
+
 		if(Receiver == null) {
 			Receiver = new MessageReceiver();
 			IntentFilter filter = new IntentFilter();
@@ -79,14 +79,15 @@ public class CallAlertActivity extends BaseActivity implements OnClickListener{
 		lin_guaduan = (LinearLayout) findViewById(R.id.lin_guaduan);	
 		tv_name.setText(name);
 		if(image == null || image.equals("") || image.equals("null") || image.trim().equals("")){
-			imageview.setImageResource(R.mipmap.wt_image_tx_hy);
+			Bitmap bmp = BitmapUtils.readBitMap(instance, R.mipmap.wt_image_tx_hy);
+			imageview.setImageBitmap(bmp);
 		}else{
 			String url = GlobalConfig.imageurl+image;
-			imageLoader.DisplayImage(url.replace( "\\/", "/"), imageview, false, false,null);
+			Picasso.with(instance).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(imageview);
 		}
 		lin_call.setOnClickListener(this);
 		lin_guaduan.setOnClickListener(this);
-		iscall = true;
+		isCall = true;
 		InterPhoneControlHelper.PersonTalkPress(instance, id);//拨号
 		musicPlayer = MediaPlayer.create(instance, R.raw.ringback);  
 		musicPlayer.start();  
@@ -106,7 +107,7 @@ public class CallAlertActivity extends BaseActivity implements OnClickListener{
 
 
 	private void initDao() {
-		dbdao = new SearchTalkHistoryDao(instance);
+		dbDao = new SearchTalkHistoryDao(instance);
 	}
 
 	@Override
@@ -116,7 +117,7 @@ public class CallAlertActivity extends BaseActivity implements OnClickListener{
 			tv_news.setText("呼叫中..");
 			lin_call.setVisibility(View.GONE);
 			lin_guaduan.setVisibility(View.VISIBLE);
-			iscall = true;
+			isCall = true;
 			InterPhoneControlHelper.PersonTalkPress(instance, id);		//拨号
 			musicPlayer = MediaPlayer.create(instance, R.raw.ringback);  
 			musicPlayer.start();  
@@ -135,7 +136,7 @@ public class CallAlertActivity extends BaseActivity implements OnClickListener{
 			tv_news.setText("重新呼叫");
 			lin_call.setVisibility(View.VISIBLE);
 			lin_guaduan.setVisibility(View.GONE);
-			iscall=false;
+			isCall=false;
 			InterPhoneControlHelper.PersonTalkHangUp(instance, InterPhoneControlHelper.bdcallid);
 			if(musicPlayer!=null){
 				musicPlayer.stop();
@@ -145,14 +146,14 @@ public class CallAlertActivity extends BaseActivity implements OnClickListener{
 		}
 	}
 
-	public void adduser() {
-		String addtime = Long.toString(System.currentTimeMillis());	//获取最新激活状态的数据
-		String bjuserid =CommonUtils.getUserId(instance);
-		dbdao.deleteHistory(id);									//如果该数据已经存在数据库则删除原有数据，然后添加最新数据
-		DBTalkHistorary history = new DBTalkHistorary( bjuserid,  "user",  id, addtime);
-		dbdao.addTalkHistory(history);
-		DBTalkHistorary talkdb = dbdao.queryHistory().get(0);		//得到数据库里边数据
-		ChatFragment.zhiDingPerson(talkdb);
+	public void addUser() {
+		String addTime = Long.toString(System.currentTimeMillis());	//获取最新激活状态的数据
+		String bjUserId =CommonUtils.getUserId(instance);
+		dbDao.deleteHistory(id);									//如果该数据已经存在数据库则删除原有数据，然后添加最新数据
+		DBTalkHistorary history = new DBTalkHistorary( bjUserId,  "user",  id, addTime);
+		dbDao.addTalkHistory(history);
+		DBTalkHistorary talkDB = dbDao.queryHistory().get(0);		//得到数据库里边数据
+		ChatFragment.zhiDingPerson(talkDB);
 		DuiJiangActivity.update();									//对讲主页界面更新
 		MyActivityManager mam = MyActivityManager.getInstance();
 		mam.finishAllActivity();
@@ -292,7 +293,7 @@ public class CallAlertActivity extends BaseActivity implements OnClickListener{
 										musicPlayer.stop();
 										musicPlayer=null;
 									}
-									adduser();
+									addUser();
 								}else if(ACKType!=null&&!ACKType.equals("")&&ACKType.equals("2")){
 									//拒绝通话，挂断电话
 									if(musicPlayer!=null){
@@ -345,7 +346,7 @@ public class CallAlertActivity extends BaseActivity implements OnClickListener{
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
 		if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
-			if (iscall) {
+			if (isCall) {
 				InterPhoneControlHelper.PersonTalkHangUp(instance, InterPhoneControlHelper.bdcallid);
 				finish();
 			} else {
@@ -375,10 +376,9 @@ public class CallAlertActivity extends BaseActivity implements OnClickListener{
 		id = null;
 		image = null;
 		name = null;
-		imageLoader = null;
 		imageview = null;
-		if(dbdao != null){
-			dbdao = null;
+		if(dbDao != null){
+			dbDao = null;
 		}
 		setContentView(R.layout.activity_null);
 	}

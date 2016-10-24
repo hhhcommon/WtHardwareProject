@@ -15,8 +15,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.ImageLoader;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
@@ -30,7 +32,6 @@ import com.wotingfm.activity.music.program.radiolist.rollviewpager.hintview.Icon
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.helper.ImageLoader;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
@@ -60,7 +61,7 @@ public class ClassifyFragment extends Fragment{
 
     private int page = 1;					// 页码
     private int pageSizeNumber;
-	private int refreshType = 1;			// refreshtype 1为下拉加载 2为上拉加载更多
+	private int refreshType = 1;			// refreshType 1为下拉加载 2为上拉加载更多
 	private String catalogId;
 	private String catalogType;
 
@@ -93,7 +94,6 @@ public class ClassifyFragment extends Fragment{
             View headView = LayoutInflater.from(context).inflate(R.layout.headview_acitivity_radiolist, null);
 			// 轮播图
             RollPagerView mLoopViewPager= (RollPagerView) headView.findViewById(R.id.slideshowView);
-//	        mLoopViewPager.setPlayDelay(5000);
 			mLoopViewPager.setAdapter(new LoopAdapter(mLoopViewPager));
 			mLoopViewPager.setHintView(new IconHintView(context,R.mipmap.indicators_now,R.mipmap.indicators_default));
             mListView = (XListView) rootView.findViewById(R.id.listview_fm);
@@ -323,7 +323,7 @@ public class ClassifyFragment extends Fragment{
             ImageView view = new ImageView(container.getContext());
             view.setScaleType(ImageView.ScaleType.FIT_XY);
             view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            new ImageLoader(context).DisplayImage(imgs[position%count],view, false, false, null, null);
+			Picasso.with(context).load(imgs[position%count]).resize(100, 100).centerCrop().into(view);
             return view;
         }
 

@@ -1,4 +1,4 @@
-package com.wotingfm.activity.person.register.activity;
+package com.wotingfm.activity.person.register;
 
 import android.app.Dialog;
 import android.content.Intent;

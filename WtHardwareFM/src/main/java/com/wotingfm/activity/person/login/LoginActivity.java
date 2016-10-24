@@ -1,4 +1,4 @@
-package com.wotingfm.activity.person.login.activity;
+package com.wotingfm.activity.person.login;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -10,8 +10,8 @@ import android.widget.EditText;
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
-import com.wotingfm.activity.person.forgetpassword.activity.ForgetPasswordActivity;
-import com.wotingfm.activity.person.register.activity.RegisterActivity;
+import com.wotingfm.activity.person.forgetpassword.ForgetPasswordActivity;
+import com.wotingfm.activity.person.register.RegisterActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstant;
