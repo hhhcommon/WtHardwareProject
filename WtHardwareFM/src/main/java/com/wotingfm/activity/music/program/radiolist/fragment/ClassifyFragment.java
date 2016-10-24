@@ -15,7 +15,6 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
-import com.android.volley.toolbox.ImageLoader;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
@@ -148,37 +147,39 @@ public class ClassifyFragment extends Fragment{
 				if (returnType != null && returnType.equals("1001")) {
 					try {
 						JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
-						String pageSizeString = arg1.getString("PageSize");
-						String allCountString = arg1.getString("AllCount");
-						if(Integer.valueOf(pageSizeString) < 10){
-                            mListView.stopLoadMore();
-                            mListView.setPullLoadEnable(false);
-						}else{
-                            mListView.setPullLoadEnable(true);
-						}
-						if (allCountString != null && !allCountString.equals("") && pageSizeString != null && !pageSizeString.equals("")) {
-							int allCount = Integer.valueOf(allCountString);
-							int pageSize = Integer.valueOf(pageSizeString);
-							// 先求余 如果等于0 最后结果不加1 如果不等于0 结果加一
-							if (allCount % pageSize == 0) {
-                                pageSizeNumber = allCount / pageSize;
-							} else {
-                                pageSizeNumber = allCount / pageSize + 1;
-							}
-						} else {
-							ToastUtils.show_always(context, "页码获取异常");
-						}
+                        try {
+                            String pageSizeString = arg1.getString("PageSize");
+                            String allCountString = arg1.getString("AllCount");
+                            if (allCountString != null && !allCountString.equals("") && pageSizeString != null && !pageSizeString.equals("")) {
+                                int allCount = Integer.valueOf(allCountString);
+                                int pageSize = Integer.valueOf(pageSizeString);
+                                if(Integer.valueOf(pageSizeString) < 10){
+                                    mListView.stopLoadMore();
+                                    mListView.setPullLoadEnable(false);
+                                }else{
+                                    mListView.setPullLoadEnable(true);
+                                    if (allCount % pageSize == 0) {
+                                        pageSizeNumber = allCount / pageSize;
+                                    } else {
+                                        pageSizeNumber = allCount / pageSize + 1;
+                                    }
+                                }
+                            } else {
+                                ToastUtils.show_always(context, "页码获取异常");
+                            }
+                        } catch(JSONException e) {
+                            e.printStackTrace();
+                        }
                         List<ListInfo> subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<ListInfo>>() {}.getType());
 						if (refreshType == 1) {
-                            mListView.stopRefresh();
                             newList.clear();
-                            newList.addAll(subList);
-                            mListView.setAdapter(adapter = new ListInfoAdapter(context, newList));
-						} else if (refreshType == 2) {
-                            mListView.stopLoadMore();
-                            newList.addAll(subList);
-							adapter.notifyDataSetChanged();
 						}
+                        newList.addAll(subList);
+                        if(adapter == null) {
+                            mListView.setAdapter(adapter = new ListInfoAdapter(context, newList));
+                        } else {
+                            adapter.notifyDataSetChanged();
+                        }
                         setOnItem();
 					} catch (JSONException e) {
 						e.printStackTrace();
@@ -186,6 +187,12 @@ public class ClassifyFragment extends Fragment{
 				} else {
 					ToastUtils.show_always(context, "暂没有该分类数据");
 				}
+
+                if(refreshType == 1) {
+                    mListView.stopRefresh();
+                } else {
+                    mListView.stopLoadMore();
+                }
 			}
 
 			@Override
