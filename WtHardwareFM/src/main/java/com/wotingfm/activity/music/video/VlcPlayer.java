@@ -107,9 +107,9 @@ public class VlcPlayer implements WtAudioPlay {
 				return;
 			switch (msg.getData().getInt("event")) {
 			case EventHandler.MediaPlayerEncounteredError:
-				Log.e("url", "playerror+Url");
-			    PlayerFragment.playNext();
-				break;
+				 Log.e("url", "playerror:"+Url);
+			     PlayerFragment.playNext();
+				 break;
 			case EventHandler.MediaPlayerOpening:
 				Log.e("url", "MediaPlayerOpenning()"+Url);
 				break;
@@ -140,9 +140,9 @@ public class VlcPlayer implements WtAudioPlay {
 		}
 		Url=null;
 	}
+
 	@Override
 	public String mark() {
-
 		return "VLC";
 	}
 }
