@@ -35,6 +35,7 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.xlistview.XListView;
 import com.wotingfm.widget.xlistview.XListView.IXListViewListener;
@@ -51,17 +52,24 @@ import java.util.List;
  * @author woting11
  */
 public class RecommendFragment extends Fragment{
-	private View rootView;
 	private Context context;
+    private SearchPlayerHistoryDao dbDao;	// 数据库
+    protected RadioListAdapter adapter;
+
 	private XListView mListView;			// 列表
 	private Dialog dialog;					// 加载对话框
-	private int page = 1;					// 页码
+    private View rootView;
+
 	private ArrayList<RankInfo> newList = new ArrayList<>();
+
+    private int page = 1;					// 页码
 	private int pageSizeNumber;
-	private SearchPlayerHistoryDao dbDao;	// 数据库
-//	protected List<RankInfo> subList;
-	protected RadioListAdapter adapter;
-	private int refreshType;				// refreshType 1为下拉加载 2为上拉加载更多
+    private int refreshType;				// refreshType 1为下拉加载 2为上拉加载更多
+
+    // 初始化数据库命令执行对象
+    private void initDao() {
+        dbDao = new SearchPlayerHistoryDao(context);
+    }
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -78,7 +86,6 @@ public class RecommendFragment extends Fragment{
             View headView = LayoutInflater.from(context).inflate(R.layout.headview_acitivity_radiolist, null);
 			// 轮播图
             RollPagerView mLoopViewPager= (RollPagerView) headView.findViewById(R.id.slideshowView);
-			// mLoopViewPager.setPlayDelay(1000);
 			mLoopViewPager.setAdapter(new LoopAdapter(mLoopViewPager));
 			mLoopViewPager.setHintView(new IconHintView(context,R.mipmap.indicators_now,R.mipmap.indicators_default));
             mListView = (XListView) rootView.findViewById(R.id.listview_fm);
@@ -96,15 +103,11 @@ public class RecommendFragment extends Fragment{
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		if(isVisibleToUser && adapter == null && getActivity() != null){
-			if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-				if(!isFirst){
-					dialog = DialogUtils.Dialogph(context, "正在获取数据");
-				}
-				sendRequest();
-				isFirst = false;
-			} else {
-				ToastUtils.show_short(context, "网络连接失败，请稍后重试");
-			}
+            if(!isFirst){
+                dialog = DialogUtils.Dialogph(context, "正在获取数据");
+            }
+            sendRequest();
+            isFirst = false;
 		}
 		super.setUserVisibleHint(isVisibleToUser);
 	}
@@ -119,9 +122,11 @@ public class RecommendFragment extends Fragment{
 	 * 请求网络数据
 	 */
 	public void sendRequest(){
+        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            ToastUtils.show_always(context, "网络连接失败，请检查网络设置!");
+            return ;
+        }
 		VolleyRequest.RequestPost(GlobalConfig.getContentUrl, setParam(), new VolleyCallback() {
-			private String resultList;
-			private String stringSubList;
 			private String returnType;
 
 			@Override
@@ -133,55 +138,57 @@ public class RecommendFragment extends Fragment{
 				page++;
 				try {
                     returnType = result.getString("ReturnType");
+                    L.w("returnType -- > > " + returnType);
+
+                    if (returnType != null && returnType.equals("1001")) {
+                        JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
+                        try {
+                            String pageSizeString = arg1.getString("PageSize");
+                            String allCountString = arg1.getString("AllCount");
+                            if (allCountString != null && !allCountString.equals("") && pageSizeString != null && !pageSizeString.equals("")) {
+                                int allCount = Integer.valueOf(allCountString);
+                                int pageSize = Integer.valueOf(pageSizeString);
+                                if(pageSize < 10 || allCount < 10){
+                                    mListView.stopLoadMore();
+                                    mListView.setPullLoadEnable(false);
+                                }else{
+                                    mListView.setPullLoadEnable(true);
+                                    if (allCount % pageSize == 0) {
+                                        pageSizeNumber = allCount / pageSize;
+                                    } else {
+                                        pageSizeNumber = allCount / pageSize + 1;
+                                    }
+                                }
+                            } else {
+                                ToastUtils.show_always(context, "页码获取异常");
+                            }
+                        } catch(JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        List<RankInfo> subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
+                        if (refreshType == 1) {
+                            newList.clear();
+                        }
+                        newList.addAll(subList);
+                        if(adapter == null) {
+                            mListView.setAdapter(adapter = new RadioListAdapter(context, newList));
+                        } else {
+                            adapter.notifyDataSetChanged();
+                        }
+                        setOnItem();
+                    } else {
+                        ToastUtils.show_always(context, "暂没有该分类数据");
+                    }
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				if (returnType != null && returnType.equals("1001")) {
-					try {
-						// 获取列表
-                        resultList = result.getString("ResultList");
-						JSONTokener jsonParser = new JSONTokener(resultList);
-						JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                        stringSubList = arg1.getString("List");
-						String pageSizeString = arg1.getString("PageSize");
-						String allCountString = arg1.getString("AllCount");
-						if(Integer.valueOf(pageSizeString) < 10){
-                            mListView.stopLoadMore();
-                            mListView.setPullLoadEnable(false);
-						}else{
-                            mListView.setPullLoadEnable(true);
-						}
-						if (allCountString != null && !allCountString.equals("") && pageSizeString != null && !pageSizeString.equals("")) {
-							int allCount = Integer.valueOf(allCountString);
-							int pageSize = Integer.valueOf(pageSizeString);
-							// 先求余 如果等于0 最后结果不加1 如果不等于0 结果加一
-							if (allCount % pageSize == 0) {
-                                pageSizeNumber = allCount / pageSize;
-							} else {
-                                pageSizeNumber = allCount / pageSize + 1;
-							}
-						} else {
-							ToastUtils.show_always(context, "页码获取异常");
-						}
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-                    List<RankInfo> subList = new Gson().fromJson(stringSubList, new TypeToken<List<RankInfo>>() {}.getType());
-					if (refreshType == 1) {
-                        mListView.stopRefresh();
-                        newList.clear();
-                        newList.addAll(subList);
-						adapter = new RadioListAdapter(context, newList);
-                        mListView.setAdapter(adapter);
-					} else if (refreshType == 2) {
-                        mListView.stopLoadMore();
-                        newList.addAll(subList);
-						adapter.notifyDataSetChanged();
-					}
-                    setOnItem();
-				} else {
-					ToastUtils.show_always(context, "暂没有该分类数据");
-				}				
+
+                if(refreshType == 1) {
+                    mListView.stopRefresh();
+                } else {
+                    mListView.stopLoadMore();
+                }
 			}
 
 			@Override
@@ -190,6 +197,7 @@ public class RecommendFragment extends Fragment{
 					dialog.dismiss();
 				}
 				((RadioListActivity)getActivity()).closeDialog();
+                ToastUtils.showVolleyError(context);
 			}
 		});
 	}
@@ -215,7 +223,7 @@ public class RecommendFragment extends Fragment{
         mListView.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-				if(newList != null &&position>=2){
+				if(newList != null && position >= 2){
 					if( newList.get(position - 2) != null && newList.get(position - 2).getMediaType() != null){
 						String MediaType = newList.get(position - 2).getMediaType();
 						if (MediaType.equals("RADIO") || MediaType.equals("AUDIO")) {
@@ -279,39 +287,23 @@ public class RecommendFragment extends Fragment{
         mListView.setXListViewListener(new IXListViewListener() {
 			@Override
 			public void onRefresh() {
-				if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    refreshType = 1;
-					page = 1;
-					sendRequest();
-				} else {
-					ToastUtils.show_short(context, "网络失败，请检查网络");
-				}
+                refreshType = 1;
+                page = 1;
+                sendRequest();
 			}
 
 			@Override
 			public void onLoadMore() {
 				if (page <= pageSizeNumber) {
-					if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                        refreshType = 2;
-						sendRequest();
-						ToastUtils.show_short(context, "正在请求" + page + "页信息");
-					} else {
-						ToastUtils.show_short(context, "网络失败，请检查网络");
-					}
+                    refreshType = 2;
+                    sendRequest();
 				} else {
                     mListView.stopLoadMore();
                     mListView.setPullLoadEnable(false);
-					ToastUtils.show_short(context, "已经没有最新的数据了");
+					ToastUtils.show_always(context, "已经没有最新的数据了");
 				}
 			}
 		});
-	}
-
-	/**
-	 * 初始化数据库命令执行对象
-	 */
-	private void initDao() {
-        dbDao = new SearchPlayerHistoryDao(context);
 	}
 
 	@Override

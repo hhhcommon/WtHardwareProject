@@ -136,7 +136,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                 isConcern = !isConcern;
                 break;
             case R.id.lin_share:
-                AlbumActivity.Sharedialog.show();
+                AlbumActivity.shareDialog.show();
                 break;
         }
     }
@@ -254,10 +254,8 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                                 // 此处后期需要用typetoken将字符串StringSubList 转化成为一个list集合
                                 StringSubList = arg1.getString("SubList");
                                 Gson gson = new Gson();
-                                SubList = gson.fromJson(StringSubList, new TypeToken<List<ContentInfo>>() {
-                                }.getType());
-                                ContentInfo contentInfo = gson.fromJson(ResultList, new TypeToken<ContentInfo>() {
-                                }.getType());
+                                SubList = gson.fromJson(StringSubList, new TypeToken<List<ContentInfo>>(){}.getType());
+                                ContentInfo contentInfo = gson.fromJson(ResultList, new TypeToken<ContentInfo>(){}.getType());
                                 contentCatalogsList = contentInfo.getContentCatalogs();
                                 contentDesc = arg1.getString("ContentDesc");
                                 ContentImg = arg1.getString("ContentImg");
@@ -267,7 +265,6 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                             } catch (Exception e) {
                                 e.printStackTrace();
                             }
-                            //	AlbumActivity.returnresult = 1;
                             if (SubList != null && SubList.size() > 0) {
                                 if (ContentFavorite != null && !ContentFavorite.equals("")) {
                                     if (ContentFavorite.equals("0")) {
@@ -278,13 +275,12 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                                         imgFavorite.setImageDrawable(context.getResources().getDrawable(R.mipmap.wt_img_liked));
                                     }
                                 }
-                                if (AlbumActivity.ContentName != null && !AlbumActivity.ContentName.equals("")) {
-                                    //作者 这地方可能要改
-                                    textAnchor.setText(AlbumActivity.ContentName);
+                                if ( ContentName != null && ! ContentName.equals("")) {
+                                    textAnchor.setText(ContentName);
                                 } else {
                                     textAnchor.setText("我听我享听");
                                 }
-                                if (AlbumActivity.ContentImg == null || AlbumActivity.ContentImg.equals("")) {
+                                if (ContentImg == null || ContentImg.equals("")) {
                                     Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
                                     img_album.setImageBitmap(bmp);
                                 } else {
@@ -292,7 +288,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                                     if (ContentImg.startsWith("http")) {
                                         url = ContentImg;
                                     } else {
-                                        url = GlobalConfig.imageurl + AlbumActivity.ContentImg;
+                                        url = GlobalConfig.imageurl + ContentImg;
                                     }
                                     Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(img_album);
                                 }
@@ -342,7 +338,6 @@ public class DetailsFragment extends Fragment implements OnClickListener {
         });
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -368,4 +363,5 @@ public class DetailsFragment extends Fragment implements OnClickListener {
         contentDesc = null;
         textConcern = null;
     }
+
 }

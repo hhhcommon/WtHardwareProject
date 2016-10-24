@@ -170,18 +170,7 @@ public class ProgramFragment extends Fragment implements OnClickListener {
 								playermediatype, plaplayeralltime, playerintime, playercontentdesc, playernum,
 								playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid,
 								playcontentshareurl, ContentFavorite, contentid,localurl,sequName,sequId,sequDesc,sequImg);
-						/*if(sequId!=null){
-                           history.setSequId(sequId);
-						}
-						if(sequName!=null){
-							history.setSequName(sequName);
-						}
-						if(sequDesc!=null){
-                            history.setSequName(sequDesc);
-						}
-						if(sequImg!=null){
-                            history.setSequImg(sequImg);
-						}*/
+
 						dbdao.deleteHistory(playerurl);
 						dbdao.addHistory(history);
 						if(PlayerFragment.context!=null){
@@ -355,7 +344,6 @@ public class ProgramFragment extends Fragment implements OnClickListener {
 			for (int i = 0; i < flist.size(); i++) {
 				if (flist.get(i).getSequimgurl() != null
 						&& flist.get(i).getSequimgurl().equals(AlbumActivity.ContentImg)) {
-
 					seqlist.add(flist.get(i));
 				}
 			}

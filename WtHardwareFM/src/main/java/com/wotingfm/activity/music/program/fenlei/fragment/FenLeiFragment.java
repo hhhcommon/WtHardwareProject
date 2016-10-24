@@ -20,8 +20,8 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.program.fenlei.adapter.FLeiGridAdapter;
-import com.wotingfm.activity.music.program.fenlei.model.fenLei;
-import com.wotingfm.activity.music.program.fenlei.model.fenLeiName;
+import com.wotingfm.activity.music.program.fenlei.model.FenLei;
+import com.wotingfm.activity.music.program.fenlei.model.FenLeiName;
 import com.wotingfm.activity.music.program.radiolist.activity.RadioListActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -47,7 +47,7 @@ public class FenLeiFragment extends Fragment implements View.OnClickListener{
     private View rootView;
     private GridView gridFenLei;
 
-    protected List<fenLeiName> subList;
+    protected List<FenLeiName> subList;
 
     private String tag = "FENLEI_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
@@ -125,7 +125,7 @@ public class FenLeiFragment extends Fragment implements View.OnClickListener{
                 // 根据返回值来对程序进行解析
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
-                        fenLei subListAll = new Gson().fromJson(result.getString("CatalogData"), new TypeToken<fenLei>() {}.getType());
+                        FenLei subListAll = new Gson().fromJson(result.getString("CatalogData"), new TypeToken<FenLei>() {}.getType());
                         subList = subListAll.getSubCata();
                         if (subList != null && subList.size() != 0) {
                             if (adapter == null) {

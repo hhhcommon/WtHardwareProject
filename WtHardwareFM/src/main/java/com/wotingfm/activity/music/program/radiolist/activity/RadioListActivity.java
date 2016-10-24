@@ -3,6 +3,8 @@ package com.wotingfm.activity.music.program.radiolist.activity;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -17,7 +19,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.activity.music.program.fenlei.model.fenLeiName;
+import com.wotingfm.activity.music.program.fenlei.model.FenLeiName;
 import com.wotingfm.activity.music.program.radiolist.adapter.MyPagerAdapter;
 import com.wotingfm.activity.music.program.radiolist.fragment.ClassifyFragment;
 import com.wotingfm.activity.music.program.radiolist.fragment.RecommendFragment;
@@ -64,7 +66,7 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		// 透明状态栏
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	// 透明导航栏
         setView();
-		HandleRequestType();
+        handleRequestType();
 
         list.add("推荐");
         fragments.add(new RecommendFragment());
@@ -74,10 +76,10 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 	}
 
 	// 接收上一个页面传递过来的数据
-	private void HandleRequestType() {
+	private void handleRequestType() {
 		Intent listIntent = getIntent();
 		if (listIntent != null) {
-			fenLeiName list = (fenLeiName) listIntent.getSerializableExtra("Catalog");
+			FenLeiName list = (FenLeiName) listIntent.getSerializableExtra("Catalog");
             String categoryName = list.getCatalogName();
             categoryType = list.getCatalogType();
 			id = list.getCatalogId();
@@ -153,6 +155,15 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 		return jsonObject;
 	}
 
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.head_left_btn:
+                finish();
+                break;
+        }
+    }
+
 	/**
 	 * 关闭加载对话框
 	 */
@@ -187,14 +198,15 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 		pageSlidingTab.setTextColorResource(R.color.wt_login_third);		// 默认字体颜色
 	}
 
-	@Override
-	public void onClick(View v) {
-		switch (v.getId()) {
-		case R.id.head_left_btn:
-			finish();
-			break;
-		}
-	}
+    // 设置android app 的字体大小不受系统字体大小改变的影响
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        return res;
+    }
 
 	@Override
 	protected void onDestroy() {
