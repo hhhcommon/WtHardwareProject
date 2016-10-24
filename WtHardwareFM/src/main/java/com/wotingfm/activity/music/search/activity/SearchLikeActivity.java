@@ -190,7 +190,8 @@ public class SearchLikeActivity extends FragmentActivity implements
         dialog = DialogUtils.Dialogph(context, "通讯中");
         send();
 
-        IntentFilter mFilter = new IntentFilter();  // 广播注册
+        // 广播注册
+        IntentFilter mFilter = new IntentFilter();
         mFilter.addAction(BroadcastConstant.SEARCHVOICE);
         registerReceiver(mBroadcastReceiver, mFilter);
     }

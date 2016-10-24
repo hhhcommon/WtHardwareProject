@@ -229,8 +229,8 @@ public class CityListActivity extends AppBaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String search_name = s.toString();
-                if (search_name.equals("") || search_name.trim().equals("")) {
+                String searchName = s.toString();
+                if (searchName.equals("") || searchName.trim().equals("")) {
                     imageClear.setVisibility(View.INVISIBLE);
                     textNoFriend.setVisibility(View.GONE);
                     // 关键词为空
@@ -250,7 +250,7 @@ public class CityListActivity extends AppBaseActivity {
                     userList.clear();
                     userList.addAll(srcList);
                     imageClear.setVisibility(View.VISIBLE);
-                    search(search_name);
+                    search(searchName);
                 }
             }
         });

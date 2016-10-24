@@ -61,7 +61,7 @@ public class DownLoadUnCompleted extends Fragment {
         if (Receiver == null) {
             Receiver = new MessageReceivers();
             IntentFilter filters = new IntentFilter();
-            filters.addAction("push_down_uncompleted");
+            filters.addAction(BroadcastConstant.PUSH_DOWN_UNCOMPLETED);
             context.registerReceiver(Receiver, filters);
         }
     }
@@ -302,7 +302,7 @@ public class DownLoadUnCompleted extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals("push_down_uncompleted")) {
+            if (action.equals(BroadcastConstant.PUSH_DOWN_UNCOMPLETED)) {
                 setDownLoadSource();
             }
         }
