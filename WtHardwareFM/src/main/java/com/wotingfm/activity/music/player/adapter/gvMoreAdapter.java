@@ -15,11 +15,11 @@ import com.wotingfm.activity.music.player.model.sharemodel;
 import java.util.List;
 
 
-public class gv_more_adapter extends BaseAdapter {
+public class gvMoreAdapter extends BaseAdapter {
 	private Context context;
 	private List<sharemodel> list;
 
-	public gv_more_adapter(Context context, List<sharemodel> list) {
+	public gvMoreAdapter(Context context, List<sharemodel> list) {
 		this.context=context;
 		this.list=list;
 	}

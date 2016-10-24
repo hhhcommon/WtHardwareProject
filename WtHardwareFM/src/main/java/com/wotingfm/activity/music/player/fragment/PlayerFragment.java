@@ -58,7 +58,7 @@ import com.wotingfm.activity.music.favorite.activity.FavoriteActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.activity.music.player.adapter.ImageAdapter;
 import com.wotingfm.activity.music.player.adapter.PlayerListAdapter;
-import com.wotingfm.activity.music.player.adapter.gv_more_adapter;
+import com.wotingfm.activity.music.player.adapter.gvMoreAdapter;
 import com.wotingfm.activity.music.player.model.LanguageSearch;
 import com.wotingfm.activity.music.player.model.LanguageSearchInside;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
@@ -139,7 +139,8 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     // 数据
     private static int num;// -2 播放器没有播放，-1播放器里边的数据不在list中，其它是在list中
     private static ArrayList<LanguageSearchInside> alllist = new ArrayList<LanguageSearchInside>();
-
+    //播放url
+    static String local;
     protected String sequid;
     protected String sequimage;
     protected String sequname;
@@ -166,7 +167,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private static ImageView img_like;
     private VoiceRecognizer mVoiceRecognizer;
     private GridView gv_more;
-    private Dialog moredialog;
+    private Dialog moreDialog;
     private LinearLayout lin_more;
     private static LinearLayout lin_sequ;
     private static TextView tv_like;
@@ -183,6 +184,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private static LinearLayout lin_schedule;
     private static int moreType=1;//1为非电台类节目 0为电台节目 对应更多按钮弹出的不同布局而定
     private List<sharemodel> mylist;
+    public static int timerService; // 当前节目播放剩余时间长度
 
 
     @Override
@@ -226,210 +228,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     }
 
 
-    private void callMore(int position) {
-        if(moreType==0){
-            //电台调用
-            switch (position){
-                case 0://定时关闭
-                    startActivity(new Intent(context,TimerPowerOffActivity.class));
-                    break;
-                case 1://播放历史
-                    startActivity(new Intent(context,PlayHistoryActivity.class));
-                    break;
-                case 2://我喜欢的
-                    startActivity(new Intent(context,FavoriteActivity.class));
-                    break;
-                case 3://预定节目单
-                    Intent intent =new Intent(context,ScheduleActivity.class);
-                    if(GlobalConfig.playerobject.getContentName()!=null){
-                    intent.putExtra("ContentName",GlobalConfig.playerobject.getContentName());
-                    }
-                    if(GlobalConfig.playerobject.getContentId()!=null){
-                        intent.putExtra("ContentId",GlobalConfig.playerobject.getContentId());
-                    }
-                    startActivity(intent);
-                    break;
-                case 4://实时路况
-                    if (audioplay == null) {
-                        audioplay = TtsPlayer.getInstance(context);
-                    } else {
-                        // 不为空
-                        if (audioplay.mark().equals("VLC")) {
-                            audioplay.pause();
-                        }
-                        audioplay = TtsPlayer.getInstance(context);
-                    }
-                    ToastUtils.show_always(context, "点击了路况TTS按钮");
-                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                        dialogs = DialogUtils.Dialogph(context, "通讯中");
-                        getLuKuangTTS();// 获取路况数据播报
-                    } else {
-                        ToastUtils.show_always(context, "网络连接失败，请稍后重试");
-                    }
-                    break;
-            }
 
-        }else{
-            //节目类调用
-        switch(position){
-            case 0://定时关闭
-                startActivity(new Intent(context,TimerPowerOffActivity.class));
-                break;
-            case 1://下载
-                if (GlobalConfig.playerobject != null) {
-                    if (GlobalConfig.playerobject.getMediaType().equals("AUDIO")) {
-					/* ToastUtil.show_always(context, "已经将该节目添加到下载列表"); */
-                        // 此处执行将当前播放任务加到数据库的操作
-                        LanguageSearchInside datals = GlobalConfig.playerobject;
-                        if (datals.getLocalurl() != null) {
-                            ToastUtils.show_always(context, "此节目已经保存到本地，请到已下载界面查看");
-                            return;
-                        }
-                        // 对数据进行转换
-                        List<ContentInfo> datalist = new ArrayList<>();
-                        ContentInfo mcontent = new ContentInfo();
-                        mcontent.setAuthor(datals.getContentPersons());
-                        mcontent.setContentPlay(datals.getContentPlay());
-                        mcontent.setContentImg(datals.getContentImg());
-                        mcontent.setContentName(datals.getContentName());
-                        mcontent.setUserid(CommonUtils.getUserId(context));
-                        mcontent.setDownloadtype("0");
-                        // sequname
-                        if (datals.getSeqInfo() == null
-                                || datals.getSeqInfo().getContentName() == null
-                                || datals.getSeqInfo().getContentName().equals("")) {
-                            mcontent.setSequname(datals.getContentName());
-                        } else {
-                            mcontent.setSequname(datals.getSeqInfo().getContentName());
-                        }
-                        // sequid
-                        if (datals.getSeqInfo() == null
-                                || datals.getSeqInfo().getContentId() == null
-                                || datals.getSeqInfo().getContentId().equals("")) {
-                            mcontent.setSequid(datals.getContentId());
-                        } else {
-                            mcontent.setSequid(datals.getSeqInfo().getContentId());
-                        }
-                        // sequimg
-                        if (datals.getSeqInfo() == null
-                                || datals.getSeqInfo().getContentImg() == null
-                                || datals.getSeqInfo().getContentImg().equals("")) {
-                            mcontent.setSequimgurl(datals.getContentImg());
-                        } else {
-                            mcontent.setSequimgurl(datals.getSeqInfo().getContentImg());
-                        }
-                        // sequdesc
-                        if (datals.getSeqInfo() == null
-                                || datals.getSeqInfo().getContentDesc() == null
-                                || datals.getSeqInfo().getContentDesc().equals("")) {
-                            mcontent.setSequdesc(datals.getContentDesc());
-                        } else {
-                            mcontent.setSequdesc(datals.getSeqInfo().getContentDesc());
-                        }
-                        datalist.add(mcontent);
-                        // 检查是否重复,如果不重复插入数据库，并且开始下载，重复了提示
-                        List<FileInfo> filedatalist = FID.queryFileinfoAll(CommonUtils.getUserId(context));
-                        if (filedatalist.size() != 0) {
-                            /**
-                             * 此时有下载数据
-                             */
-                            boolean isdownload = false;
-                            for (int j = 0; j < filedatalist.size(); j++) {
-                                if (filedatalist.get(j).getUrl().equals(mcontent.getContentPlay())) {
-                                    isdownload = true;
-                                    break;
-                                } else {
-                                    isdownload = false;
-                                }
-                            }
-                            if (isdownload) {
-                                ToastUtils.show_always(context,mcontent.getContentName() + "已经存在于下载列表");
-                            } else {
-                                FID.insertfileinfo(datalist);
-                                ToastUtils.show_always(context,mcontent.getContentName() + "已经插入了下载列表");
-                                // 未下载列表
-                                List<FileInfo> fileundownloadlist = FID.queryFileinfo("false",CommonUtils.getUserId(context));
-                                FileInfo file;
-                                for (int kk = 0; kk < fileundownloadlist.size(); kk++) {
-                                    if (fileundownloadlist.get(kk).getDownloadtype() == 1) {
-                                        DownloadService.workStop(fileundownloadlist.get(kk));
-                                        FID.updatedownloadstatus(fileundownloadlist.get(kk).getUrl(), "2");
-                                        Log.e("测试下载问题",	" 暂停下载的单体"+ (fileundownloadlist.get(kk).getFileName()));
-                                    }
-                                }
-
-                                for (int k = 0; k < fileundownloadlist.size(); k++) {
-                                    if (fileundownloadlist.get(k).getUrl().equals(mcontent.getContentPlay())) {
-                                        file = fileundownloadlist.get(k);
-                                        FID.updatedownloadstatus(mcontent.getContentPlay(), "1");
-                                        DownloadService.workStart(file);
-                                        Intent p_intent = new Intent("push_down_uncompleted");
-                                        context.sendBroadcast(p_intent);
-                                        Log.e("广播消息", "开始下载");
-                                        break;
-                                    }
-                                }
-                            }
-                        } else {
-                            /**
-                             * 此时库里没数据
-                             */
-                            FID.insertfileinfo(datalist);
-                            ToastUtils.show_always(context,mcontent.getContentName() + "已经插入了下载列表");
-                            // 未下载列表
-                            List<FileInfo> fileundownloadlist = FID.queryFileinfo("false", CommonUtils.getUserId(context));
-                            FileInfo file;
-                            for (int k = 0; k < fileundownloadlist.size(); k++) {
-                                if (fileundownloadlist.get(k).getUrl().equals(mcontent.getContentPlay())) {
-                                    file = fileundownloadlist.get(k);
-                                    FID.updatedownloadstatus(mcontent.getContentPlay(), "1");
-                                    DownloadService.workStart(file);
-                                    Intent p_intent = new Intent("push_down_uncompleted");
-                                    context.sendBroadcast(p_intent);
-                                    break;
-                                }
-                            }
-                        }
-                    } else {
-                        ToastUtils.show_always(context, "您现在播放的是电台节目，不支持下载");
-                    }
-                } else {
-                    ToastUtils.show_always(context, "当前播放器播放对象为空");
-                }
-                break;
-            case 2://播放历史
-                startActivity(new Intent(context,PlayHistoryActivity.class));
-                break;
-            case 3://我喜欢的
-                startActivity(new Intent(context,FavoriteActivity.class));
-                break;
-            case 4://本地音频 少这个界面
-                startActivity(new Intent(context,DownloadActivity.class));
-                break;
-            case 5://预定节目单
-                break;
-            case 6://实时路况
-                if (audioplay == null) {
-                    audioplay = TtsPlayer.getInstance(context);
-                } else {
-                    // 不为空
-                    if (audioplay.mark().equals("VLC")) {
-                        audioplay.pause();
-                    }
-                    audioplay = TtsPlayer.getInstance(context);
-                }
-                ToastUtils.show_always(context, "点击了路况TTS按钮");
-                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    dialogs = DialogUtils.Dialogph(context, "通讯中");
-                    getLuKuangTTS();// 获取路况数据播报
-                } else {
-                    ToastUtils.show_always(context, "网络连接失败，请稍后重试");
-                }
-                break;
-
-        }
-        }
-    }
 
     private void setView() {
         mlistView = (XListView) rootView.findViewById(R.id.listView);
@@ -483,7 +282,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        searchPress();
                         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
 //                            curVolume = audioMgr.getStreamVolume(AudioManager.STREAM_MUSIC);
 //                            audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC,stepVolume, AudioManager.FLAG_PLAY_SOUND);
@@ -510,6 +308,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 return true;
             }
         });
+
         // seekbar事件
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override
@@ -549,10 +348,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         });
     }
 
-    public static void searchPress() {
-
-    }
-
     private static LanguageSearchInside getdaolist(Context context) {
         if (dbdao == null) {
             dbdao = new SearchPlayerHistoryDao(context);
@@ -570,7 +365,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             historynews.setType("1");
             historynews.setContentURI(historynew.getPlayerUrI());
             historynews.setContentPersons("");
-			/* historynews.setContentCatalogs(""); */
             historynews.setContentKeyWord("");
             historynews.setcTime("");
             historynews.setContentSubjectWord("");
@@ -656,7 +450,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         dbdao.addHistory(history);
     }
 
-    private static void setitemlistener() {
+    private static void setItemListener() {
         mlistView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -671,7 +465,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
      * 按照界面排序号进行播放
      *
      * @param number
-     *            在play方法里初始化播放器对象 在musicplay方法里执行相关操作 要考虑entercenter方法
+     * 在play方法里初始化播放器对象 在musicplay方法里执行相关操作 要考虑entercenter方法
      *
      */
     protected static void play(int number) {
@@ -824,9 +618,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 rl_voice.setVisibility(View.VISIBLE);
                 break;
             case R.id.lin_share:
-                if(moredialog.isShowing()){
-                    moredialog.dismiss();
-                }
                     shareDialog.show();
                 break;
             case R.id.lin_like:
@@ -872,7 +663,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     shareDialog.dismiss();
                 }
                 moreDialog();
-                moredialog.show();
+                moreDialog.show();
                 break;
             case R.id.lin_sequ:
                 if(GlobalConfig.playerobject!=null){
@@ -1183,6 +974,9 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         }
     }
 
+    /**
+     * 下一首
+     */
     public static void playNext() {
         int a=alllist.size();
         if (num + 1 < alllist.size()) {
@@ -1198,7 +992,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         }
     }
 
-    public static int timerService; // 当前节目播放剩余时间长度
+
     static Handler mUIHandler = new Handler() {
         public void handleMessage(Message msg) {
             switch (msg.what) {
@@ -1273,9 +1067,9 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         view.setText(strTemp);
     }
 
-    //播放url
-    static String local;
-
+    /**
+     * 播放函数
+     */
     private static void musicPlay(String s) {
         if (local == null) {
             local = s;
@@ -1316,54 +1110,15 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         }
     }
 
-
-
-    protected void CallShare(SHARE_MEDIA Platform) {
-        String sharename;
-        String shareDesc;
-        String shareContentImg;
-        String shareurl;
-        if (GlobalConfig.playerobject != null) {
-            if (GlobalConfig.playerobject.getContentName() != null
-                    && !GlobalConfig.playerobject.getContentName().equals("")) {
-                sharename = GlobalConfig.playerobject.getContentName();
-            } else {
-                sharename = "我听我享听";
-            }
-            if (GlobalConfig.playerobject.getContentDesc() != null
-                    && !GlobalConfig.playerobject.getContentDesc().equals("")) {
-                shareDesc = GlobalConfig.playerobject.getContentDesc();
-            } else {
-                shareDesc = "暂无本节目介绍";
-            }
-            if (GlobalConfig.playerobject.getContentImg() != null
-                    && !GlobalConfig.playerobject.getContentImg().equals("")) {
-                shareContentImg = GlobalConfig.playerobject.getContentImg();
-                image = new UMImage(context, shareContentImg);
-            } else {
-                shareContentImg = "http://182.92.175.134/img/logo-web.png";
-                image = new UMImage(context, shareContentImg);
-            }
-            if (GlobalConfig.playerobject.getContentShareURL() != null
-                    && !GlobalConfig.playerobject.getContentShareURL().equals("")) {
-                shareurl = GlobalConfig.playerobject.getContentShareURL();
-            } else {
-                shareurl = "http://www.wotingfm.com/";
-            }
-            new ShareAction(context).setPlatform(Platform).withMedia(image)
-                    .withText(shareDesc).withTitle(sharename).withTargetUrl(shareurl).share();
-        } else {
-            ToastUtils.show_short(context, "没有数据");
-        }
-    }
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         UMShareAPI.get(context).onActivityResult(requestCode, resultCode, data);
     }
 
-    // 语音搜索请求
+    /**
+     * 语音搜索
+     */
     private void searchByVoicesend(String str) {
         sendtype = 2;
         // 发送数据
@@ -1405,7 +1160,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                             lin_tuijian.setVisibility(View.VISIBLE);
                             adapter = new PlayerListAdapter(context, alllist);
                             mlistView.setAdapter(adapter);
-                            setitemlistener();
+                            setItemListener();
                             getNetWork(0, context);
                             mlistView.setPullRefreshEnable(false);
                             mlistView.setPullLoadEnable(false);
@@ -1447,9 +1202,9 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         });
     }
 
-    // /////////////
-    // wifi弹出框//
-    // ////////////
+    /**
+     * wifi对话框
+     */
     private void WifiDialog() {
         final View dialog1 = LayoutInflater.from(context).inflate(R.layout.dialog_wifi_set, null);
         TextView tv_over = (TextView) dialog1.findViewById(R.id.tv_cancle);
@@ -1571,7 +1326,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                             lin_tuijian.setVisibility(View.VISIBLE);
                             adapter = new PlayerListAdapter(context, alllist);
                             mlistView.setAdapter(adapter);
-                            setitemlistener();
+                            setItemListener();
                             mlistView.setPullRefreshEnable(false);
                             mlistView.setPullLoadEnable(true);
                             mlistView.stopRefresh();
@@ -1580,7 +1335,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                             mlistView.stopLoadMore();
                             alllist.addAll(list);
                             adapter.notifyDataSetChanged();
-                            setitemlistener();
+                            setItemListener();
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
@@ -1669,12 +1424,15 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         lin_tuijian.setVisibility(View.VISIBLE);
         adapter = new PlayerListAdapter(context, alllist);
         mlistView.setAdapter(adapter);
-        setitemlistener();
+        setItemListener();
         mlistView.setPullRefreshEnable(false);
         mlistView.setPullLoadEnable(true);
         mlistView.stopRefresh();
     }
 
+    /**
+     * 设置无数据时界面样式
+     */
     protected void setDataForNoList(ArrayList<LanguageSearchInside> list) {
         GlobalConfig.playerobject = list.get(0);
         resetHeadView();
@@ -1704,13 +1462,15 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         lin_tuijian.setVisibility(View.VISIBLE);
         adapter = new PlayerListAdapter(context, alllist);
         mlistView.setAdapter(adapter);
-        setitemlistener();
+        setItemListener();
         mlistView.setPullRefreshEnable(false);
         mlistView.setPullLoadEnable(true);
         mlistView.stopRefresh();
     }
 
-    //对headview头部进行控制的类
+    /**
+     * 对headview头部进行控制的类
+     */
     private static void resetHeadView() {
         if (GlobalConfig.playerobject != null) {
             if (GlobalConfig.playerobject.getMediaType().equals("RADIO")) {
@@ -1756,7 +1516,9 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         }
     }
 
-    // 文字请求
+    /**
+     * 文字请求
+     */
     public static void SendTextRequest(String contname, final Context mContext) {
 		 /* dialogs = Utils.Dialogph(mContext, "通讯中", dialogs); */
         final LanguageSearchInside flist = getdaolist(mContext);// 得到数据库里边的第一条数据
@@ -1777,7 +1539,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             }
             adapter = new PlayerListAdapter(context, alllist);
             mlistView.setAdapter(adapter);
-            setitemlistener();
+            setItemListener();
             stopCurrentTimer();
             getNetWork(0, context);
         }
@@ -1832,7 +1594,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                             lin_tuijian.setVisibility(View.VISIBLE);
                             adapter = new PlayerListAdapter(context, alllist);
                             mlistView.setAdapter(adapter);
-                            setitemlistener();
+                            setItemListener();
                             mlistView.setPullRefreshEnable(false);
                             mlistView.setPullLoadEnable(false);
                             mlistView.stopRefresh();
@@ -1858,6 +1620,9 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         });
     }
 
+    /**
+     * 请求TTS内容
+     */
     private static void getContentNews(String id, final int number) {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
@@ -1933,6 +1698,9 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         });
     }
 
+    /**
+     * 点赞
+     */
     private static void sendfavorite() {
         dialogs = DialogUtils.Dialogph(context, "通讯中");
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
@@ -2031,15 +1799,18 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             }
         });
     }
-   // 点击更多时的对话框
+
+    /**
+     *更多
+     */
     private void moreDialog() {
         final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_player_more, null);
         gv_more=(GridView)dialog.findViewById(R.id.gv_more);
         TextView tv_cancle = (TextView) dialog.findViewById(R.id.tv_cancle);
-        moredialog = new Dialog(context, R.style.MyDialog);
+        moreDialog = new Dialog(context, R.style.MyDialog);
         // 从底部上升到一个位置
-        moredialog.setContentView(dialog);
-        Window window = moredialog.getWindow();
+        moreDialog.setContentView(dialog);
+        Window window = moreDialog.getWindow();
         DisplayMetrics dm = new DisplayMetrics();
         context.getWindowManager().getDefaultDisplay().getMetrics(dm);
         screenw = dm.widthPixels;
@@ -2048,8 +1819,8 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         dialog.setLayoutParams(params);
         window.setGravity(Gravity.BOTTOM);
         window.setWindowAnimations(R.style.sharestyle);
-        moredialog.setCanceledOnTouchOutside(true);
-        moredialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+        moreDialog.setCanceledOnTouchOutside(true);
+        moreDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
         if(moreType==0){
             //电台
          mylist = PlayermoreUtil.getPlayMoreList("RADIO");
@@ -2057,28 +1828,237 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             //非电台类内容
             mylist = PlayermoreUtil.getPlayMoreList("AUDIO");
         }
-        gv_more_adapter shareadapter = new gv_more_adapter(context, mylist);
+        gvMoreAdapter shareadapter = new gvMoreAdapter(context, mylist);
         gv_more.setAdapter(shareadapter);
         gv_more.setSelector(new ColorDrawable(Color.TRANSPARENT));
         gv_more.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 callMore(position);//呼出更多
-                moredialog.dismiss();
+                moreDialog.dismiss();
             }
         });
         tv_cancle.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (moredialog.isShowing()) {
-                    moredialog.dismiss();
+                if (moreDialog.isShowing()) {
+                    moreDialog.dismiss();
                 }
             }
         });
     }
-    // //////////
-    // 分享模块//
-    // //////////
+
+    /**
+     *更多回调
+     */
+    private void callMore(int position) {
+        if(moreType==0){
+            //电台调用
+            switch (position){
+                case 0://定时关闭
+                    startActivity(new Intent(context,TimerPowerOffActivity.class));
+                    break;
+                case 1://播放历史
+                    startActivity(new Intent(context,PlayHistoryActivity.class));
+                    break;
+                case 2://我喜欢的
+                    startActivity(new Intent(context,FavoriteActivity.class));
+                    break;
+                case 3://预定节目单
+                    Intent intent =new Intent(context,ScheduleActivity.class);
+                    if(GlobalConfig.playerobject.getContentName()!=null){
+                        intent.putExtra("ContentName",GlobalConfig.playerobject.getContentName());
+                    }
+                    if(GlobalConfig.playerobject.getContentId()!=null){
+                        intent.putExtra("ContentId",GlobalConfig.playerobject.getContentId());
+                    }
+                    startActivity(intent);
+                    break;
+                case 4://实时路况
+                    if (audioplay == null) {
+                        audioplay = TtsPlayer.getInstance(context);
+                    } else {
+                        // 不为空
+                        if (audioplay.mark().equals("VLC")) {
+                            audioplay.pause();
+                        }
+                        audioplay = TtsPlayer.getInstance(context);
+                    }
+                    ToastUtils.show_always(context, "点击了路况TTS按钮");
+                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                        dialogs = DialogUtils.Dialogph(context, "通讯中");
+                        getLuKuangTTS();// 获取路况数据播报
+                    } else {
+                        ToastUtils.show_always(context, "网络连接失败，请稍后重试");
+                    }
+                    break;
+            }
+
+        }else{
+            //节目类调用
+            switch(position){
+                case 0://定时关闭
+                    startActivity(new Intent(context,TimerPowerOffActivity.class));
+                    break;
+                case 1://下载
+                    if (GlobalConfig.playerobject != null) {
+                        if (GlobalConfig.playerobject.getMediaType().equals("AUDIO")) {
+					/* ToastUtil.show_always(context, "已经将该节目添加到下载列表"); */
+                            // 此处执行将当前播放任务加到数据库的操作
+                            LanguageSearchInside datals = GlobalConfig.playerobject;
+                            if (datals.getLocalurl() != null) {
+                                ToastUtils.show_always(context, "此节目已经保存到本地，请到已下载界面查看");
+                                return;
+                            }
+                            // 对数据进行转换
+                            List<ContentInfo> datalist = new ArrayList<>();
+                            ContentInfo mcontent = new ContentInfo();
+                            mcontent.setAuthor(datals.getContentPersons());
+                            mcontent.setContentPlay(datals.getContentPlay());
+                            mcontent.setContentImg(datals.getContentImg());
+                            mcontent.setContentName(datals.getContentName());
+                            mcontent.setUserid(CommonUtils.getUserId(context));
+                            mcontent.setDownloadtype("0");
+                            // sequname
+                            if (datals.getSeqInfo() == null
+                                    || datals.getSeqInfo().getContentName() == null
+                                    || datals.getSeqInfo().getContentName().equals("")) {
+                                mcontent.setSequname(datals.getContentName());
+                            } else {
+                                mcontent.setSequname(datals.getSeqInfo().getContentName());
+                            }
+                            // sequid
+                            if (datals.getSeqInfo() == null
+                                    || datals.getSeqInfo().getContentId() == null
+                                    || datals.getSeqInfo().getContentId().equals("")) {
+                                mcontent.setSequid(datals.getContentId());
+                            } else {
+                                mcontent.setSequid(datals.getSeqInfo().getContentId());
+                            }
+                            // sequimg
+                            if (datals.getSeqInfo() == null
+                                    || datals.getSeqInfo().getContentImg() == null
+                                    || datals.getSeqInfo().getContentImg().equals("")) {
+                                mcontent.setSequimgurl(datals.getContentImg());
+                            } else {
+                                mcontent.setSequimgurl(datals.getSeqInfo().getContentImg());
+                            }
+                            // sequdesc
+                            if (datals.getSeqInfo() == null
+                                    || datals.getSeqInfo().getContentDesc() == null
+                                    || datals.getSeqInfo().getContentDesc().equals("")) {
+                                mcontent.setSequdesc(datals.getContentDesc());
+                            } else {
+                                mcontent.setSequdesc(datals.getSeqInfo().getContentDesc());
+                            }
+                            datalist.add(mcontent);
+                            // 检查是否重复,如果不重复插入数据库，并且开始下载，重复了提示
+                            List<FileInfo> filedatalist = FID.queryFileinfoAll(CommonUtils.getUserId(context));
+                            if (filedatalist.size() != 0) {
+                                /**
+                                 * 此时有下载数据
+                                 */
+                                boolean isdownload = false;
+                                for (int j = 0; j < filedatalist.size(); j++) {
+                                    if (filedatalist.get(j).getUrl().equals(mcontent.getContentPlay())) {
+                                        isdownload = true;
+                                        break;
+                                    } else {
+                                        isdownload = false;
+                                    }
+                                }
+                                if (isdownload) {
+                                    ToastUtils.show_always(context,mcontent.getContentName() + "已经存在于下载列表");
+                                } else {
+                                    FID.insertfileinfo(datalist);
+                                    ToastUtils.show_always(context,mcontent.getContentName() + "已经插入了下载列表");
+                                    // 未下载列表
+                                    List<FileInfo> fileundownloadlist = FID.queryFileinfo("false",CommonUtils.getUserId(context));
+                                    FileInfo file;
+                                    for (int kk = 0; kk < fileundownloadlist.size(); kk++) {
+                                        if (fileundownloadlist.get(kk).getDownloadtype() == 1) {
+                                            DownloadService.workStop(fileundownloadlist.get(kk));
+                                            FID.updatedownloadstatus(fileundownloadlist.get(kk).getUrl(), "2");
+                                            Log.e("测试下载问题",	" 暂停下载的单体"+ (fileundownloadlist.get(kk).getFileName()));
+                                        }
+                                    }
+
+                                    for (int k = 0; k < fileundownloadlist.size(); k++) {
+                                        if (fileundownloadlist.get(k).getUrl().equals(mcontent.getContentPlay())) {
+                                            file = fileundownloadlist.get(k);
+                                            FID.updatedownloadstatus(mcontent.getContentPlay(), "1");
+                                            DownloadService.workStart(file);
+                                            Intent p_intent = new Intent("push_down_uncompleted");
+                                            context.sendBroadcast(p_intent);
+                                            Log.e("广播消息", "开始下载");
+                                            break;
+                                        }
+                                    }
+                                }
+                            } else {
+                                /**
+                                 * 此时库里没数据
+                                 */
+                                FID.insertfileinfo(datalist);
+                                ToastUtils.show_always(context,mcontent.getContentName() + "已经插入了下载列表");
+                                // 未下载列表
+                                List<FileInfo> fileundownloadlist = FID.queryFileinfo("false", CommonUtils.getUserId(context));
+                                FileInfo file;
+                                for (int k = 0; k < fileundownloadlist.size(); k++) {
+                                    if (fileundownloadlist.get(k).getUrl().equals(mcontent.getContentPlay())) {
+                                        file = fileundownloadlist.get(k);
+                                        FID.updatedownloadstatus(mcontent.getContentPlay(), "1");
+                                        DownloadService.workStart(file);
+                                        Intent p_intent = new Intent("push_down_uncompleted");
+                                        context.sendBroadcast(p_intent);
+                                        break;
+                                    }
+                                }
+                            }
+                        } else {
+                            ToastUtils.show_always(context, "您现在播放的是电台节目，不支持下载");
+                        }
+                    } else {
+                        ToastUtils.show_always(context, "当前播放器播放对象为空");
+                    }
+                    break;
+                case 2://播放历史
+                    startActivity(new Intent(context,PlayHistoryActivity.class));
+                    break;
+                case 3://我喜欢的
+                    startActivity(new Intent(context,FavoriteActivity.class));
+                    break;
+                case 4://本地音频 少这个界面
+                    startActivity(new Intent(context,DownloadActivity.class));
+                    break;
+                case 5://预定节目单
+                    break;
+                case 6://实时路况
+                    if (audioplay == null) {
+                        audioplay = TtsPlayer.getInstance(context);
+                    } else {
+                        // 不为空
+                        if (audioplay.mark().equals("VLC")) {
+                            audioplay.pause();
+                        }
+                        audioplay = TtsPlayer.getInstance(context);
+                    }
+                    ToastUtils.show_always(context, "点击了路况TTS按钮");
+                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                        dialogs = DialogUtils.Dialogph(context, "通讯中");
+                        getLuKuangTTS();// 获取路况数据播报
+                    } else {
+                        ToastUtils.show_always(context, "网络连接失败，请稍后重试");
+                    }
+                    break;
+
+            }
+        }
+    }
+
+    /**
+     *分享
+     */
     private void shareDialog() {
         final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_sharedialog, null);
         GridView mGallery = (GridView) dialog.findViewById(R.id.share_gallery);
@@ -2119,6 +2099,48 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 }
             }
         });
+    }
+
+    /**
+     * 分享回调
+     */
+    protected void CallShare(SHARE_MEDIA Platform) {
+        String sharename;
+        String shareDesc;
+        String shareContentImg;
+        String shareurl;
+        if (GlobalConfig.playerobject != null) {
+            if (GlobalConfig.playerobject.getContentName() != null
+                    && !GlobalConfig.playerobject.getContentName().equals("")) {
+                sharename = GlobalConfig.playerobject.getContentName();
+            } else {
+                sharename = "我听我享听";
+            }
+            if (GlobalConfig.playerobject.getContentDesc() != null
+                    && !GlobalConfig.playerobject.getContentDesc().equals("")) {
+                shareDesc = GlobalConfig.playerobject.getContentDesc();
+            } else {
+                shareDesc = "暂无本节目介绍";
+            }
+            if (GlobalConfig.playerobject.getContentImg() != null
+                    && !GlobalConfig.playerobject.getContentImg().equals("")) {
+                shareContentImg = GlobalConfig.playerobject.getContentImg();
+                image = new UMImage(context, shareContentImg);
+            } else {
+                shareContentImg = "http://182.92.175.134/img/logo-web.png";
+                image = new UMImage(context, shareContentImg);
+            }
+            if (GlobalConfig.playerobject.getContentShareURL() != null
+                    && !GlobalConfig.playerobject.getContentShareURL().equals("")) {
+                shareurl = GlobalConfig.playerobject.getContentShareURL();
+            } else {
+                shareurl = "http://www.wotingfm.com/";
+            }
+            new ShareAction(context).setPlatform(Platform).withMedia(image)
+                    .withText(shareDesc).withTitle(sharename).withTargetUrl(shareurl).share();
+        } else {
+            ToastUtils.show_short(context, "没有数据");
+        }
     }
 
     /**
