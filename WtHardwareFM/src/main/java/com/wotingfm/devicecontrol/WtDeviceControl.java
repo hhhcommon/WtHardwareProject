@@ -1,8 +1,14 @@
 package com.wotingfm.devicecontrol;
 
 
+import android.app.Dialog;
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.ImageView;
 
+import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.video.VoiceRecognizer;
@@ -14,6 +20,8 @@ import com.wotingfm.activity.music.video.VoiceRecognizer;
  */
 public class WtDeviceControl {
 	private VoiceRecognizer mVoiceRecognizer;
+	private Dialog voiceDialog;
+	private AnimationDrawable draw_img;
 
 	/**
 	 * 构造器
@@ -21,6 +29,7 @@ public class WtDeviceControl {
 	public WtDeviceControl(Context context) {
 		if(mVoiceRecognizer==null){
 			mVoiceRecognizer=new VoiceRecognizer(context);
+			Dialog(context);
 		}
 	}
 
@@ -54,6 +63,11 @@ public class WtDeviceControl {
 	 * 语音指令-开始
 	 */
 	public void pushVoiceStart() {
+		if (draw_img.isRunning()) {
+		} else {
+			draw_img.start();
+		}
+		voiceDialog.show();
 		mVoiceRecognizer.startListen();
 	}
 
@@ -61,6 +75,10 @@ public class WtDeviceControl {
 	 * 语音指令-结束
 	 */
 	public void releaseVoiceStop() {
+		if (draw_img.isRunning()) {
+			draw_img.stop();
+		}
+		voiceDialog.dismiss();
 		mVoiceRecognizer.stopListen();
 	}
 
@@ -76,5 +94,17 @@ public class WtDeviceControl {
 	 */
 	public void releasePTT() {
 		ChatFragment.jack();
+	}
+
+	private void Dialog(Context context) {
+		final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_voice_ripple, null);
+		ImageView img = (ImageView) dialog.findViewById(R.id.imageView);
+		img.setBackgroundResource(R.drawable.talk_show);
+		draw_img = (AnimationDrawable) img.getBackground();
+		voiceDialog = new Dialog(context, R.style.MyDialog);
+		voiceDialog.setContentView(dialog);
+		voiceDialog.setCanceledOnTouchOutside(true);
+		voiceDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+
 	}
 }

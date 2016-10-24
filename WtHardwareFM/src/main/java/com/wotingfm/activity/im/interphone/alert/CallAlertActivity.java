@@ -35,7 +35,7 @@ import com.wotingfm.util.CommonUtils;
 import java.util.Arrays;
 
 
-public class CallAlertActivity extends BaseActivity implements OnClickListener{
+public class  CallAlertActivity extends BaseActivity implements OnClickListener{
 	public static CallAlertActivity instance;
 	private TextView tv_news;
 	private TextView tv_name;
