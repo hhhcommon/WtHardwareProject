@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
@@ -125,13 +124,12 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private RelativeLayout lin_center;
     public static TextView time_start;
     public static TextView time_end;
-    private LinearLayout lin_voicesearch;
+    private LinearLayout lin_VoiceSearch;
     private static XListView mlistView;
     private static LinearLayout lin_tuijian;
-
     private static MyLinearLayout rl_voice;
     private ImageView imageView_voice;
-    private TextView tv_cancle;
+    private TextView tv_Cancle;
     private UMImage image;
     private LinearLayout lin_share;
     private static SeekBar seekBar;
@@ -141,10 +139,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private static ArrayList<LanguageSearchInside> alllist = new ArrayList<LanguageSearchInside>();
     //播放url
     static String local;
-    protected String sequid;
-    protected String sequimage;
-    protected String sequname;
-    protected String sequdesc;
+    protected String SequId;
+    protected String SequImage;
+    protected String SequName;
+    protected String SequDesc;
     private int stepVolume;
     private int curVolume;
     private Bitmap bmp;
@@ -156,7 +154,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private Dialog shareDialog;
     private Dialog dialog1;
     private static Handler mHandler;
-    private static int sendtype;// 第一次获取数据是有分页加载的
+    private static int sendType;// 第一次获取数据是有分页加载的
     private int page = 1;
     private int RefreshType;// 是不是第一次请求数据
     private boolean first = true;// 第一次进入界面
@@ -192,15 +190,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         super.onCreate(savedInstanceState);
         context = this.getActivity();
         RefreshType = 0;
-        if (Receiver == null) {
-            Receiver = new MessageReceiver();
-            IntentFilter filter = new IntentFilter();
-            filter.addAction("pushmusic");
-            filter.addAction(BroadcastConstant.TIMER_UPDATE);
-            filter.addAction(BroadcastConstant.TIMER_STOP);
-            filter.addAction(BroadcastConstant.PLAYERVOICE);
-            context.registerReceiver(Receiver, filter);
-        }
         format = new SimpleDateFormat("HH:mm:ss");
         format.setTimeZone(TimeZone.getTimeZone("GMT"));
         // 开启播放器服务
@@ -254,11 +243,11 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         // 配合seekbar使用的标签
         time_start = (TextView) headview.findViewById(R.id.time_start);
         time_end = (TextView) headview.findViewById(R.id.time_end);
-        lin_voicesearch = (LinearLayout) headview.findViewById(R.id.lin_voicesearch); // 语音搜索
+        lin_VoiceSearch = (LinearLayout) headview.findViewById(R.id.lin_voicesearch); // 语音搜索
         rl_voice = (MyLinearLayout) rootView.findViewById(R.id.rl_voice);
         imageView_voice = (ImageView) rootView.findViewById(R.id.imageView_voice);
         imageView_voice.setImageBitmap(bmp);
-        tv_cancle = (TextView) rootView.findViewById(R.id.tv_cancle);
+        tv_Cancle = (TextView) rootView.findViewById(R.id.tv_cancle);
         tv_speak_status = (TextView) rootView.findViewById(R.id.tv_speak_status);
         tv_speak_status.setText("请按住讲话");
         textSpeakContent = (TextView) rootView.findViewById(R.id.text_speak_content);
@@ -270,8 +259,8 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         lin_left.setOnClickListener(this);
         lin_center.setOnClickListener(this);
         lin_right.setOnClickListener(this);
-        tv_cancle.setOnClickListener(this);
-        lin_voicesearch.setOnClickListener(this);
+        tv_Cancle.setOnClickListener(this);
+        lin_VoiceSearch.setOnClickListener(this);
         lin_share.setOnClickListener(this);
         lin_more.setOnClickListener(this);
         lin_sequ.setOnClickListener(this);
@@ -402,22 +391,22 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
      */
     private static String ContentFavorite;
     private static void adddb(LanguageSearchInside languageSearchInside) {
-        String playername = languageSearchInside.getContentName();
-        String playerimage = languageSearchInside.getContentImg();
-        String playerurl = languageSearchInside.getContentPlay();
-        String playerurI = languageSearchInside.getContentURI();
-        String playermediatype = languageSearchInside.getMediaType();
-        String playcontentshareurl = languageSearchInside.getContentShareURL();
-        String playeralltime = "";
-        String playerintime = "";
-        String playercontentdesc = languageSearchInside.getContentDesc();
-        String playernum = "999";
-        String playerzantype = "false";
-        String playerfrom = "";
-        String playerfromid = "";
-        String playerfromurl = "";
-        String playeraddtime = Long.toString(System.currentTimeMillis());
-        String bjuserid = CommonUtils.getUserId(context);
+        String playerName = languageSearchInside.getContentName();
+        String playerImage = languageSearchInside.getContentImg();
+        String playerUrl = languageSearchInside.getContentPlay();
+        String playerUrI = languageSearchInside.getContentURI();
+        String playerMediaType = languageSearchInside.getMediaType();
+        String playContentShareUrl = languageSearchInside.getContentShareURL();
+        String playerAllTime = "";
+        String playerInTime = "";
+        String playerContentDesc = languageSearchInside.getContentDesc();
+        String playerNum = "999";
+        String playerZanType = "false";
+        String playerFrom = "";
+        String playerFromId = "";
+        String playerFromUrl = "";
+        String playerAddTime = Long.toString(System.currentTimeMillis());
+        String bjUserId = CommonUtils.getUserId(context);
         if(languageSearchInside.getContentFavorite()!=null){
             String contentFavorite=languageSearchInside.getContentFavorite();
             if(contentFavorite!=null){
@@ -430,22 +419,22 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             ContentFavorite = languageSearchInside.getContentFavorite();
         }
         String ContentID = languageSearchInside.getContentId();
-        String localurl = languageSearchInside.getLocalurl();
-        String sequname = languageSearchInside.getSequName();
-        String sequid = languageSearchInside.getSequId();
-        String sequdesc = languageSearchInside.getSequDesc();
-        String sequimg =languageSearchInside.getSequImg();
+        String localUrl = languageSearchInside.getLocalurl();
+        String sequName = languageSearchInside.getSequName();
+        String sequId = languageSearchInside.getSequId();
+        String sequDesc = languageSearchInside.getSequDesc();
+        String sequImg =languageSearchInside.getSequImg();
 
-        PlayerHistory history = new PlayerHistory(playername, playerimage,
-                playerurl, playerurI, playermediatype, playeralltime,
-                playerintime, playercontentdesc, playernum, playerzantype,
-                playerfrom, playerfromid, playerfromurl, playeraddtime,
-                bjuserid, playcontentshareurl, ContentFavorite, ContentID, localurl,sequname,sequid,sequdesc,sequimg);
+        PlayerHistory history = new PlayerHistory(playerName, playerImage,
+                playerUrl, playerUrI, playerMediaType, playerAllTime,
+                playerInTime, playerContentDesc, playerNum, playerZanType,
+                playerFrom, playerFromId, playerFromUrl, playerAddTime,
+                bjUserId, playContentShareUrl, ContentFavorite, ContentID, localUrl,sequName,sequId,sequDesc,sequImg);
 
-        if (playermediatype != null && playermediatype.trim().length() > 0&& playermediatype.equals("TTS")) {
+        if (playerMediaType!= null && playerMediaType.trim().length() > 0&&playerMediaType.equals("TTS")) {
             dbdao.deleteHistoryById(ContentID);
         } else {
-            dbdao.deleteHistory(playerurl);
+            dbdao.deleteHistory(playerUrl);
         }
         dbdao.addHistory(history);
     }
@@ -670,10 +659,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                   try {
                       if(GlobalConfig.playerobject.getSequId()!=null){
                           if(GlobalConfig.playerobject.getSequId()!=null){
-                              sequid = GlobalConfig.playerobject.getSequId();
-                              sequdesc = GlobalConfig.playerobject.getSequDesc();
-                              sequimage = GlobalConfig.playerobject.getSequImg();
-                              sequname = GlobalConfig.playerobject.getSequName();
+                              SequId = GlobalConfig.playerobject.getSequId();
+                              SequDesc = GlobalConfig.playerobject.getSequDesc();
+                              SequImage = GlobalConfig.playerobject.getSequImg();
+                              SequName = GlobalConfig.playerobject.getSequName();
                               IsSequ=true;
                           }else{
                               IsSequ=false;
@@ -681,10 +670,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                       } else{
                       if(GlobalConfig.playerobject.getSeqInfo()!=null){
                           if(GlobalConfig.playerobject.getSeqInfo().getContentId()!=null){
-                          sequid = GlobalConfig.playerobject.getSeqInfo().getContentId();
-                          sequdesc = GlobalConfig.playerobject.getSeqInfo().getContentDesc();
-                          sequimage = GlobalConfig.playerobject.getSeqInfo().getContentImg();
-                          sequname = GlobalConfig.playerobject.getSeqInfo().getContentName();
+                          SequId = GlobalConfig.playerobject.getSeqInfo().getContentId();
+                          SequDesc = GlobalConfig.playerobject.getSeqInfo().getContentDesc();
+                          SequImage = GlobalConfig.playerobject.getSeqInfo().getContentImg();
+                          SequName = GlobalConfig.playerobject.getSeqInfo().getContentName();
                           IsSequ=true;
                           }else{
                               IsSequ=false;
@@ -701,10 +690,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     Intent intent = new Intent(context, AlbumActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "player");
-                    bundle.putString("contentName",sequname);
-                    bundle.putString("contentDesc",sequdesc);
-                    bundle.putString("contentId",sequid);
-                    bundle.putString("contentImg",sequimage);
+                    bundle.putString("contentName",SequName);
+                    bundle.putString("contentDesc",SequDesc);
+                    bundle.putString("contentId",SequId);
+                    bundle.putString("contentImg",SequImage);
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }else{
@@ -868,7 +857,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (sendtype == 1) {
+                if (sendType == 1) {
                     mlistView.setPullLoadEnable(false);
                     RefreshType = 1;
                     page = 1;
@@ -882,7 +871,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if (sendtype == 1) {
+                if (sendType == 1) {
                     RefreshType = 2;
                     firstSend();
                 }
@@ -933,15 +922,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals("pushmusic")) {
-                String message = intent.getStringExtra("outmessage");
-                if (GlobalConfig.playerobject != null) {
-                    if (message != null && message.equals("1")) {
-                    }
-                    else {
-                    }
-                }
-            } else if (action.equals(BroadcastConstant.TIMER_UPDATE)) {
+             if (action.equals(BroadcastConstant.TIMER_UPDATE)) {
                 String s = intent.getStringExtra("update");
                 if (textTime != null) {
                     textTime.setText(s);
@@ -1120,7 +1101,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
      * 语音搜索
      */
     private void searchByVoicesend(String str) {
-        sendtype = 2;
+        sendType = 2;
         // 发送数据
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
@@ -1243,7 +1224,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
      * 第一次进入该界面时候的数据
      */
     private void firstSend() {
-        sendtype = 1;
+        sendType = 1;
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("PageType", "0");
@@ -1544,7 +1525,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             getNetWork(0, context);
         }
         // 发送数据
-        sendtype = 2;
+        sendType = 2;
         JSONObject jsonObject =VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("SearchStr", contname);

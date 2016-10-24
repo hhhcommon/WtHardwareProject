@@ -196,10 +196,10 @@ public class TotalFragment extends Fragment {
 					String playShareUrl = list.get(groupPosition).getHistoryList().get(childPosition).getPlayContentShareUrl();
 					String contentId = list.get(groupPosition).getHistoryList().get(childPosition).getContentID();
 					String localUrl = list.get(groupPosition).getHistoryList().get(childPosition).getLocalurl();
-					String sequname = list.get(groupPosition).getList().get(childPosition).getSequName();
-					String sequid = list.get(groupPosition).getList().get(childPosition).getSequId();
-					String sequdesc = list.get(groupPosition).getList().get(childPosition).getSequDesc();
-					String sequimg = list.get(groupPosition).getList().get(childPosition).getSequImg();
+					String sequname = list.get(groupPosition).getHistoryList().get(childPosition).getSequName();
+					String sequid = list.get(groupPosition).getHistoryList().get(childPosition).getSequId();
+					String sequdesc = list.get(groupPosition).getHistoryList().get(childPosition).getSequDesc();
+					String sequimg = list.get(groupPosition).getHistoryList().get(childPosition).getSequImg();
 
 					PlayerHistory history = new PlayerHistory(
                             playerName, playerImage, playerUrl, playerUri, playerMediaType,

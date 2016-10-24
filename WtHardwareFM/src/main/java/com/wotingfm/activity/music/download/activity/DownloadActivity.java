@@ -1,6 +1,7 @@
 package com.wotingfm.activity.music.download.activity;
 
 import android.annotation.TargetApi;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -151,5 +152,12 @@ public class DownloadActivity extends FragmentActivity {
         textUncompleted = null;
         viewPagerDownload = null;
         setContentView(R.layout.activity_null);
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode==1){
+           finish();
+        }
     }
 }
