@@ -63,4 +63,13 @@ public class BroadcastConstant {
 
     // 搜索
     public static final String SEARCH_VIEW_UPDATE = "SEARCH_VIEW_UPDATE";
+
+    // 播放历史更新界面
+    public static final String UPDATE_ACTION_ALL = "UPDATE_ACTION_ALL";
+
+    // 播放历史
+    public static final String UPDATE_ACTION_CHECK = "UPDATE_ACTION_CHECK";
+
+    // 专辑列表界面发送广播到下载界面  用于更新下载界面
+    public static final String PUSH_DOWN_UNCOMPLETED = "push_down_uncompleted";
 }

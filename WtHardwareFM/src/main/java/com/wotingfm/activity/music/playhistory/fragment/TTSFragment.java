@@ -2,6 +2,7 @@ package com.wotingfm.activity.music.playhistory.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -12,11 +13,17 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.wotingfm.R;
+import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
+import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.playhistory.activity.PlayHistoryActivity;
 import com.wotingfm.activity.music.playhistory.adapter.PlayHistoryAdapter;
+import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.CommonUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 
 import java.util.ArrayList;
@@ -24,22 +31,22 @@ import java.util.List;
 
 /**
  * 播放历史记录  TTS 界面
- *
  * @author woting11
  */
 public class TTSFragment extends Fragment {
-    private View rootView;
-    private SearchPlayerHistoryDao dbDao;
     private Context context;
-    private ListView listView;
-    private ArrayList<PlayerHistory> playList;    // 节目list
-//    private List<PlayerHistory> subList;        // 播放历史数据
+    private SearchPlayerHistoryDao dbDao;
     private PlayHistoryAdapter adapter;
-//    private List<PlayerHistory> deleteList;        // 删除数据列表
-    private List<PlayerHistory> checkList;        // 选中数据列表
-    public static boolean isData;                // 标记是否有数据
-    private View linearNull;            // linear_null
-    public static boolean isLoad;                // 标记是否已经加载过
+
+    private View linearNull;                    // linear_null
+    private View rootView;
+    private ListView listView;
+
+    private List<PlayerHistory> checkList;      // 选中数据列表
+    private ArrayList<PlayerHistory> playList;  // 节目list
+
+    public static boolean isData;               // 标记是否有数据
+    public static boolean isLoad;               // 标记是否已经加载过
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -182,41 +189,41 @@ public class TTSFragment extends Fragment {
                         String localUrl = playList.get(position).getLocalurl();
                         String sequname = playList.get(position).getSequName();
                         String sequid = playList.get(position).getSequId();
-                        String sequdesc =playList.get(position).getSequDesc();
-                        String sequimg =playList.get(position).getSequImg();
+                        String sequdesc = playList.get(position).getSequDesc();
+                        String sequimg = playList.get(position).getSequImg();
+
                         //如果该数据已经存在数据库则删除原有数据，然后添加最新数据
                         PlayerHistory history = new PlayerHistory(
                                 playerName, playerImage, playerUrl, playerUri, playerMediaType,
                                 playerAllTime, playerInTime, playerContentDesc, playerNum,
                                 playerZanType, playerFrom, playerFromId, playerFromUrl,
-                                playerAddTime, bjUserId, playShareUrl, contentFavorite, contentId, localUrl,sequname,sequid,sequdesc,sequimg);
+                                playerAddTime, bjUserId, playShareUrl, contentFavorite, contentId, localUrl, sequname, sequid, sequdesc, sequimg);
                         dbDao.deleteHistory(playerUrl);
                         dbDao.addHistory(history);
-//						if(PlayerFragment.context!=null){
+                        if (PlayerFragment.context != null) {
 //							MainActivity.change();
-//							HomeActivity.UpdateViewPager();
-//							String s = playList.get(position).getPlayerName();
-//							PlayerFragment.SendTextRequest(s, context);
-//							getActivity().finish();
-//						}else{
-//							SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
-//							Editor et = sp.edit();
-//							et.putString(StringConstant.PLAYHISTORYENTER, "true");
-//							et.putString(StringConstant.PLAYHISTORYENTERNEWS, subList.get(position).getPlayerName());
-//							et.commit();
+                            HomeActivity.UpdateViewPager();
+                            String s = playList.get(position).getPlayerName();
+                            PlayerFragment.SendTextRequest(s, context);
+                            getActivity().finish();
+                        } else {
+                            SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+                            et.putString(StringConstant.PLAYHISTORYENTER, "true");
+                            et.putString(StringConstant.PLAYHISTORYENTERNEWS, playList.get(position).getPlayerName());
+                            if(!et.commit()) {
+                                L.v("数据 commit 失败!");
+                            }
 //							MainActivity.change();
-//							HomeActivity.UpdateViewPager();
-//							getActivity().finish();
-//						}
+                            HomeActivity.UpdateViewPager();
+                            getActivity().finish();
+                        }
                     }
                 }
             }
         });
     }
 
-    /**
-     * 更新是否全选状态
-     */
+    // 更新是否全选状态
     private void ifAll() {
         if (checkList == null) {
             checkList = new ArrayList<>();
@@ -230,11 +237,11 @@ public class TTSFragment extends Fragment {
         }
         if (checkList.size() == playList.size()) {        // 发送广播更新为全选状态
             Intent intentAll = new Intent();
-            intentAll.setAction(PlayHistoryActivity.UPDATE_ACTION_ALL);
+            intentAll.setAction(BroadcastConstant.UPDATE_ACTION_ALL);
             context.sendBroadcast(intentAll);
         } else {                                            // 发送广播更新为非全选状态
             Intent intentNoCheck = new Intent();
-            intentNoCheck.setAction(PlayHistoryActivity.UPDATE_ACTION_CHECK);
+            intentNoCheck.setAction(BroadcastConstant.UPDATE_ACTION_CHECK);
             context.sendBroadcast(intentNoCheck);
         }
     }

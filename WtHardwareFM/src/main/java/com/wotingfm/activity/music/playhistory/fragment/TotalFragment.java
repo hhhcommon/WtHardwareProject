@@ -1,6 +1,5 @@
 package com.wotingfm.activity.music.playhistory.fragment;
 
-import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -27,6 +26,7 @@ import com.wotingfm.activity.music.playhistory.adapter.PlayHistoryExpandableAdap
 import com.wotingfm.activity.music.search.model.SuperRankInfo;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.CommonUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 
 import java.util.ArrayList;
@@ -34,22 +34,21 @@ import java.util.List;
 
 /**
  * 全部播放历史
- * 
  * @author woting11
  */
-@SuppressLint("InflateParams")
 public class TotalFragment extends Fragment {
-	private View rootView;
 	private Context context;
-	private ExpandableListView mListView;	//播放历史列表
 	private SearchPlayerHistoryDao dbDao;	//播放历史数据库
-//	private PlayHistoryExpandableAdapter adapter;
-//	private List<PlayerHistory> subList;	//播放历史数据
+
 	private ArrayList<SuperRankInfo> list = new ArrayList<>();// 返回的节目list，拆分之前的list
+
+    private View rootView;
 	private Dialog delDialog;
-	private boolean isLoad;					// 是否已经加载过
+    private ExpandableListView mListView;	//播放历史列表
+
 	private int delChildPosition = -1;
 	private int delGroupPosition = -1;
+    private boolean isLoad;					// 是否已经加载过
 	public static boolean isData = false;	// 是否有数据 
 	public static boolean isDeleteSound;	// 标记单条删除记录为声音数据
 	public static boolean isDeleteRadio;	// 标记单条删除记录为电台数据
@@ -89,9 +88,7 @@ public class TotalFragment extends Fragment {
 			ArrayList<PlayerHistory> ttsList = null;
 			ArrayList<PlayerHistory> radioList = null;
 
-			/**
-			 * 循环遍历  对数据库里的数据进行分类
-			 */
+			// 循环遍历  对数据库里的数据进行分类
 			for (int i = 0; i < subList.size(); i++) {
 				isData = true;
 				if (subList.get(i).getPlayerMediaType()!=null && !subList.get(i).getPlayerMediaType().equals("")) {
@@ -168,9 +165,7 @@ public class TotalFragment extends Fragment {
 		}
 	}
 
-	/**
-	 * 设置ExpanableListView 的 Item 的点击事件
-	 */
+	// 设置 ExpandableListView 的 Item 的点击事件
 	protected void setItemListener() {
 		mListView.setOnChildClickListener(new OnChildClickListener() {
 			@Override
@@ -207,7 +202,7 @@ public class TotalFragment extends Fragment {
                             playerZanType,  playerFrom, playerFromId, playerFromUrl,
                             playerAddTime, bjUserId, playShareUrl, contentFavorite, contentId, localUrl,sequname,sequid,sequdesc,sequimg);
 
-					//如果该数据已经存在数据库则删除原有数据，然后添加最新数据
+					// 如果该数据已经存在数据库则删除原有数据，然后添加最新数据
 					if(playerMediaType != null && playerMediaType.equals("TTS")){
                         dbDao.deleteHistoryById(contentId);
 					}else {
@@ -224,7 +219,9 @@ public class TotalFragment extends Fragment {
 						SharedPreferences.Editor et = sp.edit();
 						et.putString(StringConstant.PLAYHISTORYENTER, "true");
 						et.putString(StringConstant.PLAYHISTORYENTERNEWS,list.get(groupPosition).getHistoryList().get(childPosition).getPlayerName());
-						et.commit();
+						if(!et.commit()) {
+                            L.v("数据 commit 失败!");
+                        }
 						HomeActivity.UpdateViewPager();
 						getActivity().finish();
 					}
@@ -263,28 +260,24 @@ public class TotalFragment extends Fragment {
 		});
 	}
 
-	/**
-	 * 长按 ExpandableListView 的 Item 弹出删除对话框
-	 */
+	// 长按 ExpandableListView 的 Item 弹出删除对话框
 	private void delDialog() {
 		final View dialog1 = LayoutInflater.from(context).inflate(R.layout.dialog_exit_confirm, null);
-		TextView textCancel = (TextView) dialog1.findViewById(R.id.tv_cancle);
 		TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);
-		TextView textConfirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
         textTitle.setText("确定删除这条播放记录?");
 		delDialog = new Dialog(context, R.style.MyDialog);
 		delDialog.setContentView(dialog1);
 		delDialog.setCanceledOnTouchOutside(false);
 		delDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
 
-        textCancel.setOnClickListener(new OnClickListener() {
+        dialog1.findViewById(R.id.tv_cancle).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				delDialog.dismiss();
 			}
 		});
 
-        textConfirm.setOnClickListener(new OnClickListener() {
+        dialog1.findViewById(R.id.tv_confirm).setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				String playType = list.get(delGroupPosition).getHistoryList().get(delChildPosition).getPlayerMediaType();

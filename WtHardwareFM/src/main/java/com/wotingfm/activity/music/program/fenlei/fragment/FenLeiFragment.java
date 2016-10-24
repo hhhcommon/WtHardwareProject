@@ -13,7 +13,6 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
-import android.widget.LinearLayout;
 
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
@@ -26,6 +25,7 @@ import com.wotingfm.activity.music.program.radiolist.activity.RadioListActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -49,7 +49,7 @@ public class FenLeiFragment extends Fragment implements View.OnClickListener{
 
     protected List<FenLeiName> subList;
 
-    private String tag = "FENLEI_VOLLEY_REQUEST_CANCEL_TAG";
+    private String tag = "FEN_LEI_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
 
     @Override
@@ -62,15 +62,11 @@ public class FenLeiFragment extends Fragment implements View.OnClickListener{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_fenlei_new, container, false);
+            rootView.findViewById(R.id.lin_second).setOnClickListener(this);
             gridFenLei = (GridView) rootView.findViewById(R.id.gv_fenlei);
-            LinearLayout lin_second = (LinearLayout) rootView.findViewById(R.id.lin_second);
-            lin_second.setOnClickListener(this);
             gridFenLei.setSelector(new ColorDrawable(Color.TRANSPARENT));   // 取消默认背景选择器
-            if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {            // 发送网络请求
-                sendRequest();
-            } else {
-                ToastUtils.show_short(context, "网络失败，请检查网络");
-            }
+
+            sendRequest();
         }
         return rootView;
     }
@@ -79,11 +75,7 @@ public class FenLeiFragment extends Fragment implements View.OnClickListener{
     public void onClick(View v) {
         switch (v.getId()){
            case R.id.lin_second:
-               if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {            // 发送网络请求
-                   sendRequest();
-               } else {
-                   ToastUtils.show_short(context, "网络失败，请检查网络");
-               }
+               sendRequest();
                break;
 
         }
@@ -105,6 +97,11 @@ public class FenLeiFragment extends Fragment implements View.OnClickListener{
 
     // 发送网络请求
     private void sendRequest() {
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {            // 发送网络请求
+            ToastUtils.show_short(context, "网络失败，请检查网络");
+            return ;
+        }
+
         VolleyRequest.RequestPost(GlobalConfig.getCatalogUrl, tag, setParam(), new VolleyCallback() {
             private String ReturnType;
 
@@ -118,6 +115,7 @@ public class FenLeiFragment extends Fragment implements View.OnClickListener{
                 }
                 try {
                     ReturnType = result.getString("ReturnType");
+                    L.v("ReturnType -- > > " +ReturnType);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -140,15 +138,7 @@ public class FenLeiFragment extends Fragment implements View.OnClickListener{
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-                } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_always(context, "无此分类信息");
-                } else if (ReturnType != null && ReturnType.equals("1003")) {
-                    ToastUtils.show_always(context, "分类不存在");
-                } else if (ReturnType != null && ReturnType.equals("1011")) {
-                    ToastUtils.show_always(context, "当前暂无分类");
-                } else if (ReturnType != null && ReturnType.equals("T")) {
-                    ToastUtils.show_always(context, "获取列表异常");
-                }else {
+                } else {
                     ToastUtils.show_always(context, "数据获取异常，请稍候重试");
                 }
             }

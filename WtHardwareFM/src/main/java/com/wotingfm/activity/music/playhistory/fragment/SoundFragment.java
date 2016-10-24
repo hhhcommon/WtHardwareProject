@@ -19,8 +19,10 @@ import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.playhistory.activity.PlayHistoryActivity;
 import com.wotingfm.activity.music.playhistory.adapter.PlayHistoryAdapter;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.CommonUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 
 import java.util.ArrayList;
@@ -32,19 +34,21 @@ import java.util.List;
  * @author woting11
  */
 public class SoundFragment extends Fragment{
-	private View rootView;
+    private Context context;
 	private SearchPlayerHistoryDao dbDao;
-	private Context context;
+    private PlayHistoryAdapter adapter;
+
+    private View linearNull;			        // linear_null
+    private View rootView;
 	private ListView listView;
-	private List<PlayerHistory> subList;		// 播放历史全部数据
-	private PlayHistoryAdapter adapter;
+
 	private List<PlayerHistory> deleteList;		// 删除数据列表
-	private ArrayList<PlayerHistory> playList;	// 播放历史声音列表
 	private List<PlayerHistory> checkList;		// 选中数据列表
+    private ArrayList<PlayerHistory> playList;	// 播放历史声音列表
+
 	public static boolean isData = false;		// 是否有数据 
 	public static boolean isLoad;
-	private View linearNull;			// linear_null
-	
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -61,13 +65,10 @@ public class SoundFragment extends Fragment{
 			getData();
 			isLoad = true;
 		}
-		
 		return rootView;
 	}
 	
-	/**
-	 * 初始化数据库命令执行对象
-	 */
+	// 初始化数据库命令执行对象
 	private void initDao() {
         dbDao = new SearchPlayerHistoryDao(context);
 	}
@@ -78,7 +79,7 @@ public class SoundFragment extends Fragment{
 	public void getData(){
 		listView.setVisibility(View.GONE);
 		isData = false;
-		subList = dbDao.queryHistory();
+        List<PlayerHistory> subList = dbDao.queryHistory();
 		playList = null;
 		if (subList != null && subList.size() > 0) {
 			for (int i = 0; i < subList.size(); i++) {
@@ -114,9 +115,7 @@ public class SoundFragment extends Fragment{
 		}
 	}
 	
-	/**
-	 * 更新是否全选状态
-	 */
+	// 更新是否全选状态
 	private void ifAll(){
 		if(checkList == null){
 			checkList = new ArrayList<>();
@@ -130,11 +129,11 @@ public class SoundFragment extends Fragment{
 		}
 		if(checkList.size() == playList.size()){
 			Intent intentAll = new Intent();
-			intentAll.setAction(PlayHistoryActivity.UPDATE_ACTION_ALL);
+			intentAll.setAction(BroadcastConstant.UPDATE_ACTION_ALL);
 			context.sendBroadcast(intentAll);
 		}else{
 			Intent intentNoCheck = new Intent();
-			intentNoCheck.setAction(PlayHistoryActivity.UPDATE_ACTION_CHECK);
+			intentNoCheck.setAction(BroadcastConstant.UPDATE_ACTION_CHECK);
 			context.sendBroadcast(intentNoCheck);
 		}
 	}
@@ -229,7 +228,9 @@ public class SoundFragment extends Fragment{
 							SharedPreferences.Editor et = sp.edit();
 							et.putString(StringConstant.PLAYHISTORYENTER, "true");
 							et.putString(StringConstant.PLAYHISTORYENTERNEWS, playList.get(position).getPlayerName());
-							et.commit();
+							if(!et.commit()) {
+                                L.v("数据 commit 失败!");
+                            }
 							HomeActivity.UpdateViewPager();
 							getActivity().finish();
 						}
@@ -306,7 +307,6 @@ public class SoundFragment extends Fragment{
 		rootView = null;
 		context = null;
 		listView = null;
-		subList = null;
 		adapter = null;
 		deleteList = null;
 		playList = null;

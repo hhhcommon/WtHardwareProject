@@ -2,6 +2,7 @@ package com.wotingfm.activity.common.baseactivity;
 
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Context;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
@@ -17,11 +18,13 @@ import com.wotingfm.manager.MyActivityManager;
  * Created by Administrator on 9/6/2016.
  */
 public abstract class BaseActivity extends Activity {
+    protected Context context;
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         MyActivityManager mam = MyActivityManager.getInstance();

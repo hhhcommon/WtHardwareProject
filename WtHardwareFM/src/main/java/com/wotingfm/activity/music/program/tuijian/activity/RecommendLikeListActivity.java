@@ -52,7 +52,6 @@ public class RecommendLikeListActivity extends AppBaseActivity {
 	private SearchPlayerHistoryDao dbDao;	// 数据库
 	private String tag = "RECOMMEND_LIKE_VOLLEY_REQUEST_CANCEL_TAG";
 	private boolean isCancelRequest;
-	private int pageSize;
     private int page = 1;					// 页码
     private int refreshType = 1;		    // refreshType 1为下拉加载 2为上拉加载更多
     private int pageSizeNum;
@@ -136,23 +135,22 @@ public class RecommendLikeListActivity extends AppBaseActivity {
                     try {
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
                         subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
+
                         String pageSizeString = arg1.getString("PageSize");
                         String allCountString = arg1.getString("AllCount");
-                        pageSizeNum = Integer.valueOf(pageSizeString);
-                        if(Integer.valueOf(pageSizeString) < 10){
-                            mListView.stopLoadMore();
-                            mListView.setPullLoadEnable(false);
-                        }else{
-                            mListView.setPullLoadEnable(true);
-                        }
                         if (allCountString != null && !allCountString.equals("") && pageSizeString != null && !pageSizeString.equals("")) {
                             int allCountInt = Integer.valueOf(allCountString);
-                            pageSize = Integer.valueOf(pageSizeString);
-                            // 先求余 如果等于0 最后结果不加1 如果不等于0 结果加一
-                            if (allCountInt % pageSize == 0) {
-                                pageSizeNum = allCountInt / pageSize;
-                            } else {
-                                pageSizeNum = allCountInt / pageSize + 1;
+                            int pageSizeInt = Integer.valueOf(pageSizeString);
+                            if(pageSizeInt < 10 || allCountInt < 10){
+                                mListView.stopLoadMore();
+                                mListView.setPullLoadEnable(false);
+                            }else{
+                                mListView.setPullLoadEnable(true);
+                                if (allCountInt % pageSizeInt == 0) {
+                                    pageSizeNum = allCountInt / pageSizeInt;
+                                } else {
+                                    pageSizeNum = allCountInt / pageSizeInt + 1;
+                                }
                             }
                         } else {
                             ToastUtils.show_always(context, "页码获取异常");
@@ -162,16 +160,11 @@ public class RecommendLikeListActivity extends AppBaseActivity {
                     }
                     if (refreshType == 1) {
                         newList.clear();
-                        newList.addAll(subList);
-                        if (adapterLikeList == null) {
-                            mListView.setAdapter(adapterLikeList = new RecommendListAdapter(context, newList, false));
-                        } else {
-                            adapterLikeList.notifyDataSetChanged();
-                        }
-                        mListView.stopRefresh();
-                    } else if (refreshType == 2) {
-                        mListView.stopLoadMore();
-                        newList.addAll(subList);
+                    }
+                    newList.addAll(subList);
+                    if (adapterLikeList == null) {
+                        mListView.setAdapter(adapterLikeList = new RecommendListAdapter(context, newList, false));
+                    } else {
                         adapterLikeList.notifyDataSetChanged();
                     }
                     setOnItem();
