@@ -180,6 +180,9 @@ public class SearchLikeActivity extends FragmentActivity implements
         MyActivityManager mam = MyActivityManager.getInstance();
         mam.pushOneActivity(context);
 
+        // 初始化语音搜索
+  /*      mVoiceRecognizer= VoiceRecognizer.getInstance(context,BroadcastConstant.SEARCHVOICE);*/
+
         initViews();            // 初始化视图
         initImage();            // 初始化指示器图片
         initDao();              // 初始化数据库命令执行对象

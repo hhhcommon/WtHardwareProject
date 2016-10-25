@@ -113,7 +113,7 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
                 bundle.putString("sequname", fileSequList.get(position).getSequname());
                 bundle.putString("sequid", fileSequList.get(position).getSequid());
                 intent.putExtras(bundle);
-                context.startActivity(intent);
+                context.startActivityForResult(intent,1);
             }
         });
     }

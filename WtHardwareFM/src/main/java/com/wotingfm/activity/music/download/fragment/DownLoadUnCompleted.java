@@ -46,7 +46,7 @@ public class DownLoadUnCompleted extends Fragment {
     private LinearLayout lin_status_yes;
     private LinearLayout lin_status_no;
     private String userId;
-    private MessageReceivers Receiver;
+
     private int num = -1;
 
     @Override
@@ -58,12 +58,7 @@ public class DownLoadUnCompleted extends Fragment {
         filter.addAction(BroadcastConstant.ACTION_UPDATE);
         filter.addAction(BroadcastConstant.ACTION_FINISHED);
         context.registerReceiver(mReceiver, filter);
-        if (Receiver == null) {
-            Receiver = new MessageReceivers();
-            IntentFilter filters = new IntentFilter();
-            filters.addAction(BroadcastConstant.PUSH_DOWN_UNCOMPLETED);
-            context.registerReceiver(Receiver, filters);
-        }
+
     }
 
     @Override
@@ -251,7 +246,7 @@ public class DownLoadUnCompleted extends Fragment {
     /**
      * 更新UI的广播接收器
      */
-    BroadcastReceiver mReceiver = new BroadcastReceiver() {
+    private  BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context contexts, Intent intent) {
             if (BroadcastConstant.ACTION_UPDATE.equals(intent.getAction())) {
@@ -298,25 +293,13 @@ public class DownLoadUnCompleted extends Fragment {
         }
     };
 
-    class MessageReceivers extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(BroadcastConstant.PUSH_DOWN_UNCOMPLETED)) {
-                setDownLoadSource();
-            }
-        }
-    }
+
 
     @Override
     public void onDestroy() {
         super.onDestroy();
         Intent intent1 = new Intent(context, DownloadService.class);
         context.stopService(intent1);
-        if (Receiver != null) {
-            context.unregisterReceiver(Receiver);
-            Receiver = null;
-        }
         if(mReceiver != null){
             context.unregisterReceiver(mReceiver);
             mReceiver = null;
