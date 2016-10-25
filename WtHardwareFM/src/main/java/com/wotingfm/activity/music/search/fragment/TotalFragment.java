@@ -127,7 +127,8 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                 bundle.putString("type", "search");
                 bundle.putSerializable("list", list.get(groupPosition).getList().get(childPosition));
                 intent.putExtras(bundle);
-                startActivity(intent);
+                ((SearchLikeActivity) getActivity()).startForResult(intent);
+//                startActivity(intent);
                 break;
             default:
                 ToastUtils.show_short(context, "暂不支持的Type类型");

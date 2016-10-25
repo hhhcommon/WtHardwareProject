@@ -23,6 +23,7 @@ import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
+import com.wotingfm.activity.music.program.radiolist.activity.RadioListActivity;
 import com.wotingfm.activity.music.program.radiolist.adapter.ListInfoAdapter;
 import com.wotingfm.activity.music.program.radiolist.model.ListInfo;
 import com.wotingfm.activity.music.program.radiolist.rollviewpager.RollPagerView;
@@ -268,7 +269,8 @@ public class ClassifyFragment extends Fragment{
 						bundle.putString("type", "radiolistactivity");
 						bundle.putSerializable("list", newList.get(position - 2));
 						intent.putExtras(bundle);
-						startActivityForResult(intent, 1);
+                        ((RadioListActivity) getActivity()).startForResult(intent);
+//						startActivityForResult(intent, 1);
 					} else {
 						ToastUtils.show_short(context, "暂不支持的Type类型");
 					}

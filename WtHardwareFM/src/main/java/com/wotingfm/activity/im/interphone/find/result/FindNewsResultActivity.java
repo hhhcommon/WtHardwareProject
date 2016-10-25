@@ -42,7 +42,6 @@ import java.util.List;
  */
 
 public class FindNewsResultActivity extends AppBaseActivity {
-
     private XListView mXListView;
     private Dialog dialog;
 
@@ -169,7 +168,7 @@ public class FindNewsResultActivity extends AppBaseActivity {
         });
     }
 
-    private void setItemListener() {// 设置item对应的点击事件
+    private void setItemListener() {// 设置 item 对应的点击事件
         mXListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
@@ -192,7 +191,7 @@ public class FindNewsResultActivity extends AppBaseActivity {
                                 if (GroupList.get(position - 1).getGroupCreator().equals(CommonUtils.getUserId(context))) {
                                     Intent intent = new Intent(FindNewsResultActivity.this, GroupDetailActivity.class);
                                     Bundle bundle = new Bundle();
-                                    bundle.putSerializable("contact", GroupList.get(position - 1));
+                                    bundle.putSerializable("data", GroupList.get(position - 1));
                                     bundle.putString("type", "FindNewsResultActivity");
                                     intent.putExtras(bundle);
                                     startActivity(intent);

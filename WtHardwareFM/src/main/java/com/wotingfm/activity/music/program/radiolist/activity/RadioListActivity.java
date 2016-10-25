@@ -126,6 +126,7 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
                         }
                     } else {
                         ToastUtils.show_always(RadioListActivity.this, "暂没有该分类数据");
+                        closeDialog();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -172,6 +173,10 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 			dialog.dismiss();
 		}
 	}
+
+    public void startForResult(Intent intent) {
+        startActivityForResult(intent, 1);
+    }
 
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {

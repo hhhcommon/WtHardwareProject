@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
@@ -217,67 +218,48 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                 try {
                     String returnType = result.getString("ReturnType");
                     if (returnType != null && returnType.equals("1001")) {
-                        try {
-                            String groupInfo = result.getString("GroupInfo");
-                            GroupRation groupRation = new Gson().fromJson(groupInfo, new TypeToken<GroupRation>() {
-                            }.getType());
-                            groupRation.setAlternateChannel1(spinnerString1);// 备用频道 1
-                            groupRation.setAlternateChannel2(spinnerString2);// 备用频道 2
-                            if (viewSuccess == 1) {
-                                dealt(groupRation);
-                            } else {      // 跳转到群组详情界面
-                                sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
-                                setResult(1);
-                                Intent intent = new Intent(context, GroupDetailActivity.class);
-                                intent.putExtra("GroupId", groupRation.getGroupId());
-                                intent.putExtra("ImageUrl", miniUri);
-                                startActivity(intent);
-                                finish();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        GroupRation groupRation = new Gson().fromJson(result.getString("GroupInfo"), new TypeToken<GroupRation>() {}.getType());
+                        groupRation.setAlternateChannel1(spinnerString1);// 备用频道 1
+                        groupRation.setAlternateChannel2(spinnerString2);// 备用频道 2
+                        if (viewSuccess == 1) {
+                            dealt(groupRation);
+                        } else {      // 跳转到群组详情界面
+                            sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
+                            Intent intent = new Intent(context, GroupDetailActivity.class);
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("data", groupRation);
+                            bundle.putString("type", "CreateGroup");
+                            intent.putExtras(bundle);
+                            startActivity(intent);
+                            setResult(1);
+                            finish();
                         }
-
                     } else {
                         try {
                             String message = result.getString("Message");
                             if (returnType != null && returnType.equals("1002")) {
                                 Toast.makeText(context, "未登陆无法创建群组", Toast.LENGTH_SHORT).show();
-                                setTitle("创建失败");
-                                btnCommit.setVisibility(View.INVISIBLE);
                             } else if (returnType != null && returnType.equals("1003")) {
                                 Toast.makeText(context, "无法得到用户分类" + message, Toast.LENGTH_SHORT).show();
-                                setTitle("创建失败");
-                                btnCommit.setVisibility(View.INVISIBLE);
                             } else if (returnType != null && returnType.equals("1004")) {
                                 Toast.makeText(context, "无法得到组密码" + message, Toast.LENGTH_SHORT).show();
-                                setTitle("创建失败");
-                                btnCommit.setVisibility(View.INVISIBLE);
                             } else if (returnType != null && returnType.equals("1005")) {
                                 Toast.makeText(context, "无法得到组员信息" + message, Toast.LENGTH_SHORT).show();
-                                setTitle("创建失败");
-                                btnCommit.setVisibility(View.INVISIBLE);
                             } else if (returnType != null && returnType.equals("1006")) {
                                 Toast.makeText(context, "给定的组员信息不存在" + message, Toast.LENGTH_SHORT).show();
-                                setTitle("创建失败");
-                                btnCommit.setVisibility(View.INVISIBLE);
                             } else if (returnType != null && returnType.equals("1007")) {
                                 Toast.makeText(context, "只有一个有效成员，无法构建用户组" + message, Toast.LENGTH_SHORT).show();
-                                setTitle("创建失败");
-                                btnCommit.setVisibility(View.INVISIBLE);
                             } else if (returnType != null && returnType.equals("1008")) {
                                 Toast.makeText(context, "您所创建的组已达50个，不能再创建了" + message, Toast.LENGTH_SHORT).show();
-                                setTitle("创建失败");
-                                btnCommit.setVisibility(View.INVISIBLE);
                             } else if (returnType != null && returnType.equals("1009")) {
                                 Toast.makeText(context, "20分钟内创建组不能超过5个" + message, Toast.LENGTH_SHORT).show();
-                                setTitle("创建失败");
-                                btnCommit.setVisibility(View.INVISIBLE);
                             } else {
                                 if (message != null && !message.trim().equals("")) {
                                     Toast.makeText(context, message, Toast.LENGTH_SHORT).show();
                                 }
                             }
+                            setTitle("创建失败");
+                            btnCommit.setVisibility(View.INVISIBLE);
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -433,8 +415,10 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                     if (groupRation != null && !groupRation.equals("")) {
                         // 跳转到群组详情页面
                         Intent intent = new Intent(context, GroupDetailActivity.class);
-                        intent.putExtra("GroupId", groupRation.getGroupId());
-                        intent.putExtra("ImageUrl", miniUri);
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("data", groupRation);
+                        bundle.putString("type", "CreateGroup");
+                        intent.putExtras(bundle);
                         startActivity(intent);
                     }
                     finish();
@@ -460,7 +444,7 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                         filePath = photoCutAfterImagePath;
                         String ExtName = filePath.substring(filePath.lastIndexOf("."));
                         String TestURI = GlobalConfig.baseUrl + "wt/common/upload4App.do?FType=GroupP&ExtName=";
-                        String Response = MyHttp.postFile(new File(filePath), TestURI + ExtName + "&PCDType=" + GlobalConfig.PCDType + "&GroupId=" + groupRation.GroupId
+                        String Response = MyHttp.postFile(new File(filePath), TestURI + ExtName + "&PCDType=" + GlobalConfig.PCDType + "&GroupId=" + groupRation.getGroupId()
                                 + "&IMEI=" + PhoneMessage.imei);
                         L.e("图片上传数据", TestURI + ExtName
                                 + "&UserId=" + CommonUtils.getUserId(getApplicationContext()) + "&IMEI=" + PhoneMessage.imei);

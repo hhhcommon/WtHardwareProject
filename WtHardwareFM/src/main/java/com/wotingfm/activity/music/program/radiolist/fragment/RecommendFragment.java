@@ -268,13 +268,13 @@ public class RecommendFragment extends Fragment{
 							bundle.putString("type", "radiolistactivity");
 							bundle.putSerializable("list", newList.get(position - 2));
 							intent.putExtras(bundle);
-							startActivityForResult(intent, 1);
+                            ((RadioListActivity) getActivity()).startForResult(intent);
+//							startActivityForResult(intent, 1);
 						} else {
 							ToastUtils.show_short(context, "暂不支持的Type类型");
 						}
 					}
 				}
-
 			}
 		});
 	}

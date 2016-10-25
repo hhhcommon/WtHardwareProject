@@ -572,6 +572,10 @@ public class SearchLikeActivity extends FragmentActivity implements
         image.setImageMatrix(matrix);
     }
 
+    public void startForResult(Intent intent) {
+        startActivityForResult(intent, 1);
+    }
+
     @Override
     protected void onActivityResult(int arg0, int arg1, Intent arg2) {
         super.onActivityResult(arg0, arg1, arg2);
