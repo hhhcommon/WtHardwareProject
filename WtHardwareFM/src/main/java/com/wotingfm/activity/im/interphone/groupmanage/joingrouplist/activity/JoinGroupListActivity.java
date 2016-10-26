@@ -1,6 +1,5 @@
 package com.wotingfm.activity.im.interphone.groupmanage.joingrouplist.activity;
 
-
 import android.app.Dialog;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,7 +7,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemLongClickListener;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -17,12 +15,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.BaseActivity;
-import com.wotingfm.activity.im.interphone.groupmanage.joingrouplist.adapter.joingrouplistadapter;
+import com.wotingfm.activity.im.interphone.groupmanage.joingrouplist.adapter.JoinGroupAdapter;
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -36,87 +35,95 @@ import java.util.List;
  * 作者：xinlong on 2016/4/13
  * 邮箱：645700751@qq.com
  */
-public class JoinGroupListActivity extends BaseActivity implements OnClickListener, joingrouplistadapter.Callback {
-    private JoinGroupListActivity context;
-    private Dialog dialog;
-    private String groupId;
-    private ListView lv_jiaqun;
-    private LinearLayout lin_left;
-    protected joingrouplistadapter adapter;
+public class JoinGroupListActivity extends BaseActivity implements
+        OnClickListener, JoinGroupAdapter.Callback, OnItemLongClickListener {
+
+    protected JoinGroupAdapter adapter;
     private List<UserInfo> userList;
-    private Integer onClickTV;
-    private int dealType = 1;//1接受2拒绝
-    private Dialog DelDialog;
-    private int delPosition;
-    private String tag = "JOIN_GROUP_LIST_VOLLEY_REQUEST_CANCEL_TAG";
-    private boolean isCancelRequest;
     private ArrayList<UserInfo> list;
-    private TextView mBack;
-    private TextView tv_head_name;
+
+    private Dialog dialog;
+    private Dialog delDialog;
+    private ListView joinGroupList;
+
+    private int onClickTV;
+    private int dealType = 1;// == 1 接受    == 2 拒绝
+    private int delPosition;
+    private boolean isCancelRequest;
+    private String tag = "JOIN_GROUP_LIST_VOLLEY_REQUEST_CANCEL_TAG";
+    private String groupId;
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.wt_back:// 返回
+                finish();
+                break;
+            case R.id.tv_cancle:// 取消
+                delDialog.dismiss();
+                break;
+            case R.id.tv_confirm:// 确定拒绝
+                delDialog.dismiss();
+                dealType = 2;
+                sendRequest();
+                break;
+        }
+    }
+
+    @Override
+    public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+        delDialog.show();
+        delPosition = position;
+        return false;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_join_group_list);
-        context = this;
-        handleIntent();
-        setView();
-        setListener();
-        if (groupId != null && !groupId.equals("")) {
-            if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                dialog = DialogUtils.Dialogph(context, "正在获取群成员信息");
-                send();
-            } else {
-                ToastUtils.show_always(context, "网络失败，请检查网络");
-            }
-        } else {
-            ToastUtils.show_always(context, "获取groupid失败，请返回上一级界面重试");
-        }
-        DelDialog();
+
+        delDialog();
+        initView();
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        tv_head_name.setText("审核消息");
-    }
-
-    private void DelDialog() {
+    private void delDialog() {
         final View dialog1 = LayoutInflater.from(this).inflate(R.layout.dialog_exit_confirm, null);
-        TextView tv_cancel = (TextView) dialog1.findViewById(R.id.tv_cancle);
-        TextView tv_title = (TextView) dialog1.findViewById(R.id.tv_title);
-        TextView tv_confirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
-        tv_title.setText("确定拒绝?");
-        DelDialog = new Dialog(this, R.style.MyDialog);
-        DelDialog.setContentView(dialog1);
-        DelDialog.setCanceledOnTouchOutside(false);
-        DelDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-        tv_cancel.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                DelDialog.dismiss();
-            }
-        });
-        tv_confirm.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    DelDialog.dismiss();
-                    dealType = 2;
-                    sendRequest();
-                } else {
-                    ToastUtils.show_always(context, "网络失败，请检查网络");
-                }
-            }
-        });
+        dialog1.findViewById(R.id.tv_cancle).setOnClickListener(this);
+        dialog1.findViewById(R.id.tv_confirm).setOnClickListener(this);
+        TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);
+        textTitle.setText("确定拒绝?");
+
+        delDialog = new Dialog(this, R.style.MyDialog);
+        delDialog.setContentView(dialog1);
+        delDialog.setCanceledOnTouchOutside(false);
+        delDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
     }
 
-    private void handleIntent() {
-        groupId = this.getIntent().getStringExtra("GroupId");
+    // 初始化视图
+    private void initView() {
+        TextView textHeadName = (TextView) findViewById(R.id.tv_head_name);
+        textHeadName.setText("审核消息");// 设置标题
 
+        findViewById(R.id.wt_back).setOnClickListener(this);// 返回
+
+        joinGroupList = (ListView) findViewById(R.id.lv_jiaqun);// 消息列表
+        groupId = getIntent().getStringExtra("GroupId");// 群组 ID
+        if(groupId == null || groupId.equals("")) {
+            ToastUtils.show_always(context, "获取 groupId 失败，请返回重试!");
+            return ;
+        }
+
+        dialog = DialogUtils.Dialogph(context, "正在获取群成员信息");
+        send();
     }
 
+    // 货物需要处理的审核消息
     private void send() {
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            ToastUtils.show_always(context, "网络连接失败，请检查网络!");
+            return ;
+        }
+
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("GroupId", groupId);
@@ -130,37 +137,19 @@ public class JoinGroupListActivity extends BaseActivity implements OnClickListen
                 if (isCancelRequest) return;
                 try {
                     String ReturnType = result.getString("ReturnType");
+                    L.v("ReturnType -- > > " + ReturnType);
+
                     if (ReturnType != null && ReturnType.equals("1001")) {
-                        try {
-                            String userList1 = result.getString("InviteUserList");
-                            userList = new Gson().fromJson(userList1, new TypeToken<List<UserInfo>>() {
-                            }.getType());//userlist未包含用户名信息，此时从上一个页面中获取
-                            for (int i = 0; i < userList.size(); i++) {
-                                for (int j = 0; j < list.size(); j++) {
-                                    if (userList.get(i).getInviteUserId() != null && userList.get(i).getInviteUserId().equals(list.get(j).getUserId())) {
-                                        userList.get(i).setInvitedUserName(list.get(j).getUserName());
-                                    }
+                        userList = new Gson().fromJson(result.getString("InviteUserList"), new TypeToken<List<UserInfo>>() {}.getType());
+                        for (int i = 0; i < userList.size(); i++) {
+                            for (int j = 0; j < list.size(); j++) {
+                                if (userList.get(i).getInviteUserId() != null && userList.get(i).getInviteUserId().equals(list.get(j).getUserId())) {
+                                    userList.get(i).setInvitedUserName(list.get(j).getUserName());
                                 }
                             }
-                            adapter = new joingrouplistadapter(context, userList, context);
-                            lv_jiaqun.setAdapter(adapter);
-                            lv_jiaqun.setOnItemLongClickListener(new OnItemLongClickListener() {
-
-                                @Override
-                                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                                    DelDialog.show();
-                                    delPosition = position;
-                                    return false;
-                                }
-                            });
-
-                        } catch (Exception e1) {
-                            e1.printStackTrace();
                         }
-                    } else if (ReturnType != null && ReturnType.equals("1002")) {
-                        ToastUtils.show_always(context, "无法获取用户Id");
-                    } else if (ReturnType != null && ReturnType.equals("T")) {
-                        ToastUtils.show_always(context, "异常返回值");
+                        joinGroupList.setAdapter(adapter = new JoinGroupAdapter(context, userList, JoinGroupListActivity.this));
+                        joinGroupList.setOnItemLongClickListener(JoinGroupListActivity.this);
                     } else if (ReturnType != null && ReturnType.equals("1011")) {
                         ToastUtils.show_always(context, "没有待您审核的消息");
                     } else {
@@ -180,36 +169,20 @@ public class JoinGroupListActivity extends BaseActivity implements OnClickListen
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+                if (dialog != null) dialog.dismiss();
+                ToastUtils.showVolleyError(context);
             }
         });
     }
 
-    private void setListener() {
-        mBack.setOnClickListener(this);
-    }
-
-    private void setView() {
-        lv_jiaqun = (ListView) findViewById(R.id.lv_jiaqun);
-        mBack = (TextView) findViewById(R.id.wt_back);
-        tv_head_name = (TextView) findViewById(R.id.tv_head_name);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.wt_back:
-                finish();
-                break;
-        }
-    }
-
     private void sendRequest() {
+        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            ToastUtils.show_always(context, "网络连接失败，请检查网络!");
+            return ;
+        }
+
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            // 模块属性
             jsonObject.put("DealType", dealType);
             if (dealType == 1) {
                 jsonObject.put("InviteUserId", userList.get(onClickTV).getInviteUserId());
@@ -218,7 +191,7 @@ public class JoinGroupListActivity extends BaseActivity implements OnClickListen
                 jsonObject.put("InviteUserId", userList.get(delPosition).getInviteUserId());
                 jsonObject.put("BeInvitedUserId", userList.get(delPosition).getBeInviteUserId());
             }
-            jsonObject.put("GroupId", groupId);            // groupid由上一个界面传递而来
+            jsonObject.put("GroupId", groupId);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -276,6 +249,7 @@ public class JoinGroupListActivity extends BaseActivity implements OnClickListen
                     dialog.dismiss();
                     dealType = 1;
                 }
+                ToastUtils.showVolleyError(context);
             }
         });
     }
@@ -283,12 +257,8 @@ public class JoinGroupListActivity extends BaseActivity implements OnClickListen
     @Override
     public void click(View v) {
         onClickTV = (Integer) v.getTag();
-        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            dialog = DialogUtils.Dialogph(context, "正在获取数据");
-            sendRequest();
-        } else {
-            ToastUtils.show_always(this, "网络连接失败，请稍后重试");
-        }
+        dialog = DialogUtils.Dialogph(context, "正在获取数据");
+        sendRequest();
     }
 
     @Override
@@ -298,9 +268,7 @@ public class JoinGroupListActivity extends BaseActivity implements OnClickListen
         userList = null;
         list = null;
         adapter = null;
-        lv_jiaqun = null;
-        lin_left = null;
-        context = null;
+        joinGroupList = null;
         setContentView(R.layout.activity_null);
     }
 }

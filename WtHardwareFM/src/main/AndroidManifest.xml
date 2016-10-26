@@ -333,7 +333,7 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".activity.im.interphone.groupmanage.transferauthority.TransferAuthority"
+            android:name=".activity.im.interphone.groupmanage.transferauthority.TransferAuthorityActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />

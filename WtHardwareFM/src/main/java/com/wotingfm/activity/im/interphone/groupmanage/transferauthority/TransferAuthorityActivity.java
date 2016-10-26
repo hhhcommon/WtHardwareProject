@@ -1,6 +1,7 @@
-package com.wotingfm.activity.im.interphone.groupmanage.memberadd.activity;
+package com.wotingfm.activity.im.interphone.groupmanage.transferauthority;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -20,6 +21,7 @@ import com.wotingfm.activity.im.interphone.groupmanage.memberadd.adapter.Members
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.im.interphone.linkman.view.SideBar;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CharacterParser;
@@ -36,31 +38,31 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * 添加群成员
+ * 移交管理员权限
  * 作者：xinlong on 2016/3/9
  * 邮箱：645700751@qq.com
  */
-public class MemberAddActivity extends BaseActivity implements View.OnClickListener,
-        SideBar.OnTouchingLetterChangedListener, TextWatcher, MembersAddAdapter.FriendCheck {
+public class TransferAuthorityActivity extends BaseActivity implements
+        View.OnClickListener, TextWatcher, SideBar.OnTouchingLetterChangedListener, MembersAddAdapter.FriendCheck {
+
     private CharacterParser characterParser;
     private PinyinComparator_a pinyinComparator;
     private MembersAddAdapter adapter;
     private SideBar sideBar;
 
-    private List<UserInfo> userList;// 获取的 userList
+    private List<UserInfo> userList;        // 获取的 userList
     private List<UserInfo> userList2 = new ArrayList<>();
-    private List<String> addList = new ArrayList<>();
 
-    private Dialog dialog;
-    private TextView tvNoFriends;
-    private TextView dialogs;
-    private TextView textHeadRight;
-    private ListView listView;
-    private EditText editSearchContent;
-    private ImageView imageClear;
+    private Dialog dialog;                  // 加载数据对话框
+    private TextView tvNoFriends;           // 搜索为空时的提示
+    private TextView dialogs;               // SideBar 的选中字母提示
+    private ListView listView;              // 群组成员列表
+    private EditText editSearchContent;     // 搜索输入框
+    private ImageView imageClear;           // 清空输入内容
 
-    private String groupId;
-    private String tag = "GROUP_MEMBER_ADD_VOLLEY_REQUEST_CANCEL_TAG";
+    private String toUserId;                // 接受管理员身份转移的用户 ID
+    private String groupId;                 // 群组 ID
+    private String tag = "TRANSFER_AUTHORITY_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
 
     // 实例化汉字转拼音类
@@ -69,83 +71,40 @@ public class MemberAddActivity extends BaseActivity implements View.OnClickListe
         pinyinComparator = new PinyinComparator_a();
     }
 
-    // 设置右侧触摸监听
-    @Override
-    public void onTouchingLetterChanged(String s) {
-        int position = adapter.getPositionForSection(s.charAt(0));// 该字母首次出现的位置
-        if (position != -1) {
-            listView.setSelection(position);
-        }
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_transfer_authority);
 
-        initCharacterParser();// 初始化汉字转拼音类
-        initView();// 设置界面
+        initCharacterParser();
+        initView();
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.wt_back:// 返回
-                finish();
-                break;
-            case R.id.image_clear:// 清空输入框中输入的内容
-                editSearchContent.setText("");
-                imageClear.setVisibility(View.GONE);
-                tvNoFriends.setVisibility(View.GONE);
-                break;
-            case R.id.tv_head_right:// 确定发出邀请 - > 右上角的已选择的人数统计
-                if (userList2 == null || userList2.size() <= 0) {// 列表为空 没有好友或没有获取到用户的联系人
-                    finish();
-                    return ;
-                }
-                for (int i = 0; i < userList2.size(); i++) {// 将用户勾选的好友添加到另一个 List 中
-                    if (userList2.get(i).getCheckType() == 2) {
-                        addList.add(userList2.get(i).getUserId());
-                    }
-                }
-                if(addList == null || addList.size() <= 0) {// 如用户勾选的列表为空则提示用户选择联系人
-                    ToastUtils.show_always(context, "请选择您要邀请的好友!");
-                    return ;
-                }
-                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {// 向用户勾选的联系人发出进群组邀请
-                    dialog = DialogUtils.Dialogph(context, "正在发送邀请");
-                    sendGroupInvited();
-                } else {
-                    ToastUtils.show_always(context, "网络连接失败，请检查网络!");
-                }
-                break;
-        }
-    }
-
-    // 设置 view
+    // 初始化视图
     private void initView() {
-        findViewById(R.id.wt_back).setOnClickListener(this);// 返回
+        findViewById(R.id.wt_back).setOnClickListener(this);                    // 返回
+        findViewById(R.id.tv_head_right).setOnClickListener(this);              // 确定
 
-        sideBar = (SideBar) findViewById(R.id.sidebar);
+        TextView textHeadName = (TextView) findViewById(R.id.tv_head_name);     // 标题
+        textHeadName.setText("移交管理员权限");
+
         dialogs = (TextView) findViewById(R.id.dialog);
+        sideBar = (SideBar) findViewById(R.id.sidebar);
         sideBar.setTextView(dialogs);
-        sideBar.setOnTouchingLetterChangedListener(this);// 设置右侧触摸监听
+        sideBar.setOnTouchingLetterChangedListener(this);                       // 设置右侧触摸监听
 
-        tvNoFriends = (TextView) findViewById(R.id.title_layout_no_friends);
+        tvNoFriends = (TextView) findViewById(R.id.title_layout_no_friends);    // 搜索为空时的提示
         listView = (ListView) findViewById(R.id.country_lvcountry);
 
-        editSearchContent = (EditText) findViewById(R.id.et_search);// 搜索框输入内容
+        editSearchContent = (EditText) findViewById(R.id.et_search);            // 搜索输入框
         editSearchContent.addTextChangedListener(this);
 
-        imageClear = (ImageView) findViewById(R.id.image_clear);// 清除输入框中输入的内容
+        imageClear = (ImageView) findViewById(R.id.image_clear);                // 清空搜索输入内容
         imageClear.setOnClickListener(this);
 
-        textHeadRight = (TextView) findViewById(R.id.tv_head_right);// 确定
-        textHeadRight.setOnClickListener(this);
-
-        groupId = getIntent().getStringExtra("GroupId");// 群组 ID
+        groupId = getIntent().getStringExtra("GroupId");
         if(groupId == null || groupId.equals("")) {
-            ToastUtils.show_always(context, "获取组 ID 失败, 请返回重试!");
+            ToastUtils.show_always(context, "获取组 ID 失败, 请重试!");
             return ;
         }
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
@@ -153,6 +112,41 @@ public class MemberAddActivity extends BaseActivity implements View.OnClickListe
             send();
         } else {
             ToastUtils.show_always(context, "网络失败，请检查网络");
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.wt_back:          // 返回
+                finish();
+                break;
+            case R.id.image_clear:      // 清空搜索内容
+                imageClear.setVisibility(View.GONE);
+                tvNoFriends.setVisibility(View.GONE);
+                editSearchContent.setText("");
+                break;
+            case R.id.tv_head_right:    // 确定转移管理员权限
+                boolean isHave = false;
+                if (userList2 != null && userList2.size() > 0) {
+                    for (int i = 0; i < userList2.size(); i++) {
+                        if (userList2.get(i).getCheckType() == 2) {
+                            toUserId = userList2.get(i).getUserId();
+                            isHave = true;
+                        }
+                    }
+                }
+                if (!isHave) {          // 防空
+                    ToastUtils.show_always(context, "请勾选您要移交权限的成员!");
+                    return;
+                }
+                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                    dialog = DialogUtils.Dialogph(context, "正在变更管理员");
+                    sendTransferAuthority();
+                } else {
+                    ToastUtils.show_always(context, "网络失败，请检查网络");
+                }
+                break;
         }
     }
 
@@ -165,7 +159,7 @@ public class MemberAddActivity extends BaseActivity implements View.OnClickListe
             e.printStackTrace();
         }
 
-        VolleyRequest.RequestPost(GlobalConfig.getfriendlist, tag, jsonObject, new VolleyCallback() {
+        VolleyRequest.RequestPost(GlobalConfig.grouptalkUrl, tag, jsonObject, new VolleyCallback() {
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) dialog.dismiss();
@@ -174,24 +168,25 @@ public class MemberAddActivity extends BaseActivity implements View.OnClickListe
                     String ReturnType = result.getString("ReturnType");
                     L.v("ReturnType -- > > " + ReturnType);
 
-                    if(ReturnType == null) {
-                        ToastUtils.show_always(context, "获取成员失败，请稍后再试");
+                    if(ReturnType == null || ReturnType.equals("")) {
+                        ToastUtils.show_always(context, "获取群组成员失败，请重试!");
                         return ;
                     }
                     if (ReturnType.equals("1001") || ReturnType.equals("1002")) {
                         try {
                             userList = new Gson().fromJson(result.getString("UserList"), new TypeToken<List<UserInfo>>() {}.getType());
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        } catch (Exception e1) {
+                            e1.printStackTrace();
                         }
                         userList2.clear();
                         userList2.addAll(userList);
                         filledData(userList2);
                         Collections.sort(userList2, pinyinComparator);
-                        listView.setAdapter(adapter = new MembersAddAdapter(context, userList2));
-                        adapter.setOnListener(MemberAddActivity.this);
-                    } else {
-                        ToastUtils.show_always(context, "获取成员失败，请稍后再试");
+                        adapter = new MembersAddAdapter(context, userList2);
+                        listView.setAdapter(adapter);
+                        adapter.setOnListener(TransferAuthorityActivity.this);
+                    }  else {
+                        ToastUtils.show_always(context, "获取群组成员失败，请重试!");
                     }
                 } catch (JSONException e1) {
                     e1.printStackTrace();
@@ -206,7 +201,7 @@ public class MemberAddActivity extends BaseActivity implements View.OnClickListe
         });
     }
 
-    // 搜索好友
+    // 搜索
     private void search(String search_name) {
         List<UserInfo> filterDateList = new ArrayList<>();
         if (TextUtils.isEmpty(search_name)) {
@@ -235,7 +230,7 @@ public class MemberAddActivity extends BaseActivity implements View.OnClickListe
             person.get(i).setName(person.get(i).getUserName());
             String pinyin = characterParser.getSelling(person.get(i).getUserName());// 汉字转换成拼音
             String sortString = pinyin.substring(0, 1).toUpperCase();
-            if (sortString.matches("[A-Z]")) {// 正则表达式，判断首字母是否是英文字母
+            if (sortString.matches("[A-Z]")) {// 判断首字母是否是英文字母
                 person.get(i).setSortLetters(sortString.toUpperCase());
             } else {
                 person.get(i).setSortLetters("#");
@@ -243,42 +238,44 @@ public class MemberAddActivity extends BaseActivity implements View.OnClickListe
         }
     }
 
-    // 发送进入组的邀请
-    private void sendGroupInvited() {
+    // 管理员权限转移
+    private void sendTransferAuthority() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
+            jsonObject.put("ToUserId", toUserId);
             jsonObject.put("GroupId", groupId);
-            String s = addList.toString();// 对 s 进行处理 去掉"[]"符号
-            jsonObject.put("BeInvitedUserIds", s.substring(1, s.length() - 1).replaceAll(" ", ""));
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        VolleyRequest.RequestPost(GlobalConfig.sendInviteintoGroupUrl, tag, jsonObject, new VolleyCallback() {
+        VolleyRequest.RequestPost(GlobalConfig.changGroupAdminnerUrl, tag, jsonObject, new VolleyCallback() {
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) dialog.dismiss();
                 if (isCancelRequest) return;
                 try {
                     String ReturnType = result.getString("ReturnType");
+
                     if (ReturnType != null && ReturnType.equals("1001")) {
-                        ToastUtils.show_always(context, "组邀请已经发送，请等待对方接受");
-                        setResult(1);
+                        ToastUtils.show_always(context, "管理员权限移交成功");
+                        sendBroadcast(new Intent(BroadcastConstant.REFRESH_GROUP));
                         finish();
                     } else if (ReturnType != null && ReturnType.equals("1002")) {
                         ToastUtils.show_always(context, "无法获取用户Id");
+                    } else if (ReturnType != null && ReturnType.equals("1003")) {
+                        ToastUtils.show_always(context, "用户不存在");
+                    } else if (ReturnType != null && ReturnType.equals("10021")) {
+                        ToastUtils.show_always(context, "用户不是该组的管理员");
+                    } else if (ReturnType != null && ReturnType.equals("0000")) {
+                        ToastUtils.show_always(context, "无法获取相关的参数");
+                    } else if (ReturnType != null && ReturnType.equals("1004")) {
+                        ToastUtils.show_always(context, "无法获取移交用户Id");
+                    } else if (ReturnType != null && ReturnType.equals("10041")) {
+                        ToastUtils.show_always(context, "被移交用户不在该组");
                     } else if (ReturnType != null && ReturnType.equals("T")) {
                         ToastUtils.show_always(context, "异常返回值");
                     } else if (ReturnType != null && ReturnType.equals("200")) {
                         ToastUtils.show_always(context, "尚未登录");
-                    } else if (ReturnType != null && ReturnType.equals("1003")) {
-                        ToastUtils.show_always(context, "异常返回值");
-                    } else if (ReturnType != null && ReturnType.equals("10031")) {
-                        ToastUtils.show_always(context, "用户组不是验证群，不能采取这种方式邀请");
-                    } else if (ReturnType != null && ReturnType.equals("0000")) {
-                        ToastUtils.show_always(context, "无法获取用户ID");
-                    } else if (ReturnType != null && ReturnType.equals("1004")) {
-                        ToastUtils.show_always(context, "被邀请人不存在");
                     } else {
                         try {
                             String Message = result.getString("Message");
@@ -304,27 +301,31 @@ public class MemberAddActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void checkPosition(int position) {
-        int sum = 0;
         if (userList2.get(position).getCheckType() == 1) {
+            for (int i = 0; i < userList2.size(); i++) {
+                userList2.get(i).setCheckType(1);
+            }
             userList2.get(position).setCheckType(2);
         } else {
             userList2.get(position).setCheckType(1);
         }
-        for (int i = 0; i < userList2.size(); i++) {
-            if (userList2.get(i).getCheckType() == 2) {
-                sum++;
-            }
-        }
-        String sumString = "确定(" + sum + ")";
-        textHeadRight.setText(sumString);
         adapter.notifyDataSetChanged();
+    }
+
+    // 设置右侧触摸监听
+    @Override
+    public void onTouchingLetterChanged(String s) {
+        int position = adapter.getPositionForSection(s.charAt(0));// 该字母首次出现的位置
+        if (position != -1) {
+            listView.setSelection(position);
+        }
     }
 
     @Override
     public void afterTextChanged(Editable s) {
-        String searchName = s.toString();
+        String search_name = s.toString();
         if (userList2 != null) {
-            if (searchName.equals("") || searchName.trim().equals("")) {
+            if (search_name.equals("") || search_name.trim().equals("")) {
                 imageClear.setVisibility(View.GONE);
                 tvNoFriends.setVisibility(View.GONE);
                 if (userList == null || userList.size() == 0) {// 关键词为空
@@ -335,19 +336,15 @@ public class MemberAddActivity extends BaseActivity implements View.OnClickListe
                     userList2.addAll(userList);
                     filledData(userList2);
                     Collections.sort(userList2, pinyinComparator);
-                    if(adapter == null) {
-                        listView.setAdapter(adapter = new MembersAddAdapter(context, userList2));
-                        adapter.setOnListener(MemberAddActivity.this);
-                    } else {
-                        adapter.notifyDataSetChanged();
-                    }
+                    listView.setAdapter(adapter = new MembersAddAdapter(context, userList2));
+                    adapter.setOnListener(TransferAuthorityActivity.this);
                 }
             } else {
                 if (userList2 != null && userList2.size() != 0) {
                     userList2.clear();
                     userList2.addAll(userList);
                     imageClear.setVisibility(View.VISIBLE);
-                    search(searchName);
+                    search(search_name);
                 } else {
                     ToastUtils.show_always(context, "网络异常，没有获取导数据");
                 }
@@ -369,7 +366,6 @@ public class MemberAddActivity extends BaseActivity implements View.OnClickListe
         listView = null;
         editSearchContent = null;
         imageClear = null;
-        textHeadRight = null;
     }
 
     @Override
