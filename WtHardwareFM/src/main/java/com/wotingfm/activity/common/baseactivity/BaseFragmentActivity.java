@@ -1,20 +1,18 @@
 package com.wotingfm.activity.common.baseactivity;
 
 import android.annotation.TargetApi;
-import android.app.Activity;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.WindowManager;
 
-import com.wotingfm.manager.MyActivityManager;
-
 /**
- * App
- * Created by Administrator on 9/6/2016.
+ * 作者：xinlong on 2016/10/25 21:18
+ * 邮箱：645700751@qq.com
  */
-public abstract class BaseActivity extends Activity {
+public abstract class BaseFragmentActivity extends FragmentActivity {
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
@@ -22,8 +20,6 @@ public abstract class BaseActivity extends Activity {
         super.onCreate(savedInstanceState);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.pushOneActivity(this);
     }
 
 //    // 手机实体返回按键的处理 与 onBackPress 同理
@@ -97,10 +93,9 @@ public abstract class BaseActivity extends Activity {
         return res;
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.popOneActivity(this);
     }
 }

@@ -6,8 +6,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -15,7 +13,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -23,7 +20,6 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
-import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
@@ -37,6 +33,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.AppBaseFragmentActivity;
 import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.activity.music.search.adapter.SearchHistoryAdapter;
 import com.wotingfm.activity.music.search.adapter.SearchKeyAdapter;
@@ -51,7 +48,6 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
@@ -72,7 +68,7 @@ import java.util.List;
  * @author 辛龙
  *         2016年4月16日
  */
-public class SearchLikeActivity extends FragmentActivity implements
+public class SearchLikeActivity extends AppBaseFragmentActivity implements
         View.OnClickListener, TagFlowLayout.OnTagClickListener, AdapterView.OnItemClickListener {
 
     private SearchLikeActivity context;
@@ -175,11 +171,7 @@ public class SearchLikeActivity extends FragmentActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchlike);
         context = this;
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.pushOneActivity(context);
-
+        GlobalConfig.voicerecognizer=BroadcastConstant.SEARCHVOICE;
         initViews();            // 初始化视图
         initImage();            // 初始化指示器图片
         initDao();              // 初始化数据库命令执行对象
@@ -362,7 +354,6 @@ public class SearchLikeActivity extends FragmentActivity implements
         }
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
             jsonObject.put("FunType", "1");
             jsonObject.put("WordSize", "10");
             jsonObject.put("ReturnType", "2");
@@ -430,7 +421,6 @@ public class SearchLikeActivity extends FragmentActivity implements
 
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("UserId", CommonUtils.getUserId(context));
             jsonObject.put("FunType", "1");
             jsonObject.put("WordSize", "12");
             jsonObject.put("ReturnType", "2");
@@ -579,16 +569,6 @@ public class SearchLikeActivity extends FragmentActivity implements
         }
     }
 
-    // 设置 android app 的字体大小不受系统字体大小改变的影响
-    @Override
-    public Resources getResources() {
-        Resources res = super.getResources();
-        Configuration config = new Configuration();
-        config.setToDefaults();
-        res.updateConfiguration(config, res.getDisplayMetrics());
-        return res;
-    }
-
     /**
      * 全部 专辑 声音 电台 TTS 的点击监听
      */
@@ -636,8 +616,6 @@ public class SearchLikeActivity extends FragmentActivity implements
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.popOneActivity(context);
         mEtSearchContent = null;
         flowTopSearch = null;
         gridHistory = null;

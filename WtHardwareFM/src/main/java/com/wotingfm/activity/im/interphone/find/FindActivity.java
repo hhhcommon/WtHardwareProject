@@ -1,27 +1,15 @@
 package com.wotingfm.activity.im.interphone.find;
 
-import android.app.Dialog;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.media.AudioManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.DisplayMetrics;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
@@ -31,7 +19,6 @@ import com.wotingfm.activity.im.interphone.scanning.activity.CaptureActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.ToastUtils;
 
 /**
@@ -46,20 +33,20 @@ public class FindActivity extends AppBaseActivity implements View.OnClickListene
     private View relativeSao;               // 扫描
     private View linearContentSearch;       // 文字搜索
     private TextView textContent;           // 输入的要搜索的内容
-    private LinearLayout linearVoice;
-    private ImageView imageViewVoice;       // 语音搜索
-    private TextView textCancel;            // 关闭
-    private TextView textSpeakStatus;       // 语音搜索状态
-    private TextView textSpeakContent;      // 语音搜索内容
-
-    private Bitmap bmp;
-    private Bitmap bmpPress;
-    private Dialog yuYinDialog;             // 语音搜索对话框
-    private AudioManager audioMgr;
     private String type;
-    private int screen;
-    protected int curVolume;
-    private int stepVolume;
+
+//    private AudioManager audioMgr;
+//    private LinearLayout linearVoice;
+//    private ImageView imageViewVoice;       // 语音搜索
+//    private TextView textCancel;            // 关闭
+//    private TextView textSpeakStatus;       // 语音搜索状态
+//    private TextView textSpeakContent;      // 语音搜索内容
+//    private Bitmap bmp;
+//    private Bitmap bmpPress;
+//    private Dialog yuYinDialog;             // 语音搜索对话框
+//    private int screen;
+//    protected int curVolume;
+//    private int stepVolume;
 
     protected int setViewId() {
         return R.layout.activity_find;
@@ -70,22 +57,21 @@ public class FindActivity extends AppBaseActivity implements View.OnClickListene
         IntentFilter myFilter = new IntentFilter();
         myFilter.addAction(BroadcastConstant.FINDVOICE);
         registerReceiver(mBroadcastReceiver, myFilter);
-
-        initVoice();
+        // initVoice();
         initViews();
-        initDialog();
+        // initDialog();
         handlerIntent();
         setEditTextListener();
     }
 
 
-    private void initVoice() {
-        audioMgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-        // 获取最大音乐音量
-        int maxVolume = audioMgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
-        // 每次调整的音量大概为最大音量的1/100
-        stepVolume = maxVolume / 100;
-    }
+//    private void initVoice() {
+//        audioMgr = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+//        // 获取最大音乐音量
+//        int maxVolume = audioMgr.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+//        // 每次调整的音量大概为最大音量的1/100
+//        stepVolume = maxVolume / 100;
+//    }
 
     //处理上一个界面传递过来的数据
     private void handlerIntent() {
@@ -96,7 +82,7 @@ public class FindActivity extends AppBaseActivity implements View.OnClickListene
                 if (type.equals(StringConstant.FIND_TYPE_GROUP)) {
                     editContent.setHint("群名称");
                     setTitle("添加群组");
-                }else{
+                } else {
                     setTitle("添加好友");
                 }
             } else {
@@ -108,7 +94,7 @@ public class FindActivity extends AppBaseActivity implements View.OnClickListene
     //初始化视图
     private void initViews() {
         imageVoiceSearch = (ImageView) findViewById(R.id.img_voice_search);
-        imageVoiceSearch.setOnClickListener(this);
+        // imageVoiceSearch.setOnClickListener(this);
         imageDelete = (ImageView) findViewById(R.id.img_delete);
         imageDelete.setOnClickListener(this);
         relativeSao = findViewById(R.id.relative_saoyisao);
@@ -137,9 +123,11 @@ public class FindActivity extends AppBaseActivity implements View.OnClickListene
                     relativeSao.setVisibility(View.VISIBLE);
                 }
             }
+
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
             }
+
             @Override
             public void afterTextChanged(Editable s) {
 
@@ -148,75 +136,75 @@ public class FindActivity extends AppBaseActivity implements View.OnClickListene
     }
 
     // 语音搜索对话框
-    private void initDialog() {
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_yuyin_search, null);
-        //定义dialog view
-        bmp = BitmapUtils.readBitMap(FindActivity.this, R.mipmap.wt_image_talk_normal);
-        bmpPress = BitmapUtils.readBitMap(FindActivity.this, R.mipmap.wt_duijiang_button_pressed);
-        linearVoice = (LinearLayout) dialogView.findViewById(R.id.rl_voice);
-        imageViewVoice = (ImageView) dialogView.findViewById(R.id.imageView_voice);
-        imageViewVoice.setImageBitmap(bmp);
-        textCancel = (TextView) dialogView.findViewById(R.id.tv_cancle);
-        textSpeakStatus = (TextView) dialogView.findViewById(R.id.tv_speak_status);
-        textSpeakStatus.setText("请按住讲话");
-        textSpeakContent = (TextView) dialogView.findViewById(R.id.text_speak_content);
-        // 初始化dialog出现配置
-        yuYinDialog = new Dialog(FindActivity.this, R.style.MyDialog);
-        yuYinDialog.setContentView(dialogView);
-        Window window = yuYinDialog.getWindow();
-        DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
-        screen = dm.widthPixels;
-        ViewGroup.LayoutParams params = dialogView.getLayoutParams();
-        params.width = screen;
-        dialogView.setLayoutParams(params);
-        window.setGravity(Gravity.BOTTOM);
-        window.setWindowAnimations(R.style.ShareStyle);
-        // 定义view的监听
-        textCancel.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                yuYinDialog.dismiss();
-                textSpeakContent.setVisibility(View.GONE);
-            }
-        });
-
-        imageViewVoice.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                switch (event.getAction()) {
-                    case MotionEvent.ACTION_DOWN:
-                        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                            curVolume = audioMgr.getStreamVolume(AudioManager.STREAM_MUSIC);
-                            audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, stepVolume, AudioManager.FLAG_PLAY_SOUND);
-//                            mVoiceRecognizer.startListen();
-                            textSpeakStatus.setText("开始语音转换");
-                            imageViewVoice.setImageBitmap(bmpPress);
-                            textSpeakContent.setVisibility(View.GONE);
-                        } else {
-                            ToastUtils.show_short(FindActivity.this, "网络失败，请检查网络");
-                        }
-                        break;
-                    case MotionEvent.ACTION_UP:
-                        audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, curVolume, AudioManager.FLAG_PLAY_SOUND);
-//                        mVoiceRecognizer.stopListen();
-                        imageViewVoice.setImageBitmap(bmp);
-                        textSpeakStatus.setText("请按住讲话");
-                        break;
-                }
-                return true;
-            }
-        });
-    }
+//    private void initDialog() {
+//        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_yuyin_search, null);
+//        //定义dialog view
+//        bmp = BitmapUtils.readBitMap(FindActivity.this, R.mipmap.wt_image_talk_normal);
+//        bmpPress = BitmapUtils.readBitMap(FindActivity.this, R.mipmap.wt_duijiang_button_pressed);
+//        linearVoice = (LinearLayout) dialogView.findViewById(R.id.rl_voice);
+//        imageViewVoice = (ImageView) dialogView.findViewById(R.id.imageView_voice);
+//        imageViewVoice.setImageBitmap(bmp);
+//        textCancel = (TextView) dialogView.findViewById(R.id.tv_cancle);
+//        textSpeakStatus = (TextView) dialogView.findViewById(R.id.tv_speak_status);
+//        textSpeakStatus.setText("请按住讲话");
+//        textSpeakContent = (TextView) dialogView.findViewById(R.id.text_speak_content);
+//        // 初始化dialog出现配置
+//        yuYinDialog = new Dialog(FindActivity.this, R.style.MyDialog);
+//        yuYinDialog.setContentView(dialogView);
+//        Window window = yuYinDialog.getWindow();
+//        DisplayMetrics dm = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(dm);
+//        screen = dm.widthPixels;
+//        ViewGroup.LayoutParams params = dialogView.getLayoutParams();
+//        params.width = screen;
+//        dialogView.setLayoutParams(params);
+//        window.setGravity(Gravity.BOTTOM);
+//        window.setWindowAnimations(R.style.ShareStyle);
+//        // 定义view的监听
+//        textCancel.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                yuYinDialog.dismiss();
+//                textSpeakContent.setVisibility(View.GONE);
+//            }
+//        });
+//
+//        imageViewVoice.setOnTouchListener(new View.OnTouchListener() {
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                switch (event.getAction()) {
+//                    case MotionEvent.ACTION_DOWN:
+//                        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+//                            curVolume = audioMgr.getStreamVolume(AudioManager.STREAM_MUSIC);
+//                            audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, stepVolume, AudioManager.FLAG_PLAY_SOUND);
+////                            mVoiceRecognizer.startListen();
+//                            textSpeakStatus.setText("开始语音转换");
+//                            imageViewVoice.setImageBitmap(bmpPress);
+//                            textSpeakContent.setVisibility(View.GONE);
+//                        } else {
+//                            ToastUtils.show_short(FindActivity.this, "网络失败，请检查网络");
+//                        }
+//                        break;
+//                    case MotionEvent.ACTION_UP:
+//                        audioMgr.setStreamVolume(AudioManager.STREAM_MUSIC, curVolume, AudioManager.FLAG_PLAY_SOUND);
+////                        mVoiceRecognizer.stopListen();
+//                        imageViewVoice.setImageBitmap(bmp);
+//                        textSpeakStatus.setText("请按住讲话");
+//                        break;
+//                }
+//                return true;
+//            }
+//        });
+//    }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.img_voice_search:     // 语音搜索
-                yuYinDialog.show();
-                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                imm.hideSoftInputFromWindow(linearVoice.getWindowToken(), 0);
-                break;
+//            case R.id.img_voice_search:     // 语音搜索
+//                yuYinDialog.show();
+//                InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                imm.hideSoftInputFromWindow(linearVoice.getWindowToken(), 0);
+//                break;
             case R.id.img_delete:           // 清空
                 editContent.setText("");
                 break;
@@ -248,16 +236,7 @@ public class FindActivity extends AppBaseActivity implements View.OnClickListene
             String action = intent.getAction();
             if (action.equals(BroadcastConstant.FINDVOICE)) {
                 String str = intent.getStringExtra("VoiceContent");
-                textSpeakStatus.setText("正在为您查找: " + str);
-                Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (yuYinDialog != null) {
-                            yuYinDialog.dismiss();
-                        }
-                    }
-                }, 2000);
+
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                     if (!str.trim().equals("")) {
                         editContent.setText(str.trim());

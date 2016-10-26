@@ -13,13 +13,14 @@ import com.wotingfm.activity.music.common.service.DownloadService;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.config.SocketClientConfig;
 import com.wotingfm.common.constant.KeyConstant;
-import com.wotingfm.devicecontrol.WtDeviceControl;
 import com.wotingfm.helper.CommonHelper;
 import com.wotingfm.receiver.NetWorkChangeReceiver;
 import com.wotingfm.service.FloatingWindowService;
 import com.wotingfm.service.LocationService;
 import com.wotingfm.service.NotificationService;
+import com.wotingfm.service.SocketService;
 import com.wotingfm.service.SubclassService;
+import com.wotingfm.service.TestWindowService;
 import com.wotingfm.service.VoiceStreamPlayerService;
 import com.wotingfm.service.VoiceStreamRecordService;
 import com.wotingfm.util.PhoneMessage;
@@ -33,11 +34,11 @@ import java.util.List;
  * 邮箱：645700751@qq.com
  */
 public class BSApplication extends Application {
-    private static Context instance;
+    public static Context instance;
     private static RequestQueue queues;
     private NetWorkChangeReceiver netWorkChangeReceiver = null;
     public static android.content.SharedPreferences SharedPreferences;
-    private static Intent Socket, VoiceStreamRecord, VoiceStreamPlayer, Location, Subclass, Download, Notification, FloatingWindow;
+    private static Intent Socket, VoiceStreamRecord, VoiceStreamPlayer, Location, Subclass, Download, Notification,TestFloatingWindow, FloatingWindow;
 
     @Override
     public void onCreate() {
@@ -63,8 +64,8 @@ public class BSApplication extends Application {
         scc.setReConnectWays(_l);
         GlobalConfig.scc = scc;
 
-      /*  Socket = new Intent(this, SocketService.class);  //socket服务
-        startService(Socket);*/
+        Socket = new Intent(this, SocketService.class);  //socket服务
+        startService(Socket);
         VoiceStreamRecord = new Intent(this, VoiceStreamRecordService.class);  //录音服务
         startService(VoiceStreamRecord);
         VoiceStreamPlayer = new Intent(this, VoiceStreamPlayerService.class);//播放服务
@@ -80,11 +81,13 @@ public class BSApplication extends Application {
 
         CommonHelper.checkNetworkStatus(instance);//网络设置获取
         this.registerNetWorkChangeReceiver(new NetWorkChangeReceiver(this));// 注册网络状态及返回键监听
-        WtDeviceControl mControl = new WtDeviceControl(instance);
-        GlobalConfig.device = mControl;
+//        WtDeviceControl mControl = new WtDeviceControl(instance);
+//        GlobalConfig.device = mControl;
 
         FloatingWindow = new Intent(this, FloatingWindowService.class);//启动全局弹出框服务
         startService(FloatingWindow);
+        TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
+        startService(TestFloatingWindow);
     }
 
     private void InitThird() {
@@ -130,6 +133,7 @@ public class BSApplication extends Application {
         instance.stopService(Download);
         instance.stopService(Notification);
         instance.stopService(FloatingWindow);
+        instance.stopService(TestFloatingWindow);
         Log.e("app退出", "app退出");
     }
 

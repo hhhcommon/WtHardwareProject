@@ -1,4 +1,4 @@
-package com.wotingfm.activity.music.timeset.activity;
+package com.wotingfm.activity.music.timeset;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -18,7 +18,6 @@ import com.wotingfm.service.timeroffservice;
 
 /**
  * 定时关闭 关闭程序要以服务形式出现
- *
  * @author 辛龙
  *         2016年4月1日
  */
