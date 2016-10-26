@@ -20,11 +20,8 @@ import java.util.List;
 public class GroupTalkAdapter extends BaseAdapter {
     private List<UserInfo> list;
     private Context context;
-    private UserInfo lists;
-    private String url;
 
     public GroupTalkAdapter(Context context, List<UserInfo> list) {
-        super();
         this.list = list;
         this.context = context;
     }
@@ -54,15 +51,14 @@ public class GroupTalkAdapter extends BaseAdapter {
         ViewHolder holder ;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_grouptalk, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_grouptalk, parent, false);
             holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);//名
             holder.imageView_touxiang = (ImageView) convertView.findViewById(R.id.image);
-            holder.headFrame = (ImageView) convertView.findViewById(R.id.head_frame);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        lists = list.get(position);
+        UserInfo lists = list.get(position);
         if (lists.getType() == 1) {
             holder.tv_name.setVisibility(View.VISIBLE);
             if (lists.getUserAliasName() != null) {
@@ -78,6 +74,7 @@ public class GroupTalkAdapter extends BaseAdapter {
                 Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_hy);
                 holder.imageView_touxiang.setImageBitmap(bmp);
             } else {
+                String url;
                 if (lists.getPortraitMini().startsWith("http:")) {
                     url = lists.getPortraitMini();
                 } else {
@@ -87,12 +84,10 @@ public class GroupTalkAdapter extends BaseAdapter {
             }
         } else if (lists.getType() == 2) {
             holder.tv_name.setText("添加");
-            holder.headFrame.setVisibility(View.GONE);        // 08/04  头像的六边形边框  添加和剔除图标本身是六边形图标  所以隐藏其六边形边框
             Bitmap bp = BitmapUtils.readBitMap(context, R.mipmap.image_add);
             holder.imageView_touxiang.setImageBitmap(bp);
         } else {
             holder.tv_name.setText("删除");
-            holder.headFrame.setVisibility(View.GONE);        // 08/04  头像的六边形边框  添加和剔除图标本身是六边形图标  所以隐藏其六边形边框
             Bitmap bp = BitmapUtils.readBitMap(context, R.mipmap.image_tichu);
             holder.imageView_touxiang.setImageBitmap(bp);
         }
@@ -102,6 +97,5 @@ public class GroupTalkAdapter extends BaseAdapter {
     class ViewHolder {
         public ImageView imageView_touxiang;
         public TextView tv_name;
-        public ImageView headFrame;
     }
 }

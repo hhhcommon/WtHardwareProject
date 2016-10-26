@@ -103,9 +103,6 @@ public class ProgramFragment extends Fragment {
         mPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         mPager.setOffscreenPageLimit(1);
         ArrayList<Fragment> fragmentList = new ArrayList<>();
-//		RecommendFragment recommendFragment = new RecommendFragment();
-//		OnLineFragment onlineFragment = new OnLineFragment();
-//		FenLeiFragment fenleiFragment = new FenLeiFragment();
         fragmentList.add(new RecommendFragment());
         fragmentList.add(new OnLineFragment());
         fragmentList.add(new FenLeiFragment());

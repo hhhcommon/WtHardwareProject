@@ -255,7 +255,8 @@ public class DownLoadListActivity extends Activity implements OnClickListener {
 							MainActivity.changeToMusic();
 								HomeActivity.UpdateViewPager();
 							}
-							context.finish();
+							setResult(1);
+						    finish();
 							dbdao.closedb();
 						} else {	// 此处要调对话框，点击同意删除对应的文件信息
 							/* ToastUtil.show_always(context, "文件已经被删除，是否删除本条记录"); */

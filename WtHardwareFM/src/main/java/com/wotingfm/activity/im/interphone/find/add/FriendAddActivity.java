@@ -32,10 +32,9 @@ import org.json.JSONObject;
  * 邮箱：645700751@qq.com
  */
 public class FriendAddActivity extends AppBaseActivity implements OnClickListener {
-
     private SharedPreferences sharedPreferences = BSApplication.SharedPreferences;
-
     private UserInviteMeInside contact;
+
     private String username;
     private String url;
     private String type;
@@ -43,12 +42,12 @@ public class FriendAddActivity extends AppBaseActivity implements OnClickListene
     private boolean isCancelRequest;
 
     private ImageView image_touXiang;
+    private ImageView clearImage;
     private TextView tv_add;
     private TextView tv_name;
     private TextView tv_id;
-    private EditText et_news;
     private TextView tv_sign;
-    private ImageView clearImage;
+    private EditText et_news;
 
     @Override
     protected int setViewId() {
@@ -58,26 +57,26 @@ public class FriendAddActivity extends AppBaseActivity implements OnClickListene
     @Override
     protected void init() {
         setTitle("详细资料");
-        username = sharedPreferences.getString(StringConstant.USERNAME, "");            //当前登录账号的姓名
-        setView();        //设置界面
-        setListener();    //设置监听
-        handleIntent();    //适配数据
+        username = sharedPreferences.getString(StringConstant.USERNAME, "");            // 当前登录账号的姓名
+        setView();        // 设置界面
+        setListener();    // 设置监听
+        handleIntent();   // 适配数据
 
     }
 
     private void setView() {
-        et_news = (EditText) findViewById(R.id.et_news);//验证信息输入框
-        image_touXiang = (ImageView) findViewById(R.id.image_touxiang);//头像
-        tv_name = (TextView) findViewById(R.id.tv_name);//姓名
-        tv_id = (TextView) findViewById(R.id.tv_id);//id号
+        et_news = (EditText) findViewById(R.id.et_news);// 验证信息输入框
+        image_touXiang = (ImageView) findViewById(R.id.image_touxiang);// 头像
+        tv_name = (TextView) findViewById(R.id.tv_name);// 姓名
+        tv_id = (TextView) findViewById(R.id.tv_id);// id号
         tv_sign = (TextView) findViewById(R.id.tv_sign);
-        tv_add = (TextView) findViewById(R.id.tv_add);//添加好友
+        tv_add = (TextView) findViewById(R.id.tv_add);// 添加好友
         clearImage = (ImageView) findViewById(R.id.clear_image);
     }
 
     private void handleIntent() {
         type = this.getIntent().getStringExtra("type");
-        //数据适配
+        // 数据适配
         if (type == null || type.equals("")) {
             contact = (UserInviteMeInside) getIntent().getSerializableExtra("contact");
             if (contact.getUserName() == null || contact.getUserName().equals("")) {
@@ -148,8 +147,6 @@ public class FriendAddActivity extends AppBaseActivity implements OnClickListene
             } else {
                 et_news.setText("我是 " + username);
             }
-
-
         }
     }
 
@@ -164,16 +161,16 @@ public class FriendAddActivity extends AppBaseActivity implements OnClickListene
             case R.id.head_left_btn:
                 finish();
                 break;
-            case R.id.clear_image://验证信息清空
+            case R.id.clear_image:// 验证信息清空
                 et_news.setText("");
                 break;
-            case R.id.tv_add://点击申请添加按钮
+            case R.id.tv_add:// 点击申请添加按钮
                 String news = et_news.getText().toString().trim();
                 if (news.equals("")) {
                     ToastUtils.show_always(FriendAddActivity.this, "请输入验证信息");
                 } else {
                     if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                        //发送验证请求
+                        // 发送验证请求
                         DialogUtils.showDialog(context);
                         sendRequest();
                     } else {
@@ -200,6 +197,7 @@ public class FriendAddActivity extends AppBaseActivity implements OnClickListene
                 try {
                     String ReturnType = result.getString("ReturnType");
                     if (ReturnType != null && ReturnType.equals("1001")) {
+                        finish();
                         ToastUtils.show_always(FriendAddActivity.this, "验证发送成功，等待好友审核");
                     } else if (ReturnType != null && ReturnType.equals("1002")) {
                         ToastUtils.show_always(FriendAddActivity.this, "添加失败, 请稍后再试 ");
@@ -234,7 +232,6 @@ public class FriendAddActivity extends AppBaseActivity implements OnClickListene
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
             }
 
             @Override

@@ -7,16 +7,34 @@ import java.io.Serializable;
  */
 public class GroupRation implements Serializable {
     private static final long serialVersionUID = -2444225043712411920L;
-    public String GroupId;
-    public String GroupName;
-    public String GroupCount;
-    public String GroupImg;
-    public String GroupNum;
-    public String GroupDescn;
-    public String CreateTime;
-    public String InnerPhoneNum;
-    public String GroupType;
-    public String GroupSignature;
+    private String GroupId;
+    private String GroupName;
+    private String GroupCount;
+    private String GroupImg;
+    private String GroupNum;
+    private String GroupDescn;
+    private String CreateTime;
+    private String InnerPhoneNum;
+    private String GroupType;
+    private String GroupSignature;
+    private String GroupCreator;
+    private String GroupManager;
+
+    public String getGroupCreator() {
+        return GroupCreator;
+    }
+
+    public void setGroupCreator(String groupCreator) {
+        GroupCreator = groupCreator;
+    }
+
+    public String getGroupManager() {
+        return GroupManager;
+    }
+
+    public void setGroupManager(String groupManager) {
+        GroupManager = groupManager;
+    }
 
     private String alternateChannel1;// 备用频道 1
     private String alternateChannel2;// 备用频道 2

@@ -2,7 +2,9 @@ package com.wotingfm.activity.im.interphone.groupmanage.model;
 
 import java.io.Serializable;
 
-//用户信息实体类
+/**
+ * 用户信息实体类
+ */
 public class UserInfo implements Serializable {
 	private String name;   //显示的数据
 	private String sortLetters;  //显示数据拼音的首字母
@@ -37,7 +39,6 @@ public class UserInfo implements Serializable {
 	private String GroupType;
 	private String GroupCount;
 	private String GroupManager;
-
 
 	public void setGroupCount(String groupCount) {
 		GroupCount = groupCount;

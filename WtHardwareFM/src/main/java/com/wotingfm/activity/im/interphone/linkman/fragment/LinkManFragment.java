@@ -215,7 +215,6 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 
 	/**
 	 * 根据输入框中的值来过滤数据并更新ListView
-	 * @param filterStr
 	 */
 	private List<TalkPersonInside> filterData(String filterStr) {
 		List<TalkPersonInside> filterDateList = new ArrayList<TalkPersonInside>();
@@ -320,7 +319,6 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 
 	/**
 	 * 对讲呼叫
-	 * @param id
 	 */
 	protected void call(String id) {
 		Intent it = new Intent(context,CallAlertActivity.class);

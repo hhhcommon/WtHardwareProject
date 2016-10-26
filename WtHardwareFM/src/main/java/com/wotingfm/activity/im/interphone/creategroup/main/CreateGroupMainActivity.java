@@ -35,18 +35,26 @@ public class CreateGroupMainActivity extends AppBaseActivity implements View.OnC
             case R.id.relative_create_public:       // 创建公开群
                 Intent intentPublic = new Intent(context, CreateGroupItemActivity.class);
                 intentPublic.putExtra(StringConstant.CREATE_GROUP_TYPE, IntegerConstant.CREATE_GROUP_PUBLIC);
-                startActivity(intentPublic);
+                startActivityForResult(intentPublic, 1);
                 break;
             case R.id.relative_create_private:      // 创建密码群
                 Intent intentPrivate = new Intent(context, CreateGroupItemActivity.class);
                 intentPrivate.putExtra(StringConstant.CREATE_GROUP_TYPE, IntegerConstant.CREATE_GROUP_PRIVATE);
-                startActivity(intentPrivate);
+                startActivityForResult(intentPrivate, 1);
                 break;
             case R.id.relative_create_verification: // 创建验证群
                 Intent intentVerification = new Intent(context, CreateGroupItemActivity.class);
                 intentVerification.putExtra(StringConstant.CREATE_GROUP_TYPE, IntegerConstant.CREATE_GROUP_VERIFICATION);
-                startActivity(intentVerification);
+                startActivityForResult(intentVerification, 1);
                 break;
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1 && resultCode == 1) {
+            finish();
         }
     }
 }

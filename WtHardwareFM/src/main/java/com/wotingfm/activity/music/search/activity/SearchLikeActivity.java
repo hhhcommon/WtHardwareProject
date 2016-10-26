@@ -6,6 +6,8 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.Matrix;
@@ -13,6 +15,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -20,6 +23,7 @@ import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
+import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.AdapterView;
@@ -33,7 +37,6 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseactivity.AppBaseFragmentActivity;
 import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.activity.music.search.adapter.SearchHistoryAdapter;
 import com.wotingfm.activity.music.search.adapter.SearchKeyAdapter;
@@ -48,6 +51,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
@@ -182,7 +186,8 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
         dialog = DialogUtils.Dialogph(context, "通讯中");
         send();
 
-        IntentFilter mFilter = new IntentFilter();  // 广播注册
+        // 广播注册
+        IntentFilter mFilter = new IntentFilter();
         mFilter.addAction(BroadcastConstant.SEARCHVOICE);
         registerReceiver(mBroadcastReceiver, mFilter);
     }
@@ -559,6 +564,10 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
         Matrix matrix = new Matrix();
         matrix.postTranslate(offset, 0);
         image.setImageMatrix(matrix);
+    }
+
+    public void startForResult(Intent intent) {
+        startActivityForResult(intent, 1);
     }
 
     @Override
