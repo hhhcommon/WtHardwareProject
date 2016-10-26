@@ -526,7 +526,7 @@ public class InterPhoneControlHelper {
 		msg.setIMEI(PhoneMessage.imei);
 		pullToSocket(msg);
 	}
-	
+
 	/**
 	 * 音频文件发送==把文件编码后传输出去
 	 */
@@ -562,7 +562,7 @@ public class InterPhoneControlHelper {
 		}
 	}
 
-	
+
 	/**
 	 *音频数据结束包=== 把最后一条数据发送出去
 	 */
@@ -595,8 +595,8 @@ public class InterPhoneControlHelper {
 				pullToSocket(msg);
 		}
 	}
-	
-	
+
+
 	/**
 	 * 数据传输到socket
 	 * @param message

@@ -1,4 +1,4 @@
-package com.wotingfm.helper;
+package com.wotingfm.manager;
 
 import android.util.Log;
 import org.apache.http.HttpEntity;

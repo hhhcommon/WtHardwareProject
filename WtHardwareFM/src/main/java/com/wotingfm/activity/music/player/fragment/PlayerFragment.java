@@ -66,7 +66,7 @@ import com.wotingfm.activity.music.playhistory.activity.PlayHistoryActivity;
 import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.album.model.ContentInfo;
 import com.wotingfm.activity.music.program.schedule.activity.ScheduleActivity;
-import com.wotingfm.activity.music.timeset.activity.TimerPowerOffActivity;
+import com.wotingfm.activity.music.timeset.TimerPowerOffActivity;
 import com.wotingfm.activity.music.video.TtsPlayer;
 import com.wotingfm.activity.music.video.VlcPlayer;
 import com.wotingfm.activity.music.video.VoiceRecognizer;
@@ -215,9 +215,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         shareDialog(); // 分享dialog
         return rootView;
     }
-
-
-
 
     private void setView() {
         mlistView = (XListView) rootView.findViewById(R.id.listView);

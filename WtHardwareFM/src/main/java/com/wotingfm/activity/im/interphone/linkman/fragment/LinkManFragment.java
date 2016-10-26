@@ -53,7 +53,7 @@ import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.manager.InterPhoneControlManager;
+import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.HeightListView;
@@ -295,18 +295,18 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			@Override
 			public void onClick(View v) {
 				if(type == 1){
-					InterPhoneControlManager.PersonTalkHangUp(context, InterPhoneControlManager.bdcallid);
+					InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
 					ChatFragment.isCalling = false;
-					ChatFragment.lin_notalk.setVisibility(View.VISIBLE);
-					ChatFragment.lin_personhead.setVisibility(View.GONE);
+//					ChatFragment.lin_notalk.setVisibility(View.VISIBLE);
+//					ChatFragment.lin_personhead.setVisibility(View.GONE);
 					ChatFragment.lin_head.setVisibility(View.GONE);
 					call(id);
 					confirmDialog.dismiss();
 				}else{
-					InterPhoneControlManager.PersonTalkHangUp(context, InterPhoneControlManager.bdcallid);
+					InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
 					ChatFragment.isCalling = false;
-					ChatFragment.lin_notalk.setVisibility(View.VISIBLE);
-					ChatFragment.lin_personhead.setVisibility(View.GONE);
+//					ChatFragment.lin_notalk.setVisibility(View.VISIBLE);
+//					ChatFragment.lin_personhead.setVisibility(View.GONE);
 					ChatFragment.lin_head.setVisibility(View.GONE);
 					ChatFragment.zhiDingGroup(group);
 					//对讲主页界面更新

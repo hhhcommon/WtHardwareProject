@@ -1,9 +1,9 @@
 package com.wotingfm.common.constant;
 
 public class BroadcastConstant {
-	public static final String SEARCHVOICE="SEARCHVOICE";
-	public static final String PLAYERVOICE="PLAYERVOICE";
-	public static final String FINDVOICE="FINDVOICE";
+	public static final String SEARCHVOICE="SEARCHVOICE";//search
+	public static final String PLAYERVOICE="PLAYERVOICE";//播放主页
+	public static final String FINDVOICE="FINDVOICE";//查找好友
 	//定时
 	public static final String TIMER_START = "TIMER_START";
 	public static final String TIMER_STOP = "TIMER_STOP";

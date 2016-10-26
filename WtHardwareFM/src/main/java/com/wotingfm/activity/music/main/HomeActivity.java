@@ -5,7 +5,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
@@ -15,6 +14,7 @@ import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.BaseFragmentActivity;
 import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.activity.im.interphone.notify.activity.NotifyNewActivity;
 import com.wotingfm.activity.music.player.fragment.PlayerFragment;
@@ -30,7 +30,7 @@ import java.util.ArrayList;
  * @author 辛龙
  * 2016年2月2日
  */
-public class HomeActivity extends FragmentActivity {
+public class HomeActivity extends BaseFragmentActivity {
 	private static TextView view1;
 	private static TextView view2;
 	private static HomeActivity context;
@@ -152,14 +152,6 @@ public class HomeActivity extends FragmentActivity {
 				finish();
 				android.os.Process.killProcess(android.os.Process.myPid());
 			}
-			return true;
-		}else if(event.getAction() == KeyEvent.ACTION_DOWN &&keyCode == KeyEvent.KEYCODE_VOLUME_DOWN){
-			// 音量减小时应该执行的功能代码
-			ToastUtils.show_always(this, "音量减小时应该执行的功能代码");
-			return true;
-		}else if(event.getAction() == KeyEvent.ACTION_DOWN &&keyCode == KeyEvent.KEYCODE_VOLUME_UP){
-			// 音量增大时应该执行的功能代码
-			ToastUtils.show_always(this, "音量增大时应该执行的功能代码");
 			return true;
 		}
 		return super.onKeyDown(keyCode, event);
