@@ -14,10 +14,8 @@ import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.util.PhoneMessage;
-import com.wotingfm.util.VibratorUtils;
 
 /**
  * 测试悬浮窗服务
@@ -97,7 +95,7 @@ public class TestWindowService extends Service {
         params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         params.width = PhoneMessage.ScreenWidth;
         params.height = 150;
-        params.y = 800;
+        params.y = 700;
 
         tv_3.setOnClickListener(new View.OnClickListener() {
             @Override
