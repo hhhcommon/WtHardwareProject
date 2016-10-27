@@ -87,4 +87,7 @@ public class StringConstant {
 
     // 传递数据 WiFi 名字
     public static final String WIFI_NAME = "WIFI_NAME";
+
+    // 流量通知
+    public static final String FLOW_NOTIFY = "FLOW_NOTIFY";
 }
