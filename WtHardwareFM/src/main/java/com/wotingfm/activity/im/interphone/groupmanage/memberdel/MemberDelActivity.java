@@ -253,9 +253,9 @@ public class MemberDelActivity extends BaseActivity implements View.OnClickListe
     }
 
     private void setInterface() {
-        adapter.setOnListener(new MembersAddAdapter.friendCheck() {
+        adapter.setOnListener(new MembersAddAdapter.FriendCheck() {
             @Override
-            public void checkposition(int position) {
+            public void checkPosition(int position) {
                 sum = 0;
                 if (userList2.get(position).getCheckType() == 1) {
                     userList2.get(position).setCheckType(2);

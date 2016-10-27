@@ -466,7 +466,7 @@
                 android:layout_marginRight="12dp"
                 android:layout_marginTop="30dp"
                 android:background="@drawable/wt_commit_button_background"
-                android:text="退出账号"
+                android:text="退出群组"
                 android:textColor="@color/WHITE"/>
 
         </LinearLayout>

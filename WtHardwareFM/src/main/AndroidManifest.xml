@@ -311,7 +311,7 @@
 
         <!-- 定时关闭界面 -->
         <activity
-            android:name=".activity.music.timeset.activity.TimerPowerOffActivity"
+            android:name=".activity.music.timeset.TimerPowerOffActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -333,7 +333,7 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
         <activity
-            android:name=".activity.im.interphone.groupmanage.transferauthority.TransferAuthority"
+            android:name=".activity.im.interphone.groupmanage.transferauthority.TransferAuthorityActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -570,6 +570,7 @@
         <service android:name=".service.VoiceStreamPlayerService" />
         <service android:name=".activity.music.common.service.DownloadService" />
         <service android:name=".service.FloatingWindowService" />
+        <service android:name=".service.TestWindowService" />
         <service android:name=".service.LocationService" />
         <service android:name="com.amap.api.location.APSService" />
         <activity android:name=".activity.im.interphone.analog.AnalogueActivity"></activity>

@@ -1,9 +1,9 @@
 package com.wotingfm.common.constant;
 
 public class BroadcastConstant {
-	public static final String SEARCHVOICE="SEARCHVOICE";
-	public static final String PLAYERVOICE="PLAYERVOICE";
-	public static final String FINDVOICE="FINDVOICE";
+	public static final String SEARCHVOICE="SEARCHVOICE";//search
+	public static final String PLAYERVOICE="PLAYERVOICE";//播放主页
+	public static final String FINDVOICE="FINDVOICE";//查找好友
 	//定时
 	public static final String TIMER_START = "TIMER_START";
 	public static final String TIMER_STOP = "TIMER_STOP";
@@ -72,4 +72,7 @@ public class BroadcastConstant {
 
     // 专辑列表界面发送广播到下载界面  用于更新下载界面
     public static final String PUSH_DOWN_UNCOMPLETED = "push_down_uncompleted";
+
+    // 删除好友刷新界面广播
+    public static final String GROUP_DETAIL_CHANGE = "GROUP_DETAIL_CHANGE";
 }

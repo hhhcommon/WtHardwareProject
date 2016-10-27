@@ -2,11 +2,11 @@ package com.wotingfm.activity.im.interphone.groupmanage.modifygrouppassword;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
@@ -25,113 +25,72 @@ import org.json.JSONObject;
  * 作者：xinlong on 2016/3/9
  * 邮箱：645700751@qq.com
  */
-public class ModifyGroupPasswordActivity extends BaseActivity {
+public class ModifyGroupPasswordActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
+    private Dialog dialog;                      // 加载数据对话框
+    private EditText editOldPassword;           // 用户输入 旧密码
+    private EditText editNewPassword;           // 用户输入 新密码
+    private EditText editNewPasswordConfirm;    // 用户输入 确认新密码
+    private Button btnModifyPassword;           // 确定修改密码
 
-    private ModifyGroupPasswordActivity context;
-    private EditText et_oldPassword;
-    private EditText et_newPassword;
-    private EditText et_newPassword_confirm;
-    private TextView btn_password_modify;
-    private boolean flag;
-    private String oldPassword;
-    private String newPassword;
-    private String passWordConfirm;
-    private Dialog dialog;
-    private String groupId;
+    private String oldPassword;                 // 旧密码
+    private String newPassword;                 // 新密码
+    private String passWordConfirm;             // 确认新密码
+    private String groupId;                     // 群组 ID
     private String tag = "MODIFY_GROUP_PASSWORD_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
-    private TextView mBack;
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.wt_back:              // 返回
+                finish();
+                break;
+            case R.id.btn_modifypassword:   // 确定修改密码
+                if(groupId == null || groupId.equals("")) {
+                    ToastUtils.show_always(context, "获取群组 ID 失败，请返回重试!");
+                    return ;
+                }
+                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                    send();
+                } else {
+                    ToastUtils.show_always(ModifyGroupPasswordActivity.this, "网络连接失败，请稍后重试");
+                }
+                break;
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_modify_group_password);
-        context = this;
-        handleIntent();
-        setView();
-        setListener();
+
+        initView();
     }
 
-    private void handleIntent() {
-        groupId = this.getIntent().getStringExtra("GroupId");
+    // 初始化视图
+    private void initView() {
+        if(getIntent() != null) {
+            groupId = getIntent().getStringExtra("GroupId");
+        }
+
+        findViewById(R.id.wt_back).setOnClickListener(this);                            // 返回
+
+        btnModifyPassword = (Button) findViewById(R.id.btn_modifypassword);             // 确定修改密码
+        btnModifyPassword.setOnClickListener(this);
+
+        editOldPassword = (EditText) findViewById(R.id.edit_oldpassword);               // 旧密码
+        editOldPassword.addTextChangedListener(this);
+
+        editNewPassword = (EditText) findViewById(R.id.edit_newpassword);               // 新密码
+        editNewPassword.addTextChangedListener(this);
+
+        editNewPasswordConfirm = (EditText) findViewById(R.id.edit_confirmpassword);    // 确认新密码
+        editNewPasswordConfirm.addTextChangedListener(this);
     }
 
-    private void setView() {
-        et_oldPassword = (EditText) findViewById(R.id.edit_oldpassword);
-        et_newPassword = (EditText) findViewById(R.id.edit_newpassword);
-        et_newPassword_confirm = (EditText) findViewById(R.id.edit_confirmpassword);
-        btn_password_modify = (TextView) findViewById(R.id.btn_modifypassword);
-        mBack = (TextView) findViewById(R.id.wt_back);
-    }
-
-    private void setListener() {
-        btn_password_modify.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Boolean result = checkData();
-                if (result == true) {
-                    if (groupId != null && !groupId.equals("")) {
-                        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                            send();
-                        } else {
-                            ToastUtils.show_always(ModifyGroupPasswordActivity.this, "网络连接失败，请稍后重试");
-                        }
-                    } else {
-                        ToastUtils.show_always(context, "获取groupId失败，请返回上一级界面重试");
-                    }
-                }
-
-            }
-        });
-
-        mBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-    }
-
-    protected Boolean checkData() {
-        oldPassword = et_oldPassword.getText().toString().trim();
-        newPassword = et_newPassword.getText().toString().trim();
-        passWordConfirm = et_newPassword_confirm.getText().toString().trim();
-        flag = true;
-        if ("".equalsIgnoreCase(oldPassword)) {
-            Toast.makeText(this, "请输入您的旧密码", Toast.LENGTH_LONG).show();
-            flag = false;
-            return flag;
-        }
-        if ("".equalsIgnoreCase(newPassword)) {
-            Toast.makeText(this, "请输入您的新密码", Toast.LENGTH_LONG).show();
-            flag = false;
-            return flag;
-        }
-        if (newPassword.length() < 6) {
-            Toast.makeText(this, "密码请输入六位以上", Toast.LENGTH_LONG).show();
-            flag = false;
-            return flag;
-        }
-        if ("".equalsIgnoreCase(newPassword)) {
-            Toast.makeText(this, "请再次输入密码", Toast.LENGTH_LONG).show();
-            flag = false;
-            return flag;
-        }
-        if (!newPassword.equals(passWordConfirm)) {
-            Toast.makeText(this, "两次输入的密码不一致", Toast.LENGTH_LONG).show();
-            flag = false;
-            return flag;
-        }
-        if (passWordConfirm.length() < 6) {
-            Toast.makeText(this, "密码请输入六位以上", Toast.LENGTH_LONG).show();
-            flag = false;
-            return flag;
-        }
-        return flag;
-    }
-
+    // 发送修改密码请求到服务器
     protected void send() {
-        dialog = DialogUtils.Dialogph(this, "修改群密码提交请求");
+        dialog = DialogUtils.Dialogph(context, "修改群密码提交请求");
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("OldPassword", oldPassword);
@@ -145,31 +104,16 @@ public class ModifyGroupPasswordActivity extends BaseActivity {
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) dialog.dismiss();
-                Log.e("修改群密码返回值", "" + result.toString());
                 if (isCancelRequest) return;
                 try {
-                    // 获取列表
                     String ReturnType = result.getString("ReturnType");
                     if (ReturnType != null && ReturnType.equals("1001")) {
-                        ToastUtils.show_always(ModifyGroupPasswordActivity.this, "密码修改成功");
+                        ToastUtils.show_always(context, "密码修改成功");
                         finish();
-                    } else if (ReturnType != null && ReturnType.equals("1002")) {
-                        try {
-                            String Message = result.getString("Message");
-                            if (Message != null && !Message.trim().equals("")) {
-                                ToastUtils.show_always(ModifyGroupPasswordActivity.this, Message + "");
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
                     } else {
-                        try {
-                            String Message = result.getString("Message");
-                            if (Message != null && !Message.trim().equals("")) {
-                                ToastUtils.show_always(ModifyGroupPasswordActivity.this, Message + "");
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        String Message = result.getString("Message");
+                        if (Message != null && !Message.trim().equals("")) {
+                            ToastUtils.show_always(context, Message + "");
                         }
                     }
                 } catch (JSONException e) {
@@ -179,29 +123,60 @@ public class ModifyGroupPasswordActivity extends BaseActivity {
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+                if (dialog != null) dialog.dismiss();
+                ToastUtils.showVolleyError(context);
             }
         });
+    }
+
+    // 检查数据的正确性
+    @Override
+    public void afterTextChanged(Editable s) {
+        oldPassword = editOldPassword.getText().toString().trim();
+        newPassword = editNewPassword.getText().toString().trim();
+        passWordConfirm = editNewPasswordConfirm.getText().toString().trim();
+        if ("".equalsIgnoreCase(oldPassword) || oldPassword.length() < 6) {
+            btnModifyPassword.setEnabled(false);
+            return ;
+        }
+        if ("".equalsIgnoreCase(newPassword) || newPassword.length() < 6) {
+            btnModifyPassword.setEnabled(false);
+            return ;
+        }
+        if ("".equalsIgnoreCase(newPassword) || passWordConfirm.length() < 6) {
+            btnModifyPassword.setEnabled(false);
+            return ;
+        }
+        if(!newPassword.equals(passWordConfirm)) {
+            ToastUtils.show_always(context, "两次输入的密码不一致!");
+            btnModifyPassword.setEnabled(false);
+            return ;
+        }
+        btnModifyPassword.setEnabled(true);
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
-        et_oldPassword = null;
-        et_newPassword = null;
-        et_newPassword_confirm = null;
-        btn_password_modify = null;
+        editOldPassword = null;
+        editNewPassword = null;
+        editNewPasswordConfirm = null;
         oldPassword = null;
         newPassword = null;
         passWordConfirm = null;
         dialog = null;
-        mBack = null;
         context = null;
         groupId = null;
         tag = null;
         setContentView(R.layout.activity_null);
+    }
+
+    @Override
+    public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+    }
+
+    @Override
+    public void onTextChanged(CharSequence s, int start, int before, int count) {
     }
 }

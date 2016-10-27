@@ -7,7 +7,6 @@ import android.content.res.Resources;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.KeyEvent;
@@ -20,6 +19,7 @@ import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.BaseFragmentActivity;
 import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.activity.im.interphone.creategroup.main.CreateGroupMainActivity;
@@ -39,7 +39,7 @@ import java.util.ArrayList;
  * 作者：xinlong on 2016/1/19 21:18
  * 邮箱：645700751@qq.com
  */
-public class DuiJiangActivity extends FragmentActivity {
+public class DuiJiangActivity extends BaseFragmentActivity {
     private static TextView view1;
     private static TextView view2;
     private LinearLayout lin_more;
@@ -330,14 +330,6 @@ public class DuiJiangActivity extends FragmentActivity {
                 finish();
                 android.os.Process.killProcess(android.os.Process.myPid());
             }
-            return true;
-        } else if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_VOLUME_DOWN) {
-            // 音量减小时应该执行的功能代码
-            ToastUtils.show_always(this, "音量减小时应该执行的功能代码");
-            return true;
-        } else if (event.getAction() == KeyEvent.ACTION_DOWN && keyCode == KeyEvent.KEYCODE_VOLUME_UP) {
-            // 音量增大时应该执行的功能代码
-            ToastUtils.show_always(this, "音量增大时应该执行的功能代码");
             return true;
         }
         return super.onKeyDown(keyCode, event);

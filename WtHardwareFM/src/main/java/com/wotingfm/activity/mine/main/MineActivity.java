@@ -61,7 +61,7 @@ import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.helper.MyHttp;
+import com.wotingfm.manager.MyHttp;
 import com.wotingfm.manager.CacheManager;
 import com.wotingfm.manager.FileManager;
 import com.wotingfm.manager.UpdateManager;

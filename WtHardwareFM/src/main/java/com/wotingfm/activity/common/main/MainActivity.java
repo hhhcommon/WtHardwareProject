@@ -38,6 +38,7 @@ import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.devicecontrol.WtDeviceControl;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.manager.UpdateManager;
 import com.wotingfm.service.timeroffservice;
@@ -80,6 +81,8 @@ public class MainActivity extends TabActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    //透明导航栏
         tabHost = extracted();
         context = this;
+        WtDeviceControl mControl = new WtDeviceControl(context);
+        GlobalConfig.device = mControl;
         String first = BSApplication.SharedPreferences.getString(StringConstant.PREFERENCE, "0");//是否是第一次打开偏好设置界面
         if (first != null && first.equals("1")) {
             // 此时已经进行过偏好设置
@@ -143,10 +146,10 @@ public class MainActivity extends TabActivity {
     // 初始化视图,主页跳转的3个界面
     private void InitTextView() {
         tabHost.addTab(tabHost.newTabSpec("one").setIndicator("one")
-                .setContent(new Intent(this, DuiJiangActivity.class)));
-        tabHost.addTab(tabHost.newTabSpec("two").setIndicator("two")
                 .setContent(new Intent(this, HomeActivity.class)));
-        tabHost.addTab(tabHost.newTabSpec("three").setIndicator("five")
+        tabHost.addTab(tabHost.newTabSpec("two").setIndicator("two")
+                .setContent(new Intent(this, DuiJiangActivity.class)));
+        tabHost.addTab(tabHost.newTabSpec("three").setIndicator("three")
                 .setContent(new Intent(this, MineActivity.class)));
         tabHost.setCurrentTabByTag("one");
     }
