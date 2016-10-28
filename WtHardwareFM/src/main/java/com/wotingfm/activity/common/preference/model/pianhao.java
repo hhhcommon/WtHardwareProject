@@ -6,7 +6,7 @@ package com.wotingfm.activity.common.preference.model;
  */
 public class pianhao {
     private String Name;
-    private int Type;
+    private int Type;//2选中 1未选中
     private String Id;
 
     public String getName() {
