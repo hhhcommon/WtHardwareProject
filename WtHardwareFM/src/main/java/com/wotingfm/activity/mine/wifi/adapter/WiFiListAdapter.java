@@ -2,6 +2,7 @@ package com.wotingfm.activity.mine.wifi.adapter;
 
 import android.content.Context;
 import android.net.wifi.ScanResult;
+import android.net.wifi.WifiManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,7 +10,6 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.mine.main.MineActivity;
 import com.wotingfm.util.L;
 
 import java.util.List;
@@ -22,9 +22,10 @@ public class WiFiListAdapter extends BaseAdapter {
     private Context context;
     private List<ScanResult> list;
 
-    public WiFiListAdapter(Context context, List<ScanResult> list){
+    public WiFiListAdapter(Context context, List<ScanResult> list) {
         this.context = context;
         this.list = list;
+      
     }
 
     public void setList(List<ScanResult> list) {
@@ -50,7 +51,7 @@ public class WiFiListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if(convertView == null){
+        if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_wifi_list, parent, false);
             holder.textWiFiName = (TextView) convertView.findViewById(R.id.text_wifi_name);
@@ -61,11 +62,12 @@ public class WiFiListAdapter extends BaseAdapter {
         }
         ScanResult result = list.get(position);
         holder.textWiFiName.setText(result.SSID);
-        String connWiFiName = MineActivity.wifiManager.getConnectionInfo().getSSID();
-        if(connWiFiName.startsWith("\"")) {
+        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
+        String connWiFiName = wifiManager.getConnectionInfo().getSSID();
+        if (connWiFiName.startsWith("\"")) {
             connWiFiName = connWiFiName.substring(1, connWiFiName.length() - 1);
         }
-        if(result.SSID.equals(connWiFiName)) {
+        if (result.SSID.equals(connWiFiName)) {
             holder.textWiFiState.setText("已连接");
             holder.textWiFiName.setTextColor(context.getResources().getColor(R.color.green));
         } else {

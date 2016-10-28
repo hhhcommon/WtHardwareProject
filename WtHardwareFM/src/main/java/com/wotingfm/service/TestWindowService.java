@@ -113,7 +113,6 @@ public class TestWindowService extends Service {
             @Override
             public void onClick(View v) {
                 GlobalConfig.device.pushDownButton();
-
             }
         });
 
