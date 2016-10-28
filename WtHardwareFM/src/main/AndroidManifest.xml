@@ -465,7 +465,7 @@
             android:windowSoftInputMode="adjustPan" />
         <!-- 流量管理界面 -->
         <activity
-            android:name=".activity.mine.flowmanage.FlowManageActivity"
+            android:name=".activity.mine.flowmanage.main.FlowManageActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />

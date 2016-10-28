@@ -48,7 +48,7 @@ import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.mine.about.AboutActivity;
 import com.wotingfm.activity.mine.bluetooth.BluetoothActivity;
 import com.wotingfm.activity.mine.feedback.activity.FeedbackActivity;
-import com.wotingfm.activity.mine.flowmanage.FlowManageActivity;
+import com.wotingfm.activity.mine.flowmanage.main.FlowManageActivity;
 import com.wotingfm.activity.mine.fm.FMConnectActivity;
 import com.wotingfm.activity.mine.help.HelpActivity;
 import com.wotingfm.activity.mine.qrcode.EWMShowActivity;
@@ -176,7 +176,13 @@ public class MineActivity extends Activity implements OnClickListener {
         View checkUpdate = findViewById(R.id.update_set);       // 检查更新
         checkUpdate.setOnClickListener(this);
         TextView textVersionNumber = (TextView) findViewById(R.id.text_update_statistics);// 版本号
-        textVersionNumber.setText(PhoneMessage.appVersonName);
+
+        String versionCode =PhoneMessage.appVersonName;
+        if(versionCode!=null&&!versionCode.equals("")) {
+            textVersionNumber.setText(PhoneMessage.appVersonName);
+        }else{
+            textVersionNumber.setText("1.0.0.X.001");
+        }
 
         View clearCache = findViewById(R.id.cache_set);         // 清除缓存
         clearCache.setOnClickListener(this);
