@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -22,12 +21,10 @@ import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.BaseActivity;
 import com.wotingfm.activity.im.interphone.alert.CallAlertActivity;
 import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
-import com.wotingfm.activity.im.interphone.chat.model.TalkListGP;
 import com.wotingfm.activity.im.interphone.creategroup.frienddetails.model.GroupTalkInside;
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
 import com.wotingfm.activity.im.interphone.message.model.UserInviteMeInside;
-import com.wotingfm.activity.mine.qrcode.EWMShowActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstant;
@@ -36,8 +33,8 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.helper.CreatQRImageHelper;
 import com.wotingfm.util.BitmapUtils;
-import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -45,389 +42,227 @@ import org.json.JSONObject;
 
 /**
  * 个人详情页
+ * 以下界面可以跳转到这个界面
+ * 1、群组详情         - >  GroupDetailActivity
+ * 2、全部群组成员     - >  AllGroupMemberActivity
+ * 3、通讯录好友列表   - >  LinkManFragment
+ * 4、聊天界面         - >  ChatFragment
+ * 5、搜索好友结果     - >  FindNewsResultActivity
+ *
  * 作者：xinlong on 2016/1/19
  * 邮箱：645700751@qq.com
  */
-public class TalkPersonNewsActivity extends BaseActivity {
-    private String name;
-    private String imageUrl;
-    private String id;
-    private LinearLayout head_left_btn;
-    private ImageView image_add;
-    private TextView tv_delete;
-    private ImageView image_xiugai;
-    private ImageView image_touxiang;
-    private TextView tv_name;
-    private TextView tv_id;
-    private LinearLayout lin_person_xiugai;
-    private TalkPersonNewsActivity context;
-    private Dialog confirmDialog;
-    private Dialog dialogs;
-    private EditText et_groupSignature;
-    private EditText et_b_name;
-    private boolean update;
-    private String descN;
-    private String num;
-    private String b_name;
-    private ImageView imageView_ewm;
-    private LinearLayout lin_ewm;
-    private UserInfo news;
-    private int viewType = -1;// == 1 代表来自 groupMembers
-    private String groupId;
-    private String url12;
+public class TalkPersonNewsActivity extends BaseActivity implements  OnClickListener{
+    private MessageReceivers receiver;      // 用于删除好友之后刷新界面的广播
     private Bitmap bmp;
-    private Bitmap bmpS;
+
+    private Dialog confirmDialog;           // 确定删除好友对话框
+    private Dialog dialogs;                 // 加载数据对话框
+    private TextView editSignature;         // 用户签名
+    private ImageView imageHead;            // 用户头像
+    private ImageView imageEwm;             // 二维码
+    private EditText editName;              // 用户名
+
+    private String name;                    // 用户名
+    private String imageUrl;                // 用户头像
+    private String id;                      // 用户 ID
+    private String descN;                   // 用户签名
+    private String aliasName;               // 用户备注名
+    private String url12;                   // 用户头像
     private String tag = "TALK_PERSON_NEWS_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
-    private String url;
-    private MessageReceivers Receiver;
+    private boolean update;                 // 标记是否是修改状态
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_talk_personnews);
-        context = this;
-        update = false;    // 此时修改的状态
-        setView();
-        handleIntent();
-        setData();
-        setListener();
+
+        // 注册广播
+        receiver = new MessageReceivers();
+        IntentFilter filters = new IntentFilter();
+        filters.addAction(BroadcastConstant.GROUP_DETAIL_CHANGE);
+        registerReceiver(receiver, filters);
+
         dialogDelete();
-        if (Receiver == null) {
-            Receiver = new MessageReceivers();
-            IntentFilter filters = new IntentFilter();
-            filters.addAction("GROUP_DETAIL_CHANGE");
-            context.registerReceiver(Receiver, filters);
-        }
+        handleIntent();
+
+        initView();
     }
 
-    class MessageReceivers extends BroadcastReceiver {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals("GROUP_DETAIL_CHANGE")) {
-                send();
-            }
-        }
-    }
-
-    private void dialogDelete() {
-        final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_exit_confirm, null);
-        TextView tv_cancel = (TextView) dialog.findViewById(R.id.tv_cancle);
-        TextView tv_confirm = (TextView) dialog.findViewById(R.id.tv_confirm);
-        TextView tv_title = (TextView) dialog.findViewById(R.id.tv_title);
-        tv_title.setText("确定要删除该好友？");
-        confirmDialog = new Dialog(context, R.style.MyDialog);
-        confirmDialog.setContentView(dialog);
-        confirmDialog.setCanceledOnTouchOutside(true);
-        confirmDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-        /*
-         * LayoutParams pr2 = (LayoutParams)(confirmDialog.getLayoutParams());
-		 * pr2.width = PhoneMessage.ScreenWidth - 120;
-		 */
-        tv_cancel.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmDialog.dismiss();
-            }
-        });
-
-        tv_confirm.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (id != null && !id.equals("")) {
-                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                        confirmDialog.dismiss();
-						/* ToastUtil.show_short(context, "我是send"); */
-                        dialogs = DialogUtils.Dialogph(context, "正在获取数据");
-                        send();
-                    } else {
-                        ToastUtils.show_always(context, "网络失败，请检查网络");
-                    }
-                } else {
-                    ToastUtils.show_always(context, "用户ID为空，无法删除该好友，请稍后重试");
-                }
-            }
-        });
-    }
-
-    private void setView() {
-        image_touxiang = (ImageView) findViewById(R.id.image_touxiang);
-        tv_name = (TextView) findViewById(R.id.tv_name);
-        et_b_name = (EditText) findViewById(R.id.et_b_name);
-        et_groupSignature = (EditText) findViewById(R.id.et_groupSignature);
-        tv_id = (TextView) findViewById(R.id.tv_id);
-        lin_ewm = (LinearLayout) findViewById(R.id.lin_ewm);
-        head_left_btn = (LinearLayout) findViewById(R.id.head_left_btn);
-        imageView_ewm = (ImageView) findViewById(R.id.imageView_ewm);
-        image_add = (ImageView) findViewById(R.id.image_add);
-        image_xiugai = (ImageView) findViewById(R.id.image_xiugai);
-        tv_delete = (TextView) findViewById(R.id.tv_delete);
-        lin_person_xiugai = (LinearLayout) findViewById(R.id.lin_person_xiugai);
-        et_b_name.setEnabled(false);
-        et_groupSignature.setEnabled(false);
-    }
-
+    // 处理上一个界面传递过来的数据
     private void handleIntent() {
         String type = getIntent().getStringExtra("type");
         if (type == null || type.equals("")) {
-        } else if (type.equals("talkoldlistfragment")) {
-            TalkListGP data = (TalkListGP) getIntent().getSerializableExtra("data");
-            name = data.getName();
-            imageUrl = data.getPortrait();
-            id = data.getId();
-            descN = data.getDescn();
-            num = data.getUserNum();
-            b_name = data.getUserAliasName();
-        } else if (type.equals("talkoldlistfragment_p")) {
-            GroupTalkInside data = (GroupTalkInside) getIntent().getSerializableExtra("data");
-            name = data.getUserName();
-            imageUrl = data.getPortraitMini();
-            id = data.getUserId();
-            descN = data.getDescn();
-            num = data.getUserNum();
-            b_name = data.getUserAliasName();
+            ToastUtils.show_always(context, "数据传递失败，请返回重试!");
+            return ;
+        }
 
-        } else if (type.equals("TalkGroupNewsActivity_p")) {
-            UserInfo data = (UserInfo) getIntent().getSerializableExtra("data");
-            groupId = getIntent().getStringExtra("id");
-            name = data.getUserName();
-            imageUrl = data.getPortraitBig();
-            id = data.getUserId();
-            descN = data.getDescn();
-            num = data.getUserNum();
-            b_name = data.getUserAliasName();
-            viewType = 1;
-        } else if (type.equals("findActivity")) {
-            // 处理组邀请时进入
-            UserInviteMeInside data = (UserInviteMeInside) getIntent().getSerializableExtra("data");
-            name = data.getUserName();
-            imageUrl = data.getPortrait();
-            id = data.getUserId();
-            descN = data.getDescn();
-            num = data.getUserNum();
-            b_name = data.getUserAliasName();
-            tv_delete.setVisibility(View.GONE);
-            lin_person_xiugai.setVisibility(View.INVISIBLE);
-        } else if (type.equals("GroupMemers")) {
-            groupId = getIntent().getStringExtra("id");
-            UserInfo data = (UserInfo) getIntent().getSerializableExtra("data");
-//            TalkPersonInside data = (TalkPersonInside) getIntent().getSerializableExtra("data");
-            name = data.getUserName();
-            imageUrl = data.getPortraitMini();
-            id = data.getUserId();
-            descN = data.getDescn();
-            b_name = data.getUserAliasName();
-            num = data.getUserNum();
-            b_name = data.getUserAliasName();
-            viewType = 1;
-        } else {
-            TalkPersonInside data = (TalkPersonInside) getIntent().getSerializableExtra("data");
-            name = data.getUserName();
-            imageUrl = data.getPortraitMini();
-            id = data.getUserId();
-            descN = data.getDescn();
-            b_name = data.getUserAliasName();
-            num = data.getUserNum();
-            b_name = data.getUserAliasName();
+        switch (type) {
+            case "talkoldlistfragment_p":   // 由聊天界面跳转过来
+                GroupTalkInside groupTalkInside = (GroupTalkInside) getIntent().getSerializableExtra("data");
+                name = groupTalkInside.getUserName();
+                imageUrl = groupTalkInside.getPortraitMini();
+                id = groupTalkInside.getUserId();
+                descN = groupTalkInside.getDescn();
+                aliasName = groupTalkInside.getUserAliasName();
+                break;
+            case "TalkGroupNewsActivity_p": // 由群组详情、全部群组成员列表跳转过来
+                UserInfo userInfo = (UserInfo) getIntent().getSerializableExtra("data");
+                name = userInfo.getUserName();
+                imageUrl = userInfo.getPortraitBig();
+                id = userInfo.getUserId();
+                descN = userInfo.getDescn();
+                aliasName = userInfo.getUserAliasName();
+                break;
+            case "findActivity":            // 由搜索好友结果界面跳转过来
+                UserInviteMeInside userInviteMeInside = (UserInviteMeInside) getIntent().getSerializableExtra("data");
+                name = userInviteMeInside.getUserName();
+                imageUrl = userInviteMeInside.getPortrait();
+                id = userInviteMeInside.getUserId();
+                descN = userInviteMeInside.getDescn();
+                aliasName = userInviteMeInside.getUserAliasName();
+                break;
+            case "talkpersonfragment":      // 由通讯录好友跳转过来
+                TalkPersonInside talkPersonInside = (TalkPersonInside) getIntent().getSerializableExtra("data");
+                name = talkPersonInside.getUserName();
+                imageUrl = talkPersonInside.getPortraitMini();
+                id = talkPersonInside.getUserId();
+                descN = talkPersonInside.getDescn();
+                aliasName = talkPersonInside.getUserAliasName();
+                break;
         }
     }
 
+    // 初始化界面
+    private void initView() {
+        findViewById(R.id.head_left_btn).setOnClickListener(this);          // 返回
+        findViewById(R.id.image_add).setOnClickListener(this);              // 对讲
+        findViewById(R.id.tv_delete).setOnClickListener(this);              // 删除好友
+        findViewById(R.id.image_xiugai).setOnClickListener(this);           // 修改
+
+        imageHead = (ImageView) findViewById(R.id.image_touxiang);          // 头像
+        editName = (EditText) findViewById(R.id.et_b_name);                 // 用户名 备注名
+        editSignature = (TextView) findViewById(R.id.et_groupSignature);    // 用户签名
+        imageEwm = (ImageView) findViewById(R.id.imageView_ewm);            // 二维码图片
+
+        setData();
+    }
+
+    // 初始化数据
     private void setData() {
-        if (name == null || name.equals("")) {
-            tv_name.setText("我听科技");
-        } else {
-            tv_name.setText(name);
-        }
-        if (num == null || num.equals("")) {
-            num = "0000";
-            tv_id.setVisibility(View.GONE);
-        } else {
-            tv_id.setVisibility(View.VISIBLE);
-            tv_id.setText(num);
-        }
-        if (descN == null || descN.equals("")) {
-            descN = "这家伙很懒，什么都没写";
-            et_groupSignature.setText(descN);
-        } else {
-            et_groupSignature.setText(descN);
-        }
-        if (b_name == null || b_name.equals("")) {
-            et_b_name.setText("暂无备注名");
-        } else {
-            et_b_name.setText(b_name);
-        }
-        if (imageUrl == null || imageUrl.equals("") || imageUrl.equals("null")
-                || imageUrl.trim().equals("")) {
+        // 设置好友头像显示
+        if (imageUrl == null || imageUrl.equals("null") || imageUrl.trim().equals("")) {
             Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_hy);
-            image_touxiang.setImageBitmap(bmp);
+            imageHead.setImageBitmap(bmp);
         } else {
             if (imageUrl.startsWith("http:")) {
                 url12 = imageUrl;
             } else {
                 url12 = GlobalConfig.imageurl + imageUrl;
             }
-            Picasso.with(context).load(url12.replace("\\/", "/")).resize(100, 100).centerCrop().into(image_touxiang);
+            Picasso.with(context).load(url12.replace("\\/", "/")).resize(100, 100).centerCrop().into(imageHead);
         }
-        news = new UserInfo();
-        news.setPortraitMini(imageUrl);
-        news.setUserId(id);
-        news.setUserName(name);
-        bmp = CreatQRImageHelper.getInstance().createQRImage(1, news, 300, 300);
-        if (bmp != null) {
-            imageView_ewm.setImageBitmap(bmp);
-        } else {
-            bmpS = BitmapUtils.readBitMap(context, R.mipmap.ewm);
-            imageView_ewm.setImageBitmap(bmpS);
+
+        // 好友签名 不可更改好友签名 只能由其本人修改
+        if (descN == null || descN.equals("")) {
+            descN = "这家伙很懒，什么都没写";
         }
+        editSignature.setText(descN);
+
+        // 好友名称  给好友的备注名  可随时修改 但修改的是给好友的备注好友的名称没有改变
+        if (aliasName == null || aliasName.equals("")) {
+            aliasName = name;
+        }
+        editName.setText(aliasName);
+
+        // 二维码以及二维码中包含的好友信息
+        UserInfo userInfo = new UserInfo();
+        userInfo.setPortraitMini(imageUrl);
+        userInfo.setUserId(id);
+        userInfo.setUserName(name);
+        bmp = CreatQRImageHelper.getInstance().createQRImage(1, userInfo, 300, 300);
+        if (bmp == null) {
+            bmp = BitmapUtils.readBitMap(context, R.mipmap.ewm);
+        }
+        imageEwm.setImageBitmap(bmp);
     }
 
-    private void setListener() {
-        lin_ewm.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(context, EWMShowActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("type", "1");
-                bundle.putString("id", num);
-                bundle.putString("image", imageUrl);
-                bundle.putString("news", descN);
-                bundle.putString("name", name);
-                bundle.putSerializable("person", news);
-                intent.putExtras(bundle);
-                startActivity(intent);
-            }
-        });
-
-        image_xiugai.setOnClickListener(new OnClickListener() {
-            private String beiName;
-            private String groupSignature;
-
-            @Override
-            public void onClick(View v) {
-                if (update) {
-                    // 此时是修改状态需要进行以下操作
-                    if (id.equals(CommonUtils.getUserId(context))) {
-                        if (et_b_name.getText().toString().trim().equals("")
-                                || et_b_name.getText().toString().trim().equals("暂无备注名")) {
-                            beiName = " ";
-                        } else {
-                            beiName = et_b_name.getText().toString();
-                        }
-                        if (et_groupSignature.getText().toString().trim().equals("")
-                                || et_groupSignature.getText().toString().trim().equals("这家伙很懒，什么都没写")) {
-                            groupSignature = " ";
-                        } else {
-                            groupSignature = et_groupSignature.getText().toString();
-                        }
-                    } else {
-                        if (et_b_name.getText().toString().trim().equals("")
-                                || et_b_name.getText().toString().trim().equals("暂无备注名")) {
-                            beiName = " ";
-                        } else {
-                            beiName = et_b_name.getText().toString();
-                        }
-                        groupSignature = "";
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.head_left_btn:    // 返回
+                finish();
+                break;
+            case R.id.image_add:        // 对讲
+                call(id);
+                break;
+            case R.id.tv_delete:        // 删除好友
+                confirmDialog.show();
+                break;
+            case R.id.image_xiugai:     // 修改好友备注
+                editName.setEnabled(false);
+                String beiName;
+                if (update) {           // 此时是修改状态需要进行以下操作
+                    beiName = editName.getText().toString().trim();
+                    if(beiName.equals(aliasName)) {
+                        return ;
+                    }
+                    if (beiName.equals("")) {
+                        beiName = name;
                     }
                     if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                         dialogs = DialogUtils.Dialogph(context, "提交中");
-                        update(beiName, groupSignature);
+                        update(beiName);
                     } else {
                         ToastUtils.show_always(context, "网络失败，请检查网络");
                     }
-                    et_b_name.setEnabled(false);
-                    et_groupSignature.setEnabled(false);
-                    et_b_name.setBackgroundColor(context.getResources().getColor(R.color.dinglan_orange));
-                    et_b_name.setTextColor(context.getResources().getColor(R.color.white));
-                    et_groupSignature.setBackgroundColor(context.getResources().getColor(R.color.dinglan_orange));
-                    et_groupSignature.setTextColor(context.getResources().getColor(R.color.white));
-                    Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.xiugai);
-                    image_xiugai.setImageBitmap(bmp);
-                    update = false;
-                } else {
-                    // 此时是未编辑状态
-                    if (id.equals(CommonUtils.getUserId(context))) {
-                        // 此时是我本人
-                        et_b_name.setEnabled(true);
-                        et_groupSignature.setEnabled(true);
-                        et_b_name.setBackgroundColor(context.getResources().getColor(R.color.white));
-                        et_b_name.setTextColor(context.getResources().getColor(R.color.gray));
-                        et_groupSignature.setBackgroundColor(context.getResources().getColor(R.color.white));
-                        et_groupSignature.setTextColor(context.getResources().getColor(R.color.gray));
-                    } else {
-                        // 此时我不是我本人
-                        et_b_name.setEnabled(true);
-                        et_b_name.setBackgroundColor(context.getResources().getColor(R.color.white));
-                        et_b_name.setTextColor(context.getResources().getColor(R.color.gray));
-                    }
-                    Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wancheng);
-                    image_xiugai.setImageBitmap(bmp);
-                    update = true;
+                } else {                // 此时是未编辑状态
+                    editName.setEnabled(true);
                 }
-            }
-        });
-
-        head_left_btn.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-
-        });
-
-        image_add.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                call(id);
-                // ToastUtil.show_short(TalkPersonNewsActivity.this, "添加好友到活跃状态");
-            }
-        });
-
-        tv_delete.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                confirmDialog.show();
-            }
-        });
+                update = !update;
+                break;
+            case R.id.tv_cancle:        // 取消删除好友
+                confirmDialog.dismiss();
+                break;
+            case R.id.tv_confirm:       // 确定删除好友
+                confirmDialog.dismiss();
+                if (id != null && !id.equals("")) {
+                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                        dialogs = DialogUtils.Dialogph(context, "正在获取数据");
+                        send();
+                    } else {
+                        ToastUtils.show_always(context, "网络连接失败，请检查网络!");
+                    }
+                } else {
+                    ToastUtils.show_always(context, "删除好友失败，请稍后重试!");
+                }
+                break;
+        }
     }
 
-    protected void update(final String b_name2, String groupSignature) {
+    // 修改好友资料
+    protected void update(final String friendAliasName) {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            // 模块属性
-            if (viewType == -1) {
-                jsonObject.put("FriendUserId", id);
-                jsonObject.put("FriendAliasName", b_name2);
-                jsonObject.put("FriendAliasdescN", groupSignature);
-                url = GlobalConfig.updateFriendnewsUrl;
-            } else {
-                jsonObject.put("groupId", groupId);
-                jsonObject.put("UpdateUserId", id);
-                jsonObject.put("UserAliasName", b_name2);
-                jsonObject.put("UserAliasdescN", groupSignature);
-                url = GlobalConfig.updategroupFriendnewsUrl;
-            }
+            jsonObject.put("FriendUserId", id);
+            jsonObject.put("FriendAliasName", friendAliasName);
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
-        VolleyRequest.RequestPost(url, groupSignature, jsonObject, new VolleyCallback() {
+        VolleyRequest.RequestPost(GlobalConfig.updateFriendnewsUrl, tag, jsonObject, new VolleyCallback() {
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (dialogs != null) {
-                    dialogs.dismiss();
-                }
-                if (isCancelRequest) {
-                    return;
-                }
+                if (dialogs != null) dialogs.dismiss();
+                if (isCancelRequest) return;
                 try {
                     String ReturnType = result.getString("ReturnType");
-                    // 根据返回值来对程序进行解析
                     if (ReturnType != null) {
                         if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
-                            et_b_name.setText(b_name2);
-                            context.sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
-                            context.sendBroadcast(new Intent(BroadcastConstant.REFRESH_GROUP));
+                            editName.setText(friendAliasName);
+                            sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
+                            sendBroadcast(new Intent(BroadcastConstant.REFRESH_GROUP));
                             ToastUtils.show_always(context, "修改成功");
                         } else if (ReturnType.equals("0000")) {
                             ToastUtils.show_always(context, "无法获取相关的参数");
@@ -461,9 +296,8 @@ public class TalkPersonNewsActivity extends BaseActivity {
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialogs != null) {
-                    dialogs.dismiss();
-                }
+                if (dialogs != null) dialogs.dismiss();
+                ToastUtils.showVolleyError(context);
             }
         });
     }
@@ -471,7 +305,6 @@ public class TalkPersonNewsActivity extends BaseActivity {
     private void send() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            // 模块属性
             jsonObject.put("FriendUserId", id);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -484,16 +317,17 @@ public class TalkPersonNewsActivity extends BaseActivity {
                 if (isCancelRequest) return;
                 try {
                     String ReturnType = result.getString("ReturnType");
-                    // 根据返回值来对程序进行解析
                     if (ReturnType != null) {
                         if (ReturnType.equals("1001")) {
-                            context.sendBroadcast( new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
+                            sendBroadcast( new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
                             if (ChatFragment.context != null &&
                                     ChatFragment.interPhoneId != null && ChatFragment.interPhoneId.equals(id)) {
                                 // 保存通讯录是否刷新的属性
                                 Editor et = BSApplication.SharedPreferences.edit();
                                 et.putString(StringConstant.PERSONREFRESHB, "true");
-                                et.commit();
+                                if(et.commit()) {
+                                    L.v("数据 commit 失败!");
+                                }
                             }
                             ToastUtils.show_always(context, "已经删除成功");
                             finish();
@@ -520,64 +354,70 @@ public class TalkPersonNewsActivity extends BaseActivity {
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialogs != null) {
-                    dialogs.dismiss();
-                }
+                if (dialogs != null) dialogs.dismiss();
+                ToastUtils.showVolleyError(context);
             }
         });
     }
 
+    // 对讲
     protected void call(String id) {
         Intent it = new Intent(TalkPersonNewsActivity.this, CallAlertActivity.class);
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
         it.putExtras(bundle);
-        // it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(it);
+    }
+
+    // 确定删除好友对话框
+    private void dialogDelete() {
+        final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_exit_confirm, null);
+        dialog.findViewById(R.id.tv_cancle).setOnClickListener(this);// 取消
+        dialog.findViewById(R.id.tv_confirm).setOnClickListener(this);// 确定
+        TextView textTitle = (TextView) dialog.findViewById(R.id.tv_title);
+        textTitle.setText("确定要删除该好友？");
+        confirmDialog = new Dialog(context, R.style.MyDialog);
+        confirmDialog.setContentView(dialog);
+        confirmDialog.setCanceledOnTouchOutside(true);
+        confirmDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+    }
+
+    // 广播  用于删除好友之后的刷新界面
+    class MessageReceivers extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action.equals(BroadcastConstant.GROUP_DETAIL_CHANGE)) {
+                send();
+            }
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (Receiver != null) {
-            context.unregisterReceiver(Receiver);
-            Receiver = null;
+        if (receiver != null) {
+            unregisterReceiver(receiver);
+            receiver = null;
         }
         isCancelRequest = VolleyRequest.cancelRequest(tag);
         if (bmp != null && !bmp.isRecycled()) {
             bmp.recycle();
             bmp = null;
         }
-        if (bmpS != null && !bmpS.isRecycled()) {
-            bmpS.recycle();
-            bmpS = null;
-        }
-        news = null;
         confirmDialog = null;
-        context = null;
         name = null;
         imageUrl = null;
         id = null;
-        head_left_btn = null;
-        image_add = null;
-        tv_delete = null;
-        image_xiugai = null;
-        image_touxiang = null;
-        tv_name = null;
-        tv_id = null;
-        lin_person_xiugai = null;
+        imageHead = null;
         dialogs = null;
-        et_groupSignature = null;
-        et_b_name = null;
+        editSignature = null;
+        editName = null;
         descN = null;
-        num = null;
-        b_name = null;
-        imageView_ewm = null;
-        lin_ewm = null;
-        groupId = null;
+        aliasName = null;
+        imageEwm = null;
         url12 = null;
         tag = null;
-        url = null;
         setContentView(R.layout.activity_null);
     }
 }

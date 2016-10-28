@@ -94,7 +94,8 @@ public class TestWindowService extends Service {
         // 设置Window flag
         params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         params.width = PhoneMessage.ScreenWidth;
-        params.height = 150;
+//        params.height = 150;
+        params.height = 1;
         params.y = 700;
 
         tv_3.setOnClickListener(new View.OnClickListener() {

@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,7 +62,7 @@ import java.util.List;
 
 /**
  * 群组详情
- * 以下界面可跳转至这界面
+ * 以下界面可跳转到这界面
  * 1、搜索群组结果               - > FindNewsResultActivity
  * 2、通讯录                     - > LinkManFragment
  * 3、聊天界面                   - > ChatFragment
@@ -82,6 +83,8 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
     private EditText mGroupName;                        // 群名称
     private EditText mGroupSign;                        // 群签名
     private TextView mTextNumber;                       // 群成员人数
+    private TextView textChannelOne;                    // 设备备用频道一
+    private TextView textChannelTwo;                    // 设备备用频道二
     private GridView gridAllPerson;                     // 展示全部成全
     private ImageView mImageHead;                       // 头像
 //    private ImageView mImgEWM;
@@ -90,6 +93,8 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
     private View relativeModifyPassword;                // 修改密码
     private View relativeAddGroup;                      // 加群消息
     private View relativeVerifyGroup;                   // 审核消息
+    private Spinner spinnerChannelOne;
+    private Spinner spinnerChannelTwo;
     
     private String groupId;                             // 群 ID
     private String imageUrl;                            // 群头像 URL
@@ -97,6 +102,8 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
     private String signature;                           // 群签名
     private String name;                                // 群名称
     private String groupType;                           // 群类型 0 -> 审核群  1 -> 公开群  2 -> 密码群
+    private String channelOne = "CH01-409.7500";
+    private String channelTwo = "CH02-409.7625";
     private String tag = "TALK_GROUP_NEWS_VOLLEY_REQUEST_CANCEL_TAG";
 
     private boolean isCancelRequest;
@@ -245,6 +252,8 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                 signature = groupRation.getGroupSignature();
                 groupType = groupRation.getGroupType();
                 creator = CommonUtils.getUserId(context);
+                channelOne = groupRation.getAlternateChannel1();
+                channelTwo = groupRation.getAlternateChannel2();
                 break;
         }
 
@@ -271,6 +280,15 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
         mGroupName = (EditText) findViewById(R.id.et_group_name);               // 群名称
         mGroupSign = (EditText) findViewById(R.id.et_group_sign);               // 群签名
         mTextNumber = (TextView) findViewById(R.id.tv_number);                  // 群成员数量
+
+        textChannelOne = (TextView) findViewById(R.id.text_channel_one);
+        textChannelTwo = (TextView) findViewById(R.id.text_channel_two);
+
+        spinnerChannelOne = (Spinner) findViewById(R.id.spinner_channel1);
+        spinnerChannelOne.setEnabled(false);
+
+        spinnerChannelTwo = (Spinner) findViewById(R.id.spinner_channel2);
+        spinnerChannelTwo.setEnabled(false);
 
         relativeTransferAuthority = findViewById(R.id.rl_transferauthority);    // 移交管理员权限
         relativeTransferAuthority.setOnClickListener(this);
@@ -319,6 +337,10 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
         // 根据群组和群类型初始化界面
         if (creator != null && !creator.equals("")) {
             if (creator.equals(CommonUtils.getUserId(context)) && groupType != null && !groupType.equals("")) {
+                textChannelOne.setVisibility(View.GONE);
+                textChannelTwo.setVisibility(View.GONE);
+                spinnerChannelOne.setVisibility(View.VISIBLE);
+                spinnerChannelTwo.setVisibility(View.VISIBLE);
                 isCreator = true;
                 switch (groupType) {
                     case "2":// 密码群
@@ -333,6 +355,9 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                         relativeTransferAuthority.setVisibility(View.VISIBLE);
                         break;
                 }
+            } else {
+                textChannelOne.setText(channelOne);
+                textChannelTwo.setText(channelTwo);
             }
         }
     }
@@ -364,48 +389,69 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                 if (dialog != null) dialog.dismiss();
                 if (isCancelRequest) return;
                 try {
-                    list = new Gson().fromJson(result.getString("UserList"), new TypeToken<List<UserInfo>>() {}.getType());
-                    if (list == null || list.size() == 0) {
-                        ToastUtils.show_always(context, "您当前没有数据");
-                        sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
-                    } else {
-                        // 处理组装数据 判断 list 和 Create 大小进行组装
-                        // 如果是管理员 判断 list 是否 > 3 大于 3 出现删除按钮 如果 list > 6 截取前六条添加增加删除按钮
-                        int sum = list.size();
-                        if (sum != -1) {
-                            String sumString = "(" + sum + ")";
-                            mTextNumber.setText(sumString);
-                        }
-                        UserInfo add = new UserInfo();
-                        add.setType(2);
-                        UserInfo del = new UserInfo();
-                        del.setType(3);
-                        userList.clear();
-                        if (isCreator) {
-                            if (list.size() > 0 && list.size() < 7) {
-                                userList.addAll(list);
-                            } else if (list.size() > 6) {
-                                for (int i = 0; i < 6; i++) {
-                                    userList.add(list.get(i));
-                                }
-                            }
-                            userList.add(add);
-                            userList.add(del);
-                        } else {// 如果不是管理员 判断 list 是否大于 8 大于 8 取前 7 条 添加添加按钮
-                            if (list.size() > 7) {
-                                for (int i = 0; i < 7; i++) {
-                                    userList.add(list.get(i));
-                                }
-                            } else {
-                                userList.addAll(list);
-                            }
-                            userList.add(add);
-                        }
-                        if (adapter == null) {
-                            gridAllPerson.setAdapter(adapter = new GroupTalkAdapter(context, userList));
+                    String returnType = result.getString("ReturnType");
+                    L.v("returnType -- > > " + returnType);
+
+                    if(returnType != null && returnType.equals("1001")) {
+                        list = new Gson().fromJson(result.getString("UserList"), new TypeToken<List<UserInfo>>() {}.getType());
+                        if (list == null || list.size() == 0) {
+                            ToastUtils.show_always(context, "您当前没有数据");
+                            sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
                         } else {
-                            adapter.notifyDataSetChanged();
+                            // 处理组装数据 判断 list 和 Create 大小进行组装
+                            // 如果是管理员 判断 list 是否 > 3 大于 3 出现删除按钮 如果 list > 6 截取前六条添加增加删除按钮
+                            int sum = list.size();
+                            if (sum != -1) {
+                                String sumString = "(" + sum + ")";
+                                mTextNumber.setText(sumString);
+                            }
+                            UserInfo add = new UserInfo();
+                            add.setType(2);
+                            UserInfo del = new UserInfo();
+                            del.setType(3);
+                            userList.clear();
+                            if (isCreator) {
+                                if(list.size() == 1) {
+                                    userList.addAll(list);
+                                    userList.add(add);
+                                } else if (list.size() > 1 && list.size() < 7) {
+                                    userList.addAll(list);
+                                    userList.add(add);
+                                    userList.add(del);
+                                } else if (list.size() > 6) {
+                                    for (int i = 0; i < 6; i++) {
+                                        userList.add(list.get(i));
+                                    }
+                                    userList.add(add);
+                                    userList.add(del);
+                                }
+                            } else {// 如果不是管理员 判断 list 是否大于 8 大于 8 取前 7 条 添加添加按钮
+                                if (list.size() > 7) {
+                                    for (int i = 0; i < 7; i++) {
+                                        userList.add(list.get(i));
+                                    }
+                                } else {
+                                    userList.addAll(list);
+                                }
+                                userList.add(add);
+                            }
+                            if (adapter == null) {
+                                gridAllPerson.setAdapter(adapter = new GroupTalkAdapter(context, userList));
+                            } else {
+                                adapter.notifyDataSetChanged();
+                            }
                         }
+                    }else if(returnType != null && returnType.equals("1011")) {
+                        ToastUtils.show_always(context, "群组无成员，群组已自动解散!");
+                        sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
+                        SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+                        et.putString(StringConstant.PERSONREFRESHB, "true");
+                        if (!et.commit()) {
+                            L.v("数据 commit 失败!");
+                        }
+                        finish();
+                    } else {
+                        ToastUtils.show_always(context, "获取群组成员失败，请重试!");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -462,6 +508,10 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                 if (!isUpdate) {
                     mGroupName.setEnabled(true);
                     mGroupSign.setEnabled(true);
+                    if(isCreator) {
+                        spinnerChannelOne.setEnabled(true);
+                        spinnerChannelTwo.setEnabled(true);
+                    }
                 } else {
                     String groupName = mGroupName.getText().toString().trim();
                     String groupSign = mGroupSign.getText().toString().trim();
@@ -479,6 +529,10 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                     }
                     mGroupName.setEnabled(false);
                     mGroupSign.setEnabled(false);
+                    if(isCreator) {
+                        spinnerChannelOne.setEnabled(false);
+                        spinnerChannelTwo.setEnabled(false);
+                    }
                 }
                 isUpdate = !isUpdate;
                 break;
@@ -554,7 +608,12 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                     String ReturnType = result.getString("ReturnType");
                     L.v("ReturnType -- > > " + ReturnType);
 
-                    if (ReturnType != null && ReturnType.equals("1001")) {
+                    if(ReturnType == null || ReturnType.equals("")) {
+                        ToastUtils.show_always(context, "退出群组失败，请稍后重试!");
+                        return ;
+                    }
+
+                    if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
                         ToastUtils.show_always(context, "已经成功退出该组");
                         sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
                         SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();

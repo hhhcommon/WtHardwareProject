@@ -117,7 +117,7 @@ public class JoinGroupListActivity extends BaseActivity implements
         send();
     }
 
-    // 货物需要处理的审核消息
+    // 获取需要处理的审核消息
     private void send() {
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
             ToastUtils.show_always(context, "网络连接失败，请检查网络!");

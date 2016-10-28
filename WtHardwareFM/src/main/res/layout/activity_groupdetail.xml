@@ -138,21 +138,29 @@
                     android:id="@+id/text_channel1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/text_group_autograph"
-                    android:layout_below="@id/text_group_verification"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="17dp"
-                    android:text="设备备用频道1  "
+                    android:text="设备备用频道1: "
                     android:textColor="@color/group_4b"
                     android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/text_channel_one"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="17dp"
+                    android:visibility="visible"
+                    android:text="备用频道一"
+                    android:layout_toRightOf="@id/text_channel1"/>
 
                 <Spinner
                     android:id="@+id/spinner_channel1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/text_group_verification"
                     android:layout_marginRight="12dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="7dp"
+                    android:visibility="gone"
                     android:layout_toRightOf="@id/text_channel1"
                     android:entries="@array/spingar_channel"/>
 
@@ -160,13 +168,24 @@
                     android:id="@+id/text_channel2"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/text_group_autograph"
-                    android:layout_below="@id/spinner_channel1"
+                    android:layout_below="@id/text_channel1"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="17dp"
-                    android:text="设备备用频道2  "
+                    android:layout_marginTop="30dp"
+                    android:layout_marginBottom="17dp"
+                    android:text="设备备用频道2: "
                     android:textColor="@color/group_4b"
                     android:textSize="15sp"/>
+
+                <TextView
+                    android:id="@+id/text_channel_two"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/text_channel1"
+                    android:layout_marginRight="12dp"
+                    android:layout_marginTop="30dp"
+                    android:visibility="visible"
+                    android:text="备用频道二"
+                    android:layout_toRightOf="@id/text_channel2"/>
 
                 <Spinner
                     android:id="@+id/spinner_channel2"
@@ -174,7 +193,8 @@
                     android:layout_height="wrap_content"
                     android:layout_below="@id/spinner_channel1"
                     android:layout_marginRight="12dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="3dp"
+                    android:visibility="gone"
                     android:layout_toRightOf="@id/text_channel2"
                     android:entries="@array/spingar_channel"/>
 
