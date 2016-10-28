@@ -72,7 +72,7 @@ public class TalkPersonNewsActivity extends BaseActivity {
     private ImageView imageView_ewm;
     private LinearLayout lin_ewm;
     private UserInfo news;
-    private int viewType = -1;//=1时代表来自groupmembers
+    private int viewType = -1;// == 1 代表来自 groupMembers
     private String groupId;
     private String url12;
     private Bitmap bmp;
@@ -169,10 +169,10 @@ public class TalkPersonNewsActivity extends BaseActivity {
     }
 
     private void handleIntent() {
-        String type = this.getIntent().getStringExtra("type");
+        String type = getIntent().getStringExtra("type");
         if (type == null || type.equals("")) {
         } else if (type.equals("talkoldlistfragment")) {
-            TalkListGP data = (TalkListGP) this.getIntent().getSerializableExtra("data");
+            TalkListGP data = (TalkListGP) getIntent().getSerializableExtra("data");
             name = data.getName();
             imageUrl = data.getPortrait();
             id = data.getId();
@@ -180,7 +180,7 @@ public class TalkPersonNewsActivity extends BaseActivity {
             num = data.getUserNum();
             b_name = data.getUserAliasName();
         } else if (type.equals("talkoldlistfragment_p")) {
-            GroupTalkInside data = (GroupTalkInside) this.getIntent().getSerializableExtra("data");
+            GroupTalkInside data = (GroupTalkInside) getIntent().getSerializableExtra("data");
             name = data.getUserName();
             imageUrl = data.getPortraitMini();
             id = data.getUserId();
@@ -189,8 +189,8 @@ public class TalkPersonNewsActivity extends BaseActivity {
             b_name = data.getUserAliasName();
 
         } else if (type.equals("TalkGroupNewsActivity_p")) {
-            UserInfo data = (UserInfo) this.getIntent().getSerializableExtra("data");
-            groupId = this.getIntent().getStringExtra("id");
+            UserInfo data = (UserInfo) getIntent().getSerializableExtra("data");
+            groupId = getIntent().getStringExtra("id");
             name = data.getUserName();
             imageUrl = data.getPortraitBig();
             id = data.getUserId();
@@ -200,7 +200,7 @@ public class TalkPersonNewsActivity extends BaseActivity {
             viewType = 1;
         } else if (type.equals("findActivity")) {
             // 处理组邀请时进入
-            UserInviteMeInside data = (UserInviteMeInside) this.getIntent().getSerializableExtra("data");
+            UserInviteMeInside data = (UserInviteMeInside) getIntent().getSerializableExtra("data");
             name = data.getUserName();
             imageUrl = data.getPortrait();
             id = data.getUserId();
@@ -210,8 +210,9 @@ public class TalkPersonNewsActivity extends BaseActivity {
             tv_delete.setVisibility(View.GONE);
             lin_person_xiugai.setVisibility(View.INVISIBLE);
         } else if (type.equals("GroupMemers")) {
-            TalkPersonInside data = (TalkPersonInside) this.getIntent().getSerializableExtra("data");
-            groupId = this.getIntent().getStringExtra("id");
+            groupId = getIntent().getStringExtra("id");
+            UserInfo data = (UserInfo) getIntent().getSerializableExtra("data");
+//            TalkPersonInside data = (TalkPersonInside) getIntent().getSerializableExtra("data");
             name = data.getUserName();
             imageUrl = data.getPortraitMini();
             id = data.getUserId();
@@ -221,7 +222,7 @@ public class TalkPersonNewsActivity extends BaseActivity {
             b_name = data.getUserAliasName();
             viewType = 1;
         } else {
-            TalkPersonInside data = (TalkPersonInside) this.getIntent().getSerializableExtra("data");
+            TalkPersonInside data = (TalkPersonInside) getIntent().getSerializableExtra("data");
             name = data.getUserName();
             imageUrl = data.getPortraitMini();
             id = data.getUserId();
@@ -307,23 +308,20 @@ public class TalkPersonNewsActivity extends BaseActivity {
                 if (update) {
                     // 此时是修改状态需要进行以下操作
                     if (id.equals(CommonUtils.getUserId(context))) {
-                        if (et_b_name.getText().toString() == null
-                                || et_b_name.getText().toString().trim().equals("")
+                        if (et_b_name.getText().toString().trim().equals("")
                                 || et_b_name.getText().toString().trim().equals("暂无备注名")) {
                             beiName = " ";
                         } else {
                             beiName = et_b_name.getText().toString();
                         }
-                        if (et_groupSignature.getText().toString() == null
-                                || et_groupSignature.getText().toString().trim().equals("")
+                        if (et_groupSignature.getText().toString().trim().equals("")
                                 || et_groupSignature.getText().toString().trim().equals("这家伙很懒，什么都没写")) {
                             groupSignature = " ";
                         } else {
                             groupSignature = et_groupSignature.getText().toString();
                         }
                     } else {
-                        if (et_b_name.getText().toString() == null
-                                || et_b_name.getText().toString().trim().equals("")
+                        if (et_b_name.getText().toString().trim().equals("")
                                 || et_b_name.getText().toString().trim().equals("暂无备注名")) {
                             beiName = " ";
                         } else {

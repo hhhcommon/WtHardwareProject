@@ -86,7 +86,7 @@ public class GroupTalkAdapter extends BaseAdapter {
             holder.tv_name.setText("添加");
             Bitmap bp = BitmapUtils.readBitMap(context, R.mipmap.image_add);
             holder.imageView_touxiang.setImageBitmap(bp);
-        } else {
+        } else if (lists.getType() == 3) {
             holder.tv_name.setText("删除");
             Bitmap bp = BitmapUtils.readBitMap(context, R.mipmap.image_tichu);
             holder.imageView_touxiang.setImageBitmap(bp);

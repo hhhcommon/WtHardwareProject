@@ -181,11 +181,11 @@ public class LoginActivity extends AppBaseActivity implements OnClickListener {
                         InterPhoneControlHelper.sendEntryMessage(context);//登录后socket发送进入的请求
                         finish();
                     } else if (ReturnType != null && ReturnType.equals("1002")) {
-                        ToastUtils.show_always(context, "服务器端无此用户!");
+                        ToastUtils.show_always(context, "服务器端无此用户");
                     } else if (ReturnType != null && ReturnType.equals("1003")) {
-                        ToastUtils.show_always(context, "密码错误!");
+                        ToastUtils.show_always(context, "密码错误");
                     } else {
-                        ToastUtils.show_always(context, "发生未知错误，请稍后重试!");
+                        ToastUtils.show_always(context, "发生未知错误，请稍后重试");
                     }
                 } catch (Exception e1) {
                     e1.printStackTrace();

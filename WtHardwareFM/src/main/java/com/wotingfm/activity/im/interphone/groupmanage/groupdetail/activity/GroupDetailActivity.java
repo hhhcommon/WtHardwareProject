@@ -38,7 +38,7 @@ import com.wotingfm.activity.im.interphone.groupmanage.memberadd.activity.Member
 import com.wotingfm.activity.im.interphone.groupmanage.memberdel.MemberDelActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.im.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity;
-import com.wotingfm.activity.im.interphone.groupmanage.transferauthority.TransferAuthority;
+import com.wotingfm.activity.im.interphone.groupmanage.transferauthority.TransferAuthorityActivity;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
 import com.wotingfm.activity.im.interphone.message.model.GroupInfo;
 import com.wotingfm.common.application.BSApplication;
@@ -61,6 +61,13 @@ import java.util.List;
 
 /**
  * 群组详情
+ * 以下界面可跳转至这界面
+ * 1、搜索群组结果               - > FindNewsResultActivity
+ * 2、通讯录                     - > LinkManFragment
+ * 3、聊天界面                   - > ChatFragment
+ * 4、创建群组成功后直接进入     - > CreateGroupItemActivity
+ * 5、申请加入成功后直接进入     - > GroupAddActivity
+ *
  * 作者：xinlong on 2016/4/13
  * 邮箱：645700751@qq.com
  */
@@ -79,10 +86,10 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
     private ImageView mImageHead;                       // 头像
 //    private ImageView mImgEWM;
 
-    private View relativeTransferAuthority;   // 移交管理员权限
-    private View relativeModifyPassword;      // 修改密码
-    private View relativeAddGroup;            // 加群消息
-    private View relativeVerifyGroup;         // 审核消息
+    private View relativeTransferAuthority;             // 移交管理员权限
+    private View relativeModifyPassword;                // 修改密码
+    private View relativeAddGroup;                      // 加群消息
+    private View relativeVerifyGroup;                   // 审核消息
     
     private String groupId;                             // 群 ID
     private String imageUrl;                            // 群头像 URL
@@ -316,8 +323,13 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                 switch (groupType) {
                     case "2":// 密码群
                         relativeModifyPassword.setVisibility(View.VISIBLE);
+                        relativeTransferAuthority.setVisibility(View.VISIBLE);
+                        break;
                     case "1":// 公开群
+                        relativeTransferAuthority.setVisibility(View.VISIBLE);
+                        break;
                     case "0":// 审核群 审核消息
+                        relativeVerifyGroup.setVisibility(View.VISIBLE);
                         relativeTransferAuthority.setVisibility(View.VISIBLE);
                         break;
                 }
@@ -355,7 +367,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                     list = new Gson().fromJson(result.getString("UserList"), new TypeToken<List<UserInfo>>() {}.getType());
                     if (list == null || list.size() == 0) {
                         ToastUtils.show_always(context, "您当前没有数据");
-                        context.sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
+                        sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
                     } else {
                         // 处理组装数据 判断 list 和 Create 大小进行组装
                         // 如果是管理员 判断 list 是否 > 3 大于 3 出现删除按钮 如果 list > 6 截取前六条添加增加删除按钮
@@ -370,31 +382,24 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                         del.setType(3);
                         userList.clear();
                         if (isCreator) {
-                            if (list.size() > 0 && list.size() < 3) {
-                                list.add(add);
+                            if (list.size() > 0 && list.size() < 7) {
                                 userList.addAll(list);
-                            } else if (list.size() > 3 && list.size() < 7) {
-                                list.add(add);
-                                list.add(del);
-                                userList.addAll(list);
-                            } else if (list.size() >= 7) {
+                            } else if (list.size() > 6) {
                                 for (int i = 0; i < 6; i++) {
                                     userList.add(list.get(i));
                                 }
-                                userList.add(add);
-                                userList.add(del);
                             }
-                        } else {
-                            // 如果不是管理员 判断 list 是否大于 8 大于 8 取前 7 条 添加添加按钮
+                            userList.add(add);
+                            userList.add(del);
+                        } else {// 如果不是管理员 判断 list 是否大于 8 大于 8 取前 7 条 添加添加按钮
                             if (list.size() > 7) {
                                 for (int i = 0; i < 7; i++) {
                                     userList.add(list.get(i));
                                 }
-                                userList.add(add);
                             } else {
-                                list.add(add);
                                 userList.addAll(list);
                             }
+                            userList.add(add);
                         }
                         if (adapter == null) {
                             gridAllPerson.setAdapter(adapter = new GroupTalkAdapter(context, userList));
@@ -442,7 +447,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                 confirmDialog.show();
                 break;
             case R.id.rl_transferauthority: // 移交管理员权限
-                startToActivity(TransferAuthority.class);
+                startToActivity(TransferAuthorityActivity.class);
                 break;
             case R.id.rl_modifygpassword:   // 修改密码
                 startToActivity(ModifyGroupPasswordActivity.class);
@@ -524,9 +529,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+                if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
             }
         });
@@ -586,8 +589,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
     class MessageReceivers extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
-            if (action.equals(BroadcastConstant.REFRESH_GROUP)) {
+            if (intent.getAction().equals(BroadcastConstant.REFRESH_GROUP)) {
                 send();
             }
         }

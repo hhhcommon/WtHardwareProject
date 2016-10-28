@@ -18,17 +18,20 @@ import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
 
-public class joingrouplistadapter extends BaseAdapter implements OnClickListener{
+/**
+ * 申请加入群组消息列表
+ */
+public class JoinGroupAdapter extends BaseAdapter implements OnClickListener{
 	private List<UserInfo> list;
 	private Context context;
 	private Callback mCallback;
 	private String url;
 
 	public interface Callback {
-		public void click(View v);
+        void click(View v);
 	}
 
-	public joingrouplistadapter(Context context, List<UserInfo> list, Callback callback) {
+	public JoinGroupAdapter(Context context, List<UserInfo> list, Callback callback) {
 		super();
 		this.list = list;
 		this.context = context;

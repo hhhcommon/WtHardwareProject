@@ -147,6 +147,41 @@ public class FriendAddActivity extends AppBaseActivity implements OnClickListene
             } else {
                 et_news.setText("我是 " + username);
             }
+        } else if(type.equals("TalkGroupNewsActivity_p")) {
+            UserInfo contact = (UserInfo) this.getIntent().getSerializableExtra("data");
+            if (contact.getUserName() == null || contact.getUserName().equals("")) {
+                tv_name.setText("未知");
+            } else {
+                tv_name.setText(contact.getUserName());
+            }
+            if (contact.getUserNum() == null || contact.getUserNum().equals("")) {
+                tv_id.setVisibility(View.INVISIBLE);
+            } else {
+                tv_id.setVisibility(View.VISIBLE);
+                tv_id.setText(contact.getUserNum());
+            }
+            if (contact.getDescn() == null || contact.getDescn().equals("")) {
+                tv_sign.setVisibility(View.INVISIBLE);
+            } else {
+                tv_sign.setVisibility(View.VISIBLE);
+                tv_sign.setText(contact.getDescn());
+            }
+            if (contact.getPortraitMini() == null || contact.getPortraitMini().equals("") || contact.getPortraitMini().equals("null") || contact.getPortraitMini().trim().equals("")) {
+                Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_hy);
+                image_touXiang.setImageBitmap(bmp);
+            } else {
+                if (contact.getPortraitMini().startsWith("http:")) {
+                    url = contact.getPortraitMini();
+                } else {
+                    url = GlobalConfig.imageurl + contact.getPortraitMini();
+                }
+                Picasso.with(this).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(image_touXiang);
+            }
+            if (username == null || username.equals("")) {
+                et_news.setText("");
+            } else {
+                et_news.setText("我是 " + username);
+            }
         }
     }
 

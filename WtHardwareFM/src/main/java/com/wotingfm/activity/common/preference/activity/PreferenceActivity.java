@@ -1,7 +1,10 @@
 package com.wotingfm.activity.common.preference.activity;
 
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -11,13 +14,22 @@ import android.widget.GridView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.preference.adapter.PianHaoAdapter;
 import com.wotingfm.activity.common.preference.model.pianhao;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.common.volley.VolleyCallback;
+import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.util.ToastUtils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 偏好设置界面
@@ -26,18 +38,24 @@ import java.util.ArrayList;
  */
 public class PreferenceActivity extends Activity implements View.OnClickListener {
     private TextView tv_over;
-    private TextView tv_tiaoguo;
+    private TextView tv_tiao_guo;
     private LinearLayout head_left_btn;
-    private GridView gv_pianhao;
+    private GridView gv_pian_hao;
     private int type = 1;
     private ArrayList<pianhao> list;
     private PianHaoAdapter adapter;
+    private String tag = "PREFERENCE_REQUEST_CANCEL_TAG"; // 取消网络请求标签
+    private PreferenceActivity context;
+    private Dialog dialog;
+    private boolean isCancelRequest;
+    private List<String> perferenceList=new ArrayList<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_preference);
+        context=this;
         receiveData();
         initView();
         setListener();
@@ -51,21 +69,21 @@ public class PreferenceActivity extends Activity implements View.OnClickListener
 
     private void initView() {
         head_left_btn = (LinearLayout) findViewById(R.id.head_left_btn);
-        tv_tiaoguo = (TextView) findViewById(R.id.tv_tiaoguo);
-        gv_pianhao = (GridView) findViewById(R.id.gv_pianhao);
-        gv_pianhao.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        tv_tiao_guo = (TextView) findViewById(R.id.tv_tiaoguo);
+        gv_pian_hao = (GridView) findViewById(R.id.gv_pianhao);
+        gv_pian_hao.setSelector(new ColorDrawable(Color.TRANSPARENT));
         tv_over = (TextView) findViewById(R.id.tv_over);
         if (type == 1) {
             head_left_btn.setVisibility(View.INVISIBLE);
         } else {
-            tv_tiaoguo.setVisibility(View.INVISIBLE);
+            tv_tiao_guo.setVisibility(View.INVISIBLE);
         }
 
     }
 
     private void setListener() {
         head_left_btn.setOnClickListener(this);
-        tv_tiaoguo.setOnClickListener(this);
+        tv_tiao_guo.setOnClickListener(this);
         tv_over.setOnClickListener(this);
     }
 
@@ -79,9 +97,71 @@ public class PreferenceActivity extends Activity implements View.OnClickListener
                 finish();
                 break;
             case R.id.tv_over:
-                finish();
+                //判断点选
+                perferenceList.clear();
+                for(int i=0;i<list.size();i++){
+                    if(list.get(i).getType()==2){
+                        perferenceList.add(list.get(i).getName());
+                    }
+                }
+                if(perferenceList.size()!=0){
+                //发送网络请求
+                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                    //dialog = DialogUtils.Dialogph(context, "通讯中...");
+                    //send(); 还没有接口
+                    ToastUtils.show_always(context,"测试点击"+perferenceList.toString());
+                } else {
+                    ToastUtils.show_always(context, "网络失败，请检查网络");
+                }
+                }else{
+                    ToastUtils.show_always(context,"您还没有选择偏好，是否跳过？");
+                }
                 break;
         }
+    }
+
+    private void send() {
+
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
+        VolleyRequest.RequestPost(GlobalConfig.logoutUrl, tag, jsonObject, new VolleyCallback() {
+            private String ReturnType;
+            @Override
+            protected void requestSuccess(JSONObject result) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                // 如果网络请求已经执行取消操作  就表示就算请求成功也不需要数据返回了  所以方法就此结束
+                if(isCancelRequest){
+                    return ;
+                }
+                try {
+                    ReturnType = result.getString("ReturnType");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if(ReturnType != null && ReturnType.equals("1001")){
+
+                } else if (ReturnType != null && ReturnType.equals("200")) {
+
+                } else if (ReturnType != null && ReturnType.equals("0000")) {
+
+                } else if (ReturnType != null && ReturnType.equals("T")) {
+
+                } else {
+
+                }
+
+            }
+
+            @Override
+            protected void requestError(VolleyError error) {
+                if (dialog != null) {
+                    dialog.dismiss();
+                }
+                ToastUtils.showVolleyError(context);
+            }
+        });
+
     }
 
     private void setData() {
@@ -95,12 +175,12 @@ public class PreferenceActivity extends Activity implements View.OnClickListener
         }
 
         adapter = new PianHaoAdapter(this, list);
-        gv_pianhao.setAdapter(adapter);
+        gv_pian_hao.setAdapter(adapter);
         setListViewListener();
     }
 
     private void setListViewListener() {
-        gv_pianhao.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        gv_pian_hao.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (list.get(position).getType() == 1) {
@@ -114,9 +194,20 @@ public class PreferenceActivity extends Activity implements View.OnClickListener
     }
 
     @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        return res;
+    }
+
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         //保存偏好设置页查看状态
+        isCancelRequest = VolleyRequest.cancelRequest(tag);
         SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
         et.putString(StringConstant.PREFERENCE, "1");
         et.commit();
