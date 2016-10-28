@@ -69,8 +69,8 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
 
         View linView = findViewById(R.id.lin_view);
 
-        if(GlobalConfig.playerobject != null && PlayerFragment.audioplay != null &&
-                PlayerFragment.audioplay.isPlaying() && !GlobalConfig.playerobject.getMediaType().equals("RADIO")) {
+        if(GlobalConfig.playerobject != null && PlayerFragment.audioPlay != null &&
+                PlayerFragment.audioPlay.isPlaying() && !GlobalConfig.playerobject.getMediaType().equals("RADIO")) {
 
             linearPlayEnd.setVisibility(View.VISIBLE);
             linView.setVisibility(View.VISIBLE);
