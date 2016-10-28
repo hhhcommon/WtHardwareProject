@@ -21,11 +21,12 @@ import java.util.List;
 public class WiFiListAdapter extends BaseAdapter {
     private Context context;
     private List<ScanResult> list;
+    private WifiManager wifiManager;
 
     public WiFiListAdapter(Context context, List<ScanResult> list) {
         this.context = context;
         this.list = list;
-      
+        wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
     }
 
     public void setList(List<ScanResult> list) {
@@ -62,7 +63,6 @@ public class WiFiListAdapter extends BaseAdapter {
         }
         ScanResult result = list.get(position);
         holder.textWiFiName.setText(result.SSID);
-        WifiManager wifiManager = (WifiManager) context.getSystemService(Context.WIFI_SERVICE);
         String connWiFiName = wifiManager.getConnectionInfo().getSSID();
         if (connWiFiName.startsWith("\"")) {
             connWiFiName = connWiFiName.substring(1, connWiFiName.length() - 1);
