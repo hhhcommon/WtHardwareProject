@@ -11,6 +11,7 @@ import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.person.modifypassword.ModifyPasswordActivity;
 import com.wotingfm.activity.person.modifyphonenumber.ModifyPhoneNumberActivity;
+import com.wotingfm.activity.person.phonecheck.PhoneCheckActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 
@@ -23,6 +24,7 @@ public class UpdatePersonActivity extends AppBaseActivity implements OnClickList
     private Dialog imageDialog;
     private TextView textGender;        // 性别
     private TextView textPhoneNumber;   // 手机号码
+    private String phoneNumber;
 
     @Override
     protected int setViewId() {
@@ -79,7 +81,7 @@ public class UpdatePersonActivity extends AppBaseActivity implements OnClickList
     @Override
     protected void onResume() {
         super.onResume();
-        String phoneNumber = BSApplication.SharedPreferences.getString(StringConstant.PHONENUMBER, ""); // 用户手机号
+        phoneNumber = BSApplication.SharedPreferences.getString(StringConstant.PHONENUMBER, ""); // 用户手机号
         textPhoneNumber.setText(phoneNumber);
     }
 
@@ -107,7 +109,13 @@ public class UpdatePersonActivity extends AppBaseActivity implements OnClickList
                 imageDialog.dismiss();
                 break;
             case R.id.linear_modify_phone_number:
+                if(phoneNumber.equals("")){
                 startActivity(new Intent(context, ModifyPhoneNumberActivity.class));
+                }else{
+                    Intent intent=new Intent(context, PhoneCheckActivity.class);
+                    intent.putExtra("phoneNumber",phoneNumber);
+                    startActivity(intent);
+                }
                 break;
         }
     }

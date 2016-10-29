@@ -517,6 +517,13 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
+        <!-- 验证手机号 -->
+        <activity
+            android:name=".activity.person.phonecheck.PhoneCheckActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan" />
+
         <!-- 友盟activity -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
