@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.iflytek.cloud.SpeechUtility;
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.preference.activity.PreferenceActivity;
@@ -81,6 +82,9 @@ public class MainActivity extends TabActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    //透明导航栏
         tabHost = extracted();
         context = this;
+        SpeechUtility.createUtility(context, "appid=58116950");
+        // 以下语句用于设置日志开关（默认开启），设置成false时关闭语音云SDK日志打印
+        // Setting.setShowLog(false);
         WtDeviceControl mControl = new WtDeviceControl(context);
         GlobalConfig.device = mControl;
         String first = BSApplication.SharedPreferences.getString(StringConstant.PREFERENCE, "0");//是否是第一次打开偏好设置界面

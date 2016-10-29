@@ -17,12 +17,6 @@ android {
 
     }
 
-//    sourceSets {
-//        main {
-//            jniLibs.srcDirs = ['libs']
-//        }
-//    }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -34,17 +28,7 @@ android {
         checkReleaseBuilds false
         abortOnError false
     }
-//    task nativeLibsToJar(type: Zip, description: "create a jar archive of the native libs") {
-//        destinationDir file("$projectDir/libs")
-//        baseName "native_ecmobile"
-//        extension "jar"
-//        from fileTree(dir: "libs", include: "**/*.so")
-//        into "libs"
-//    }
-//
-//    tasks.withType(JavaCompile) {
-//        compileTask -> compileTask.dependsOn(nativeLibsToJar)
-//    }
+
 }
 
 dependencies {

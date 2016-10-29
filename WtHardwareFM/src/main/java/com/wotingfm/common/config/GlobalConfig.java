@@ -3,6 +3,7 @@ package com.wotingfm.common.config;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
 import com.wotingfm.activity.music.player.model.LanguageSearchInside;
+import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.devicecontrol.WtDeviceControl;
 
 import java.util.List;
@@ -41,7 +42,7 @@ public class GlobalConfig {
     // 硬件设备控制器
     public static WtDeviceControl device;
     // 此时的语音搜索界面
-    public static String voicerecognizer;
+    public static String voicerecognizer= BroadcastConstant.PLAYERVOICE;
     // 是否吐司
     public static boolean istusi = true;
     // PersonClientDevice(个人客户端设备) 终端类型1=app,2=设备，3=pc
