@@ -67,8 +67,8 @@ public class FindNewsResultActivity extends AppBaseActivity {
         setTitle("搜索结果");
         setView();
         setListener();
-        searchStr = this.getIntent().getStringExtra(StringConstant.FIND_CONTENT_TO_RESULT);
-        type = this.getIntent().getStringExtra(StringConstant.FIND_TYPE);
+        searchStr = getIntent().getStringExtra(StringConstant.FIND_CONTENT_TO_RESULT);
+        type = getIntent().getStringExtra(StringConstant.FIND_TYPE);
         if (!type.trim().equals("")) {
             if (type.equals(StringConstant.FIND_TYPE_PERSON)) {
                 // 搜索好友
@@ -175,7 +175,7 @@ public class FindNewsResultActivity extends AppBaseActivity {
                 if (!type.trim().equals("")) {
                     if (type.equals(StringConstant.FIND_TYPE_PERSON)) {
                         if (position > 0) {
-                            if (UserList != null && UserList.size() > 0) {
+                            if (UserList != null && UserList.size() > 0) {// 不是好友跳转至添加好友界面
                                 Intent intent = new Intent(FindNewsResultActivity.this, FriendAddActivity.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("contact", UserList.get(position - 1));
@@ -184,6 +184,8 @@ public class FindNewsResultActivity extends AppBaseActivity {
                             } else {
                                 ToastUtils.show_always(FindNewsResultActivity.this, "获取数据异常");
                             }
+                            // 不是好友跳转至好友详情界面 -- > TalkPersonNewsActivity
+                            // 传递的 type 为 "findActivity"
                         }
                     } else if (type.equals(StringConstant.FIND_TYPE_GROUP)) {
                         if (position > 0) {
@@ -260,6 +262,14 @@ public class FindNewsResultActivity extends AppBaseActivity {
                         }
                         // 获取数据失败
                         ToastUtils.show_always(FindNewsResultActivity.this, "数据获取失败，请稍候再试");
+                    } else if (ReturnType != null && ReturnType.equals("1011")) {
+                        if (RefreshType == 1) {
+                            mXListView.stopRefresh();
+                        } else {
+                            mXListView.stopLoadMore();
+                        }
+                        // 获取数据失败
+                        ToastUtils.show_always(FindNewsResultActivity.this, "没有搜索到相关用户!");
                     } else {
                         if (RefreshType == 1) {
                             mXListView.stopRefresh();

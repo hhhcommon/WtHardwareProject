@@ -62,7 +62,7 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
 
     private int createGroupType = -1;           // 标识要创建的群类型
     private int imageNum;
-    private int viewSuccess = -1;               //判断图片是否保存完成
+    private int viewSuccess = -1;               // 判断图片是否保存完成
 
     private EditText editGroupName;             // EditText 群组名称
     private EditText editGroupAutograph;        // EditText 群组签名
@@ -135,9 +135,7 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
         }
     }
 
-    /*
-     * 处理上个界面传递过来的数据  接收的数据用于判断用户想创建的群组类型
-     */
+    // 处理上个界面传递过来的数据  接收的数据用于判断用户想创建的群组类型
     private void handleIntent() {
         Intent intent = getIntent();
         if (intent != null) {
@@ -155,9 +153,7 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
         return true;
     }
 
-    /*
-     * 设置群组头像
-     */
+    // 设置群组头像
     private void setHeadDialog() {
         View dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_imageupload, null);
         dialogView.findViewById(R.id.tv_gallery).setOnClickListener(new View.OnClickListener() {
@@ -276,9 +272,7 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
         });
     }
 
-    /**
-     * 获取用户选择的设备备用频道
-     */
+    // 获取用户选择的设备备用频道
     private void setSpinnerItemListener() {
         spinnerChannel1.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -288,7 +282,6 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
 
@@ -300,7 +293,6 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-
             }
         });
     }
@@ -312,7 +304,7 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                 headDialog.show();
                 break;
             case R.id.btn_commit:       // 确定
-                Toast.makeText(context, "备用频道1: " + spinnerString1 + ", 备用频道2: " + spinnerString2, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "备用频道1: " + spinnerString1 + "\n备用频道2: " + spinnerString2, Toast.LENGTH_LONG).show();
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
                     Toast.makeText(context, "网络失败，请检查网络", Toast.LENGTH_SHORT).show();
                     return;
@@ -412,7 +404,7 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                     sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
                     setResult(1);
                     Toast.makeText(context, "创建成功", Toast.LENGTH_SHORT).show();
-                    if (groupRation != null && !groupRation.equals("")) {
+                    if (groupRation != null) {
                         // 跳转到群组详情页面
                         Intent intent = new Intent(context, GroupDetailActivity.class);
                         Bundle bundle = new Bundle();
@@ -449,8 +441,7 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                         L.e("图片上传数据", TestURI + ExtName
                                 + "&UserId=" + CommonUtils.getUserId(getApplicationContext()) + "&IMEI=" + PhoneMessage.imei);
                         Response = ImageUploadReturnUtil.getResPonse(Response);
-                        userPortait = new Gson().fromJson(Response, new TypeToken<UserPortaitInside>() {
-                        }.getType());
+                        userPortait = new Gson().fromJson(Response, new TypeToken<UserPortaitInside>() {}.getType());
                         try {
                             returnType = userPortait.getReturnType();
                         } catch (Exception e1) {
@@ -475,7 +466,6 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                         msg.what = 1;
                     }
                 } catch (Exception e) {
-                    // 异常处理
                     e.printStackTrace();
                     if (e.getMessage() != null) {
                         msg.obj = "异常" + e.getMessage();

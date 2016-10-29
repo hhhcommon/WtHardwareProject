@@ -174,14 +174,14 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
                 if (MineActivity.blueAdapter.isEnabled()) {
                     MineActivity.blueAdapter.cancelDiscovery();// 停止蓝牙搜索
                     MineActivity.blueAdapter.disable();// 关闭蓝牙
-                    SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
-                    imageBluetoothSet.setImageResource(R.mipmap.wt_person_close);
-                    et.putBoolean(StringConstant.BLUETOOTH_SET, false);
-                    if(!et.commit()) {
-                        L.w("数据 commit 失败!");
-                    }
-                    openDetection.setClickable(false);
-                    imageOpenDetection.setImageResource(R.mipmap.wt_person_close);
+//                    SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+//                    imageBluetoothSet.setImageResource(R.mipmap.wt_person_close);
+//                    et.putBoolean(StringConstant.BLUETOOTH_SET, false);
+//                    if(!et.commit()) {
+//                        L.w("数据 commit 失败!");
+//                    }
+//                    openDetection.setClickable(false);
+//                    imageOpenDetection.setImageResource(R.mipmap.wt_person_close);
                 } else {
                     setBluetooth();// 打开蓝牙
                 }
@@ -249,7 +249,6 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
     // 蓝牙设置
     private void setBluetooth(){
         if(MineActivity.blueAdapter != null){  // 设备支持蓝牙
-            // 确认开启蓝牙
             MineActivity.blueAdapter.enable(); // 直接开启，不经过提示
             imageBluetoothSet.setImageResource(R.mipmap.wt_person_on);
             openDetection.setClickable(true);
@@ -284,6 +283,9 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
                     textOpenDetectionTime.setVisibility(View.GONE);
                     textOpenDetectionInfo.setText("仅让已配对的蓝牙设备可见");
                     userBluetoothList.setDividerHeight(0);
+                    if(userList != null) {
+                        userList.clear();
+                    }
                     list.clear();
                     userAdapter.notifyDataSetChanged();
                 } else if(MineActivity.blueAdapter.getState() == BluetoothAdapter.STATE_ON){

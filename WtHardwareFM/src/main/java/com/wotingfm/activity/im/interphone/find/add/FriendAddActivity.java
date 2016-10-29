@@ -147,7 +147,7 @@ public class FriendAddActivity extends AppBaseActivity implements OnClickListene
             } else {
                 et_news.setText("我是 " + username);
             }
-        } else if(type.equals("TalkGroupNewsActivity_p")) {
+        } else if(type.equals("FriendAddActivity")) {
             UserInfo contact = (UserInfo) this.getIntent().getSerializableExtra("data");
             if (contact.getUserName() == null || contact.getUserName().equals("")) {
                 tv_name.setText("未知");

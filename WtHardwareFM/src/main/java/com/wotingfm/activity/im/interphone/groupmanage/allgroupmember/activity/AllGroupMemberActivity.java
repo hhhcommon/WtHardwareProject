@@ -279,7 +279,7 @@ public class AllGroupMemberActivity extends BaseActivity implements View.OnClick
                     mUserInfo.setUserAliasName(userList2.get(position).getUserAliasName());
                     Intent intent = new Intent(AllGroupMemberActivity.this, TalkPersonNewsActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("type", "GroupMemers");
+                    bundle.putString("type", "TalkGroupNewsActivity_p");
                     bundle.putString("id", groupId);
                     bundle.putSerializable("data", mUserInfo);
                     intent.putExtras(bundle);
@@ -287,7 +287,7 @@ public class AllGroupMemberActivity extends BaseActivity implements View.OnClick
                 } else {// 不是好友 跳转到非好友界面
                     Intent intent = new Intent(AllGroupMemberActivity.this, FriendAddActivity.class);
                     Bundle bundle = new Bundle();
-                    bundle.putString("type", "TalkGroupNewsActivity_p");
+                    bundle.putString("type", "FriendAddActivity");
                     bundle.putString("id", groupId);
                     bundle.putSerializable("data", userList2.get(position));
                     intent.putExtras(bundle);

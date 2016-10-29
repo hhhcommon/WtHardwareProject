@@ -86,7 +86,7 @@ public class MineActivity extends Activity implements OnClickListener {
     private MineActivity context;
     public DeviceReceiver mDevice = new DeviceReceiver();
     public static BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
-    public static WifiManager wifiManager;
+    private  WifiManager wifiManager;
     private UserPortaitInside UserPortait;
 
     private Dialog dialog;                          // 加载数据对话框
@@ -399,6 +399,8 @@ public class MineActivity extends Activity implements OnClickListener {
                 } else {
                     textWifiName.setText("关闭");
                 }
+            }else if(intent.getAction().equals(WifiManager.NETWORK_STATE_CHANGED_ACTION)){
+                L.e("SSIDWiFi", "ffffffffffffffffffff");
             }
         }
     }
