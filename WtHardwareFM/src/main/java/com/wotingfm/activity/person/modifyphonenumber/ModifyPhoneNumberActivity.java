@@ -33,7 +33,6 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
 
     private Dialog dialog;                          // 加载数据对话框
     private EditText editPhoneNumber;               // 输入新手机号码
-    private EditText editPhoneNumberOld;            // 输入旧手机号码
     private EditText editVerificationCode;          // 输入 验证码
     private TextView textGetVerificationCode;       // 获取验证码
     private TextView textResend;                    // 重新发送验证码
@@ -41,11 +40,12 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
 
     private String tag = "MODIFY_PHONE_NUMBER_VOLLEY_REQUEST_CANCEL_TAG";
     private String phoneNumber;                     // 新手机号
-    private String phoneNumberOld;                  // 旧手机号
+
     private String verificationCode;                // 验证码
     private int sendType = 1;                       // == 1 为第一次发送验证码  == 2 为重新发送验证码
     private boolean isCancelRequest;
     private boolean isGetCode;                      // 判断是否已经获取验证码
+    private String phoneNumberNew;
 
     @Override
     public void onClick(View v) {
@@ -73,13 +73,13 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
         return R.layout.activity_modify_phone_number;
     }
 
+
+
     @Override
     protected void init() {
-        setTitle("修改手机号");
-        editPhoneNumberOld = (EditText) findViewById(R.id.edit_phone_numberOld);            // 旧手机号码
+        setTitle("绑定手机");
         editPhoneNumber = (EditText) findViewById(R.id.edit_phone_number);                  // 新手机号码
         editVerificationCode = (EditText) findViewById(R.id.edit_verification_code);        // 验证码
-        editPhoneNumberOld.addTextChangedListener(new MyEditListener());
         editPhoneNumber.addTextChangedListener(new MyEditListener());
         editVerificationCode.addTextChangedListener(new MyEditListener());
         textGetVerificationCode = (TextView) findViewById(R.id.text_get_verification_code); // 获取验证码
@@ -93,8 +93,8 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
 
     // 验证码手机号正确就获取验证码
     private void checkVerificationCode() {
-        phoneNumberOld = editPhoneNumberOld.getText().toString().trim();
-        if ("".equalsIgnoreCase(phoneNumberOld) || phoneNumberOld.length() != 11) {// 检查输入数字是否为手机号
+        phoneNumberNew = editPhoneNumber.getText().toString().trim();
+        if ("".equalsIgnoreCase(phoneNumberNew) || phoneNumberNew.length() != 11) {// 检查输入数字是否为手机号
             ToastUtils.show_always(context, "请输入正确的手机号码!");
             return;
         }
@@ -120,7 +120,7 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
         }
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("PhoneNum", phoneNumberOld);
+            jsonObject.put("PhoneNum", phoneNumberNew);
             if (sendType == 2) {
                 jsonObject.put("OperType", "1");
             }
@@ -240,6 +240,7 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
                         if (!et.commit()) {
                             L.w(" 数据 commit 失败!");
                         }
+                        setResult(1);
                         finish();
                     } else {
                         ToastUtils.show_always(context, "手机号修改失败!");
@@ -284,12 +285,8 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
     private boolean isComplete(int type) {
         verificationCode = editVerificationCode.getText().toString().trim();
         phoneNumber = editPhoneNumber.getText().toString().trim();
-        phoneNumberOld = editPhoneNumberOld.getText().toString().trim();
 
-        if ("".equalsIgnoreCase(phoneNumberOld) || phoneNumberOld.length() != 11) {// 检查输入数字是否为手机号
-            if(type==1)ToastUtils.show_always(context, "请输入旧的正确的手机号码!");
-            return false;
-        } else if ("".equalsIgnoreCase(phoneNumber) || phoneNumber.length() != 11) {// 检查输入数字是否为手机号
+        if ("".equalsIgnoreCase(phoneNumber) || phoneNumber.length() != 11) {// 检查输入数字是否为手机号
             if(type==1) ToastUtils.show_always(context, "请输入新的正确的手机号码!");
             return false;
         } else if ("".equalsIgnoreCase(verificationCode) || verificationCode.length() != 6) {

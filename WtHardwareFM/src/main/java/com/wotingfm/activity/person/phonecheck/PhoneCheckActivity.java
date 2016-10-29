@@ -8,7 +8,6 @@ import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -16,12 +15,10 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.BaseActivity;
-import com.wotingfm.activity.person.modifypassword.ModifyPasswordActivity;
-import com.wotingfm.activity.person.register.RegisterActivity;
+import com.wotingfm.activity.person.modifyphonenumber.ModifyPhoneNumberActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
 
@@ -57,20 +54,16 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 
 	private CountDownTimer mcountDownTimer;
 
-	private int sendtype = 1;		// sendtype=1 掉发送验证码接口 sendtype=2时调重发验证码接口
-	private int ViewType;			// =0时为忘记密码界面跳入 =1时为默认事件 =2为修改手机号
-	private int type = -1;
+	private int sendType = 1;		// sendtype=1 掉发送验证码接口 sendtype=2时调重发验证码接口
+
 	private boolean isCancelRequest;
+	private String phoneNumber;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_phonecheck);
-
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		// 透明状态栏
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	// 透明导航栏
-		MyActivityManager mam = MyActivityManager.getInstance();
-		mam.pushOneActivity(context);
 		context = this;
 		setview();	// 设置界面
 		handleIntent();//接收数据
@@ -79,14 +72,7 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 	}
 
 	private void handleIntent() {
-		ViewType = context.getIntent().getIntExtra("origin", 1);
-		type= context.getIntent().getIntExtra("type", -1);
-		if (ViewType == 0) {
-			tv_head_name.setText("找回密码");
-		} else if ((ViewType == 2)) {
-			tv_head_name.setText("变更手机号");
-			et_phonenum.setHint("请输入您要变更的手机号码");
-		}
+		phoneNumber = context.getIntent().getStringExtra("phoneNumber");
 	}
 
 	private void setview() {
@@ -139,6 +125,15 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 		}
 	}
 
+
+	@Override
+	protected void onStop() {
+		super.onStop();
+		if(mcountDownTimer!=null){
+			mcountDownTimer.cancel();
+		}
+	}
+
 	private void checkvalue() {
 		yanzhengma = et_yzm.getText().toString().trim();
 		if ("".equalsIgnoreCase(phonenum)) {
@@ -174,12 +169,8 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 		}
 		if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
 			dialog = DialogUtils.Dialogph(context, "正在验证手机号");
-			if (sendtype == 1) {
-				if (ViewType == 1 || ViewType == 2) {
-					send();
-				} else {
-					sendfindpassword();
-				}
+			if (sendType == 1) {
+				sendfindpassword();
 			} else {
 				Resend();
 			}
@@ -192,19 +183,23 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 		mcountDownTimer = new CountDownTimer(60000, 1000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
+				if(mcountDownTimer!=null&&tv_cxfasong!=null){
 				tv_cxfasong.setText(millisUntilFinished / 1000 + "s后重新发送");
+				}
 			}
 
 			@Override
 			public void onFinish() {
-				tv_cxfasong.setVisibility(View.GONE);
-				tv_getyzm.setVisibility(View.VISIBLE);
-				if (mcountDownTimer != null) {
-					mcountDownTimer.cancel();
+				if(tv_cxfasong!=null){
+					tv_cxfasong.setVisibility(View.GONE);
+				/*	Log.e("PhoneCheck","tv_cxfasong");*/
+				}
+				if(tv_getyzm!=null){
+					tv_getyzm.setVisibility(View.VISIBLE);
+				/*	Log.e("PhoneCheck","tv_getyzm");*/
 				}
 			}
-		};
-		mcountDownTimer.start();
+		}.start();
 	}
 
 	// 查找密码的相关接口
@@ -239,7 +234,7 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 				}
 				if (ReturnType != null && ReturnType.equals("1001")) {
 					ToastUtils.show_always(context, "验证码已经发送");
-					sendtype = 2;
+					sendType = 2;
 					timerdown();		// 每秒减1
 					et_phonenum.setEnabled(false);
 					tv_getyzm.setVisibility(View.GONE);
@@ -271,11 +266,8 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 			// 模块属性
 			jsonObject.put("PhoneNum", phonenum);
 			// OperType
-			if (ViewType == 1 || ViewType == 2) {
-				jsonObject.put("OperType", "1");
-			} else {
-				jsonObject.put("OperType", "2");
-			}
+			jsonObject.put("OperType", "1");
+
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -327,9 +319,8 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 			// 模块属性
 			jsonObject.put("PhoneNum", phonenum);
 			jsonObject.put("CheckCode", yanzhengma);
-			if (ViewType == 0) {
-				jsonObject.put("NeedUserId", "true");
-			}
+			jsonObject.put("NeedUserId", "true");
+
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -350,43 +341,15 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 				}
 				try {
 					ReturnType = result.getString("ReturnType");
-//					SessionId = result.getString("SessionId");
-					Message = result.getString("Message");
 					UserId = result.getString("UserId");
+					Message = result.getString("Message");
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 				if (ReturnType != null && ReturnType.equals("1001")) {
-					if (ViewType == 1) {
-						ToastUtils.show_always(context, "验证成功,跳往注册界面");
-						Intent intent = new Intent(context, RegisterActivity.class);
-						intent.putExtra("phonenum", phonenum);
-						intent.putExtra("type", type);
-						startActivityForResult(intent,0);
-						setResult(1);
-						finish();
-					} else if (ViewType == 0) {
-						if (UserId != null && !UserId.equals("")) {
-							ToastUtils.show_always(context, "验证成功,跳往修改密码界面");
-							Intent intent = new Intent(context, ModifyPasswordActivity.class);
-							intent.putExtra("origin", 0);
-							intent.putExtra("userid", UserId);
-							intent.putExtra("phonenum", phonenum);
-							startActivityForResult(intent, 0);
-							setResult(1);
-							finish();
-						} else {
-							ToastUtils.show_always(context, "获取UserId异常");
-						}
-					} else if (ViewType == 2) {
-						// 修改手机号的界面
-						if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-							dialog = DialogUtils.Dialogph(context, "正在修改绑定手机号");
-							sendbingding();
-							}
-						} else {
-							ToastUtils.show_always(context, "网络失败，请检查网络");
-						}
+                   ToastUtils.show_always(context, "验证成功,跳往修改密码界面");
+				   Intent intent = new Intent(context, ModifyPhoneNumberActivity.class);
+					startActivityForResult(intent,1);
 				} else if (ReturnType != null && ReturnType.equals("T")) {
 					ToastUtils.show_always(context, "异常返回值");
 				} else if (ReturnType != null && ReturnType.equals("1002")) {
@@ -408,112 +371,6 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 		});
 	}
 
-	// 修改手机号方法 利用目前的修改手机号接口
-	protected void sendbingding() {
-		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
-		try {
-			jsonObject.put("PhoneNum", phonenum);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
-		VolleyRequest.RequestPost(GlobalConfig.bindExtUserUrl, tag, jsonObject, new VolleyCallback() {
-			private String ReturnType;
-//			private String SessionId;
-			private String Message;
-
-			@Override
-			protected void requestSuccess(JSONObject result) {
-				if (dialog != null) {
-					dialog.dismiss();
-				}
-				if(isCancelRequest){
-					return ;
-				}
-				try {
-					ReturnType = result.getString("ReturnType");
-//					SessionId = result.getString("SessionId");
-					Message = result.getString("Message");
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				if (ReturnType != null && !ReturnType.equals("")) {
-					if (ReturnType.equals("1001")) {
-                        ToastUtils.show_always(context, "登录用手机号已经成功修改为" + phonenum);
-                        finish();
-					} else {
-						ToastUtils.show_always(context, Message + "");
-					}
-				} else {
-                   ToastUtils.show_always(context, "数据获取异常，返回值为null");
-				}
-			}
-
-			@Override
-			protected void requestError(VolleyError error) {
-				if (dialog != null) {
-					dialog.dismiss();
-				}
-			}
-		});
-	}
-
-	// 首次发送验证码方法
-	private void send() {
-		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
-		try {
-			// 模块属性
-			jsonObject.put("PhoneNum", phonenum);
-		} catch (JSONException e) {
-			e.printStackTrace();
-		}
-
-		VolleyRequest.RequestPost(GlobalConfig.registerByPhoneNumUrl, tag, jsonObject, new VolleyCallback() {
-//			private String SessionId;
-			private String ReturnType;
-			private String Message;
-
-			@Override
-			protected void requestSuccess(JSONObject result) {
-				if (dialog != null) {
-					dialog.dismiss();
-				}
-				if(isCancelRequest){
-					return ;
-				}
-				try {
-					ReturnType = result.getString("ReturnType");
-//					SessionId = result.getString("SessionId");
-					Message = result.getString("Message");
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-				if (ReturnType != null && ReturnType.equals("1001")) {
-					ToastUtils.show_always(context, "验证码已经发送");
-					sendtype = 2;
-					timerdown();		// 每秒减1
-					et_phonenum.setEnabled(false);
-					tv_getyzm.setVisibility(View.GONE);
-					tv_cxfasong.setVisibility(View.VISIBLE);
-				} else if (ReturnType != null && ReturnType.equals("T")) {
-					ToastUtils.show_always(context, "异常返回值");
-				} else if (ReturnType != null && ReturnType.equals("1002")) {
-					ToastUtils.show_always(context, "此号码已经注册");
-				}else {
-					if (Message != null && !Message.trim().equals("")) {
-						ToastUtils.show_always(context, Message + "");
-					}
-				}
-			}
-
-			@Override
-			protected void requestError(VolleyError error) {
-				if (dialog != null) {
-					dialog.dismiss();
-				}
-			}
-		});
-	}
 
 	// 验证手机号的方法
 	public static boolean isMobile(String str) {
@@ -530,11 +387,16 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode) {
-		case 0: //从注册界面返回数据，注册成功
-			if(resultCode==1){
+		    case 0: //从注册界面返回数据，注册成功
+			   if(resultCode==1){
 				setResult(1);
 				finish();
-			} break;
+			    }
+			    break;
+			case 1:
+				if(resultCode==1){
+					finish();
+				} break;
 		}
 	}
 
@@ -542,22 +404,24 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 	protected void onDestroy() {
 		super.onDestroy();
 		isCancelRequest = VolleyRequest.cancelRequest(tag);
-		MyActivityManager mam = MyActivityManager.getInstance();
-		mam.popOneActivity(context);
-		context = null;
-		head_left = null;
-		et_phonenum = null;
-		et_yzm = null;
-		tv_getyzm = null;
-		tv_next = null;
-		phonenum = null;
-		dialog = null;
-		mcountDownTimer = null;
-		tv_cxfasong = null;
-		yanzhengma = null;
-		tv_next_default = null;
-		tv_head_name = null;
-		tag = null;
-		setContentView(R.layout.activity_null);
+		if (mcountDownTimer != null) {
+			mcountDownTimer.cancel();
+			mcountDownTimer = null;
+		}
+//		context = null;
+//		head_left = null;
+//		et_phonenum = null;
+//		et_yzm = null;
+//		tv_getyzm = null;
+//		tv_next = null;
+//		phonenum = null;
+//		dialog = null;
+//		mcountDownTimer = null;
+//		tv_cxfasong = null;
+//		yanzhengma = null;
+//		tv_next_default = null;
+//		tv_head_name = null;
+//		tag = null;
+//		setContentView(R.layout.activity_null);
 	}
 }

@@ -125,7 +125,7 @@ public class BSApplication extends Application {
      * app退出时执行该操作
      */
     public static void onStop() {
-        instance.stopService(Socket);
+//        instance.stopService(Socket);
         instance.stopService(VoiceStreamRecord);
         instance.stopService(VoiceStreamPlayer);
         instance.stopService(Location);
