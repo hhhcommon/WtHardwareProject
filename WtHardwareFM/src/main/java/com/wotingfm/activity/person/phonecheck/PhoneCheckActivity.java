@@ -64,7 +64,7 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 		context = this;
 		setview();	// 设置界面
 		handleIntent();//接收数据
-		setLisener();	// 设置监听
+		setListener();	// 设置监听
 
 	}
 
@@ -83,7 +83,7 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 
 	}
 
-	private void setLisener() {
+	private void setListener() {
 		head_left.setOnClickListener(this);
 		tv_getyzm.setOnClickListener(this);
 		tv_next.setOnClickListener(this);
