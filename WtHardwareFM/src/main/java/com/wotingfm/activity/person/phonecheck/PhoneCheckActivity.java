@@ -25,9 +25,6 @@ import com.wotingfm.util.ToastUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 /**
  * 账号绑定==找回密码--变更手机号
  * @author 辛龙
@@ -44,15 +41,15 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 	private TextView tv_next;
 	private TextView tv_cxfasong;
 	private TextView tv_next_default;
-	private TextView tv_head_name;
+
 
 	private Dialog dialog;
 
-	private String phonenum;
+	private String phoneNum;
 	private String yanzhengma;
 	private String tag = "PHONE_CHECK_VOLLEY_REQUEST_CANCEL_TAG";
 
-	private CountDownTimer mcountDownTimer;
+	private CountDownTimer mCountDownTimer;
 
 	private int sendType = 1;		// sendtype=1 掉发送验证码接口 sendtype=2时调重发验证码接口
 
@@ -83,7 +80,7 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 		tv_next = (TextView) findViewById(R.id.tv_next);
 		tv_cxfasong = (TextView) findViewById(R.id.tv_cxfasong);
 		tv_next_default = (TextView) findViewById(R.id.tv_next_default);
-		tv_head_name = (TextView) findViewById(R.id.head_name_tv);
+
 	}
 
 	private void setLisener() {
@@ -99,7 +96,7 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 			}
 			@Override
 			public void afterTextChanged(Editable s) {
-				if (s.length() == 6 && phonenum != null && !phonenum.equals("")) {
+				if (s.length() == 6 && phoneNum != null && !phoneNum.equals("")) {
 					tv_next_default.setVisibility(View.GONE);
 					tv_next.setVisibility(View.VISIBLE);
 				} else {
@@ -117,26 +114,26 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 			finish();
 			break;
 		case R.id.tv_getyzm:
-			checkyzm();		// 检查手机号是否为空，或者是否是一个正常手机号
+			checkYzm();		// 检查手机号是否为空，或者是否是一个正常手机号
 			break;
 		case R.id.tv_next:
-			checkvalue();	// 检查输入到页面的信息是否符合接口返回的结果进行验证
+			checkValue();	// 检查输入到页面的信息是否符合接口返回的结果进行验证
 			break;
 		}
 	}
 
 
-	@Override
-	protected void onStop() {
-		super.onStop();
-		if(mcountDownTimer!=null){
-			mcountDownTimer.cancel();
-		}
-	}
+//	@Override
+//	protected void onStop() {
+//		super.onStop();
+//		if(mcountDownTimer!=null){
+//			mcountDownTimer.cancel();
+//		}
+//	}
 
-	private void checkvalue() {
+	private void checkValue() {
 		yanzhengma = et_yzm.getText().toString().trim();
-		if ("".equalsIgnoreCase(phonenum)) {
+		if ("".equalsIgnoreCase(phoneNum)) {
 			ToastUtils.show_always(this, "手机号码不能为空");
 			return;
 		}
@@ -150,27 +147,27 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 		}
 		if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
 			dialog = DialogUtils.Dialogph(context, "正在验证手机号");
-			sendrequest();
+			sendRequest();
 		} else {
 			ToastUtils.show_short(context, "网络失败，请检查网络");
 		}
 	}
 
-	private void checkyzm() {
+	private void checkYzm() {
 		//检查手机号内容是否为空 检查输入数字是否为手机号 发送网络请求 返回值如果为正常的话 开启线程 每一秒刷新一次一下按钮
-		phonenum = et_phonenum.getText().toString().trim();
-		if ("".equalsIgnoreCase(phonenum)) {
+		phoneNum = et_phonenum.getText().toString().trim();
+		if ("".equalsIgnoreCase(phoneNum)) {
 			ToastUtils.show_always(this, "手机号码不能为空");
 			return;
 		}
-		if (isMobile(phonenum) == false) {
-			ToastUtils.show_short(this, "请您输入正确的手机号");
+		if ("".equalsIgnoreCase(phoneNum) || phoneNum.length() != 11) {// 检查输入数字是否为手机号
+			ToastUtils.show_always(context, "请输入正确的手机号码!");
 			return;
 		}
 		if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
 			dialog = DialogUtils.Dialogph(context, "正在验证手机号");
 			if (sendType == 1) {
-				sendfindpassword();
+				sendFindPassword();
 			} else {
 				Resend();
 			}
@@ -179,41 +176,47 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 		}
 	}
 
-	private void timerdown() {
-		mcountDownTimer = new CountDownTimer(60000, 1000) {
+	private void timerDown() {
+		mCountDownTimer = new CountDownTimer(60000, 1000) {
 			@Override
 			public void onTick(long millisUntilFinished) {
-				if(mcountDownTimer!=null&&tv_cxfasong!=null){
+//				if(context==null){
+//					if(mcountDownTimer!=null){
+//						mcountDownTimer.onFinish();
+//					}
+//					return;
+//				}
+				if(/*context!=null&&*/mCountDownTimer!=null&&tv_cxfasong!=null){
 				tv_cxfasong.setText(millisUntilFinished / 1000 + "s后重新发送");
 				}
 			}
 
 			@Override
 			public void onFinish() {
+//				if(context==null){
+//					return;
+//				}
 				if(tv_cxfasong!=null){
 					tv_cxfasong.setVisibility(View.GONE);
-				/*	Log.e("PhoneCheck","tv_cxfasong");*/
 				}
 				if(tv_getyzm!=null){
 					tv_getyzm.setVisibility(View.VISIBLE);
-				/*	Log.e("PhoneCheck","tv_getyzm");*/
 				}
 			}
 		}.start();
 	}
 
 	// 查找密码的相关接口
-	private void sendfindpassword() {
+	private void sendFindPassword() {
 		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
 			// 模块属性
-			jsonObject.put("PhoneNum", phonenum);
+			jsonObject.put("PhoneNum", phoneNum);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 
 		VolleyRequest.RequestPost(GlobalConfig.retrieveByPhoneNumUrl, tag, jsonObject, new VolleyCallback() {
-//			private String SessionId;
 			private String ReturnType;
 			private String Message;
 
@@ -227,15 +230,14 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 				}
 				try {
 					ReturnType = result.getString("ReturnType");
-//					SessionId = result.getString("SessionId");
-//					Message = result.getString("Message");
+					Message = result.getString("Message");
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 				if (ReturnType != null && ReturnType.equals("1001")) {
 					ToastUtils.show_always(context, "验证码已经发送");
 					sendType = 2;
-					timerdown();		// 每秒减1
+					timerDown();		// 每秒减1
 					et_phonenum.setEnabled(false);
 					tv_getyzm.setVisibility(View.GONE);
 					tv_cxfasong.setVisibility(View.VISIBLE);
@@ -264,7 +266,7 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 		JSONObject jsonObject =VolleyRequest.getJsonObject(context);
 		try {
 			// 模块属性
-			jsonObject.put("PhoneNum", phonenum);
+			jsonObject.put("PhoneNum", phoneNum);
 			// OperType
 			jsonObject.put("OperType", "1");
 
@@ -286,7 +288,6 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 				}
 				try {
 					ReturnType = result.getString("ReturnType");
-//					SessionId = result.getString("SessionId");
 					Message = result.getString("Message");
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -313,11 +314,11 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 	}
 
 	// 提交数据到服务器进行验证
-	private void sendrequest() {
+	private void sendRequest() {
 		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
 			// 模块属性
-			jsonObject.put("PhoneNum", phonenum);
+			jsonObject.put("PhoneNum", phoneNum);
 			jsonObject.put("CheckCode", yanzhengma);
 			jsonObject.put("NeedUserId", "true");
 
@@ -326,10 +327,10 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 		}
 
 		VolleyRequest.RequestPost(GlobalConfig.checkPhoneCheckCodeUrl, tag, jsonObject, new VolleyCallback() {
-//			private String SessionId;
+
 			private String ReturnType;
 			private String Message;
-			private String UserId;
+
 
 			@Override
 			protected void requestSuccess(JSONObject result) {
@@ -341,7 +342,6 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 				}
 				try {
 					ReturnType = result.getString("ReturnType");
-					UserId = result.getString("UserId");
 					Message = result.getString("Message");
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -372,27 +372,10 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 	}
 
 
-	// 验证手机号的方法
-	public static boolean isMobile(String str) {
-		Pattern pattern = null;
-		Matcher mathcer = null;
-		boolean bool = false;
-		pattern = Pattern.compile("^[1][3,4,5,7,8][0-9]{9}$"); // 验证手机号格式
-		mathcer = pattern.matcher(str);
-		bool = mathcer.matches();
-		return bool;
-	}
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode) {
-		    case 0: //从注册界面返回数据，注册成功
-			   if(resultCode==1){
-				setResult(1);
-				finish();
-			    }
-			    break;
 			case 1:
 				if(resultCode==1){
 					finish();
@@ -404,24 +387,23 @@ public class PhoneCheckActivity extends BaseActivity implements OnClickListener 
 	protected void onDestroy() {
 		super.onDestroy();
 		isCancelRequest = VolleyRequest.cancelRequest(tag);
-		if (mcountDownTimer != null) {
-			mcountDownTimer.cancel();
-			mcountDownTimer = null;
+		if (mCountDownTimer != null) {
+			mCountDownTimer.cancel();
+			mCountDownTimer = null;
 		}
-//		context = null;
-//		head_left = null;
-//		et_phonenum = null;
-//		et_yzm = null;
-//		tv_getyzm = null;
-//		tv_next = null;
-//		phonenum = null;
-//		dialog = null;
-//		mcountDownTimer = null;
-//		tv_cxfasong = null;
-//		yanzhengma = null;
-//		tv_next_default = null;
-//		tv_head_name = null;
-//		tag = null;
-//		setContentView(R.layout.activity_null);
+		context = null;
+		head_left = null;
+		et_phonenum = null;
+	    et_yzm = null;
+	    tv_getyzm = null;
+		tv_next = null;
+		phoneNum = null;
+		dialog = null;
+	    mCountDownTimer = null;
+		tv_cxfasong = null;
+		yanzhengma = null;
+		tv_next_default = null;
+		tag = null;
+		setContentView(R.layout.activity_null);
 	}
 }
