@@ -264,11 +264,11 @@ public class WIFIActivity extends AppBaseActivity implements View.OnClickListene
         int wifiId;
         WifiConfiguration wifiCong = new WifiConfiguration();
         wifiCong.SSID = "\"" + wifi.SSID + "\"";
-        wifiCong.preSharedKey = "\"" + pwd + "\"";// WPA-PSK密码
+        wifiCong.preSharedKey = "\"" + pwd + "\"";// WPA-PSK 密码
         wifiCong.hiddenSSID = false;
         wifiCong.status = WifiConfiguration.Status.ENABLED;
 
-        // 将配置好的特定 WIFI 密码信息添加,添加完成后默认是不激活状态，成功返回 ID，否则为-1
+        // 将配置好的特定 WIFI 密码信息添加,添加完成后默认是不激活状态，成功返回 ID，否则为 -1
         wifiId = wifiManager.addNetwork(wifiCong);
         if (wifiId != -1) {
             return wifiId;

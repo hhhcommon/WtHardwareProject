@@ -55,7 +55,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
     private String phoneNum;                // 手机号
     private String userName;                // 用户名
     private String password;                // 密码
-    private String passwordT;                // 确认密码
+    private String passwordT;               // 确认密码
     private String verificationCode;        // 验证码
     private String tempVerify;
     private String tag = "REGISTER_VOLLEY_REQUEST_CANCEL_TAG";
@@ -376,7 +376,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
                             e.printStackTrace();
                         }
                     } else if (ReturnType != null && ReturnType.equals("1002")) {
-                        ToastUtils.show_always(context, "服务器端无此用户!");
+                        ToastUtils.show_always(context, "用户名第一个字符不能是数字,无法注册!");
                     } else if (ReturnType != null && ReturnType.equals("1003")) {
                         ToastUtils.show_always(context, "您输入的用户名已存在");
                     } else {
