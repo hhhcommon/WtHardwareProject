@@ -191,6 +191,7 @@ public class FindNewsResultActivity extends AppBaseActivity {
                     } else if (type.equals(StringConstant.FIND_TYPE_GROUP)) {
                         if (position > 0) {
                             if (GroupList != null && GroupList.size() > 0) {
+                                // 仅仅判断了用户创建的群组 不是用户创建但用户已经加入的群组也应该过滤出来
                                 if (GroupList.get(position - 1).getGroupCreator().equals(CommonUtils.getUserId(context))) {
                                     Intent intent = new Intent(context, GroupDetailActivity.class);
                                     Bundle bundle = new Bundle();

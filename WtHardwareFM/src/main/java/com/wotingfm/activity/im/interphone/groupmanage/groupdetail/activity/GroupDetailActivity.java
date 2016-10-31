@@ -493,7 +493,9 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                 confirmDialog.show();
                 break;
             case R.id.rl_transferauthority: // 移交管理员权限
-                startToActivity(TransferAuthorityActivity.class);
+                Intent intentTransfer = new Intent(context, TransferAuthorityActivity.class);
+                intentTransfer.putExtra("GroupId", groupId);
+                startActivityForResult(intentTransfer, 100);
                 break;
             case R.id.rl_modifygpassword:   // 修改密码
                 startToActivity(ModifyGroupPasswordActivity.class);
@@ -638,11 +640,32 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
         });
     }
 
-    // 群管理 （修改密码、移交管理员权限、审核消息、加群消息）跳转
+    // 群管理 （修改密码、审核消息、加群消息）跳转
     private void startToActivity(Class toClass) {
         Intent intent = new Intent(context, toClass);
         intent.putExtra("GroupId", groupId);
         startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 100 && resultCode == RESULT_OK) {
+            isCreator = false;
+            relativeTransferAuthority.setVisibility(View.GONE);
+            textChannelOne.setVisibility(View.VISIBLE);
+            textChannelTwo.setVisibility(View.VISIBLE);
+            spinnerChannelOne.setVisibility(View.GONE);
+            spinnerChannelTwo.setVisibility(View.GONE);
+            textChannelOne.setText(channelOne);
+            textChannelTwo.setText(channelTwo);
+            sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
+            SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+            et.putString(StringConstant.PERSONREFRESHB, "true");
+            if (!et.commit()) {
+                L.v("数据 commit 失败!");
+            }
+            send();
+        }
     }
 
     class MessageReceivers extends BroadcastReceiver {
