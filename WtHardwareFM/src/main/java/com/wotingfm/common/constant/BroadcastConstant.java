@@ -14,6 +14,7 @@ public class BroadcastConstant {
 	public static final String ACTION_STOP = "ACTION_STOP";
 	public static final String ACTION_UPDATE = "ACTION_UPDATE";
 	public static final String ACTION_FINISHED = "ACTION_FINISHED";
+	public static final String ACTION_FINISHED_NO_DOWNLOADVIEW = "ACTION_FINISHED_NO_DOWNLOADVIEW";
 	//城市更改
 	public static final String CITY_CHANGE="CITYCHANGE";
 	//刷新组信息
