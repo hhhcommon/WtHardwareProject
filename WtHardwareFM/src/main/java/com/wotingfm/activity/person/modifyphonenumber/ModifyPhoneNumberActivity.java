@@ -73,8 +73,6 @@ public class ModifyPhoneNumberActivity extends AppBaseActivity implements View.O
         return R.layout.activity_modify_phone_number;
     }
 
-
-
     @Override
     protected void init() {
         setTitle("绑定手机");
