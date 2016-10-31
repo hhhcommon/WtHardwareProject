@@ -1,13 +1,19 @@
 package com.wotingfm.activity.music.common.service;
 
 import android.app.Service;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.wotingfm.activity.music.download.dao.FileInfoDao;
 import com.wotingfm.activity.music.download.model.FileInfo;
+import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.util.CommonUtils;
 
 import org.apache.http.HttpStatus;
 
@@ -16,6 +22,7 @@ import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.List;
 
 /**
  * 类注释
@@ -28,8 +35,12 @@ public class DownloadService extends Service {
 	private static DownloadService context;
 	private static DownloadTask mTask;
 	private static FileInfo fileTemp = null;
+	private static FileInfoDao FID;
+	private static List<FileInfo> fileInfoList;
+	private static int downloadStatus=-1;  //
 
-	@Override
+
+ 	@Override
 	public void onCreate() {
 		super.onCreate();
 		context=this;
@@ -40,6 +51,14 @@ public class DownloadService extends Service {
 		String s=fileInfo.getFileName();
         String s1=fileInfo.getUrl();
 		new InitThread(fileInfo).start();
+		// 注册广播接收器
+		IntentFilter filter = new IntentFilter();
+		filter.addAction(BroadcastConstant.ACTION_FINISHED_NO_DOWNLOADVIEW);
+		context.registerReceiver(mReceiver, filter);
+		downloadStatus=1;
+		if(FID==null){
+		FID=new FileInfoDao(context);
+		}
 	}
 
 	public static void workStop(FileInfo fileInFo) {
@@ -49,9 +68,6 @@ public class DownloadService extends Service {
 		}
 	}
 
-	public void workFinish() {
-
-	}
 
 	private static Handler mHandler = new Handler() {
 		public void handleMessage(android.os.Message msg) {
@@ -138,6 +154,35 @@ public class DownloadService extends Service {
 					}
 				}
 			}
+		}
+	}
+
+
+	private static BroadcastReceiver mReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context contexts, Intent intent) {
+
+		 if (BroadcastConstant.ACTION_FINISHED_NO_DOWNLOADVIEW.equals(intent.getAction())) {
+				// 下载结束
+				FileInfo fileInfo = (FileInfo) intent.getSerializableExtra("fileInfo");
+				FID.updatefileinfo(fileInfo.getFileName());
+				//发送更新界面数据广播
+					fileInfoList = FID.queryFileinfo("false", CommonUtils.getUserId(context));// 查询表中未完成的任务
+					if (fileInfoList != null && fileInfoList.size() > 0) {
+						fileInfoList.get(0).setDownloadtype(1);
+						FID.updatedownloadstatus(fileInfoList.get(0).getUrl(), "1");
+				     	workStart(fileInfoList.get(0));
+					}
+			}
+		}
+	};
+
+
+	@Override
+	public void onDestroy() {
+		super.onDestroy();
+		if(downloadStatus==1) {
+			context.unregisterReceiver(mReceiver);
 		}
 	}
 

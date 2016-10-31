@@ -25,6 +25,7 @@ import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CharacterParser;
+import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
 import com.wotingfm.util.PinyinComparator_a;
@@ -172,16 +173,23 @@ public class MemberDelActivity extends BaseActivity implements
                     if (ReturnType.equals("1001") || ReturnType.equals("1002")) {
                         try {
                             userList = new Gson().fromJson(result.getString("UserList"), new TypeToken<List<UserInfo>>() {}.getType());
+                            if (userList != null && userList.size() != 0) {
+                                for(int i=0; i<userList.size(); i++) {
+                                    if(userList.get(i).getUserId().equals(CommonUtils.getUserId(context))) {
+                                        // 移除群组成员不能操作用户本人 所以此操作不需要显示用户本人
+                                        userList.remove(i);
+                                        break;
+                                    }
+                                }
+                                userList2.clear();
+                                userList2.addAll(userList);
+                                filledData(userList2);
+                                Collections.sort(userList2, pinyinComparator);
+                                listView.setAdapter(adapter = new MembersAddAdapter(context, userList2));
+                                adapter.setOnListener(MemberDelActivity.this);
+                            }
                         } catch (Exception e1) {
                             e1.printStackTrace();
-                        }
-                        if (userList != null && userList.size() != 0) {
-                            userList2.clear();
-                            userList2.addAll(userList);
-                            filledData(userList2);
-                            Collections.sort(userList2, pinyinComparator);
-                            listView.setAdapter(adapter = new MembersAddAdapter(context, userList2));
-                            adapter.setOnListener(MemberDelActivity.this);
                         }
                     } else {
                         ToastUtils.show_always(context, "获取成员失败，请稍后再试");

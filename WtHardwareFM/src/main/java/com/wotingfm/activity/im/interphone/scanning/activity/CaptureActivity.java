@@ -14,7 +14,6 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup.LayoutParams;
-import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
@@ -77,8 +76,7 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 保持屏幕常亮
         setContentView(R.layout.activity_capture);
         context = this;
         MyActivityManager mam = MyActivityManager.getInstance();

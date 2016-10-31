@@ -31,6 +31,7 @@ public class DownloadActivity extends FragmentActivity {
     private TextView textUncompleted;
     private TextView textMemory;
     private ViewPager viewPagerDownload;
+    public static Boolean isVisible=false;
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
@@ -40,6 +41,12 @@ public class DownloadActivity extends FragmentActivity {
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
         setView();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        isVisible=true;
     }
 
     /**
@@ -145,9 +152,11 @@ public class DownloadActivity extends FragmentActivity {
         textMemory.setText("已用" + userText + "/总容量" + totalText);
     }
 
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        isVisible=false;
         textCompleted = null;
         textUncompleted = null;
         viewPagerDownload = null;
