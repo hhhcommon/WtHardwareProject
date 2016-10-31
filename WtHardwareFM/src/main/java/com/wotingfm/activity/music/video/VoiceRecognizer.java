@@ -51,6 +51,7 @@ public class VoiceRecognizer {
         }
         mIatResults.clear();
         mIat.startListening(mRecoListener);
+
     }
 
     /**
