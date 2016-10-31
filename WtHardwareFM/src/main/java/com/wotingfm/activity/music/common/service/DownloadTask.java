@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import com.wotingfm.activity.music.download.activity.DownloadActivity;
 import com.wotingfm.activity.music.download.dao.FileInfoDao;
 import com.wotingfm.activity.music.download.dao.ThreadDao;
 import com.wotingfm.activity.music.download.model.FileInfo;
@@ -127,8 +128,13 @@ public class DownloadTask{
 					Log.i("DownloadTask", "下载完毕");
 	                //向fragment发送完成消息
 					intent.putExtra("fileInfo",mFileInfo);
+					if (DownloadActivity.isVisible==true){
 					intent.setAction(BroadcastConstant.ACTION_FINISHED);
 					mContext.sendBroadcast(intent);
+					}else{
+						intent.setAction(BroadcastConstant.ACTION_FINISHED_NO_DOWNLOADVIEW);
+						mContext.sendBroadcast(intent);
+					}
 					}
 			}catch (Exception e){
 				e.printStackTrace();

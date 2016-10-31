@@ -66,7 +66,7 @@ public class DownLoadUnCompleted extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_download_uncompleted, container, false);
         setView();
         initDao();// 初始化数据库对象
-        setlistener();// 给控件设置监听
+        setListener();// 给控件设置监听
         setDownLoadSource();// 设置界面数据
         return rootView;
     }
@@ -111,11 +111,11 @@ public class DownLoadUnCompleted extends Fragment {
             Log.e("广播消息", "执行刷新");
             adapter = new DownloadAdapter(context, fileInfoList);
             listView.setAdapter(adapter);
-            setonitemlistener();
+            setItemListener();
         }
     }
 
-    private void setlistener() {
+    private void setListener() {
         tv_start.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -192,7 +192,7 @@ public class DownLoadUnCompleted extends Fragment {
         return num;
     }
 
-    private void setonitemlistener() {
+    private void setItemListener() {
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -259,7 +259,6 @@ public class DownLoadUnCompleted extends Fragment {
             } else if (BroadcastConstant.ACTION_FINISHED.equals(intent.getAction())) {
                 // 下载结束
                 FileInfo fileInfo = (FileInfo) intent.getSerializableExtra("fileInfo");
-                ToastUtils.show_short(contexts, fileInfo.getFileName() + "已经下载完毕");
                 FID.updatefileinfo(fileInfo.getFileName());
                 //发送更新界面数据广播
                 Intent p_intent = new Intent("push_down_completed");
@@ -272,13 +271,13 @@ public class DownLoadUnCompleted extends Fragment {
                         DownloadService.workStart(fileInfoList.get(0));
                         adapter = new DownloadAdapter(context, fileInfoList);
                         listView.setAdapter(adapter);
-                        setonitemlistener();
+                        setItemListener();
                         setDownLoadSource();
                     } else {
                         tv_start.setText("全部开始");
                         adapter = new DownloadAdapter(context, fileInfoList);
                         listView.setAdapter(adapter);
-                        setonitemlistener();
+                        setItemListener();
                         setDownLoadSource();
                     }
                 } else {
@@ -286,7 +285,7 @@ public class DownLoadUnCompleted extends Fragment {
                     tv_start.setText("全部开始");
                     adapter = new DownloadAdapter(context, fileInfoList);
                     listView.setAdapter(adapter);
-                    setonitemlistener();
+                    setItemListener();
                     setDownLoadSource();
                 }
             }
