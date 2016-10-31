@@ -64,7 +64,8 @@ public class RecommendFragment extends Fragment{
 
     private int page = 1;					// 页码
 	private int pageSizeNumber;
-    private int refreshType;				// refreshType 1为下拉加载 2为上拉加载更多
+    private int refreshType = 1;			// refreshType 1为下拉加载 2为上拉加载更多
+    private boolean isFirst = true;
 
     // 初始化数据库命令执行对象
     private void initDao() {
@@ -76,7 +77,6 @@ public class RecommendFragment extends Fragment{
 		super.onCreate(savedInstanceState);
 		context = getActivity();
 		initDao();
-        refreshType = 1;
 	}
 
 	@Override
@@ -94,8 +94,6 @@ public class RecommendFragment extends Fragment{
 		}
 		return rootView;
 	}
-
-	private boolean isFirst = true;
 
 	/**
 	 * 与onActivityCreated()方法 解决预加载问题 
@@ -131,9 +129,7 @@ public class RecommendFragment extends Fragment{
 
 			@Override
 			protected void requestSuccess(JSONObject result) {
-				if (dialog != null) {
-					dialog.dismiss();
-				}
+				if (dialog != null) dialog.dismiss();
 				((RadioListActivity)getActivity()).closeDialog();
 				page++;
 				try {
@@ -193,9 +189,7 @@ public class RecommendFragment extends Fragment{
 
 			@Override
 			protected void requestError(VolleyError error) {
-				if (dialog != null) {
-					dialog.dismiss();
-				}
+				if (dialog != null) dialog.dismiss();
 				((RadioListActivity)getActivity()).closeDialog();
                 ToastUtils.showVolleyError(context);
 			}
