@@ -42,14 +42,15 @@ import java.util.List;
  */
 
 public class FindNewsResultActivity extends AppBaseActivity {
+    private FindFriendResultAdapter adapter;
+    private FindGroupResultAdapter adapters;
+
     private XListView mXListView;
     private Dialog dialog;
 
     private ArrayList<UserInviteMeInside> UserList;
     private ArrayList<FindGroupNews> GroupList;
 
-    private FindFriendResultAdapter adapter;
-    private FindGroupResultAdapter adapters;
     private String searchStr;
     private String type;
     private String tag = "FINDNEWS_RESULT_VOLLEY_REQUEST_CANCEL_TAG";
@@ -74,36 +75,36 @@ public class FindNewsResultActivity extends AppBaseActivity {
                 // 搜索好友
                 if (!searchStr.trim().equals("")) {
                     if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                        dialog = DialogUtils.Dialogph(FindNewsResultActivity.this, "正在获取数据");
+                        dialog = DialogUtils.Dialogph(context, "正在获取数据");
                         PageNum = 1;
                         RefreshType = 1;
                         getFriend();
                     } else {
-                        ToastUtils.show_always(FindNewsResultActivity.this, "网络连接失败，请稍后重试");
+                        ToastUtils.show_always(context, "网络连接失败，请稍后重试");
                     }
                 } else {
                     // 如果当前界面没有接收到数据就给以友好提示
-                    ToastUtils.show_always(FindNewsResultActivity.this, "网络连接失败，请稍后重试");
+                    ToastUtils.show_always(context, "网络连接失败，请稍后重试");
                 }
             } else if (type.equals(StringConstant.FIND_TYPE_GROUP)) {
                 // 搜索群组
                 if (!searchStr.trim().equals("")) {
                     if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                        dialog = DialogUtils.Dialogph(FindNewsResultActivity.this, "正在获取数据");
+                        dialog = DialogUtils.Dialogph(context, "正在获取数据");
                         PageNum = 1;
                         RefreshType = 1;
                         getGroup();
                     } else {
-                        ToastUtils.show_always(FindNewsResultActivity.this, "网络连接失败，请稍后重试");
+                        ToastUtils.show_always(context, "网络连接失败，请稍后重试");
                     }
                 } else {
                     // 如果当前界面没有接收到数据就给以友好提示
-                    ToastUtils.show_always(FindNewsResultActivity.this, "网络连接失败，请稍后重试");
+                    ToastUtils.show_always(context, "网络连接失败，请稍后重试");
                 }
             }
         } else {
             // 如果当前界面没有接收到搜索类型数据就给以友好提示
-            ToastUtils.show_always(FindNewsResultActivity.this, "网络连接失败，请稍后重试");
+            ToastUtils.show_always(context, "网络连接失败，请稍后重试");
         }
     }
 
@@ -126,7 +127,7 @@ public class FindNewsResultActivity extends AppBaseActivity {
                             PageNum = 1;
                             getFriend();
                         } else {
-                            ToastUtils.show_always(FindNewsResultActivity.this, "网络连接失败，请稍后重试");
+                            ToastUtils.show_always(context, "网络连接失败，请稍后重试");
                         }
                     } else if (type.equals(StringConstant.FIND_TYPE_GROUP)) {
                         // 获取刷新群组数据
@@ -135,7 +136,7 @@ public class FindNewsResultActivity extends AppBaseActivity {
                             PageNum = 1;
                             getGroup();
                         } else {
-                            ToastUtils.show_always(FindNewsResultActivity.this, "网络连接失败，请稍后重试");
+                            ToastUtils.show_always(context, "网络连接失败，请稍后重试");
                         }
                     }
                 }
@@ -151,7 +152,7 @@ public class FindNewsResultActivity extends AppBaseActivity {
                             PageNum = PageNum + 1;
                             getFriend();
                         } else {
-                            ToastUtils.show_always(FindNewsResultActivity.this, "网络连接失败，请稍后重试");
+                            ToastUtils.show_always(context, "网络连接失败，请稍后重试");
                         }
                     } else if (type.equals(StringConstant.FIND_TYPE_GROUP)) {
                         // 获取加载更多群组数据
@@ -160,7 +161,7 @@ public class FindNewsResultActivity extends AppBaseActivity {
                             PageNum = PageNum + 1;
                             getGroup();
                         } else {
-                            ToastUtils.show_always(FindNewsResultActivity.this, "网络连接失败，请稍后重试");
+                            ToastUtils.show_always(context, "网络连接失败，请稍后重试");
                         }
                     }
                 }
@@ -176,36 +177,36 @@ public class FindNewsResultActivity extends AppBaseActivity {
                     if (type.equals(StringConstant.FIND_TYPE_PERSON)) {
                         if (position > 0) {
                             if (UserList != null && UserList.size() > 0) {// 不是好友跳转至添加好友界面
-                                Intent intent = new Intent(FindNewsResultActivity.this, FriendAddActivity.class);
+                                Intent intent = new Intent(context, FriendAddActivity.class);
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("contact", UserList.get(position - 1));
                                 intent.putExtras(bundle);
                                 startActivity(intent);
                             } else {
-                                ToastUtils.show_always(FindNewsResultActivity.this, "获取数据异常");
+                                ToastUtils.show_always(context, "获取数据异常");
                             }
-                            // 不是好友跳转至好友详情界面 -- > TalkPersonNewsActivity
+                            // 是好友跳转至好友详情界面 -- > TalkPersonNewsActivity
                             // 传递的 type 为 "findActivity"
                         }
                     } else if (type.equals(StringConstant.FIND_TYPE_GROUP)) {
                         if (position > 0) {
                             if (GroupList != null && GroupList.size() > 0) {
                                 if (GroupList.get(position - 1).getGroupCreator().equals(CommonUtils.getUserId(context))) {
-                                    Intent intent = new Intent(FindNewsResultActivity.this, GroupDetailActivity.class);
+                                    Intent intent = new Intent(context, GroupDetailActivity.class);
                                     Bundle bundle = new Bundle();
                                     bundle.putSerializable("data", GroupList.get(position - 1));
                                     bundle.putString("type", "FindNewsResultActivity");
                                     intent.putExtras(bundle);
                                     startActivity(intent);
                                 } else {
-                                    Intent intent = new Intent(FindNewsResultActivity.this, GroupAddActivity.class);
+                                    Intent intent = new Intent(context, GroupAddActivity.class);
                                     Bundle bundle = new Bundle();
                                     bundle.putSerializable("contact", GroupList.get(position - 1));
                                     intent.putExtras(bundle);
                                     startActivity(intent);
                                 }
                             } else {
-                                ToastUtils.show_always(FindNewsResultActivity.this, "获取数据异常");
+                                ToastUtils.show_always(context, "获取数据异常");
                             }
                         }
                     }
@@ -240,7 +241,7 @@ public class FindNewsResultActivity extends AppBaseActivity {
                             }.getType());
                             if (UserList != null && UserList.size() > 0) {
                                 if (RefreshType == 1) {
-                                    adapter = new FindFriendResultAdapter(FindNewsResultActivity.this, UserList);
+                                    adapter = new FindFriendResultAdapter(context, UserList);
                                     mXListView.setAdapter(adapter);
                                     mXListView.stopRefresh();
                                 } else {
@@ -249,7 +250,7 @@ public class FindNewsResultActivity extends AppBaseActivity {
                                 }
                                 setItemListener();    // 设置item的点击事件
                             } else {
-                                ToastUtils.show_always(FindNewsResultActivity.this, "数据获取失败，请稍候再试");    // json解析失败
+                                ToastUtils.show_always(context, "数据获取失败，请稍候再试");    // json解析失败
                             }
                         } catch (JSONException e1) {
                             e1.printStackTrace();
@@ -261,7 +262,7 @@ public class FindNewsResultActivity extends AppBaseActivity {
                             mXListView.stopLoadMore();
                         }
                         // 获取数据失败
-                        ToastUtils.show_always(FindNewsResultActivity.this, "数据获取失败，请稍候再试");
+                        ToastUtils.show_always(context, "数据获取失败，请稍候再试");
                     } else if (ReturnType != null && ReturnType.equals("1011")) {
                         if (RefreshType == 1) {
                             mXListView.stopRefresh();
@@ -269,14 +270,14 @@ public class FindNewsResultActivity extends AppBaseActivity {
                             mXListView.stopLoadMore();
                         }
                         // 获取数据失败
-                        ToastUtils.show_always(FindNewsResultActivity.this, "没有搜索到相关用户!");
+                        ToastUtils.show_always(context, "没有搜索到相关用户!");
                     } else {
                         if (RefreshType == 1) {
                             mXListView.stopRefresh();
                         } else {
                             mXListView.stopLoadMore();
                         }
-                        ToastUtils.show_always(FindNewsResultActivity.this, "数据获取失败，请稍候再试");
+                        ToastUtils.show_always(context, "数据获取失败，请稍候再试");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -318,7 +319,7 @@ public class FindNewsResultActivity extends AppBaseActivity {
                             }.getType());
                             if (GroupList != null && GroupList.size() > 0) {
                                 if (RefreshType == 1) {
-                                    adapters = new FindGroupResultAdapter(FindNewsResultActivity.this, GroupList);
+                                    adapters = new FindGroupResultAdapter(context, GroupList);
                                     mXListView.setAdapter(adapters);
                                     mXListView.stopRefresh();
                                 } else {
@@ -327,7 +328,7 @@ public class FindNewsResultActivity extends AppBaseActivity {
                                 }
                                 setItemListener();    // 设置item的点击事件
                             } else {
-                                ToastUtils.show_always(FindNewsResultActivity.this, "数据获取失败，请稍候再试");    // json解析失败
+                                ToastUtils.show_always(context, "数据获取失败，请稍候再试");    // json解析失败
                             }
                         } catch (JSONException e1) {
                             e1.printStackTrace();
@@ -339,14 +340,14 @@ public class FindNewsResultActivity extends AppBaseActivity {
                             mXListView.stopLoadMore();
                         }
                         // 获取数据失败
-                        ToastUtils.show_always(FindNewsResultActivity.this, "数据获取失败，请稍候再试");
+                        ToastUtils.show_always(context, "数据获取失败，请稍候再试");
                     } else {
                         if (RefreshType == 1) {
                             mXListView.stopRefresh();
                         } else {
                             mXListView.stopLoadMore();
                         }
-                        ToastUtils.show_always(FindNewsResultActivity.this, "数据获取失败，请稍候再试");
+                        ToastUtils.show_always(context, "数据获取失败，请稍候再试");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -355,9 +356,8 @@ public class FindNewsResultActivity extends AppBaseActivity {
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+                if (dialog != null) dialog.dismiss();
+                ToastUtils.showVolleyError(context);
             }
         });
     }
@@ -371,7 +371,6 @@ public class FindNewsResultActivity extends AppBaseActivity {
         mXListView = null;
         adapter = null;
         adapters = null;
-        context = null;
         dialog = null;
         searchStr = null;
         type = null;
