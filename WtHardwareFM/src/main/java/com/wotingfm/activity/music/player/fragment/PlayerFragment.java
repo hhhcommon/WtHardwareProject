@@ -231,7 +231,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         lin_schedule.setOnClickListener(this);
 
 
-        // seekbar事件
+        // seekBar事件
         seekBar.setOnSeekBarChangeListener(new OnSeekBarChangeListener() {
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {

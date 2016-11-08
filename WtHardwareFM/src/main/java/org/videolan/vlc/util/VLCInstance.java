@@ -20,15 +20,15 @@
 
 package org.videolan.vlc.util;
 
-import org.videolan.libvlc.LibVLC;
-import org.videolan.libvlc.LibVlcException;
-import org.videolan.vlc.VLCCrashHandler;
-
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 
 import com.wotingfm.common.application.BSApplication;
+
+import org.videolan.libvlc.LibVLC;
+import org.videolan.libvlc.LibVlcException;
+import org.videolan.vlc.VLCCrashHandler;
 
 public class VLCInstance {
     public final static String TAG = "VLC/Util/VLCInstance";
@@ -100,11 +100,12 @@ public class VLCInstance {
         catch(NumberFormatException nfe) {
             hardwareAcceleration = -1;
         }
-        int networkCaching = pref.getInt("network_caching_value", 1500);
+      int networkCaching = pref.getInt("network_caching_value", 1500);
         if(networkCaching > 60000)
             networkCaching = 60000;
         else if(networkCaching < 0)
             networkCaching = 0;
+        int networkCaching=15000;
         instance.setAout(aout);
         instance.setVout(vout);
         instance.setDeblocking(deblocking);
