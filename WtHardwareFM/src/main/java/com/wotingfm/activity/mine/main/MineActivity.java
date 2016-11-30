@@ -16,7 +16,6 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.net.wifi.WifiManager;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -24,47 +23,34 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
-import android.text.Html;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.preference.activity.PreferenceActivity;
 import com.wotingfm.activity.im.interphone.creategroup.model.UserPortaitInside;
 import com.wotingfm.activity.im.interphone.creategroup.photocut.PhotoCutActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
-import com.wotingfm.activity.mine.about.AboutActivity;
 import com.wotingfm.activity.mine.bluetooth.BluetoothActivity;
-import com.wotingfm.activity.mine.feedback.activity.FeedbackActivity;
 import com.wotingfm.activity.mine.flowmanage.main.FlowManageActivity;
 import com.wotingfm.activity.mine.fm.FMConnectActivity;
-import com.wotingfm.activity.mine.help.HelpActivity;
 import com.wotingfm.activity.mine.qrcode.EWMShowActivity;
 import com.wotingfm.activity.mine.update.UpdatePersonActivity;
 import com.wotingfm.activity.mine.wifi.WIFIActivity;
-import com.wotingfm.activity.person.login.LoginActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.common.volley.VolleyCallback;
-import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.manager.CacheManager;
 import com.wotingfm.manager.FileManager;
 import com.wotingfm.manager.MyHttp;
-import com.wotingfm.manager.UpdateManager;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
@@ -72,10 +58,6 @@ import com.wotingfm.util.ImageUploadReturnUtil;
 import com.wotingfm.util.L;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
-
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.io.File;
 
@@ -91,38 +73,28 @@ public class MineActivity extends Activity implements OnClickListener {
 
     private Dialog dialog;                          // 加载数据对话框
     protected Dialog imageDialog;                   // 修改头像对话框
-    private Dialog updateDialog;                    // 更新对话框
-    private Dialog clearCacheDialog;                // 清除缓存对话框
-    private Dialog exitLoginDialog;                 // 退出登录对话框
 
     private RelativeLayout relativeStatusUnLogin;   // 未登录状态
     private RelativeLayout relativeStatusLogin;     // 登录状态
     private ImageView userHead;                     // 用户头像
     private TextView textWifiName;
     private TextView textBluetoothState;            // 蓝牙状态 打开 OR 关闭
-    private TextView textCache;                     // 缓存统计
     private TextView textUserName;                  // 用户名
-    private Button exitLogin;                       // 退出登录
 
     private String ReturnType;
     private String MiniUri;
     private String outputFilePath;
     private String filePath;
-    private String tag = "MINE_REQUEST_CANCEL_TAG"; // 取消网络请求标签
-    private String updateContent;                   // 更新内容
-    private String cachePath;                       // 缓存路径
-    private String cache;                           // 缓存
     private String url;
     private String userId;
     private String userName;
     private String PhotoCutAfterImagePath;
     private String isLogin;                         // 判断是否登录
 
+    private final int UPDATE_USER = 3;              // 标识 跳转到修改个人信息界面
     private final int TO_GALLERY = 1;               // 打开图库
     private final int TO_CAMERA = 2;                // 打开照相机
-    private int updateType = 1;                     // 版本更新类型
     private int imageNum;
-    private boolean isCancelRequest;
     private boolean hasRegister = false;
     private boolean isFirst = true;                 // 第一次加载界面
 
@@ -132,12 +104,9 @@ public class MineActivity extends Activity implements OnClickListener {
         setContentView(R.layout.activity_mine);
         context = this;
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);             // 获取 WiFi 服务
-        clearCacheDialog();     // 清除缓存对话框
-        exitLoginDialog();      // 退出登录对话框
         setView();              // 设置界面
         imageDialog();          // 更换头像对话框
         getBluetoothState();    // 获取蓝牙的打开关闭状态
-        initCache();            // 启动统计缓存的线程
     }
 
     // 设置 view
@@ -147,6 +116,8 @@ public class MineActivity extends Activity implements OnClickListener {
         loginBackgroundImage.setImageBitmap(bmp);
         ImageView lin_image_0 = (ImageView) findViewById(R.id.lin_image_0);             // 未登录背景图片
         lin_image_0.setImageBitmap(bmp);
+
+        findViewById(R.id.lin_xiugai).setOnClickListener(this);             // 修改个人资料
 
         textUserName = (TextView) findViewById(R.id.text_user_name);                    // 用户名
         userHead = (ImageView) findViewById(R.id.image_touxiang);                       // 用户头像
@@ -161,38 +132,8 @@ public class MineActivity extends Activity implements OnClickListener {
         relativeStatusLogin = (RelativeLayout) findViewById(R.id.lin_status_denglu);    // 登录时的状态
         relativeStatusLogin.setOnClickListener(this);
 
-        exitLogin = (Button) findViewById(R.id.exit_login);     // 退出
-        exitLogin.setOnClickListener(this);
-
-        View aboutWt = findViewById(R.id.about_set);            // 关于
-        aboutWt.setOnClickListener(this);
-
-        View feedbackView = findViewById(R.id.feedback_set);    // 反馈建议
-        feedbackView.setOnClickListener(this);
-
-        View userHelp = findViewById(R.id.help_set);            // 使用帮助
-        userHelp.setOnClickListener(this);
-
-        View checkUpdate = findViewById(R.id.update_set);       // 检查更新
-        checkUpdate.setOnClickListener(this);
-        TextView textVersionNumber = (TextView) findViewById(R.id.text_update_statistics);// 版本号
-
-        String versionCode =PhoneMessage.appVersonName;
-        if(versionCode!=null&&!versionCode.equals("")) {
-            textVersionNumber.setText(PhoneMessage.appVersonName);
-        }else{
-            textVersionNumber.setText("1.0.0.X.001");
-        }
-
-        View clearCache = findViewById(R.id.cache_set);         // 清除缓存
-        clearCache.setOnClickListener(this);
-        textCache = (TextView) findViewById(R.id.text_cache_statistics);                // 缓存统计
-
         View flowManager = findViewById(R.id.flow_set);         // 流量管理
         flowManager.setOnClickListener(this);
-
-        View likeSet = findViewById(R.id.like_set);             // 喜好设置
-        likeSet.setOnClickListener(this);
 
         View bluetoothSet = findViewById(R.id.bluetooth_set);   // 蓝牙设置
         bluetoothSet.setOnClickListener(this);
@@ -218,12 +159,6 @@ public class MineActivity extends Activity implements OnClickListener {
                 doDialogClick(1);
                 imageDialog.dismiss();
                 break;
-            case R.id.lin_status_nodenglu:      // 登陆
-                startActivity(new Intent(context, LoginActivity.class));
-                break;
-            case R.id.lin_status_denglu:        // 修改个人资料
-                startActivity(new Intent(context, UpdatePersonActivity.class));
-                break;
             case R.id.imageView_ewm:            // 二维码
                 UserInfo news = new UserInfo();
                 news.setPortraitMini(url);
@@ -237,36 +172,8 @@ public class MineActivity extends Activity implements OnClickListener {
                 intentEwm.putExtras(bundle);
                 startActivity(intentEwm);
                 break;
-            case R.id.exit_login:               // 退出登录
-                exitLoginDialog.show();
-                break;
-            case R.id.about_set:                // 关于
-                startActivity(new Intent(context, AboutActivity.class));
-                break;
-            case R.id.feedback_set:             // 反馈意见
-                startActivity(new Intent(context, FeedbackActivity.class));
-                break;
-            case R.id.help_set:                 // 使用帮助
-                startActivity(new Intent(context, HelpActivity.class));
-                break;
-            case R.id.update_set:               // 检查更新
-                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    dialog = DialogUtils.Dialogph(context, "通讯中...");
-                    sendRequestUpdate();
-                } else {
-                    ToastUtils.show_always(context, "网络失败，请检查网络");
-                }
-                break;
-            case R.id.cache_set:                // 清除缓存
-                clearCacheDialog.show();
-                break;
             case R.id.flow_set:                 // 流量管理
                 startActivity(new Intent(context, FlowManageActivity.class));
-                break;
-            case R.id.like_set:                 // 偏好设置
-                Intent intent = new Intent(context, PreferenceActivity.class);
-                intent.putExtra("type", 2);
-                startActivity(intent);
                 break;
             case R.id.bluetooth_set:            // 蓝牙
                 startActivity(new Intent(context, BluetoothActivity.class));
@@ -274,29 +181,14 @@ public class MineActivity extends Activity implements OnClickListener {
             case R.id.wifi_set:                 // WIFI连接设置
                 startActivity(new Intent(context, WIFIActivity.class));
                 break;
-            case R.id.tv_update:                // 更新
-                UpdateManager updateManager = new UpdateManager(context);
-                updateManager.checkUpdateInfo1();
-                updateDialog.dismiss();
-                break;
-            case R.id.tv_qx:                    // 取消更新
-                if (updateType == 1) {
-                    updateDialog.dismiss();
-                } else {
-                    ToastUtils.show_short(context, "本次需要更新");
-                }
-                break;
-            case R.id.tv_confirm:               // 确认清除缓存
-                new ClearCacheTask().execute();
-                break;
-            case R.id.tv_cancle:                // 取消清除缓存
-                clearCacheDialog.dismiss();
-                break;
             case R.id.image_touxiang:           // 更换头像
                 imageDialog.show();
                 break;
             case R.id.listener_set:
                 startActivity(new Intent(context, FMConnectActivity.class));
+                break;
+            case R.id.lin_xiugai:           // 修改个人资料
+                startActivityForResult(new Intent(context, UpdatePersonActivity.class), UPDATE_USER);
                 break;
         }
     }
@@ -335,7 +227,6 @@ public class MineActivity extends Activity implements OnClickListener {
         if (isLogin.equals("true")) {
             relativeStatusUnLogin.setVisibility(View.GONE);
             relativeStatusLogin.setVisibility(View.VISIBLE);
-            exitLogin.setVisibility(View.VISIBLE);
             String imageUrl = BSApplication.SharedPreferences.getString(StringConstant.IMAGEURL, "");
             userName = BSApplication.SharedPreferences.getString(StringConstant.USERNAME, "");// 用户名，昵称
             userId = BSApplication.SharedPreferences.getString(StringConstant.USERID, "");
@@ -353,7 +244,6 @@ public class MineActivity extends Activity implements OnClickListener {
         } else {
             relativeStatusLogin.setVisibility(View.GONE);
             relativeStatusUnLogin.setVisibility(View.VISIBLE);
-            exitLogin.setVisibility(View.GONE);
         }
     }
 
@@ -424,224 +314,6 @@ public class MineActivity extends Activity implements OnClickListener {
         } else {
             textWifiName.setText("关闭");
         }
-    }
-
-    // 注销数据交互
-    private void sendRequestLogout(){
-        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
-        VolleyRequest.RequestPost(GlobalConfig.logoutUrl, tag, jsonObject, new VolleyCallback() {
-            private String ReturnType;
-            @Override
-            protected void requestSuccess(JSONObject result) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                // 如果网络请求已经执行取消操作  就表示就算请求成功也不需要数据返回了  所以方法就此结束
-                if(isCancelRequest){
-                    return ;
-                }
-                try {
-                    ReturnType = result.getString("ReturnType");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if(ReturnType != null && ReturnType.equals("1001")){        // 正常注销成功
-                    Intent pushIntent = new Intent("push_down_completed");  // 发送广播 更新已下载和未下载界面
-                    sendBroadcast(pushIntent);
-                } else if (ReturnType != null && ReturnType.equals("200")) {// 还未登录，注销成功
-                    L.w(ReturnType + "--->  还未登录，注销成功");
-                } else if (ReturnType != null && ReturnType.equals("0000")) {// 无法获取相关的参数，注销成功
-                    L.w(ReturnType + "--->  无法获取相关的参数，注销成功");
-                } else if (ReturnType != null && ReturnType.equals("T")) {
-                    L.w(ReturnType + "--->  异常");
-                } else {
-                    L.w(ReturnType + "--->  其它情况");
-                }
-                Editor et = BSApplication.SharedPreferences.edit();
-                et.putString(StringConstant.ISLOGIN, "false");
-                et.putString(StringConstant.USERID, "");
-                et.putString(StringConstant.IMAGEURL, "");
-                if(!et.commit()) {
-                    L.w("数据 commit 失败!");
-                }
-                exitLogin.setVisibility(View.GONE);
-                getLoginStatus();
-                Toast.makeText(context, "注销成功!", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                ToastUtils.showVolleyError(context);
-            }
-        });
-    }
-
-    // 更新数据交互
-    private void sendRequestUpdate(){
-        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
-        try {
-            jsonObject.put("Version", PhoneMessage.appVersonName);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        VolleyRequest.RequestPost(GlobalConfig.VersionUrl, tag, jsonObject, new VolleyCallback() {
-            private String ReturnType;
-
-            @Override
-            protected void requestSuccess(JSONObject result) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                if(isCancelRequest){
-                    return ;
-                }
-                try {
-                    ReturnType = result.getString("ReturnType");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if(ReturnType != null && ReturnType.equals("1001")){
-                    String MastUpdate;
-                    String ResultList;
-                    try {
-                        GlobalConfig.apkUrl = result.getString("DownLoadUrl");
-                        MastUpdate = result.getString("MastUpdate");
-                        ResultList = result.getString("CurVersion");
-                        if (ResultList != null && MastUpdate != null) {
-                            dealVersion(ResultList, MastUpdate);
-                        } else {
-                            L.e("检查更新返回值", "返回值为1001，但是返回的数值有误");
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                } else {
-                    ToastUtils.show_always(context, "当前已是最新版本");
-                }
-            }
-
-            @Override
-            protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                ToastUtils.showVolleyError(context);
-            }
-        });
-    }
-
-    // 检查版本更新
-    protected void dealVersion(String ResultList, String mastUpdate) {
-        String Version = "0.1.0.X.0";
-        String Descn = null;
-        try {
-            JSONTokener jsonParser = new JSONTokener(ResultList);
-            JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-            Version = arg1.getString("Version");
-            Descn = arg1.getString("Descn");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        // 版本更新比较
-        String version = Version;
-        String[] strArray;
-        strArray = version.split("\\.");
-        String versionBuild;
-        try {
-            versionBuild = strArray[4];
-            int versionOld = PhoneMessage.versionCode;
-            int versionNew = Integer.parseInt(versionBuild);
-            if (versionNew > versionOld) {
-                if (mastUpdate != null && mastUpdate.equals("1")) {		// 强制升级
-                    if (Descn != null && !Descn.trim().equals("")) {
-                        updateContent = Descn;
-                    } else {
-                        updateContent = "本次版本升级较大，需要更新";
-                    }
-                    updateType = 2;
-                    updateDialog();
-                    updateDialog.show();
-                } else {			// 普通升级
-                    if (Descn != null && !Descn.trim().equals("")) {
-                        updateContent = Descn;
-                    } else {
-                        updateContent = "有新的版本需要升级喽";
-                    }
-                    updateType = 1;// 不需要强制升级
-                    updateDialog();
-                    updateDialog.show();
-                }
-            }else if(versionNew == versionOld){
-                ToastUtils.show_always(context, "已经是最新版本");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-            L.e("版本处理异常", e.toString() + "");
-        }
-    }
-
-    // 更新弹出框
-    private void updateDialog() {
-        View dialog = LayoutInflater.from(this).inflate(R.layout.dialog_update, null);
-        TextView textContent = (TextView) dialog.findViewById(R.id.text_contnt);
-        textContent.setText(Html.fromHtml("<font size='26'>" + updateContent + "</font>"));
-        TextView textUpdate = (TextView) dialog.findViewById(R.id.tv_update);
-        textUpdate.setOnClickListener(this);
-        TextView textCancel = (TextView) dialog.findViewById(R.id.tv_qx);
-        textCancel.setOnClickListener(this);
-        updateDialog = new Dialog(this, R.style.MyDialog);
-        updateDialog.setContentView(dialog);
-        updateDialog.setCanceledOnTouchOutside(false);
-        updateDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-    }
-
-    // 清除缓存对话框
-    private void clearCacheDialog() {
-        View dialog = LayoutInflater.from(this).inflate(R.layout.dialog_exit_confirm, null);
-        TextView textTitle = (TextView) dialog.findViewById(R.id.tv_title);
-        textTitle.setText("是否删除本地存储缓存？");
-        TextView textConfirm = (TextView) dialog.findViewById(R.id.tv_confirm);
-        textConfirm.setOnClickListener(this);
-        TextView textCancel = (TextView) dialog.findViewById(R.id.tv_cancle);
-        textCancel.setOnClickListener(this);
-        clearCacheDialog = new Dialog(this, R.style.MyDialog);
-        clearCacheDialog.setContentView(dialog);
-        clearCacheDialog.setCanceledOnTouchOutside(true);
-        clearCacheDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-    }
-
-    // 退出登录对话框
-    private void exitLoginDialog() {
-        View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_exit_confirm, null);
-        TextView textTitle = (TextView) dialogView.findViewById(R.id.tv_title);
-        textTitle.setText("是否退出登录？");
-        dialogView.findViewById(R.id.tv_confirm).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    exitLoginDialog.dismiss();
-                    dialog = DialogUtils.Dialogph(context, "正在注销...");
-                    sendRequestLogout();
-                } else {
-                    ToastUtils.show_short(context, "网络失败，请检查网络");
-                }
-            }
-        });
-        dialogView.findViewById(R.id.tv_cancle).setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                exitLoginDialog.dismiss();
-            }
-        });
-        exitLoginDialog = new Dialog(this, R.style.MyDialog);
-        exitLoginDialog.setContentView(dialogView);
-        exitLoginDialog.setCanceledOnTouchOutside(false);
-        exitLoginDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
     }
 
     // 拍照调用逻辑  从相册选择 which == 0   拍照 which == 1
@@ -959,62 +631,6 @@ public class MineActivity extends Activity implements OnClickListener {
         return super.onKeyDown(keyCode, event);
     }
 
-    // 启动统计缓存的线程
-    private void initCache() {
-        new TotalCache().start();
-    }
-
-    // 统计缓存线程
-    class TotalCache extends Thread implements Runnable {
-        @Override
-        public void run() {
-            cachePath = Environment.getExternalStorageDirectory() + "/woting/image";
-            File file = new File(cachePath);
-            try {
-                cache = CacheManager.getCacheSize(file);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        textCache.setText(cache);
-                    }
-                });
-            } catch (Exception e) {
-                L.w("获取本地缓存文件大小", cache);
-            }
-        }
-    }
-
-    // 清除缓存异步任务
-    private class ClearCacheTask extends AsyncTask<Void, Void, Void> {
-        private boolean clearResult;
-
-        @Override
-        protected void onPreExecute() {
-            dialog = DialogUtils.Dialogph(context, "正在清除缓存");
-        }
-
-        @Override
-        protected Void doInBackground(Void... params) {
-            clearResult = CacheManager.delAllFile(cachePath);
-            return null;
-        }
-
-        @Override
-        protected void onPostExecute(Void result) {
-            clearCacheDialog.dismiss();
-            if(dialog != null && dialog.isShowing()){
-                dialog.dismiss();
-            }
-            if (clearResult) {
-                ToastUtils.show_always(context, "缓存已清除");
-                textCache.setText("0MB");
-            } else {
-                L.e("缓存异常", "缓存清理异常");
-                initCache();
-            }
-        }
-    }
-
     // 设置android app 的字体大小不受系统字体大小改变的影响
     @Override
     public Resources getResources() {
@@ -1028,7 +644,6 @@ public class MineActivity extends Activity implements OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        isCancelRequest = VolleyRequest.cancelRequest(tag);
         if(blueAdapter != null && blueAdapter.isDiscovering()){
             blueAdapter.cancelDiscovery();
         }

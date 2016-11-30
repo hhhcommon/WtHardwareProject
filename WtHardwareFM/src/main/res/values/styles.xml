@@ -230,4 +230,74 @@
         <item name="android:layout_marginBottom">6dp</item>
     </style>
 
+    <!--不顶边线条-->
+    <style name="LineStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:layout_marginLeft">10dp</item>
+        <item name="android:layout_marginRight">10dp</item>
+        <item name="android:background">@color/view_color</item>
+    </style>
+
+    <!--顶边线条-->
+    <style name="ViewStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">0.5dp</item>
+        <item name="android:background">@color/view_color</item>
+    </style>
+
+    <style name="PersonAndSetRelativeStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">43dp</item>
+        <item name="android:background">@drawable/person_color</item>
+    </style>
+
+    <style name="PersonAndSetLeftStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_marginLeft">13dp</item>
+    </style>
+
+    <style name="PersonAndSetTextStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginLeft">14dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:textColor">@color/wt_login_third</item>
+        <item name="android:textSize">@dimen/list_text_size</item>
+    </style>
+
+    <style name="PersonAndSetRightStyle">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginRight">13dp</item>
+        <item name="android:layout_centerVertical">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:src">@mipmap/live_more</item>
+    </style>
+
+    <!--左上角返回图片 Style-->
+    <style name="LeftImageStyle">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:paddingLeft">6dp</item>
+        <item name="android:paddingRight">18dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:src">@mipmap/back_images</item>
+    </style>
+
+    <!--左上角返回图片 Style-->
+    <style name="ButtonStyle">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">40dp</item>
+        <item name="android:background">@drawable/zhuxiao_press</item>
+        <item name="android:layout_marginLeft">12dp</item>
+        <item name="android:layout_marginRight">12dp</item>
+        <item name="android:layout_marginTop">15dp</item>
+        <item name="android:textColor">@color/WHITE</item>
+        <item name="android:textSize">@dimen/activity_head_right</item>
+    </style>
+
 </resources>
