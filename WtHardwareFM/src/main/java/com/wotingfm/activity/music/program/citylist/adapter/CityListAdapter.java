@@ -10,7 +10,7 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.music.program.fenlei.model.FenLeiName;
+import com.wotingfm.activity.music.program.fenlei.model.CatalogName;
 
 import java.util.List;
 
@@ -20,17 +20,15 @@ import java.util.List;
  * 2016年3月25日
  */
 public class CityListAdapter extends BaseAdapter implements SectionIndexer{
-	private List<FenLeiName> list;
+	private List<CatalogName> list;
 	private Context context;
-//	private ImageLoader imageLoader;
-	private FenLeiName lists;
-	public CityListAdapter(Context context,List<FenLeiName> list) {
+	private CatalogName lists;
+	public CityListAdapter(Context context,List<CatalogName> list) {
 		super();
 		this.list = list;
 		this.context = context;
-//		imageLoader=new ImageLoader(context);
 	}
-	public void ChangeDate(List<FenLeiName> list){
+	public void ChangeDate(List<CatalogName> list){
 		this.list = list;
 		this.notifyDataSetChanged();
 	}
@@ -51,14 +49,14 @@ public class CityListAdapter extends BaseAdapter implements SectionIndexer{
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		ViewHolder holder=null;
+		ViewHolder holder;
 		if(convertView==null){
 			convertView=LayoutInflater.from(context).inflate(R.layout.adapter_city, null);
 			holder=new ViewHolder();
 			holder.tv_name = (TextView)convertView.findViewById(R.id.tv_name);//名
 			holder.indexLayut=(LinearLayout)convertView.findViewById(R.id.index);
 			holder.contactLayut=(LinearLayout)convertView.findViewById(R.id.contactLayut);
-			holder.indexTv = (TextView) convertView.findViewById(R.id.indexTv); 
+			holder.indexTv = (TextView) convertView.findViewById(R.id.indexTv);
 			convertView.setTag(holder);
 		}else{
 			holder=(ViewHolder) convertView.getTag();
@@ -67,7 +65,7 @@ public class CityListAdapter extends BaseAdapter implements SectionIndexer{
 		int section = getSectionForPosition(position);
 		if (position == getPositionForSection(section)) {
 			holder.indexLayut.setVisibility(View.VISIBLE);
-			holder.indexTv.setText(list.get(position).getSortLetters());  
+			holder.indexTv.setText(list.get(position).getSortLetters());
 		} else {
 			holder.indexLayut.setVisibility(View.GONE);
 		}
@@ -121,7 +119,7 @@ public class CityListAdapter extends BaseAdapter implements SectionIndexer{
 			return "#";
 		}
 	}
-	
+
 	@Override
 	public Object[] getSections() {
 		return null;

@@ -1,4 +1,4 @@
-package com.wotingfm.activity.music.program.radiolist.rollviewpager.hintview;
+package com.wotingfm.widget.rollviewpager.hintview;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -8,7 +8,8 @@ import android.graphics.PixelFormat;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 
-import com.wotingfm.activity.music.program.radiolist.rollviewpager.Util;
+import com.wotingfm.widget.rollviewpager.Util;
+
 
 /**
  * Created by Mr.Jude on 2016/1/10.
@@ -16,7 +17,7 @@ import com.wotingfm.activity.music.program.radiolist.rollviewpager.Util;
 public class IconHintView extends ShapeHintView {
     private int focusResId;
     private int normalResId;
-    private int size = 30;
+    private int size = 25;
 
     public IconHintView(Context context, int focusResId, int normalResId) {
         this(context, focusResId, normalResId, Util.dip2px(context,32));
@@ -55,7 +56,8 @@ public class IconHintView extends ShapeHintView {
         float scaleWidth = ((float) w / width);
         float scaleHeight = ((float) h / height);
         matrix.postScale(scaleWidth, scaleHeight);
-        Bitmap newbmp = Bitmap.createBitmap(oldbmp, 0, 0, width, height, matrix, true);
+        Bitmap newbmp = Bitmap.createBitmap(oldbmp, 0, 0, width, height,
+                matrix, true);
         return new BitmapDrawable(null, newbmp);
     }
 

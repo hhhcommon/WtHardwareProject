@@ -1,4 +1,4 @@
-package com.wotingfm.activity.music.program.radiolist.rollviewpager.hintview;
+package com.wotingfm.widget.rollviewpager.hintview;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
@@ -7,7 +7,8 @@ import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
-import com.wotingfm.activity.music.program.radiolist.rollviewpager.HintView;
+import com.wotingfm.widget.rollviewpager.HintView;
+
 
 public abstract class ShapeHintView extends LinearLayout implements HintView {
 	private ImageView[] mDots;

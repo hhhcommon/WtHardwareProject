@@ -6,7 +6,7 @@
     android:background="@color/app_bg"
     android:orientation="vertical" >
     
-        <com.wotingfm.activity.music.program.radiolist.rollviewpager.RollPagerView
+        <com.wotingfm.widget.rollviewpager.RollPagerView
             android:id="@+id/slideshowView"
 	        android:layout_width="match_parent"
 	        android:layout_height="85dp"

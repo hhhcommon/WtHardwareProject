@@ -48,8 +48,8 @@ public class DownloadService extends Service {
 	public static void workStart(FileInfo fileInfo) {
 		/*		Log.i(TAG, "Start:" + fileInfo.toString());*/
 		// 启动初始化线程
-		String s=fileInfo.getFileName();
-        String s1=fileInfo.getUrl();
+/*		String s=fileInfo.getFileName();
+        String s1=fileInfo.getUrl();*/
 		new InitThread(fileInfo).start();
 		// 注册广播接收器
 		IntentFilter filter = new IntentFilter();

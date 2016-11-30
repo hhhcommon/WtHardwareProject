@@ -1,10 +1,9 @@
 package com.wotingfm.activity.music.program.radiolist.activity;
 
+import android.annotation.SuppressLint;
 import android.annotation.TargetApi;
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -12,7 +11,7 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -44,108 +43,115 @@ import java.util.List;
  * 2016年4月5日
  */
 public class RadioListActivity extends FragmentActivity implements OnClickListener {
-    private Dialog dialog;					// 加载对话框
-    private PagerSlidingTabStrip pageSlidingTab;
-    private ViewPager viewPager;
-
-	private List<String> list = new ArrayList<>();
-	private List<Fragment> fragments = new ArrayList<>();
-
-//    public static String categoryName;
-    public static String categoryType;
-    public static String id;
+	private LinearLayout head_left_btn;		// 返回
+	private TextView mTextView_Head;
+	public static String catalogName;
+	public static String catalogType;
+	public static String id;
+	private Dialog dialog;					// 加载对话框
+	private List<String> list;
+	private List<Fragment> fragments;
+	private PagerSlidingTabStrip pageSlidingTab;
+	private ViewPager viewPager;
+	private int count = 1;
 	public static final String tag = "RADIO_LIST_VOLLEY_REQUEST_CANCEL_TAG";
-	public static boolean isCancelRequest;
-    private int count = 1;
+	private boolean isCancelRequest;
+	private RecommendFragment recommend;
+
+	public boolean isCancel() {
+		return isCancelRequest;
+	}
 
 	@TargetApi(Build.VERSION_CODES.KITKAT)
+	@SuppressLint("InlinedApi")
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_radiolist);
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		// 透明状态栏
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	// 透明导航栏
-        setView();
-        handleRequestType();
-
-        list.add("推荐");
-        fragments.add(new RecommendFragment());
-
+		fragments = new ArrayList<>();
+		setView();
+		handleRequestType();
+		if(list == null){
+			list = new ArrayList<>();
+			list.add("推荐");
+			recommend = new RecommendFragment();
+			fragments.add( recommend);
+		}
 		sendRequest();
 		dialog = DialogUtils.Dialogph(this, "正在获取数据");
 	}
 
-	// 接收上一个页面传递过来的数据
+	/**
+	 * 接收上一个页面传递过来的数据
+	 */
 	private void handleRequestType() {
 		Intent listIntent = getIntent();
 		if (listIntent != null) {
-			FenLeiName list = (FenLeiName) listIntent.getSerializableExtra("Catalog");
-            String categoryName = list.getCatalogName();
-            categoryType = list.getCatalogType();
-			id = list.getCatalogId();
+			String type=listIntent.getStringExtra("type");
+			if(type!=null&&type.trim().equals("fenLeiAdapter")){
+				try {
+					FenLeiName list = (FenLeiName) listIntent.getSerializableExtra("Catalog");
+					catalogName = list.getName();
+					catalogType = list.getAttributes().getmId();
+					id = list.getAttributes().getId();
+					mTextView_Head.setText(catalogName);
+				} catch (Exception e) {
+					e.printStackTrace();
+					mTextView_Head.setText("分类");
+				}
+			}
 
-            TextView mTextViewHead = (TextView) findViewById(R.id.head_name_tv);
-            mTextViewHead.setText(categoryName);
 		}
 	}
 
-	// 请求网络获取分类信息
+	/**
+	 * 请求网络获取分类信息
+	 */
 	private void sendRequest(){
-        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
-            ToastUtils.show_always(RadioListActivity.this, "网络连接失败，请稍后重试!");
-            return ;
-        }
-
 		VolleyRequest.RequestPost(GlobalConfig.getCatalogUrl, tag, setParam(), new VolleyCallback() {
-			private String returnType;
-			private List<SubCata> subCateList;
+			private String ReturnType;
+			private List<SubCata> subDataList;
+			private String CatalogData;
 
 			@Override
 			protected void requestSuccess(JSONObject result) {
-//				closeDialog();
 				try {
-                    returnType = result.getString("ReturnType");
+					ReturnType = result.getString("ReturnType");
+					CatalogData = result.getString("CatalogData");
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-                try {
-                    if (returnType != null && returnType.equals("1001")) {
-                        CatalogData catalogData = new Gson().fromJson(result.getString("CatalogData"), new TypeToken<CatalogData>() {}.getType());
-                        subCateList = catalogData.getSubCata();
-                        if(subCateList != null && subCateList.size() > 0){
-                            for(int i=0; i<subCateList.size(); i++){
-                                list.add(subCateList.get(i).getCatalogName());
-                                fragments.add(ClassifyFragment.instance(subCateList.get(i).getCatalogId(), subCateList.get(i).getCatalogType()));
-                                count++;
-                            }
-                        }
-                        viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), list, fragments));
-                        pageSlidingTab.setViewPager(viewPager);
-                        if(count == 1){
-                            pageSlidingTab.setVisibility(View.GONE);
-                        }
-                    } else {
-                        ToastUtils.show_always(RadioListActivity.this, "暂没有该分类数据");
-                        closeDialog();
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+				if (ReturnType != null && ReturnType.equals("1001")) {
+					CatalogData catalogData = new Gson().fromJson(CatalogData, new TypeToken<CatalogData>() {}.getType());
+					subDataList = catalogData.getSubCata();
+					if(subDataList != null && subDataList.size() > 0){
+						for(int i=0; i<subDataList.size(); i++){
+							list.add(subDataList.get(i).getCatalogName());
+							fragments.add(ClassifyFragment.instance(subDataList.get(i).getCatalogId(), subDataList.get(i).getCatalogType()));
+							count++;
+						}
+					}
+					viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), list, fragments));
+					pageSlidingTab.setViewPager(viewPager);
+					if(count == 1){
+						pageSlidingTab.setVisibility(View.GONE);
+					}
+				} else {
+					ToastUtils.show_always(RadioListActivity.this, "暂没有该分类数据");
+				}
 			}
 
 			@Override
 			protected void requestError(VolleyError error) {
 				closeDialog();
-                ToastUtils.showVolleyError(RadioListActivity.this);
 			}
 		});
 	}
 
 	private JSONObject setParam(){
-		JSONObject jsonObject = VolleyRequest.getJsonObject(RadioListActivity.this);
+		JSONObject jsonObject =VolleyRequest.getJsonObject(this);
 		try {
-//			jsonObject.put("UserId", CommonUtils.getUserId(RadioListActivity.this));
-			jsonObject.put("CatalogType", categoryType);
+			jsonObject.put("CatalogType",catalogType);
 			jsonObject.put("CatalogId", id);
 			jsonObject.put("Page", "1");
 			jsonObject.put("ResultType", "1");
@@ -156,15 +162,6 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 		return jsonObject;
 	}
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.head_left_btn:
-                finish();
-                break;
-        }
-    }
-
 	/**
 	 * 关闭加载对话框
 	 */
@@ -174,26 +171,25 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 		}
 	}
 
-    public void startForResult(Intent intent) {
-        startActivityForResult(intent, 1);
-    }
-
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		switch (requestCode) {
-		case 1:
-			if (resultCode == 1) {
-				finish();
-			}
-			break;
+			case 1:
+				if (resultCode == 1) {
+					finish();
+				}
+				break;
 		}
 	}
 
-	// 初始化界面
+	/**
+	 * 初始化界面
+	 */
 	private void setView() {
-        findViewById(R.id.head_left_btn).setOnClickListener(this);
-
+		head_left_btn = (LinearLayout) findViewById(R.id.head_left_btn);
+		head_left_btn.setOnClickListener(this);
+		mTextView_Head = (TextView) findViewById(R.id.head_name_tv);
 		pageSlidingTab = (PagerSlidingTabStrip) findViewById(R.id.tabs_title);
 		viewPager = (ViewPager) findViewById(R.id.view_pager);
 		pageSlidingTab.setIndicatorHeight(4);								// 滑动指示器的高度
@@ -203,15 +199,14 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 		pageSlidingTab.setTextColorResource(R.color.wt_login_third);		// 默认字体颜色
 	}
 
-    // 设置android app 的字体大小不受系统字体大小改变的影响
-    @Override
-    public Resources getResources() {
-        Resources res = super.getResources();
-        Configuration config = new Configuration();
-        config.setToDefaults();
-        res.updateConfiguration(config, res.getDisplayMetrics());
-        return res;
-    }
+	@Override
+	public void onClick(View v) {
+		switch (v.getId()) {
+			case R.id.head_left_btn:
+				finish();
+				break;
+		}
+	}
 
 	@Override
 	protected void onDestroy() {
@@ -219,11 +214,14 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 		isCancelRequest = VolleyRequest.cancelRequest(tag);
 		pageSlidingTab = null;
 		viewPager = null;
+		head_left_btn = null;
+		mTextView_Head = null;
 		dialog = null;
 		if(list != null){
 			list.clear();
 			list = null;
 		}
+		recommend = null;
 		if(fragments != null){
 			fragments.clear();
 			fragments = null;

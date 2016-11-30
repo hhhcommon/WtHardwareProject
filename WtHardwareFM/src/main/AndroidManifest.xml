@@ -520,6 +520,18 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
+        <!-- 国家台界面-->
+        <activity
+            android:name=".activity.music.program.diantai.activity.RadioNationalActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan" />
+        <!-- 地方台界面-->
+        <activity
+            android:name=".activity.music.program.diantai.activity.CityRadioActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan" />
         <!-- 验证手机号 -->
         <activity
             android:name=".activity.person.phonecheck.PhoneCheckActivity"

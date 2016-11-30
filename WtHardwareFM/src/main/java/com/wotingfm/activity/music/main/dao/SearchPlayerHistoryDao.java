@@ -260,7 +260,16 @@ public class SearchPlayerHistoryDao {
 		db.close();
 	}
 
-
+	public void updatePlayIntime(String url,long times) {
+		SQLiteDatabase	db = helper.getWritableDatabase();
+		String userid=CommonUtils.getUserId(context);
+		if(userid!=null&&!userid.equals("")&&times >=0 ){
+			db.execSQL("update playerhistory set playerintime=? where bjuserid=? and playerurl=?",new Object[]{String.valueOf(times),userid,url});
+		}else{
+			db.execSQL("update playerhistory set playerintime=? where playerurl=?",new Object[]{String.valueOf(times),url});
+		}
+		db.close();
+	}
 
 	/**
 	 * 关闭目前打开的所有数据库对象

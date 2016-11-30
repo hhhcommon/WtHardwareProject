@@ -78,6 +78,7 @@ public class UpdatePersonActivity extends AppBaseActivity implements OnClickList
         textUserId.setText(userId);
     }
 
+
     @Override
     protected void onResume() {
         super.onResume();

@@ -1,10 +1,11 @@
-package com.wotingfm.activity.music.program.radiolist.rollviewpager.hintview;
+package com.wotingfm.widget.rollviewpager.hintview;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 
-import com.wotingfm.activity.music.program.radiolist.rollviewpager.Util;
+import com.wotingfm.widget.rollviewpager.Util;
+
 
 /**
  * Created by Mr.Jude on 2016/1/10.
