@@ -54,7 +54,7 @@ import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
 import com.wotingfm.activity.person.login.LoginActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -150,13 +150,13 @@ public class ChatFragment extends Fragment implements OnClickListener {
         if (Receiver == null) {
             Receiver = new MessageReceiver();
             IntentFilter filter = new IntentFilter();
-            filter.addAction(BroadcastConstant.SOCKET_PUSH);
-            filter.addAction(BroadcastConstant.UP_DATA_GROUP);
-            filter.addAction(BroadcastConstant.PUSH_VOICE_IMAGE_REFRESH);
+            filter.addAction(BroadcastConstants.SOCKET_PUSH);
+            filter.addAction(BroadcastConstants.UP_DATA_GROUP);
+            filter.addAction(BroadcastConstants.PUSH_VOICE_IMAGE_REFRESH);
             context.registerReceiver(Receiver, filter);
 
             IntentFilter filter1 = new IntentFilter();
-            filter1.addAction(BroadcastConstant.PUSH_BACK);
+            filter1.addAction(BroadcastConstants.PUSH_BACK);
             filter1.setPriority(500);
             context.registerReceiver(Receiver, filter1);
         }
@@ -455,7 +455,7 @@ public class ChatFragment extends Fragment implements OnClickListener {
      */
     public static void zhiDingGroupss(String groupIds) {
         Intent intent = new Intent();
-        intent.setAction(BroadcastConstant.UP_DATA_GROUP);
+        intent.setAction(BroadcastConstants.UP_DATA_GROUP);
         context.sendBroadcast(intent);
         enterGroupType = 1;
         groupId = groupIds;
@@ -470,7 +470,7 @@ public class ChatFragment extends Fragment implements OnClickListener {
      */
     public static void zhiDingGroup(TalkGroupInside talkGroupInside) {
         Intent intent = new Intent();
-        intent.setAction(BroadcastConstant.UP_DATA_GROUP);
+        intent.setAction(BroadcastConstants.UP_DATA_GROUP);
         context.sendBroadcast(intent);
         enterGroupType = 1;
         groupId = talkGroupInside.getGroupId();
@@ -485,7 +485,7 @@ public class ChatFragment extends Fragment implements OnClickListener {
      */
     public static void zhiDingGroups(TalkGroupInside talkGroupInside) {
         Intent intent = new Intent();
-        intent.setAction(BroadcastConstant.UP_DATA_GROUP);
+        intent.setAction(BroadcastConstants.UP_DATA_GROUP);
         context.sendBroadcast(intent);
         enterGroupType = 2;
         groupId = talkGroupInside.getGroupId();
@@ -904,7 +904,7 @@ public class ChatFragment extends Fragment implements OnClickListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastConstant.SOCKET_PUSH)) {
+            if (action.equals(BroadcastConstants.SOCKET_PUSH)) {
                 //				MsgNormal message = (MsgNormal) intent.getSerializableExtra("outmessage");
                 byte[] bt = intent.getByteArrayExtra("outmessage");
                 //				Log.e("接收器中数据", Arrays.toString(bt)+"");
@@ -1304,11 +1304,11 @@ public class ChatFragment extends Fragment implements OnClickListener {
                 } catch (Exception e1) {
                     e1.printStackTrace();
                 }
-            } else if (action.equals(BroadcastConstant.UP_DATA_GROUP)) {
+            } else if (action.equals(BroadcastConstants.UP_DATA_GROUP)) {
                 if (gridView_person != null) {
                     gridView_person.setVisibility(View.GONE);
                 }
-            } else if (action.equals(BroadcastConstant.PUSH_BACK)) {
+            } else if (action.equals(BroadcastConstants.PUSH_BACK)) {
                 //MsgNormal message = (MsgNormal) intent.getSerializableExtra("outmessage");
                 //Log.i("talkOldListFragment弹出框服务push_back", "接收到的socket服务的信息"+message+"");
                 byte[] bt = intent.getByteArrayExtra("outmessage");
@@ -1349,7 +1349,7 @@ public class ChatFragment extends Fragment implements OnClickListener {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-            } else if (action.equals(BroadcastConstant.PUSH_VOICE_IMAGE_REFRESH)) {
+            } else if (action.equals(BroadcastConstants.PUSH_VOICE_IMAGE_REFRESH)) {
                 int seqNum = intent.getIntExtra("seqNum", -1);
                 if (interPhoneType.equals("group")) {
                 } else {

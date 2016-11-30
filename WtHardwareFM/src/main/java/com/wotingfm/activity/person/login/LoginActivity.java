@@ -14,7 +14,7 @@ import com.wotingfm.activity.person.forgetpassword.ForgetPasswordActivity;
 import com.wotingfm.activity.person.register.RegisterActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -173,7 +173,7 @@ public class LoginActivity extends AppBaseActivity implements OnClickListener {
                         if(!et.commit()) {
                             L.w("数据 commit 失败!");
                         }
-                        context.sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));//刷新通信录界面
+                        context.sendBroadcast(new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN));//刷新通信录界面
                         context.sendBroadcast(new Intent("push_down_completed"));// 刷新下载界面
                         setResult(1);
 

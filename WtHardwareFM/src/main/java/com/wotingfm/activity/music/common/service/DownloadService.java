@@ -12,7 +12,7 @@ import android.util.Log;
 
 import com.wotingfm.activity.music.download.dao.FileInfoDao;
 import com.wotingfm.activity.music.download.model.FileInfo;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.util.CommonUtils;
 
 import org.apache.http.HttpStatus;
@@ -53,7 +53,7 @@ public class DownloadService extends Service {
 		new InitThread(fileInfo).start();
 		// 注册广播接收器
 		IntentFilter filter = new IntentFilter();
-		filter.addAction(BroadcastConstant.ACTION_FINISHED_NO_DOWNLOADVIEW);
+		filter.addAction(BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW);
 		context.registerReceiver(mReceiver, filter);
 		downloadStatus=1;
 		if(FID==null){
@@ -162,7 +162,7 @@ public class DownloadService extends Service {
 		@Override
 		public void onReceive(Context contexts, Intent intent) {
 
-		 if (BroadcastConstant.ACTION_FINISHED_NO_DOWNLOADVIEW.equals(intent.getAction())) {
+		 if (BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW.equals(intent.getAction())) {
 				// 下载结束
 				FileInfo fileInfo = (FileInfo) intent.getSerializableExtra("fileInfo");
 				FID.updatefileinfo(fileInfo.getFileName());

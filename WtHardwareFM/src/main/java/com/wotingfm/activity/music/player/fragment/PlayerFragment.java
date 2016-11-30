@@ -67,7 +67,7 @@ import com.wotingfm.activity.music.video.TtsPlayer;
 import com.wotingfm.activity.music.video.VlcPlayer;
 import com.wotingfm.activity.music.video.WtAudioPlay;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -246,7 +246,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     public void run() {
                         if (PlayerFragment.isCurrentPlay) {
                             Intent intent = new Intent(context, timeroffservice.class);
-                            intent.setAction(BroadcastConstant.TIMER_START);
+                            intent.setAction(BroadcastConstants.TIMER_START);
                             int time = PlayerFragment.timerService;
                             intent.putExtra("time", time);
                             context.startService(intent);
@@ -676,7 +676,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private static void stopCurrentTimer() {
         if (PlayerFragment.isCurrentPlay) {
             Intent intent = new Intent(context, timeroffservice.class);
-            intent.setAction(BroadcastConstant.TIMER_STOP);
+            intent.setAction(BroadcastConstants.TIMER_STOP);
             context.startService(intent);
             PlayerFragment.isCurrentPlay = false;
         }
@@ -844,7 +844,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-             if (action.equals(BroadcastConstant.PLAYERVOICE)) {
+             if (action.equals(BroadcastConstants.PLAYERVOICE)) {
                 String str = intent.getStringExtra("VoiceContent");
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                     if(!str.trim().equals("")){

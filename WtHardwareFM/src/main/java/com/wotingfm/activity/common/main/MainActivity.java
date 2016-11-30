@@ -34,7 +34,7 @@ import com.wotingfm.activity.music.program.fenlei.model.Catalog;
 import com.wotingfm.activity.music.program.fenlei.model.CatalogName;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -396,8 +396,8 @@ public class MainActivity extends TabActivity {
     //注册广播  用于接收定时服务发送过来的广播
     private void registerReceiver() {
         IntentFilter myFilter = new IntentFilter();
-        myFilter.addAction(BroadcastConstant.TIMER_END);
-        myFilter.addAction(BroadcastConstant.ACTIVITY_CHANGE);
+        myFilter.addAction(BroadcastConstants.TIMER_END);
+        myFilter.addAction(BroadcastConstants.ACTIVITY_CHANGE);
         registerReceiver(endApplicationBroadcast, myFilter);
     }
 
@@ -406,7 +406,7 @@ public class MainActivity extends TabActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastConstant.TIMER_END)) {
+            if (action.equals(BroadcastConstants.TIMER_END)) {
                 ToastUtils.show_always(MainActivity.this, "定时关闭应用时间就要到了，应用即将退出");
                 stopService(new Intent(MainActivity.this, timeroffservice.class));    // 停止服务
                 new Handler().postDelayed(new Runnable() {
@@ -415,7 +415,7 @@ public class MainActivity extends TabActivity {
                         finish();
                     }
                 }, 1000);
-            } else if (action.equals(BroadcastConstant.ACTIVITY_CHANGE)) {
+            } else if (action.equals(BroadcastConstants.ACTIVITY_CHANGE)) {
                 if (GlobalConfig.activitytype == 1) {
                     MyActivityManager mam = MyActivityManager.getInstance();
                     mam.finishAllActivity();

@@ -209,13 +209,6 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
-        <!-- 联系我们 -->
-        <activity
-            android:name=".activity.mine.contactus.ContactUsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
-
         <!-- 下载位置 -->
         <activity
             android:name=".activity.mine.downloadposition.DownloadPositionActivity"
@@ -378,15 +371,9 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".activity.im.interphone.groupmanage.handlegroupapply.HandleGroupApplyActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
-
-        <!-- 我的好友的界面，通过群界面登入 -->
-        <activity
-            android:name=".activity.im.interphone.groupmanage.groupperson.GroupPersonActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -432,21 +419,25 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".activity.music.program.fmlist.activity.FMListActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".activity.im.interphone.creategroup.frienddetails.TalkPersonNewsActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".activity.im.interphone.message.activity.NewsActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".activity.common.welcome.activity.WelcomeActivity"
             android:screenOrientation="portrait"
@@ -466,6 +457,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
         <!-- 流量管理界面 -->
         <activity
             android:name=".activity.mine.flowmanage.main.FlowManageActivity"
@@ -514,6 +506,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".activity.person.modifyphonenumber.ModifyPhoneNumberActivity"
             android:screenOrientation="portrait"
@@ -538,6 +531,49 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
+        <!-- 我的上传 -->
+        <activity
+            android:name=".activity.mine.myupload.MyUploadActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
+
+        <!-- 选择要上传的音频文件 -->
+        <activity
+            android:name=".activity.mine.myupload.upload.SelectLocalFileActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
+
+        <!--发布作品-->
+        <activity
+            android:name=".activity.mine.myupload.upload.UploadActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+
+        <!--选择专辑-->
+        <activity
+            android:name=".activity.mine.myupload.upload.SelectSequActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
+
+        <!--添加标签-->
+        <activity
+            android:name=".activity.mine.myupload.upload.AddLabelActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
+
+        <!--音频录制-->
+        <activity
+            android:name=".activity.mine.myupload.upload.recording.MediaRecorderActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
 
         <!-- 友盟activity -->
         <activity
@@ -570,11 +606,11 @@
 
         <meta-data
             android:name="UMENG_APPKEY"
-            android:value="5715cf1e67e58e5955000896"></meta-data>
+            android:value="5715cf1e67e58e5955000896"/>
         <!-- 高德地图用户Key -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
-            android:value="7dabc8027d924f36cd758732c895c261"></meta-data>
+            android:value="7dabc8027d924f36cd758732c895c261"/>
 
         <!-- 开机启动 -->
         <receiver android:name=".receiver.AutoStartReceiver">

@@ -20,7 +20,7 @@ import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.playhistory.activity.PlayHistoryActivity;
 import com.wotingfm.activity.music.playhistory.adapter.PlayHistoryAdapter;
 import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.L;
@@ -237,11 +237,11 @@ public class TTSFragment extends Fragment {
         }
         if (checkList.size() == playList.size()) {        // 发送广播更新为全选状态
             Intent intentAll = new Intent();
-            intentAll.setAction(BroadcastConstant.UPDATE_ACTION_ALL);
+            intentAll.setAction(BroadcastConstants.UPDATE_ACTION_ALL);
             context.sendBroadcast(intentAll);
         } else {                                            // 发送广播更新为非全选状态
             Intent intentNoCheck = new Intent();
-            intentNoCheck.setAction(BroadcastConstant.UPDATE_ACTION_CHECK);
+            intentNoCheck.setAction(BroadcastConstants.UPDATE_ACTION_CHECK);
             context.sendBroadcast(intentNoCheck);
         }
     }

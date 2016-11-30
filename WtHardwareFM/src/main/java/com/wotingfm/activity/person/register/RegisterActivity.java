@@ -19,7 +19,7 @@ import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.person.agreement.AgreementActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -368,7 +368,7 @@ public class RegisterActivity extends AppBaseActivity implements OnClickListener
                             if (!et.commit()) {
                                 L.w("数据 commit 失败!");
                             }
-                            sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));// 刷新通信录界面
+                            sendBroadcast(new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN));// 刷新通信录界面
                             InterPhoneControlHelper.sendEntryMessage(context);// 登录后socket发送进入的请求
                             setResult(1);// 返回结果数据到上一个界面
                             finish();

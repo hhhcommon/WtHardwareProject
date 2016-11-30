@@ -44,7 +44,7 @@ import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
 import com.wotingfm.activity.im.interphone.message.model.GroupInfo;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -160,7 +160,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
         if (receiver == null) {
             receiver = new MessageReceivers();
             IntentFilter filters = new IntentFilter();
-            filters.addAction(BroadcastConstant.REFRESH_GROUP);
+            filters.addAction(BroadcastConstants.REFRESH_GROUP);
             context.registerReceiver(receiver, filters);
         }
 
@@ -396,7 +396,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                         list = new Gson().fromJson(result.getString("UserList"), new TypeToken<List<UserInfo>>() {}.getType());
                         if (list == null || list.size() == 0) {
                             ToastUtils.show_always(context, "您当前没有数据");
-                            sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
+                            sendBroadcast(new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN));
                         } else {
                             // 处理组装数据 判断 list 和 Create 大小进行组装
                             // 如果是管理员 判断 list 是否 > 3 大于 3 出现删除按钮 如果 list > 6 截取前六条添加增加删除按钮
@@ -443,7 +443,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                         }
                     }else if(returnType != null && returnType.equals("1011")) {
                         ToastUtils.show_always(context, "群组无成员，群组已自动解散!");
-                        sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
+                        sendBroadcast(new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN));
                         SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
                         et.putString(StringConstant.PERSONREFRESHB, "true");
                         if (!et.commit()) {
@@ -574,7 +574,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                     L.v("ReturnType -- > > " + ReturnType);
 
                     if (ReturnType != null && ReturnType.equals("1001")) {
-                        sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
+                        sendBroadcast(new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN));
                     } else {
                         ToastUtils.show_always(context, "修改群组资料失败，请稍后重试!");
                     }
@@ -617,7 +617,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
 
                     if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
                         ToastUtils.show_always(context, "已经成功退出该组");
-                        sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
+                        sendBroadcast(new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN));
                         SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
                         et.putString(StringConstant.PERSONREFRESHB, "true");
                         if (!et.commit()) {
@@ -658,7 +658,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
             spinnerChannelTwo.setVisibility(View.GONE);
             textChannelOne.setText(channelOne);
             textChannelTwo.setText(channelTwo);
-            sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
+            sendBroadcast(new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN));
             SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
             et.putString(StringConstant.PERSONREFRESHB, "true");
             if (!et.commit()) {
@@ -671,7 +671,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
     class MessageReceivers extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(BroadcastConstant.REFRESH_GROUP)) {
+            if (intent.getAction().equals(BroadcastConstants.REFRESH_GROUP)) {
                 send();
             }
         }

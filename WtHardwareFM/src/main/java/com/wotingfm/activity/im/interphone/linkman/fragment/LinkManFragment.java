@@ -49,7 +49,7 @@ import com.wotingfm.activity.im.interphone.message.activity.NewsActivity;
 import com.wotingfm.activity.person.login.LoginActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -128,8 +128,8 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 		if(Receiver == null) {
 			Receiver = new MessageReceiver();
 			IntentFilter filter = new IntentFilter();
-			filter.addAction(BroadcastConstant.PUSH_REFRESH_LINKMAN);
-			filter.addAction(BroadcastConstant.PUSH_NEWPERSON);
+			filter.addAction(BroadcastConstants.PUSH_REFRESH_LINKMAN);
+			filter.addAction(BroadcastConstants.PUSH_NEWPERSON);
 			context.registerReceiver(Receiver, filter);
 		}
 	}
@@ -261,10 +261,10 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action = intent.getAction();
-			if(action.equals(BroadcastConstant.PUSH_REFRESH_LINKMAN)){
+			if(action.equals(BroadcastConstants.PUSH_REFRESH_LINKMAN)){
 				send();
 				ToastUtils.show_always(context, "重新获取了新数据");
-			}else if(action.equals(BroadcastConstant.PUSH_NEWPERSON)){
+			}else if(action.equals(BroadcastConstants.PUSH_NEWPERSON)){
 				String messages = intent.getStringExtra("outmessage");
 				if(messages!=null&&!messages.equals("")){
 					message=messages;

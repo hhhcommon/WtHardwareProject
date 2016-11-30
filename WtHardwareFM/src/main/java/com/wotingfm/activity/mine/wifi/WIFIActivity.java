@@ -23,7 +23,7 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.mine.wifi.adapter.WiFiListAdapter;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
@@ -62,7 +62,7 @@ public class WIFIActivity extends AppBaseActivity implements View.OnClickListene
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         // 注册广播 监听 WiFi 的状态
         IntentFilter filter = new IntentFilter();
-        filter.addAction(BroadcastConstant.UPDATE_WIFI_LIST);
+        filter.addAction(BroadcastConstants.UPDATE_WIFI_LIST);
         filter.addAction(WifiManager.WIFI_STATE_CHANGED_ACTION);
         registerReceiver(mBroadcastReceiver, filter);
 
@@ -113,7 +113,7 @@ public class WIFIActivity extends AppBaseActivity implements View.OnClickListene
                 break;
             case R.id.btn_scan_wifi:    // 扫描附近WiFi
                 wifiManager.startScan();
-                sendBroadcast(new Intent(BroadcastConstant.UPDATE_WIFI_LIST));
+                sendBroadcast(new Intent(BroadcastConstants.UPDATE_WIFI_LIST));
                 break;
             case R.id.btn_cancel:       // 取消
                 wiFiInfoDialog.dismiss();
@@ -284,7 +284,7 @@ public class WIFIActivity extends AppBaseActivity implements View.OnClickListene
             if (wifi.networkId == wifiId) {// status:0--已经连接，1--不可连接，2--可以连接
                 if (wifiManager.enableNetwork(wifiId, true)) {// 激活 Id，建立连接
                     L.w("已成功连接网络");
-                    Intent pushWifi = new Intent(BroadcastConstant.UPDATE_WIFI_LIST);
+                    Intent pushWifi = new Intent(BroadcastConstants.UPDATE_WIFI_LIST);
                     Bundle bundle1 = new Bundle();
                     bundle1.putString("wifiName", wifiManager.getConnectionInfo().getSSID());
                     pushWifi.putExtras(bundle1);
@@ -301,7 +301,7 @@ public class WIFIActivity extends AppBaseActivity implements View.OnClickListene
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(BroadcastConstant.UPDATE_WIFI_LIST)) {// 更新 WiFi 列表
+            if (intent.getAction().equals(BroadcastConstants.UPDATE_WIFI_LIST)) {// 更新 WiFi 列表
                 L.i("扫描WiFi");
                 getConfiguration();
                 new Handler().postDelayed(new Runnable() {
@@ -331,7 +331,7 @@ public class WIFIActivity extends AppBaseActivity implements View.OnClickListene
                         imageWiFiSet.setImageResource(R.mipmap.wt_person_on);
                         textUserWiFi.setVisibility(View.VISIBLE);
                         linearScan.setVisibility(View.VISIBLE);
-                        sendBroadcast(new Intent(BroadcastConstant.UPDATE_WIFI_LIST));
+                        sendBroadcast(new Intent(BroadcastConstants.UPDATE_WIFI_LIST));
                         break;
                 }
             }

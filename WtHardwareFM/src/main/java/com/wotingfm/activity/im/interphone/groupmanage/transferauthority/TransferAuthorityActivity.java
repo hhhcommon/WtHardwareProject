@@ -265,7 +265,7 @@ public class TransferAuthorityActivity extends BaseActivity implements
 
                     if (ReturnType != null && ReturnType.equals("1001")) {
                         ToastUtils.show_always(context, "管理员权限移交成功");
-//                        sendBroadcast(new Intent(BroadcastConstant.REFRESH_GROUP));
+//                        sendBroadcast(new Intent(BroadcastConstants.REFRESH_GROUP));
                         setResult(RESULT_OK);
                         finish();
                     } else if (ReturnType != null && ReturnType.equals("1002")) {

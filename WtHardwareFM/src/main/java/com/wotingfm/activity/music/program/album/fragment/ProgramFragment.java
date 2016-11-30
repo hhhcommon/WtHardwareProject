@@ -35,7 +35,7 @@ import com.wotingfm.activity.music.program.album.adapter.AlbumAdapter;
 import com.wotingfm.activity.music.program.album.adapter.AlbumMainAdapter;
 import com.wotingfm.activity.music.program.album.model.ContentInfo;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -380,7 +380,7 @@ public class ProgramFragment extends Fragment implements OnClickListener, OnItem
                     L.v("数据库内数据", linShiList.toString());
                     DownloadService.workStart(linShiList.get(0));
                     // 发送更新界面数据广播
-                    context.sendBroadcast(new Intent(BroadcastConstant.PUSH_DOWN_UNCOMPLETED));
+                    context.sendBroadcast(new Intent(BroadcastConstants.PUSH_DOWN_UNCOMPLETED));
                     linearStatus.setVisibility(View.GONE);
                 } else {
                     ToastUtils.show_always(context, "请重新选择数据");

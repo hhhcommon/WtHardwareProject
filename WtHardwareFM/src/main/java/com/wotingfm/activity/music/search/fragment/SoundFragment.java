@@ -29,7 +29,7 @@ import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
@@ -70,7 +70,7 @@ public class SoundFragment extends Fragment {
         super.onCreate(savedInstanceState);
         context = getActivity();
         IntentFilter mFilter = new IntentFilter();
-        mFilter.addAction(BroadcastConstant.SEARCH_VIEW_UPDATE);
+        mFilter.addAction(BroadcastConstants.SEARCH_VIEW_UPDATE);
         context.registerReceiver(mBroadcastReceiver, mFilter);
         initDao();
     }
@@ -203,7 +203,7 @@ public class SoundFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastConstant.SEARCH_VIEW_UPDATE)) {
+            if (action.equals(BroadcastConstants.SEARCH_VIEW_UPDATE)) {
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                     searchString = intent.getStringExtra("SearchStr");
                     if (searchString != null && !searchString.equals("")) {

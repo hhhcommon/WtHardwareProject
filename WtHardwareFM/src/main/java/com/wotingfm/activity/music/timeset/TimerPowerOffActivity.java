@@ -13,7 +13,7 @@ import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.service.timeroffservice;
 
 /**
@@ -38,11 +38,11 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
         setRightText("00:00", null);
         setView();                                  // 设置界面
         IntentFilter mFilter = new IntentFilter();  // 注册广播里接收器
-        mFilter.addAction(BroadcastConstant.TIMER_UPDATE);
+        mFilter.addAction(BroadcastConstants.TIMER_UPDATE);
         registerReceiver(mBroadcastReceiver, mFilter);
         // 设置Intent
         intent = new Intent(TimerPowerOffActivity.this, timeroffservice.class);
-        intent.setAction(BroadcastConstant.TIMER_START);
+        intent.setAction(BroadcastConstants.TIMER_START);
         setImageTimeCheck(0);
     }
 
@@ -227,7 +227,7 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
             case R.id.lin_nostart:      // 不启动
                 imageTimeCheck = 0;
                 Intent intent = new Intent(this, timeroffservice.class);
-                intent.setAction(BroadcastConstant.TIMER_STOP);
+                intent.setAction(BroadcastConstants.TIMER_STOP);
                 startService(intent);
                 setRightText("00:00", null);
 			    PlayerFragment.isCurrentPlay = false;
@@ -244,7 +244,7 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
         @Override
         public void onReceive(Context context, final Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastConstant.TIMER_UPDATE)) {
+            if (action.equals(BroadcastConstants.TIMER_UPDATE)) {
                 String s = intent.getStringExtra("update");
                 setRightText(s, null);
                 if (isCheck) {

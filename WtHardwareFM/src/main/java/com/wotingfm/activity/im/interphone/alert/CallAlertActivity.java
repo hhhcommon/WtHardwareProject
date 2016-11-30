@@ -26,7 +26,7 @@ import com.wotingfm.activity.im.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.activity.im.interphone.chat.model.DBTalkHistorary;
 import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.BitmapUtils;
@@ -69,7 +69,7 @@ public class  CallAlertActivity extends BaseActivity implements OnClickListener{
 		if(Receiver == null) {
 			Receiver = new MessageReceiver();
 			IntentFilter filter = new IntentFilter();
-			filter.addAction(BroadcastConstant.PUSH_CALL);
+			filter.addAction(BroadcastConstants.PUSH_CALL);
 			instance.registerReceiver(Receiver, filter);
 		}
 		tv_news = (TextView) findViewById(R.id.tv_news);	
@@ -165,7 +165,7 @@ public class  CallAlertActivity extends BaseActivity implements OnClickListener{
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action=intent.getAction();
-			if(action.equals(BroadcastConstant.PUSH_CALL)){
+			if(action.equals(BroadcastConstants.PUSH_CALL)){
 				byte[] bt = intent.getByteArrayExtra("outmessage");
 				Log.e("push_call接收器中数据", Arrays.toString(bt)+"");
 				try {

@@ -6,7 +6,7 @@ import android.os.CountDownTimer;
 import android.os.IBinder;
 
 import com.wotingfm.activity.music.player.fragment.PlayerFragment;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 
 import java.text.SimpleDateFormat;
 import java.util.TimeZone;
@@ -23,7 +23,7 @@ public class timeroffservice extends Service {
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-		if (BroadcastConstant.TIMER_START.equals(intent.getAction())) {
+		if (BroadcastConstants.TIMER_START.equals(intent.getAction())) {
 			int a = intent.getIntExtra("time", 0);
 			final int index = a;
 			long EndTime;
@@ -36,7 +36,7 @@ public class timeroffservice extends Service {
 				mcountDownTimer.cancel();
 			}
 			mintent = new Intent();
-			mintent.setAction(BroadcastConstant.TIMER_UPDATE);
+			mintent.setAction(BroadcastConstants.TIMER_UPDATE);
 			mcountDownTimer = new CountDownTimer(EndTime, 1000) {
 				private long a;
 				private SimpleDateFormat format;
@@ -62,7 +62,7 @@ public class timeroffservice extends Service {
 				}
 				@Override
 				public void onFinish() {
-					mintent.setAction(BroadcastConstant.TIMER_END);
+					mintent.setAction(BroadcastConstants.TIMER_END);
 					sendBroadcast(mintent);
 				}
 			};
@@ -73,7 +73,7 @@ public class timeroffservice extends Service {
 				mcountDownTimer.cancel();
 			}
 			if(mintent != null){
-				mintent.setAction(BroadcastConstant.TIMER_STOP);
+				mintent.setAction(BroadcastConstants.TIMER_STOP);
 				sendBroadcast(mintent);
 			}
 			onDestroy();

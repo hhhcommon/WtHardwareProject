@@ -1,6 +1,6 @@
 package com.wotingfm.common.constant;
 
-public class BroadcastConstant {
+public class BroadcastConstants {
 	public static final String SEARCHVOICE="SEARCHVOICE";//search
 	public static final String PLAYERVOICE="PLAYERVOICE";//播放主页
 	public static final String FINDVOICE="FINDVOICE";//查找好友
@@ -76,4 +76,10 @@ public class BroadcastConstant {
 
     // 删除好友刷新界面广播
     public static final String GROUP_DETAIL_CHANGE = "GROUP_DETAIL_CHANGE";
+
+    // 我的上传界面非全选
+    public static final String UPDATE_MY_UPLOAD_CHECK_NO = "UPDATE_MY_UPLOAD_CHECK_NO";
+
+    // 我的上传界面全选
+    public static final String UPDATE_MY_UPLOAD_CHECK_ALL = "UPDATE_MY_UPLOAD_CHECK_ALL";
 }
