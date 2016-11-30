@@ -1,4 +1,4 @@
-package com.wotingfm.activity.music.program.radiolist.rollviewpager;
+package com.wotingfm.widget.rollviewpager;
 
 /**
  * Created by zhuchenxi on 16/8/4.

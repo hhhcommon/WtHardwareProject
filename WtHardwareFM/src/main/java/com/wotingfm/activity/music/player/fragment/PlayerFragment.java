@@ -121,7 +121,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private LinearLayout lin_share;
     private static SeekBar seekBar;
     // 数据
-    private static int num;// -2 播放器没有播放，-1播放器里边的数据不在list中，其它是在list中
+    private static int num;                                 // -2 播放器没有播放，-1播放器里边的数据不在list中，其它是在list中
     private static ArrayList<LanguageSearchInside> alllist = new ArrayList<LanguageSearchInside>();
     //播放url
     static String local;
@@ -138,11 +138,11 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private Dialog shareDialog;
     private Dialog dialog1;
     private static Handler mHandler;
-    private static int sendType;// 第一次获取数据是有分页加载的
+    private static int sendType;                            // 第一次获取数据是有分页加载的
     private int page = 1;
-    private int RefreshType;// 是不是第一次请求数据
-    private boolean first = true;// 第一次进入界面
-    private int voice_type = 2;// 判断此时是否按下语音按钮，1，按下2，松手
+    private int RefreshType;                                // 是不是第一次请求数据
+    private boolean first = true;                           // 第一次进入界面
+    private int voice_type = 2;                             // 判断此时是否按下语音按钮，1，按下2，松手
     public static WtAudioPlay audioPlay;
     private LinearLayout lin_like;
     private static ImageView img_like;
@@ -161,9 +161,12 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private static String playType;// 当前播放的媒体类型
     private static List<PlayerHistory> historyDatabaseList;
     private static LinearLayout lin_schedule;
-    private static int moreType=1;//1为非电台类节目 0为电台节目 对应更多按钮弹出的不同布局而定
+    private static int moreType=1;                         //1为非电台类节目 0为电台节目 对应更多按钮弹出的不同布局而定
     private List<sharemodel> mList;
-    public static int timerService; // 当前节目播放剩余时间长度
+    public static int timerService;                        // 当前节目播放剩余时间长度
+    private static int VoicePage = 1;                      // 语音搜索page
+    public static int TextPage = 1;                        // 文本搜索page
+
 
 
     @Override

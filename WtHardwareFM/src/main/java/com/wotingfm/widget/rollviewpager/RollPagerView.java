@@ -1,4 +1,4 @@
-package com.wotingfm.activity.music.program.radiolist.rollviewpager;
+package com.wotingfm.widget.rollviewpager;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -20,14 +20,13 @@ import android.widget.RelativeLayout;
 import android.widget.Scroller;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.music.program.radiolist.rollviewpager.adapter.LoopPagerAdapter;
-import com.wotingfm.activity.music.program.radiolist.rollviewpager.hintview.ColorPointHintView;
+import com.wotingfm.widget.rollviewpager.adapter.LoopPagerAdapter;
+import com.wotingfm.widget.rollviewpager.hintview.ColorPointHintView;
 
 import java.lang.ref.WeakReference;
 import java.lang.reflect.Field;
 import java.util.Timer;
 import java.util.TimerTask;
-
 
 /**
  * 支持轮播和提示的的viewpager

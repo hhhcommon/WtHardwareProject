@@ -30,8 +30,8 @@ import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
 import com.wotingfm.activity.mine.main.MineActivity;
 import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.program.citylist.dao.CityInfoDao;
-import com.wotingfm.activity.music.program.fenlei.model.FenLei;
-import com.wotingfm.activity.music.program.fenlei.model.FenLeiName;
+import com.wotingfm.activity.music.program.fenlei.model.Catalog;
+import com.wotingfm.activity.music.program.fenlei.model.CatalogName;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstant;
@@ -69,7 +69,7 @@ public class MainActivity extends TabActivity {
     private String mPageName = "MainActivity";
     private int upDataType = 1;      // 1,不需要强制升级2，需要强制升级
     private boolean isCancelRequest;
-    private List<FenLeiName> list;
+    private List<CatalogName> list;
 
     private CityInfoDao CID;         // 城市列表数据库
 
@@ -238,17 +238,17 @@ public class MainActivity extends TabActivity {
                             try {
                                 // 获取列表
                                 String ResultList = result.getString("CatalogData");
-                                FenLei SubList_all = new Gson().fromJson(ResultList, new TypeToken<FenLei>() {
+                                Catalog SubList_all = new Gson().fromJson(ResultList, new TypeToken<Catalog>() {
                                 }.getType());
-                                List<FenLeiName> srcList = SubList_all.getSubCata();
+                                List<CatalogName> srcList = SubList_all.getSubCata();
                                 if (srcList != null) {
                                     if (srcList.size() == 0) {
                                         ToastUtils.show_short(context, "获取城市列表为空");
                                     } else {
                                         //组装从后台获取到的数据
-                                        List<FenLeiName> mList = new ArrayList<FenLeiName>();
+                                        List<CatalogName> mList = new ArrayList<>();
                                         for (int i = 0; i < srcList.size(); i++) {
-                                            FenLeiName mFenLeiName = new FenLeiName();
+                                            CatalogName mFenLeiName = new CatalogName();
                                             mFenLeiName.setCatalogId(srcList.get(i).getCatalogId());
                                             mFenLeiName.setCatalogName(srcList.get(i).getCatalogName());
                                             mList.add(mFenLeiName);

@@ -1,8 +1,11 @@
 package com.wotingfm.common.config;
 
+import android.os.Environment;
+
 import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
 import com.wotingfm.activity.music.player.model.LanguageSearchInside;
+import com.wotingfm.activity.music.program.fenlei.model.CatalogName;
 import com.wotingfm.devicecontrol.WtDeviceControl;
 
 import java.util.List;
@@ -19,6 +22,10 @@ public class GlobalConfig {
     public static String latitude;
     public static String CityName;
     public static String AdCode;
+    //缓存路径
+    public static String playCacheDir= Environment.getExternalStorageDirectory() + "/woting/playCache/";
+    //缓存的城市列表
+    public static List<CatalogName> CityCatalogList;
     //
     public static List<TalkGroupInside> list_group;
     public static List<TalkPersonInside> list_person;
@@ -217,4 +224,8 @@ public class GlobalConfig {
     public static final String getFavoriteListUrl = baseUrl + "wt/content/getFavoriteList.do";
     // 删除喜欢列表
     public static final String delFavoriteListUrl = baseUrl + "wt/content/delFavorites.do";
+    // 获取偏好列表
+    public static final String getPreferenceUrl=baseUrl+"wt/getPreferenceCatalog.do";
+    // 设置偏好列表
+    public static final String setPreferenceUrl=baseUrl+"wt/setPreference.do";
 }

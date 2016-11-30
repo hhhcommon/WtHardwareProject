@@ -1,17 +1,21 @@
 package com.wotingfm.activity.music.program.fmlist.activity;
 
 import android.app.Dialog;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
+import com.wotingfm.activity.common.baseactivity.BaseActivity;
 import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.activity.music.player.fragment.PlayerFragment;
@@ -42,100 +46,52 @@ import java.util.List;
  * @author 辛龙
  *         2016年8月8日
  */
-public class FMListActivity extends AppBaseActivity {
-    private SearchPlayerHistoryDao dbDao;
+public class FMListActivity extends BaseActivity implements View.OnClickListener {
+
+    private FMListActivity context;
+    private LinearLayout head_left_btn;
+    private XListView mListView;
+    private TextView mTextView_Head;
+    private Dialog dialog;
     protected RankInfoAdapter adapter;
 
-    private List<RankInfo> newList = new ArrayList<>();
-    private Dialog dialog;
-    private XListView mListView;
-    
-    private int viewType = 1;
+    private int ViewType = 1;
     private int page = 1;
-    private int refreshType = 1;// refreshType 1 为下拉加载 2 为上拉加载更多
-    private int pageSizeNum;
-    private String catalogId;
-    private String tag = "FM_LIST_VOLLEY_REQUEST_CANCEL_TAG";
+    private int RefreshType;// refreshType 1为下拉加载 2为上拉加载更多
+
+    private String CatalogName;
+    private String CatalogId;
+    private String tag = "FMLIST_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
-
-    // 初始化数据库命令执行对象
-    private void initDao() {
-        dbDao = new SearchPlayerHistoryDao(context);
-    }
-
-    @Override
-    protected int setViewId() {
-        return R.layout.activity_fmlist;
-    }
+    private ArrayList<RankInfo> newList = new ArrayList<RankInfo>();
+    protected List<RankInfo> SubList;
+    private SharedPreferences shared = BSApplication.SharedPreferences;
+    private SearchPlayerHistoryDao dbDao;
+    private String CatalogType;
 
     @Override
-    protected void init() {
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_fmlist);
+        context = this;
+        RefreshType = 1;
+        setView();
+        setListener();
+        HandleRequestType();
         initDao();
-        initListView();
-        handleRequestType();
-
-        dialog = DialogUtils.Dialogph(context, "正在获取数据");
-        sendRequest();
-    }
-
-    // 初始化控件
-    private void initListView() {
-        mListView = (XListView) findViewById(R.id.listview_fm);
-        mListView.setPullLoadEnable(true);
-        mListView.setPullRefreshEnable(true);
-        mListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-
-        mListView.setXListViewListener(new IXListViewListener() {
-            @Override
-            public void onRefresh() {
-                refreshType = 1;
-                page = 1;
-                sendRequest();
-            }
-
-            @Override
-            public void onLoadMore() {
-                if (page <= pageSizeNum) {
-                    refreshType = 2;
-                    sendRequest();
-                } else {
-                    mListView.stopLoadMore();
-                    ToastUtils.show_always(context, "已经没有最新的数据了");
-                }
-            }
-        });
-    }
-
-    // 处理上一个界面跳转携带的数据
-    private void handleRequestType() {
-        String type = getIntent().getStringExtra("fromtype");
-        String position = getIntent().getStringExtra("Position");
-        if (position != null && !position.trim().equals("")) {
-            viewType = -1;
-        }
-        String catalogName;
-        RadioPlay list;
-        if (type != null && type.trim().equals("online")) {
-            catalogName = getIntent().getStringExtra("name");
-            catalogId = getIntent().getStringExtra("id");
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+            dialog = DialogUtils.Dialogph(FMListActivity.this, "正在获取数据");
+            sendRequest();
         } else {
-            list = (RadioPlay) getIntent().getSerializableExtra("list");
-            catalogName = list.getCatalogName();
-            catalogId = list.getCatalogId();
+            ToastUtils.show_always(this, "网络连接失败，请稍后重试");
         }
-        setTitle(catalogName);
     }
 
-    // 请求网络获取网络数据
     private void sendRequest() {
-        // 以下操作需要网络支持
-        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
-            ToastUtils.show_always(context, "网络失败，请检查网络");
-            return ;
-        }
-
         VolleyRequest.RequestPost(GlobalConfig.getContentUrl, tag, setParam(), new VolleyCallback() {
-            private String returnType;
+            private String ResultList;
+            private String StringSubList;
+            private String ReturnType;
 
             @Override
             protected void requestSuccess(JSONObject result) {
@@ -147,31 +103,45 @@ public class FMListActivity extends AppBaseActivity {
                 }
                 page++;
                 try {
-                    returnType = result.getString("ReturnType");
+                    ReturnType = result.getString("ReturnType");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                if (returnType != null && returnType.equals("1001")) {
+                if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
-                        JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
-                        pageSizeNum = Integer.valueOf(arg1.getString("PageSize"));
-                        List<RankInfo> subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
-                        if (refreshType == 1) {
-                            mListView.stopRefresh();
-                            newList.clear();
-                            newList.addAll(subList);
-                            mListView.setAdapter(adapter = new RankInfoAdapter(FMListActivity.this, newList));
-                        } else if (refreshType == 2) {
-                            mListView.stopLoadMore();
-                            newList.addAll(subList);
-                            adapter.notifyDataSetChanged();
+                        ResultList = result.getString("ResultList");
+                        JSONTokener jsonParser = new JSONTokener(ResultList);
+                        JSONObject arg1 = (JSONObject) jsonParser.nextValue();
+                        try {
+                            StringSubList = arg1.getString("List");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            SubList = new Gson().fromJson(StringSubList, new TypeToken<List<RankInfo>>() {
+                            }.getType());
+                            if (RefreshType == 1) {
+                                mListView.stopRefresh();
+                                newList.clear();
+                                newList.addAll(SubList);
+                                adapter = new RankInfoAdapter(FMListActivity.this, newList);
+                                mListView.setAdapter(adapter);
+                            } else if (RefreshType == 2) {
+                                mListView.stopLoadMore();
+                                newList.addAll(SubList);
+                                adapter.notifyDataSetChanged();
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
                         setListView();
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 } else {
                     mListView.stopLoadMore();
+                    mListView.setPullLoadEnable(false);
                 }
             }
 
@@ -180,37 +150,54 @@ public class FMListActivity extends AppBaseActivity {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
-                ToastUtils.showVolleyError(context);
             }
         });
     }
 
-    // 获取网络数据需要提交的参数
     private JSONObject setParam() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-//            jsonObject.put("UserId", CommonUtils.getUserId(FMListActivity.this));
             jsonObject.put("MediaType", "RADIO");
-            String cityId = BSApplication.SharedPreferences.getString(StringConstant.CITYID, "110000");
-            if (viewType == 1) {    // 获取当前城市下所有分类内容
+            String cityId = shared.getString(StringConstant.CITYID, "110000");
+            if (ViewType == 1) {
+                //获取当前城市下所有分类内容
                 jsonObject.put("CatalogId", cityId);
-                jsonObject.put("CatalogType", "2");
-            } else {                // 按照分类获取内容
+                jsonObject.put("CatalogType", "2");//
+                jsonObject.put("PerSize", "3");
+                jsonObject.put("ResultType", "3");
+                jsonObject.put("PageSize", "10");
+                jsonObject.put("Page", String.valueOf(page));
+            } else if(ViewType ==2){
+                jsonObject.put("CatalogId",CatalogId);
+                jsonObject.put("CatalogType",CatalogType);
+                jsonObject.put("PerSize", "3");
+                jsonObject.put("ResultType", "3");
+                jsonObject.put("PageSize", "10");
+                jsonObject.put("Page", String.valueOf(page));
+            }else if(ViewType==3){
+                jsonObject.put("CatalogId",CatalogId);
+                jsonObject.put("CatalogType",CatalogType);
+                jsonObject.put("ResultType", "3");
+                jsonObject.put("PageSize", "50");
+                jsonObject.put("Page", String.valueOf(page));
+            }else{
+                //按照分类获取内容
                 JSONObject js = new JSONObject();
                 jsonObject.put("CatalogType", "1");
-                jsonObject.put("CatalogId", catalogId);
+                jsonObject.put("CatalogId", CatalogId);
                 js.put("CatalogType", "2");
                 js.put("CatalogId", cityId);
                 jsonObject.put("FilterData", js);
             }
-            jsonObject.put("PerSize", "3");
-            jsonObject.put("ResultType", "3");
-            jsonObject.put("PageSize", "10");
-            jsonObject.put("Page", String.valueOf(page));
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return jsonObject;
+    }
+
+    private void initDao() {// 初始化数据库命令执行对象
+        dbDao = new SearchPlayerHistoryDao(context);
     }
 
     // 这里要改
@@ -230,9 +217,9 @@ public class FMListActivity extends AppBaseActivity {
                         String plaplayeralltime = "0";
                         String playerintime = "0";
                         String playercontentdesc = newList.get(position - 1).getCurrentContent();
-                        String playernum = newList.get(position - 1).getWatchPlayerNum();
+                        String playernum = newList.get(position - 1).getPlayCount();
                         String playerzantype = "0";
-                        String playerfrom = "";
+                        String playerfrom = newList.get(position - 1).getContentPub();
                         String playerfromid = "";
                         String playerfromurl = "";
                         String playeraddtime = Long.toString(System.currentTimeMillis());
@@ -240,18 +227,24 @@ public class FMListActivity extends AppBaseActivity {
                         String ContentFavorite = newList.get(position - 1).getContentFavorite();
                         String ContentId = newList.get(position - 1).getContentId();
                         String localurl = newList.get(position - 1).getLocalurl();
-                        String sequname = newList.get(position - 1).getSequName();
-                        String sequid = newList.get(position - 1).getSequId();
-                        String sequdesc =newList.get(position - 1).getSequDesc();
-                        String sequimg =newList.get(position - 1).getSequImg();
+                        String sequName = newList.get(position - 1).getSequName();
+                        String sequId = newList.get(position - 1).getSequId();
+                        String sequDesc = newList.get(position - 1).getSequDesc();
+                        String sequImg = newList.get(position - 1).getSequImg();
+
                         //如果该数据已经存在数据库则删除原有数据，然后添加最新数据
                         PlayerHistory history = new PlayerHistory(
                                 playername, playerimage, playerurl, playerurI, playermediatype,
                                 plaplayeralltime, playerintime, playercontentdesc, playernum,
-                                playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid, playcontentshareurl, ContentFavorite, ContentId, localurl,sequname,sequid,sequdesc,sequimg);
+                                playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid, playcontentshareurl,
+                                ContentFavorite, ContentId, localurl, sequName, sequId, sequDesc, sequImg);
                         dbDao.deleteHistory(playerurl);
                         dbDao.addHistory(history);
                         HomeActivity.UpdateViewPager();
+                        if(ViewType==3){
+                            finish();
+                        }
+                        PlayerFragment.TextPage=1;
                         PlayerFragment.SendTextRequest(newList.get(position - 1).getContentName(), context);
                         finish();
                     }
@@ -260,20 +253,99 @@ public class FMListActivity extends AppBaseActivity {
         });
     }
 
+    private void HandleRequestType() {
+        String type = this.getIntent().getStringExtra("fromtype");
+        String Position = this.getIntent().getStringExtra("Position");
+        if (Position == null || Position.trim().equals("")) {
+            ViewType = 1;
+        } else {
+            ViewType = -1;
+        }
+        RadioPlay list;
+        if (type != null && type.trim().equals("online")) {
+            CatalogName = this.getIntent().getStringExtra("name");
+            CatalogId = this.getIntent().getStringExtra("id");
+        } else if (type != null && type.trim().equals("net")) {
+            CatalogName = this.getIntent().getStringExtra("name");
+            CatalogId = this.getIntent().getStringExtra("id");
+            CatalogType = this.getIntent().getStringExtra("type");
+            ViewType=2;
+        }else if(type != null && type.trim().equals("cityRadio")) {
+            CatalogName = this.getIntent().getStringExtra("name");
+            CatalogId = this.getIntent().getStringExtra("id");
+            CatalogType = this.getIntent().getStringExtra("type");
+            ViewType=3;
+        } else{
+            list = (RadioPlay) this.getIntent().getSerializableExtra("list");
+            CatalogName = list.getCatalogName();
+            CatalogId = list.getCatalogId();
+        }
+        mTextView_Head.setText(CatalogName);
+    }
+
+    private void setView() {
+        mListView = (XListView) findViewById(R.id.listview_fm);
+        head_left_btn = (LinearLayout) findViewById(R.id.head_left_btn);
+        mTextView_Head = (TextView) findViewById(R.id.head_name_tv);
+    }
+
+    private void setListener() {
+        head_left_btn.setOnClickListener(this);
+        // 设置上下拉参数
+        mListView.setPullLoadEnable(true);
+        mListView.setPullRefreshEnable(true);
+        mListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        mListView.setXListViewListener(new IXListViewListener() {
+            @Override
+            public void onRefresh() {
+                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                    RefreshType = 1;
+                    page = 1;
+                    sendRequest();
+                } else {
+                    ToastUtils.show_short(FMListActivity.this, "网络失败，请检查网络");
+                }
+            }
+
+            @Override
+            public void onLoadMore() {
+                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                    RefreshType = 2;
+                    sendRequest();
+                }
+            }
+        });
+    }
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.head_left_btn:
+                finish();
+                break;
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
+        head_left_btn = null;
+        mListView = null;
+        dialog = null;
+        mTextView_Head = null;
         if (dbDao != null) {
             dbDao.closedb();
             dbDao = null;
         }
-        if(newList != null) {
-            newList.clear();
-            newList = null;
+        newList.clear();
+        newList = null;
+        if (SubList != null) {
+            SubList.clear();
+            SubList = null;
         }
-        mListView = null;
-        dialog = null;
         adapter = null;
+        context = null;
+        setContentView(R.layout.activity_null);
     }
+
 }

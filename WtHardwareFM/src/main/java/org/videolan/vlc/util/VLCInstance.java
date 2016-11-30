@@ -105,7 +105,7 @@ public class VLCInstance {
             networkCaching = 60000;
         else if(networkCaching < 0)
             networkCaching = 0;
-        int networkCaching=15000;
+/*        int networkCaching=15000;*/
         instance.setAout(aout);
         instance.setVout(vout);
         instance.setDeblocking(deblocking);

@@ -1,20 +1,19 @@
-package com.wotingfm.activity.music.program.radiolist.rollviewpager.adapter;
+package com.wotingfm.widget.rollviewpager.adapter;
 
 import android.database.DataSetObserver;
 import android.support.v4.view.PagerAdapter;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.wotingfm.activity.music.program.radiolist.rollviewpager.HintView;
-import com.wotingfm.activity.music.program.radiolist.rollviewpager.RollPagerView;
+import com.wotingfm.widget.rollviewpager.HintView;
+import com.wotingfm.widget.rollviewpager.RollPagerView;
 
 import java.util.ArrayList;
-
 
 /**
  * Created by Mr.Jude on 2016/1/9.
  */
-public abstract class LoopPagerAdapter extends PagerAdapter{
+public abstract class LoopPagerAdapter extends PagerAdapter {
     private RollPagerView mViewPager;
 
     private ArrayList<View> mViewList = new ArrayList<View>();

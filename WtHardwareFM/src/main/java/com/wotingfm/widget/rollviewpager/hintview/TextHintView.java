@@ -1,4 +1,4 @@
-package com.wotingfm.activity.music.program.radiolist.rollviewpager.hintview;
+package com.wotingfm.widget.rollviewpager.hintview;
 
 import android.content.Context;
 import android.graphics.Color;
@@ -6,7 +6,8 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.widget.TextView;
 
-import com.wotingfm.activity.music.program.radiolist.rollviewpager.HintView;
+import com.wotingfm.widget.rollviewpager.HintView;
+
 
 public class TextHintView extends TextView implements HintView {
 	private int length;
