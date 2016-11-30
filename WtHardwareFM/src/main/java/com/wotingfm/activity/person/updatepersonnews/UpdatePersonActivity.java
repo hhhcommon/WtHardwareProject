@@ -1,4 +1,4 @@
-package com.wotingfm.activity.mine.update;
+package com.wotingfm.activity.person.updatepersonnews;
 
 import android.app.Dialog;
 import android.content.Intent;

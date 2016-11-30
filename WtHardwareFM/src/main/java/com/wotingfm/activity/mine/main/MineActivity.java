@@ -9,6 +9,7 @@ import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.content.res.Configuration;
 import android.content.res.Resources;
@@ -30,6 +31,7 @@ import android.view.View.OnClickListener;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
@@ -43,13 +45,17 @@ import com.wotingfm.activity.mine.flowmanage.main.FlowManageActivity;
 import com.wotingfm.activity.mine.fm.FMConnectActivity;
 import com.wotingfm.activity.mine.myupload.MyUploadActivity;
 import com.wotingfm.activity.mine.qrcode.EWMShowActivity;
-import com.wotingfm.activity.mine.update.UpdatePersonActivity;
+import com.wotingfm.activity.mine.set.SetActivity;
 import com.wotingfm.activity.mine.wifi.WIFIActivity;
 import com.wotingfm.activity.person.login.LoginActivity;
+import com.wotingfm.activity.person.updatepersonnews.UpdatePersonActivity;
+import com.wotingfm.activity.person.updatepersonnews.model.UpdatePerson;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.common.volley.VolleyCallback;
+import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.manager.FileManager;
 import com.wotingfm.manager.MyHttp;
 import com.wotingfm.util.AssembleImageUrlUtils;
@@ -61,17 +67,24 @@ import com.wotingfm.util.L;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.io.File;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * 个人信息主页
  */
 public class MineActivity extends Activity implements OnClickListener {
     private MineActivity context;
-    public DeviceReceiver mDevice = new DeviceReceiver();
     public static BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
+    private DeviceReceiver mDevice = new DeviceReceiver();
     private WifiManager wifiManager;
     private UserPortaitInside UserPortait;
+    private SharedPreferences sharedPreferences;
+    private UpdatePerson pModel;
 
     private Dialog dialog;// 加载数据对话框
     private Dialog imageDialog;// 修改头像对话框
@@ -97,19 +110,24 @@ public class MineActivity extends Activity implements OnClickListener {
     private String userNum;// 用户号
     private String userSign;// 用户签名
     private String region;// 城市
+    private String regionId;
+    private String tag = "MINE_UPDATE_PERSON_NEWS_VOLLEY_REQUEST_CANCEL_TAG";
 
     private final int UPDATE_USER = 3;// 标识 跳转到修改个人信息界面
     private final int TO_GALLERY = 1;// 打开图库
     private final int TO_CAMERA = 2;// 打开照相机
     private int imageNum;
     private boolean hasRegister;
+    private boolean isCancelRequest;
     private boolean isFirst = true;// 第一次加载界面
+    private boolean isUpdate;// 个人资料有改动
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine);
         context = this;
+        sharedPreferences = BSApplication.SharedPreferences;
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);// 获取 WiFi 服务
         initViews();
     }
@@ -133,10 +151,11 @@ public class MineActivity extends Activity implements OnClickListener {
         findViewById(R.id.listener_set).setOnClickListener(this);// 频道设置
         findViewById(R.id.image_nodenglu).setOnClickListener(this);// 没有登录时的默认头像 点击跳转至登录界面
         findViewById(R.id.text_denglu).setOnClickListener(this);// "点击登录"
+        findViewById(R.id.lin_set).setOnClickListener(this);// 设置
 
         relativeStatusUnLogin = findViewById(R.id.lin_status_nodenglu);// 未登录时的状态
 
-        relativeStatusLogin = findViewById(R.id.lin_status_denglu);    // 登录时的状态
+        relativeStatusLogin = findViewById(R.id.lin_status_denglu);// 登录时的状态
 
         userHead = (ImageView) findViewById(R.id.image_touxiang);// 用户头像
         userHead.setOnClickListener(this);
@@ -193,7 +212,7 @@ public class MineActivity extends Activity implements OnClickListener {
             case R.id.image_touxiang:// 更换头像
                 imageDialog.show();
                 break;
-            case R.id.listener_set:
+            case R.id.listener_set:// 调频
                 startActivity(new Intent(context, FMConnectActivity.class));
                 break;
             case R.id.lin_xiugai:// 修改个人资料
@@ -204,6 +223,11 @@ public class MineActivity extends Activity implements OnClickListener {
                 break;
             case R.id.text_denglu:// 登录
                 startActivity(new Intent(context, LoginActivity.class));
+                break;
+            case R.id.lin_set:// 设置
+                Intent intentSet = new Intent(context, SetActivity.class);
+                intentSet.putExtra("LOGIN_STATE", isLogin);
+                startActivityForResult(intentSet, 0x222);
                 break;
         }
     }
@@ -232,20 +256,20 @@ public class MineActivity extends Activity implements OnClickListener {
     private void getLoginStatus() {
         if(isFirst) {
             isFirst = false;
-        } else if(isLogin.equals(BSApplication.SharedPreferences.getString(StringConstant.ISLOGIN, "false"))) {
+        } else if(isLogin.equals(sharedPreferences.getString(StringConstant.ISLOGIN, "false"))) {
             L.v("isLogin 登录状态没有发生变化 -- > > " + isLogin);
             return ;
         }
-        isLogin = BSApplication.SharedPreferences.getString(StringConstant.ISLOGIN, "false");
+        isLogin = sharedPreferences.getString(StringConstant.ISLOGIN, "false");
         if (isLogin.equals("true")) {
             relativeStatusUnLogin.setVisibility(View.GONE);
             relativeStatusLogin.setVisibility(View.VISIBLE);
-            String imageUrl = BSApplication.SharedPreferences.getString(StringConstant.IMAGEURL, "");// 头像
-            userName = BSApplication.SharedPreferences.getString(StringConstant.USERNAME, "");// 用户名
-            userId = BSApplication.SharedPreferences.getString(StringConstant.USERID, "");// 用户 ID
-            userNum = BSApplication.SharedPreferences.getString(StringConstant.USER_NUM, "");// 用户号
-            userSign = BSApplication.SharedPreferences.getString(StringConstant.USER_SIGN, "");// 签名
-            region = BSApplication.SharedPreferences.getString(StringConstant.REGION, "");// 区域
+            String imageUrl = sharedPreferences.getString(StringConstant.IMAGEURL, "");// 头像
+            userName = sharedPreferences.getString(StringConstant.USERNAME, "");// 用户名
+            userId = sharedPreferences.getString(StringConstant.USERID, "");// 用户 ID
+            userNum = sharedPreferences.getString(StringConstant.USER_NUM, "");// 用户号
+            userSign = sharedPreferences.getString(StringConstant.USER_SIGN, "");// 签名
+            region = sharedPreferences.getString(StringConstant.REGION, "");// 区域
 
             if(region.equals("")) {
                 region = "您还没有填写地址";
@@ -321,7 +345,7 @@ public class MineActivity extends Activity implements OnClickListener {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action =intent.getAction();
-            if(BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)){    // 蓝牙状态发生改变
+            if(BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)){// 蓝牙状态发生改变
                 if(blueAdapter.getState() == BluetoothAdapter.STATE_OFF){// 蓝牙关闭
                     textBluetoothState.setText("关闭");
                 } else if(blueAdapter.getState() == BluetoothAdapter.STATE_ON){// 蓝牙打开
@@ -368,7 +392,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 startActivityForResult(intents, TO_CAMERA);
                 break;
             default:
-                ToastUtils.show_always(MineActivity.this, "发生未知异常");
+                ToastUtils.show_always(context, "发生未知异常");
                 break;
         }
     }
@@ -401,8 +425,29 @@ public class MineActivity extends Activity implements OnClickListener {
                 if (resultCode == 1) {
                     imageNum = 1;
                     PhotoCutAfterImagePath = data.getStringExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH);
-                    dialog = DialogUtils.Dialogph(MineActivity.this, "头像上传中");
+                    dialog = DialogUtils.Dialogph(context, "头像上传中");
                     dealt();
+                }
+                break;
+            case UPDATE_USER:// 修改个人资料界面返回
+                if(resultCode == 1){
+                    Bundle bundle = data.getExtras();
+                    pModel = (UpdatePerson) bundle.getSerializable("data");
+                    regionId = bundle.getString("regionId");
+                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+                        ToastUtils.show_always(context, "网络失败，请检查网络");
+                        return;
+                    }
+                    sendUpdate(pModel);
+                }
+            case 0x222:// 其它设置界面返回
+                if(resultCode == RESULT_OK) {
+                    userNum = sharedPreferences.getString(StringConstant.USER_NUM, "");// 用户号
+                    if(!userNum.equals("")) {
+                        circleView.setVisibility(View.VISIBLE);
+                        textUserId.setVisibility(View.VISIBLE);
+                        textUserId.setText( userNum);
+                    }
                 }
                 break;
         }
@@ -424,7 +469,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 super.handleMessage(msg);
                 if (msg.what == 1) {
                     ToastUtils.show_always(context, "保存成功");
-                    Editor et = BSApplication.SharedPreferences.edit();
+                    Editor et = sharedPreferences.edit();
                     String imageUrl;
                     if (MiniUri.startsWith("http:")) {
                         imageUrl = MiniUri;
@@ -519,15 +564,6 @@ public class MineActivity extends Activity implements OnClickListener {
         return path;
     }
 
-
-    /**
-     * API level 19以上才有
-     * 创建项目时，我们设置了最低版本API Level，比如我的是10，
-     * 因此，AS检查我调用的API后，发现版本号不能向低版本兼容，
-     * 比如我用的“DocumentsContract.isDocumentUri(context, uri)”是Level 19 以上才有的，
-     * 自然超过了10，所以提示错误。
-     * 添加    @TargetApi(Build.VERSION_CODES.KITKAT)即可。
-     */
     @TargetApi(Build.VERSION_CODES.KITKAT)
     private String getPath_above19(final Context context, final Uri uri) {
         final boolean isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT;
@@ -576,11 +612,11 @@ public class MineActivity extends Activity implements OnClickListener {
         if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
                 long currentTime = System.currentTimeMillis();
                 if ((currentTime - touchTime) >= waitTime) {
-                    ToastUtils.show_always(MineActivity.this, "再按一次退出");
+                    ToastUtils.show_always(context, "再按一次退出");
                     touchTime = currentTime;
                 } else {
                     BSApplication.onStop();
-                    MobclickAgent.onKillProcess(this);
+                    MobclickAgent.onKillProcess(context);
                     finish();
                     android.os.Process.killProcess(android.os.Process.myPid());
                 }
@@ -631,9 +667,166 @@ public class MineActivity extends Activity implements OnClickListener {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
 
+    String nickName;
+    String sign;
+    String gender;
+    String birthday;
+    String starSign;
+    String email;
+    String area;
+
+    // 判断个人资料是否有修改过  有则将数据提交服务器
+    private void sendUpdate(UpdatePerson pM) {
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
+        try {
+            nickName = pM.getNickName();
+            if(!nickName.equals(sharedPreferences.getString(StringConstant.NICK_NAME, ""))) {
+                if(nickName.trim().equals("")) {
+                    jsonObject.put("NickName", "&null");
+                } else {
+                    jsonObject.put("NickName", nickName);
+                }
+                isUpdate = true;
+            }
+
+            sign = pM.getUserSign();
+            if(!sign.equals(sharedPreferences.getString(StringConstant.USER_SIGN, ""))) {
+                if(sign.trim().equals("")) {
+                    jsonObject.put("UserSign", "&null");
+                } else {
+                    jsonObject.put("UserSign", sign);
+                }
+                isUpdate = true;
+            }
+
+            gender = pM.getGender();
+            L.v("gender", "gender -- > > " + gender);
+            if(!gender.equals(sharedPreferences.getString(StringConstant.GENDERUSR, "xb001"))) {
+                jsonObject.put("SexDictId", gender);
+                isUpdate = true;
+            }
+
+            birthday = pM.getBirthday();
+            if(!birthday.equals(sharedPreferences.getString(StringConstant.BIRTHDAY, ""))) {
+                jsonObject.put("Birthday",  Long.valueOf(birthday));
+                isUpdate = true;
+            }
+
+            starSign = pM.getStarSign();
+            if(!starSign.equals(sharedPreferences.getString(StringConstant.STAR_SIGN, ""))){
+                jsonObject.put("StarSign", starSign);
+                isUpdate = true;
+            }
+
+            email = pM.getEmail();
+            if(!email.equals(sharedPreferences.getString(StringConstant.EMAIL, ""))){
+                if(!email.trim().equals("")) {
+                    if(isEmail(email)) {
+                        jsonObject.put("MailAddr", email);
+                        isUpdate = true;
+                    } else {
+                        ToastUtils.show_always(context, "邮箱格式不正确，请重新修改!");
+                    }
+                } else {
+                    jsonObject.put("MailAddr", "&null");
+                    isUpdate = true;
+                }
+            }
+
+            area = pM.getRegion();
+            if(!area.equals(sharedPreferences.getString(StringConstant.REGION, ""))) {
+                jsonObject.put("RegionDictId", regionId);
+                isUpdate = true;
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+            isUpdate = false;
+        }
+
+        // 个人资料没有修改过则不需要将数据提交服务器
+        if(!isUpdate) {
+            return ;
+        }
+        isUpdate = false;
+        L.v("数据改动", "数据有改动，将数据提交到服务器!" );
+        VolleyRequest.RequestPost(GlobalConfig.updateUserUrl, tag, jsonObject, new VolleyCallback() {
+            @Override
+            protected void requestSuccess(JSONObject result) {
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return ;
+                try {
+                    String returnType = result.getString("ReturnType");
+                    L.v("returnType", "returnType -- > > " + returnType);
+
+                    if (returnType != null && returnType.equals("1001")) {
+                        SharedPreferences.Editor et = sharedPreferences.edit();
+                        if(!nickName.equals(sharedPreferences.getString(StringConstant.NICK_NAME, ""))) {
+                            et.putString(StringConstant.NICK_NAME, nickName);
+                        }
+                        if(!sign.equals(sharedPreferences.getString(StringConstant.USER_SIGN, ""))) {
+                            et.putString(StringConstant.USER_SIGN, sign);
+                        }
+                        if(!gender.equals(sharedPreferences.getString(StringConstant.GENDERUSR, ""))) {
+                            et.putString(StringConstant.GENDERUSR, gender);
+                        }
+                        if(!birthday.equals(sharedPreferences.getString(StringConstant.BIRTHDAY, ""))) {
+                            et.putString(StringConstant.BIRTHDAY, birthday);
+                        }
+                        if(!starSign.equals(sharedPreferences.getString(StringConstant.STAR_SIGN, ""))) {
+                            et.putString(StringConstant.STAR_SIGN, starSign);
+                        }
+                        if(!email.equals(sharedPreferences.getString(StringConstant.EMAIL, ""))) {
+                            if(!email.equals("")) {
+                                if(isEmail(email)) {
+                                    et.putString(StringConstant.EMAIL, email);
+                                }
+                            } else {
+                                et.putString(StringConstant.EMAIL, "");
+                            }
+                        }
+
+                        if(!area.equals(sharedPreferences.getString(StringConstant.REGION, ""))) {
+                            et.putString(StringConstant.REGION, pModel.getRegion());
+                        }
+                        if (!et.commit()) L.w("commit", " 数据 commit 失败!");
+                        if(!userSign.equals(pModel.getUserSign())) {// 签名
+                            userSign = pModel.getUserSign();
+                            textUserAutograph.setText(userSign);
+                        }
+                        if(!region.equals(area)) {// 区域
+                            region = area;
+                            if(region.equals("")) {
+                                region = "您还没有填写地址";
+                            }
+                            textUserArea.setText(region);
+                        }
+                    } else {
+//                        ToastUtils.show_always(context, "信息修改失败!");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected void requestError(VolleyError error) {
+                if (dialog != null) dialog.dismiss();
+                ToastUtils.showVolleyError(context);
+            }
+        });
+    }
+
+    // 验证邮箱的方法
+    private boolean isEmail(String str) {
+        Pattern pattern = Pattern.compile("^([a-zA-Z0-9_\\-\\.]+)@((\\[[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.)|(([a-zA-Z0-9\\-]+\\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\\]?)$"); // 验证邮箱格式
+        Matcher matcher = pattern.matcher(str);
+        return matcher.matches();
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        isCancelRequest = VolleyRequest.cancelRequest(tag);
         if(blueAdapter != null && blueAdapter.isDiscovering()){
             blueAdapter.cancelDiscovery();
         }

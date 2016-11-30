@@ -356,7 +356,7 @@ public class MainActivity extends TabActivity {
     //版本更新对话框
     private void UpdateDialog() {
         View dialog = LayoutInflater.from(this).inflate(R.layout.dialog_update, null);
-        TextView text_content = (TextView) dialog.findViewById(R.id.text_contnt);
+        TextView text_content = (TextView) dialog.findViewById(R.id.text_content);
         text_content.setText(Html.fromHtml("<font size='26'>" + upDataNews + "</font>"));
         TextView tv_update = (TextView) dialog.findViewById(R.id.tv_update);
         TextView tv_qx = (TextView) dialog.findViewById(R.id.tv_qx);

@@ -91,6 +91,8 @@ public class GlobalConfig {
     public static final String modifyPasswordUrl = baseUrl + "wt/passport/user/updatePwd.do?";
     // 找回密码
     // public static final String retrievePasswordUrl = baseUrl+"wt//passport/user/retrievePwd.do?";
+    // 账号修改
+    public static final String updateUserUrl = baseUrl + "wt/passport/user/updateUserInfo.do?";
     // 账号绑定
     public static final String bindExtUserUrl = baseUrl + "wt/passport/user/bindExtUserInfo.do?";
     // 帮助

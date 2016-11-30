@@ -77,6 +77,9 @@ public class BroadcastConstants {
     // 删除好友刷新界面广播
     public static final String GROUP_DETAIL_CHANGE = "GROUP_DETAIL_CHANGE";
 
+    // 刷新下载完成界面
+    public static final String PUSH_DOWN_COMPLETED= "push_down_completed";
+
     // 我的上传界面非全选
     public static final String UPDATE_MY_UPLOAD_CHECK_NO = "UPDATE_MY_UPLOAD_CHECK_NO";
 

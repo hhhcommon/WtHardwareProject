@@ -232,7 +232,7 @@
 
         <!-- 修改个人资料 -->
         <activity
-            android:name=".activity.mine.update.UpdatePersonActivity"
+            android:name=".activity.person.updatepersonnews.UpdatePersonActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -528,6 +528,13 @@
         <!-- 验证手机号 -->
         <activity
             android:name=".activity.person.phonecheck.PhoneCheckActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan" />
+
+        <!-- 验证手机号 -->
+        <activity
+            android:name=".activity.mine.set.SetActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
