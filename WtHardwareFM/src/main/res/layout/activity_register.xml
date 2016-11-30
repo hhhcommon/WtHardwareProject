@@ -28,7 +28,6 @@
                 android:layout_marginTop="10dp"
                 android:orientation="vertical">
 
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -43,7 +42,6 @@
                         android:layout_height="wrap_content"
                         android:text="账        号"
                         android:textSize="16sp" />
-
 
                     <EditText
                         android:id="@+id/edittext_userphone"
@@ -98,7 +96,8 @@
                         android:textColor="@color/wt_login_third"
                         android:textColorHint="@color/gray"
                         android:textCursorDrawable="@drawable/wt_edittext_cursor"
-                        android:textSize="@dimen/wt_edittext_default_text"></EditText>
+                        android:textSize="@dimen/wt_edittext_default_text"/>
+
                 </LinearLayout>
 
                 <LinearLayout
@@ -210,20 +209,6 @@
                         android:textCursorDrawable="@drawable/wt_edittext_cursor"
                         android:textSize="@dimen/wt_edittext_default_text" />
 
-
-                    <TextView
-                        android:id="@+id/tv_getyzm"
-                        android:layout_width="80dp"
-                        android:layout_height="match_parent"
-                        android:layout_alignParentRight="true"
-                        android:background="@drawable/et_bg_yanzhengma"
-                        android:gravity="center"
-                        android:singleLine="true"
-                        android:text="获取验证码"
-                        android:textColor="@color/WHITE"
-                        android:textSize="12sp"
-                        android:visibility="visible" />
-
                     <TextView
                         android:id="@+id/tv_cxfasong"
                         android:layout_width="79dp"
@@ -238,10 +223,27 @@
 
                     <TextView
                         android:layout_width="1dp"
-                        android:layout_height="38dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="2dp"
+                        android:layout_marginBottom="2dp"
                         android:layout_toLeftOf="@id/tv_cxfasong"
                         android:background="@color/gray_z" />
+
+                    <TextView
+                        android:id="@+id/tv_getyzm"
+                        android:layout_width="80dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentRight="true"
+                        android:background="@drawable/et_bg_yanzhengma"
+                        android:gravity="center"
+                        android:singleLine="true"
+                        android:text="获取验证码"
+                        android:textColor="@color/WHITE"
+                        android:textSize="12sp"
+                        android:visibility="visible" />
+
                 </RelativeLayout>
+
             </LinearLayout>
 
             <LinearLayout

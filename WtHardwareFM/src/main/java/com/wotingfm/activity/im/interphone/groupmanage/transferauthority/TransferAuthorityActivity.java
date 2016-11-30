@@ -1,7 +1,6 @@
 package com.wotingfm.activity.im.interphone.groupmanage.transferauthority;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
@@ -21,10 +20,10 @@ import com.wotingfm.activity.im.interphone.groupmanage.memberadd.adapter.Members
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.im.interphone.linkman.view.SideBar;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CharacterParser;
+import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
 import com.wotingfm.util.PinyinComparator_a;
@@ -175,16 +174,24 @@ public class TransferAuthorityActivity extends BaseActivity implements
                     if (ReturnType.equals("1001") || ReturnType.equals("1002")) {
                         try {
                             userList = new Gson().fromJson(result.getString("UserList"), new TypeToken<List<UserInfo>>() {}.getType());
+                            if(userList != null && userList.size() > 0) {
+                                for(int i=0; i<userList.size(); i++) {
+                                    if(userList.get(i).getUserId().equals(CommonUtils.getUserId(context))) {
+                                        // 移交管理员权限不能操作用户本人 所以此操作不需要显示用户本人
+                                        userList.remove(i);
+                                        break;
+                                    }
+                                }
+                                userList2.clear();
+                                userList2.addAll(userList);
+                                filledData(userList2);
+                                Collections.sort(userList2, pinyinComparator);
+                                listView.setAdapter(adapter = new MembersAddAdapter(context, userList2));
+                                adapter.setOnListener(TransferAuthorityActivity.this);
+                            }
                         } catch (Exception e1) {
                             e1.printStackTrace();
                         }
-                        userList2.clear();
-                        userList2.addAll(userList);
-                        filledData(userList2);
-                        Collections.sort(userList2, pinyinComparator);
-                        adapter = new MembersAddAdapter(context, userList2);
-                        listView.setAdapter(adapter);
-                        adapter.setOnListener(TransferAuthorityActivity.this);
                     }  else {
                         ToastUtils.show_always(context, "获取群组成员失败，请重试!");
                     }
@@ -258,7 +265,8 @@ public class TransferAuthorityActivity extends BaseActivity implements
 
                     if (ReturnType != null && ReturnType.equals("1001")) {
                         ToastUtils.show_always(context, "管理员权限移交成功");
-                        sendBroadcast(new Intent(BroadcastConstant.REFRESH_GROUP));
+//                        sendBroadcast(new Intent(BroadcastConstant.REFRESH_GROUP));
+                        setResult(RESULT_OK);
                         finish();
                     } else if (ReturnType != null && ReturnType.equals("1002")) {
                         ToastUtils.show_always(context, "无法获取用户Id");
