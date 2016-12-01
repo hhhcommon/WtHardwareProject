@@ -6,11 +6,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.activity.music.program.fenlei.model.FenLeiName;
+import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
 
@@ -19,12 +19,11 @@ public class PreferGridAdapter extends BaseAdapter {
     private Context context;
 
     public PreferGridAdapter(Context context, List<FenLeiName> list) {
-        super();
         this.list = list;
         this.context = context;
     }
 
-    public void ChangeData(List<FenLeiName> list) {
+    public void changeData(List<FenLeiName> list) {
         this.list = list;
         notifyDataSetInvalidated();
     }
@@ -50,29 +49,27 @@ public class PreferGridAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_prefer_child_grid, null);
             holder = new ViewHolder();
-            holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
-            holder.img_prefer = (ImageView) convertView.findViewById(R.id.img_prefer);
-            holder.rv_all = (RelativeLayout) convertView.findViewById(R.id.relativeLayout2);
+            holder.textName = (TextView) convertView.findViewById(R.id.tv_name);
+            holder.imgPrefer = (ImageView) convertView.findViewById(R.id.img_prefer);
+            holder.viewAll = convertView.findViewById(R.id.relativeLayout2);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.tv_name.setText(list.get(position).getName());
-//        String s1 = list.get(position).getName();
-//        String s = list.get(position).getchecked();
+        holder.textName.setText(list.get(position).getName());
         if (list.get(position).getchecked().equals("false")) {
-            holder.img_prefer.setImageResource(R.mipmap.wt_img_unprefer);
-            holder.rv_all.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.bg_edittext_stroke_gray));
+            holder.imgPrefer.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_img_unprefer));
+            holder.viewAll.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.bg_edittext_stroke_gray));
         } else {
-            holder.img_prefer.setImageResource(R.mipmap.wt_img_prefer);
-            holder.rv_all.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.bg_edittext_stroke_dinglan));
+            holder.imgPrefer.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_img_prefer));
+            holder.viewAll.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.bg_edittext_stroke_dinglan));
         }
         return convertView;
     }
 
     class ViewHolder {
-        public TextView tv_name;
-        public ImageView img_prefer;
-        public RelativeLayout rv_all;
+        public TextView textName;
+        public ImageView imgPrefer;
+        public View viewAll;
     }
 }

@@ -101,8 +101,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <!--  -->
-
 
         <!-- 主界面 -->
         <activity
@@ -189,6 +187,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".activity.im.interphone.alert.CallAlertActivity"
             android:screenOrientation="portrait"
@@ -323,26 +322,31 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".activity.im.interphone.alert.ReceiveAlertActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".activity.im.interphone.groupmanage.transferauthority.TransferAuthorityActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".activity.im.interphone.groupmanage.memberadd.activity.MemberAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".activity.im.interphone.groupmanage.memberdel.MemberDelActivity"
             android:screenOrientation="portrait"
@@ -512,24 +516,20 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
-        <activity
-            android:name=".activity.person.modifyphonenumber.ModifyPhoneNumberActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan" />
-
         <!-- 国家台界面-->
         <activity
             android:name=".activity.music.program.diantai.activity.RadioNationalActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
         <!-- 地方台界面-->
         <activity
             android:name=".activity.music.program.diantai.activity.CityRadioActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
         <!-- 验证手机号 -->
         <activity
             android:name=".activity.person.phonecheck.PhoneCheckActivity"
@@ -619,6 +619,7 @@
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="5715cf1e67e58e5955000896"/>
+
         <!-- 高德地图用户Key -->
         <meta-data
             android:name="com.amap.api.v2.apikey"
@@ -632,6 +633,7 @@
                 <category android:name="android.intent.category.HOME" />
             </intent-filter>
         </receiver>
+
         <service android:name=".service.SubclassService" />
         <service android:name=".service.NotificationService" />
         <service android:name=".service.timeroffservice" />
@@ -643,7 +645,7 @@
         <service android:name=".service.TestWindowService" />
         <service android:name=".service.LocationService" />
         <service android:name="com.amap.api.location.APSService" />
-        <activity android:name=".activity.im.interphone.analog.AnalogueActivity"></activity>
+        <activity android:name=".activity.im.interphone.analog.AnalogueActivity"/>
 
     </application>
 

@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
@@ -29,8 +26,9 @@ import org.json.JSONObject;
  * 邮箱：645700751@qq.com
  */
 public class FeedbackActivity extends BaseActivity implements OnClickListener {
-    private EditText mEditContent;
     private Dialog dialog;
+    private EditText mEditContent;
+
     private String sEditContent;
     private String tag = "FEEDBACK_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
@@ -43,13 +41,11 @@ public class FeedbackActivity extends BaseActivity implements OnClickListener {
     }
 
     private void setView() {
+        findViewById(R.id.head_left_btn).setOnClickListener(this);
+        findViewById(R.id.head_right_btn).setOnClickListener(this);
+        findViewById(R.id.submit_button).setOnClickListener(this);
+
         mEditContent = (EditText) findViewById(R.id.edit_feedback_content);
-        TextView mBtnFeedback = (TextView) findViewById(R.id.submit_button);
-        mBtnFeedback.setOnClickListener(this);
-        LinearLayout mHeadLeftLn = (LinearLayout) findViewById(R.id.head_left_btn);
-        mHeadLeftLn.setOnClickListener(this);
-        LinearLayout mHeadRightLn = (LinearLayout) findViewById(R.id.head_right_btn);
-        mHeadRightLn.setOnClickListener(this);
     }
 
     @Override
@@ -62,8 +58,7 @@ public class FeedbackActivity extends BaseActivity implements OnClickListener {
                 finish();
                 break;
             case R.id.head_right_btn:
-                Intent intent = new Intent(this, FeedbackListActivity.class);
-                startActivity(intent);
+                startActivity(new Intent(context, FeedbackListActivity.class));
                 break;
         }
     }
@@ -71,19 +66,19 @@ public class FeedbackActivity extends BaseActivity implements OnClickListener {
     private void checkData() {
         sEditContent = mEditContent.getText().toString().trim();
         if ("".equalsIgnoreCase(sEditContent)) {
-            Toast.makeText(this, "请您输入您的意见", Toast.LENGTH_LONG).show();
+            ToastUtils.show_always(context, "请您输入您的意见");
         } else {
             if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                dialog = DialogUtils.Dialogph(FeedbackActivity.this, "反馈中");
+                dialog = DialogUtils.Dialogph(context, "反馈中");
                 send();
             } else {
-                ToastUtils.show_always(FeedbackActivity.this, "网络失败，请检查网络");
+                ToastUtils.show_always(context, "网络失败，请检查网络");
             }
         }
     }
 
     private void send() {
-        JSONObject jsonObject = VolleyRequest.getJsonObject(this);
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("PCDType", GlobalConfig.PCDType);
             jsonObject.put("Opinion", sEditContent);
@@ -99,20 +94,13 @@ public class FeedbackActivity extends BaseActivity implements OnClickListener {
                 try {
                     String ReturnType = result.getString("ReturnType");
                     if (ReturnType != null && ReturnType.equals("1001")) {
-                        ToastUtils.show_always(getApplicationContext(), "提交成功");
-                        Intent intent = new Intent(FeedbackActivity.this, FeedbackListActivity.class);
-                        startActivity(intent);
+                        ToastUtils.show_always(context, "提交成功");
+                        startActivity(new Intent(context, FeedbackListActivity.class));
                         finish();
-                    } else if (ReturnType != null && ReturnType.equals("1002")) {
-                        ToastUtils.show_always(FeedbackActivity.this, "出错了,提交失败");
                     } else {
-                        try {
-                            String Message = result.getString("Message");
-                            if (Message != null && !Message.trim().equals("")) {
-                                Toast.makeText(FeedbackActivity.this, "提交意见反馈失败, " + Message, Toast.LENGTH_SHORT).show();
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        String Message = result.getString("Message");
+                        if (Message != null && !Message.trim().equals("")) {
+                            ToastUtils.show_always(context, "提交意见反馈失败, " + Message);
                         }
                     }
                 } catch (JSONException e) {
@@ -123,7 +111,7 @@ public class FeedbackActivity extends BaseActivity implements OnClickListener {
             @Override
             protected void requestError(VolleyError error) {
                 if (dialog != null) dialog.dismiss();
-                ToastUtils.show_always(FeedbackActivity.this, "出错了,提交失败");
+                ToastUtils.showVolleyError(context);
             }
         });
     }
@@ -136,7 +124,6 @@ public class FeedbackActivity extends BaseActivity implements OnClickListener {
         dialog = null;
         sEditContent = null;
         tag = null;
-        mEditContent = null;
         setContentView(R.layout.activity_null);
     }
 }

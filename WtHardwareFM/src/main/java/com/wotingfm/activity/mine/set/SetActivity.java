@@ -87,7 +87,7 @@ public class SetActivity extends BaseActivity implements OnClickListener {
         findViewById(R.id.lin_feedback).setOnClickListener(this);           // 意见反馈
         findViewById(R.id.lin_downloadposition).setOnClickListener(this);   // 下载位置
         findViewById(R.id.lin_preference).setOnClickListener(this);         // 偏好设置
-        findViewById(R.id.lin_id_name).setOnClickListener(this);            // ID号
+        findViewById(R.id.lin_id_name).setOnClickListener(this);            // ID 号
 
         lin_IsLogin= findViewById(R.id.lin_IsLogin);                        // 未登录时需要隐藏的绑定手机号和重置密码布局
         linearIdName = findViewById(R.id.lin_id_name);                      // 用户可以且仅可以设置一次的唯一标识 ID
