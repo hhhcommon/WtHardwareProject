@@ -18,11 +18,12 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.BaseActivity;
-import com.wotingfm.activity.common.preference.activity.PreferenceActivity;
-import com.wotingfm.activity.mine.about.AboutActivity;
-import com.wotingfm.activity.mine.downloadposition.DownloadPositionActivity;
-import com.wotingfm.activity.mine.feedback.activity.FeedbackActivity;
-import com.wotingfm.activity.mine.help.HelpActivity;
+import com.wotingfm.activity.mine.set.preference.activity.PreferenceActivity;
+import com.wotingfm.activity.mine.set.about.AboutActivity;
+import com.wotingfm.activity.mine.set.downloadposition.DownloadPositionActivity;
+import com.wotingfm.activity.mine.set.feedback.activity.FeedbackActivity;
+import com.wotingfm.activity.mine.set.help.HelpActivity;
+import com.wotingfm.activity.mine.set.updateusernum.UpdateUserNumActivity;
 import com.wotingfm.activity.person.modifypassword.ModifyPasswordActivity;
 import com.wotingfm.activity.person.phonecheck.PhoneCheckActivity;
 import com.wotingfm.common.application.BSApplication;
@@ -188,7 +189,7 @@ public class SetActivity extends BaseActivity implements OnClickListener {
                 startActivity(new Intent(context, ModifyPasswordActivity.class));
                 break;
             case R.id.lin_id_name:// ID
-//                startActivityForResult(new Intent(context, updateUserNumActivity.class), 0x111);
+                startActivityForResult(new Intent(context, UpdateUserNumActivity.class), 0x111);
                 break;
         }
     }
@@ -224,7 +225,6 @@ public class SetActivity extends BaseActivity implements OnClickListener {
     private void sendRequestLogout() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         VolleyRequest.RequestPost(GlobalConfig.logoutUrl, tag, jsonObject, new VolleyCallback() {
-
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) dialog.dismiss();
@@ -232,12 +232,10 @@ public class SetActivity extends BaseActivity implements OnClickListener {
                 try {
                     String returnType = result.getString("ReturnType");
                     String message = result.getString("Message");
-
                     Log.v("returnType", "returnType -- > > " + returnType + " -- message -- > > " + message);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-
                 Editor et = BSApplication.SharedPreferences.edit();
                 et.putString(StringConstant.ISLOGIN, "false");
                 et.putString(StringConstant.USERID, "");
@@ -253,9 +251,7 @@ public class SetActivity extends BaseActivity implements OnClickListener {
                 et.putString(StringConstant.STAR_SIGN, "");
                 et.putString(StringConstant.AGE, "");
                 et.putString(StringConstant.NICK_NAME, "");
-                if (!et.commit()) {
-                    Log.v("commit", "数据 commit 失败!");
-                }
+                if (!et.commit()) Log.v("commit", "数据 commit 失败!");
                 logOut.setVisibility(View.GONE);
                 lin_IsLogin.setVisibility(View.GONE);
                 sendBroadcast(new Intent(BroadcastConstants.PUSH_DOWN_COMPLETED));// 发送广播 更新已下载和未下载界面
@@ -272,7 +268,7 @@ public class SetActivity extends BaseActivity implements OnClickListener {
 
     // 调用更新功能
     protected void okUpdate() {
-        UpdateManager updateManager = new UpdateManager(this);
+        UpdateManager updateManager = new UpdateManager(context);
         updateManager.checkUpdateInfo1();
     }
 
@@ -285,7 +281,6 @@ public class SetActivity extends BaseActivity implements OnClickListener {
             e.printStackTrace();
         }
         VolleyRequest.RequestPost(GlobalConfig.VersionUrl, tag, jsonObject, new VolleyCallback() {
-
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) dialog.dismiss();
@@ -382,8 +377,6 @@ public class SetActivity extends BaseActivity implements OnClickListener {
                 }
             }
         }).start();
-
-
     }
 
     // 清除缓存异步任务
@@ -405,9 +398,7 @@ public class SetActivity extends BaseActivity implements OnClickListener {
 
         @Override
         protected void onPostExecute(Void result) {
-            if (dialog != null && dialog.isShowing()) {
-                dialog.dismiss();
-            }
+            if (dialog != null) dialog.dismiss();
             if (clearResult) {
                 ToastUtils.show_always(context, "缓存已清除");
                 textCache.setText("0MB");

@@ -100,4 +100,7 @@ public class StringConstant {
 
     // 流量通知
     public static final String FLOW_NOTIFY = "FLOW_NOTIFY";
+
+    // 保存是否已经选择喜欢的节目
+    public static final String FAVORITE_PROGRAM_TYPE = "FavoriteProgramType";
 }

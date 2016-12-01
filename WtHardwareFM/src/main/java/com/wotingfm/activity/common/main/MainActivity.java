@@ -25,7 +25,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.preference.activity.PreferenceActivity;
+import com.wotingfm.activity.common.favoritetype.FavoriteProgramTypeActivity;
 import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
 import com.wotingfm.activity.mine.main.MineActivity;
 import com.wotingfm.activity.music.main.HomeActivity;
@@ -83,16 +83,11 @@ public class MainActivity extends TabActivity {
         context = this;
         WtDeviceControl mControl = new WtDeviceControl(context);
         GlobalConfig.device = mControl;
-        String first = BSApplication.SharedPreferences.getString(StringConstant.PREFERENCE, "0");//是否是第一次打开偏好设置界面
-        if (first != null && first.equals("1")) {
-            // 此时已经进行过偏好设置
-        } else {// 1：第一次进入  其它：其它界面进入
-            Intent intent = new Intent(this, PreferenceActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("type", "1");
-            intent.putExtras(bundle);
-            startActivity(intent);
+
+        if(!BSApplication.SharedPreferences.getBoolean(StringConstant.FAVORITE_PROGRAM_TYPE, false)) {
+            startActivity(new Intent(context, FavoriteProgramTypeActivity.class));
         }
+
         MobclickAgent.openActivityDurationTrack(false);//友盟的数据统计
         update();           // 获取版本数据
         InitTextView();     // 设置界面

@@ -204,28 +204,28 @@
 
         <!-- 关于我们 -->
         <activity
-            android:name=".activity.mine.about.AboutActivity"
+            android:name=".activity.mine.set.about.AboutActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
         <!-- 下载位置 -->
         <activity
-            android:name=".activity.mine.downloadposition.DownloadPositionActivity"
+            android:name=".activity.mine.set.downloadposition.DownloadPositionActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
         <!-- 意见反馈 -->
         <activity
-            android:name=".activity.mine.feedback.activity.FeedbackActivity"
+            android:name=".activity.mine.set.feedback.activity.FeedbackActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
         <!-- 帮助 -->
         <activity
-            android:name=".activity.mine.help.HelpActivity"
+            android:name=".activity.mine.set.help.HelpActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -233,6 +233,14 @@
         <!-- 修改个人资料 -->
         <activity
             android:name=".activity.person.updatepersonnews.UpdatePersonActivity"
+            android:configChanges="keyboardHidden|orientation"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+
+        <!-- 修改用户号 -->
+        <activity
+            android:name=".activity.mine.set.updateusernum.UpdateUserNumActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
@@ -243,6 +251,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
+
         <activity
             android:name=".activity.music.main.HomeActivity"
             android:screenOrientation="portrait"
@@ -276,27 +285,23 @@
         <!-- 修改密码 -->
         <activity
             android:name=".activity.person.modifypassword.ModifyPasswordActivity"
-            android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- 反馈建议历史 -->
         <activity
-            android:name=".activity.mine.feedback.feedbacklist.activity.FeedbackListActivity"
+            android:name=".activity.mine.set.feedback.feedbacklist.activity.FeedbackListActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
 
-        <!--
-        修改手机号
+        <!-- 反馈建议历史 -->
         <activity
-            android:name=".activity.person.phonecheck.activity.PhoneCheckActivity"
+            android:name=".activity.common.favoritetype.FavoriteProgramTypeActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />
-        -->
-
 
         <!-- 播放历史界面 -->
         <activity
@@ -380,7 +385,7 @@
 
         <!-- 偏好设置界面 -->
         <activity
-            android:name=".activity.common.preference.activity.PreferenceActivity"
+            android:name=".activity.mine.set.preference.activity.PreferenceActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan" />

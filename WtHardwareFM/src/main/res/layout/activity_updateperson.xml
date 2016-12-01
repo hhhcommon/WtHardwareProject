@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dinglan_orange"
@@ -7,404 +8,340 @@
     android:fitsSystemWindows="true"
     android:orientation="vertical">
 
-    <LinearLayout
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+
+        <ImageView
+            android:id="@+id/head_left_btn"
+            style="@style/LeftImageStyle"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="修改资料"
+            android:textColor="@color/WHITE"
+            android:textSize="@dimen/activity_head_center_s"/>
+
+    </RelativeLayout>
+
+    <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/app_bg"
-        android:orientation="vertical">
-
-        <include
-            android:id="@+id/include_title"
-            layout="@layout/base_activity_title"/>
+        android:scrollbars="none">
 
         <LinearLayout
-            android:id="@+id/lin_zhanghu"
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:background="@drawable/person_color"
-            android:clickable="true"
-            android:gravity="left|center"
-            android:visibility="gone"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="19dp"
-                android:gravity="center"
-                android:text="账号"
-                android:textColor="@color/wt_login_third"
-                android:textSize="@dimen/list_text_size"/>
-
-            <TextView
-                android:id="@+id/tv_zhanghu"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="39dp"
-                android:layout_weight="8"
-                android:gravity="left|center"
-                android:textColor="#5e6471"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="13dp"
-                android:layout_weight="1"
-                android:gravity="right|center"
-                android:visibility="invisible">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/live_more"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:layout_marginTop="1dp"
-            android:background="@drawable/person_color"
-            android:clickable="true"
-            android:gravity="left|center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="19dp"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="昵称"
-                android:textColor="@color/wt_login_third"
-                android:textSize="@dimen/list_text_size"/>
-
-            <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="39dp"
-                android:layout_weight="8"
-                android:gravity="left|center"
-                android:textColor="#5e6471"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="13dp"
-                android:layout_weight="1"
-                android:gravity="right|center"
-                android:visibility="visible">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/wt_person_modify"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linear_modify_phone_number"
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:layout_marginTop="1dp"
-            android:background="@drawable/person_color"
-            android:clickable="true"
-            android:gravity="left|center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="19dp"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="手机号"
-                android:textColor="@color/wt_login_third"
-                android:textSize="@dimen/list_text_size"/>
-
-            <TextView
-                android:id="@+id/tv_phone_number"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="25dp"
-                android:layout_weight="8"
-                android:text=""
-                android:gravity="left|center"
-                android:textColor="#5e6471"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="13dp"
-                android:layout_weight="1"
-                android:gravity="right|center"
-                android:visibility="visible">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/live_more"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/linear_modify"
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:layout_marginTop="1dp"
-            android:background="@drawable/person_color"
-            android:clickable="true"
-            android:gravity="left|center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="19dp"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="修改密码"
-                android:textColor="@color/wt_login_third"
-                android:textSize="@dimen/list_text_size"/>
-
-            <TextView
-                android:id="@+id/tv_modify"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="39dp"
-                android:layout_weight="8"
-                android:gravity="left|center"
-                android:textColor="#5e6471"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="13dp"
-                android:layout_weight="1"
-                android:gravity="right|center"
-                android:visibility="visible">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/live_more"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/lin_gender"
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:layout_marginTop="10dp"
-            android:background="@drawable/person_color"
-            android:gravity="left|center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="19dp"
-                android:gravity="center"
-                android:text="性别"
-                android:textColor="@color/wt_login_third"
-                android:textSize="@dimen/list_text_size"/>
-
-            <TextView
-                android:id="@+id/tv_gender"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="39dp"
-                android:layout_weight="1"
-                android:gravity="left|center"
-                android:text="男"
-                android:textColor="#5e6471"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginRight="13dp"
-                android:gravity="right|center">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/live_more"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/lin_age"
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:layout_marginTop="1dp"
-            android:background="@drawable/person_color"
-            android:gravity="left|center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="19dp"
-                android:gravity="center"
-                android:text="年龄"
-                android:textColor="@color/wt_login_third"
-                android:textSize="@dimen/list_text_size"/>
-
-            <TextView
-                android:id="@+id/tv_age"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="39dp"
-                android:layout_weight="1"
-                android:gravity="left|center"
-                android:text="18"
-                android:textColor="#5e6471"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginRight="13dp"
-                android:gravity="right|center">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/live_more"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/lin_xingzuo"
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:layout_marginTop="1dp"
-            android:background="@drawable/person_color"
-            android:gravity="left|center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="19dp"
-                android:gravity="center"
-                android:text="星座"
-                android:textColor="@color/wt_login_third"
-                android:textSize="@dimen/list_text_size"/>
-
-            <TextView
-                android:id="@+id/tv_xingzuo"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="39dp"
-                android:layout_weight="1"
-                android:gravity="left|center"
-                android:text="水瓶座"
-                android:textColor="#5e6471"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginRight="13dp"
-                android:gravity="right|center">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/live_more"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/lin_area"
-            android:layout_width="match_parent"
-            android:layout_height="43dp"
-            android:layout_marginTop="1dp"
-            android:background="@drawable/person_color"
-            android:clickable="true"
-            android:gravity="left|center"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="19dp"
-                android:gravity="center"
-                android:text="地区"
-                android:textColor="@color/wt_login_third"
-                android:textSize="@dimen/list_text_size"/>
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="39dp"
-                android:layout_weight="1"
-                android:gravity="left|center"
-                android:text="北京 朝阳区"
-                android:textColor="#5e6471"/>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginRight="13dp"
-                android:gravity="right|center">
-
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:src="@mipmap/live_more"/>
-            </LinearLayout>
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/lin_signature"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="1dp"
-            android:background="@drawable/person_color"
-            android:clickable="true"
-            android:gravity="left|center"
-            android:minHeight="43dp"
-            android:orientation="horizontal">
+            android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="19dp"
-                android:gravity="center"
-                android:singleLine="true"
-                android:text="个性签名"
-                android:textColor="@color/wt_login_third"
-                android:textSize="@dimen/list_text_size"/>
+            <RelativeLayout
+                android:id="@+id/lin_zhanghu"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/person_color"
+                android:clickable="true">
 
-            <TextView
-                android:id="@+id/text_signature"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="15dp"
-                android:layout_weight="8"
-                android:gravity="left|center"
-                android:maxLines="3"
-                android:minHeight="43dp"
-                android:paddingBottom="2dp"
-                android:paddingTop="2dp"
-                android:text="Anyone can give up, do not give up"
-                android:textColor="#5e6471"/>
-
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_marginRight="13dp"
-                android:layout_weight="1"
-                android:gravity="right|center"
-                android:visibility="visible">
-
-                <ImageView
+                <TextView
+                    android:id="@+id/text_zh"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/wt_person_modify"/>
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="19dp"
+                    android:text="账号"
+                    android:textColor="@color/wt_login_third"
+                    android:textSize="@dimen/list_text_size"/>
+
+                <TextView
+                    android:id="@+id/tv_zhanghu"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="39dp"
+                    android:layout_toRightOf="@id/text_zh"
+                    android:textColor="@color/up_tv_default"/>
+
+                <View
+                    style="@style/LineStyle"
+                    android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/person_color">
+
+                <TextView
+                    android:id="@+id/text_nc"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="19dp"
+                    android:text="昵称"
+                    android:textColor="@color/wt_login_third"
+                    android:textSize="@dimen/list_text_size"/>
+
+                <EditText
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="39dp"
+                    android:layout_toRightOf="@id/text_nc"
+                    android:background="@null"
+                    android:gravity="left|center"
+                    android:hint="请设置您的昵称"
+                    android:maxLength="20"
+                    android:maxLines="1"
+                    android:textColor="@color/up_tv_default"
+                    android:textColorHint="@color/gray"
+                    android:textSize="14sp"/>
+
+                <View
+                    style="@style/ViewStyle"
+                    android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lin_gender"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="20dp"
+                android:background="@drawable/person_color">
+
+                <View style="@style/ViewStyle"/>
+
+                <TextView
+                    android:id="@+id/text_xb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="19dp"
+                    android:text="性别"
+                    android:textColor="@color/wt_login_third"
+                    android:textSize="@dimen/list_text_size"/>
+
+                <TextView
+                    android:id="@+id/lin_gender_man"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="39dp"
+                    android:layout_toRightOf="@id/text_xb"
+                    android:background="@color/dinglan_orange"
+                    android:drawableLeft="@mipmap/wt_img_gender_men"
+                    android:drawablePadding="10dp"
+                    android:gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="男"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"/>
+
+                <TextView
+                    android:id="@+id/lin_gender_woman"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="30dp"
+                    android:layout_toRightOf="@id/lin_gender_man"
+                    android:background="@color/up_bg_unselected"
+                    android:drawableLeft="@mipmap/wt_img_gender_woman"
+                    android:drawablePadding="10dp"
+                    android:gravity="center"
+                    android:paddingLeft="15dp"
+                    android:paddingRight="15dp"
+                    android:text="女"
+                    android:textColor="@color/white"
+                    android:textSize="16sp"/>
+
+                <View
+                    style="@style/LineStyle"
+                    android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lin_age"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/person_color">
+
+                <TextView
+                    android:id="@+id/text_sr"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="19dp"
+                    android:text="生日"
+                    android:textColor="@color/wt_login_third"
+                    android:textSize="@dimen/list_text_size"/>
+
+                <TextView
+                    android:id="@+id/tv_age"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="39dp"
+                    android:layout_toRightOf="@id/text_sr"
+                    android:hint="请设置您的生日"
+                    android:textColor="@color/up_tv_default"
+                    android:textColorHint="@color/gray"/>
+
+                <View
+                    style="@style/LineStyle"
+                    android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lin_xingzuo"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/person_color">
+
+                <TextView
+                    android:id="@+id/text_xz"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="19dp"
+                    android:text="星座"
+                    android:textColor="@color/wt_login_third"
+                    android:textSize="@dimen/list_text_size"/>
+
+                <TextView
+                    android:id="@+id/tv_xingzuo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="39dp"
+                    android:layout_toRightOf="@id/text_xz"
+                    android:text="水瓶座"
+                    android:textColor="@color/up_tv_default"/>
+
+                <View
+                    style="@style/LineStyle"
+                    android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lin_area"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/person_color">
+
+                <TextView
+                    android:id="@+id/text_dq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="19dp"
+                    android:text="地区"
+                    android:textColor="@color/wt_login_third"
+                    android:textSize="@dimen/list_text_size"/>
+
+                <TextView
+                    android:id="@+id/tv_region"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="39dp"
+                    android:layout_toRightOf="@id/text_dq"
+                    android:hint="请设置您的所在地"
+                    android:textColor="@color/up_tv_default"
+                    android:textColorHint="@color/gray"/>
+
+                <View
+                    style="@style/LineStyle"
+                    android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lin_mail"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:background="@drawable/person_color">
+
+                <TextView
+                    android:id="@+id/text_yx"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="19dp"
+                    android:text="邮箱"
+                    android:textColor="@color/wt_login_third"
+                    android:textSize="@dimen/list_text_size"/>
+
+                <EditText
+                    android:id="@+id/tv_mail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginLeft="39dp"
+                    android:layout_toRightOf="@id/text_yx"
+                    android:background="@null"
+                    android:gravity="left|center"
+                    android:hint="请设置您的邮箱"
+                    android:maxLength="20"
+                    android:maxLines="1"
+                    android:textColor="#5e6471"
+                    android:textColorHint="@color/gray"
+                    android:textSize="14sp"/>
+
+                <View
+                    style="@style/LineStyle"
+                    android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/lin_signature"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/person_color"
+                android:clickable="true"
+                android:gravity="left|center"
+                android:minHeight="48dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:layout_marginLeft="19dp"
+                    android:gravity="center"
+                    android:text="个性签名"
+                    android:textColor="@color/wt_login_third"
+                    android:textSize="@dimen/list_text_size"/>
+
+                <EditText
+                    android:id="@+id/tv_signature"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="11dp"
+                    android:layout_weight="8"
+                    android:background="@null"
+                    android:gravity="left|center"
+                    android:hint="请设置您的个性签名"
+                    android:maxLength="81"
+                    android:maxLines="4"
+                    android:minHeight="43dp"
+                    android:paddingBottom="2dp"
+                    android:paddingRight="10dp"
+                    android:paddingTop="2dp"
+                    android:textColorHint="@color/gray"
+                    android:textSize="14sp"/>
+
             </LinearLayout>
+
         </LinearLayout>
-    </LinearLayout>
+
+    </ScrollView>
 
 </LinearLayout>

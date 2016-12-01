@@ -189,10 +189,10 @@ public class MineActivity extends Activity implements OnClickListener {
                 news.setPortraitMini(url);
                 news.setUserId(userId);
                 news.setUserName(userName);
-                Intent intentEwm = new Intent(context,EWMShowActivity.class);
-                Bundle bundle =  new Bundle();
+                Intent intentEwm = new Intent(context, EWMShowActivity.class);
+                Bundle bundle = new Bundle();
                 bundle.putString("type", "1");
-                bundle.putString("news","");
+                bundle.putString("news", "");
                 bundle.putSerializable("person", news);
                 intentEwm.putExtras(bundle);
                 startActivity(intentEwm);
@@ -233,8 +233,8 @@ public class MineActivity extends Activity implements OnClickListener {
     }
 
     // 获取蓝牙状态
-    private void getBluetoothState(){
-        if(blueAdapter.isEnabled()){
+    private void getBluetoothState() {
+        if (blueAdapter.isEnabled()) {
             textBluetoothState.setText("打开");
         } else {
             textBluetoothState.setText("关闭");
@@ -254,11 +254,11 @@ public class MineActivity extends Activity implements OnClickListener {
 
     // 获取用户的登陆状态   登陆 OR 未登录
     private void getLoginStatus() {
-        if(isFirst) {
+        if (isFirst) {
             isFirst = false;
-        } else if(isLogin.equals(sharedPreferences.getString(StringConstant.ISLOGIN, "false"))) {
+        } else if (isLogin.equals(sharedPreferences.getString(StringConstant.ISLOGIN, "false"))) {
             L.v("isLogin 登录状态没有发生变化 -- > > " + isLogin);
-            return ;
+            return;
         }
         isLogin = sharedPreferences.getString(StringConstant.ISLOGIN, "false");
         if (isLogin.equals("true")) {
@@ -271,14 +271,14 @@ public class MineActivity extends Activity implements OnClickListener {
             userSign = sharedPreferences.getString(StringConstant.USER_SIGN, "");// 签名
             region = sharedPreferences.getString(StringConstant.REGION, "");// 区域
 
-            if(region.equals("")) {
+            if (region.equals("")) {
                 region = "您还没有填写地址";
             }
             textUserArea.setText(region);
             textUserName.setText(userName);
             textUserAutograph.setText(userSign);
 
-            if(userNum.equals("")) {
+            if (userNum.equals("")) {
                 circleView.setVisibility(View.GONE);
                 textUserId.setVisibility(View.GONE);
             } else {
@@ -287,7 +287,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 textUserId.setText(userNum);
             }
 
-            if(!imageUrl.equals("")) {
+            if (!imageUrl.equals("")) {
                 if (imageUrl.startsWith("http:")) {
                     url = imageUrl;
                 } else {
@@ -308,7 +308,7 @@ public class MineActivity extends Activity implements OnClickListener {
     // 注册广播 接收蓝牙、WiFi 状态发生改变信息
     @Override
     protected void onStart() {
-        if(!hasRegister){
+        if (!hasRegister) {
             hasRegister = true;
             IntentFilter filterBluetooth = new IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED);
             registerReceiver(mDevice, filterBluetooth);
@@ -323,13 +323,13 @@ public class MineActivity extends Activity implements OnClickListener {
     protected void onResume() {
         super.onResume();
         getLoginStatus();
-        if(wifiManager.isWifiEnabled()) {
+        if (wifiManager.isWifiEnabled()) {
             new Handler().postDelayed(new Runnable() {
                 @Override
                 public void run() {
                     String SSIDWiFi = wifiManager.getConnectionInfo().getSSID();
                     L.v("SSIDWiFi", SSIDWiFi);
-                    if(SSIDWiFi.startsWith("\"")) {
+                    if (SSIDWiFi.startsWith("\"")) {
                         SSIDWiFi = SSIDWiFi.substring(1, SSIDWiFi.length() - 1);
                     }
                     textWifiName.setText(SSIDWiFi);
@@ -344,21 +344,21 @@ public class MineActivity extends Activity implements OnClickListener {
     private class DeviceReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            String action =intent.getAction();
-            if(BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)){// 蓝牙状态发生改变
-                if(blueAdapter.getState() == BluetoothAdapter.STATE_OFF){// 蓝牙关闭
+            String action = intent.getAction();
+            if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {// 蓝牙状态发生改变
+                if (blueAdapter.getState() == BluetoothAdapter.STATE_OFF) {// 蓝牙关闭
                     textBluetoothState.setText("关闭");
-                } else if(blueAdapter.getState() == BluetoothAdapter.STATE_ON){// 蓝牙打开
+                } else if (blueAdapter.getState() == BluetoothAdapter.STATE_ON) {// 蓝牙打开
                     textBluetoothState.setText("打开");
                 }
             } else if (WifiManager.WIFI_STATE_CHANGED_ACTION.equals(intent.getAction())) {// wifi的打开与关闭，与wifi的连接无关
-                if(wifiManager.isWifiEnabled()) {
+                if (wifiManager.isWifiEnabled()) {
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {
                             String SSIDWiFi = wifiManager.getConnectionInfo().getSSID();
                             L.v("SSIDWiFi", SSIDWiFi);
-                            if(SSIDWiFi.startsWith("\"")) {
+                            if (SSIDWiFi.startsWith("\"")) {
                                 SSIDWiFi = SSIDWiFi.substring(1, SSIDWiFi.length() - 1);
                             }
                             textWifiName.setText(SSIDWiFi);
@@ -430,7 +430,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 }
                 break;
             case UPDATE_USER:// 修改个人资料界面返回
-                if(resultCode == 1){
+                if (resultCode == 1) {
                     Bundle bundle = data.getExtras();
                     pModel = (UpdatePerson) bundle.getSerializable("data");
                     regionId = bundle.getString("regionId");
@@ -441,12 +441,12 @@ public class MineActivity extends Activity implements OnClickListener {
                     sendUpdate(pModel);
                 }
             case 0x222:// 其它设置界面返回
-                if(resultCode == RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     userNum = sharedPreferences.getString(StringConstant.USER_NUM, "");// 用户号
-                    if(!userNum.equals("")) {
+                    if (!userNum.equals("")) {
                         circleView.setVisibility(View.VISIBLE);
                         textUserId.setVisibility(View.VISIBLE);
-                        textUserId.setText( userNum);
+                        textUserId.setText(userNum);
                     }
                 }
                 break;
@@ -477,7 +477,7 @@ public class MineActivity extends Activity implements OnClickListener {
                         imageUrl = GlobalConfig.imageurl + MiniUri;
                     }
                     et.putString(StringConstant.IMAGEURL, imageUrl);
-                    if(et.commit()) L.v("数据 commit 失败!");
+                    if (et.commit()) L.v("数据 commit 失败!");
                     Picasso.with(context).load(imageUrl.replace("\\/", "/")).resize(100, 100).centerCrop().into(userHead);
                 } else {
                     ToastUtils.show_always(context, "头像保存失败，请稍后再试");
@@ -496,7 +496,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 try {
                     String filePath = PhotoCutAfterImagePath;
                     String ExtName = filePath.substring(filePath.lastIndexOf("."));
-                    String TestURI = GlobalConfig.baseUrl+"wt/common/upload4App.do?FType=UserP&ExtName=";
+                    String TestURI = GlobalConfig.baseUrl + "wt/common/upload4App.do?FType=UserP&ExtName=";
                     String Response = MyHttp.postFile(new File(filePath), TestURI
                             + ExtName
                             + "&PCDType="
@@ -512,7 +512,8 @@ public class MineActivity extends Activity implements OnClickListener {
                     L.e("图片上传结果", Response);
                     Gson gson = new Gson();
                     Response = ImageUploadReturnUtil.getResPonse(Response);
-                    UserPortait = gson.fromJson(Response, new TypeToken<UserPortaitInside>() {}.getType());
+                    UserPortait = gson.fromJson(Response, new TypeToken<UserPortaitInside>() {
+                    }.getType());
                     String ReturnType = null;
                     try {
                         ReturnType = UserPortait.getReturnType();
@@ -533,7 +534,7 @@ public class MineActivity extends Activity implements OnClickListener {
                             msg.what = 0;
                         }
                     }
-                    if(m == imageNum) msg.what = 1;
+                    if (m == imageNum) msg.what = 1;
                 } catch (Exception e) {        // 异常处理
                     e.printStackTrace();
                     if (e.getMessage() != null) {
@@ -610,16 +611,16 @@ public class MineActivity extends Activity implements OnClickListener {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
-                long currentTime = System.currentTimeMillis();
-                if ((currentTime - touchTime) >= waitTime) {
-                    ToastUtils.show_always(context, "再按一次退出");
-                    touchTime = currentTime;
-                } else {
-                    BSApplication.onStop();
-                    MobclickAgent.onKillProcess(context);
-                    finish();
-                    android.os.Process.killProcess(android.os.Process.myPid());
-                }
+            long currentTime = System.currentTimeMillis();
+            if ((currentTime - touchTime) >= waitTime) {
+                ToastUtils.show_always(context, "再按一次退出");
+                touchTime = currentTime;
+            } else {
+                BSApplication.onStop();
+                MobclickAgent.onKillProcess(context);
+                finish();
+                android.os.Process.killProcess(android.os.Process.myPid());
+            }
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -680,8 +681,8 @@ public class MineActivity extends Activity implements OnClickListener {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             nickName = pM.getNickName();
-            if(!nickName.equals(sharedPreferences.getString(StringConstant.NICK_NAME, ""))) {
-                if(nickName.trim().equals("")) {
+            if (!nickName.equals(sharedPreferences.getString(StringConstant.NICK_NAME, ""))) {
+                if (nickName.trim().equals("")) {
                     jsonObject.put("NickName", "&null");
                 } else {
                     jsonObject.put("NickName", nickName);
@@ -690,8 +691,8 @@ public class MineActivity extends Activity implements OnClickListener {
             }
 
             sign = pM.getUserSign();
-            if(!sign.equals(sharedPreferences.getString(StringConstant.USER_SIGN, ""))) {
-                if(sign.trim().equals("")) {
+            if (!sign.equals(sharedPreferences.getString(StringConstant.USER_SIGN, ""))) {
+                if (sign.trim().equals("")) {
                     jsonObject.put("UserSign", "&null");
                 } else {
                     jsonObject.put("UserSign", sign);
@@ -701,27 +702,27 @@ public class MineActivity extends Activity implements OnClickListener {
 
             gender = pM.getGender();
             L.v("gender", "gender -- > > " + gender);
-            if(!gender.equals(sharedPreferences.getString(StringConstant.GENDERUSR, "xb001"))) {
+            if (!gender.equals(sharedPreferences.getString(StringConstant.GENDERUSR, "xb001"))) {
                 jsonObject.put("SexDictId", gender);
                 isUpdate = true;
             }
 
             birthday = pM.getBirthday();
-            if(!birthday.equals(sharedPreferences.getString(StringConstant.BIRTHDAY, ""))) {
-                jsonObject.put("Birthday",  Long.valueOf(birthday));
+            if (!birthday.equals(sharedPreferences.getString(StringConstant.BIRTHDAY, ""))) {
+                jsonObject.put("Birthday", Long.valueOf(birthday));
                 isUpdate = true;
             }
 
             starSign = pM.getStarSign();
-            if(!starSign.equals(sharedPreferences.getString(StringConstant.STAR_SIGN, ""))){
+            if (!starSign.equals(sharedPreferences.getString(StringConstant.STAR_SIGN, ""))) {
                 jsonObject.put("StarSign", starSign);
                 isUpdate = true;
             }
 
             email = pM.getEmail();
-            if(!email.equals(sharedPreferences.getString(StringConstant.EMAIL, ""))){
-                if(!email.trim().equals("")) {
-                    if(isEmail(email)) {
+            if (!email.equals(sharedPreferences.getString(StringConstant.EMAIL, ""))) {
+                if (!email.trim().equals("")) {
+                    if (isEmail(email)) {
                         jsonObject.put("MailAddr", email);
                         isUpdate = true;
                     } else {
@@ -734,7 +735,7 @@ public class MineActivity extends Activity implements OnClickListener {
             }
 
             area = pM.getRegion();
-            if(!area.equals(sharedPreferences.getString(StringConstant.REGION, ""))) {
+            if (!area.equals(sharedPreferences.getString(StringConstant.REGION, ""))) {
                 jsonObject.put("RegionDictId", regionId);
                 isUpdate = true;
             }
@@ -744,40 +745,40 @@ public class MineActivity extends Activity implements OnClickListener {
         }
 
         // 个人资料没有修改过则不需要将数据提交服务器
-        if(!isUpdate) {
-            return ;
+        if (!isUpdate) {
+            return;
         }
         isUpdate = false;
-        L.v("数据改动", "数据有改动，将数据提交到服务器!" );
+        L.v("数据改动", "数据有改动，将数据提交到服务器!");
         VolleyRequest.RequestPost(GlobalConfig.updateUserUrl, tag, jsonObject, new VolleyCallback() {
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) dialog.dismiss();
-                if (isCancelRequest) return ;
+                if (isCancelRequest) return;
                 try {
                     String returnType = result.getString("ReturnType");
                     L.v("returnType", "returnType -- > > " + returnType);
 
                     if (returnType != null && returnType.equals("1001")) {
                         SharedPreferences.Editor et = sharedPreferences.edit();
-                        if(!nickName.equals(sharedPreferences.getString(StringConstant.NICK_NAME, ""))) {
+                        if (!nickName.equals(sharedPreferences.getString(StringConstant.NICK_NAME, ""))) {
                             et.putString(StringConstant.NICK_NAME, nickName);
                         }
-                        if(!sign.equals(sharedPreferences.getString(StringConstant.USER_SIGN, ""))) {
+                        if (!sign.equals(sharedPreferences.getString(StringConstant.USER_SIGN, ""))) {
                             et.putString(StringConstant.USER_SIGN, sign);
                         }
-                        if(!gender.equals(sharedPreferences.getString(StringConstant.GENDERUSR, ""))) {
+                        if (!gender.equals(sharedPreferences.getString(StringConstant.GENDERUSR, ""))) {
                             et.putString(StringConstant.GENDERUSR, gender);
                         }
-                        if(!birthday.equals(sharedPreferences.getString(StringConstant.BIRTHDAY, ""))) {
+                        if (!birthday.equals(sharedPreferences.getString(StringConstant.BIRTHDAY, ""))) {
                             et.putString(StringConstant.BIRTHDAY, birthday);
                         }
-                        if(!starSign.equals(sharedPreferences.getString(StringConstant.STAR_SIGN, ""))) {
+                        if (!starSign.equals(sharedPreferences.getString(StringConstant.STAR_SIGN, ""))) {
                             et.putString(StringConstant.STAR_SIGN, starSign);
                         }
-                        if(!email.equals(sharedPreferences.getString(StringConstant.EMAIL, ""))) {
-                            if(!email.equals("")) {
-                                if(isEmail(email)) {
+                        if (!email.equals(sharedPreferences.getString(StringConstant.EMAIL, ""))) {
+                            if (!email.equals("")) {
+                                if (isEmail(email)) {
                                     et.putString(StringConstant.EMAIL, email);
                                 }
                             } else {
@@ -785,22 +786,23 @@ public class MineActivity extends Activity implements OnClickListener {
                             }
                         }
 
-                        if(!area.equals(sharedPreferences.getString(StringConstant.REGION, ""))) {
+                        if (!area.equals(sharedPreferences.getString(StringConstant.REGION, ""))) {
                             et.putString(StringConstant.REGION, pModel.getRegion());
                         }
                         if (!et.commit()) L.w("commit", " 数据 commit 失败!");
-                        if(!userSign.equals(pModel.getUserSign())) {// 签名
+                        if (!userSign.equals(pModel.getUserSign())) {// 签名
                             userSign = pModel.getUserSign();
                             textUserAutograph.setText(userSign);
                         }
-                        if(!region.equals(area)) {// 区域
+                        if (!region.equals(area)) {// 区域
                             region = area;
-                            if(region.equals("")) {
+                            if (region.equals("")) {
                                 region = "您还没有填写地址";
                             }
                             textUserArea.setText(region);
                         }
                     } else {
+                        L.w("信息修改失败!");
 //                        ToastUtils.show_always(context, "信息修改失败!");
                     }
                 } catch (JSONException e) {
@@ -827,10 +829,10 @@ public class MineActivity extends Activity implements OnClickListener {
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
-        if(blueAdapter != null && blueAdapter.isDiscovering()){
+        if (blueAdapter != null && blueAdapter.isDiscovering()) {
             blueAdapter.cancelDiscovery();
         }
-        if(hasRegister) {
+        if (hasRegister) {
             hasRegister = false;
             unregisterReceiver(mDevice);
         }
