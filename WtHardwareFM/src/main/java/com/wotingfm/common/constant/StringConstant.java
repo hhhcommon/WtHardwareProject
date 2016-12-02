@@ -83,9 +83,6 @@ public class StringConstant {
 
     public static final String FIND_CONTENT_TO_RESULT = "searchstr";
 
-    // 蓝牙的设置状态
-    public static final String BLUETOOTH_SET = "BLUETOOTH_SET";
-
     // 保存蓝牙是否开放检测状态
     public static final String BLUETOOTH_OPEN_DETECTION_SET = "BLUETOOTH_OPEN_DETECTION_SET";
 
