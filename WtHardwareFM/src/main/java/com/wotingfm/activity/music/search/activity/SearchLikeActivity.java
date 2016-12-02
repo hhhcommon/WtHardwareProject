@@ -71,7 +71,6 @@ import java.util.List;
 public class SearchLikeActivity extends AppBaseFragmentActivity implements
         View.OnClickListener, TagFlowLayout.OnTagClickListener, AdapterView.OnItemClickListener {
 
-    private SearchLikeActivity context;
     private SearchHistoryDao shd;               // 搜索数据库
     private History history;                    // 数据库信息
     private SearchKeyAdapter searchKeyAdapter;
@@ -170,7 +169,6 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchlike);
-        context = this;
         GlobalConfig.voicerecognizer= BroadcastConstants.SEARCHVOICE;
         initViews();            // 初始化视图
         initImage();            // 初始化指示器图片
@@ -553,7 +551,7 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
         image.setLayoutParams(lp);
         bmpW = BitmapFactory.decodeResource(getResources(), R.mipmap.left_personal_bg).getWidth();
         DisplayMetrics dm = new DisplayMetrics();
-        context.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenW = dm.widthPixels;
         offset = (screenW / 5 - bmpW) / 2;
         // imageView 设置平移，使下划线平移到初始位置（平移一个offset）

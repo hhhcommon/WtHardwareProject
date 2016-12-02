@@ -499,8 +499,8 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private static void getNetWork(int number, Context context) {
         String wifiset = sp.getString(StringConstant.WIFISET, "true"); // 是否开启网络流量提醒
         String wifishow = sp.getString(StringConstant.WIFISHOW, "true");// 是否网络弹出框提醒
-        if (wifishow != null && !wifishow.trim().equals("") && wifishow.equals("true")) {
-            if (wifiset != null && !wifiset.trim().equals("") && wifiset.equals("true")) {
+        if (!wifishow.trim().equals("") && wifishow.equals("true")) {
+            if (!wifiset.trim().equals("") && wifiset.equals("true")) {
                 // 开启网络播放数据连接提醒
                 CommonHelper.checkNetworkStatus(context);// 网络设置获取
                 GlobalConfig.playerobject=alllist.get(number);

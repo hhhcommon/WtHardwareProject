@@ -15,7 +15,6 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -47,12 +46,11 @@ import java.util.List;
 
 /**
  * 城市列表
+ *
  * @author 辛龙
  *         2016年4月7日
  */
-public class CityListActivity extends BaseActivity implements OnClickListener{
-
-    private CityListActivity context;
+public class CityListActivity extends BaseActivity implements OnClickListener {
     private CharacterParser characterParser;
     private PinyinComparator_d pinyinComparator;
     private Dialog dialog;
@@ -61,9 +59,8 @@ public class CityListActivity extends BaseActivity implements OnClickListener{
     private TextView dialogs;
     private ListView listView;
     private EditText et_Search_content;
-    private LinearLayout lin_head_left;
     private ImageView image_clear;
-    private List<CatalogName> userList= new ArrayList<>();
+    private List<CatalogName> userList = new ArrayList<>();
     private CityListAdapter adapter;
     private List<CatalogName> srcList;
     private String tag = "CITY_LIST_REQUEST_CANCEL_TAG";
@@ -74,15 +71,14 @@ public class CityListActivity extends BaseActivity implements OnClickListener{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_citylists);
-        context = this;
-        type=this.getIntent().getStringExtra("type");
-        characterParser = CharacterParser.getInstance();								// 实例化汉字转拼音类
+        type = getIntent().getStringExtra("type");
+        characterParser = CharacterParser.getInstance();// 实例化汉字转拼音类
         pinyinComparator = new PinyinComparator_d();
         setView();
         setListener();
-        if(GlobalConfig.CityCatalogList!=null&&GlobalConfig.CityCatalogList.size()>0){
+        if (GlobalConfig.CityCatalogList != null && GlobalConfig.CityCatalogList.size() > 0) {
             handleCityList(GlobalConfig.CityCatalogList);
-        }else{
+        } else {
             if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 dialog = DialogUtils.Dialogph(context, "正在获取信息");
                 sendRequest();
@@ -94,13 +90,14 @@ public class CityListActivity extends BaseActivity implements OnClickListener{
 
 
     private void setView() {
+        findViewById(R.id.head_left_btn).setOnClickListener(this);
+
         tvNoFriend = (TextView) findViewById(R.id.title_layout_no_friends);
         sideBar = (SideBar) findViewById(R.id.sidrbar);
         dialogs = (TextView) findViewById(R.id.dialog);
         sideBar.setTextView(dialogs);
-        listView = (ListView) findViewById(R.id.country_lvcountry);		     // listview
-        et_Search_content = (EditText) findViewById(R.id.et_search);		 // 搜索控件
-        lin_head_left = (LinearLayout) findViewById(R.id.head_left_btn);
+        listView = (ListView) findViewById(R.id.country_lvcountry);             // listview
+        et_Search_content = (EditText) findViewById(R.id.et_search);         // 搜索控件
         image_clear = (ImageView) findViewById(R.id.image_clear);
     }
 
@@ -113,7 +110,7 @@ public class CityListActivity extends BaseActivity implements OnClickListener{
         }
     }
 
-    private void handleCityList(List<CatalogName> srcList){
+    private void handleCityList(List<CatalogName> srcList) {
         if (srcList.size() == 0) {
             ToastUtils.show_always(context, "获取分类列表为空");
         } else {
@@ -131,7 +128,7 @@ public class CityListActivity extends BaseActivity implements OnClickListener{
     /**
      * 发送网络请求
      */
-    private void sendRequest(){
+    private void sendRequest() {
         VolleyRequest.RequestPost(GlobalConfig.getCatalogUrl, tag, setParam(), new VolleyCallback() {
 
             private String ReturnType;
@@ -142,8 +139,8 @@ public class CityListActivity extends BaseActivity implements OnClickListener{
                     dialog.dismiss();
                 }
                 // 如果网络请求已经执行取消操作  就表示就算请求成功也不需要数据返回了  所以方法就此结束
-                if(isCancelRequest){
-                    return ;
+                if (isCancelRequest) {
+                    return;
                 }
                 try {
                     ReturnType = result.getString("ReturnType");
@@ -156,9 +153,10 @@ public class CityListActivity extends BaseActivity implements OnClickListener{
                         try {
                             // 获取列表
                             String ResultList = result.getString("CatalogData");
-                            Catalog SubList_all = new Gson().fromJson(ResultList, new TypeToken<Catalog>() {}.getType());
+                            Catalog SubList_all = new Gson().fromJson(ResultList, new TypeToken<Catalog>() {
+                            }.getType());
                             srcList = SubList_all.getSubCata();
-                            GlobalConfig.CityCatalogList=srcList;
+                            GlobalConfig.CityCatalogList = srcList;
                             handleCityList(srcList);
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -188,9 +186,10 @@ public class CityListActivity extends BaseActivity implements OnClickListener{
 
     /**
      * 设置请求参数
+     *
      * @return
      */
-    private JSONObject setParam(){
+    private JSONObject setParam() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("CatalogType", "2");
@@ -222,22 +221,22 @@ public class CityListActivity extends BaseActivity implements OnClickListener{
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(type!=null&&!type.trim().equals("")&&type.equals("address")){
+                if (type != null && !type.trim().equals("") && type.equals("address")) {
                     SharedPreferences sp = getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
                     Editor et = sp.edit();
                     et.putString(StringConstant.CITYTYPE, "true");
-                    if(userList.get(position).getCatalogId()!=null&&!userList.get(position).getCatalogId().equals("")){
+                    if (userList.get(position).getCatalogId() != null && !userList.get(position).getCatalogId().equals("")) {
                         et.putString(StringConstant.CITYID, userList.get(position).getCatalogId());
-                        GlobalConfig.AdCode= userList.get(position).getCatalogId();
+                        GlobalConfig.AdCode = userList.get(position).getCatalogId();
                     }
-                    if(userList.get(position).getCatalogName()!=null&&!userList.get(position).getCatalogName().equals("")){
+                    if (userList.get(position).getCatalogName() != null && !userList.get(position).getCatalogName().equals("")) {
                         et.putString(StringConstant.CITYNAME, userList.get(position).getCatalogName());
-                        GlobalConfig.CityName=userList.get(position).getCatalogName();
+                        GlobalConfig.CityName = userList.get(position).getCatalogName();
                     }
                     et.commit();
                     finish();
-                }else{
-                    Intent intent = new Intent(context,CityRadioActivity.class);
+                } else {
+                    Intent intent = new Intent(context, CityRadioActivity.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("fromtype", "city");
                     bundle.putString("name", userList.get(position).getCatalogName());
@@ -267,7 +266,6 @@ public class CityListActivity extends BaseActivity implements OnClickListener{
     }
 
     private void setListener() {
-        lin_head_left.setOnClickListener(this);
         image_clear.setOnClickListener(this);
 
         image_clear.setOnClickListener(new OnClickListener() {
@@ -321,9 +319,7 @@ public class CityListActivity extends BaseActivity implements OnClickListener{
         });
     }
 
-    /**
-     * 根据输入框中的值来过滤数据并更新ListView
-     */
+    // 根据输入框中的值来过滤数据并更新 ListView
     private void search(String search_name) {
         List<CatalogName> filterDateList = new ArrayList<>();
         if (TextUtils.isEmpty(search_name)) {
@@ -333,8 +329,7 @@ public class CityListActivity extends BaseActivity implements OnClickListener{
             filterDateList.clear();
             for (CatalogName sortModel : userList) {
                 String name = sortModel.getName();
-                if (name.indexOf(search_name.toString()) != -1
-                        || characterParser.getSelling(name).startsWith(search_name.toString())) {
+                if (name.contains(search_name) || characterParser.getSelling(name).startsWith(search_name)) {
                     filterDateList.add(sortModel);
                 }
             }
@@ -354,19 +349,17 @@ public class CityListActivity extends BaseActivity implements OnClickListener{
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
-        srcList=null;
+        srcList = null;
         userList = null;
         adapter = null;
         tvNoFriend = null;
         sideBar = null;
         dialogs = null;
         listView = null;
-        lin_head_left = null;
         et_Search_content = null;
         listView = null;
         image_clear = null;
         pinyinComparator = null;
-        context = null;
         characterParser = null;
         setContentView(R.layout.activity_null);
     }

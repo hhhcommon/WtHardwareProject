@@ -11,7 +11,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -43,7 +42,6 @@ import java.util.List;
  * 2016年4月5日
  */
 public class RadioListActivity extends FragmentActivity implements OnClickListener {
-	private LinearLayout head_left_btn;		// 返回
 	private TextView mTextView_Head;
 	public static String catalogName;
 	public static String catalogType;
@@ -187,8 +185,7 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 	 * 初始化界面
 	 */
 	private void setView() {
-		head_left_btn = (LinearLayout) findViewById(R.id.head_left_btn);
-		head_left_btn.setOnClickListener(this);
+        findViewById(R.id.head_left_btn).setOnClickListener(this);
 		mTextView_Head = (TextView) findViewById(R.id.head_name_tv);
 		pageSlidingTab = (PagerSlidingTabStrip) findViewById(R.id.tabs_title);
 		viewPager = (ViewPager) findViewById(R.id.view_pager);
@@ -214,7 +211,6 @@ public class RadioListActivity extends FragmentActivity implements OnClickListen
 		isCancelRequest = VolleyRequest.cancelRequest(tag);
 		pageSlidingTab = null;
 		viewPager = null;
-		head_left_btn = null;
 		mTextView_Head = null;
 		dialog = null;
 		if(list != null){

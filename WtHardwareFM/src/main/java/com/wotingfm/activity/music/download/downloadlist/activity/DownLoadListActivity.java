@@ -1,6 +1,5 @@
 package com.wotingfm.activity.music.download.downloadlist.activity;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -9,7 +8,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.LinearLayout;
@@ -17,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.BaseActivity;
 import com.wotingfm.activity.common.main.MainActivity;
 import com.wotingfm.activity.music.download.dao.FileInfoDao;
 import com.wotingfm.activity.music.download.downloadlist.adapter.DownLoadListAdapter;
@@ -26,7 +25,6 @@ import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.ToastUtils;
 
@@ -39,16 +37,13 @@ import java.util.List;
  * @author 辛龙
  *2016年8月8日
  */
-public class DownLoadListActivity extends Activity implements OnClickListener {
-	private DownLoadListActivity context;
-	private LinearLayout head_left;
+public class DownLoadListActivity extends BaseActivity implements OnClickListener {
 	private ListView mlistview;
 	private TextView head_name_tv;
-	//	private LinearLayout lin_clear;
 	private TextView tv_sum;
 	private TextView tv_totalcache;
 	private LinearLayout lin_dinglan;
-	private List<FileInfo> fileinfolist = new ArrayList<FileInfo>();
+	private List<FileInfo> fileinfolist = new ArrayList<>();
 	private DownLoadListAdapter adapter;
 	private String sequname;
 	private int positionnow = -1;	// 标记当前选中的位置
@@ -59,20 +54,15 @@ public class DownLoadListActivity extends Activity implements OnClickListener {
 	private DecimalFormat df;
 	private SearchPlayerHistoryDao dbdao;
 	private FileInfoDao FID;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_downloadlist);
-		context = this;
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);		// 透明状态栏
-		getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);	// 透明导航栏
-		MyActivityManager mam = MyActivityManager.getInstance();
-		mam.pushOneActivity(context);
 		InitDao();
 		handleIntent();
 		setview();
 		confirmdialog();// 确定是否删除记录弹窗
-		setListener();
 		df = new DecimalFormat("0.00");
 	}
 
@@ -138,7 +128,6 @@ public class DownLoadListActivity extends Activity implements OnClickListener {
 			setItemListener();
 			setInterface();
 			tv_sum.setText("共" + fileinfolist.size() + "个节目");
-/*			tv_totalcache.setText("20.0MB");*/
 			for(int i=0;i<fileinfolist.size();i++){
 				sum += fileinfolist.get(i).getEnd();			
 			}
@@ -149,8 +138,6 @@ public class DownLoadListActivity extends Activity implements OnClickListener {
 			lin_dinglan.setVisibility(View.GONE);
 			adapter = new DownLoadListAdapter(context, fileinfolist);
 			mlistview.setAdapter(adapter);
-			/*lin_dinglan.setVisibility(View.GONE);
-			mlistview.setVisibility(View.GONE);*/
 			Intent p_intent = new Intent("push_down_completed");
 			context.sendBroadcast(p_intent);
 			ToastUtils.show_always(context, "此目录内已经没有内容");
@@ -269,20 +256,15 @@ public class DownLoadListActivity extends Activity implements OnClickListener {
 		});
 	}
 
-	private void setListener() {
-		head_left.setOnClickListener(this);
-	}
-
 	private void handleIntent() {
-		Intent intent = context.getIntent();
+		Intent intent = getIntent();
 		Bundle bundle = intent.getExtras();
 		sequname = bundle.getString("sequname");
 		sequid = bundle.getString("sequid");
 	}
 
 	private void setview() {
-		// 返回按钮
-		head_left = (LinearLayout) findViewById(R.id.head_left_btn);
+        findViewById(R.id.head_left_btn).setOnClickListener(this);// 返回按钮
 		mlistview = (ListView) findViewById(R.id.lv_downloadlist);
 		head_name_tv = (TextView) findViewById(R.id.head_name_tv);
 		head_name_tv.setText(sequname);
@@ -303,9 +285,6 @@ public class DownLoadListActivity extends Activity implements OnClickListener {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		MyActivityManager mam = MyActivityManager.getInstance();
-		mam.popOneActivity(context);
-		head_left=null;
 		mlistview=null;
 		head_name_tv=null;
 		tv_sum=null;

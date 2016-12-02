@@ -46,7 +46,7 @@ import java.util.List;
 /**
  * 专辑页
  * @author 辛龙
- *         2016年4月1日
+ * 2016年4月1日
  */
 public class AlbumActivity extends FragmentActivity implements OnClickListener {
     private AlbumActivity context;
@@ -87,7 +87,7 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
         fragmentList.add(new DetailsFragment());
         fragmentList.add(new ProgramFragment());
 
-        mPager = (ViewPager) findViewById(R.id.mpager);
+        mPager = (ViewPager) findViewById(R.id.view_pager);
         mPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList));
 //        mPager.setOnPageChangeListener(new MyOnPageChangeListener());
         mPager.setCurrentItem(0);

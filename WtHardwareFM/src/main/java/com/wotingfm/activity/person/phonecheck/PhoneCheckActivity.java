@@ -40,17 +40,16 @@ public class PhoneCheckActivity extends AppBaseActivity implements OnClickListen
     private EditText editVerificationCode;          // 输入 验证码
     private TextView textGetVerificationCode;       // 获取验证码
     private TextView textResend;                    // 重新发送验证码
+    private TextView tv_Phone_Desc;
     private Button btUpdate;                        // 修改按钮
 
     private String tag = "MODIFY_PHONE_NUMBER_VOLLEY_REQUEST_CANCEL_TAG";
     private String phoneNumber;                     // 新手机号
-
     private String verificationCode;                // 验证码
+    private String phoneNumberNew;
     private int sendType = 1;                       // == 1 为第一次发送验证码  == 2 为重新发送验证码
     private boolean isCancelRequest;
     private boolean isGetCode;                      // 判断是否已经获取验证码
-    private String phoneNumberNew;
-    private TextView tv_Phone_Desc;
 
     @Override
     protected int setViewId() {

@@ -1,31 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/BaseStyle"
     android:orientation="vertical">
+
     <include android:id="@+id/include_title" layout="@layout/base_activity_title"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/gray"
         android:gravity="center_vertical">
 
-
-
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@drawable/bg_dinglan_edittext"
-            android:layout_marginTop="3dp"
             android:layout_marginBottom="3dp"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:gravity="left|center">
+            android:layout_marginTop="3dp"
+            android:background="@drawable/bg_dinglan_edittext"
+            android:gravity="center_vertical">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
-                android:src="@mipmap/wt_image_search_gray" />
+                android:src="@mipmap/wt_image_search_gray"/>
 
             <EditText
                 android:id="@+id/et_news"
@@ -39,7 +40,7 @@
                 android:singleLine="true"
                 android:textColor="@color/wt_login_third"
                 android:textColorHint="@color/beijing"
-                android:textSize="@dimen/wt_button_default_text" />
+                android:textSize="@dimen/wt_button_default_text"/>
 
             <ImageView
                 android:id="@+id/img_voice_search"
@@ -47,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="11dp"
                 android:src="@mipmap/wt_image_voice"
-                android:visibility="visible" />
+                android:visibility="visible"/>
 
             <ImageView
                 android:id="@+id/img_delete"
@@ -55,7 +56,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginRight="8dp"
                 android:src="@mipmap/wt_img_clearnew"
-                android:visibility="gone" />
+                android:visibility="gone"/>
+
         </LinearLayout>
 
     </LinearLayout>
@@ -77,42 +79,42 @@
                 android:id="@+id/rank_image_url"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:scaleType="centerCrop"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="18dp"
                 android:layout_marginRight="13dp"
-                android:src="@mipmap/wt_image_saoyisao" />
+                android:scaleType="centerCrop"
+                android:src="@mipmap/wt_image_saoyisao"/>
 
             <TextView
                 android:id="@+id/rank_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignTop="@id/rank_image_url"
+                android:layout_marginTop="5dp"
+                android:layout_toRightOf="@id/rank_image_url"
                 android:text="扫一扫"
                 android:textColor="@color/dinglan_orange"
-                android:textSize="@dimen/wt_button_default_text"
-                android:layout_toRightOf="@id/rank_image_url"
-                android:layout_alignTop="@id/rank_image_url"
-                android:layout_marginTop="5dp"/>
+                android:textSize="@dimen/wt_button_default_text"/>
 
             <TextView
                 android:id="@+id/tv_num"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@id/rank_image_url"
+                android:layout_marginBottom="5dp"
                 android:layout_marginTop="3dp"
+                android:layout_toRightOf="@id/rank_image_url"
                 android:text="扫描二维码名片"
                 android:textColor="@color/beijing"
-                android:textSize="@dimen/wt_login_text_wjmm"
-                android:layout_toRightOf="@id/rank_image_url"
-                android:layout_alignBottom="@id/rank_image_url"
-                android:layout_marginBottom="5dp"/>
+                android:textSize="@dimen/wt_login_text_wjmm"/>
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/wt_image_right"
-                android:layout_marginRight="19dp"/>
+                android:layout_marginRight="19dp"
+                android:src="@mipmap/wt_image_right"/>
 
         </RelativeLayout>
 
@@ -131,7 +133,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/wt_image_search_find" />
+                android:src="@mipmap/wt_image_search_find"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -139,7 +141,7 @@
                 android:layout_marginLeft="13dp"
                 android:text="搜索："
                 android:textColor="@color/dinglan_orange"
-                android:textSize="@dimen/wt_button_default_text" />
+                android:textSize="@dimen/wt_button_default_text"/>
 
             <TextView
                 android:id="@+id/text_search"
@@ -153,14 +155,14 @@
                 android:singleLine="true"
                 android:text="AGUIFHSDIOSDH"
                 android:textColor="@color/dinglan_orange"
-                android:textSize="16sp" />
+                android:textSize="16sp"/>
 
         </LinearLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/view_color" />
+            android:background="@color/view_color"/>
 
     </LinearLayout>
 

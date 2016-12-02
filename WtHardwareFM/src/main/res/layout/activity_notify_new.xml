@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/BaseStyle">
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/BaseStyle"
+    android:orientation="vertical">
 
     <include android:id="@+id/include_title" layout="@layout/base_activity_title"/>
 
@@ -9,7 +11,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="none"
-        android:background="@color/WHITE"
-        android:layout_below="@id/include_title"/>
+        android:background="@color/app_bg"/>
 
-</RelativeLayout>
+</LinearLayout>

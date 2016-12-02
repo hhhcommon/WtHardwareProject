@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/dinglan_orange"
@@ -11,14 +12,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/wt_dinglan_high">
 
-        <TextView
+        <ImageView
             android:id="@+id/head_left_btn"
-            android:layout_width="43dp"
-            android:layout_height="match_parent"
-            android:text="返回"
-            android:gravity="center"
-            android:textColor="@color/WHITE_1"
-            android:textSize="@dimen/wt_dinglan_text_right"/>
+            style="@style/LeftImageStyle"/>
 
         <TextView
             android:id="@+id/lin_head_right"

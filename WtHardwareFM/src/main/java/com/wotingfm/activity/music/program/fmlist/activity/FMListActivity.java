@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -47,9 +46,7 @@ import java.util.List;
  *         2016年8月8日
  */
 public class FMListActivity extends BaseActivity implements View.OnClickListener {
-
     private FMListActivity context;
-    private LinearLayout head_left_btn;
     private XListView mListView;
     private TextView mTextView_Head;
     private Dialog dialog;
@@ -285,12 +282,11 @@ public class FMListActivity extends BaseActivity implements View.OnClickListener
 
     private void setView() {
         mListView = (XListView) findViewById(R.id.listview_fm);
-        head_left_btn = (LinearLayout) findViewById(R.id.head_left_btn);
         mTextView_Head = (TextView) findViewById(R.id.head_name_tv);
     }
 
     private void setListener() {
-        head_left_btn.setOnClickListener(this);
+        findViewById(R.id.head_left_btn).setOnClickListener(this);
         // 设置上下拉参数
         mListView.setPullLoadEnable(true);
         mListView.setPullRefreshEnable(true);
@@ -329,7 +325,6 @@ public class FMListActivity extends BaseActivity implements View.OnClickListener
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
-        head_left_btn = null;
         mListView = null;
         dialog = null;
         mTextView_Head = null;

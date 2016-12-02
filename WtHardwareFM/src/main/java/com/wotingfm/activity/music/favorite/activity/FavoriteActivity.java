@@ -27,7 +27,6 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
@@ -58,7 +57,6 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
 
     private Dialog confirmDialog;
     private Dialog delDialog;
-    private LinearLayout head_left;
     private ImageView image;
     private ImageView imgQXuan;
     private static TextView tv_total;
@@ -171,7 +169,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
     }
 
     private void setListener() {
-        head_left.setOnClickListener(this);
+        findViewById(R.id.head_left_btn).setOnClickListener(this);// 返回按钮
         tv_total.setOnClickListener(new txListener(0));
         tv_sequ.setOnClickListener(new txListener(1));
         tv_sound.setOnClickListener(new txListener(2));
@@ -207,7 +205,6 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
 
     // 初始化视图
     private void setView() {
-        head_left = (LinearLayout) findViewById(R.id.head_left_btn);// 返回按钮
         tv_total = (TextView) findViewById(R.id.tv_total);// 全部
         tv_sequ = (TextView) findViewById(R.id.tv_sequ);// 专辑
         tv_sound = (TextView) findViewById(R.id.tv_sound);// 声音
@@ -651,7 +648,6 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
         tv_tts = null;
         tv_qingkong = null;
         tv_bianji = null;
-        head_left = null;
         imgQXuan = null;
         mPager = null;
         delDialog = null;
