@@ -1,10 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/dinglan_orange"
-    android:clipToPadding="true"
-    android:fitsSystemWindows="true"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/BaseStyle"
     android:orientation="vertical">
 
     <RelativeLayout
@@ -18,10 +15,10 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
             android:text="录音"
-            android:textSize="17sp"
             android:textColor="@color/WHITE"
-            android:layout_centerInParent="true"/>
+            android:textSize="17sp"/>
 
     </RelativeLayout>
 
@@ -43,109 +40,109 @@
             android:layout_height="168dp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="90dp"
-            android:visibility="gone"
-            android:background="@mipmap/wt_image_audio_recording"/>
+            android:background="@mipmap/wt_image_audio_recording"
+            android:visibility="gone"/>
 
         <TextView
             android:id="@+id/text_record_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="开始录音"
-            android:textSize="18sp"
             android:layout_centerHorizontal="true"
             android:layout_marginTop="150dp"
-            android:textColor="@color/dinglan_orange"/>
+            android:text="开始录音"
+            android:textColor="@color/dinglan_orange"
+            android:textSize="18sp"/>
 
         <LinearLayout
             android:id="@+id/linear_time"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:layout_below="@id/text_record_state"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/timestamp_hour_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="00"
                 android:textColor="@color/dinglan_orange"
-                android:textSize="25sp"
-                android:text="00"/>
+                android:textSize="25sp"/>
 
             <TextView
                 android:id="@+id/text_hour_dian"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text=":"
                 android:textColor="@color/dinglan_orange"
-                android:textSize="25sp"
-                android:text=":"/>
+                android:textSize="25sp"/>
 
             <TextView
                 android:id="@+id/timestamp_minute_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="00"
                 android:textColor="@color/dinglan_orange"
-                android:textSize="25sp"
-                android:text="00"/>
+                android:textSize="25sp"/>
 
             <TextView
                 android:id="@+id/text_dian"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text=":"
                 android:textColor="@color/dinglan_orange"
-                android:textSize="25sp"
-                android:text=":"/>
+                android:textSize="25sp"/>
 
             <TextView
                 android:id="@+id/timestamp_second_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:text="00"
                 android:textColor="@color/dinglan_orange"
-                android:textSize="25sp"
-                android:text="00"/>
+                android:textSize="25sp"/>
 
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="200dp"
-            android:orientation="horizontal"
+            android:layout_alignParentBottom="true"
             android:gravity="center"
-            android:layout_alignParentBottom="true">
+            android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btn_play"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="40dp"
-                android:drawableTop="@mipmap/wt_image_recorder_play_unavailable"
                 android:background="@color/WHITE"
-                android:enabled="false"
-                android:textColor="@color/gray"
                 android:drawablePadding="7dp"
-                android:text="播放"/>
+                android:drawableTop="@mipmap/wt_image_recorder_play_unavailable"
+                android:enabled="false"
+                android:text="播放"
+                android:textColor="@color/gray"/>
 
             <Button
                 android:id="@+id/btn_start"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@color/WHITE"
-                android:drawableTop="@mipmap/wt_image_recording"
                 android:drawablePadding="7dp"
-                android:textColor="@color/dinglan_orange"
-                android:text="开始"/>
+                android:drawableTop="@mipmap/wt_image_recording"
+                android:text="开始"
+                android:textColor="@color/dinglan_orange"/>
 
             <Button
                 android:id="@+id/btn_save"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="40dp"
-                android:drawableTop="@mipmap/wt_image_recorder_save_unavailable"
                 android:background="@color/WHITE"
-                android:enabled="false"
-                android:textColor="@color/gray"
                 android:drawablePadding="7dp"
-                android:text="保存"/>
+                android:drawableTop="@mipmap/wt_image_recorder_save_unavailable"
+                android:enabled="false"
+                android:text="保存"
+                android:textColor="@color/gray"/>
 
         </LinearLayout>
 

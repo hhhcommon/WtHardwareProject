@@ -1,17 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    android:background="@color/dinglan_orange"
-    android:clipToPadding="true"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical" >
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/BaseStyle"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:background="@color/dinglan_orange"
-        android:gravity="center_vertical" >
+        android:gravity="center_vertical">
 
         <ImageView
             android:id="@+id/head_left_btn"
@@ -20,20 +17,20 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="意见反馈"
             android:layout_centerInParent="true"
+            android:text="意见反馈"
             android:textColor="@color/WHITE"
-            android:textSize="@dimen/activity_head_center_s" />
+            android:textSize="@dimen/activity_head_center_s"/>
 
         <TextView
             android:id="@+id/head_right_btn"
             android:layout_width="48dp"
             android:layout_height="match_parent"
-            android:text="历史"
-            android:gravity="center"
             android:layout_alignParentRight="true"
-            android:textSize="@dimen/wt_dinglan_text_right"
-            android:textColor="@color/WHITE" />
+            android:gravity="center"
+            android:text="历史"
+            android:textColor="@color/WHITE"
+            android:textSize="@dimen/wt_dinglan_text_right"/>
 
     </RelativeLayout>
 
@@ -41,7 +38,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/app_bg"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
         <EditText
             android:id="@+id/edit_feedback_content"
@@ -55,7 +52,7 @@
             android:hint="请输入您的反馈意见以及您的联系方式"
             android:padding="14dp"
             android:textColor="@color/beijing"
-            android:textSize="@dimen/list_text_size" />
+            android:textSize="@dimen/list_text_size"/>
 
         <TextView
             android:id="@+id/submit_button"
@@ -68,7 +65,7 @@
             android:gravity="center"
             android:text="提交"
             android:textColor="@color/WHITE"
-            android:textSize="@dimen/activity_head_right" />
+            android:textSize="@dimen/activity_head_right"/>
 
     </LinearLayout>
 

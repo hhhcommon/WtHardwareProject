@@ -1,15 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/dinglan_orange"
-    android:clipToPadding="true"
-    android:fitsSystemWindows="true"
-    android:orientation="vertical" >
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/BaseStyle"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="48dp" >
+        android:layout_height="48dp">
 
         <ImageView
             android:id="@+id/head_left_btn"
@@ -18,27 +15,27 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="下载位置"
             android:layout_centerInParent="true"
+            android:text="下载位置"
             android:textColor="@color/WHITE"
-            android:textSize="@dimen/activity_head_center_s" />
+            android:textSize="@dimen/activity_head_center_s"/>
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/app_bg" >
+        android:background="@color/app_bg">
 
         <TextView
             android:id="@+id/text_phone"
             android:layout_width="match_parent"
             android:layout_height="60dp"
-            android:text="手机"
-            android:background="@color/WHITE"
             android:layout_marginTop="15dp"
-            android:paddingTop="8dp"
+            android:background="@color/WHITE"
             android:paddingLeft="19dp"
+            android:paddingTop="8dp"
+            android:text="手机"
             android:textColor="@color/wt_login_third"
             android:textSize="@dimen/activity_head_right"/>
 
@@ -46,20 +43,20 @@
             android:id="@+id/tv_downloadposition"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="19dp"
             android:layout_alignBottom="@id/text_phone"
             android:layout_marginBottom="8dp"
+            android:layout_marginLeft="19dp"
             android:textColor="@color/beijing"
             android:textSize="@dimen/text_size_13"/>
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/text_phone"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@id/text_phone"
-            android:layout_alignBottom="@id/text_phone"
             android:layout_marginRight="19dp"
-            android:src="@mipmap/wt_group_checked" />
+            android:src="@mipmap/wt_group_checked"/>
 
     </RelativeLayout>
 

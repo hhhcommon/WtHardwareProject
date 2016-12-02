@@ -29,9 +29,7 @@ public abstract class AppBaseActivity extends BaseActivity {
         initView();
     }
 
-    /*
-     * 初始化
-     */
+    // 初始化
     private void initView() {
         leftBack = findView(R.id.left_back);
         leftBack.setOnClickListener(new View.OnClickListener() {

@@ -1,221 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/BaseStyle"
-    android:background="@color/white"
-    >
+    android:orientation="vertical">
+
+    <include android:id="@+id/include_title" layout="@layout/base_activity_title"/>
+
     <RelativeLayout
-        android:id="@+id/relative_title"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:background="@color/dinglan_orange"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true">
+        android:layout_height="match_parent"
+        android:background="@color/app_bg">
 
         <TextView
-            android:id="@+id/left_back"
-            android:layout_width="48dp"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="返回"
-            android:textColor="@color/WHITE"
-            android:textSize="16sp"
-            android:layout_marginLeft="6dp"/>
-
-
-        <TextView
-            android:id="@+id/text_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:text="流量管理"
-            android:textColor="@color/WHITE"
-            android:textSize="20sp" />
-
-    </RelativeLayout>
-    <ImageView
-        android:id="@+id/image_bluetooth_set"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/wt_person_close"
-        android:layout_alignBottom="@+id/textView6"
-        android:layout_alignRight="@+id/pb_flow"
-        android:layout_alignEnd="@+id/pb_flow" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:layout_marginLeft="8dp"
-        android:layout_below="@+id/include_title"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/textView8" />
-
-        <TextView
+            android:id="@+id/text_view_flow_info"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@color/setting_bg_color"
             android:paddingLeft="8dp"
             android:text="流量信息"
             android:textColor="@color/s_green"
-            android:gravity="center|left"
-            android:textSize="16sp"
-            android:id="@+id/textView9"
-            android:layout_below="@+id/relative_title"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:gravity="center_vertical"
+            android:textSize="16sp"/>
 
-    <TextView
+        <TextView
+            android:id="@+id/text_view_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="已使用流量2.0G"
-            android:id="@+id/textView2"
-            android:layout_below="@+id/textView9"
-            android:layout_toRightOf="@+id/textView8"
-            android:layout_toEndOf="@+id/textView8" />
+            android:paddingLeft="8dp"
+            android:layout_below="@id/text_view_flow_info"/>
+
         <TextView
+            android:id="@+id/text_surplus_flow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="剩余流量1.0G"
-            android:id="@+id/textView"
-            android:layout_below="@+id/textView9"
-            android:layout_alignRight="@+id/pb_flow"
-            android:layout_alignEnd="@+id/pb_flow" />
-         <ProgressBar
-             android:layout_width="match_parent"
-             android:layout_height="10dp"
-             style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-             android:layout_below="@+id/textView2"
-             android:layout_alignParentLeft="true"
-             android:layout_alignParentStart="true"
-             android:progressDrawable="@drawable/bg_seekbar"
-             android:layout_marginRight="8dp"
-             android:layout_marginTop="5dp"
-             android:layout_marginLeft="8dp"
-             android:id="@+id/pb_flow"
-             />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="当前网速300kb/s"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="5dp"
-        android:layout_below="@+id/pb_flow"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:id="@+id/textView3" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=""
-        android:layout_marginLeft="8dp"
-        android:layout_below="@+id/include_title"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        />
+            android:layout_marginRight="8dp"
+            android:layout_below="@id/text_view_flow_info"
+            android:layout_alignParentRight="true"/>
 
+        <ProgressBar
+            android:id="@+id/pb_flow"
+            android:layout_width="match_parent"
+            android:layout_height="10dp"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+            android:layout_below="@+id/text_view_2"
+            android:progressDrawable="@drawable/bg_seekbar"
+            android:layout_margin="8dp"/>
 
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:orientation="horizontal"
-        android:layout_below="@+id/textView3"
-        android:background="@color/setting_bg_color"
-        android:id="@+id/linearLayout2">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="48dp"
-        android:text="定期自动校准"
-        android:textColor="@color/s_green"
-        android:gravity="center|left"
-        android:textSize="16sp"
-        android:layout_below="@+id/textView3"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:paddingLeft="8dp"
-        android:id="@+id/textView4" />
         <TextView
-            android:layout_width="200dp"
+            android:id="@+id/text_network_speed"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="当前网速300kb/s"
+            android:layout_marginLeft="8dp"
+            android:layout_below="@+id/pb_flow"/>
+
+        <RelativeLayout
+            android:id="@+id/view_relative"
+            android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:text="定期自动校准"
-            android:gravity="center|right"
-            android:layout_below="@+id/textView3"
+            android:orientation="horizontal"
+            android:layout_below="@+id/text_network_speed"
+            android:background="@color/setting_bg_color">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="定期自动校准"
+                android:textColor="@color/s_green"
+                android:layout_centerVertical="true"
+                android:textSize="16sp"
+                android:layout_marginLeft="8dp"/>
+
+            <Spinner
+                android:id="@+id/sp_liuliang"
+                android:layout_width="60dp"
+                android:layout_height="40dp"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="8dp"/>
+
+            <TextView
+                android:id="@+id/tv_showchoice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="每天"
+                android:layout_toLeftOf="@id/sp_liuliang"
+                android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/text_notify"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="流量通知"
+            android:layout_below="@+id/view_relative"
+            android:textColor="@color/s_green"
+            android:textSize="16sp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginTop="5dp"/>
+
+        <TextView
+            android:id="@+id/text_view_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="当使用流量超过90%时通知我"
+            android:layout_below="@+id/text_notify"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:paddingLeft="8dp"
-            android:id="@+id/tv_showchoice" />
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="10dp"/>
 
-
-        <Spinner
-          android:id="@+id/sp_liuliang"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:layout_marginRight="8dp"
-          android:layout_alignBottom="@+id/textView4"
-          android:layout_alignParentRight="true"
-          android:layout_alignParentEnd="true"
-            android:scrollbars="none"
-            >
-      </Spinner>
-    </LinearLayout>
-
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="流量通知"
-        android:id="@+id/textView5"
-        android:layout_below="@+id/linearLayout2"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:textColor="@color/s_green"
-        android:gravity="center|left"
-        android:textSize="16sp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="5dp"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:text="当使用流量超过90%时通知我"
-        android:id="@+id/textView6"
-        android:layout_below="@+id/textView5"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="8dp"
-        android:layout_marginBottom="10dp"
-        />
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="48dp"
-        android:orientation="horizontal"
-        android:background="@color/setting_bg_color"
-        android:id="@+id/linearLayout3"
-        android:layout_below="@+id/textView6"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true">
+        <ImageView
+            android:id="@+id/image_flow_set"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/wt_person_close"
+            android:layout_alignTop="@id/text_notify"
+            android:layout_alignBottom="@id/text_view_3"
+            android:layout_alignRight="@+id/pb_flow" />
 
         <TextView
-            android:layout_width="wrap_content"
+            android:id="@+id/text_recharge"
+            android:layout_width="match_parent"
             android:layout_height="48dp"
             android:text="流量充值"
             android:textColor="@color/s_green"
-            android:gravity="center|left"
+            android:gravity="center_vertical"
+            android:layout_below="@+id/text_view_3"
             android:textSize="16sp"
-            android:layout_below="@+id/textView3"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:paddingLeft="8dp"
-            android:id="@+id/textView7" />
+            android:background="@color/setting_bg_color"
+            android:paddingLeft="8dp"/>
 
+    </RelativeLayout>
 
-    </LinearLayout>
-
-
-</RelativeLayout>
+</LinearLayout>

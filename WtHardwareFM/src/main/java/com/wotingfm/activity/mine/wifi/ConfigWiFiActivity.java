@@ -33,7 +33,7 @@ public class ConfigWiFiActivity extends AppBaseActivity implements View.OnClickL
             String wiFiName = intent.getStringExtra(StringConstant.WIFI_NAME);
             setTitle(wiFiName);
         } else {
-            setTitle("连接WiFi");
+            setTitle("连接 WiFi");
         }
 
         editPsw = findView(R.id.edit_psw);                          // 输入 密码

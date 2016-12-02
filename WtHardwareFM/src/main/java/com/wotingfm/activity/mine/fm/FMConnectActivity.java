@@ -1,13 +1,11 @@
 package com.wotingfm.activity.mine.fm;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -15,7 +13,9 @@ import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.mine.fm.adapter.FMListAdapter;
 import com.wotingfm.activity.mine.fm.model.FMInfo;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.util.L;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,17 +24,16 @@ import java.util.List;
  * FM 连接界面
  */
 public class FMConnectActivity extends AppBaseActivity implements View.OnClickListener {
-    private SharedPreferences sharedPreferences;
     private ListView fmListView;// 频率列表
-    private LinearLayout linearScan;// 底部扫描
+//    private LinearLayout linearScan;// 底部扫描
     private List<FMInfo> list = new ArrayList<>();
     private FMListAdapter adapter;
 
-    private ImageView imageFmSet;// FM开关
+    private ImageView imageFmSet;// FM 开关
     private TextView userFmList;// 提示文字  可用FM列表
     private Button btnScan;
 
-    private boolean isOpenFm;// 是否打开FM
+    private boolean isOpenFm;// 是否打开 FM
 
     @Override
     protected int setViewId() {
@@ -44,10 +43,9 @@ public class FMConnectActivity extends AppBaseActivity implements View.OnClickLi
     @Override
     protected void init() {
         setTitle("我听调频设置");
-        sharedPreferences = getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
 
         fmListView = findView(R.id.fm_list_view);
-        linearScan = findView(R.id.linear_scan);
+//        linearScan = findView(R.id.linear_scan);
         btnScan = findView(R.id.btn_scan_fm);// 扫描
         btnScan.setOnClickListener(this);
 
@@ -59,7 +57,7 @@ public class FMConnectActivity extends AppBaseActivity implements View.OnClickLi
         imageFmSet = (ImageView) headView.findViewById(R.id.image_fm_set);
         userFmList = (TextView) headView.findViewById(R.id.user_fm_list);
 
-        isOpenFm = sharedPreferences.getBoolean(StringConstant.FM_IS_OPEN, true);// 开放蓝牙检测开关
+        isOpenFm = BSApplication.SharedPreferences.getBoolean(StringConstant.FM_IS_OPEN, true);// 开放蓝牙检测开关
         if(isOpenFm){
             imageFmSet.setImageResource(R.mipmap.wt_person_on);
             getData();
@@ -80,16 +78,12 @@ public class FMConnectActivity extends AppBaseActivity implements View.OnClickLi
         setListItemLis();
     }
 
-    /**
-     * ListView 点击事件监听
-     */
+    // ListView 点击事件监听
     private void setListItemLis(){
         fmListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(list.size() == 1) {
-                    return ;
-                }
+                if(list.size() == 1) return ;
                 if(position - 1 >= 0) {
                     for(int i=0; i<list.size(); i++){
                         list.get(i).setType(0);
@@ -126,21 +120,17 @@ public class FMConnectActivity extends AppBaseActivity implements View.OnClickLi
                     btnScan.setVisibility(View.VISIBLE);
                     fmListView.setDividerHeight(1);
                 }
-                SharedPreferences.Editor et = sharedPreferences.edit();
+                SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
                 isOpenFm = !isOpenFm;
                 et.putBoolean(StringConstant.FM_IS_OPEN, isOpenFm);
-                et.commit();
+                if(et.commit()) L.w("数据 commit 失败!");
                 break;
         }
     }
 
-    /**
-     * 获取数据
-     */
+    // 获取数据
     private void getData(){
-        if(list != null) {
-            list.clear();
-        }
+        if(list != null) list.clear();
         FMInfo fmInfo = new FMInfo();
         fmInfo.setFmName("87.5MHz");
         fmInfo.setFmIntroduce("将车载调频调到87.5MHz");
