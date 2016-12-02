@@ -321,34 +321,6 @@
                         android:textSize="11sp" />
                 </LinearLayout>
 
-
-
-                <LinearLayout
-                    android:id="@+id/lin_collect"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:visibility="gone" >
-
-                    <ImageView
-                        android:id="@+id/img_collect"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/wt_shoucang_nomal" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="收藏"
-                        android:textColor="@color/dinglan_orange"
-                        android:layout_marginTop="4dp"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
-
-
                 <LinearLayout
                     android:id="@+id/lin_comment"
                     android:layout_width="0dp"

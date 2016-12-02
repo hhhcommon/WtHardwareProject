@@ -139,7 +139,7 @@
                 android:id="@+id/clear_image"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/wt_image_clearnew" />
+                android:src="@mipmap/wt_img_clearnew" />
 
         </LinearLayout>
 

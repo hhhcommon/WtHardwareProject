@@ -31,6 +31,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.util.L;
 import com.wotingfm.util.TimeUtils;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.pickview.LoopView;
@@ -67,7 +68,7 @@ public class UpdatePersonActivity extends BaseActivity implements
     private Dialog dateDialog;// 选择生日 Dialog
     private View genderMan;// 性别  男
     private View genderWoman;// 性别 女
-    private View viewArea;// 地区
+//    private View viewArea;// 地区
 
     private TextView textAge;// 年龄
     private TextView textStarSign;// 星座
@@ -161,7 +162,7 @@ public class UpdatePersonActivity extends BaseActivity implements
     private void initView() {
         findViewById(R.id.head_left_btn).setOnClickListener(this);
         findViewById(R.id.lin_age).setOnClickListener(this);
-        viewArea = findViewById(R.id.lin_area);
+        findViewById(R.id.lin_area).setOnClickListener(this);
 
         genderMan = findViewById(R.id.lin_gender_man);
         genderMan.setOnClickListener(this);
@@ -201,8 +202,7 @@ public class UpdatePersonActivity extends BaseActivity implements
                     Log.v("ReturnType", "ReturnType -- > > " + ReturnType);
 
                     if (ReturnType != null && ReturnType.equals("1001")) {
-                        Catalog subListAll = new Gson().fromJson(result.getString("CatalogData"), new TypeToken<Catalog>() {
-                        }.getType());
+                        Catalog subListAll = new Gson().fromJson(result.getString("CatalogData"), new TypeToken<Catalog>() {}.getType());
                         List<CatalogName> catalogNameList = subListAll.getSubCata();
                         if (catalogNameList != null && catalogNameList.size() > 0) {
                             tempMap = new HashMap<>();
@@ -259,17 +259,9 @@ public class UpdatePersonActivity extends BaseActivity implements
                                 }
                             }
                             cityPickerDialog();
-                            viewArea.setOnClickListener(new OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    cityDialog.show();
-                                }
-                            });
                         } else {
-                            Log.e("", "获取城市列表为空");
+                            L.e("获取城市列表为空");
                         }
-                    } else {
-                        ToastUtils.show_always(context, "数据获取异常，请稍候重试");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -304,6 +296,9 @@ public class UpdatePersonActivity extends BaseActivity implements
                     gender = "xb002";
                     changViewGender();
                 }
+                break;
+            case R.id.lin_area:
+                cityDialog.show();
                 break;
         }
     }

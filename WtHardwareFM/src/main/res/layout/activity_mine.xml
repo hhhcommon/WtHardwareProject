@@ -233,7 +233,7 @@
 
                 <TextView
                     style="@style/PersonAndSetTextStyle"
-                    android:text="调频"
+                    android:text="调频设置"
                     android:layout_toRightOf="@id/image_listener" />
 
                 <ImageView
@@ -265,7 +265,7 @@
                 <TextView
                     android:id="@+id/text_wifi_set"
                     style="@style/PersonAndSetTextStyle"
-                    android:text="WIFI"
+                    android:text="WIFI设置"
                     android:layout_toRightOf="@id/image_wifi"/>
 
                 <ImageView
@@ -298,7 +298,7 @@
                 <TextView
                     android:id="@+id/text_bluetooth_set"
                     style="@style/PersonAndSetTextStyle"
-                    android:text="蓝牙"
+                    android:text="蓝牙设置"
                     android:layout_toRightOf="@id/image_bluetooth" />
 
                 <ImageView

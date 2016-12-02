@@ -260,10 +260,9 @@
         <!-- 登录 -->
         <activity
             android:name=".activity.person.login.LoginActivity"
-            android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize" />
+            android:windowSoftInputMode="adjustPan" />
 
         <!-- 注册 -->
         <activity
