@@ -635,7 +635,7 @@
 
         <service android:name=".service.SubclassService" />
         <service android:name=".service.NotificationService" />
-        <service android:name=".service.timeroffservice" />
+        <service android:name=".service.TimeOffService" />
         <service android:name=".service.SocketService" />
         <service android:name=".service.VoiceStreamRecordService" />
         <service android:name=".service.VoiceStreamPlayerService" />

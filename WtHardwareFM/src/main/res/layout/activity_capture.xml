@@ -59,6 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentTop="true"
                 android:layout_marginTop="5dp"
+                android:layout_centerHorizontal="true"
                 android:src="@mipmap/wt_image_scan_line"/>
 
         </RelativeLayout>

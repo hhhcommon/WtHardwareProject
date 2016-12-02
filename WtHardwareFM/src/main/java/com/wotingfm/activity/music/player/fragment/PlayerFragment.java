@@ -72,7 +72,7 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.helper.CommonHelper;
-import com.wotingfm.service.timeroffservice;
+import com.wotingfm.service.TimeOffService;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
@@ -245,7 +245,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     @Override
                     public void run() {
                         if (PlayerFragment.isCurrentPlay) {
-                            Intent intent = new Intent(context, timeroffservice.class);
+                            Intent intent = new Intent(context, TimeOffService.class);
                             intent.setAction(BroadcastConstants.TIMER_START);
                             int time = PlayerFragment.timerService;
                             intent.putExtra("time", time);
@@ -675,7 +675,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
      */
     private static void stopCurrentTimer() {
         if (PlayerFragment.isCurrentPlay) {
-            Intent intent = new Intent(context, timeroffservice.class);
+            Intent intent = new Intent(context, TimeOffService.class);
             intent.setAction(BroadcastConstants.TIMER_STOP);
             context.startService(intent);
             PlayerFragment.isCurrentPlay = false;

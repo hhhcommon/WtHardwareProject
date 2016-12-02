@@ -14,7 +14,7 @@ import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.service.timeroffservice;
+import com.wotingfm.service.TimeOffService;
 
 /**
  * 定时关闭 关闭程序要以服务形式出现
@@ -41,7 +41,7 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
         mFilter.addAction(BroadcastConstants.TIMER_UPDATE);
         registerReceiver(mBroadcastReceiver, mFilter);
         // 设置Intent
-        intent = new Intent(TimerPowerOffActivity.this, timeroffservice.class);
+        intent = new Intent(TimerPowerOffActivity.this, TimeOffService.class);
         intent.setAction(BroadcastConstants.TIMER_START);
         setImageTimeCheck(0);
     }
@@ -226,7 +226,7 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
                 break;
             case R.id.lin_nostart:      // 不启动
                 imageTimeCheck = 0;
-                Intent intent = new Intent(this, timeroffservice.class);
+                Intent intent = new Intent(this, TimeOffService.class);
                 intent.setAction(BroadcastConstants.TIMER_STOP);
                 startService(intent);
                 setRightText("00:00", null);

@@ -41,7 +41,7 @@ import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.devicecontrol.WtDeviceControl;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.manager.UpdateManager;
-import com.wotingfm.service.timeroffservice;
+import com.wotingfm.service.TimeOffService;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ScreenUtils;
@@ -403,7 +403,7 @@ public class MainActivity extends TabActivity {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.TIMER_END)) {
                 ToastUtils.show_always(MainActivity.this, "定时关闭应用时间就要到了，应用即将退出");
-                stopService(new Intent(MainActivity.this, timeroffservice.class));    // 停止服务
+                stopService(new Intent(MainActivity.this, TimeOffService.class));    // 停止服务
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {

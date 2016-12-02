@@ -3,8 +3,6 @@ package com.wotingfm.activity.im.interphone.scanning.activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.os.Handler;
@@ -19,7 +17,6 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
-import android.widget.TextView;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -51,19 +48,20 @@ import java.lang.reflect.Field;
  */
 public final class CaptureActivity extends BaseActivity implements SurfaceHolder.Callback {
     private static final String TAG = CaptureActivity.class.getSimpleName();
+
     private CameraManager cameraManager;
     private CaptureActivityHandler handler;
     private InactivityTimer inactivityTimer;
     private BeepManager beepManager;
-    private SurfaceView scanPreview = null;
+    private Rect mCropRect;
+    private TranslateAnimation animation;
+
+    private SurfaceView scanPreview;
     private RelativeLayout scanContainer;
     private RelativeLayout scanCropView;
     private ImageView scanLine;
-    private Rect mCropRect = null;
-    private boolean isHasSurface = false;
-    private CaptureActivity context;
-    private Gson gson;
-    private TranslateAnimation animation;
+
+    private boolean isHasSurface;
 
     public Handler getHandler() {
         return handler;
@@ -78,12 +76,9 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
         super.onCreate(icicle);
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);// 保持屏幕常亮
         setContentView(R.layout.activity_capture);
-        context = this;
         MyActivityManager mam = MyActivityManager.getInstance();
-        mam.pushOneActivity(context);
-        gson = new Gson();
-        TextView leftBack = (TextView) findViewById(R.id.head_left_btn);
-        leftBack.setOnClickListener(new OnClickListener() {
+        mam.pushOneActivity(this);
+        findViewById(R.id.head_left_btn).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -100,11 +95,11 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
         scanCropView.setLayoutParams(pr2);
         inactivityTimer = new InactivityTimer(this);
         beepManager = new BeepManager(this);
-        //动画
+        // 动画
         animation = new TranslateAnimation(Animation.RELATIVE_TO_PARENT, 0.0f,
                 Animation.RELATIVE_TO_PARENT, 0.0f,
                 Animation.RELATIVE_TO_PARENT, 0.0f,
-                Animation.RELATIVE_TO_PARENT, 0.9f);
+                Animation.RELATIVE_TO_PARENT, 0.95f);
         animation.setDuration(4500);
         animation.setRepeatCount(-1);
         animation.setRepeatMode(Animation.RESTART);
@@ -160,8 +155,7 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
     }
 
     /**
-     * 有效的条形码被发现,所以给的成功和显示
-     * 结果。
+     * 有效的条形码被发现,所以给的成功和显示结果。
      */
     public void handleDecode(Result rawResult, Bundle bundle) {
         inactivityTimer.onActivity();
@@ -172,8 +166,7 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
                 bundle.putString("result", news);
                 startActivity(new Intent(CaptureActivity.this, ResultActivity.class).putExtras(bundle));
             } else {
-                MessageInfo message = gson.fromJson(news, new TypeToken<MessageInfo>() {
-                }.getType());
+                MessageInfo message = new Gson().fromJson(news, new TypeToken<MessageInfo>() {}.getType());
                 if (message != null && !message.equals("")) {
                     if (message.getType() != null && !message.getType().equals("")) {
                         if (message.getType().equals("1")) {
@@ -316,23 +309,12 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
         return 0;
     }
 
-    // 设置android app 的字体大小不受系统字体大小改变的影响
-    @Override
-    public Resources getResources() {
-        Resources res = super.getResources();
-        Configuration config = new Configuration();
-        config.setToDefaults();
-        res.updateConfiguration(config, res.getDisplayMetrics());
-        return res;
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         inactivityTimer.shutdown();
         MyActivityManager mam = MyActivityManager.getInstance();
-        mam.popOneActivity(context);
-        gson = null;
+        mam.popOneActivity(this);
         scanPreview = null;
         scanContainer = null;
         scanCropView = null;
@@ -341,7 +323,6 @@ public final class CaptureActivity extends BaseActivity implements SurfaceHolder
         beepManager = null;
         animation = null;
         cameraManager = null;
-        context = null;
         setContentView(R.layout.activity_null);
     }
 }

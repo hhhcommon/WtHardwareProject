@@ -16,7 +16,7 @@ import java.util.TimeZone;
  * @author 辛龙
  * 2016年4月1日
  */
-public class timeroffservice extends Service {
+public class TimeOffService extends Service {
 
 	private CountDownTimer mcountDownTimer;
 	private Intent mintent;
