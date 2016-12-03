@@ -117,5 +117,5 @@ public class StringConstant {
     public static final String NOTIFY_SUBSCRIBER_STATE = "NOTIFY_SUBSCRIBER_STATE";
 
     // 通知设置 关注通知开关状态
-    public static final String NOTIFY_CONCERN_STATE = "NOTIFY_SOUND_STATE";
+    public static final String NOTIFY_CONCERN_STATE = "NOTIFY_CONCERN_STATE";
 }
