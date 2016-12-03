@@ -246,6 +246,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
+                    android:textColor="@color/beijing"
                     android:layout_toLeftOf="@id/image_listener_frequency"
                     android:text="87.5MHz" />
 
@@ -278,6 +279,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
+                    android:textColor="@color/beijing"
                     android:layout_toLeftOf="@id/image_wifi_set"
                     android:maxLines="1"
                     android:text="已连接" />
@@ -311,6 +313,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
+                    android:textColor="@color/beijing"
                     android:layout_toLeftOf="@id/image_bluetooth_set"
                     android:maxLines="1"
                     android:text="关闭" />

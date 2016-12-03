@@ -100,4 +100,22 @@ public class StringConstant {
 
     // 保存是否已经选择喜欢的节目
     public static final String FAVORITE_PROGRAM_TYPE = "FavoriteProgramType";
+
+    // 通知设置 声音通知开关状态
+    public static final String NOTIFY_SOUND_STATE = "NOTIFY_SOUND_STATE";
+
+    // 通知设置 群聊通知开关状态
+    public static final String NOTIFY_GROUP_CHAT_STATE = "NOTIFY_GROUP_CHAT_STATE";
+
+    // 通知设置 好友通知开关状态
+    public static final String NOTIFY_FRIEND_STATE = "NOTIFY_FRIEND_STATE";
+
+    // 通知设置 节目推送通知开关状态
+    public static final String NOTIFY_PROGRAM_STATE = "NOTIFY_PROGRAM_STATE";
+
+    // 通知设置 订阅通知开关状态
+    public static final String NOTIFY_SUBSCRIBER_STATE = "NOTIFY_SUBSCRIBER_STATE";
+
+    // 通知设置 关注通知开关状态
+    public static final String NOTIFY_CONCERN_STATE = "NOTIFY_SOUND_STATE";
 }

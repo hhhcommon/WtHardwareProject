@@ -110,7 +110,6 @@ public class MyUploadSoundFragment extends Fragment implements AdapterView.OnIte
             e.printStackTrace();
         }
 
-        // 获取用户上传的声音列表  目前没有接口  测试获取的是我喜欢的声音
         VolleyRequest.RequestPost(GlobalConfig.getMediaList, tag, jsonObject, new VolleyCallback() {
             @Override
             protected void requestSuccess(JSONObject result) {

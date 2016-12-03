@@ -99,13 +99,62 @@
 
                     <ImageView style="@style/PersonAndSetRightStyle"/>
 
+                    <View
+                        style="@style/ViewStyle"
+                        android:layout_alignParentBottom="true"/>
+
                 </RelativeLayout>
 
             </LinearLayout>
 
             <RelativeLayout
-                android:id="@+id/lin_downloadposition"
+                android:id="@+id/lin_notify"
                 style="@style/PersonAndSetRelativeStyle">
+
+                <View style="@style/ViewStyle"/>
+
+                <ImageView
+                    android:id="@+id/image_notify"
+                    style="@style/PersonAndSetLeftStyle"
+                    android:src="@mipmap/wt_image_set_preference"/>
+
+                <TextView
+                    style="@style/PersonAndSetTextStyle"
+                    android:layout_toRightOf="@id/image_notify"
+                    android:text="通知设置"/>
+
+                <ImageView style="@style/PersonAndSetRightStyle"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lin_preference"
+                style="@style/PersonAndSetRelativeStyle">
+
+                <View style="@style/LineStyle"/>
+
+                <ImageView
+                    android:id="@+id/image_preference"
+                    style="@style/PersonAndSetLeftStyle"
+                    android:src="@mipmap/wt_image_set_preference"/>
+
+                <TextView
+                    style="@style/PersonAndSetTextStyle"
+                    android:layout_toRightOf="@id/image_preference"
+                    android:text="偏好设置"/>
+
+                <ImageView style="@style/PersonAndSetRightStyle"/>
+
+                <View
+                    style="@style/ViewStyle"
+                    android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lin_downloadposition"
+                style="@style/PersonAndSetRelativeStyle"
+                android:layout_marginTop="20dp">
 
                 <View style="@style/ViewStyle"/>
 
@@ -174,43 +223,13 @@
 
                 <ImageView style="@style/PersonAndSetRightStyle"/>
 
-                <View
-                    style="@style/ViewStyle"
-                    android:layout_alignParentBottom="true"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/lin_preference"
-                style="@style/PersonAndSetRelativeStyle"
-                android:layout_marginTop="20dp">
-
-                <View style="@style/ViewStyle"/>
-
-                <ImageView
-                    android:id="@+id/image_preference"
-                    style="@style/PersonAndSetLeftStyle"
-                    android:src="@mipmap/wt_image_set_preference"/>
-
-                <TextView
-                    style="@style/PersonAndSetTextStyle"
-                    android:layout_toRightOf="@id/image_preference"
-                    android:text="偏好设置"/>
-
-                <ImageView style="@style/PersonAndSetRightStyle"/>
-
-                <View
-                    style="@style/ViewStyle"
-                    android:layout_alignParentBottom="true"/>
-
             </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/lin_help"
-                style="@style/PersonAndSetRelativeStyle"
-                android:layout_marginTop="20dp">
+                style="@style/PersonAndSetRelativeStyle">
 
-                <View style="@style/ViewStyle"/>
+                <View style="@style/LineStyle"/>
 
                 <ImageView
                     android:id="@+id/image_help"
@@ -273,15 +292,15 @@
             <Button
                 android:id="@+id/lin_zhuxiao"
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
-                android:layout_marginBottom="40dp"
+                android:layout_height="50dp"
+                android:layout_marginBottom="50dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="50dp"
                 android:background="@drawable/zhuxiao_press"
                 android:text="注销登录"
                 android:textColor="@color/WHITE"
-                android:textSize="@dimen/activity_head_right"/>
+                android:textSize="@dimen/activity_person"/>
 
         </LinearLayout>
 

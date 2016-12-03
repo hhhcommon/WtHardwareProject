@@ -91,7 +91,7 @@ public class WIFIActivity extends AppBaseActivity implements View.OnClickListene
             linearScan.setVisibility(View.GONE);
         }
         scanResultList = wifiManager.getScanResults();
-        if (scanResultList != null && scanResultList.size() > 0) {               // 判断附近是否有可用 WiFi
+        if (scanResultList != null && scanResultList.size() > 0) {// 判断附近是否有可用 WiFi
             wifiListView.setAdapter(adapter = new WiFiListAdapter(context, scanResultList));
         } else {
             wifiListView.setAdapter(adapter = new WiFiListAdapter(context, scanResultList = new ArrayList<>()));
@@ -103,7 +103,7 @@ public class WIFIActivity extends AppBaseActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.wifi_set:         // WiFi 开关
-                if (wifiManager.isWifiEnabled()) {                  // 如果是打开状态则关闭 WiFi
+                if (wifiManager.isWifiEnabled()) {// 如果是打开状态则关闭 WiFi
                     wifiManager.setWifiEnabled(false);
                 } else {                // 否则打开 WiFi
                     wifiManager.setWifiEnabled(true);
@@ -256,7 +256,7 @@ public class WIFIActivity extends AppBaseActivity implements View.OnClickListene
         wifiCong.hiddenSSID = false;
         wifiCong.status = WifiConfiguration.Status.ENABLED;
 
-        // 将配置好的特定 WIFI 密码信息添加,添加完成后默认是不激活状态，成功返回 ID，否则为 -1
+        // 将配置好的特定 WIFI 密码信息添加,添加完成后默认是不激活状态,成功返回 ID,否则为 -1
         return wifiManager.addNetwork(wifiCong);
     }
 

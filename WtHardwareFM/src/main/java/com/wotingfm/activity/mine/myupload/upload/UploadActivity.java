@@ -27,6 +27,7 @@ import com.wotingfm.activity.common.baseactivity.BaseActivity;
 import com.wotingfm.activity.im.interphone.creategroup.photocut.PhotoCutActivity;
 import com.wotingfm.activity.mine.myupload.http.HttpMultipartPost;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.manager.FileManager;
@@ -123,8 +124,8 @@ public class UploadActivity extends BaseActivity implements View.OnClickListener
     // 登陆状态下 用户设置头像对话框
     private void imageDialog() {
         final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_imageupload, null);
-        dialog.findViewById(R.id.tv_gallery).setOnClickListener(this);      // 从手机相册选择
-        dialog.findViewById(R.id.tv_camera).setOnClickListener(this);       // 拍照
+        dialog.findViewById(R.id.tv_gallery).setOnClickListener(this);// 从手机相册选择
+        dialog.findViewById(R.id.tv_camera).setOnClickListener(this);// 拍照
 
         imageDialog = new Dialog(context, R.style.MyDialog);
         imageDialog.setContentView(dialog);
@@ -323,7 +324,7 @@ public class UploadActivity extends BaseActivity implements View.OnClickListener
                 break;
             case PHOTO_REQUEST_CUT:
                 if (resultCode == 1) {
-                    photoCutAfterImagePath = data.getStringExtra("return");
+                    photoCutAfterImagePath = data.getStringExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH);
                     Log.v("photoCutAfterImagePath", "photoCutAfterImagePath -- > > " + photoCutAfterImagePath);
 //                    imageCover.setImageBitmap(BitmapUtils.decodeFile(new File(photoCutAfterImagePath)));
 
@@ -348,8 +349,8 @@ public class UploadActivity extends BaseActivity implements View.OnClickListener
     // 图片裁剪
     private void startPhotoZoom(Uri uri) {
         Intent intent = new Intent(context, PhotoCutActivity.class);
-        intent.putExtra("URI", uri.toString());
-        intent.putExtra("type", 1);
+        intent.putExtra(StringConstant.START_PHOTO_ZOOM_URI, uri.toString());
+        intent.putExtra(StringConstant.START_PHOTO_ZOOM_TYPE, 1);
         startActivityForResult(intent, PHOTO_REQUEST_CUT);
     }
 

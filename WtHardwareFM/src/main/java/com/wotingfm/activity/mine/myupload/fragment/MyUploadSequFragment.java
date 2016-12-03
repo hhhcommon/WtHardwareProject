@@ -101,7 +101,6 @@ public class MyUploadSequFragment extends Fragment implements AdapterView.OnItem
             e.printStackTrace();
         }
 
-        // 获取用户上传的专辑列表  目前没有接口  测试获取的是我喜欢的专辑
         VolleyRequest.RequestPost(GlobalConfig.getSequMediaList, tag, jsonObject, new VolleyCallback() {
             @Override
             protected void requestSuccess(JSONObject result) {

@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.BaseActivity;
+import com.wotingfm.activity.mine.set.notifyset.NotifySetActivity;
 import com.wotingfm.activity.mine.set.preference.activity.PreferenceActivity;
 import com.wotingfm.activity.mine.set.about.AboutActivity;
 import com.wotingfm.activity.mine.set.downloadposition.DownloadPositionActivity;
@@ -88,6 +89,7 @@ public class SetActivity extends BaseActivity implements OnClickListener {
         findViewById(R.id.lin_downloadposition).setOnClickListener(this);   // 下载位置
         findViewById(R.id.lin_preference).setOnClickListener(this);         // 偏好设置
         findViewById(R.id.lin_id_name).setOnClickListener(this);            // ID 号
+        findViewById(R.id.lin_notify).setOnClickListener(this);             // 通知设置
 
         lin_IsLogin= findViewById(R.id.lin_IsLogin);                        // 未登录时需要隐藏的绑定手机号和重置密码布局
         linearIdName = findViewById(R.id.lin_id_name);                      // 用户可以且仅可以设置一次的唯一标识 ID
@@ -190,6 +192,9 @@ public class SetActivity extends BaseActivity implements OnClickListener {
                 break;
             case R.id.lin_id_name:// ID
                 startActivityForResult(new Intent(context, UpdateUserNumActivity.class), 0x111);
+                break;
+            case R.id.lin_notify:// 通知设置
+                startActivity(new Intent(context, NotifySetActivity.class));
                 break;
         }
     }
