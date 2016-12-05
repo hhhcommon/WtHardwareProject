@@ -24,13 +24,14 @@ import java.util.List;
  * 下载任务类
  */
 public class DownloadTask{
-	public static int downloadstatus = -1;
+	public static int downloadStatus = -1;
 	public  static Context mContext = null;
 	private FileInfo mFileInfo = null;
 	private ThreadDao mDao = null;
 	private FileInfoDao FID=null;
-	private int mFinised = 0;
+	private int mFinished = 0;
 	public static boolean isPause = false;
+
 
 	/**
 	 *@param mContexts
@@ -40,21 +41,21 @@ public class DownloadTask{
 		mContext = mContexts;
 		this.mFileInfo = mFileInfo;
 		mDao = new ThreadDao(mContext);
-		FID = new FileInfoDao(mContext);
-	
+		FID  = new FileInfoDao(mContext);
+
 	}
 
 	public void downLoad(){
 		// 读取数据库的线程信息
 		List<ThreadInfo> threads = mDao.getThreads(mFileInfo.getUrl());
-		ThreadInfo threadInfo;
+		ThreadInfo threadInfo ;
 		if (0 == threads.size()){
 			// 初始化线程信息对象
 			threadInfo = new ThreadInfo(mFileInfo.getId(), mFileInfo.getUrl(),0, mFileInfo.getLength(), 0);
 		}else{
 			threadInfo = threads.get(0);
 		}
-		downloadstatus=-1;
+		downloadStatus=-1;
 		// 创建子线程进行下载
 		new DownloadThread(threadInfo).start();
 	}
@@ -78,23 +79,23 @@ public class DownloadTask{
 				connection = (HttpURLConnection) url.openConnection();
 				connection.setConnectTimeout(5000);
 				connection.setRequestMethod("GET");
-				downloadstatus=1;
+				downloadStatus=1;
 				// 设置下载位置
 				int start = mThreadInfo.getStart() + mThreadInfo.getFinished();
 				connection.setRequestProperty("Range","bytes=" + start + "-" + mThreadInfo.getEnd());
 				// 设置文件写入位置
-				 String name = mFileInfo.getFileName();
+				String name = mFileInfo.getFileName();
 				File file = new File(DownloadService.DOWNLOAD_PATH,name);
 				raf = new RandomAccessFile(file, "rwd");
 				raf.seek(start);
 				Intent intent = new Intent();
 				intent.setAction(BroadcastConstant.ACTION_UPDATE);
-				mFinised += mThreadInfo.getFinished();
+				mFinished += mThreadInfo.getFinished();
 				// 开始下载
 				if (connection.getResponseCode() == HttpStatus.SC_PARTIAL_CONTENT){
 					// 读取数据
 					inputStream = connection.getInputStream();
-					
+
 					byte buf[] = new byte[1024 << 2];
 					int len = -1;
 					long time = System.currentTimeMillis();
@@ -102,40 +103,44 @@ public class DownloadTask{
 						// 写入文件
 						raf.write(buf, 0, len);
 						// 把下载进度发送广播给Activity
-						mFinised += len;
+						mFinished += len;
 						if (System.currentTimeMillis() - time > 100){
 							time = System.currentTimeMillis();
+						/*	intent.putExtra("finished", mFinised * 100 / mThreadInfo.getEnd());*/
+//						    String s =mThreadInfo.getUrl();
+//						    int start1=mFinised;
+//							int end=mThreadInfo.getEnd();
 							intent.putExtra("url",mThreadInfo.getUrl() );
-							intent.putExtra("start", mFinised);
+							intent.putExtra("start", mFinished);
 							intent.putExtra("end",mThreadInfo.getEnd());
-							FID.updatefileprogress(mThreadInfo.getUrl(), mFinised, mThreadInfo.getEnd());
-							Log.e("getStart()", mFinised+"");
+							FID.updataFileProgress(mThreadInfo.getUrl(), mFinished, mThreadInfo.getEnd());
+							Log.e("getStart()", mFinished+"");
 							mContext.sendBroadcast(intent);
 						}
 						// 在下载暂停时，保存下载进度
 						if (isPause){
 							Log.e("isPause", isPause+"");
-					 		mDao.updateThread(mThreadInfo.getUrl(),	mThreadInfo.getId(), mFinised);
-					 		FID.updatefileprogress(mThreadInfo.getUrl(), mFinised, mThreadInfo.getEnd());
-					 		Log.e("mFinised", mFinised+"");
-					 		Log.e("mThreadInfo.getStart()", start+"");
-					 		Log.e("mThreadInfo.getEnd()", mThreadInfo.getEnd()+"");
-					 		return;
+							mDao.updateThread(mThreadInfo.getUrl(),	mThreadInfo.getId(), mFinished);
+							FID.updataFileProgress(mThreadInfo.getUrl(), mFinished, mThreadInfo.getEnd());
+							Log.e("mFinised", mFinished+"");
+							Log.e("mThreadInfo.getStart()", start+"");
+							Log.e("mThreadInfo.getEnd()", mThreadInfo.getEnd()+"");
+							return;
 						}
 					}
 					// 删除线程信息
 					mDao.deleteThread(mThreadInfo.getUrl(),	mThreadInfo.getId());
 					Log.i("DownloadTask", "下载完毕");
-	                //向fragment发送完成消息
+					//向fragment发送完成消息
 					intent.putExtra("fileInfo",mFileInfo);
 					if (DownloadActivity.isVisible==true){
-					intent.setAction(BroadcastConstant.ACTION_FINISHED);
-					mContext.sendBroadcast(intent);
+						intent.setAction(BroadcastConstant.ACTION_FINISHED);
+						mContext.sendBroadcast(intent);
 					}else{
 						intent.setAction(BroadcastConstant.ACTION_FINISHED_NO_DOWNLOADVIEW);
 						mContext.sendBroadcast(intent);
 					}
-					}
+				}
 			}catch (Exception e){
 				e.printStackTrace();
 			}finally{

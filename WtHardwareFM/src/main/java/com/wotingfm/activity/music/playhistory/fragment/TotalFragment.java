@@ -179,7 +179,7 @@ public class TotalFragment extends Fragment {
 					String playerMediaType = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerMediaType();
 					String playerAllTime = "0";
 					String playerInTime = "0";
-					String playerContentDesc = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerContentDesc();
+					String playerContentDesc = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerContentDescn();
 					String playerNum = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerNum();
 					String playerZanType = "0";
 					String playerFrom = "";

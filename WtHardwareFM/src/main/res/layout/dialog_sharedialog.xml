@@ -8,7 +8,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="121dp"
+        android:layout_height="161dp"
         android:orientation="vertical" >
 
         <LinearLayout
@@ -16,15 +16,19 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:gravity="center" >
-            <GridView
+
+            <com.wotingfm.widget.HorizontalListView
                 android:id="@+id/share_gallery"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:horizontalSpacing="5dp"
-                android:numColumns="5"
-                android:scrollbars="none"
-                android:verticalSpacing="5dp"
-                />
+                android:layout_marginRight="25dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginBottom="2dp"
+                android:layout_marginTop="10dp"
+                android:layout_height="100dp"
+                android:gravity="center"
+                android:text="确定退出该群?"
+                android:textColor="@color/BLACK" />
+              
         </LinearLayout>
 
         <TextView
@@ -34,17 +38,18 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="60dp"
             android:orientation="horizontal" >
+
             <TextView
                 android:id="@+id/tv_cancle"
                 android:layout_width="0dp"
-                android:layout_height="40dp"
+                android:layout_height="60dp"
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="取 消"
                 android:textSize="16sp"
-                />
+               />
 
         </LinearLayout>
     </LinearLayout>
