@@ -192,12 +192,13 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:orientation="vertical">
 
             <RelativeLayout
                 android:id="@+id/lin_album"
-                style="@style/PersonAndSetRelativeStyle">
+                style="@style/PersonAndSetRelativeStyle"
+                android:visibility="gone"
+                android:layout_marginTop="20dp">
 
                 <View style="@style/ViewStyle"/>
 

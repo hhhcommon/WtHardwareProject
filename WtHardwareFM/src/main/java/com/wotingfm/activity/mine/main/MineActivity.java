@@ -43,7 +43,6 @@ import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.mine.bluetooth.BluetoothActivity;
 import com.wotingfm.activity.mine.flowmanage.main.FlowManageActivity;
 import com.wotingfm.activity.mine.fm.FMConnectActivity;
-import com.wotingfm.activity.mine.myupload.MyUploadActivity;
 import com.wotingfm.activity.mine.qrcode.EWMShowActivity;
 import com.wotingfm.activity.mine.set.SetActivity;
 import com.wotingfm.activity.mine.wifi.WIFIActivity;
@@ -91,6 +90,7 @@ public class MineActivity extends Activity implements OnClickListener {
 
     private View relativeStatusUnLogin;// 未登录状态
     private View relativeStatusLogin;// 登录状态
+//    private View relativeMyUpload;// 我的上传
     private View circleView;// 点
     private ImageView userHead;// 用户头像
     private TextView textWifiName;
@@ -144,7 +144,6 @@ public class MineActivity extends Activity implements OnClickListener {
 
         findViewById(R.id.lin_xiugai).setOnClickListener(this);// 修改个人资料
         findViewById(R.id.imageView_ewm).setOnClickListener(this);// 二维码
-        findViewById(R.id.lin_album).setOnClickListener(this);// 我的上传
         findViewById(R.id.flow_set).setOnClickListener(this);// 流量管理
         findViewById(R.id.bluetooth_set).setOnClickListener(this);// 蓝牙设置
         findViewById(R.id.wifi_set).setOnClickListener(this);// WIFI设置
@@ -159,6 +158,9 @@ public class MineActivity extends Activity implements OnClickListener {
 
         userHead = (ImageView) findViewById(R.id.image_touxiang);// 用户头像
         userHead.setOnClickListener(this);
+
+//        relativeMyUpload = findViewById(R.id.lin_album);// 我的上传
+//        relativeMyUpload.setOnClickListener(this);
 
         textUserName = (TextView) findViewById(R.id.text_user_name);// 用户名
         textUserArea = (TextView) findViewById(R.id.text_user_area);// 城市
@@ -197,9 +199,9 @@ public class MineActivity extends Activity implements OnClickListener {
                 intentEwm.putExtras(bundle);
                 startActivity(intentEwm);
                 break;
-            case R.id.lin_album:// 我的上传
-                startActivity(new Intent(context, MyUploadActivity.class));
-                break;
+//            case R.id.lin_album:// 我的上传
+//                startActivity(new Intent(context, MyUploadActivity.class));
+//                break;
             case R.id.flow_set:// 流量管理
                 startActivity(new Intent(context, FlowManageActivity.class));
                 break;
@@ -264,6 +266,7 @@ public class MineActivity extends Activity implements OnClickListener {
         if (isLogin.equals("true")) {
             relativeStatusUnLogin.setVisibility(View.GONE);
             relativeStatusLogin.setVisibility(View.VISIBLE);
+//            relativeMyUpload.setVisibility(View.VISIBLE);
             String imageUrl = sharedPreferences.getString(StringConstant.IMAGEURL, "");// 头像
             userName = sharedPreferences.getString(StringConstant.USERNAME, "");// 用户名
             userId = sharedPreferences.getString(StringConstant.USERID, "");// 用户 ID
@@ -301,6 +304,7 @@ public class MineActivity extends Activity implements OnClickListener {
             }
         } else {
             relativeStatusLogin.setVisibility(View.GONE);
+//            relativeMyUpload.setVisibility(View.GONE);
             relativeStatusUnLogin.setVisibility(View.VISIBLE);
         }
     }
