@@ -56,7 +56,7 @@ public class MediaRecorderActivity extends BaseActivity implements View.OnClickL
 
     private boolean isPlay;                 // 是否正在播放录音
     private boolean isRecord;               // 是否正在录音
-    private boolean isSave;                 // 保存之后删除源文件 播放不删除源文件
+    private boolean isSave = true;          // 保存之后删除源文件 播放不删除源文件
     private boolean isStart;                // 开启录音
     private int ringerMode;                 // 保存用户铃声震动模式的设置
     private int curVolume;                  // 保存当前音量
@@ -150,6 +150,7 @@ public class MediaRecorderActivity extends BaseActivity implements View.OnClickL
         if(!isStart) {
             mRecorder.start();
             isStart = true;
+            isSave = false;
         } else if(!isRecord) {
             mRecorder.restore();
         }
@@ -221,7 +222,7 @@ public class MediaRecorderActivity extends BaseActivity implements View.OnClickL
         long time = System.currentTimeMillis();
         String title = "AUD_" + new SimpleDateFormat("yyyyMMdd_hhMMss", Locale.CHINA).format(time);
         values.put(MediaStore.Audio.Media.TITLE, title);
-        values.put(MediaStore.Audio.Media.DATE_ADDED, time);// 修改时间
+        values.put(MediaStore.Audio.Media.DATE_MODIFIED, time);// 修改时间
         values.put(MediaStore.Audio.Media.DATA, mAudioRecordFileName);
         values.put(MediaStore.Audio.Media.MIME_TYPE, "audio/mp3");
         values.put(MediaStore.Audio.Media.DURATION, audioTime);

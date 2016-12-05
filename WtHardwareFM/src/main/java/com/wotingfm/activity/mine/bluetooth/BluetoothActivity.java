@@ -461,7 +461,7 @@ public class BluetoothActivity extends AppBaseActivity implements View.OnClickLi
     @Override
     protected void onDestroy() {
         MineActivity.blueAdapter.cancelDiscovery();// 停止蓝牙搜索
-        if(hasRegister){
+        if(hasRegister) {
             hasRegister = false;
             unregisterReceiver(mDevice);
         }

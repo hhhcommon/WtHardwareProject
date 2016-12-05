@@ -28,7 +28,7 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="14dp"
             android:layout_toRightOf="@id/image_wifi"
-            android:text="WiFi"
+            android:text="WiFi设置"
             android:textSize="16sp"/>
 
         <ImageView
@@ -51,7 +51,7 @@
     <TextView
         android:id="@+id/user_wifi_list"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
+        android:layout_height="40dp"
         android:layout_marginTop="20dp"
         android:gravity="center_vertical"
         android:background="@color/WHITE"
