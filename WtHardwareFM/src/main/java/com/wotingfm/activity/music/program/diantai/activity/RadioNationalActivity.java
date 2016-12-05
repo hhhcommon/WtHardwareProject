@@ -7,7 +7,6 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -39,8 +38,6 @@ import java.util.List;
 
 
 public class RadioNationalActivity extends BaseActivity implements View.OnClickListener {
-
-    private LinearLayout head_left_btn;
     private TextView mTextView_Head;
     private Dialog dialog;
 
@@ -58,7 +55,6 @@ public class RadioNationalActivity extends BaseActivity implements View.OnClickL
         setContentView(R.layout.activity_radio_nation);
         context = this;
         setView();
-        setListener();
         initDao();
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             dialog = DialogUtils.Dialogph(context, "正在获取数据");
@@ -219,8 +215,8 @@ public class RadioNationalActivity extends BaseActivity implements View.OnClickL
 
 
     private void setView() {
+        findViewById(R.id.head_left_btn).setOnClickListener(this);
         mListView = (ExpandableListView) findViewById(R.id.listview_fm);
-        head_left_btn = (LinearLayout) findViewById(R.id.head_left_btn);
         mTextView_Head = (TextView) findViewById(R.id.head_name_tv);
         mTextView_Head.setText("国家台");
         mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
@@ -232,10 +228,6 @@ public class RadioNationalActivity extends BaseActivity implements View.OnClickL
         });
         mListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
         mListView.setGroupIndicator(null);
-    }
-
-    private void setListener() {
-        head_left_btn.setOnClickListener(this);
     }
 
     public void onClick(View v) {
@@ -250,7 +242,6 @@ public class RadioNationalActivity extends BaseActivity implements View.OnClickL
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
-        head_left_btn = null;
         mListView = null;
         dialog = null;
         mTextView_Head = null;
