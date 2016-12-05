@@ -230,7 +230,7 @@
                 <ImageView
                     android:id="@+id/image_listener"
                     style="@style/PersonAndSetLeftStyle"
-                    android:src="@mipmap/wt_image_album" />
+                    android:src="@mipmap/wt_image_listener" />
 
                 <TextView
                     style="@style/PersonAndSetTextStyle"
@@ -262,7 +262,7 @@
                 <ImageView
                     android:id="@+id/image_wifi"
                     style="@style/PersonAndSetLeftStyle"
-                    android:src="@mipmap/wt_image_album" />
+                    android:src="@mipmap/wt_person_liuliang" />
 
                 <TextView
                     android:id="@+id/text_wifi_set"
@@ -296,7 +296,7 @@
                 <ImageView
                     android:id="@+id/image_bluetooth"
                     style="@style/PersonAndSetLeftStyle"
-                    android:src="@mipmap/wt_image_album" />
+                    android:src="@mipmap/wt_image_bluetooth" />
 
                 <TextView
                     android:id="@+id/text_bluetooth_set"
@@ -330,7 +330,7 @@
                 <ImageView
                     android:id="@+id/image_flow"
                     style="@style/PersonAndSetLeftStyle"
-                    android:src="@mipmap/wt_image_album" />
+                    android:src="@mipmap/wt_image_flow" />
 
                 <TextView
                     android:id="@+id/text_flow_set"

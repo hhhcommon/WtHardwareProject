@@ -58,7 +58,7 @@ public class WIFIActivity extends AppBaseActivity implements View.OnClickListene
 
     @Override
     protected void init() {
-        setTitle("WiFi");
+        setTitle("WiFi 设置");
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);
         // 注册广播 监听 WiFi 的状态
         IntentFilter filter = new IntentFilter();
