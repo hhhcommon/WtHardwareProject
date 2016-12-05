@@ -34,6 +34,7 @@ import com.wotingfm.manager.FileManager;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 
@@ -117,6 +118,7 @@ public class UploadActivity extends BaseActivity implements View.OnClickListener
             String path = intent.getStringExtra("MEDIA__FILE_PATH");
             timeLong = intent.getLongExtra("TIME_LONG", 0);
             ToastUtils.show_always(context, path);
+            L.v("path -- > > " + path);
             fileList.add(path);
         }
     }
