@@ -69,7 +69,7 @@ public class WiFiListAdapter extends BaseAdapter {
         }
         if (result.SSID.equals(connWiFiName)) {
             holder.textWiFiState.setText("已连接");
-            holder.textWiFiName.setTextColor(context.getResources().getColor(R.color.green));
+            holder.textWiFiName.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
         } else {
             holder.textWiFiState.setText("通过WPA/WPA2进行保护");
             holder.textWiFiName.setTextColor(context.getResources().getColor(R.color.BLACK));

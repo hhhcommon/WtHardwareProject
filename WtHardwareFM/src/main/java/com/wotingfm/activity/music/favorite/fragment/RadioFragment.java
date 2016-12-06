@@ -29,6 +29,7 @@ import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -80,9 +81,9 @@ public class RadioFragment extends Fragment {
         super.onCreate(savedInstanceState);
         context = getActivity();
         IntentFilter mFilter = new IntentFilter();
-        mFilter.addAction(FavoriteActivity.VIEW_UPDATE);
-        mFilter.addAction(FavoriteActivity.SET_NOT_LOAD_REFRESH);
-        mFilter.addAction(FavoriteActivity.SET_LOAD_REFRESH);
+        mFilter.addAction(BroadcastConstants.VIEW_UPDATE);
+        mFilter.addAction(BroadcastConstants.SET_NOT_LOAD_REFRESH);
+        mFilter.addAction(BroadcastConstants.SET_LOAD_REFRESH);
         context.registerReceiver(mBroadcastReceiver, mFilter);
         initDao();
     }
@@ -91,37 +92,56 @@ public class RadioFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_favorite_sound, container, false);
-            linearNull = rootView.findViewById(R.id.linear_null);
-            mListView = (XListView) rootView.findViewById(R.id.listView);
-            mListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-            setView();
-            if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                send();
-            } else {
-                ToastUtils.show_short(context, "网络失败，请检查网络");
-            }
+            initViews();
+            send();
         }
         return rootView;
     }
 
-    /**
-     * 设置 View 隐藏
-     */
+    // 初始化视图
+    private void initViews() {
+        linearNull = rootView.findViewById(R.id.linear_null);
+
+        mListView = (XListView) rootView.findViewById(R.id.listView);
+        mListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        mListView.setPullRefreshEnable(true);
+        mListView.setPullLoadEnable(true);
+        mListView.setXListViewListener(new XListView.IXListViewListener() {
+            @Override
+            public void onRefresh() {
+                refreshType = 1;
+                page = 1;
+                send();
+            }
+
+            @Override
+            public void onLoadMore() {
+                if (page <= pageSizeNum) {
+                    refreshType = 2;
+                    send();
+                } else {
+                    mListView.stopLoadMore();
+                    mListView.setPullLoadEnable(false);
+                    ToastUtils.show_always(context, "已经是最后一页了");
+                }
+            }
+        });
+    }
+
+    // 设置 View 隐藏
     public void setViewHint() {
         linearNull.setVisibility(View.GONE);
     }
 
-    /**
-     * 设置 View 可见  解决全选 Dialog 挡住 ListView 最底下一条 Item 问题
-     */
+    // 设置 View 可见  解决全选 Dialog 挡住 ListView 最底下一条 Item 问题
     public void setViewVisibility() {
         linearNull.setVisibility(View.VISIBLE);
     }
 
     private void setListener() {
-        adapter.setOnListener(new FavorListAdapter.favorCheck() {
+        adapter.setOnListener(new FavorListAdapter.FavoriteCheck() {
             @Override
-            public void checkposition(int position) {
+            public void checkPosition(int position) {
                 if (newList.get(position).getChecktype() == 0) {
                     newList.get(position).setChecktype(1);
                 } else {
@@ -155,7 +175,7 @@ public class RadioFragment extends Fragment {
                             String playercontentshareurl = newList.get(position - 1).getContentShareURL();
                             String plaplayeralltime = "0";
                             String playerintime = "0";
-                            String playercontentdesc = newList.get(position - 1).getCurrentContent();
+                            String playercontentdesc = newList.get(position - 1).getContentDescn();
                             String playernum = newList.get(position - 1).getWatchPlayerNum();
                             String playerzantype = "0";
                             String playerfrom = "";
@@ -188,14 +208,10 @@ public class RadioFragment extends Fragment {
                                 SharedPreferences.Editor et = sp.edit();
                                 et.putString(StringConstant.PLAYHISTORYENTER, "true");
                                 et.putString(StringConstant.PLAYHISTORYENTERNEWS, newList.get(position - 1).getContentName());
-                                if(!et.commit()) {
-                                    L.w("数据 commit 失败!");
-                                }
+                                if(!et.commit()) L.w("数据 commit 失败!");
                                 HomeActivity.UpdateViewPager();
                                 getActivity().finish();
                             }
-                        } else {
-                            ToastUtils.show_short(context, "暂不支持的Type类型");
                         }
                     }
                 }
@@ -203,43 +219,18 @@ public class RadioFragment extends Fragment {
         });
     }
 
-    private void setView() {
-        mListView.setPullRefreshEnable(true);
-        mListView.setPullLoadEnable(true);
-        mListView.setXListViewListener(new XListView.IXListViewListener() {
-            @Override
-            public void onRefresh() {
-                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    refreshType = 1;
-                    page = 1;
-                    send();
-                } else {
-                    mListView.stopRefresh();
-                    ToastUtils.show_short(context, "网络失败，请检查网络");
-                }
-            }
-
-            @Override
-            public void onLoadMore() {
-                if (page <= pageSizeNum) {
-                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                        refreshType = 2;
-                        send();
-                        ToastUtils.show_short(context, "正在请求" + page + "页信息");
-                    } else {
-                        ToastUtils.show_short(context, "网络失败，请检查网络");
-                    }
-                } else {
-                    mListView.stopLoadMore();
-                    mListView.setPullLoadEnable(false);
-                    ToastUtils.show_always(context, "已经是最后一页了");
-                }
-            }
-        });
-    }
-
     // 发送网络请求
     private void send() {
+        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            if(dialog != null) dialog.dismiss();
+            if(refreshType == 1) {
+                mListView.stopRefresh();
+            } else {
+                mListView.stopLoadMore();
+            }
+            ToastUtils.show_always(context, "网络连接失败，请检查网络设置!");
+            return ;
+        }
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("MediaType", "RADIO");
@@ -253,12 +244,8 @@ public class RadioFragment extends Fragment {
 
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                if (isCancelRequest) {
-                    return;
-                }
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return;
                 page++;
                 try {
                     ReturnType = result.getString("ReturnType");
@@ -288,16 +275,11 @@ public class RadioFragment extends Fragment {
                                         pageSizeNum = allCountInt / pageSizeInt + 1;
                                     }
                                 }
-                            } else {
-                                ToastUtils.show_always(context, "页码获取异常");
                             }
-                        } catch (JSONException e) {
+                        } catch (Exception e) {
                             e.printStackTrace();
                         }
-
-                        if (refreshType == 1) {
-                            newList.clear();
-                        }
+                        if (refreshType == 1) newList.clear();
                         newList.addAll(subList);
                         if (adapter == null) {
                             mListView.setAdapter(adapter = new FavorListAdapter(context, newList));
@@ -305,9 +287,6 @@ public class RadioFragment extends Fragment {
                             adapter.notifyDataSetChanged();
                         }
                         setListener();
-                    } else {
-                        mListView.setVisibility(View.GONE);
-                        ToastUtils.show_short(context, "无数据");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -322,9 +301,7 @@ public class RadioFragment extends Fragment {
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+                if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
             }
         });
@@ -336,21 +313,17 @@ public class RadioFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
-                case FavoriteActivity.VIEW_UPDATE:
-                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                        page = 1;
-                        send();
-                    } else {
-                        ToastUtils.show_always(context, "网络失败，请检查网络");
-                    }
+                case BroadcastConstants.VIEW_UPDATE:
+                    page = 1;
+                    send();
                     break;
-                case FavoriteActivity.SET_NOT_LOAD_REFRESH:
+                case BroadcastConstants.SET_NOT_LOAD_REFRESH:
                     if (isVisible()) {
                         mListView.setPullRefreshEnable(false);
                         mListView.setPullLoadEnable(false);
                     }
                     break;
-                case FavoriteActivity.SET_LOAD_REFRESH:
+                case BroadcastConstants.SET_LOAD_REFRESH:
                     if (isVisible()) {
                         mListView.setPullRefreshEnable(true);
                         if (newList.size() >= 10) {
@@ -362,11 +335,9 @@ public class RadioFragment extends Fragment {
         }
     };
 
-    /**
-     * 更改界面的view布局 让每个item都可以显示点选框
-     */
-    public boolean changeviewtype(int type) {
-        if (newList != null & newList.size() != 0) {
+    // 更改界面的view布局 让每个item都可以显示点选框
+    public boolean changeViewType(int type) {
+        if (newList != null && newList.size() != 0) {
             for (int i = 0; i < newList.size(); i++) {
                 newList.get(i).setViewtype(type);
             }
@@ -382,10 +353,8 @@ public class RadioFragment extends Fragment {
         }
     }
 
-    /**
-     * 点击全选时的方法
-     */
-    public void changechecktype(int type) {
+    // 点击全选时的方法
+    public void changeCheckType(int type) {
         if (adapter != null) {
             for (int i = 0; i < newList.size(); i++) {
                 newList.get(i).setChecktype(type);
@@ -394,10 +363,8 @@ public class RadioFragment extends Fragment {
         }
     }
 
-    /**
-     * 获取当前页面选中的为选中的数目
-     */
-    public int getdelitemsum() {
+    // 获取当前页面选中的为选中的数目
+    public int getDelItemSum() {
         int sum = 0;
         for (int i = 0; i < newList.size(); i++) {
             if (newList.get(i).getChecktype() == 1) {
@@ -407,39 +374,29 @@ public class RadioFragment extends Fragment {
         return sum;
     }
 
-    /**
-     * 判断是否全部选择
-     */
+    // 判断是否全部选择
     public void ifAll() {
-        if (getdelitemsum() == newList.size()) {
+        if (getDelItemSum() == newList.size()) {
             Intent intentAll = new Intent();
-            intentAll.setAction(FavoriteActivity.SET_ALL_IMAGE);
+            intentAll.setAction(BroadcastConstants.SET_ALL_IMAGE);
             context.sendBroadcast(intentAll);
         } else {
             Intent intentNotAll = new Intent();
-            intentNotAll.setAction(FavoriteActivity.SET_NOT_ALL_IMAGE);
+            intentNotAll.setAction(BroadcastConstants.SET_NOT_ALL_IMAGE);
             context.sendBroadcast(intentNotAll);
         }
     }
 
-    /**
-     * 删除
-     */
-    public void delitem() {
+    // 删除
+    public void delItem() {
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             dialog = DialogUtils.Dialogph(context, "正在删除");
             for (int i = 0; i < newList.size(); i++) {
                 if (newList.get(i).getChecktype() == 1) {
-                    if (delList == null) {
-                        delList = new ArrayList<>();
-                        String type = newList.get(i).getMediaType();
-                        String contentid = newList.get(i).getContentId();
-                        delList.add(type + "::" + contentid);
-                    } else {
-                        String type = newList.get(i).getMediaType();
-                        String contentid = newList.get(i).getContentId();
-                        delList.add(type + "::" + contentid);
-                    }
+                    if (delList == null) delList = new ArrayList<>();
+                    String type = newList.get(i).getMediaType();
+                    String contentId = newList.get(i).getContentId();
+                    delList.add(type + "::" + contentId);
                 }
             }
             refreshType = 1;
@@ -453,8 +410,7 @@ public class RadioFragment extends Fragment {
     protected void sendRequest() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            // 对s进行处理 去掉"[]"符号
-            String s = delList.toString();
+            String s = delList.toString();// 对s进行处理 去掉"[]"符号
             jsonObject.put("DelInfos", s.substring(1, s.length() - 1).replaceAll(" ", ""));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -468,9 +424,7 @@ public class RadioFragment extends Fragment {
             protected void requestSuccess(JSONObject result) {
                 isDel = true;
                 delList.clear();
-                if (isCancelRequest) {
-                    return;
-                }
+                if (isCancelRequest) return;
                 try {
                     ReturnType = result.getString("ReturnType");
                     Message = result.getString("Message");
@@ -479,7 +433,7 @@ public class RadioFragment extends Fragment {
                     e.printStackTrace();
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
-                    context.sendBroadcast(new Intent(FavoriteActivity.VIEW_UPDATE));
+                    context.sendBroadcast(new Intent(BroadcastConstants.VIEW_UPDATE));
                 } else {
                     ToastUtils.show_always(context, "删除失败!");
                 }
@@ -487,9 +441,7 @@ public class RadioFragment extends Fragment {
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+                if (dialog != null) dialog.dismiss();
                 delList.clear();
                 ToastUtils.showVolleyError(context);
             }

@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -21,130 +20,97 @@ import java.util.List;
 
 
 public class CityNewAdapter extends BaseAdapter {
-	private List<RankInfo> list;
-	private Context context;
+    private List<RankInfo> list;
+    private Context context;
 
-	public CityNewAdapter(Context context, List<RankInfo> list) {
-		this.context = context;
-		this.list = list;
-	}
+    public CityNewAdapter(Context context, List<RankInfo> list) {
+        this.context = context;
+        this.list = list;
+    }
 
-	@Override
-	public int getCount() {
-		return list.size();
-	}
+    @Override
+    public int getCount() {
+        return list.size();
+    }
 
-	@Override
-	public Object getItem(int position) {
-		return list.get(position);
-	}
+    @Override
+    public Object getItem(int position) {
+        return list.get(position);
+    }
 
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-	@Override
-	public View getView(final int position, View convertView, ViewGroup parent) {
-		ViewHolder holder;
-		if (convertView == null) {
-			holder = new ViewHolder();
-			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_rankinfo, null);
-			holder.textview_ranktitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
-			holder.textview_rankplaying = (TextView) convertView.findViewById(R.id.RankPlaying);// 正在播放的节目
-			holder.imageview_rankimage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
-			holder.mTv_number = (TextView) convertView.findViewById(R.id.tv_num);
-			holder.lin_CurrentPlay = (LinearLayout) convertView.findViewById(R.id.lin_currentplay);
-			holder.image_last = (ImageView) convertView.findViewById(R.id.image_last);//
-			holder.image_num = (ImageView) convertView.findViewById(R.id.image_num);//
-			holder.tv_last = (TextView) convertView.findViewById(R.id.tv_last);
-			holder.image_last.setVisibility(View.GONE);
-			holder.image_num.setVisibility(View.GONE);
-			holder.tv_last.setVisibility(View.GONE);
+    @Override
+    public View getView(final int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+        if (convertView == null) {
+            holder = new ViewHolder();
+            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_rankinfo, parent, false);
 
-			holder.img_zhezhao = (ImageView) convertView.findViewById(R.id.img_zhezhao);
-			Bitmap bmp_zhezhao = BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b);
-			holder.img_zhezhao.setImageBitmap(bmp_zhezhao);
-			convertView.setTag(holder);
-		} else {
-			holder = (ViewHolder) convertView.getTag();
-		}
-		RankInfo lists = list.get(position);
-		if(lists.getMediaType()!=null&&!lists.getMediaType().equals("")){
-			if (lists.getMediaType().equals("RADIO")) {
-				if (lists.getContentName() == null|| lists.getContentName().equals("")) {
-					holder.textview_ranktitle.setText("未知");
-				} else {
-					holder.textview_ranktitle.setText(lists.getContentName());
-				}
+            // 六边形封面遮罩
+            holder.imageMask = (ImageView) convertView.findViewById(R.id.img_zhezhao);
+            holder.imageMask.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b));
 
-//				if (lists.getContentPub() == null|| lists.getContentPub().equals("")) {
-//					holder.textview_rankplaying.setText("未知");
-//				} else {
-//					holder.textview_rankplaying.setText(lists.getContentPub());
+            holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
+            holder.textRankPlaying = (TextView) convertView.findViewById(R.id.RankPlaying);// 正在播放的节目
+            holder.imageRankImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
+            holder.textNumber = (TextView) convertView.findViewById(R.id.tv_num);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        RankInfo lists = list.get(position);
+        String mediaType = lists.getMediaType();
+
+        if (mediaType != null && !mediaType.equals("")) {
+
+            // 标题
+            if (lists.getContentName() != null && !lists.getContentName().equals("")) {
+                holder.textRankTitle.setText(lists.getContentName());
+            }
+
+            // 封面
+            String contentImage = lists.getContentImg();
+            if (contentImage == null || contentImage.equals("null") || contentImage.trim().equals("")) {
+                Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx_d);
+                holder.imageRankImage.setImageBitmap(bmp);
+            } else {
+                String url;
+                if (contentImage.startsWith("http")) {
+                    url = contentImage;
+                } else {
+                    url = GlobalConfig.imageurl + contentImage;
+                }
+                url = AssembleImageUrlUtils.assembleImageUrl150(url);
+                Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageRankImage);
+            }
+
+            // 收听人数
+            String playCount = lists.getPlayCount();
+            if (playCount != null && !playCount.equals("") && !playCount.equals("null")) {
+                holder.textNumber.setText(lists.getPlayCount());
+            }
+
+            if (mediaType.equals("RADIO")) {
+//				if (lists.getContentPub() != null && !lists.getContentPub().equals("")) {
+//                    holder.textRankPlaying.setText("正在直播：" + lists.getContentPub());
 //				}
-
-				holder.textview_rankplaying.setText("测试-无节目单数据");
-
-				if (lists.getContentImg() == null
-						|| lists.getContentImg().equals("")
-						|| lists.getContentImg().equals("null")
-						|| lists.getContentImg().trim().equals("")) {
-					Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx_d);
-					holder.imageview_rankimage.setImageBitmap(bmp);
-				} else {
-					String url;
-					if(lists.getContentImg().startsWith("http")){
-						url =  lists.getContentImg();
-					}else{
-						url = GlobalConfig.imageurl + lists.getContentImg();
-					}
-					url=AssembleImageUrlUtils.assembleImageUrl150(url);
-					Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageview_rankimage);
+                holder.textRankPlaying.setText("正在直播：测试-无节目单数据");
+            } else {
+                if (lists.getContentPub() != null && !lists.getContentPub().equals("")) {
+                    holder.textRankPlaying.setText(lists.getContentPub());
 				}
-			} else {
-				// 判断mediatype==AUDIO的情况
-				if (lists.getContentName() == null|| lists.getContentName().equals("")) {
-					holder.textview_ranktitle.setText("未知");
-				} else {
-					holder.textview_ranktitle.setText(lists.getContentName());
-				}
-				if (lists.getContentImg() == null
-						|| lists.getContentImg().equals("")
-						|| lists.getContentImg().equals("null")
-						|| lists.getContentImg().trim().equals("")) {
-					Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
-					holder.imageview_rankimage.setImageBitmap(bmp);
-				} else {
-					String url;
-					if(lists.getContentImg().startsWith("http")){
-						url =  lists.getContentImg();
-					}else{
-						url = GlobalConfig.imageurl + lists.getContentImg();
-					}
-					url=AssembleImageUrlUtils.assembleImageUrl150(url);
-					Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageview_rankimage);
-				}
-				holder.lin_CurrentPlay.setVisibility(View.INVISIBLE);
-			}
-		}
-		if (lists.getPlayCount() == null
-				|| lists.getPlayCount().equals("")
-				|| lists.getPlayCount().equals("null")) {
-			holder.mTv_number.setText("0");
-		} else {
-			holder.mTv_number.setText(lists.getPlayCount());
-		}
-		return convertView;
-	}
+            }
+        }
+        return convertView;
+    }
 
-	private class ViewHolder {
-		public TextView textview_ranktitle,mTv_number,textview_rankplaying;
-		public ImageView imageview_rankimage;
-		public LinearLayout lin_CurrentPlay;
-		public ImageView img_zhezhao;
-		public ImageView image_num;
-		public TextView tv_last;
-		public ImageView image_last;
-	}
+    private class ViewHolder {
+        public TextView textRankTitle, textNumber, textRankPlaying;// 标题  收听人数  正在直播的节目
+        public ImageView imageRankImage;// 封面
+        public ImageView imageMask;// 六边形封面遮罩
+    }
 }

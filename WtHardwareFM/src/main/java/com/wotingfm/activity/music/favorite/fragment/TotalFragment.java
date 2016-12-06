@@ -33,7 +33,9 @@ import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.activity.music.search.adapter.SearchContentAdapter;
 import com.wotingfm.activity.music.search.model.SuperRankInfo;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -87,7 +89,7 @@ public class TotalFragment extends Fragment {
         initDao();
         delDialog();
         IntentFilter mFilter = new IntentFilter();
-        mFilter.addAction(FavoriteActivity.VIEW_UPDATE);
+        mFilter.addAction(BroadcastConstants.VIEW_UPDATE);
         context.registerReceiver(mBroadcastReceiver, mFilter);
     }
 
@@ -98,19 +100,16 @@ public class TotalFragment extends Fragment {
             expandListView = (ExpandableListView) rootView.findViewById(R.id.ex_listview);
             expandListView.setGroupIndicator(null);
             setListener();
-            if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                dialog = DialogUtils.Dialogph(context, "正在获取全部喜欢信息");
-                send();
-            } else {
-                ToastUtils.show_always(context, "网络失败，请检查网络");
-            }
+
+            dialog = DialogUtils.Dialogph(context, "正在获取全部喜欢信息");
+            send();
         }
         return rootView;
     }
 
     // 控件点击事件监听
     private void setListener() {
-        // 屏蔽group点击事件
+        // 屏蔽 group 点击事件
         expandListView.setOnGroupClickListener(new OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -184,8 +183,7 @@ public class TotalFragment extends Fragment {
     protected void sendRequest() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            // 对s进行处理 去掉"[]"符号
-            String s = delList.toString();
+            String s = delList.toString();// 对s进行处理 去掉"[]"符号
             jsonObject.put("DelInfos", s.substring(1, s.length() - 1).replaceAll(" ", ""));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -198,9 +196,7 @@ public class TotalFragment extends Fragment {
             @Override
             protected void requestSuccess(JSONObject result) {
                 delList.clear();
-                if (isCancelRequest) {
-                    return;
-                }
+                if (isCancelRequest) return;
                 try {
                     ReturnType = result.getString("ReturnType");
                     Message = result.getString("Message");
@@ -210,17 +206,13 @@ public class TotalFragment extends Fragment {
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     send();
-                    context.sendBroadcast(new Intent(FavoriteActivity.VIEW_UPDATE));
-                } else {
-                    ToastUtils.show_always(context, "无数据");
+                    context.sendBroadcast(new Intent(BroadcastConstants.VIEW_UPDATE));
                 }
             }
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+                if (dialog != null) dialog.dismiss();
                 delList.clear();
                 ToastUtils.showVolleyError(context);
             }
@@ -229,6 +221,11 @@ public class TotalFragment extends Fragment {
 
     // 请求网络获取数据
     private void send() {
+        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            if(dialog != null) dialog.dismiss();
+            ToastUtils.show_always(context, "网络连接失败，请检查网络设置!");
+            return ;
+        }
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("PageSize", "12");
@@ -239,16 +236,11 @@ public class TotalFragment extends Fragment {
         VolleyRequest.RequestPost(GlobalConfig.getFavoriteListUrl, tag, jsonObject, new VolleyCallback() {
             private String ReturnType;
             private String Message;
-            private JSONObject arg1;
 
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                if (isCancelRequest) {
-                    return;
-                }
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return;
                 try {
                     ReturnType = result.getString("ReturnType");
                     Message = result.getString("Message");
@@ -257,18 +249,15 @@ public class TotalFragment extends Fragment {
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
-                        arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
+                        JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
                         subList = new Gson().fromJson(arg1.getString("FavoriteList"), new TypeToken<List<RankInfo>>() {}.getType());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     list.clear();
-                    if (playList != null) {
-                        playList.clear();
-                    }
-                    if (sequList != null) {
-                        sequList.clear();
-                    }
+                    if (playList != null) playList.clear();
+                    if (sequList != null) sequList.clear();
+
                     if (subList != null && subList.size() > 0) {
                         for (int i = 0; i < subList.size(); i++) {
                             if (subList.get(i).getMediaType() != null && !subList.get(i).getMediaType().equals("")) {
@@ -342,29 +331,19 @@ public class TotalFragment extends Fragment {
                                 expandListView.expandGroup(i);
                             }
                             setItemListener();
-                        } else {
-                            ToastUtils.show_short(context, "没有数据");
                         }
-                    } else {
-                        ToastUtils.show_short(context, "数据获取异常");
                     }
-                } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_always(context, "" + Message);
-                } else if (ReturnType != null && ReturnType.equals("1011")) {
-                    ToastUtils.show_always(context,"没有喜欢的节目");
-                    expandListView.setVisibility(View.GONE);
                 } else {
                     if (Message != null && !Message.trim().equals("")) {
-                        ToastUtils.show_always(context, "加载失败" + Message);
+                        ToastUtils.show_always(context, Message);
                     }
                 }
             }
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+                if (dialog != null) dialog.dismiss();
+                ToastUtils.showVolleyError(context);
             }
         });
     }
@@ -372,7 +351,6 @@ public class TotalFragment extends Fragment {
     // ExpandableListView Item 点击事件监听
     protected void setItemListener() {
         expandListView.setOnChildClickListener(new OnChildClickListener() {
-
             @Override
             public boolean onChildClick(ExpandableListView parent, View v, int groupPosition, int childPosition, long id) {
                 String MediaType = null;
@@ -381,7 +359,7 @@ public class TotalFragment extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if (MediaType != null && MediaType.equals("RADIO") || MediaType.equals("AUDIO")) {
+                if (MediaType != null && MediaType.equals("RADIO") || MediaType != null && MediaType.equals("AUDIO")) {
                     String playername = list.get(groupPosition).getList().get(childPosition).getContentName();
                     String playerimage = list.get(groupPosition).getList().get(childPosition).getContentImg();
                     String playerurl = list.get(groupPosition).getList().get(childPosition).getContentPlay();
@@ -389,7 +367,7 @@ public class TotalFragment extends Fragment {
                     String playermediatype = list.get(groupPosition).getList().get(childPosition).getMediaType();
                     String plaplayeralltime = "0";
                     String playerintime = "0";
-                    String playercontentdesc = list.get(groupPosition).getList().get(childPosition).getCurrentContent();
+                    String playercontentdesc = list.get(groupPosition).getList().get(childPosition).getContentDescn();
                     String playernum = list.get(groupPosition).getList().get(childPosition).getWatchPlayerNum();
                     String playerzantype = "0";
                     String playerfrom = "";
@@ -418,25 +396,20 @@ public class TotalFragment extends Fragment {
 						PlayerFragment.SendTextRequest(list.get(groupPosition).getList().get(childPosition).getContentName(), context);
 						getActivity().finish();
 					} else {
-						SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
-						SharedPreferences.Editor et = sp.edit();
+						SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
 						et.putString(StringConstant.PLAYHISTORYENTER, "true");
 						et.putString(StringConstant.PLAYHISTORYENTERNEWS, list.get(groupPosition).getList().get(childPosition).getContentName());
-						if(!et.commit()) {
-                            L.w("数据 commit 失败!");
-                        }
+						if(!et.commit()) L.w("数据 commit 失败!");
 						HomeActivity.UpdateViewPager();
 						getActivity().finish();
 					}
-                } else if (MediaType.equals("SEQU")) {
+                } else if (MediaType != null && MediaType.equals("SEQU")) {
 					Intent intent = new Intent(context, AlbumActivity.class);
 					Bundle bundle = new Bundle();
 					bundle.putString("type", "search");
 					bundle.putSerializable("list", list.get(groupPosition).getList().get(childPosition));
 					intent.putExtras(bundle);
 					startActivityForResult(intent, 1);
-                } else {
-                    ToastUtils.show_short(context, "暂不支持的Type类型");
                 }
                 return true;
             }
@@ -457,23 +430,16 @@ public class TotalFragment extends Fragment {
 
     // 广播接收器 用于刷新界面
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(FavoriteActivity.VIEW_UPDATE)) {
-                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    send();
-                } else {
-                    ToastUtils.show_always(context, "网络失败，请检查网络");
-                }
+            if (action.equals(BroadcastConstants.VIEW_UPDATE)) {
+                send();
             }
         }
     };
 
-    /**
-     * 获取当前页面选中的为选中的数目
-     */
+    // 获取当前页面选中的为选中的数目
     public int getDelItemSum() {
         int sum = 0;
         if (subList == null) {
@@ -484,23 +450,15 @@ public class TotalFragment extends Fragment {
         return sum;
     }
 
-    /**
-     * 删除
-     */
+    // 删除
     public void delItem() {
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             dialog = DialogUtils.Dialogph(context, "正在删除");
             for (int i = 0; i < subList.size(); i++) {
-                if (delList == null) {
-                    delList = new ArrayList<>();
-                    String type = subList.get(i).getMediaType();
-                    String contentId = subList.get(i).getContentId();
-                    delList.add(type + "::" + contentId);
-                } else {
-                    String type = subList.get(i).getMediaType();
-                    String contentId = subList.get(i).getContentId();
-                    delList.add(type + "::" + contentId);
-                }
+                if (delList == null) delList = new ArrayList<>();
+                String type = subList.get(i).getMediaType();
+                String contentId = subList.get(i).getContentId();
+                delList.add(type + "::" + contentId);
             }
             sendRequest();
         } else {

@@ -25,13 +25,14 @@
         android:text="通过WPA/WPA2进行保护"
         android:textSize="14sp"
         android:layout_marginLeft="14dp"
+        android:textColor="@color/gray"
         android:layout_below="@id/text_wifi_name"/>
 
     <ImageView
         android:id="@+id/image_wifi"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_launcher"
+        android:src="@mipmap/wt_image_wifi_lockde"
         android:layout_alignParentRight="true"
         android:layout_centerVertical="true"
         android:layout_marginRight="14dp"/>

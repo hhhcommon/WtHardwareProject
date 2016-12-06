@@ -8,9 +8,9 @@
 
     <RelativeLayout
         android:layout_width="270dp"
-        android:layout_height="350dp"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:background="@color/shen_hui">
+        android:background="@drawable/background_button_white">
 
         <TextView
             android:id="@+id/text_title"
@@ -23,14 +23,14 @@
             android:singleLine="true"
             android:layout_marginLeft="20dp"
             android:layout_marginRight="20dp"
-            android:textColor="@color/WHITE" />
+            android:textColor="@color/BLACK" />
 
         <TextView
             android:id="@+id/text_state"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="状态信息：已连接"
-            android:textColor="@color/WHITE"
+            android:textColor="@color/BLACK"
             android:layout_below="@id/text_title"
             android:layout_marginTop="13dp"
             android:layout_marginLeft="15dp"
@@ -41,7 +41,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="信号强度：强"
-            android:textColor="@color/WHITE"
+            android:textColor="@color/BLACK"
             android:layout_below="@id/text_state"
             android:layout_marginTop="13dp"
             android:layout_marginLeft="15dp"
@@ -52,7 +52,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="连接速度：72Mbps"
-            android:textColor="@color/WHITE"
+            android:textColor="@color/BLACK"
             android:layout_below="@id/text_signal"
             android:layout_marginTop="13dp"
             android:layout_marginLeft="15dp"
@@ -63,7 +63,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="安全性：WPA/WPA2 PSK"
-            android:textColor="@color/WHITE"
+            android:textColor="@color/BLACK"
             android:layout_below="@id/text_speed"
             android:layout_marginTop="13dp"
             android:layout_marginLeft="15dp"
@@ -74,7 +74,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="IP地址：192.168.1.02"
-            android:textColor="@color/WHITE"
+            android:textColor="@color/BLACK"
             android:layout_below="@id/text_security"
             android:layout_marginTop="13dp"
             android:layout_marginLeft="15dp"
@@ -86,10 +86,10 @@
             android:layout_height="40dp"
             android:text="取消"
             android:layout_below="@id/text_ip"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="30dp"
             android:layout_marginLeft="20dp"
             android:textSize="18sp"
-            android:background="@drawable/background_button_white"
+            android:background="@drawable/background_button_gray"
             android:textColor="@color/BLACK" />
 
         <Button
@@ -97,10 +97,11 @@
             android:layout_width="100dp"
             android:layout_height="40dp"
             android:layout_below="@id/text_ip"
-            android:layout_marginTop="18dp"
+            android:layout_marginTop="30dp"
             android:layout_alignParentRight="true"
+            android:layout_marginBottom="30dp"
             android:textSize="18sp"
-            android:background="@drawable/background_button_white"
+            android:background="@drawable/background_button_gray"
             android:layout_marginRight="20dp"
             android:text="不保存" />
 
@@ -108,6 +109,7 @@
             android:id="@+id/text_disconnect"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:text="断开WiFi连接"
             android:textColor="@color/game_blue_text_select"
             android:layout_below="@id/btn_not_save"

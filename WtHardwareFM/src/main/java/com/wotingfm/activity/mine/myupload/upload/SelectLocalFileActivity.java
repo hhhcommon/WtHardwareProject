@@ -138,9 +138,7 @@ public class SelectLocalFileActivity extends BaseActivity implements
             String type = cursor.getString(cursor.getColumnIndex(MediaStore.Audio.Media.MIME_TYPE));
             int id = cursor.getInt(cursor.getColumnIndex(MediaStore.Audio.Media._ID));
             long size = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.SIZE));
-//            long addTime = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.YEAR));// 修改时间
-//            long addTime1 = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED));// 修改时间
-            long addTime2 = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_ADDED));// 修改时间
+            long addTime2 = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DATE_MODIFIED));// 修改时间
             long duration = cursor.getLong(cursor.getColumnIndex(MediaStore.Audio.Media.DURATION));
             mediaStoreInfo.setData(data1);
             mediaStoreInfo.setTitle(title);

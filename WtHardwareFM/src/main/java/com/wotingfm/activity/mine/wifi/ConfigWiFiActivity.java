@@ -1,6 +1,7 @@
 package com.wotingfm.activity.mine.wifi;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -86,8 +87,10 @@ public class ConfigWiFiActivity extends AppBaseActivity implements View.OnClickL
         public void afterTextChanged(Editable s) {
             if(s.toString().length() < 8) {
                 btnConfirm.setEnabled(false);
+                btnConfirm.setTextColor(Color.parseColor("#BABAC1"));
             } else {
                 btnConfirm.setEnabled(true);
+                btnConfirm.setTextColor(Color.parseColor("#FFFFFFFF"));
             }
         }
     }

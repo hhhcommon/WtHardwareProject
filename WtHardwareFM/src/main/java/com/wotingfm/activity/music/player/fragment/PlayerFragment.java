@@ -1257,7 +1257,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                         MainList = arg1.getString("List");
                         ArrayList<LanguageSearchInside> list = new Gson().fromJson(
                                 MainList, new TypeToken<List<LanguageSearchInside>>() {}.getType());
-//                        String s=list.get(0).getContentDesc();
+//                        String s=list.get(0).getContentDescn();
                         if (RefreshType == 0) {
                             // 得到数据库里边的第一条数据
                             LanguageSearchInside fList = getdaolist(context);
