@@ -26,6 +26,15 @@ public class RankInfo implements Serializable {
 	private String sequImg;//专辑图片
 	private String sequDesc;//专辑描述
 	private String sequName;//专辑名称
+    private String ContentSeqId;
+
+    public String getContentSeqId() {
+        return ContentSeqId;
+    }
+
+    public void setContentSeqId(String contentSeqId) {
+        ContentSeqId = contentSeqId;
+    }
 
 	//界面展示状态
 	private int viewtype=0;//界面决定组件 1为显示点选框 0是没有

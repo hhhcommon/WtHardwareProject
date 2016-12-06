@@ -27,7 +27,7 @@ import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
 import com.wotingfm.activity.im.interphone.message.model.UserInviteMeInside;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -81,7 +81,7 @@ public class TalkPersonNewsActivity extends BaseActivity implements  OnClickList
         // 注册广播
         receiver = new MessageReceivers();
         IntentFilter filters = new IntentFilter();
-        filters.addAction(BroadcastConstant.GROUP_DETAIL_CHANGE);
+        filters.addAction(BroadcastConstants.GROUP_DETAIL_CHANGE);
         registerReceiver(receiver, filters);
 
         dialogDelete();
@@ -261,8 +261,8 @@ public class TalkPersonNewsActivity extends BaseActivity implements  OnClickList
                     if (ReturnType != null) {
                         if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
                             editName.setText(friendAliasName);
-                            sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
-                            sendBroadcast(new Intent(BroadcastConstant.REFRESH_GROUP));
+                            sendBroadcast(new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN));
+                            sendBroadcast(new Intent(BroadcastConstants.REFRESH_GROUP));
                             ToastUtils.show_always(context, "修改成功");
                         } else if (ReturnType.equals("0000")) {
                             ToastUtils.show_always(context, "无法获取相关的参数");
@@ -319,7 +319,7 @@ public class TalkPersonNewsActivity extends BaseActivity implements  OnClickList
                     String ReturnType = result.getString("ReturnType");
                     if (ReturnType != null) {
                         if (ReturnType.equals("1001")) {
-                            sendBroadcast( new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
+                            sendBroadcast( new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN));
                             if (ChatFragment.context != null &&
                                     ChatFragment.interPhoneId != null && ChatFragment.interPhoneId.equals(id)) {
                                 // 保存通讯录是否刷新的属性
@@ -387,7 +387,7 @@ public class TalkPersonNewsActivity extends BaseActivity implements  OnClickList
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastConstant.GROUP_DETAIL_CHANGE)) {
+            if (action.equals(BroadcastConstants.GROUP_DETAIL_CHANGE)) {
                 send();
             }
         }

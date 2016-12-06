@@ -36,7 +36,7 @@ import com.wotingfm.activity.music.playhistory.fragment.RadioFragment;
 import com.wotingfm.activity.music.playhistory.fragment.SoundFragment;
 import com.wotingfm.activity.music.playhistory.fragment.TTSFragment;
 import com.wotingfm.activity.music.playhistory.fragment.TotalFragment;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
@@ -87,8 +87,8 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
         mam.pushOneActivity(context);   // 将 Activity 添加到集合中
 
         IntentFilter intentFilter = new IntentFilter();	//注册广播
-        intentFilter.addAction(BroadcastConstant.UPDATE_ACTION_ALL);
-        intentFilter.addAction(BroadcastConstant.UPDATE_ACTION_CHECK);
+        intentFilter.addAction(BroadcastConstants.UPDATE_ACTION_ALL);
+        intentFilter.addAction(BroadcastConstants.UPDATE_ACTION_CHECK);
         registerReceiver(myBroadcast, intentFilter);
 
         initImage();
@@ -467,10 +467,10 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastConstant.UPDATE_ACTION_ALL)) {
+            if (action.equals(BroadcastConstants.UPDATE_ACTION_ALL)) {
                 imgAllCheck.setImageResource(R.mipmap.wt_group_checked);
                 dialogFlag = 1;
-            }else if(action.equals(BroadcastConstant.UPDATE_ACTION_CHECK)){
+            }else if(action.equals(BroadcastConstants.UPDATE_ACTION_CHECK)){
                 imgAllCheck.setImageResource(R.mipmap.wt_group_nochecked);
                 dialogFlag = 0;
             }

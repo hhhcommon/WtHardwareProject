@@ -17,7 +17,7 @@ import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.im.interphone.linkman.dao.NotifyHistoryDao;
 import com.wotingfm.activity.im.interphone.linkman.model.DBNotifyHistory;
 import com.wotingfm.activity.im.interphone.notify.adapter.NotifyListAdapter;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -84,7 +84,7 @@ public class NotifyNewActivity extends AppBaseActivity implements View.OnClickLi
         if(receiver == null) {		// 注册广播
             receiver = new MessageReceiver();
             IntentFilter filter = new IntentFilter();
-            filter.addAction(BroadcastConstant.PUSH_REFRESHNEWS);
+            filter.addAction(BroadcastConstants.PUSH_REFRESHNEWS);
             registerReceiver(receiver, filter);
         }
         initDao();
@@ -171,7 +171,7 @@ public class NotifyNewActivity extends AppBaseActivity implements View.OnClickLi
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if(action.equals(BroadcastConstant.PUSH_REFRESHNEWS)){
+            if(action.equals(BroadcastConstants.PUSH_REFRESHNEWS)){
                 getDate();
             }
         }

@@ -72,8 +72,7 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.helper.CommonHelper;
-import com.wotingfm.service.timeroffservice;
-import com.wotingfm.util.AssembleImageUrlUtils;
+import com.wotingfm.service.TimeOffService;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
@@ -247,8 +246,8 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     @Override
                     public void run() {
                         if (PlayerFragment.isCurrentPlay) {
-                            Intent intent = new Intent(context, timeroffservice.class);
-                            intent.setAction(BroadcastConstant.TIMER_START);
+                            Intent intent = new Intent(context, TimeOffService.class);
+                            intent.setAction(BroadcastConstants.TIMER_START);
                             int time = PlayerFragment.timerService;
                             intent.putExtra("time", time);
                             context.startService(intent);
@@ -503,8 +502,8 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private static void getNetWork(int number, Context context) {
         String wifiset = sp.getString(StringConstant.WIFISET, "true"); // 是否开启网络流量提醒
         String wifishow = sp.getString(StringConstant.WIFISHOW, "true");// 是否网络弹出框提醒
-        if (wifishow != null && !wifishow.trim().equals("") && wifishow.equals("true")) {
-            if (wifiset != null && !wifiset.trim().equals("") && wifiset.equals("true")) {
+        if (!wifishow.trim().equals("") && wifishow.equals("true")) {
+            if (!wifiset.trim().equals("") && wifiset.equals("true")) {
                 // 开启网络播放数据连接提醒
                 CommonHelper.checkNetworkStatus(context);// 网络设置获取
                 GlobalConfig.playerobject=alllist.get(number);
@@ -679,8 +678,8 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
      */
     private static void stopCurrentTimer() {
         if (PlayerFragment.isCurrentPlay) {
-            Intent intent = new Intent(context, timeroffservice.class);
-            intent.setAction(BroadcastConstant.TIMER_STOP);
+            Intent intent = new Intent(context, TimeOffService.class);
+            intent.setAction(BroadcastConstants.TIMER_STOP);
             context.startService(intent);
             PlayerFragment.isCurrentPlay = false;
         }
@@ -850,7 +849,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-             if (action.equals(BroadcastConstant.PLAYERVOICE)) {
+             if (action.equals(BroadcastConstants.PLAYERVOICE)) {
                 String str = intent.getStringExtra("VoiceContent");
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                     if(!str.trim().equals("")){

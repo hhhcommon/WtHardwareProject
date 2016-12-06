@@ -17,7 +17,7 @@ import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.im.interphone.find.result.FindNewsResultActivity;
 import com.wotingfm.activity.im.interphone.scanning.activity.CaptureActivity;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.ToastUtils;
 
@@ -55,7 +55,7 @@ public class FindActivity extends AppBaseActivity implements View.OnClickListene
     @Override
     protected void init() {
         IntentFilter myFilter = new IntentFilter();
-        myFilter.addAction(BroadcastConstant.FINDVOICE);
+        myFilter.addAction(BroadcastConstants.FINDVOICE);
         registerReceiver(mBroadcastReceiver, myFilter);
         // initVoice();
         initViews();
@@ -234,7 +234,7 @@ public class FindActivity extends AppBaseActivity implements View.OnClickListene
         @Override
         public void onReceive(Context context, final Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastConstant.FINDVOICE)) {
+            if (action.equals(BroadcastConstants.FINDVOICE)) {
                 String str = intent.getStringExtra("VoiceContent");
 
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {

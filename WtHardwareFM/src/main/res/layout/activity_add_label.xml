@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/BaseStyle"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+
+        <ImageView
+            android:id="@+id/image_left_back"
+            style="@style/LeftImageStyle"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="编辑标签"
+            android:textSize="17sp"
+            android:textColor="@color/WHITE"
+            android:layout_centerInParent="true"/>
+
+        <TextView
+            android:id="@+id/text_confirm"
+            android:layout_width="48dp"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="确定"
+            android:textSize="16sp"
+            android:layout_alignParentRight="true"
+            android:textColor="@color/WHITE"
+            android:layout_centerInParent="true"/>
+
+    </RelativeLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:background="@color/app_bg">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="最多添加 5 个标签，每个标签最长 8 个汉字，标签之间用逗号隔开"
+            android:textSize="10sp"
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/gray"/>
+
+        <com.zhy.view.flowlayout.FlowLayout
+            android:id="@+id/tag_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="15dp"
+            android:padding="8dp"
+            android:background="@color/WHITE"
+            android:horizontalSpacing="20dp"
+            android:verticalSpacing="20dp"/>
+
+        <TextView
+            android:id="@+id/text_my_label"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我的标签"
+            android:textSize="16sp"
+            android:textColor="@color/wt_login_third"
+            android:layout_marginLeft="15dp"/>
+
+        <GridView
+            android:id="@+id/grid_my_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:horizontalSpacing="20dp"
+            android:numColumns="4"
+            android:paddingBottom="10dp"
+            android:paddingLeft="11dp"
+            android:paddingRight="11dp"
+            android:paddingTop="18dp"
+            android:scrollbars="none"
+            android:verticalSpacing="15dp" />
+
+    </LinearLayout>
+
+</LinearLayout>

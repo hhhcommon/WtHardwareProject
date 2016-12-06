@@ -28,7 +28,7 @@ import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
@@ -74,7 +74,7 @@ public class SequFragment extends Fragment {
         super.onCreate(savedInstanceState);
         context = getActivity();
         IntentFilter mFilter = new IntentFilter();
-        mFilter.addAction(BroadcastConstant.SEARCH_VIEW_UPDATE);
+        mFilter.addAction(BroadcastConstants.SEARCH_VIEW_UPDATE);
         context.registerReceiver(mBroadcastReceiver, mFilter);
         initDao();
     }
@@ -264,7 +264,7 @@ public class SequFragment extends Fragment {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(BroadcastConstant.SEARCH_VIEW_UPDATE)) {
+            if (intent.getAction().equals(BroadcastConstants.SEARCH_VIEW_UPDATE)) {
                 searchString = intent.getStringExtra("SearchStr");
                 if (searchString != null && !searchString.equals("")) {
                     dialog = DialogUtils.Dialogph(context, "通讯中");

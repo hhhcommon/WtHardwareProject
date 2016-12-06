@@ -17,7 +17,7 @@ import android.widget.LinearLayout;
 
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.util.PhoneMessage;
 /**
  * 悬浮窗服务----在BSApplication中启动
@@ -120,17 +120,17 @@ public class FloatingWindowService extends Service {
                 //startActivity(intent);
 				if(GlobalConfig.activitytype==1){
 					GlobalConfig.activitytype=2;
-					Intent push=new Intent(BroadcastConstant.ACTIVITY_CHANGE);
+					Intent push=new Intent(BroadcastConstants.ACTIVITY_CHANGE);
 					sendBroadcast(push);
 					lin_d.setBackgroundResource(R.mipmap.bb);
 				}else if(GlobalConfig.activitytype==2){
 					GlobalConfig.activitytype=3;
-					Intent push=new Intent(BroadcastConstant.ACTIVITY_CHANGE);
+					Intent push=new Intent(BroadcastConstants.ACTIVITY_CHANGE);
 					sendBroadcast(push);
 					lin_d.setBackgroundResource(R.mipmap.cc);
 				}else if(GlobalConfig.activitytype==3){
 					GlobalConfig.activitytype=1;
-					Intent push=new Intent(BroadcastConstant.ACTIVITY_CHANGE);
+					Intent push=new Intent(BroadcastConstants.ACTIVITY_CHANGE);
 					sendBroadcast(push);
 					lin_d.setBackgroundResource(R.mipmap.aa);
 				}

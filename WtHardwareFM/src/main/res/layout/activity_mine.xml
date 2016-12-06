@@ -233,7 +233,7 @@
 
                 <TextView
                     style="@style/PersonAndSetTextStyle"
-                    android:text="调频"
+                    android:text="调频设置"
                     android:layout_toRightOf="@id/image_listener" />
 
                 <ImageView
@@ -246,6 +246,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
+                    android:textColor="@color/beijing"
                     android:layout_toLeftOf="@id/image_listener_frequency"
                     android:text="87.5MHz" />
 
@@ -265,7 +266,7 @@
                 <TextView
                     android:id="@+id/text_wifi_set"
                     style="@style/PersonAndSetTextStyle"
-                    android:text="WIFI"
+                    android:text="WIFI设置"
                     android:layout_toRightOf="@id/image_wifi"/>
 
                 <ImageView
@@ -278,6 +279,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
+                    android:textColor="@color/beijing"
                     android:layout_toLeftOf="@id/image_wifi_set"
                     android:maxLines="1"
                     android:text="已连接" />
@@ -298,7 +300,7 @@
                 <TextView
                     android:id="@+id/text_bluetooth_set"
                     style="@style/PersonAndSetTextStyle"
-                    android:text="蓝牙"
+                    android:text="蓝牙设置"
                     android:layout_toRightOf="@id/image_bluetooth" />
 
                 <ImageView
@@ -311,6 +313,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
+                    android:textColor="@color/beijing"
                     android:layout_toLeftOf="@id/image_bluetooth_set"
                     android:maxLines="1"
                     android:text="关闭" />

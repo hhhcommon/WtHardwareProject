@@ -30,7 +30,7 @@ import com.wotingfm.activity.music.search.activity.SearchLikeActivity;
 import com.wotingfm.activity.music.search.adapter.SearchContentAdapter;
 import com.wotingfm.activity.music.search.model.SuperRankInfo;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
@@ -147,7 +147,7 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
         super.onCreate(savedInstanceState);
         context = getActivity();
         IntentFilter mFilter = new IntentFilter();
-        mFilter.addAction(BroadcastConstant.SEARCH_VIEW_UPDATE);
+        mFilter.addAction(BroadcastConstants.SEARCH_VIEW_UPDATE);
         context.registerReceiver(mBroadcastReceiver, mFilter);
         initDao();
     }
@@ -312,7 +312,7 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastConstant.SEARCH_VIEW_UPDATE)) {
+            if (action.equals(BroadcastConstants.SEARCH_VIEW_UPDATE)) {
                 searchString = intent.getStringExtra("SearchStr");
                 if (searchString != null && !searchString.equals("")) {
                     dialog = DialogUtils.Dialogph(context, "通讯中");

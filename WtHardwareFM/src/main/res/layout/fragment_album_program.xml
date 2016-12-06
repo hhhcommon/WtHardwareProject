@@ -22,7 +22,6 @@
                 android:id="@+id/text_total"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:background="@drawable/bg_tv_normal"
                 android:gravity="center"
                 android:text="共0集"
                 android:textColor="@color/wt_login_third"

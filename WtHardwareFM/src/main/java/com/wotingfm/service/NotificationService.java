@@ -23,7 +23,7 @@ import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.activity.im.interphone.linkman.dao.NotifyHistoryDao;
 import com.wotingfm.activity.im.interphone.linkman.model.DBNotifyHistory;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.JsonEncloseUtils;
 
@@ -51,7 +51,7 @@ public  class NotificationService   extends  Service{
 		if(Receiver==null) {
 			Receiver=new MessageReceiver();
 			IntentFilter filter=new IntentFilter();
-			filter.addAction(BroadcastConstant.PUSH_NOTIFY);
+			filter.addAction(BroadcastConstants.PUSH_NOTIFY);
 			registerReceiver(Receiver, filter);
 		}
 	}
@@ -75,7 +75,7 @@ public  class NotificationService   extends  Service{
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			String action=intent.getAction();
-			if(action.equals(BroadcastConstant.PUSH_NOTIFY)){
+			if(action.equals(BroadcastConstants.PUSH_NOTIFY)){
 				//				MsgNormal message = (MsgNormal) intent.getSerializableExtra("outmessage");
 				byte[] bt = intent.getByteArrayExtra("outmessage");
 				Log.e("Notification接收器中数据", Arrays.toString(bt)+"");
@@ -121,7 +121,7 @@ public  class NotificationService   extends  Service{
 								}
 								setNewMessageNotification(context, news, "我听");
 								//已经添加在通讯录
-								Intent pushIntent=new Intent(BroadcastConstant.PUSH_NEWPERSON);
+								Intent pushIntent=new Intent(BroadcastConstants.PUSH_NEWPERSON);
 								Bundle bundle=new Bundle();
 								bundle.putString("outmessage",news);
 								pushIntent.putExtras(bundle);
@@ -171,7 +171,7 @@ public  class NotificationService   extends  Service{
 								if(dealtype!=null&&dealtype.equals("1")){
 									setNewMessageNotification(context, news, "我听");
 									add("Ub3", imageurl, news, "好友邀请信息", dealtime);
-									Intent pushIntent=new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
+									Intent pushIntent=new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN);
 									context. sendBroadcast(pushIntent);
 								}else{
 									setNewMessageNotification(context, news, "我听");
@@ -181,7 +181,7 @@ public  class NotificationService   extends  Service{
 								//A与B原为好友，A把B从自己的好友中删除后，向B发送A已删除自己为好友的信息。
 								//										Data data = message.getData();
 								setNewMessageNotification(context, "测试：《该提示不显示》删除好友通知", "我听");
-								Intent pushIntent=new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
+								Intent pushIntent=new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN);
 								context. sendBroadcast(pushIntent);
 							}
 							break;
@@ -230,7 +230,7 @@ public  class NotificationService   extends  Service{
 									}
 									setNewMessageNotification(context, news, "我听");
 									//已经添加在通讯录
-									Intent pushintent=new Intent(BroadcastConstant.PUSH_NEWPERSON);
+									Intent pushintent=new Intent(BroadcastConstants.PUSH_NEWPERSON);
 									Bundle bundle=new Bundle();
 									bundle.putString("outmessage",news);
 									pushintent.putExtras(bundle);
@@ -309,7 +309,7 @@ public  class NotificationService   extends  Service{
 											}else{
 												news="对讲组:"+name+"同意了您的入组请求";
 											}
-											Intent pushIntent=new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
+											Intent pushIntent=new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN);
 											context. sendBroadcast(pushIntent);
 										}else{//拒绝
 											if(name==null||name.trim().equals("")){
@@ -469,7 +469,7 @@ public  class NotificationService   extends  Service{
 								setNewMessageNotification(context, news, "我听");
 								add("Gb6", groupurl, news, "组信息", String.valueOf(System.currentTimeMillis()));
 								//刷新通讯录
-								Intent pushIntent=new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
+								Intent pushIntent=new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN);
 								context. sendBroadcast(pushIntent);
 							}else if(command2==7){
 								//当管理员把某组的权限移交给另一个人时，向组内所有成员发送新管理员Id。
@@ -521,7 +521,7 @@ public  class NotificationService   extends  Service{
 									//如果管理员权限移交给自己，则需要刷新通讯录
 									if(userid!=null&&!userid.equals("")&&CommonUtils.getUserId(context)!=null&&
 											CommonUtils.getUserId(context).equals(userid)){
-										Intent pushIntent=new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
+										Intent pushIntent=new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN);
 										context. sendBroadcast(pushIntent);
 									}
 								} catch (Exception e) {
@@ -614,7 +614,7 @@ public  class NotificationService   extends  Service{
 									setNewMessageNotification(context, news, "我听");
 									add("Gb9", groupurl, news, "组信息", String.valueOf(System.currentTimeMillis()));
 									//刷新通讯录
-									Intent pushIntent=new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
+									Intent pushIntent=new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN);
 									context. sendBroadcast(pushIntent);
 								} catch (Exception e) {
 									Log.e("消息接收服务中Gb9的异常", e.toString());
@@ -626,7 +626,7 @@ public  class NotificationService   extends  Service{
 						}
 					}
 					//如果此时消息中心的界面在打开状态，则发送广播刷新消息中心界面
-					Intent pushNews=new Intent(BroadcastConstant.PUSH_REFRESHNEWS);
+					Intent pushNews=new Intent(BroadcastConstants.PUSH_REFRESHNEWS);
 					context. sendBroadcast(pushNews);
 				} catch (Exception e1) {
 					e1.printStackTrace();
@@ -643,7 +643,7 @@ public  class NotificationService   extends  Service{
      */
     private void setNewMessageNotification(Context mContext, String message, String title){
         NotificationManager mNotificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        Intent pushIntent = new Intent(BroadcastConstant.PUSH_NOTIFICATION);
+        Intent pushIntent = new Intent(BroadcastConstants.PUSH_NOTIFICATION);
 //        Intent pushIntent = new Intent(mContext, NotifyNewActivityApp.class);
 //        PendingIntent in = PendingIntent.getActivity(mContext, 0, pushIntent, 0);
         PendingIntent in = PendingIntent.getBroadcast(mContext, 2, pushIntent, PendingIntent.FLAG_UPDATE_CURRENT);

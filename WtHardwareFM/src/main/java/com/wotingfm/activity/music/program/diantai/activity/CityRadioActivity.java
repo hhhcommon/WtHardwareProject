@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -40,8 +39,6 @@ import java.util.List;
 
 
 public class CityRadioActivity extends BaseActivity implements View.OnClickListener {
-
-    private LinearLayout head_left_btn;
     private TextView mTextView_Head;
     private Dialog dialog;
     private String tag = "RADIO_CITY_VOLLEY_REQUEST_CANCEL_TAG";
@@ -62,7 +59,6 @@ public class CityRadioActivity extends BaseActivity implements View.OnClickListe
         context = this;
         setView();
         handleIntent();
-        setListener();
         initDao();
     }
 
@@ -238,8 +234,9 @@ public class CityRadioActivity extends BaseActivity implements View.OnClickListe
 
 
     private void setView() {
+        findViewById(R.id.head_left_btn).setOnClickListener(this);
+
         mListView = (ExpandableListView) findViewById(R.id.listview_fm);
-        head_left_btn = (LinearLayout) findViewById(R.id.head_left_btn);
         mTextView_Head = (TextView) findViewById(R.id.head_name_tv);
         mTextView_Head.setText("国家台");
         mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {
@@ -251,10 +248,6 @@ public class CityRadioActivity extends BaseActivity implements View.OnClickListe
         });
         mListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
         mListView.setGroupIndicator(null);
-    }
-
-    private void setListener() {
-        head_left_btn.setOnClickListener(this);
     }
 
     public void onClick(View v) {
@@ -269,7 +262,6 @@ public class CityRadioActivity extends BaseActivity implements View.OnClickListe
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
-        head_left_btn = null;
         mListView = null;
         dialog = null;
         mTextView_Head = null;

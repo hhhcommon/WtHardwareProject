@@ -11,7 +11,7 @@ import android.os.IBinder;
 import android.util.Log;
 import com.rectsoft.ppsip.G729ACodec;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.helper.BytesTransHelper;
 import java.io.File;
 import java.io.FileWriter;
@@ -43,7 +43,7 @@ public  class VoiceStreamPlayerService   extends  Service{
 	public void onCreate() {
 		super.onCreate();
 		context=this;
-		push=new Intent(BroadcastConstant.PUSH_VOICE_IMAGE_REFRESH);
+		push=new Intent(BroadcastConstants.PUSH_VOICE_IMAGE_REFRESH);
 		creatPlayer();//创建播放器
 		//压缩方法
 		try {

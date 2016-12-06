@@ -57,7 +57,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_marginRight="20dp"
                 android:layout_marginTop="10dp"
-                android:background="@drawable/color_wt_circle_grays"
+                android:background="@drawable/color_wt_circle_home_white"
                 android:gravity="left|center" >
 
                 <ImageView

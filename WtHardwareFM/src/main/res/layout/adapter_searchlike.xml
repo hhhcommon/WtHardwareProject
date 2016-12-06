@@ -3,7 +3,7 @@
         android:id="@+id/tv_search_like"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/bg_gridview_normal"
+        android:background="@drawable/bg_imgview_radioitem"
         android:gravity="center"
         android:padding="5dp"
         android:singleLine="true"

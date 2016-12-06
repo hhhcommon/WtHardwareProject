@@ -19,7 +19,7 @@ import com.wotingfm.activity.im.interphone.find.result.model.FindGroupNews;
 import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -293,7 +293,7 @@ public class GroupAddActivity extends AppBaseActivity implements OnClickListener
                             ToastUtils.show_always(GroupAddActivity.this, "无法获取用户组ID");
                         } else if (ReturnType.equals("1001")) {
                             ToastUtils.show_always(GroupAddActivity.this, "成功返回，用户已经成功加入了这个群组");
-                            Intent pushIntent = new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
+                            Intent pushIntent = new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN);
                             context.sendBroadcast(pushIntent);
                             Intent intent = new Intent(GroupAddActivity.this, GroupDetailActivity.class);
                             Bundle bundle = new Bundle();

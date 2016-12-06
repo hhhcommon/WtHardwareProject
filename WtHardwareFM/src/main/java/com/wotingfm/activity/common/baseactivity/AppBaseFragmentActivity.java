@@ -1,6 +1,7 @@
 package com.wotingfm.activity.common.baseactivity;
 
 import android.annotation.TargetApi;
+import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 
@@ -11,11 +12,13 @@ import com.wotingfm.manager.MyActivityManager;
  * 邮箱：645700751@qq.com
  */
 public abstract class AppBaseFragmentActivity extends BaseFragmentActivity {
+    protected Context context;
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         MyActivityManager mam = MyActivityManager.getInstance();
         mam.pushOneActivity(this);
     }

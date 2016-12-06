@@ -31,7 +31,7 @@ public class DownloadActivity extends FragmentActivity {
     private TextView textUncompleted;
     private TextView textMemory;
     private ViewPager viewPagerDownload;
-    public static Boolean isVisible=false;
+    public static Boolean isVisible = false;
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
@@ -46,14 +46,14 @@ public class DownloadActivity extends FragmentActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        isVisible=true;
+        isVisible = true;
     }
 
     /**
      * 设置界面
      */
     private void setView() {
-        findViewById(R.id.left_back).setOnClickListener(new OnClickListener() { // 返回
+        findViewById(R.id.left_image).setOnClickListener(new OnClickListener() { // 返回
             @Override
             public void onClick(View v) {
                 finish();
@@ -156,17 +156,18 @@ public class DownloadActivity extends FragmentActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        isVisible=false;
+        isVisible = false;
         textCompleted = null;
         textUncompleted = null;
         viewPagerDownload = null;
         setContentView(R.layout.activity_null);
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(resultCode==1){
-           finish();
+        if (resultCode == 1) {
+            finish();
         }
     }
 }

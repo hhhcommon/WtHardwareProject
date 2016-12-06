@@ -19,7 +19,7 @@ import com.wotingfm.activity.im.interphone.message.model.GroupInfo;
 import com.wotingfm.activity.im.interphone.message.model.MessageInfo;
 import com.wotingfm.activity.im.interphone.message.model.UserInviteMeInside;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.DialogUtils;
@@ -58,7 +58,7 @@ public class NewsActivity extends AppBaseActivity {
         setTitle("新的朋友");
         dealMessageList = findView(R.id.deal_message_list_view);
         //发送广播到linkmanfragment界面,来更新按钮为====新的朋友
-        Intent pushIntent = new Intent(BroadcastConstant.PUSH_NEWPERSON);
+        Intent pushIntent = new Intent(BroadcastConstants.PUSH_NEWPERSON);
         Bundle bundle = new Bundle();
         bundle.putString("outmessage", "");
         pushIntent.putExtras(bundle);
@@ -332,7 +332,7 @@ public class NewsActivity extends AppBaseActivity {
 							 */
                             message.remove(index);
                             adapter.notifyDataSetChanged();
-                            Intent pushIntent = new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
+                            Intent pushIntent = new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN);
                             context.sendBroadcast(pushIntent);
                         } else if (ReturnType != null && ReturnType.equals("1002")) {
                             ToastUtils.show_always(context, "添加失败，" + Message);
@@ -361,7 +361,7 @@ public class NewsActivity extends AppBaseActivity {
 							 */
                             message.remove(index);
                             adapter.notifyDataSetChanged();
-                            Intent pushIntent = new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN);
+                            Intent pushIntent = new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN);
                             context.sendBroadcast(pushIntent);
                         } else if (ReturnType != null && ReturnType.equals("1002")) {
                             ToastUtils.show_always(context, "添加失败，" + Message);

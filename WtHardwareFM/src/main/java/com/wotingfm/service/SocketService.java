@@ -16,7 +16,7 @@ import com.wotingfm.activity.im.common.message.MsgMedia;
 import com.wotingfm.activity.im.common.message.MsgNormal;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.config.SocketClientConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.helper.InterPhoneControlHelper;
 import com.wotingfm.util.JsonEncloseUtils;
 import com.wotingfm.util.ToastUtils;
@@ -71,7 +71,7 @@ public class SocketService extends Service  {
 			Receiver=new MessageReceiver();
 			//接收网络状态
 			IntentFilter filter=new IntentFilter();
-			filter.addAction(BroadcastConstant.PUSH_NetWorkPush);
+			filter.addAction(BroadcastConstants.PUSH_NetWorkPush);
 			getApplicationContext().registerReceiver(Receiver, filter);
 		}
 		//设置播放器
@@ -580,7 +580,7 @@ public class SocketService extends Service  {
 							/*
 							 * 接收该广播的地方
 							 */
-							Intent push=new Intent(BroadcastConstant.SOCKET_PUSH);
+							Intent push=new Intent(BroadcastConstants.SOCKET_PUSH);
 							Bundle bundle1=new Bundle();
 							bundle1.putByteArray("outmessage", msg.toBytes());
 							//							Log.e("广播中数据", Arrays.toString(msg.toBytes())+"");
@@ -597,7 +597,7 @@ public class SocketService extends Service  {
 									/*
 									 * 接收该广播的地方
 									 */
-									Intent push_call=new Intent(BroadcastConstant.PUSH_CALL);
+									Intent push_call=new Intent(BroadcastConstants.PUSH_CALL);
 									Bundle bundle211=new Bundle();
 									bundle211.putByteArray("outmessage", msg.toBytes());
 									push_call.putExtras(bundle211);
@@ -606,7 +606,7 @@ public class SocketService extends Service  {
 									/*
 									 * 接收该广播的地方
 									 */
-									Intent push_back=new Intent(BroadcastConstant.PUSH_BACK);
+									Intent push_back=new Intent(BroadcastConstants.PUSH_BACK);
 									Bundle bundle212=new Bundle();
 									bundle212.putByteArray("outmessage", msg.toBytes());
 									push_back.putExtras(bundle212);
@@ -616,7 +616,7 @@ public class SocketService extends Service  {
 									/*
 									 * 接收该广播的地方
 									 */
-									Intent push_service=new Intent(BroadcastConstant.PUSH_SERVICE);
+									Intent push_service=new Intent(BroadcastConstants.PUSH_SERVICE);
 									Bundle bundle213=new Bundle();
 									bundle213.putByteArray("outmessage", msg.toBytes());
 									push_service.putExtras(bundle213);
@@ -624,7 +624,7 @@ public class SocketService extends Service  {
 								}
 								break;
 							case 2:
-								Intent push2=new Intent(BroadcastConstant.SOCKET_PUSH);
+								Intent push2=new Intent(BroadcastConstants.SOCKET_PUSH);
 								Bundle bundle2=new Bundle();
 								bundle2.putByteArray("outmessage", msg.toBytes());
 								//								Log.e("广播中数据", Arrays.toString(msg.toBytes())+"");
@@ -636,7 +636,7 @@ public class SocketService extends Service  {
 							}
 							break;
 						case 4://通知消息
-							Intent pushnotify=new Intent(BroadcastConstant.PUSH_NOTIFY);
+							Intent pushnotify=new Intent(BroadcastConstants.PUSH_NOTIFY);
 							Bundle bundle4=new Bundle();
 							bundle4.putByteArray("outmessage", msg.toBytes());
 							pushnotify.putExtras(bundle4);
@@ -662,7 +662,7 @@ public class SocketService extends Service  {
 		public void onReceive(Context context, Intent intent) {
 			String action=intent.getAction();
 			//接收来自网络接收器的广播
-			if(action.equals(BroadcastConstant.PUSH_NetWorkPush)){
+			if(action.equals(BroadcastConstants.PUSH_NetWorkPush)){
 				String message = intent.getStringExtra("message");
 				if(message!=null&&message.equals("true")){
 					Log.e("socket", "socket监听到有网络，开始连接");

@@ -40,7 +40,71 @@ public class UserInfo implements Serializable {
 	private String GroupCount;
 	private String GroupManager;
 
-	public void setGroupCount(String groupCount) {
+    private String UserSign;// 用户签名
+    private String Sex;// 性别
+    private String StarSign;// 星座
+    private String Region;// 区域
+    private String Birthday;// 生日
+    private String Age;// 年龄
+    private String NickName; //昵称
+
+    public String getUserSign() {
+        return UserSign;
+    }
+
+    public void setUserSign(String userSign) {
+        UserSign = userSign;
+    }
+
+    public String getSex() {
+        return Sex;
+    }
+
+    public void setSex(String sex) {
+        Sex = sex;
+    }
+
+    public String getStarSign() {
+        return StarSign;
+    }
+
+    public void setStarSign(String starSign) {
+        StarSign = starSign;
+    }
+
+    public String getRegion() {
+        return Region;
+    }
+
+    public void setRegion(String region) {
+        Region = region;
+    }
+
+    public String getBirthday() {
+        return Birthday;
+    }
+
+    public void setBirthday(String birthday) {
+        Birthday = birthday;
+    }
+
+    public String getAge() {
+        return Age;
+    }
+
+    public void setAge(String age) {
+        Age = age;
+    }
+
+    public String getNickName() {
+        return NickName;
+    }
+
+    public void setNickName(String nickName) {
+        NickName = nickName;
+    }
+
+    public void setGroupCount(String groupCount) {
 		GroupCount = groupCount;
 	}
 

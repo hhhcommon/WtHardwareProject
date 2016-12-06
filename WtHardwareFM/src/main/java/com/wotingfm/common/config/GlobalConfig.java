@@ -91,6 +91,8 @@ public class GlobalConfig {
     public static final String modifyPasswordUrl = baseUrl + "wt/passport/user/updatePwd.do?";
     // 找回密码
     // public static final String retrievePasswordUrl = baseUrl+"wt//passport/user/retrievePwd.do?";
+    // 账号修改
+    public static final String updateUserUrl = baseUrl + "wt/passport/user/updateUserInfo.do?";
     // 账号绑定
     public static final String bindExtUserUrl = baseUrl + "wt/passport/user/bindExtUserInfo.do?";
     // 帮助
@@ -228,4 +230,21 @@ public class GlobalConfig {
     public static final String getPreferenceUrl=baseUrl+"wt/getPreferenceCatalog.do";
     // 设置偏好列表
     public static final String setPreferenceUrl=baseUrl+"wt/setPreference.do";
+
+    // "我的上传" 相关接口
+    private static final String uploadBaseUrl = "http://123.56.254.75:908/CM/";
+    // 获取专辑列表
+    public static final String getSequMediaList = uploadBaseUrl + "content/seq/getSeqMediaList.do";
+    // 删除专辑
+    public static final String removeSequMedia = uploadBaseUrl + "content/seq/removeSeqMedia.do";
+    // 获取节目列表
+    public static final String getMediaList = uploadBaseUrl + "content/media/getMediaList.do";
+    // 删除节目
+    public static final String removeMedia = uploadBaseUrl + "content/media/removeMedia.do";
+    // 获取标签列表
+    public static final String getTags = uploadBaseUrl + "content/getTags.do";
+    // 上传文件 SrcType == 1、图片  == 2、音频
+    public static final String uploadFileUrl = uploadBaseUrl + "common/uploadCM.do";
+    // 新增节目
+    public static final String addMediaInfo = uploadBaseUrl + "content/media/addMediaInfo.do";
 }
