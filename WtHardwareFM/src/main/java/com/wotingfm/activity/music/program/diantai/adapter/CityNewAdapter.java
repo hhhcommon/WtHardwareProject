@@ -79,9 +79,9 @@ public class CityNewAdapter extends BaseAdapter {
 				}
 
 //				if (lists.getContentPub() == null|| lists.getContentPub().equals("")) {
-//					holder.textview_rankplaying.setText("未知");
+//					holder.textRankPlaying.setText("未知");
 //				} else {
-//					holder.textview_rankplaying.setText(lists.getContentPub());
+//					holder.textRankPlaying.setText(lists.getContentPub());
 //				}
 
 				holder.textview_rankplaying.setText("测试-无节目单数据");

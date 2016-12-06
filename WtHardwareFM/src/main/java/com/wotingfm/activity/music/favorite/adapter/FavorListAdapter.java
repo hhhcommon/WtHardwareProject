@@ -8,7 +8,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -22,7 +21,7 @@ import java.util.List;
 public class FavorListAdapter extends BaseAdapter {
     private List<RankInfo> list;
     private Context context;
-    private favorCheck favorcheck;
+    private FavoriteCheck favoriteCheck;
     private String url;
 
     public FavorListAdapter(Context context, List<RankInfo> list) {
@@ -45,8 +44,8 @@ public class FavorListAdapter extends BaseAdapter {
         return position;
     }
 
-    public void setOnListener(favorCheck favorcheck) {
-        this.favorcheck = favorcheck;
+    public void setOnListener(FavoriteCheck favoriteCheck) {
+        this.favoriteCheck = favoriteCheck;
     }
 
     @Override
@@ -54,12 +53,11 @@ public class FavorListAdapter extends BaseAdapter {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_favoritelist, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_favoritelist, parent, false);
             holder.textview_ranktitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
             holder.imageview_rankimage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
             holder.tv_RankContent = (TextView) convertView.findViewById(R.id.RankContent);
             holder.img_check = (ImageView) convertView.findViewById(R.id.img_check);
-            holder.lin_check = (LinearLayout) convertView.findViewById(R.id.lin_check);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -89,11 +87,11 @@ public class FavorListAdapter extends BaseAdapter {
             holder.tv_RankContent.setText(lists.getContentDesc());
         }
         if (lists.getViewtype() == 0) {
-            // 0状态时 为点选框隐藏状态设置当前的选择状态为0
-            holder.lin_check.setVisibility(View.GONE);
+            // 0 状态时 为点选框隐藏状态设置当前的选择状态为 0
+            holder.img_check.setVisibility(View.GONE);
         } else {
-            // 1状态 此时设置choicetype生效
-            holder.lin_check.setVisibility(View.VISIBLE);
+            // 1状态 此时设置 choiceType 生效
+            holder.img_check.setVisibility(View.VISIBLE);
             if (lists.getChecktype() == 0) {
                 Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_group_nochecked);// 未点击状态
                 holder.img_check.setImageBitmap(bmp);
@@ -102,18 +100,17 @@ public class FavorListAdapter extends BaseAdapter {
                 holder.img_check.setImageBitmap(bmp);
             }
         }
-        holder.lin_check.setOnClickListener(new OnClickListener() {
-
+        holder.img_check.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                favorcheck.checkposition(position);
+                favoriteCheck.checkPosition(position);
             }
         });
         return convertView;
     }
 
-    public interface favorCheck {
-        void checkposition(int position);
+    public interface FavoriteCheck {
+        void checkPosition(int position);
     }
 
     private class ViewHolder {
@@ -121,6 +118,5 @@ public class FavorListAdapter extends BaseAdapter {
         public TextView textview_ranktitle;
         public TextView tv_RankContent;
         public ImageView img_check;
-        public LinearLayout lin_check;
     }
 }

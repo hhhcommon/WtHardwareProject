@@ -8,22 +8,14 @@
         android:layout_width="match_parent"
         android:layout_height="81dp"
         android:background="@color/WHITE"
-        android:gravity="left|center"
-        android:orientation="horizontal">
+        android:gravity="center_vertical">
 
-        <LinearLayout
-            android:id="@+id/lin_check"
+        <ImageView
+            android:id="@+id/img_check"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_marginLeft="12dp">
-
-            <ImageView
-                android:id="@+id/img_check"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/wt_group_nochecked" />
-        </LinearLayout>
+            android:layout_marginLeft="12dp"
+            android:src="@mipmap/wt_group_nochecked" />
 
         <RelativeLayout
             android:layout_width="wrap_content"
@@ -43,14 +35,14 @@
                 android:layout_height="65dp"
                 android:layout_centerInParent="true"
                 android:src="@mipmap/wt_6_b_y_b" />
+
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="13dp"
-            android:layout_weight="2"
-            android:gravity="left|center"
+            android:gravity="center_vertical"
             android:orientation="vertical" >
 
             <TextView
@@ -76,6 +68,7 @@
                 android:textSize="13sp" />
 
         </LinearLayout>
+
     </LinearLayout>
 
     <View

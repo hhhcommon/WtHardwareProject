@@ -52,7 +52,7 @@ import java.util.List;
 public class SoundFragment extends Fragment {
 	private FragmentActivity context;
     private SearchPlayerHistoryDao dbDao;
-    protected FavorListAdapter adapter;
+    private FavorListAdapter adapter;
 
 	private Dialog dialog;
     private View linearNull;
@@ -64,8 +64,8 @@ public class SoundFragment extends Fragment {
 	private ArrayList<RankInfo> newList = new ArrayList<>();
 
     private int page = 1;
-    private int refreshType = 1;// refreshType 1为下拉加载 2为上拉加载更多
-	private int pageSizeNum = -1;// 前端自己算 //先求余 如果等于0 最后结果不加1 如果不等于0 结果加一
+    private int refreshType = 1;// refreshType 1 为下拉加载  2 为上拉加载更多
+	private int pageSizeNum = -1;// 先求余 如果等于 0 最后结果不加 1  如果不等于 0 结果加 1
 	private String ReturnType;
 	private String tag = "SOUND_VOLLEY_REQUEST_CANCEL_TAG";
 	private boolean isCancelRequest;
@@ -116,9 +116,9 @@ public class SoundFragment extends Fragment {
 	}
 
 	private void setListener() {
-		adapter.setOnListener(new FavorListAdapter.favorCheck() {
+		adapter.setOnListener(new FavorListAdapter.FavoriteCheck() {
 			@Override
-			public void checkposition(int position) {
+			public void checkPosition(int position) {
 				if (newList.get(position).getChecktype() == 0) {
 					newList.get(position).setChecktype(1);
 				} else {
@@ -461,9 +461,7 @@ public class SoundFragment extends Fragment {
 			protected void requestSuccess(JSONObject result) {
 				isDel = true;
 				delList.clear();
-				if(isCancelRequest){
-					return ;
-				}
+				if(isCancelRequest) return ;
 				try {
 					ReturnType = result.getString("ReturnType");
 					Message = result.getString("Message");
@@ -480,9 +478,7 @@ public class SoundFragment extends Fragment {
 			
 			@Override
 			protected void requestError(VolleyError error) {
-				if (dialog != null) {
-					dialog.dismiss();
-				}
+				if (dialog != null) dialog.dismiss();
 				delList.clear();
 			}
 		});

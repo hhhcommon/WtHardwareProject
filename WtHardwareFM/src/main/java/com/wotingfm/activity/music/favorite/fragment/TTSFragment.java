@@ -115,9 +115,9 @@ public class TTSFragment extends Fragment {
 	}
 
 	private void setListener() {
-		adapter.setOnListener(new FavorListAdapter.favorCheck() {
+		adapter.setOnListener(new FavorListAdapter.FavoriteCheck() {
 			@Override
-			public void checkposition(int position) {
+			public void checkPosition(int position) {
 				if (newList.get(position).getChecktype() == 0) {
 					newList.get(position).setChecktype(1);
 				} else {
