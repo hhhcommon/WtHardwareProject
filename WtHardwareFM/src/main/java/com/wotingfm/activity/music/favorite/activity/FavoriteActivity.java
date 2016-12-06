@@ -13,7 +13,6 @@ import android.graphics.Matrix;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -30,13 +29,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.AppBaseFragmentActivity;
 import com.wotingfm.activity.common.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.activity.music.favorite.fragment.RadioFragment;
 import com.wotingfm.activity.music.favorite.fragment.SequFragment;
 import com.wotingfm.activity.music.favorite.fragment.SoundFragment;
 import com.wotingfm.activity.music.favorite.fragment.TTSFragment;
 import com.wotingfm.activity.music.favorite.fragment.TotalFragment;
-import com.wotingfm.manager.MyActivityManager;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 
@@ -45,7 +45,7 @@ import java.util.ArrayList;
 /**
  * 我喜欢的
  */
-public class FavoriteActivity extends FragmentActivity implements OnClickListener {
+public class FavoriteActivity extends AppBaseFragmentActivity implements OnClickListener {
     private static FavoriteActivity context;
     private MyBroadcast mBroadcast;
     private TotalFragment totalFragment;
@@ -53,7 +53,6 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
     private SoundFragment soundfragment;
     private RadioFragment radiofragment;
     private TTSFragment ttsfragment;
-
 
     private Dialog confirmDialog;
     private Dialog delDialog;
@@ -66,20 +65,14 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
     private static TextView tv_tts;
     private static ViewPager mPager;
     private static TextView tv_qingkong;
-    private static TextView tv_bianji;// 加一个bol值，如果key值为0是为编辑状态，为1时显示完成
+    private static TextView tv_bianji;// 加一个 bol 值，如果 key 值为 0 是为编辑状态，为 1 时显示完成
 
     private int bmpW;
     private int offset;
-    private int dialogFlag = 0;// 编辑全选状态的变量0为未选中，1为选中
-    private int textFlag = 0;// 标记右上角text的状态0为编辑，1为取消
+    private int dialogFlag = 0;// 编辑全选状态的变量 0 为未选中，1 为选中
+    private int textFlag = 0;// 标记右上角 text 的状态 0 为编辑，1 为取消
     private static int lastIndex = -1;
-    private static int currentIndex = 0;// 标记当前viewpager显示的页面
-    public static final String VIEW_UPDATE = "VIEW_UPDATE";
-    public static final String SET_ALL_IMAGE = "SET_ALL_IMAGE";// 全选
-    public static final String SET_NOT_ALL_IMAGE = "SET_NOT_ALL_IMAGE";// 非全选
-    public static final String SET_NOT_LOAD_REFRESH = "SET_NOT_LOAD_REFRESH";// 禁止刷新加载
-    public static final String SET_LOAD_REFRESH = "SET_LOAD_REFRESH";// 允许刷新加载
-
+    private static int currentIndex = 0;// 标记当前 viewpager 显示的页面
     public static boolean isEdit = false;// 是否为编辑状态
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
@@ -88,16 +81,12 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_favorite);
         context = this;
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.pushOneActivity(context);
 
         // 注册广播
         mBroadcast = new MyBroadcast();
         IntentFilter intentFilter = new IntentFilter();
-        intentFilter.addAction(FavoriteActivity.SET_ALL_IMAGE);
-        intentFilter.addAction(FavoriteActivity.SET_NOT_ALL_IMAGE);
+        intentFilter.addAction(BroadcastConstants.SET_ALL_IMAGE);
+        intentFilter.addAction(BroadcastConstants.SET_NOT_ALL_IMAGE);
         registerReceiver(mBroadcast, intentFilter);
 
         setView();
@@ -317,7 +306,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                 if (flag) {
                     isEdit = true;
                     sequfragment.setViewVisibility();
-                    sendBroadcast(new Intent(FavoriteActivity.SET_NOT_LOAD_REFRESH));
+                    sendBroadcast(new Intent(BroadcastConstants.SET_NOT_LOAD_REFRESH));
                     textFlag = 1;
                     tv_bianji.setText("取消");
                     if (delDialog != null) {
@@ -329,7 +318,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
             } else if (type == 2) {// 隐藏view
                 sequfragment.changeviewtype(0);
                 sequfragment.setViewHint();
-                sendBroadcast(new Intent(FavoriteActivity.SET_LOAD_REFRESH));
+                sendBroadcast(new Intent(BroadcastConstants.SET_LOAD_REFRESH));
             } else if (type == 3) {// 全选
                 sequfragment.changechecktype(1);
             } else if (type == 4) {// 解除全选
@@ -348,7 +337,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                 tv_bianji.setText("编辑");
                 sequfragment.delitem();
                 sequfragment.setViewHint();
-                sendBroadcast(new Intent(FavoriteActivity.SET_LOAD_REFRESH));
+                sendBroadcast(new Intent(BroadcastConstants.SET_LOAD_REFRESH));
             }
         } else if (currentIndex == 2) {
             // 声音
@@ -357,7 +346,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                 if (flag) {
                     isEdit = true;
                     soundfragment.setViewVisibility();
-                    sendBroadcast(new Intent(FavoriteActivity.SET_NOT_LOAD_REFRESH));
+                    sendBroadcast(new Intent(BroadcastConstants.SET_NOT_LOAD_REFRESH));
                     textFlag = 1;
                     tv_bianji.setText("取消");
                     if (delDialog != null) {
@@ -369,7 +358,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
             } else if (type == 2) {// 隐藏view
                 soundfragment.changeviewtype(0);
                 soundfragment.setViewHint();
-                sendBroadcast(new Intent(FavoriteActivity.SET_LOAD_REFRESH));
+                sendBroadcast(new Intent(BroadcastConstants.SET_LOAD_REFRESH));
             } else if (type == 3) {// 全选
                 soundfragment.changechecktype(1);
             } else if (type == 4) {// 解除全选
@@ -388,7 +377,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                 tv_bianji.setText("编辑");
                 soundfragment.delitem();
                 soundfragment.setViewHint();
-                sendBroadcast(new Intent(FavoriteActivity.SET_LOAD_REFRESH));
+                sendBroadcast(new Intent(BroadcastConstants.SET_LOAD_REFRESH));
             }
         } else if (currentIndex == 3) {
             // 电台
@@ -397,7 +386,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                 if (flag) {
                     isEdit = true;
                     radiofragment.setViewVisibility();
-                    sendBroadcast(new Intent(FavoriteActivity.SET_NOT_LOAD_REFRESH));
+                    sendBroadcast(new Intent(BroadcastConstants.SET_NOT_LOAD_REFRESH));
                     textFlag = 1;
                     tv_bianji.setText("取消");
                     if (delDialog != null) {
@@ -409,7 +398,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
             } else if (type == 2) {// 隐藏view
                 radiofragment.changeviewtype(0);
                 radiofragment.setViewHint();
-                sendBroadcast(new Intent(FavoriteActivity.SET_LOAD_REFRESH));
+                sendBroadcast(new Intent(BroadcastConstants.SET_LOAD_REFRESH));
             } else if (type == 3) {// 全选
                 radiofragment.changechecktype(1);
             } else if (type == 4) {// 解除全选
@@ -428,7 +417,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                 tv_bianji.setText("编辑");
                 radiofragment.delitem();
                 radiofragment.setViewHint();
-                sendBroadcast(new Intent(FavoriteActivity.SET_LOAD_REFRESH));
+                sendBroadcast(new Intent(BroadcastConstants.SET_LOAD_REFRESH));
             }
         } else if (currentIndex == 4) {
             // TTS
@@ -437,7 +426,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                 if (flag) {
                     isEdit = true;
                     ttsfragment.setViewVisibility();
-                    sendBroadcast(new Intent(FavoriteActivity.SET_NOT_LOAD_REFRESH));
+                    sendBroadcast(new Intent(BroadcastConstants.SET_NOT_LOAD_REFRESH));
                     textFlag = 1;
                     tv_bianji.setText("取消");
                     if (delDialog != null) {
@@ -449,7 +438,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
             } else if (type == 2) {// 隐藏view
                 ttsfragment.changeviewtype(0);
                 ttsfragment.setViewHint();
-                sendBroadcast(new Intent(FavoriteActivity.SET_LOAD_REFRESH));
+                sendBroadcast(new Intent(BroadcastConstants.SET_LOAD_REFRESH));
             } else if (type == 3) {// 全选
                 ttsfragment.changechecktype(1);
             } else if (type == 4) {// 解除全选
@@ -468,7 +457,7 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
                 tv_bianji.setText("编辑");
                 ttsfragment.delitem();
                 ttsfragment.setViewHint();
-                sendBroadcast(new Intent(FavoriteActivity.SET_LOAD_REFRESH));
+                sendBroadcast(new Intent(BroadcastConstants.SET_LOAD_REFRESH));
             }
         }
     }
@@ -591,10 +580,10 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
     private class MyBroadcast extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(SET_ALL_IMAGE)) {
+            if (intent.getAction().equals(BroadcastConstants.SET_ALL_IMAGE)) {
                 imgQXuan.setImageResource(R.mipmap.wt_group_checked);
                 dialogFlag = 1;
-            } else if (intent.getAction().equals(SET_NOT_ALL_IMAGE)) {
+            } else if (intent.getAction().equals(BroadcastConstants.SET_NOT_ALL_IMAGE)) {
                 imgQXuan.setImageResource(R.mipmap.wt_group_nochecked);
                 dialogFlag = 0;
             }
@@ -637,8 +626,6 @@ public class FavoriteActivity extends FragmentActivity implements OnClickListene
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.popOneActivity(context);
         unregisterReceiver(mBroadcast);
         image = null;
         tv_total = null;

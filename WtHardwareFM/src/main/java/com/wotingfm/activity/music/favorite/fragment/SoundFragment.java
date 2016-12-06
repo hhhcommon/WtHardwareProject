@@ -29,6 +29,7 @@ import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -75,9 +76,9 @@ public class SoundFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 		context = getActivity();
         IntentFilter mFilter = new IntentFilter();
-        mFilter.addAction(FavoriteActivity.VIEW_UPDATE);
-        mFilter.addAction(FavoriteActivity.SET_NOT_LOAD_REFRESH);
-        mFilter.addAction(FavoriteActivity.SET_LOAD_REFRESH);
+        mFilter.addAction(BroadcastConstants.VIEW_UPDATE);
+        mFilter.addAction(BroadcastConstants.SET_NOT_LOAD_REFRESH);
+        mFilter.addAction(BroadcastConstants.SET_LOAD_REFRESH);
         context.registerReceiver(mBroadcastReceiver, mFilter);
 		initDao();
 	}
@@ -329,7 +330,7 @@ public class SoundFragment extends Fragment {
 		@Override
 		public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
-                case FavoriteActivity.VIEW_UPDATE:
+                case BroadcastConstants.VIEW_UPDATE:
                     if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                         page = 1;
                         send();
@@ -337,13 +338,13 @@ public class SoundFragment extends Fragment {
                         ToastUtils.show_always(context, "网络失败，请检查网络");
                     }
                     break;
-                case FavoriteActivity.SET_NOT_LOAD_REFRESH:
+                case BroadcastConstants.SET_NOT_LOAD_REFRESH:
                     if (isVisible()) {
                         mListView.setPullRefreshEnable(false);
                         mListView.setPullLoadEnable(false);
                     }
                     break;
-                case FavoriteActivity.SET_LOAD_REFRESH:
+                case BroadcastConstants.SET_LOAD_REFRESH:
                     if (isVisible()) {
                         mListView.setPullRefreshEnable(true);
                         if (newList.size() >= 10) {
@@ -406,11 +407,11 @@ public class SoundFragment extends Fragment {
 	public void ifAll(){
 		if(getdelitemsum() == newList.size()){
 			Intent intentAll = new Intent();
-			intentAll.setAction(FavoriteActivity.SET_ALL_IMAGE);
+			intentAll.setAction(BroadcastConstants.SET_ALL_IMAGE);
 			context.sendBroadcast(intentAll);
 		}else{
 			Intent intentNotAll = new Intent();
-			intentNotAll.setAction(FavoriteActivity.SET_NOT_ALL_IMAGE);
+			intentNotAll.setAction(BroadcastConstants.SET_NOT_ALL_IMAGE);
 			context.sendBroadcast(intentNotAll);
 		}
 	}
@@ -471,7 +472,7 @@ public class SoundFragment extends Fragment {
 					e.printStackTrace();
 				}
 				if (ReturnType != null && ReturnType.equals("1001")) {
-					context.sendBroadcast(new Intent(FavoriteActivity.VIEW_UPDATE));
+					context.sendBroadcast(new Intent(BroadcastConstants.VIEW_UPDATE));
 				}else {
 					ToastUtils.show_always(context, "删除失败!");
 				}

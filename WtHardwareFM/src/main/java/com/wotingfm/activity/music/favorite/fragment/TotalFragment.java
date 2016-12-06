@@ -34,6 +34,7 @@ import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.activity.music.search.adapter.SearchContentAdapter;
 import com.wotingfm.activity.music.search.model.SuperRankInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -87,7 +88,7 @@ public class TotalFragment extends Fragment {
         initDao();
         delDialog();
         IntentFilter mFilter = new IntentFilter();
-        mFilter.addAction(FavoriteActivity.VIEW_UPDATE);
+        mFilter.addAction(BroadcastConstants.VIEW_UPDATE);
         context.registerReceiver(mBroadcastReceiver, mFilter);
     }
 
@@ -210,7 +211,7 @@ public class TotalFragment extends Fragment {
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     send();
-                    context.sendBroadcast(new Intent(FavoriteActivity.VIEW_UPDATE));
+                    context.sendBroadcast(new Intent(BroadcastConstants.VIEW_UPDATE));
                 } else {
                     ToastUtils.show_always(context, "无数据");
                 }
@@ -461,7 +462,7 @@ public class TotalFragment extends Fragment {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(FavoriteActivity.VIEW_UPDATE)) {
+            if (action.equals(BroadcastConstants.VIEW_UPDATE)) {
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                     send();
                 } else {

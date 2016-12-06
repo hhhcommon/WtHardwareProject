@@ -57,9 +57,7 @@
         <LinearLayout
             android:id="@+id/lin_clear"
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@color/WHITE"
-            android:gravity="center">
+            android:layout_height="40dp">
 
             <TextView
                 android:id="@+id/text_all"
@@ -110,10 +108,7 @@
             android:scaleType="matrix"
             android:src="@mipmap/left_personal_bg"/>
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/text_line_1"/>
+        <View style="@style/ViewStyle"/>
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewpager"

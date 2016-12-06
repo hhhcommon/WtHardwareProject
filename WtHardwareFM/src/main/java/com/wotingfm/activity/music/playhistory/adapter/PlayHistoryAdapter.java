@@ -7,7 +7,6 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -16,6 +15,7 @@ import com.wotingfm.activity.music.player.model.PlayerHistory;
 
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 import java.util.TimeZone;
 
 public class PlayHistoryAdapter extends BaseAdapter {
@@ -24,7 +24,6 @@ public class PlayHistoryAdapter extends BaseAdapter {
 	private PlayHistoryCheck playCheck;
 
 	public PlayHistoryAdapter(Context context, List<PlayerHistory> list) {
-		super();
 		this.list = list;
 		this.context = context;
 	}
@@ -59,11 +58,11 @@ public class PlayHistoryAdapter extends BaseAdapter {
 		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_play_history, parent, false);
-			holder.textView_playName = (TextView) convertView.findViewById(R.id.RankTitle);			// 节目名称
+			holder.textView_playName = (TextView) convertView.findViewById(R.id.RankTitle);// 节目名称
 			holder.textView_PlayIntroduce = (TextView) convertView.findViewById(R.id.tv_last);
-			holder.imageView_playImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);	// 节目图片
-			holder.imageCheck = (LinearLayout) convertView.findViewById(R.id.lin_check);			//是否选中  清除
-			holder.layoutCheck = (LinearLayout) convertView.findViewById(R.id.layout_check);
+			holder.imageView_playImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 节目图片
+			holder.imageCheck = convertView.findViewById(R.id.lin_check);// 是否选中 清除
+			holder.layoutCheck = convertView.findViewById(R.id.layout_check);
 			holder.check = (ImageView) convertView.findViewById(R.id.img_check);
 			holder.textNumber = (TextView) convertView.findViewById(R.id.text_number);
 			holder.textRankContent = (TextView) convertView.findViewById(R.id.RankContent);
@@ -90,7 +89,7 @@ public class PlayHistoryAdapter extends BaseAdapter {
 		if (lists.getPlayerInTime() == null | lists.getPlayerInTime().equals("")) {
 			holder.textView_PlayIntroduce.setText("未知");
 		} else {
-            SimpleDateFormat format = new SimpleDateFormat("mm:ss");
+            SimpleDateFormat format = new SimpleDateFormat("mm:ss", Locale.CHINA);
 			format.setTimeZone(TimeZone.getTimeZone("GMT"));
 			int a = Integer.valueOf(lists.getPlayerInTime());
 			holder.textView_PlayIntroduce.setText("上次播放至" + format.format(a));
@@ -105,9 +104,9 @@ public class PlayHistoryAdapter extends BaseAdapter {
 		if(lists.isCheck()){
 			holder.imageCheck.setVisibility(View.VISIBLE);
 			if(lists.getStatus() == 0){
-				holder.check.setImageResource(R.mipmap.wt_group_nochecked);	//未点击状态
+				holder.check.setImageResource(R.mipmap.wt_group_nochecked);// 未点击状态
 			}else if(lists.getStatus() == 1){
-				holder.check.setImageResource(R.mipmap.wt_group_checked);		//点击状态
+				holder.check.setImageResource(R.mipmap.wt_group_checked);// 点击状态
 			}
 		}else{
 			holder.imageCheck.setVisibility(View.GONE);
@@ -129,9 +128,9 @@ public class PlayHistoryAdapter extends BaseAdapter {
 		public TextView textView_playName;
 		public TextView textView_PlayIntroduce;
 		public ImageView imageView_playImage;
-		private ImageView check;
-		public LinearLayout imageCheck;
-		public LinearLayout layoutCheck;
+        public ImageView check;
+		public View imageCheck;
+		public View layoutCheck;
 		public TextView textNumber;
 		public TextView textRankContent;
 	}

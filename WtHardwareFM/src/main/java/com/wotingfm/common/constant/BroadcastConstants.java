@@ -85,4 +85,19 @@ public class BroadcastConstants {
 
     // 我的上传界面全选
     public static final String UPDATE_MY_UPLOAD_CHECK_ALL = "UPDATE_MY_UPLOAD_CHECK_ALL";
+
+    // 我喜欢的 更新视图
+    public static final String VIEW_UPDATE = "VIEW_UPDATE";
+
+    // 我喜欢的 设置全选
+    public static final String SET_ALL_IMAGE = "SET_ALL_IMAGE";
+
+    // 我喜欢的 取消全选
+    public static final String SET_NOT_ALL_IMAGE = "SET_NOT_ALL_IMAGE";
+
+    // 我喜欢的 在编辑状态下禁止刷新
+    public static final String SET_NOT_LOAD_REFRESH = "SET_NOT_LOAD_REFRESH";
+
+    // 我喜欢的 在非编辑状态下可以刷新
+    public static final String SET_LOAD_REFRESH = "SET_LOAD_REFRESH";
 }
