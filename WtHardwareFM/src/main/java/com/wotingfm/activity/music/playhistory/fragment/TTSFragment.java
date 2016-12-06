@@ -175,7 +175,7 @@ public class TTSFragment extends Fragment {
                         String playerMediaType = playList.get(position).getPlayerMediaType();
                         String playerAllTime = "0";
                         String playerInTime = "0";
-                        String playerContentDesc = playList.get(position).getPlayerContentDesc();
+                        String playerContentDesc = playList.get(position).getPlayerContentDescn();
                         String playerNum = playList.get(position).getPlayerNum();
                         String playerZanType = "0";
                         String playerFrom = "";

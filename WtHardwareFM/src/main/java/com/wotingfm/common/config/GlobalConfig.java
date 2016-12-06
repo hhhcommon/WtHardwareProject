@@ -8,6 +8,7 @@ import com.wotingfm.activity.music.player.model.LanguageSearchInside;
 import com.wotingfm.activity.music.program.fenlei.model.CatalogName;
 import com.wotingfm.devicecontrol.WtDeviceControl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,9 +23,10 @@ public class GlobalConfig {
     public static String latitude;
     public static String CityName;
     public static String AdCode;
-    //缓存路径
+    public static ArrayList<String> staticFacesList;   //从Asset中取出的表情list
+    // 缓存路径
     public static String playCacheDir= Environment.getExternalStorageDirectory() + "/woting/playCache/";
-    //缓存的城市列表
+    // 缓存的城市列表
     public static List<CatalogName> CityCatalogList;
     //
     public static List<TalkGroupInside> list_group;
@@ -40,7 +42,7 @@ public class GlobalConfig {
     // volley请求超时 时间
     public static final int HTTP_CONNECTION_TIMEOUT = 60 * 1000;
     // 数据库版本号
-    public static final int dbversoncode = 2;
+    public static final int dbversoncode = 3;
     // 此时的界面
     public static int activitytype=1;
     // Socket连接客户端配置信息
@@ -155,7 +157,7 @@ public class GlobalConfig {
     public static final String InvitedDealUrl = baseUrl + "wt/passport/friend/inviteDeal.do?";
     // 查询陌生人
     public static final String searchStrangerUrl = baseUrl + "wt/passport/friend/searchStranger.do?";
-    //查找用户组
+    // 查找用户组
     public static final String searchStrangerGroupUrl = baseUrl + "wt/passport/group/searchGroup.do?";
     // 邀请陌生人为好友
     public static final String sendInviteUrl = baseUrl + "wt/passport/friend/invite.do";
@@ -178,7 +180,7 @@ public class GlobalConfig {
     public static final String updategroupFriendnewsUrl = baseUrl + "wt/passport/group/updateGroupUser.do?";
     // 管理员踢出用户 当踢出用户只剩用户本人时 此群将解散
     public static final String KickOutMembersUrl = baseUrl + "wt/passport/group/kickoutGroup.do";
-    //管理员权限移交
+    // 管理员权限移交
     public static final String changGroupAdminnerUrl = baseUrl + "wt/passport/group/changGroupAdminner.do";
     // 修改群密码 没接口
     public static final String UpdateGroupPassWordUrl = baseUrl + "wt/passport/group/updatePwd.do";
@@ -247,4 +249,10 @@ public class GlobalConfig {
     public static final String uploadFileUrl = uploadBaseUrl + "common/uploadCM.do";
     // 新增节目
     public static final String addMediaInfo = uploadBaseUrl + "content/media/addMediaInfo.do";
+    // 获取当前内容的评论列表
+    public static final String getMyCommentListUrl = baseUrl + "wt/discuss/article/getList.do";
+    // 发表评论
+    public static final String pushCommentUrl=baseUrl+"wt/discuss/add.do";
+    // 删除评论
+    public static final String delCommentUrl=baseUrl+"wt/discuss/del.do";
 }

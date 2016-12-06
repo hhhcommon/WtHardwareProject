@@ -94,7 +94,7 @@ public class DownLoadListActivity extends BaseActivity implements OnClickListene
 			public void onClick(View v) {
 				// 这里添加删除数据库事件
 				try {
-					FID.deletefileinfo(fileinfolist.get(positionnow).getLocalurl(), CommonUtils.getUserId(context));
+					FID.deleteFileInfo(fileinfolist.get(positionnow).getLocalurl(), CommonUtils.getUserId(context));
 					if (confirmdialog != null) {
 						confirmdialog.dismiss();
 					}
@@ -119,7 +119,7 @@ public class DownLoadListActivity extends BaseActivity implements OnClickListene
 
 	private void setListValue() {
 		sum=0;
-		fileinfolist = FID.queryFileinfo(sequid, CommonUtils.getUserId(context),0);
+		fileinfolist = FID.queryFileInfo(sequid, CommonUtils.getUserId(context),0);
 		if (fileinfolist.size() != 0) {
 			lin_dinglan.setVisibility(View.VISIBLE);
 			mlistview.setVisibility(View.VISIBLE);
@@ -178,7 +178,7 @@ public class DownLoadListActivity extends BaseActivity implements OnClickListene
 			@Override
 			public void onClick(View v) {
 				confirmdialog1.dismiss();
-				FID.deletefileinfo(fileinfolist.get(position).getLocalurl(), CommonUtils.getUserId(context));
+				FID.deleteFileInfo(fileinfolist.get(position).getLocalurl(), CommonUtils.getUserId(context));
 				setListValue();
 				Intent p_intent = new Intent("push_down_completed");
 				context.sendBroadcast(p_intent);

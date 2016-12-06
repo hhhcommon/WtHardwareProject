@@ -29,7 +29,7 @@ import org.json.JSONObject;
  * 设置用户号  只能设置一次
  * Created by Administrator on 2016/11/9 0009.
  */
-public class UpdateUserNumActivity extends AppBaseActivity implements View.OnClickListener {
+public class UpdateUserNumberActivity extends AppBaseActivity implements View.OnClickListener {
     private Dialog confirmDialog;
     private Dialog dialog;
     private EditText editUserNum;

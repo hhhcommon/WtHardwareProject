@@ -161,18 +161,15 @@ public class DownloadService extends Service {
 	private static BroadcastReceiver mReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context contexts, Intent intent) {
-
-		 if (BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW.equals(intent.getAction())) {
-				// 下载结束
+			if (BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW.equals(intent.getAction())) {
 				FileInfo fileInfo = (FileInfo) intent.getSerializableExtra("fileInfo");
-				FID.updatefileinfo(fileInfo.getFileName());
-				//发送更新界面数据广播
-					fileInfoList = FID.queryFileinfo("false", CommonUtils.getUserId(context));// 查询表中未完成的任务
-					if (fileInfoList != null && fileInfoList.size() > 0) {
-						fileInfoList.get(0).setDownloadtype(1);
-						FID.updatedownloadstatus(fileInfoList.get(0).getUrl(), "1");
-				     	workStart(fileInfoList.get(0));
-					}
+				FID.updataFileInfo(fileInfo.getFileName());
+				fileInfoList=FID.queryFileInfo("false", CommonUtils.getUserId(context));
+				if (fileInfoList != null && fileInfoList.size() > 0) {
+					fileInfoList.get(0).setDownloadtype(1);
+					FID.updataDownloadStatus(fileInfoList.get(0).getUrl(), "1");
+					workStart(fileInfoList.get(0));
+				}
 			}
 		}
 	};

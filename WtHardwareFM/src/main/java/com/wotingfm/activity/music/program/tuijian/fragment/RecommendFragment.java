@@ -244,7 +244,7 @@ public class RecommendFragment extends Fragment {
                         String playercontentshareurl = newList.get(position - 2).getContentShareURL();
                         String plaplayeralltime = "0";
                         String playerintime = "0";
-                        String playercontentdesc = newList.get(position - 2).getCurrentContent();
+                        String playercontentdescn = newList.get(position - 2).getCurrentContent();
                         String playernum = newList.get(position - 2).getWatchPlayerNum();
                         String playerzantype = "0";
                         String playerfrom = "";
@@ -264,7 +264,7 @@ public class RecommendFragment extends Fragment {
                         // 如果该数据已经存在数据库则删除原有数据，然后添加最新数据
                         PlayerHistory history = new PlayerHistory(
                                 playername, playerimage, playerurl, playerurI, playermediatype,
-                                plaplayeralltime, playerintime, playercontentdesc, playernum,
+                                plaplayeralltime, playerintime, playercontentdescn, playernum,
                                 playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid, playercontentshareurl, ContentFavorite, ContentId, localurl,sequname,sequid,sequdesc,sequimg);
                         dbDao.deleteHistory(playerurl);
                         dbDao.addHistory(history);
@@ -273,11 +273,8 @@ public class RecommendFragment extends Fragment {
                     } else if (MediaType.equals("SEQU")) {
                         Intent intent = new Intent(context, AlbumActivity.class);
                         Bundle bundle = new Bundle();
-                        bundle.putString("type", "player");
-                        bundle.putString("contentName", newList.get(position - 2).getContentName());
-                        bundle.putString("contentDesc", newList.get(position - 2).getContentDescn());
-                        bundle.putString("contentId", newList.get(position - 2).getContentId());
-                        bundle.putString("contentImg", newList.get(position - 2).getContentImg());
+                        bundle.putString("type", "recommend");
+                        bundle.putSerializable("list", newList.get(position - 2));
                         intent.putExtras(bundle);
                         startActivity(intent);
                     } else {
