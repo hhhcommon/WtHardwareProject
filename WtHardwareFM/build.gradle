@@ -39,4 +39,6 @@ dependencies {
     compile files('libs/SocialSDK_umengqq.jar')
     compile files('libs/picasso-2.5.2.jar')
     compile files('libs/xom-1.2.7.jar')
+    compile files('libs/libksyhttpcache-proguard.jar')
+    compile files('libs/libksystat.jar')
 }

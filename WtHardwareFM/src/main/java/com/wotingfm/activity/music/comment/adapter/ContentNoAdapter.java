@@ -6,8 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 
-import com.woting.R;
-
+import com.wotingfm.R;
 
 public class ContentNoAdapter extends BaseAdapter {
 	private Context context;

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -32,6 +33,7 @@ import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseadapter.MyFragmentChildPagerAdapter;
+import com.wotingfm.activity.music.comment.CommentActivity;
 import com.wotingfm.activity.music.player.adapter.ImageAdapter;
 import com.wotingfm.activity.music.player.model.LanguageSearchInside;
 import com.wotingfm.activity.music.player.model.sharemodel;
@@ -356,7 +358,7 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
                 textProgram.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
                 textDetails.setTextColor(context.getResources().getColor(R.color.group_item_text2));
                 break;
-           /* case R.id.lin_pinglun: // 评论
+            case R.id.lin_pinglun: // 评论
                 if(!TextUtils.isEmpty(id)){
                     Intent intent=new Intent(context, CommentActivity.class);
                     intent.putExtra("contentId",id);
@@ -365,7 +367,7 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
                 }else{
                     ToastUtils.show_always(context,"当前播放的节目的信息有误，无法获取评论列表");
                 }
-                break;*/
+                break;
         }
     }
 

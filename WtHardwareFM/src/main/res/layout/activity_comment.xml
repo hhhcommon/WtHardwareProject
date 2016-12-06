@@ -107,7 +107,7 @@
                     android:background="@mipmap/img_smile_comment"
                     android:visibility="visible" />
 
-                <com.woting.common.widgetui.MyEditText
+                <com.wotingfm.widget.MyEditText
                     android:id="@+id/input_sms"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"

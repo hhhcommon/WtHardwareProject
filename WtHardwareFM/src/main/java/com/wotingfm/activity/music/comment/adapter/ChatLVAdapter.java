@@ -14,11 +14,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
-import com.woting.R;
-import com.woting.common.config.GlobalConfig;
-import com.woting.common.util.AssembleImageUrlUtils;
-import com.woting.common.util.BitmapUtils;
-import com.woting.ui.home.program.comment.model.opinion;
+import com.wotingfm.R;
+import com.wotingfm.activity.music.comment.model.opinion;
+import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.util.AssembleImageUrlUtils;
+import com.wotingfm.util.BitmapUtils;
 
 import java.io.IOException;
 import java.util.List;

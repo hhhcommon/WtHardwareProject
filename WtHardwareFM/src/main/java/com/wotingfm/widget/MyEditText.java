@@ -14,8 +14,8 @@ import android.widget.Toast;
  * @author Lukas Knuth
  * @version 1.0
  */
-@SuppressLint("NewApi") public class MyEditText extends EditText implements
-		MenuItem.OnMenuItemClickListener {
+  @SuppressLint("NewApi")
+  public class MyEditText extends EditText implements MenuItem.OnMenuItemClickListener {
 	private static final int ID_SELECTION_MODE = android.R.id.selectTextMode;
 	  // Selection context mode
     private static final int ID_SELECT_ALL = android.R.id.selectAll;

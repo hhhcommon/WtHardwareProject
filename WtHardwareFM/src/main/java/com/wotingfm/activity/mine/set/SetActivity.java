@@ -24,7 +24,7 @@ import com.wotingfm.activity.mine.set.about.AboutActivity;
 import com.wotingfm.activity.mine.set.downloadposition.DownloadPositionActivity;
 import com.wotingfm.activity.mine.set.feedback.activity.FeedbackActivity;
 import com.wotingfm.activity.mine.set.help.HelpActivity;
-import com.wotingfm.activity.mine.set.updateusernum.UpdateUserNumActivity;
+import com.wotingfm.activity.mine.set.updateusernum.UpdateUserNumberActivity;
 import com.wotingfm.activity.person.modifypassword.ModifyPasswordActivity;
 import com.wotingfm.activity.person.phonecheck.PhoneCheckActivity;
 import com.wotingfm.common.application.BSApplication;
@@ -191,7 +191,7 @@ public class SetActivity extends BaseActivity implements OnClickListener {
                 startActivity(new Intent(context, ModifyPasswordActivity.class));
                 break;
             case R.id.lin_id_name:// ID
-                startActivityForResult(new Intent(context, UpdateUserNumActivity.class), 0x111);
+                startActivityForResult(new Intent(context, UpdateUserNumberActivity.class), 0x111);
                 break;
             case R.id.lin_notify:// 通知设置
                 startActivity(new Intent(context, NotifySetActivity.class));

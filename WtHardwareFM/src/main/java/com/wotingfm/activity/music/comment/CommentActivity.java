@@ -28,19 +28,19 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.woting.R;
-import com.woting.common.config.GlobalConfig;
-import com.woting.common.util.CommonUtils;
-import com.woting.common.util.ToastUtils;
-import com.woting.common.volley.VolleyCallback;
-import com.woting.common.volley.VolleyRequest;
-import com.woting.common.widgetui.MyEditText;
-import com.woting.ui.baseactivity.AppBaseActivity;
-import com.woting.ui.home.program.comment.adapter.ChatLVAdapter;
-import com.woting.ui.home.program.comment.adapter.ContentNoAdapter;
-import com.woting.ui.home.program.comment.adapter.FaceGVAdapter;
-import com.woting.ui.home.program.comment.adapter.FaceVPAdapter;
-import com.woting.ui.home.program.comment.model.opinion;
+import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.BaseActivity;
+import com.wotingfm.activity.music.comment.adapter.ChatLVAdapter;
+import com.wotingfm.activity.music.comment.adapter.ContentNoAdapter;
+import com.wotingfm.activity.music.comment.adapter.FaceGVAdapter;
+import com.wotingfm.activity.music.comment.adapter.FaceVPAdapter;
+import com.wotingfm.activity.music.comment.model.opinion;
+import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.volley.VolleyCallback;
+import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.util.CommonUtils;
+import com.wotingfm.util.ToastUtils;
+import com.wotingfm.widget.MyEditText;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -52,7 +52,7 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CommentActivity extends AppBaseActivity implements View.OnClickListener {
+public class CommentActivity extends BaseActivity implements View.OnClickListener {
 
     private CommentActivity context;
     private ImageView image_face;
@@ -144,6 +144,8 @@ public class CommentActivity extends AppBaseActivity implements View.OnClickList
         final View dialog1 = LayoutInflater.from(this).inflate(R.layout.dialog_exit_confirm, null);
         TextView tv_cancle = (TextView) dialog1.findViewById(R.id.tv_cancle);
         TextView tv_confirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
+        TextView tv_title=(TextView)dialog1.findViewById(R.id.tv_title);
+        tv_title.setText("确定删除本条评论吗？");
         confirmDialog = new Dialog(this, R.style.MyDialog);
         confirmDialog.setContentView(dialog1);
         confirmDialog.setCanceledOnTouchOutside(true);

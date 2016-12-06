@@ -7,7 +7,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ExpandableListView;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -40,7 +40,7 @@ import java.util.List;
 
 public class RadioNationalActivity extends BaseActivity implements View.OnClickListener {
 
-    private LinearLayout head_left_btn;
+    private ImageView head_left_btn;
     private TextView mTextView_Head;
     private Dialog dialog;
 
@@ -220,7 +220,7 @@ public class RadioNationalActivity extends BaseActivity implements View.OnClickL
 
     private void setView() {
         mListView = (ExpandableListView) findViewById(R.id.listview_fm);
-        head_left_btn = (LinearLayout) findViewById(R.id.head_left_btn);
+        head_left_btn = (ImageView) findViewById(R.id.head_left_btn);
         mTextView_Head = (TextView) findViewById(R.id.head_name_tv);
         mTextView_Head.setText("国家台");
         mListView.setOnGroupClickListener(new ExpandableListView.OnGroupClickListener() {

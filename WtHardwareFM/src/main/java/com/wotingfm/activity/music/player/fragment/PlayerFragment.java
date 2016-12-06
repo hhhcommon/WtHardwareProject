@@ -38,6 +38,9 @@ import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechUtility;
+import com.kingsoft.media.httpcache.KSYProxyService;
+import com.kingsoft.media.httpcache.OnCacheStatusListener;
+import com.kingsoft.media.httpcache.OnErrorListener;
 import com.squareup.picasso.Picasso;
 import com.umeng.socialize.Config;
 import com.umeng.socialize.ShareAction;
@@ -66,13 +69,15 @@ import com.wotingfm.activity.music.timeset.TimerPowerOffActivity;
 import com.wotingfm.activity.music.video.TtsPlayer;
 import com.wotingfm.activity.music.video.VlcPlayer;
 import com.wotingfm.activity.music.video.WtAudioPlay;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.helper.CommonHelper;
 import com.wotingfm.service.TimeOffService;
+import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
@@ -87,9 +92,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.TimeZone;
 
@@ -98,7 +105,7 @@ import java.util.TimeZone;
  * 2016年2月4日
  * @author 辛龙
  */
-public class PlayerFragment extends Fragment implements OnClickListener, XListView.IXListViewListener {
+public class PlayerFragment extends Fragment implements OnClickListener, XListView.IXListViewListener,OnErrorListener {
     public static FragmentActivity context;
     // 功能性
     private static SimpleDateFormat format;
@@ -167,8 +174,18 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     public static int timerService;                        // 当前节目播放剩余时间长度
     private static int VoicePage = 1;                      // 语音搜索page
     public static int TextPage = 1;                        // 文本搜索page
-
-
+    private RelativeLayout rv_details;
+    private ArrayList<Object> testList;
+    private GridView flowTag;
+    private static TextView tv_origin;
+    private static TextView tv_details_flag;
+    private boolean details_flag = false;
+    private static TextView tv_sequ;
+    private static TextView tv_desc;
+    private static TextView tv_download;
+    private static ImageView img_download;
+    private static KSYProxyService proxy;
+    private static long currPosition = -1;                 // 当前的播放时间
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -180,10 +197,25 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         // 开启播放器服务
         context.startService(new Intent(context, TtsPlayer.class));
  //       android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_BACKGROUND);
-        // 初始化语音配置对象
-        SpeechUtility.createUtility(context, SpeechConstant.APPID + "=56275014");
-        initDao();// 初始化数据库命令执行对象
-        UMShareAPI.get(context);// 初始化友盟
+        SpeechUtility.createUtility(context, SpeechConstant.APPID + "=56275014");              // 初始化语音配置对象
+        initDao();                                                                             // 初始化数据库命令执行对象
+        UMShareAPI.get(context);                                                               // 初始化友盟
+        initCache();                                                                           // 初始化缓存
+    }
+
+    private void initCache() {
+        proxy = BSApplication.getKSYProxy(context);
+     /*   proxy.registerCacheStatusListener(context);*/
+        proxy.registerErrorListener(this);
+
+        File file=new File(GlobalConfig.playCacheDir);               // 设置缓存目录
+        if (!file.exists()) {
+            file.mkdir();
+        }
+        proxy.setCacheRoot(file);
+        //   proxy.setMaxSingleFileSize(10*1024*1024);                    // 单个文件缓存大小
+        proxy.setMaxCacheSize(500*1024*1024);                        // 缓存大小 500MB
+        proxy.startServer();
     }
 
     @Override
@@ -201,7 +233,9 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         mListView = (XListView) rootView.findViewById(R.id.listView);
         mListView.setPullLoadEnable(false);
         mListView.setXListViewListener(this);
+
         headView = LayoutInflater.from(context).inflate(R.layout.headview_fragment_play, null);
+
         lin_center = (RelativeLayout) headView.findViewById(R.id.lin_center);
         lin_tuijian = (LinearLayout) headView.findViewById(R.id.lin_tuijian);
         lin_like = (LinearLayout) headView.findViewById(R.id.lin_like);
@@ -213,6 +247,26 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         lin_more= (LinearLayout) headView.findViewById(R.id.lin_more);//更多
         lin_sequ= (LinearLayout) headView.findViewById(R.id.lin_sequ);//专辑
         lin_schedule=(LinearLayout) headView.findViewById(R.id.lin_schedule);//节目单
+
+        rv_details = (RelativeLayout) headView.findViewById(R.id.rv_details);      // 节目详情布局
+        tv_like = (TextView) headView.findViewById(R.id.tv_like);
+        tv_sequ = (TextView) headView.findViewById(R.id.tv_sequ);
+        tv_desc = (TextView) headView.findViewById(R.id.tv_desc);
+        tv_download = (TextView) headView.findViewById(R.id.tv_download);
+        tv_origin = (TextView) headView.findViewById(R.id.tv_origin);               // 来源
+        tv_details_flag = (TextView) headView.findViewById(R.id.tv_details_flag);   // 展开或者隐藏按钮
+        tv_details_flag.setOnClickListener(this);
+        tv_details_flag.setText("  显示  ");
+        img_download = (ImageView) headView.findViewById(R.id.img_download);
+
+        flowTag = (GridView) headView.findViewById(R.id.gv_tag);
+        testList = new ArrayList<>();
+        testList.add("逻辑思维");
+        testList.add("不是我不明白");
+        testList.add("今天你吃饭了吗");
+        testList.add("看世界");
+        testList.add("影视资讯");
+
         lin_left = (LinearLayout) headView.findViewById(R.id.lin_left);
         tv_name = (TextView) headView.findViewById(R.id.tv_name);
         seekBar = (SeekBar) headView.findViewById(R.id.seekBar);
@@ -296,7 +350,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             historynews.setContentTimes("");
             historynews.setContentName(historynew.getPlayerName());
             historynews.setContentPubTime("");
-            historynews.setContentPub("");
+            historynews.setContentPub(historynew.getContentPub());
             historynews.setContentPlay(historynew.getPlayerUrl());
             historynews.setMediaType(historynew.getPlayerMediaType());
             historynews.setContentId(historynew.getContentID());
@@ -628,6 +682,17 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     ToastUtils.show_always(context,"此节目目前没有所属专辑");
                 }
                 break;
+            case R.id.tv_details_flag:
+                if (details_flag == false) {
+                    details_flag = true;
+                    tv_details_flag.setText("  隐藏  ");
+                    rv_details.setVisibility(View.VISIBLE);
+                } else {
+                    details_flag = false;
+                    tv_details_flag.setText("  显示  ");
+                    rv_details.setVisibility(View.GONE);
+                }
+                break;
         }
     }
 
@@ -896,8 +961,17 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     if (GlobalConfig.playerobject != null&& GlobalConfig.playerobject.getMediaType() != null
                             && GlobalConfig.playerobject.getMediaType().trim().length() > 0
                             && GlobalConfig.playerobject.getMediaType().equals("AUDIO")) {
+
                         long currPosition = audioPlay.getTime();
                         long duration = audioPlay.getTotalTime();
+
+                        if(IsCache(local)==true){
+                            // ToastUtils.show_always(context,"缓存完成");
+                            int Length =(int)(audioPlay.getTotalTime()) * 100 / 100;
+                            seekBar.setSecondaryProgress(Length);
+                        }else{
+                            // ToastUtils.show_always(context,"缓存未完成");
+                        }
                         updateTextViewWithTimeFormat(time_start,(int) (currPosition / 1000));
                         updateTextViewWithTimeFormat(time_end,(int) (duration / 1000));
                         seekBar.setMax((int) duration);
@@ -931,7 +1005,25 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     mUIHandler.sendEmptyMessageDelayed(TIME_UI, 1000);
                     break;
                 case PLAY:
-                    audioPlay.play(local);
+                    if(GlobalConfig.playerobject.getMediaType().equals("AUDIO")){
+                        if(GlobalConfig.playerobject.getLocalurl()!=null){
+                            //本地内容无法通过缓存加载 直接播放
+                            audioPlay.play(local);
+                        }else{
+                            String proxyUrl = proxy.getProxyUrl(local);
+                            audioPlay.play(proxyUrl);
+                            proxy.registerCacheStatusListener(new OnCacheStatusListener() {
+                                @Override
+                                public void OnCacheStatus(String url, long sourceLength,int percentsAvailable) {
+                                    int a=percentsAvailable;
+                                    int Length = (int)(audioPlay.getTotalTime()) * percentsAvailable / 100;
+                                    seekBar.setSecondaryProgress(Length);
+                                }
+                            }, local);
+                        }
+                    }else{
+                        audioPlay.play(local);
+                    }
                     break;
                 case PAUSE:
                     audioPlay.pause();
@@ -1362,41 +1454,56 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
      */
     private static void resetHeadView() {
         if (GlobalConfig.playerobject != null) {
-            if (GlobalConfig.playerobject.getMediaType().equals("RADIO")) {
-                // 不支持分享
-                if(moreType==1){
-                moreType=0;
-                }
-                lin_sequ.setVisibility(View.GONE);
-                lin_schedule.setVisibility(View.VISIBLE);
-                return;
-                // 设置灰色界面
+        /*    //判断下载类型的方法
+            if (GlobalConfig.playerobject.getMediaType().equals("AUDIO")) {
+                img_download.setImageResource(R.mipmap.wt_play_xiazai);
+                tv_download.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
+                tv_download.setText("下载");
             } else {
-                // 支持分享
-                // 设置回界面
-                if(moreType==0){
-                    moreType=1;
-                }
-                lin_schedule.setVisibility(View.GONE);
-                lin_sequ.setVisibility(View.VISIBLE);
+                img_download.setImageResource(R.mipmap.wt_play_xiazai_no);
+                tv_download.setTextColor(context.getResources().getColor(R.color.gray));
+                tv_download.setText("下载");
             }
 
-            if (GlobalConfig.playerobject.getContentFavorite() != null && !GlobalConfig.playerobject.equals("")) {
+            if (!TextUtils.isEmpty(GlobalConfig.playerobject.getLocalurl())) {
+                img_download.setImageResource(R.mipmap.wt_play_xiazai_no);
+                tv_download.setTextColor(context.getResources().getColor(R.color.gray));
+                tv_download.setText("已下载");
+            }*/
 
-                if(GlobalConfig.playerobject.getContentFavorite().equals("0")){
+            if (GlobalConfig.playerobject.getSequName() != null) {
+                tv_sequ.setText(GlobalConfig.playerobject.getSequName());
+            } else {
+                tv_sequ.setText("暂无专辑");
+            }
+
+            if (GlobalConfig.playerobject.getContentPub() != null) {
+                tv_origin.setText(GlobalConfig.playerobject.getContentPub());
+            } else {
+                tv_origin.setText("暂无来源");
+            }
+
+            if (GlobalConfig.playerobject.getContentDescn() != null) {
+                tv_desc.setText(GlobalConfig.playerobject.getContentDescn());
+            } else {
+                tv_desc.setText("暂无介绍");
+            }
+            if (GlobalConfig.playerobject.getContentFavorite() != null
+                    && !GlobalConfig.playerobject.equals("")) {
+
+                if (GlobalConfig.playerobject.getContentFavorite().equals("0")) {
                     tv_like.setText("喜欢");
                     img_like.setImageResource(R.mipmap.wt_dianzan_nomal);
-                }else{
+                } else {
                     tv_like.setText("已喜欢");
                     img_like.setImageResource(R.mipmap.wt_dianzan_select);
                 }
             } else {
                 tv_like.setText("喜欢");
                 img_like.setImageResource(R.mipmap.wt_dianzan_nomal);
-
             }
         } else {
-
+            ToastUtils.show_always(context, "播放器数据获取异常，请退出程序后尝试");
         }
     }
 
@@ -1924,7 +2031,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                         ToastUtils.show_always(context, "网络连接失败，请稍后重试");
                     }
                     break;
-
             }
         }
     }
@@ -2034,5 +2140,28 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
             alllist.get(num).setType("0");
             adapter.notifyDataSetChanged();
         }
+    }
+
+    /**
+     * 缓存错误的监听回调方法
+     */
+    @Override
+    public void OnError(int errCode) {
+
+        Log.d("cachetest", "播放器缓存代码异常:" + errCode);
+    }
+
+    //判断某个链接是否已经缓存完毕的方法
+    private static Boolean IsCache(String url) {
+
+        HashMap<String, File> cacheMap = proxy.getCachedFileList();
+
+        File CacheFile=cacheMap.get(url);
+
+        if(CacheFile==null||CacheFile.equals("")){
+            return  false;
+        }
+
+        return true;
     }
 }

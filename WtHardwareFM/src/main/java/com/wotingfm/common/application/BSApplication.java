@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
+import com.kingsoft.media.httpcache.KSYProxyService;
 import com.umeng.socialize.PlatformConfig;
 import com.wotingfm.activity.music.common.service.DownloadService;
 import com.wotingfm.common.config.GlobalConfig;
@@ -38,6 +39,9 @@ public class BSApplication extends Application {
     private NetWorkChangeReceiver netWorkChangeReceiver = null;
     public static android.content.SharedPreferences SharedPreferences;
     private static Intent Socket, VoiceStreamRecord, VoiceStreamPlayer, Location, Subclass, Download, Notification,TestFloatingWindow, FloatingWindow;
+    private ArrayList<String> staticFacesList;
+    public static BSApplication mBSApplication;
+    private static KSYProxyService proxyService = null;
 
     @Override
     public void onCreate() {
@@ -45,6 +49,7 @@ public class BSApplication extends Application {
         instance = this;
         SharedPreferences = this.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
         InitThird();
+        initStaticFaces();                  //读取assets里的图片资源
         queues = Volley.newRequestQueue(this);
         PhoneMessage.getPhoneInfo(instance);//获取手机信息
 
@@ -89,6 +94,24 @@ public class BSApplication extends Application {
         startService(TestFloatingWindow);
     }
 
+    private void initStaticFaces() {
+        try {
+            staticFacesList = new ArrayList<String>();
+            String[] faces = getAssets().list("face/png");
+            //将Assets中的表情名称转为字符串一一添加进staticFacesList
+            for (int i = 0; i < faces.length; i++) {
+                staticFacesList.add(faces[i]);
+            }
+            //去掉删除图片
+            staticFacesList.remove("emotion_del_normal.png");
+            GlobalConfig.staticFacesList=staticFacesList;
+            int a=staticFacesList.size();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private void InitThird() {
         PlatformConfig.setWeixin(KeyConstant.WEIXIN_KEY, KeyConstant.WEIXIN_SECRET);
         PlatformConfig.setQQZone(KeyConstant.QQ_KEY, KeyConstant.QQ_SECRET);
@@ -99,6 +122,17 @@ public class BSApplication extends Application {
         return instance;
     }
 
+    public static KSYProxyService getKSYProxy(Context context) {
+        instance = context;
+        if(mBSApplication == null){
+            mBSApplication = new BSApplication();
+        }
+        return mBSApplication.proxyService == null ? (mBSApplication.proxyService = newKSYProxy()) : BSApplication.proxyService;
+    }
+
+    private static KSYProxyService newKSYProxy() {
+        return new KSYProxyService(instance);
+    }
     public static RequestQueue getHttpQueues() {
         return queues;
     }

@@ -10,7 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.woting.R;
+import com.wotingfm.R;
 
 import java.io.IOException;
 import java.util.List;
