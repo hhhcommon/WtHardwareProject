@@ -207,7 +207,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                         String contentImg = null;
                         String contentName = null;
                         try {
-                            contentDesc = arg1.getString("ContentDesc");
+                            contentDesc = arg1.getString("ContentDescn");
                             contentImg = arg1.getString("ContentImg");
                             contentName = arg1.getString("ContentName");
 //                        String contentShareURL = arg1.getString("ContentShareURL");

@@ -314,7 +314,7 @@ public class FavoriteActivity extends AppBaseFragmentActivity implements OnClick
             }
         } else if (currentIndex == 1) {
             if (type == 1) {// 打开 view
-                boolean flag = sequFragment.changeviewtype(1);
+                boolean flag = sequFragment.changeViewType(1);
                 if (flag) {
                     isEdit = true;
                     sequFragment.setViewVisibility();
@@ -328,15 +328,15 @@ public class FavoriteActivity extends AppBaseFragmentActivity implements OnClick
                     ToastUtils.show_always(context, "当前页无数据");
                 }
             } else if (type == 2) {// 隐藏 view
-                sequFragment.changeviewtype(0);
+                sequFragment.changeViewType(0);
                 sequFragment.setViewHint();
                 sendBroadcast(new Intent(BroadcastConstants.SET_LOAD_REFRESH));
             } else if (type == 3) {// 全选
-                sequFragment.changechecktype(1);
+                sequFragment.changeCheckType(1);
             } else if (type == 4) {// 解除全选
-                sequFragment.changechecktype(0);
+                sequFragment.changeCheckType(0);
             } else if (type == 5) {// 删除
-                if (sequFragment.getdelitemsum() == 0) {
+                if (sequFragment.getDelItemSum() == 0) {
                     ToastUtils.show_always(context, "请选择您要删除的数据");
                     return;
                 }
@@ -347,14 +347,14 @@ public class FavoriteActivity extends AppBaseFragmentActivity implements OnClick
                 }
                 textFlag = 0;
                 textEditor.setText("编辑");
-                sequFragment.delitem();
+                sequFragment.delItem();
                 sequFragment.setViewHint();
                 sendBroadcast(new Intent(BroadcastConstants.SET_LOAD_REFRESH));
             }
         } else if (currentIndex == 2) {
             // 声音
             if (type == 1) {// 打开 view
-                boolean flag = soundFragment.changeviewtype(1);
+                boolean flag = soundFragment.changeViewType(1);
                 if (flag) {
                     isEdit = true;
                     soundFragment.setViewVisibility();
@@ -368,15 +368,15 @@ public class FavoriteActivity extends AppBaseFragmentActivity implements OnClick
                     ToastUtils.show_always(context, "当前页无数据");
                 }
             } else if (type == 2) {// 隐藏 view
-                soundFragment.changeviewtype(0);
+                soundFragment.changeViewType(0);
                 soundFragment.setViewHint();
                 sendBroadcast(new Intent(BroadcastConstants.SET_LOAD_REFRESH));
             } else if (type == 3) {// 全选
-                soundFragment.changechecktype(1);
+                soundFragment.changeCheckType(1);
             } else if (type == 4) {// 解除全选
-                soundFragment.changechecktype(0);
+                soundFragment.changeCheckType(0);
             } else if (type == 5) {// 删除
-                if (soundFragment.getdelitemsum() == 0) {
+                if (soundFragment.getDelItemSum() == 0) {
                     ToastUtils.show_always(context, "请选择您要删除的数据");
                     return;
                 }
@@ -387,14 +387,14 @@ public class FavoriteActivity extends AppBaseFragmentActivity implements OnClick
                 }
                 textFlag = 0;
                 textEditor.setText("编辑");
-                soundFragment.delitem();
+                soundFragment.delItem();
                 soundFragment.setViewHint();
                 sendBroadcast(new Intent(BroadcastConstants.SET_LOAD_REFRESH));
             }
         } else if (currentIndex == 3) {
             // 电台
             if (type == 1) {// 打开 view
-                boolean flag = radioFragment.changeviewtype(1);
+                boolean flag = radioFragment.changeViewType(1);
                 if (flag) {
                     isEdit = true;
                     radioFragment.setViewVisibility();
@@ -408,15 +408,15 @@ public class FavoriteActivity extends AppBaseFragmentActivity implements OnClick
                     ToastUtils.show_always(context, "当前页无数据");
                 }
             } else if (type == 2) {// 隐藏 view
-                radioFragment.changeviewtype(0);
+                radioFragment.changeViewType(0);
                 radioFragment.setViewHint();
                 sendBroadcast(new Intent(BroadcastConstants.SET_LOAD_REFRESH));
             } else if (type == 3) {// 全选
-                radioFragment.changechecktype(1);
+                radioFragment.changeCheckType(1);
             } else if (type == 4) {// 解除全选
-                radioFragment.changechecktype(0);
+                radioFragment.changeCheckType(0);
             } else if (type == 5) {// 删除
-                if (radioFragment.getdelitemsum() == 0) {
+                if (radioFragment.getDelItemSum() == 0) {
                     ToastUtils.show_always(context, "请选择您要删除的数据");
                     return;
                 }
@@ -427,14 +427,14 @@ public class FavoriteActivity extends AppBaseFragmentActivity implements OnClick
                 }
                 textFlag = 0;
                 textEditor.setText("编辑");
-                radioFragment.delitem();
+                radioFragment.delItem();
                 radioFragment.setViewHint();
                 sendBroadcast(new Intent(BroadcastConstants.SET_LOAD_REFRESH));
             }
         } else if (currentIndex == 4) {
             // TTS
             if (type == 1) {// 打开 view
-                boolean flag = ttsFragment.changeviewtype(1);
+                boolean flag = ttsFragment.changeViewType(1);
                 if (flag) {
                     isEdit = true;
                     ttsFragment.setViewVisibility();
@@ -448,15 +448,15 @@ public class FavoriteActivity extends AppBaseFragmentActivity implements OnClick
                     ToastUtils.show_always(context, "当前页无数据");
                 }
             } else if (type == 2) {// 隐藏 view
-                ttsFragment.changeviewtype(0);
+                ttsFragment.changeViewType(0);
                 ttsFragment.setViewHint();
                 sendBroadcast(new Intent(BroadcastConstants.SET_LOAD_REFRESH));
             } else if (type == 3) {// 全选
-                ttsFragment.changechecktype(1);
+                ttsFragment.changeCheckType(1);
             } else if (type == 4) {// 解除全选
-                ttsFragment.changechecktype(0);
+                ttsFragment.changeCheckType(0);
             } else if (type == 5) {// 删除
-                if (ttsFragment.getdelitemsum() == 0) {
+                if (ttsFragment.getDelItemSum() == 0) {
                     ToastUtils.show_always(context, "请选择您要删除的数据");
                     return;
                 }
@@ -467,7 +467,7 @@ public class FavoriteActivity extends AppBaseFragmentActivity implements OnClick
                 }
                 textFlag = 0;
                 textEditor.setText("编辑");
-                ttsFragment.delitem();
+                ttsFragment.delItem();
                 ttsFragment.setViewHint();
                 sendBroadcast(new Intent(BroadcastConstants.SET_LOAD_REFRESH));
             }

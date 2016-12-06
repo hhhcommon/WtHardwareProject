@@ -100,19 +100,16 @@ public class TotalFragment extends Fragment {
             expandListView = (ExpandableListView) rootView.findViewById(R.id.ex_listview);
             expandListView.setGroupIndicator(null);
             setListener();
-            if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                dialog = DialogUtils.Dialogph(context, "正在获取全部喜欢信息");
-                send();
-            } else {
-                ToastUtils.show_always(context, "网络失败，请检查网络");
-            }
+
+            dialog = DialogUtils.Dialogph(context, "正在获取全部喜欢信息");
+            send();
         }
         return rootView;
     }
 
     // 控件点击事件监听
     private void setListener() {
-        // 屏蔽group点击事件
+        // 屏蔽 group 点击事件
         expandListView.setOnGroupClickListener(new OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -224,6 +221,11 @@ public class TotalFragment extends Fragment {
 
     // 请求网络获取数据
     private void send() {
+        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            if(dialog != null) dialog.dismiss();
+            ToastUtils.show_always(context, "网络连接失败，请检查网络设置!");
+            return ;
+        }
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("PageSize", "12");
@@ -234,7 +236,6 @@ public class TotalFragment extends Fragment {
         VolleyRequest.RequestPost(GlobalConfig.getFavoriteListUrl, tag, jsonObject, new VolleyCallback() {
             private String ReturnType;
             private String Message;
-            private JSONObject arg1;
 
             @Override
             protected void requestSuccess(JSONObject result) {
@@ -248,7 +249,7 @@ public class TotalFragment extends Fragment {
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
-                        arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
+                        JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
                         subList = new Gson().fromJson(arg1.getString("FavoriteList"), new TypeToken<List<RankInfo>>() {}.getType());
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -366,7 +367,7 @@ public class TotalFragment extends Fragment {
                     String playermediatype = list.get(groupPosition).getList().get(childPosition).getMediaType();
                     String plaplayeralltime = "0";
                     String playerintime = "0";
-                    String playercontentdesc = list.get(groupPosition).getList().get(childPosition).getCurrentContent();
+                    String playercontentdesc = list.get(groupPosition).getList().get(childPosition).getContentDescn();
                     String playernum = list.get(groupPosition).getList().get(childPosition).getWatchPlayerNum();
                     String playerzantype = "0";
                     String playerfrom = "";
@@ -433,18 +434,12 @@ public class TotalFragment extends Fragment {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.VIEW_UPDATE)) {
-                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    send();
-                } else {
-                    ToastUtils.show_always(context, "网络失败，请检查网络");
-                }
+                send();
             }
         }
     };
 
-    /**
-     * 获取当前页面选中的为选中的数目
-     */
+    // 获取当前页面选中的为选中的数目
     public int getDelItemSum() {
         int sum = 0;
         if (subList == null) {
@@ -455,16 +450,12 @@ public class TotalFragment extends Fragment {
         return sum;
     }
 
-    /**
-     * 删除
-     */
+    // 删除
     public void delItem() {
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             dialog = DialogUtils.Dialogph(context, "正在删除");
             for (int i = 0; i < subList.size(); i++) {
-                if (delList == null) {
-                    delList = new ArrayList<>();
-                }
+                if (delList == null) delList = new ArrayList<>();
                 String type = subList.get(i).getMediaType();
                 String contentId = subList.get(i).getContentId();
                 delList.add(type + "::" + contentId);

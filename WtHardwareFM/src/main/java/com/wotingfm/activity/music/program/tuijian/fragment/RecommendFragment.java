@@ -275,7 +275,7 @@ public class RecommendFragment extends Fragment {
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "player");
                         bundle.putString("contentName", newList.get(position - 2).getContentName());
-                        bundle.putString("contentDesc", newList.get(position - 2).getContentDesc());
+                        bundle.putString("contentDesc", newList.get(position - 2).getContentDescn());
                         bundle.putString("contentId", newList.get(position - 2).getContentId());
                         bundle.putString("contentImg", newList.get(position - 2).getContentImg());
                         intent.putExtras(bundle);

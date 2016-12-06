@@ -99,7 +99,7 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
         if (type != null && type.trim().equals("radiolistactivity")) {
             RankInfo list = (RankInfo) getIntent().getSerializableExtra("list");
             contentName = list.getContentName();
-            contentDesc = list.getContentDesc();
+            contentDesc = list.getContentDescn();
             id = list.getContentId();
             contentImg = list.getContentImg();
         } else if (type != null && type.trim().equals("recommend")) {
@@ -110,7 +110,7 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
         } else if (type != null && type.trim().equals("search")) {
             RankInfo list = (RankInfo) getIntent().getSerializableExtra("list");
             contentName = list.getContentName();
-            contentDesc = list.getContentDesc();
+            contentDesc = list.getContentDescn();
             id = list.getContentId();
             contentImg = list.getContentImg();
         } else if (type != null && type.trim().equals("main")) {
