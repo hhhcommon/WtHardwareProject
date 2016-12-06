@@ -1,19 +1,18 @@
 package com.wotingfm.activity.music.playhistory.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.search.model.SuperRankInfo;
+import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
 import java.text.SimpleDateFormat;
@@ -72,7 +71,6 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fragment_radio_list, parent, false);
 			holder = new ViewHolder();
 			holder.textName = (TextView) convertView.findViewById(R.id.tv_name);
-			holder.linearMore = (LinearLayout) convertView.findViewById(R.id.lin_head_more);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -86,8 +84,6 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 			} else if (key.equals("TTS")){
 				holder.textName.setText("TTS");
 			}
-		} else {
-			holder.textName.setText("我听");
 		}
 		return convertView;
 	}
@@ -95,12 +91,14 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 	@Override
 	public View getChildView(int groupPosition, int childPosition,boolean isLastChild, View convertView, ViewGroup parent) {
 		ViewHolder holder;
-        SimpleDateFormat format;
-        String url;
-        int a;
 		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_play_history, parent, false);
+
+            // 六边形封面遮罩
+            holder.imageMask = (ImageView) convertView.findViewById(R.id.image_mask);
+            holder.imageMask.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b));
+
 			holder.textViewPlayName = (TextView) convertView.findViewById(R.id.RankTitle);// 节目名称
 			holder.textViewPlayIntroduce = (TextView) convertView.findViewById(R.id.tv_last);// 上次播放时长
 			holder.imageViewPlayImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 节目图片
@@ -111,107 +109,42 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		PlayerHistory lists = mSuperRankInfo.get(groupPosition).getHistoryList().get(childPosition);
-		if (lists.getPlayerMediaType().equals("RADIO")) {
-			if (lists.getPlayerName() == null || lists.getPlayerName().equals("")) {
-				holder.textViewPlayName.setText("未知");
-			} else {
-				holder.textViewPlayName.setText(lists.getPlayerName());
-			}
-			if (lists.getPlayerNum() == null || lists.getPlayerNum().equals("")) {
-				holder.textNumber.setText("8888");
-			} else {
-				holder.textNumber.setText(lists.getPlayerNum());
-			}
-			if (lists.getContentPub() == null || lists.getContentPub().equals("")) {
-				holder.textRankContent.setText("我听科技");
-			} else {
-				holder.textRankContent.setText(lists.getContentPub());
-			}
-			if (lists.getPlayerInTime() == null | lists.getPlayerInTime().equals("")) {
-				holder.textViewPlayIntroduce.setText("未知");
-			} else {
-				format = new SimpleDateFormat("mm:ss", Locale.CHINA);
-				format.setTimeZone(TimeZone.getTimeZone("GMT"));
-				a = Integer.valueOf(lists.getPlayerInTime());
-				String s = format.format(a);
-				holder.textViewPlayIntroduce.setText("上次播放至" + s);
-			}
-			if (lists.getPlayerImage() == null || lists.getPlayerImage().equals("") 
-					|| lists.getPlayerImage().equals("null") || lists.getPlayerImage().trim().equals("")) {
-				Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
-				holder.imageViewPlayImage.setImageBitmap(bmp);
-			} else {
-				url = lists.getPlayerImage();
-				Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageViewPlayImage);
-			}
-		} else if(lists.getPlayerMediaType().equals("AUDIO")){
-			if (lists.getPlayerName() == null || lists.getPlayerName().equals("")) {
-				holder.textViewPlayName.setText("未知");
-			} else {
-				holder.textViewPlayName.setText(lists.getPlayerName());
-			}
-			if (lists.getPlayerNum() == null || lists.getPlayerNum().equals("")) {
-				holder.textNumber.setText("8888");
-			} else {
-				holder.textNumber.setText(lists.getPlayerNum());
-			}
-			if (lists.getContentPub() == null || lists.getContentPub().equals("")) {
-				holder.textRankContent.setText("我听科技");
-			} else {
-				holder.textRankContent.setText(lists.getContentPub());
-			}
-			if (lists.getPlayerInTime() == null | lists.getPlayerInTime().equals("")) {
-				holder.textViewPlayIntroduce.setText("未知");
-			} else {
-				format = new SimpleDateFormat("mm:ss", Locale.CHINA);
-				format.setTimeZone(TimeZone.getTimeZone("GMT"));
-				a = Integer.valueOf(lists.getPlayerInTime());
-				String s = format.format(a);
-				holder.textViewPlayIntroduce.setText("上次播放至" + s);
-			}
-			if (lists.getPlayerImage() == null || lists.getPlayerImage().equals("") 
-					|| lists.getPlayerImage().equals("null") || lists.getPlayerImage().trim().equals("")) {
-				Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
-				holder.imageViewPlayImage.setImageBitmap(bmp);
-			} else {
-				url = lists.getPlayerImage();
-				Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageViewPlayImage);
-			}
-			
-		}else if(lists.getPlayerMediaType().equals("TTS")){
-			if (lists.getPlayerName() == null || lists.getPlayerName().equals("")) {
-				holder.textViewPlayName.setText("未知");
-			} else {
-				holder.textViewPlayName.setText(lists.getPlayerName());
-			}
-			if (lists.getPlayerNum() == null || lists.getPlayerNum().equals("")) {
-				holder.textNumber.setText("8888");
-			} else {
-				holder.textNumber.setText(lists.getPlayerNum());
-			}
-			if (lists.getContentPub() == null || lists.getContentPub().equals("")) {
-				holder.textRankContent.setText("我听科技");
-			} else {
-				holder.textRankContent.setText(lists.getContentPub());
-			}
-			if (lists.getPlayerInTime() == null | lists.getPlayerInTime().equals("")) {
-				holder.textViewPlayIntroduce.setText("未知");
-			} else {
-				format = new SimpleDateFormat("mm:ss", Locale.CHINA);
-				format.setTimeZone(TimeZone.getTimeZone("GMT"));
-				a = Integer.valueOf(lists.getPlayerInTime());
-				String s = format.format(a);
-				holder.textViewPlayIntroduce.setText("上次播放至" + s);
-			}
-			if (lists.getPlayerImage() == null || lists.getPlayerImage().equals("") 
-					|| lists.getPlayerImage().equals("null") || lists.getPlayerImage().trim().equals("")) {
-				Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
-				holder.imageViewPlayImage.setImageBitmap(bmp);
-			} else {
-				url = lists.getPlayerImage();
-				Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageViewPlayImage);
-			}
-		}
+        SimpleDateFormat format = new SimpleDateFormat("mm:ss", Locale.CHINA);
+
+        // 封面
+        String playImage = lists.getPlayerImage();
+        if (playImage == null || playImage.equals("null") || playImage.trim().equals("")) {
+            holder.imageViewPlayImage.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx));
+        } else {
+            String url = AssembleImageUrlUtils.assembleImageUrl150(playImage);
+            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageViewPlayImage);
+        }
+
+        // 节目名
+        String playName = lists.getPlayerName();
+        if (playName != null && !playName.equals("")) {
+            holder.textViewPlayName.setText(playName);
+        }
+
+        // 来源
+        String contentPub = lists.getContentPub();
+        if (contentPub != null && !contentPub.equals("")) {
+            holder.textRankContent.setText(contentPub);
+        }
+
+        // 收听次数
+        String playNum = lists.getPlayerNum();
+        if (playNum != null && !playNum.equals("")) {
+            holder.textNumber.setText(lists.getPlayerNum());
+        }
+
+        // 上次播放时间
+        String playInTime = lists.getPlayerInTime();
+        if (playInTime != null && !playInTime.equals("")) {
+            format.setTimeZone(TimeZone.getTimeZone("GMT"));
+            playInTime = "上次播放至" + format.format(Integer.valueOf(playInTime));
+            holder.textViewPlayIntroduce.setText(playInTime);
+        }
 		return convertView;
 	}
 
@@ -221,8 +154,8 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 	}
 	
 	class ViewHolder {
-		private TextView textName;
-		public LinearLayout linearMore;
+        public ImageView imageMask;// 六边形遮罩
+        public TextView textName;
 		public TextView textViewPlayName;
 		public TextView textViewPlayIntroduce;
 		public ImageView imageViewPlayImage;
