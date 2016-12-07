@@ -243,6 +243,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical"
+                    android:visibility="gone"
                     >
 
                     <ImageView
@@ -576,7 +577,7 @@
             <LinearLayout
                 android:id="@+id/lin_tuijian"
                 android:layout_width="match_parent"
-                android:layout_height="32dp"
+                android:layout_height="34dp"
                 android:background="@color/setting_bg_color"
                 android:gravity="left|center"
                 android:visibility="gone" >

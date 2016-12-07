@@ -1,32 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="32dp"
-    android:background="@color/setting_bg_color">
+    android:layout_height="wrap_content"
+    android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/tv_name"
-        android:layout_width="0dp"
-        android:layout_weight="3"
-        android:layout_height="match_parent"
-        android:paddingLeft="18dp"
-        android:gravity="center_vertical"
-        android:text="排行榜"
-        android:textColor="@color/wt_login_third"
-        android:textSize="@dimen/text_size_13"/>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="34dp"
+        android:background="@color/setting_bg_color"
+        android:orientation="horizontal">
 
-    <TextView
-        android:id="@+id/lin_head_more"
-        android:layout_width="0dp"
-        android:layout_weight="1"
-        android:layout_height="match_parent"
-        android:gravity="right|center_vertical"
-        android:paddingRight="14dp"
-        android:drawablePadding="5dp"
-        android:text="更多"
-        android:drawableRight="@mipmap/live_more"
-        android:textColor="@color/wt_login_third"
-        android:textSize="@dimen/text_size_13"/>
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="3"
+            android:gravity="left">
+
+            <TextView
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="15dp"
+                android:gravity="center_vertical"
+                android:text="分类"
+                android:textColor="@color/wt_login_third"
+                android:textSize="14sp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/lin_head_more"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_marginRight="13dp"
+            android:layout_weight="1"
+            android:gravity="right|center_vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="更多"
+                android:textColor="@color/wt_login_third"
+                android:textSize="12sp" />
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="16dp"
+                android:src="@mipmap/live_more" />
+        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
