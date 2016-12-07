@@ -67,7 +67,7 @@ public class TotalFragment extends Fragment {
 		if(rootView == null){
 			rootView = inflater.inflate(R.layout.fragment_playhistory_total_layout, container, false);
 			mListView = (ExpandableListView) rootView.findViewById(R.id.listview_history);
-			mListView.setGroupIndicator(null);			// 去除indicator
+			mListView.setGroupIndicator(null);			// 去除 indicator
 			isLoad = true;
 			getData();
 		}

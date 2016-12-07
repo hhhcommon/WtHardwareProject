@@ -26,6 +26,7 @@ import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
+import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
@@ -36,7 +37,6 @@ import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.xlistview.XListView;
-import com.wotingfm.widget.xlistview.XListView.IXListViewListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,18 +49,17 @@ public class SequFragment extends Fragment {
     private FragmentActivity context;
     protected FavorListAdapter adapter;
     private SearchPlayerHistoryDao dbDao;
+    private List<RankInfo> SubList;
+    private ArrayList<RankInfo> newList = new ArrayList<>();
 
     private Dialog dialog;
     private View rootView;
     private XListView mListView;
 
-    private List<RankInfo> subList;
-    private ArrayList<RankInfo> newList = new ArrayList<>();
-
-    protected String searchString;
+    protected String searchStr;
     private String tag = "SEQU_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
-    private int RefreshType = 1;
+    private int refreshType = 1;
     private int page = 1;
     private int pageSizeNum;
 
@@ -73,6 +72,7 @@ public class SequFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
+
         IntentFilter mFilter = new IntentFilter();
         mFilter.addAction(BroadcastConstants.SEARCH_VIEW_UPDATE);
         context.registerReceiver(mBroadcastReceiver, mFilter);
@@ -94,10 +94,10 @@ public class SequFragment extends Fragment {
     private void setLoadListener() {
         mListView.setPullRefreshEnable(true);
         mListView.setPullLoadEnable(true);
-        mListView.setXListViewListener(new IXListViewListener() {
+        mListView.setXListViewListener(new XListView.IXListViewListener() {
             @Override
             public void onRefresh() {
-                RefreshType = 1;
+                refreshType = 1;
                 page = 1;
                 sendRequest();
             }
@@ -105,12 +105,11 @@ public class SequFragment extends Fragment {
             @Override
             public void onLoadMore() {
                 if (page <= pageSizeNum) {
-                    RefreshType = 2;
+                    refreshType = 2;
                     sendRequest();
                 } else {
                     mListView.stopLoadMore();
                     mListView.setPullLoadEnable(false);
-                    ToastUtils.show_always(context, "已经是最后一页了");
                 }
             }
         });
@@ -128,13 +127,13 @@ public class SequFragment extends Fragment {
                         String playerurl = newList.get(position - 1).getContentPlay();
                         String playerurI = newList.get(position - 1).getContentURI();
                         String playermediatype = newList.get(position - 1).getMediaType();
-                        String playercontentshareurl = newList.get(position - 1).getContentShareURL();
+                        String playcontentshareurl = newList.get(position - 1).getContentShareURL();
                         String plaplayeralltime = "0";
                         String playerintime = "0";
                         String playercontentdesc = newList.get(position - 1).getCurrentContent();
                         String playernum = newList.get(position - 1).getWatchPlayerNum();
                         String playerzantype = "0";
-                        String playerfrom = "";
+                        String playerfrom = newList.get(position - 1).getContentPub();
                         String playerfromid = "";
                         String playerfromurl = "";
                         String playeraddtime = Long.toString(System.currentTimeMillis());
@@ -142,23 +141,34 @@ public class SequFragment extends Fragment {
                         String ContentFavorite = newList.get(position - 1).getContentFavorite();
                         String ContentId = newList.get(position - 1).getContentId();
                         String localurl = newList.get(position - 1).getLocalurl();
-                        String sequname = newList.get(position - 1).getSequName();
-                        String sequid = newList.get(position - 1).getSequId();
-                        String sequdesc = newList.get(position - 1).getSequDesc();
-                        String sequimg = newList.get(position - 1).getSequImg();
-                        //如果该数据已经存在数据库则删除原有数据，然后添加最新数据
+
+                        String sequName = newList.get(position - 1).getSequName();
+                        String sequId = newList.get(position - 1).getSequId();
+                        String sequDesc = newList.get(position - 1).getSequDesc();
+                        String sequImg = newList.get(position - 1).getSequImg();
+
+                        // 如果该数据已经存在数据库则删除原有数据，然后添加最新数据
                         PlayerHistory history = new PlayerHistory(
                                 playername, playerimage, playerurl, playerurI, playermediatype,
                                 plaplayeralltime, playerintime, playercontentdesc, playernum,
-                                playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid, playercontentshareurl, ContentFavorite, ContentId, localurl, sequname, sequid, sequdesc, sequimg);
+                                playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid, playcontentshareurl,
+                                ContentFavorite, ContentId, localurl, sequName, sequId, sequDesc, sequImg);
                         dbDao.deleteHistory(playerurl);
                         dbDao.addHistory(history);
                         MainActivity.changeToMusic();
                         HomeActivity.UpdateViewPager();
+                        PlayerFragment.TextPage=1;
                         PlayerFragment.SendTextRequest(newList.get(position - 1).getContentName(), context);
                         context.finish();
+                    } else if(MediaType.equals("SEQU")) {
+                        Intent intent = new Intent(context, AlbumActivity.class);
+                        Bundle bundle = new Bundle();
+                        bundle.putString("type", "search");
+                        bundle.putSerializable("list", newList.get(position - 1));
+                        intent.putExtras(bundle);
+                        startActivity(intent);
                     } else {
-                        ToastUtils.show_short(context, "暂不支持的Type类型");
+                        ToastUtils.show_always(context, "暂不支持的Type类型");
                     }
                 }
             }
@@ -166,71 +176,67 @@ public class SequFragment extends Fragment {
     }
 
     private void sendRequest() {
-        // 以下操作需要网络支持
         if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
-            mListView.stopRefresh();
-            ToastUtils.show_always(context, "网络连接失败，请检查网络连接!");
+            ToastUtils.show_always(context, "连接网络失败，请检查网络设置!");
+            if(refreshType == 1) {
+                mListView.stopRefresh();
+            } else {
+                mListView.stopLoadMore();
+            }
             return ;
         }
-
         VolleyRequest.RequestPost(GlobalConfig.getSearchByText, tag, setParam(), new VolleyCallback() {
             private String ReturnType;
 
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                if (isCancelRequest) {
-                    return;
-                }
-                mListView.setVisibility(View.GONE);
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return;
                 page++;
                 try {
                     ReturnType = result.getString("ReturnType");
-                    L.w("ReturnType -- > > " + ReturnType);
-
-                    if (ReturnType != null && ReturnType.equals("1001")) {
-                        JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
-                        subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
-                        String allCountString = arg1.getString("AllCount");
-                        String pageSizeString = arg1.getString("PageSize");
-                        if (allCountString != null && !allCountString.equals("") && pageSizeString != null && !pageSizeString.equals("")) {
-                            int allCountInt = Integer.valueOf(allCountString);
-                            int pageSize = Integer.valueOf(pageSizeString);
-                            if (pageSize < 10 || allCountInt < 10) {
-                                mListView.stopLoadMore();
-                                mListView.setPullLoadEnable(false);
-                            } else {
-                                mListView.setPullLoadEnable(true);
-                                if (allCountInt % pageSize == 0) {
-                                    pageSizeNum = allCountInt / pageSize;
-                                } else {
-                                    pageSizeNum = allCountInt / pageSize + 1;
-                                }
-                            }
-                        } else {
-                            ToastUtils.show_always(context, "页码获取异常");
-                        }
-                        if (RefreshType == 1) {
-                            newList.clear();
-                        }
-                        newList.addAll(subList);
-                        if (adapter == null) {
-                            mListView.setAdapter(adapter = new FavorListAdapter(context, newList));
-                        } else {
-                            adapter.notifyDataSetChanged();
-                        }
-                        mListView.setVisibility(View.VISIBLE);
-                        setListener();
-                    } else {
-                        ToastUtils.show_short(context, "无数据");
-                    }
+                    L.v("ReturnType", "ReturnType -- > > " + ReturnType);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                // 无论何种返回值都应该停止
-                if(RefreshType == 1) {
+                if (ReturnType != null && ReturnType.equals("1001")) {
+                    try {
+                        JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
+                        SubList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
+
+                        try {
+                            String allCountString = arg1.getString("AllCount");
+                            String pageSizeString = arg1.getString("PageSize");
+                            if (allCountString != null && !allCountString.equals("") && pageSizeString != null && !pageSizeString.equals("")) {
+                                int allCountInt = Integer.valueOf(allCountString);
+                                int pageSizeInt = Integer.valueOf(allCountString);
+                                if (allCountInt < 10 || pageSizeInt < 10) {
+                                    mListView.stopLoadMore();
+                                    mListView.setPullLoadEnable(false);
+                                } else {
+                                    mListView.setPullLoadEnable(true);
+                                    if (allCountInt % pageSizeInt == 0) {
+                                        pageSizeNum = allCountInt / pageSizeInt;
+                                    } else {
+                                        pageSizeNum = allCountInt / pageSizeInt + 1;
+                                    }
+                                }
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        if (refreshType == 1) newList.clear();
+                        for(int i=0; i<SubList.size(); i++) {
+                            if(SubList.get(i).getMediaType().equals("SEQU")) newList.add(SubList.get(i));
+                        }
+                        adapter.notifyDataSetChanged();
+                        setListener();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                if(refreshType == 1) {
                     mListView.stopRefresh();
                 } else {
                     mListView.stopLoadMore();
@@ -239,10 +245,7 @@ public class SequFragment extends Fragment {
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                ToastUtils.showVolleyError(context);
+                if (dialog != null) dialog.dismiss();
             }
         });
     }
@@ -250,9 +253,11 @@ public class SequFragment extends Fragment {
     private JSONObject setParam() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("MediaType", "SEQU");
-            if (searchString != null && !searchString.equals("")) {
-                jsonObject.put("SearchStr", searchString);
+            if (searchStr != null && !searchStr.equals("")) {
+                jsonObject.put("MediaType", "SEQU");
+                jsonObject.put("SearchStr", searchStr);
+                jsonObject.put("Page", String.valueOf(page));
+                jsonObject.put("PageSize", "10");
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -261,12 +266,22 @@ public class SequFragment extends Fragment {
     }
 
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
-
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(BroadcastConstants.SEARCH_VIEW_UPDATE)) {
-                searchString = intent.getStringExtra("SearchStr");
-                if (searchString != null && !searchString.equals("")) {
+            String action = intent.getAction();
+            if (action.equals(BroadcastConstants.SEARCH_VIEW_UPDATE)) {
+                searchStr = intent.getStringExtra("SearchStr");
+                if (searchStr != null && !searchStr.equals("")) {
+                    refreshType = 1;
+                    page = 1;
+                    mListView.setPullLoadEnable(false);
+                    newList.clear();
+                    if (adapter == null) {
+                        mListView.setAdapter(adapter = new FavorListAdapter(context, newList));
+                    } else {
+                        adapter.notifyDataSetChanged();
+                    }
+
                     dialog = DialogUtils.Dialogph(context, "通讯中");
                     sendRequest();
                 }
@@ -286,16 +301,15 @@ public class SequFragment extends Fragment {
     public void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
-        mListView = null;
         context.unregisterReceiver(mBroadcastReceiver);
         context = null;
         dialog = null;
-        subList = null;
+        SubList = null;
         mListView = null;
         newList = null;
         rootView = null;
         adapter = null;
-        searchString = null;
+        searchStr = null;
         tag = null;
         if (dbDao != null) {
             dbDao.closedb();

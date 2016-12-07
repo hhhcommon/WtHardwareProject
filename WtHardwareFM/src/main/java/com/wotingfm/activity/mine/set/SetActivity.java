@@ -16,14 +16,15 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.kingsoft.media.httpcache.KSYProxyService;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.BaseActivity;
-import com.wotingfm.activity.mine.set.notifyset.NotifySetActivity;
-import com.wotingfm.activity.mine.set.preference.activity.PreferenceActivity;
 import com.wotingfm.activity.mine.set.about.AboutActivity;
 import com.wotingfm.activity.mine.set.downloadposition.DownloadPositionActivity;
 import com.wotingfm.activity.mine.set.feedback.activity.FeedbackActivity;
 import com.wotingfm.activity.mine.set.help.HelpActivity;
+import com.wotingfm.activity.mine.set.notifyset.NotifySetActivity;
+import com.wotingfm.activity.mine.set.preference.activity.PreferenceActivity;
 import com.wotingfm.activity.mine.set.updateusernum.UpdateUserNumberActivity;
 import com.wotingfm.activity.person.modifypassword.ModifyPasswordActivity;
 import com.wotingfm.activity.person.phonecheck.PhoneCheckActivity;
@@ -65,7 +66,7 @@ public class SetActivity extends BaseActivity implements OnClickListener {
     private String cachePath;           // 缓存路径
     private String tag = "SET_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
-//    private KSYProxyService proxy;
+    private KSYProxyService proxy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,7 +107,7 @@ public class SetActivity extends BaseActivity implements OnClickListener {
 
         textCache = (TextView) findViewById(R.id.text_cache);               // 缓存
         initCache();
-//        proxy = BSApplication.getKSYProxy(context);                         // 播放缓存
+        proxy = BSApplication.getKSYProxy(context);                         // 播放缓存
     }
 
     @Override
@@ -397,7 +398,7 @@ public class SetActivity extends BaseActivity implements OnClickListener {
         @Override
         protected Void doInBackground(Void... params) {
             clearResult = CacheManager.delAllFile(cachePath);
-//            proxy.cleanCaches();
+            proxy.cleanCaches();
             return null;
         }
 

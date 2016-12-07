@@ -1,11 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/dinglan_orange"
-    android:clipToPadding="true"
-    android:fitsSystemWindows="true"
+    style="@style/BaseStyle"
     android:orientation="vertical" >
 
     <RelativeLayout
@@ -78,8 +74,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/WHITE"
-        android:orientation="vertical"
-        android:visibility="visible" >
+        android:orientation="vertical" >
 
         <TextView
             android:id="@+id/lin_top_title"
@@ -132,7 +127,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="5dp"
-                    android:src="@mipmap/wt_delete_rubbish_orange" />
+                    android:src="@mipmap/wt_person_cache" />
 
                 <TextView
                     android:layout_width="wrap_content"

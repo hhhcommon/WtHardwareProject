@@ -230,7 +230,7 @@ public class PullToRefreshLayout extends RelativeLayout
 			// 刷新成功
 			refreshStateImageView.setVisibility(View.VISIBLE);
 			refreshStateTextView.setText(R.string.refresh_succeed);
-			refreshStateImageView.setBackgroundResource(R.mipmap.refresh_succeed);
+			refreshStateImageView.setBackgroundResource(R.mipmap.load_succeed);
 			break;
 		case FAIL:
 		default:
@@ -238,7 +238,7 @@ public class PullToRefreshLayout extends RelativeLayout
 			refreshStateImageView.setVisibility(View.VISIBLE);
 			refreshStateTextView.setText(R.string.refresh_fail);
 			refreshStateImageView
-					.setBackgroundResource(R.mipmap.refresh_failed);
+					.setBackgroundResource(R.mipmap.load_failed);
 			break;
 		}
 		if (pullDownY > 0)
