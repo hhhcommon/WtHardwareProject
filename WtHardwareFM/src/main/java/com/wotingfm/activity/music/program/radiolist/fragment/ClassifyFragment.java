@@ -48,21 +48,20 @@ import java.util.List;
 
 /**
  * 分类列表
- *
  * @author woting11
  */
 public class ClassifyFragment extends Fragment {
     private Context context;
-    private SearchPlayerHistoryDao dbDao;    // 数据库
+    private SearchPlayerHistoryDao dbDao;  // 数据库
     private ListInfoAdapter adapter;
-    private List<ListInfo> newList;
+    private List<ListInfo> newList = new ArrayList<>();
     private List<ListInfo> subList;
 
     private View rootView;
     private XListView mListView;            // 列表
-    private Dialog dialog;                    // 加载对话框
+    private Dialog dialog;                  // 加载对话框
 
-    private int page = 1;                    // 页码
+    private int page = 1;                   // 页码
     private int pageSizeNum;
     private int refreshType = 1;            // refreshType 1 为下拉加载  2 为上拉加载更多
 
@@ -112,13 +111,8 @@ public class ClassifyFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         if (isVisibleToUser && adapter == null && getActivity() != null) {
-            if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                dialog = DialogUtils.Dialogph(context, "正在获取数据");
-                newList = new ArrayList<>();
-                sendRequest();
-            } else {
-                ToastUtils.show_short(context, "网络连接失败，请稍后重试");
-            }
+            dialog = DialogUtils.Dialogph(context, "正在获取数据");
+            sendRequest();
         }
         super.setUserVisibleHint(isVisibleToUser);
     }
@@ -131,6 +125,17 @@ public class ClassifyFragment extends Fragment {
 
     // 请求网络获取分类信息
     private void sendRequest() {
+        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            ToastUtils.show_always(context, "网络连接失败，请检查网络设置!");
+            if(dialog != null) dialog.dismiss();
+            if(refreshType == 1) {
+                mListView.stopRefresh();
+            } else {
+                mListView.stopLoadMore();
+            }
+            return ;
+        }
+
         VolleyRequest.RequestPost(GlobalConfig.getContentUrl, RadioListActivity.tag, setParam(), new VolleyCallback() {
             private String ReturnType;
 
@@ -169,20 +174,22 @@ public class ClassifyFragment extends Fragment {
                             e.printStackTrace();
                         }
                         subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<ListInfo>>() {}.getType());
-                        if (refreshType == 1) {
-                            mListView.stopRefresh();
-                            newList.clear();
-                            newList.addAll(subList);
-                            adapter = new ListInfoAdapter(context, newList);
-                            mListView.setAdapter(adapter);
-                        } else if (refreshType == 2) {
-                            mListView.stopLoadMore();
-                            newList.addAll(subList);
+                        if (refreshType == 1) newList.clear();
+                        newList.addAll(subList);
+                        if(adapter == null) {
+                            mListView.setAdapter(adapter = new ListInfoAdapter(context, newList));
+                        } else {
                             adapter.notifyDataSetChanged();
                         }
                         setOnItem();
                     } catch (JSONException e) {
                         e.printStackTrace();
+                    }
+
+                    if(refreshType == 1) {
+                        mListView.stopRefresh();
+                    } else {
+                        mListView.stopLoadMore();
                     }
                 }
             }
@@ -275,24 +282,16 @@ public class ClassifyFragment extends Fragment {
         mListView.setXListViewListener(new IXListViewListener() {
             @Override
             public void onRefresh() {
-                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    refreshType = 1;
-                    page = 1;
-                    sendRequest();
-                } else {
-                    ToastUtils.show_short(context, "网络失败，请检查网络");
-                }
+                refreshType = 1;
+                page = 1;
+                sendRequest();
             }
 
             @Override
             public void onLoadMore() {
                 if (page <= pageSizeNum) {
-                    if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                        refreshType = 2;
-                        sendRequest();
-                    } else {
-                        ToastUtils.show_short(context, "网络失败，请检查网络");
-                    }
+                    refreshType = 2;
+                    sendRequest();
                 } else {
                     mListView.stopLoadMore();
                     mListView.setPullLoadEnable(false);
