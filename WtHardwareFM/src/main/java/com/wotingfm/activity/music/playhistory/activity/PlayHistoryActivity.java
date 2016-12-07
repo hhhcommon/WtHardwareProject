@@ -11,7 +11,6 @@ import android.graphics.Matrix;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
@@ -26,18 +25,17 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.wotingfm.R;
+import com.wotingfm.activity.common.baseactivity.AppBaseFragmentActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.activity.music.playhistory.fragment.RadioFragment;
 import com.wotingfm.activity.music.playhistory.fragment.SoundFragment;
 import com.wotingfm.activity.music.playhistory.fragment.TTSFragment;
 import com.wotingfm.activity.music.playhistory.fragment.TotalFragment;
-import com.wotingfm.common.constant.BroadcastConstant;
-import com.wotingfm.manager.MyActivityManager;
+import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 
@@ -48,8 +46,7 @@ import java.util.List;
  * 播放历史
  * @author woting11
  */
-public class PlayHistoryActivity extends FragmentActivity implements View.OnClickListener {
-    private PlayHistoryActivity context;
+public class PlayHistoryActivity extends AppBaseFragmentActivity implements View.OnClickListener {
     private SearchPlayerHistoryDao dbDao;	// 播放历史数据库
     private TotalFragment allFragment; 		// 全部
     private SoundFragment soundFragment; 	// 声音
@@ -67,7 +64,7 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
     private int currIndex; 					// 当前页卡编号
     private int bmpW; 						// 横线图片宽度
     private int offset; 					// 图片移动的偏移量
-    private int dialogFlag = 0; 			// 编辑全选状态的变量 0为未选中，1为选中
+    private int dialogFlag = 0; 			// 编辑全选状态的变量 0 为未选中，1 为选中
 
     public static boolean isEdit = true; 	// 是否为编辑状态
     private boolean isDelete = false;
@@ -77,26 +74,21 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_playhistory);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS); 		// 透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION); 	// 透明导航栏
 
-        context = this;
         dbDao = new SearchPlayerHistoryDao(context);    // 初始化数据库
 
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.pushOneActivity(context);   // 将 Activity 添加到集合中
-
-        IntentFilter intentFilter = new IntentFilter();	//注册广播
-        intentFilter.addAction(BroadcastConstant.UPDATE_ACTION_ALL);
-        intentFilter.addAction(BroadcastConstant.UPDATE_ACTION_CHECK);
+        IntentFilter intentFilter = new IntentFilter();	// 注册广播
+        intentFilter.addAction(BroadcastConstants.UPDATE_ACTION_ALL);
+        intentFilter.addAction(BroadcastConstants.UPDATE_ACTION_CHECK);
         registerReceiver(myBroadcast, intentFilter);
 
+        initDialog();
         initImage();
-        setView();                      // 设置界面
+        initViews();
     }
 
     // 初始化视图
-    private void setView() {
+    private void initViews() {
         findViewById(R.id.head_left_btn).setOnClickListener(this);  // 左上返回键
 
         clearEmpty = (TextView) findViewById(R.id.clear_empty); 	// 清空
@@ -105,7 +97,7 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
         openEdit = (TextView) findViewById(R.id.open_edit); 		// 编辑
         openEdit.setOnClickListener(this);
 
-        fragmentList = new ArrayList<>();					        //存放 Fragment
+        fragmentList = new ArrayList<>();					        // 存放 Fragment
         viewPager = (ViewPager) findViewById(R.id.viewpager);
 
         allText = (TextView) findViewById(R.id.text_all); 			// 全部
@@ -129,8 +121,8 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
         fragmentList.add(ttsFragment);
 
         viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager()));
-        viewPager.setOnPageChangeListener(new MyOnPageChangeListener()); 	// 页面变化时的监听器
-        viewPager.setCurrentItem(0); 										// 设置当前显示标签页为第一页
+        viewPager.setOnPageChangeListener(new MyOnPageChangeListener());
+        viewPager.setCurrentItem(0);// 设置当前显示标签页为第一页
     }
 
     // TextView 点击事件
@@ -181,8 +173,8 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
             Animation animation = new TranslateAnimation(currIndex * one, arg0 * one, 0, 0);// 平移动画
             currIndex = arg0;
             animation.setFillAfter(true); 		// 动画终止时停留在最后一帧，不然会回到没有执行前的状态
-            animation.setDuration(200); 		// 动画持续时间0.2秒
-            image.startAnimation(animation); 	// 是用ImageView来显示动画的
+            animation.setDuration(200); 		// 动画持续时间 0.2 秒
+            image.startAnimation(animation); 	// 是用 ImageView 来显示动画的
             int i = currIndex + 1;
             if (i == 1) { // 全部
                 allText.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
@@ -227,9 +219,8 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
         switch (i) {
             case 2: // 声音
                 if (!SoundFragment.isData) {
-                    Toast.makeText(getApplicationContext(), "没有历史播放数据", Toast.LENGTH_SHORT).show();
+                    ToastUtils.show_always(context, "没有历史播放数据");
                 } else {
-                    delDialog();
                     openEdit.setText("取消");
                     PlayHistoryActivity.isEdit = false;
                     soundFragment.setCheck(true);
@@ -239,9 +230,8 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
                 break;
             case 3: // 电台
                 if (!RadioFragment.isData) {
-                    Toast.makeText(getApplicationContext(), "没有历史播放数据", Toast.LENGTH_SHORT).show();
+                    ToastUtils.show_always(context, "没有历史播放数据");
                 } else {
-                    delDialog();
                     openEdit.setText("取消");
                     PlayHistoryActivity.isEdit = false;
                     radioFragment.setCheck(true);
@@ -251,9 +241,8 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
                 break;
             case 4: // TTS
                 if (!TTSFragment.isData) {
-                    Toast.makeText(getApplicationContext(), "没有历史播放数据", Toast.LENGTH_SHORT).show();
+                    ToastUtils.show_always(context, "没有历史播放数据");
                 } else {
-                    delDialog();
                     openEdit.setText("取消");
                     PlayHistoryActivity.isEdit = false;
                     ttsFragment.setCheck(true);
@@ -292,7 +281,7 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
         dialogFlag = 0;
     }
 
-    // 设置cursor的宽
+    // 设置 cursor 的宽
     public void initImage() {
         image = (ImageView) findViewById(R.id.cursor);
         ViewGroup.LayoutParams lp = image.getLayoutParams();
@@ -300,10 +289,10 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
         image.setLayoutParams(lp);
         bmpW = BitmapFactory.decodeResource(getResources(), R.mipmap.left_personal_bg).getWidth();
         DisplayMetrics dm = new DisplayMetrics();
-        context.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenW = dm.widthPixels;
         offset = (screenW / 4 - bmpW) / 2;
-        // imageView设置平移，使下划线平移到初始位置（平移一个offset）
+        // imageView 设置平移，使下划线平移到初始位置（平移一个 offset）
         Matrix matrix = new Matrix();
         matrix.postTranslate(offset, 0);
         image.setImageMatrix(matrix);
@@ -317,10 +306,9 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
                 break;
             case R.id.clear_empty:		// 清空数据
                 if (TotalFragment.isData) {
-                    confirmDialog();
                     confirmDialog.show();
                 } else {
-                    ToastUtils.show_always(this, "没有历史播放记录");
+                    ToastUtils.show_always(context, "没有历史播放数据");
                 }
                 break;
             case R.id.open_edit:		// 编辑
@@ -332,10 +320,10 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
                 break;
             case R.id.lin_favorite_quanxuan:// 全选
                 if (dialogFlag == 0) {
-                    imgAllCheck.setImageResource(R.mipmap.wt_group_checked);
+                    imgAllCheck.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_group_checked));
                     dialogFlag = 1;
                 } else if(dialogFlag == 1){
-                    imgAllCheck.setImageResource(R.mipmap.wt_group_nochecked);
+                    imgAllCheck.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_group_nochecked));
                     dialogFlag = 0;
                 }
                 handleData(dialogFlag);
@@ -347,7 +335,7 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
                     delDialog.dismiss();
                     setCancel();
                 }else{
-                    Toast.makeText(context, "请选择你要删除的历史播放记录", Toast.LENGTH_SHORT).show();
+                    ToastUtils.show_always(context, "请选择你要删除的历史播放记录");
                 }
                 break;
             case R.id.tv_cancle:// 取消删除
@@ -370,27 +358,37 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
         }
     }
 
-    // 编辑状态下的对话框 在界面底部显示
-    private void delDialog() {
+    // 初始化提示对话框
+    private void initDialog() {
+        // 编辑状态下的对话框 在界面底部显示
         final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_fravorite, null);
-        LinearLayout linearAllCheck = (LinearLayout) dialog.findViewById(R.id.lin_favorite_quanxuan);
-        linearAllCheck.setOnClickListener(this);
-        LinearLayout linearDelete = (LinearLayout) dialog.findViewById(R.id.lin_favorite_shanchu);
-        linearDelete.setOnClickListener(this);
+        dialog.findViewById(R.id.lin_favorite_quanxuan).setOnClickListener(this);
+        dialog.findViewById(R.id.lin_favorite_shanchu).setOnClickListener(this);
         imgAllCheck = (ImageView) dialog.findViewById(R.id.img_fravorite_quanxuan);
         delDialog = new Dialog(context, R.style.MyDialog_duijiang);
         delDialog.setContentView(dialog); // 从底部上升到一个位置
         Window window = delDialog.getWindow();
         DisplayMetrics dm = new DisplayMetrics();
-        context.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
         ViewGroup.LayoutParams params = dialog.getLayoutParams();
         params.width = dm.widthPixels;
         dialog.setLayoutParams(params);
         window.setGravity(Gravity.BOTTOM);
         window.setWindowAnimations(R.style.sharestyle);
-        // 设置dialog不获取焦点
         window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         delDialog.setCanceledOnTouchOutside(false);
+
+        // 清空所有数据 对话框
+        final View dialog1 = LayoutInflater.from(this).inflate(R.layout.dialog_exit_confirm, null);
+        dialog1.findViewById(R.id.tv_cancle).setOnClickListener(this);
+        dialog1.findViewById(R.id.tv_confirm).setOnClickListener(this);
+        TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);
+        textTitle.setText("是否清空全部历史记录");
+
+        confirmDialog = new Dialog(context, R.style.MyDialog);
+        confirmDialog.setContentView(dialog1);
+        confirmDialog.setCanceledOnTouchOutside(true);
+        confirmDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
     }
 
     // 处理数据
@@ -428,7 +426,7 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
         }
         if(number > 0){
             isDelete = true;
-            Toast.makeText(context, "删除了 " + number + " 条" + message + "播放历史记录", Toast.LENGTH_SHORT).show();
+            ToastUtils.show_always(context, "删除了 " + number + " 条" + message + "播放历史记录");
         }
     }
 
@@ -447,37 +445,21 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
         }
     }
 
-    // 清空所有数据 对话框
-    private void confirmDialog() {
-        final View dialog1 = LayoutInflater.from(this).inflate(R.layout.dialog_exit_confirm, null);
-        TextView textCancel = (TextView) dialog1.findViewById(R.id.tv_cancle);
-        textCancel.setOnClickListener(this);
-        TextView textConfirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
-        textConfirm.setOnClickListener(this);
-        TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);
-        textTitle.setText("是否清空全部历史记录");
-        confirmDialog = new Dialog(context, R.style.MyDialog);
-        confirmDialog.setContentView(dialog1);
-        confirmDialog.setCanceledOnTouchOutside(true);
-        confirmDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-    }
-
     // 广播接收器  接收 Fragment 发送的广播  用于更新全选状态
     private BroadcastReceiver myBroadcast = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastConstant.UPDATE_ACTION_ALL)) {
-                imgAllCheck.setImageResource(R.mipmap.wt_group_checked);
+            if (action.equals(BroadcastConstants.UPDATE_ACTION_ALL)) {
+                imgAllCheck.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_group_checked));
                 dialogFlag = 1;
-            }else if(action.equals(BroadcastConstant.UPDATE_ACTION_CHECK)){
-                imgAllCheck.setImageResource(R.mipmap.wt_group_nochecked);
+            }else if(action.equals(BroadcastConstants.UPDATE_ACTION_CHECK)){
+                imgAllCheck.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_group_nochecked));
                 dialogFlag = 0;
             }
         }
     };
 
-    // 返回键功能
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
@@ -494,8 +476,6 @@ public class PlayHistoryActivity extends FragmentActivity implements View.OnClic
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.popOneActivity(context);	// 将 Activity 从集合中移除
         unregisterReceiver(myBroadcast);// 反注册广播
         SoundFragment.isLoad = false;
         RadioFragment.isData = false;

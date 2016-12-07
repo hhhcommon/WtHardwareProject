@@ -25,7 +25,7 @@ import com.wotingfm.activity.music.common.service.DownloadTask;
 import com.wotingfm.activity.music.download.adapter.DownloadAdapter;
 import com.wotingfm.activity.music.download.dao.FileInfoDao;
 import com.wotingfm.activity.music.download.model.FileInfo;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.ToastUtils;
 
@@ -55,8 +55,8 @@ public class DownLoadUnCompleted extends Fragment {
         context = getActivity();
         // 注册广播接收器
         IntentFilter filter = new IntentFilter();
-        filter.addAction(BroadcastConstant.ACTION_UPDATE);
-        filter.addAction(BroadcastConstant.ACTION_FINISHED);
+        filter.addAction(BroadcastConstants.ACTION_UPDATE);
+        filter.addAction(BroadcastConstants.ACTION_FINISHED);
         context.registerReceiver(mReceiver, filter);
 
     }
@@ -88,7 +88,7 @@ public class DownLoadUnCompleted extends Fragment {
      */
     private void setDownLoadSource() {
         userId = CommonUtils.getUserId(context);
-        fileInfoList = FID.queryFileinfo("false", userId);// 查询表中未完成的任务
+        fileInfoList = FID.queryFileInfo("false", userId);// 查询表中未完成的任务
         if (fileInfoList.size() == 0) {
             lin_status_yes.setVisibility(View.GONE);
             lin_status_no.setVisibility(View.VISIBLE);
@@ -127,7 +127,7 @@ public class DownLoadUnCompleted extends Fragment {
                     for (int i = 0; i < fileInfoList.size(); i++) {
                         if (fileInfoList.get(i).getDownloadtype() == 1) {
                             fileInfoList.get(i).setDownloadtype(2);
-                            FID.updatedownloadstatus(fileInfoList.get(i).getUrl(), "2");
+                            FID.updataDownloadStatus(fileInfoList.get(i).getUrl(), "2");
                             DownloadService.workStop(fileInfoList.get(i));
                         }
                     }
@@ -144,7 +144,7 @@ public class DownLoadUnCompleted extends Fragment {
                         for (int i = 0; i < fileInfoList.size(); i++) {
                             if (fileInfoList.get(i).getDownloadtype() == 1) {
                                 fileInfoList.get(i).setDownloadtype(2);
-                                FID.updatedownloadstatus(fileInfoList.get(i).getUrl(), "2");
+                                FID.updataDownloadStatus(fileInfoList.get(i).getUrl(), "2");
                                 DownloadService.workStop(fileInfoList.get(i));
                             }
                         }
@@ -161,7 +161,7 @@ public class DownLoadUnCompleted extends Fragment {
                         h.postDelayed(new Runnable() {
                             @Override
                             public void run() {
-                                if (DownloadTask.downloadstatus == -1) {
+                                if (DownloadTask.downloadStatus == -1) {
                                     ToastUtils.show_always(context, fileInfoList.get(num).getFileName() + "的下载出现问题");
                                     getFileInfo(fileInfoList.get(getnum()));
                                 }
@@ -177,7 +177,7 @@ public class DownLoadUnCompleted extends Fragment {
         rootView.findViewById(R.id.text_clear).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                FID.deletefilebyuserid(userId);
+                FID.deleteFileByUserId(userId);
                 setDownLoadSource();
             }
         });
@@ -204,7 +204,7 @@ public class DownLoadUnCompleted extends Fragment {
                     for (int i = 0; i < fileInfoList.size(); i++) {
                         if (fileInfoList.get(i).getDownloadtype() == 1) {
                             fileInfoList.get(i).setDownloadtype(2);
-                            FID.updatedownloadstatus(fileInfoList.get(i).getUrl(), "2");
+                            FID.updataDownloadStatus(fileInfoList.get(i).getUrl(), "2");
                             DownloadService.workStop(fileInfoList.get(i));
                         }
                     }
@@ -214,7 +214,7 @@ public class DownLoadUnCompleted extends Fragment {
 					 * 点击该项目时，此时该项目的状态是下载中 只需要把项目自己变为暂停状态即可
 					 */
                     fileInfoList.get(position).setDownloadtype(2);
-                    FID.updatedownloadstatus(fileInfoList.get(position).getUrl(), "2");
+                    FID.updataDownloadStatus(fileInfoList.get(position).getUrl(), "2");
                     DownloadService.workStop(fileInfoList.get(position));
                     adapter.notifyDataSetChanged();
                 } else {
@@ -224,7 +224,7 @@ public class DownLoadUnCompleted extends Fragment {
                     for (int i = 0; i < fileInfoList.size(); i++) {
                         if (fileInfoList.get(i).getDownloadtype() == 1) {
                             fileInfoList.get(i).setDownloadtype(2);
-                            FID.updatedownloadstatus(fileInfoList.get(i).getUrl(), "2");
+                            FID.updataDownloadStatus(fileInfoList.get(i).getUrl(), "2");
                             DownloadService.workStop(fileInfoList.get(i));
                         }
                     }
@@ -239,7 +239,7 @@ public class DownLoadUnCompleted extends Fragment {
      */
     private void getFileInfo(FileInfo fileInfo) {
         fileInfo.setDownloadtype(1);
-        FID.updatedownloadstatus(fileInfo.getUrl(), "1");
+        FID.updataDownloadStatus(fileInfo.getUrl(), "1");
         DownloadService.workStart(fileInfo);
     }
 
@@ -249,25 +249,25 @@ public class DownLoadUnCompleted extends Fragment {
     private  BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context contexts, Intent intent) {
-            if (BroadcastConstant.ACTION_UPDATE.equals(intent.getAction())) {
+            if (BroadcastConstants.ACTION_UPDATE.equals(intent.getAction())) {
                 int start = intent.getIntExtra("start", 0);
                 int end = intent.getIntExtra("end", 0);
                 String url = intent.getStringExtra("url");
                 if (adapter != null) {
                     adapter.updateProgress(url, start, end);
                 }
-            } else if (BroadcastConstant.ACTION_FINISHED.equals(intent.getAction())) {
+            } else if (BroadcastConstants.ACTION_FINISHED.equals(intent.getAction())) {
                 // 下载结束
                 FileInfo fileInfo = (FileInfo) intent.getSerializableExtra("fileInfo");
-                FID.updatefileinfo(fileInfo.getFileName());
+                FID.updataFileInfo(fileInfo.getFileName());
                 //发送更新界面数据广播
                 Intent p_intent = new Intent("push_down_completed");
                 context.sendBroadcast(p_intent);
                 if (dwtype) {
-                    fileInfoList = FID.queryFileinfo("false", userId);// 查询表中未完成的任务
+                    fileInfoList = FID.queryFileInfo("false", userId);// 查询表中未完成的任务
                     if (fileInfoList != null && fileInfoList.size() > 0) {
                         fileInfoList.get(0).setDownloadtype(1);
-                        FID.updatedownloadstatus(fileInfoList.get(0).getUrl(), "1");
+                        FID.updataDownloadStatus(fileInfoList.get(0).getUrl(), "1");
                         DownloadService.workStart(fileInfoList.get(0));
                         adapter = new DownloadAdapter(context, fileInfoList);
                         listView.setAdapter(adapter);
@@ -281,7 +281,7 @@ public class DownLoadUnCompleted extends Fragment {
                         setDownLoadSource();
                     }
                 } else {
-                    fileInfoList = FID.queryFileinfo("false", userId);// 查询表中未完成的任务
+                    fileInfoList = FID.queryFileInfo("false", userId);// 查询表中未完成的任务
                     tv_start.setText("全部开始");
                     adapter = new DownloadAdapter(context, fileInfoList);
                     listView.setAdapter(adapter);

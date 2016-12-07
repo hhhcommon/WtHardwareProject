@@ -2,7 +2,8 @@
 <resources>
 
     <color name="dinglan_orange_z">#de6300</color>
-    <color name="dinglan_orange">#ffa634</color>
+    <color name="dinglan_orange">#ff6600</color>
+    <color name="dinglan_orange_old">#ffa634</color>
     <color name="dinglan_orange_light">#ffce8f</color>
     <color name="item_common">#F111</color>
     <color name="item_1">#F222</color>
@@ -143,7 +144,7 @@
     <color name="tomato">#FF6347</color>
     <!-- 西红柿色 -->
     <color name="orangered">#FF6600</color>
-    <color name="dinglanorangered">#f09c30</color>
+    <color name="dinglanorangered">#d05300</color>
     <!-- 红橙色 -->
     <color name="deeppink">#FF1493</color>
     <!-- 深粉红色 -->
@@ -702,4 +703,8 @@
     <color name="umeng_socialize_text_ucenter">#595959</color>
     <color name="umeng_socialize_edit_bg">#C4C4C4</color>
     <color name="umeng_socialize_grid_divider_line">#F8F8F8</color>
+
+    <!--UpdatePerson -->
+    <color name="up_tv_default">#5e6471</color>
+    <color name="up_bg_unselected">#888888</color>
 </resources>

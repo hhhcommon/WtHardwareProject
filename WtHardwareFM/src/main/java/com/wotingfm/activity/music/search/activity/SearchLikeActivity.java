@@ -45,12 +45,11 @@ import com.wotingfm.activity.music.search.fragment.TTSFragment;
 import com.wotingfm.activity.music.search.fragment.TotalFragment;
 import com.wotingfm.activity.music.search.model.History;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.L;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 import com.zhy.view.flowlayout.FlowLayout;
@@ -65,16 +64,19 @@ import java.util.List;
 
 /**
  * 界面搜索界面
+ *
  * @author 辛龙
  *         2016年4月16日
  */
 public class SearchLikeActivity extends AppBaseFragmentActivity implements
         View.OnClickListener, TagFlowLayout.OnTagClickListener, AdapterView.OnItemClickListener {
 
-    private SearchLikeActivity context;
     private SearchHistoryDao shd;               // 搜索数据库
     private History history;                    // 数据库信息
     private SearchKeyAdapter searchKeyAdapter;
+    private List<History> historyDatabaseList;
+    private List<String> topSearchList = new ArrayList<>();
+    private List<String> hotSearchList = new ArrayList<>();
 
     private Dialog dialog;                      // 加载数据对话框
     private TagFlowLayout flowTopSearch;        // 热门搜索内容
@@ -97,13 +99,8 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
     private ImageView image;                    // 页面指示器 图片
     private TextView textSpeakStatus;           // 显示语音搜索的状态
 
-    private List<History> historyDatabaseList;
-    private List<String> topSearchList = new ArrayList<>();
-    private List<String> hotSearchList = new ArrayList<>();
-
     private int bmpW;
-    public int offset;
-//    public static String SEARCH_VIEW_UPDATE = "SEARCH_VIEW_UPDATE";
+    private int offset;
     private String tag = "SEARCH_LIKE_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
 
@@ -111,7 +108,7 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
     private BroadcastReceiver mBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, final Intent intent) {
-            if (intent.getAction().equals(BroadcastConstant.SEARCHVOICE)) {
+            if (intent.getAction().equals(BroadcastConstants.SEARCHVOICE)) {
                 String searchString = intent.getStringExtra("VoiceContent");
                 if (!searchString.trim().equals("")) {
                     mEtSearchContent.setText(searchString);
@@ -127,6 +124,7 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
         linearStatusFirst.setVisibility(View.GONE);
         mListView.setVisibility(View.GONE);
         mEtSearchContent.setText(hotSearchList.get(position));
+//        mEtSearchContent.setSelection();
         return true;
     }
 
@@ -170,13 +168,12 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchlike);
-        context = this;
-        GlobalConfig.voicerecognizer=BroadcastConstant.SEARCHVOICE;
-        initViews();            // 初始化视图
+        GlobalConfig.voicerecognizer = BroadcastConstants.SEARCHVOICE;
+
         initImage();            // 初始化指示器图片
+        initViews();            // 初始化视图
         initDao();              // 初始化数据库命令执行对象
         initTextWatcher();      // 输入框监听
-        initViewPager();
 
         // 获取热门搜索对应接口 HotKey
         dialog = DialogUtils.Dialogph(context, "通讯中");
@@ -184,21 +181,8 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
 
         // 广播注册
         IntentFilter mFilter = new IntentFilter();
-        mFilter.addAction(BroadcastConstant.SEARCHVOICE);
+        mFilter.addAction(BroadcastConstants.SEARCHVOICE);
         registerReceiver(mBroadcastReceiver, mFilter);
-    }
-
-    // 初始化界面
-    private void initViewPager() {
-        ArrayList<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(new TotalFragment());
-        fragmentList.add(new SequFragment());
-        fragmentList.add(new SoundFragment());
-        fragmentList.add(new RadioFragment());
-        fragmentList.add(new TTSFragment());
-        mPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList));
-        mPager.setOnPageChangeListener(new MyOnPageChangeListener());   // 页面变化时的监听器
-        mPager.setCurrentItem(0);                                       // 设置当前显示标签页为第
     }
 
     // 初始化控件
@@ -224,34 +208,48 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
         mListView = (ListView) findViewById(R.id.lv_searchlike_status_second);              // 搜索时的联想词 搜索中状态
         mListView.setSelector(new ColorDrawable(Color.TRANSPARENT));                        // 取消默认背景颜色
         setListItemListener();
-        
+
         imageEditClear = (ImageView) findViewById(R.id.img_edit_clear);                     // 清理 editText 内容
         imageEditClear.setOnClickListener(this);
-        
+
         textTotal = (TextView) findViewById(R.id.tv_total);                                 // 全部
-        textTotal.setOnClickListener(new txListener(0));
+        textTotal.setOnClickListener(new TextClickListener(0));
 
         textSequ = (TextView) findViewById(R.id.tv_sequ);                                   // 专辑
-        textSequ.setOnClickListener(new txListener(1));
+        textSequ.setOnClickListener(new TextClickListener(1));
 
         textSound = (TextView) findViewById(R.id.tv_sound);                                 // 声音
-        textSound.setOnClickListener(new txListener(2));
+        textSound.setOnClickListener(new TextClickListener(2));
 
         textRadio = (TextView) findViewById(R.id.tv_radio);                                 // 电台
-        textRadio.setOnClickListener(new txListener(3));
+        textRadio.setOnClickListener(new TextClickListener(3));
 
         textTts = (TextView) findViewById(R.id.tv_tts);                                     // TTS
-        textTts.setOnClickListener(new txListener(4));
+        textTts.setOnClickListener(new TextClickListener(4));
 
         mPager = (ViewPager) findViewById(R.id.viewpager);
-        mPager.setOffscreenPageLimit(1);
+        mPager.setOffscreenPageLimit(5);
+        initViewPager();
+    }
+
+    // 初始化界面
+    private void initViewPager() {
+        ArrayList<Fragment> fragmentList = new ArrayList<>();
+        fragmentList.add(new TotalFragment());
+        fragmentList.add(new SequFragment());
+        fragmentList.add(new SoundFragment());
+        fragmentList.add(new RadioFragment());
+        fragmentList.add(new TTSFragment());
+        mPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList));
+        mPager.setOnPageChangeListener(new MyOnPageChangeListener());   // 页面变化时的监听器
+        mPager.setCurrentItem(0);                                       // 设置当前显示标签页为第
     }
 
     // 初始化数据库
     private void initDao() {
         shd = new SearchHistoryDao(context);
-        history = new History(CommonUtils.getUserId(context), "");
         String userId = CommonUtils.getUserId(context);
+        history = new History(userId, "");
         if (userId != null) {
             historyDatabaseList = shd.queryHistory(history);
         } else {
@@ -329,7 +327,7 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
             linearStatusThird.setVisibility(View.VISIBLE);
 
             Intent mIntent = new Intent();
-            mIntent.setAction(BroadcastConstant.SEARCH_VIEW_UPDATE);
+            mIntent.setAction(BroadcastConstants.SEARCH_VIEW_UPDATE);
             mIntent.putExtra("SearchStr", str);
             if (CommonUtils.getUserId(context) == null) {
                 history = new History("wotingkeji", str);
@@ -349,9 +347,10 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
     // 每个字检索
     protected void sendKey(String keyword) {
         // 以下操作需要网络支持
-        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            if (dialog != null) dialog.dismiss();
             ToastUtils.show_always(context, "网络连接失败，请检查网络设置!");
-            return ;
+            return;
         }
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
@@ -364,15 +363,10 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
         }
 
         VolleyRequest.RequestPost(GlobalConfig.searchHotKeysUrl, tag, jsonObject, new VolleyCallback() {
-
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                if (isCancelRequest) {
-                    return;
-                }
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return;
                 try {
                     String ReturnType = result.getString("ReturnType");
                     try {
@@ -385,7 +379,6 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
-
                     if (ReturnType != null && ReturnType.equals("1001")) {
                         if (topSearchList != null && topSearchList.size() > 0) {
                             if (searchKeyAdapter == null) {
@@ -394,8 +387,6 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
                                 searchKeyAdapter.notifyDataSetChanged();
                             }
                         }
-                    } else {
-                        L.w("没有查询到内容");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -404,20 +395,19 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+                if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
             }
         });
     }
 
-    // 得到搜索热词，返回的是两个list
+    // 得到搜索热词，返回的是两个 list
     private void send() {
         // 以下操作需要网络支持
-        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            if (dialog != null) dialog.dismiss();
             ToastUtils.show_always(context, "网络连接失败，请检查网络设置!");
-            return ;
+            return;
         }
 
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
@@ -430,15 +420,10 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
         }
 
         VolleyRequest.RequestPost(GlobalConfig.getHotSearch, tag, jsonObject, new VolleyCallback() {
-
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                if (isCancelRequest) {
-                    return;
-                }
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return;
                 try {
                     String ReturnType = result.getString("ReturnType");
                     try {
@@ -451,7 +436,6 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
                     } catch (JSONException e1) {
                         e1.printStackTrace();
                     }
-
                     if (ReturnType != null && ReturnType.equals("1001")) {
                         linearStatusFirst.setVisibility(View.VISIBLE);
                         if (hotSearchList != null && hotSearchList.size() != 0) {
@@ -468,7 +452,6 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
                             flowTopSearch.setVisibility(View.GONE);
                         }
                     } else {
-                        ToastUtils.show_short(context, "请稍后重试");
                         linearTopTitle.setVisibility(View.GONE);
                         flowTopSearch.setVisibility(View.GONE);
                     }
@@ -479,9 +462,7 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+                if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
             }
         });
@@ -540,8 +521,6 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
             }
             mPager.setCurrentItem(index);
             viewChange(index);
-        } else {
-            L.w("传进来的mediaType值为空");
         }
     }
 
@@ -553,10 +532,10 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
         image.setLayoutParams(lp);
         bmpW = BitmapFactory.decodeResource(getResources(), R.mipmap.left_personal_bg).getWidth();
         DisplayMetrics dm = new DisplayMetrics();
-        context.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenW = dm.widthPixels;
         offset = (screenW / 5 - bmpW) / 2;
-        // imageView 设置平移，使下划线平移到初始位置（平移一个offset）
+        // imageView 设置平移，使下划线平移到初始位置（平移一个 offset）
         Matrix matrix = new Matrix();
         matrix.postTranslate(offset, 0);
         image.setImageMatrix(matrix);
@@ -577,10 +556,10 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
     /**
      * 全部 专辑 声音 电台 TTS 的点击监听
      */
-    class txListener implements View.OnClickListener {
+    class TextClickListener implements View.OnClickListener {
         private int index = 0;
 
-        public txListener(int i) {
+        public TextClickListener(int i) {
             index = i;
         }
 

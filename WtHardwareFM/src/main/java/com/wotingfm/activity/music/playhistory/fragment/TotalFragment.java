@@ -67,7 +67,7 @@ public class TotalFragment extends Fragment {
 		if(rootView == null){
 			rootView = inflater.inflate(R.layout.fragment_playhistory_total_layout, container, false);
 			mListView = (ExpandableListView) rootView.findViewById(R.id.listview_history);
-			mListView.setGroupIndicator(null);			// 去除indicator
+			mListView.setGroupIndicator(null);			// 去除 indicator
 			isLoad = true;
 			getData();
 		}
@@ -179,7 +179,7 @@ public class TotalFragment extends Fragment {
 					String playerMediaType = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerMediaType();
 					String playerAllTime = "0";
 					String playerInTime = "0";
-					String playerContentDesc = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerContentDesc();
+					String playerContentDesc = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerContentDescn();
 					String playerNum = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerNum();
 					String playerZanType = "0";
 					String playerFrom = "";

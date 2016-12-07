@@ -19,7 +19,7 @@ import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.playhistory.activity.PlayHistoryActivity;
 import com.wotingfm.activity.music.playhistory.adapter.PlayHistoryAdapter;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.L;
@@ -173,7 +173,7 @@ public class RadioFragment extends Fragment {
                         String playermediatype = playList.get(position).getPlayerMediaType();
                         String plaplayeralltime = "0";
                         String playerintime = "0";
-                        String playercontentdesc = playList.get(position).getPlayerContentDesc();
+                        String playercontentdesc = playList.get(position).getPlayerContentDescn();
                         String playernum = playList.get(position).getPlayerNum();
                         String playerzantype = "0";
                         String playerfrom = "";
@@ -235,11 +235,11 @@ public class RadioFragment extends Fragment {
         }
         if (checkList.size() == playList.size()) {
             Intent intentAll = new Intent();
-            intentAll.setAction(BroadcastConstant.UPDATE_ACTION_ALL);
+            intentAll.setAction(BroadcastConstants.UPDATE_ACTION_ALL);
             context.sendBroadcast(intentAll);
         } else {
             Intent intentNoCheck = new Intent();
-            intentNoCheck.setAction(BroadcastConstant.UPDATE_ACTION_CHECK);
+            intentNoCheck.setAction(BroadcastConstants.UPDATE_ACTION_CHECK);
             context.sendBroadcast(intentNoCheck);
         }
     }

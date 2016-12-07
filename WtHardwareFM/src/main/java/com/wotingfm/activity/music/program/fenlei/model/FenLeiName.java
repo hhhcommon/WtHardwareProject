@@ -1,88 +1,42 @@
 package com.wotingfm.activity.music.program.fenlei.model;
 
 import java.io.Serializable;
-import java.util.List;
 
-public class FenLeiName implements Serializable {
-    private String name;   //显示的数据
-    private String sortLetters;  //显示数据拼音的首字母
-    private String pinYinName;
-    private String CatalogName;
-    private String CatalogId;
-    private String CatalogType;
-    private String PortraitMini;    //
-    private String truename;
-    private List<FenLeiName> SubCata;
+public class FenLeiName implements Serializable{
+	private String name;   //显示的数据
+	private Attributes attributes;
+	private String checked="false";
+	private String id;
 
-    public String getPortraitMini() {
-        return PortraitMini;
-    }
+	public String getId() {
+		return id;
+	}
 
-    public void setPortraitMini(String portraitMini) {
-        PortraitMini = portraitMini;
-    }
+	public void setId(String id) {
+		this.id = id;
+	}
 
-    public List<FenLeiName> getSubCata() {
-        return SubCata;
-    }
+	public String getName() {
+		return name;
+	}
 
-    public void setSubCata(List<FenLeiName> subCata) {
-        SubCata = subCata;
-    }
+	public void setName(String name) {
+		this.name = name;
+	}
 
-    public String getName() {
-        return name;
-    }
+	public Attributes getAttributes() {
+		return attributes;
+	}
 
-    public void setName(String name) {
-        this.name = name;
-    }
+	public void setAttributes(Attributes attributes) {
+		this.attributes = attributes;
+	}
 
-    public String getSortLetters() {
-        return sortLetters;
-    }
+	public String getchecked() {
+		return checked;
+	}
 
-    public void setSortLetters(String sortLetters) {
-        this.sortLetters = sortLetters;
-    }
-
-    public String getTruename() {
-        return truename;
-    }
-
-    public void setTruename(String truename) {
-        this.truename = truename;
-    }
-
-    public String getPinYinName() {
-        return pinYinName;
-    }
-
-    public void setPinYinName(String pinYinName) {
-        this.pinYinName = pinYinName;
-    }
-
-    public String getCatalogName() {
-        return CatalogName;
-    }
-
-    public void setCatalogName(String catalogName) {
-        CatalogName = catalogName;
-    }
-
-    public String getCatalogId() {
-        return CatalogId;
-    }
-
-    public void setCatalogId(String catalogId) {
-        CatalogId = catalogId;
-    }
-
-    public String getCatalogType() {
-        return CatalogType;
-    }
-
-    public void setCatalogType(String catalogType) {
-        CatalogType = catalogType;
-    }
+	public void setchecked(String checked) {
+		this.checked = checked;
+	}
 }

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/BaseStyle"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/include_title"
+        layout="@layout/base_activity_title"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/app_bg"
+        android:orientation="vertical"
+        android:paddingLeft="17dp"
+        android:paddingRight="17dp"
+        android:paddingTop="5dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <ImageView
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:layout_marginTop="3dp"
+                android:src="@mipmap/img_update_usernum"/>
+
+            <TextView
+                android:id="@+id/tv_Phone_Desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp"
+                android:layout_marginTop="5dp"
+                android:text="用户号是账号的唯一凭证，只能修改一次"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/bg_edittext_normal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="12dp"
+                android:src="@mipmap/img_username"/>
+
+            <EditText
+                android:id="@+id/edit_usr_num"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ_"
+                android:gravity="center_vertical"
+                android:hint="仅支持6-20个数字、字母、下划线"
+                android:inputType="date"
+                android:maxLength="20"
+                android:singleLine="true"
+                android:textColor="@color/wt_login_third"
+                android:textColorHint="@color/gray"
+                android:textCursorDrawable="@drawable/wt_edittext_cursor"
+                android:textSize="14sp"/>
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_confirm"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/bg_graybutton"
+            android:text="确定"
+            android:textColor="@color/WHITE"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

@@ -40,7 +40,7 @@ public class LocationService extends Service implements GDLocation.Location {
             config.locale = locale;
             getBaseContext().getResources().updateConfiguration(config,getBaseContext().getResources().getDisplayMetrics());
         }
-        mGDLocation.startlocation();
+        mGDLocation.startLocation();
 
 
     }

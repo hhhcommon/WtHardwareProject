@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/BaseStyle"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp">
+
+        <ImageView
+            android:id="@+id/image_back"
+            style="@style/LeftImageStyle"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="录音"
+            android:textColor="@color/WHITE"
+            android:textSize="17sp"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/WHITE">
+
+        <ImageView
+            android:id="@+id/image_background"
+            android:layout_width="168dp"
+            android:layout_height="168dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="90dp"/>
+
+        <ImageView
+            android:id="@+id/image_recording"
+            android:layout_width="168dp"
+            android:layout_height="168dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="90dp"
+            android:background="@mipmap/wt_image_audio_recording"
+            android:visibility="gone"/>
+
+        <TextView
+            android:id="@+id/text_record_state"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="150dp"
+            android:text="开始录音"
+            android:textColor="@color/dinglan_orange"
+            android:textSize="18sp"/>
+
+        <LinearLayout
+            android:id="@+id/linear_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_record_state"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/timestamp_hour_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00"
+                android:textColor="@color/dinglan_orange"
+                android:textSize="25sp"/>
+
+            <TextView
+                android:id="@+id/text_hour_dian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":"
+                android:textColor="@color/dinglan_orange"
+                android:textSize="25sp"/>
+
+            <TextView
+                android:id="@+id/timestamp_minute_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00"
+                android:textColor="@color/dinglan_orange"
+                android:textSize="25sp"/>
+
+            <TextView
+                android:id="@+id/text_dian"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=":"
+                android:textColor="@color/dinglan_orange"
+                android:textSize="25sp"/>
+
+            <TextView
+                android:id="@+id/timestamp_second_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="00"
+                android:textColor="@color/dinglan_orange"
+                android:textSize="25sp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_alignParentBottom="true"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_play"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="40dp"
+                android:background="@color/WHITE"
+                android:drawablePadding="7dp"
+                android:drawableTop="@mipmap/wt_image_recorder_play_unavailable"
+                android:enabled="false"
+                android:text="播放"
+                android:textColor="@color/gray"/>
+
+            <Button
+                android:id="@+id/btn_start"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/WHITE"
+                android:drawablePadding="7dp"
+                android:drawableTop="@mipmap/wt_image_recording"
+                android:text="开始"
+                android:textColor="@color/dinglan_orange"/>
+
+            <Button
+                android:id="@+id/btn_save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:background="@color/WHITE"
+                android:drawablePadding="7dp"
+                android:drawableTop="@mipmap/wt_image_recorder_save_unavailable"
+                android:enabled="false"
+                android:text="保存"
+                android:textColor="@color/gray"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

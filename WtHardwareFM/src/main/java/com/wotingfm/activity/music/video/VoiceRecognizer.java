@@ -13,7 +13,7 @@ import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.helper.JsonParser;
 import com.wotingfm.util.ToastUtils;
 
@@ -133,20 +133,20 @@ public class VoiceRecognizer {
                 str = str.replaceAll("[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……& amp;*（）——+|{}【】‘；：”“’。，、？|-]", "");
                 Log.e("语音识别到的数据", "==: " + str);
                 //根据发起来源决定调用
-                if (GlobalConfig.voicerecognizer.equals(BroadcastConstant.SEARCHVOICE)) {
+                if (GlobalConfig.voicerecognizer.equals(BroadcastConstants.SEARCHVOICE)) {
                     Intent intent = new Intent();
                     intent.putExtra("VoiceContent", str);
-                    intent.setAction(BroadcastConstant.SEARCHVOICE);
+                    intent.setAction(BroadcastConstants.SEARCHVOICE);
                     context.sendBroadcast(intent);
-                } else if (GlobalConfig.voicerecognizer.equals(BroadcastConstant.PLAYERVOICE)) {
+                } else if (GlobalConfig.voicerecognizer.equals(BroadcastConstants.PLAYERVOICE)) {
                     Intent intent = new Intent();
                     intent.putExtra("VoiceContent", str);
-                    intent.setAction(BroadcastConstant.PLAYERVOICE);
+                    intent.setAction(BroadcastConstants.PLAYERVOICE);
                     context.sendBroadcast(intent);
-                } else if (GlobalConfig.voicerecognizer.equals(BroadcastConstant.FINDVOICE)) {
+                } else if (GlobalConfig.voicerecognizer.equals(BroadcastConstants.FINDVOICE)) {
                     Intent intent = new Intent();
                     intent.putExtra("VoiceContent", str);
-                    intent.setAction(BroadcastConstant.FINDVOICE);
+                    intent.setAction(BroadcastConstants.FINDVOICE);
                     context.sendBroadcast(intent);
                 }
             } else {

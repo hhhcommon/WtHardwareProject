@@ -1,633 +1,379 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/WHITE"
-    android:clipToPadding="true"
-    android:fitsSystemWindows="true"
-    android:scrollbars="none">
+    android:background="@color/app_bg"
+    android:orientation="vertical">
 
-    <LinearLayout
+    <!--用户登录状态-->
+    <RelativeLayout
+        android:id="@+id/lin_status_denglu"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/app_bg"
-        android:orientation="vertical">
+        android:background="@color/WHITE"
+        android:layout_height="176dp"
+        android:visibility="visible" >
 
-        <RelativeLayout
-            android:id="@+id/lin_status_denglu"
+        <ImageView
+            android:id="@+id/lin_image"
             android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:visibility="gone">
+            android:layout_height="100dp"
+            android:scaleType="centerCrop" />
 
-            <ImageView
-                android:id="@+id/lin_image"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
+        <ImageView
+            android:id="@+id/imageView_ewm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginTop="40dp"
+            android:src="@mipmap/ewm_white" />
 
-            <ImageView
-                android:id="@+id/image_touxiang"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:scaleType="centerCrop" />
+        <TextView
+            android:id="@+id/text_user_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ellipsize="end"
+            android:singleLine="true"
+            android:layout_marginTop="40dp"
+            android:layout_centerHorizontal="true"
+            android:maxWidth="200dp"
+            android:text="小茉莉"
+            android:textColor="@color/white"
+            android:textSize="17sp" />
 
-            <ImageView
-                android:id="@+id/default_head"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:src="@mipmap/liubianxing_orange" />
+        <ImageView
+            android:id="@+id/lin_xiugai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="30dp"
+            android:scaleType="centerCrop"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="40dp"
+            android:src="@mipmap/image_edit_profile" />
 
-            <TextView
-                android:id="@+id/text_user_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="25dp"
-                android:layout_toLeftOf="@+id/imageView_ewm"
-                android:layout_toRightOf="@id/default_head"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:text="小茉莉"
-                android:textColor="@color/white"
-                android:textSize="17sp" />
+        <ImageView
+            android:id="@+id/image_touxiang"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="51dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerCrop" />
 
-            <TextView
-                android:id="@+id/tv_user"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/text_user_name"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@+id/imageView_ewm"
-                android:text="24岁 水瓶座 北京  "
-                android:textColor="@color/white"
-                android:textSize="13sp" />
+        <ImageView
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="51dp"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/wt_liubianxing_orange" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/text_user_name"
-                android:layout_alignParentBottom="true"
-                android:layout_marginBottom="25dp"
-                android:layout_marginTop="13dp"
-                android:layout_toLeftOf="@+id/imageView_ewm"
-                android:text="少壮不努力，老大徒伤悲"
-                android:textColor="@color/white"
-                android:textSize="13sp" />
-
-            <ImageView
-                android:id="@+id/imageView_ewm"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="20dp"
-                android:src="@mipmap/ewm_white" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/lin_status_nodenglu"
-            android:layout_width="match_parent"
-            android:layout_height="120dp"
-            android:visibility="visible">
-
-            <ImageView
-                android:id="@+id/lin_image_0"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:scaleType="centerCrop" />
-
-            <ImageView
-                android:id="@+id/image_nodenglu"
-                android:layout_width="56dp"
-                android:layout_height="56dp"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="15dp"
-                android:src="@mipmap/person_nologinimage" />
+        <LinearLayout
+            android:id="@+id/linear_user"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/wt_login_third"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/text_user_autograph"
+            android:gravity="center">
 
             <TextView
-                android:id="@+id/text_denglu"
+                android:id="@+id/text_user_area"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignTop="@id/image_nodenglu"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="5dp"
-                android:layout_toRightOf="@id/image_nodenglu"
-                android:text="点击登录"
-                android:textColor="@color/WHITE"
-                android:textSize="17sp" />
+                android:text="北京东城"
+                android:textColor="@color/wt_login_third"
+                android:textSize="12sp" />
+
+            <View
+                android:id="@+id/circle_view"
+                android:layout_width="2dp"
+                android:layout_height="2dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginRight="4dp"
+                android:background="@drawable/d_circle_black"/>
 
             <TextView
+                android:id="@+id/text_user_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBottom="@id/image_nodenglu"
-                android:layout_marginBottom="5dp"
-                android:layout_marginLeft="10dp"
-                android:layout_toRightOf="@id/image_nodenglu"
-                android:text="登录后可享受更多服务"
-                android:textColor="@color/WHITE"
-                android:textSize="14sp" />
+                android:text="123456"
+                android:textColor="@color/wt_login_third"
+                android:textSize="12sp" />
 
-        </RelativeLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/text_user_autograph"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:maxHeight="28dp"
+            android:textColor="@color/wt_login_third"
+            android:layout_marginBottom="10dp"
+            android:singleLine="true"
+            android:maxWidth="240dp"
+            android:ellipsize="end"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="12sp" />
 
         <View
-            android:id="@+id/liner_view_1"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/view_color" />
+            style="@style/ViewStyle"
+            android:layout_alignParentBottom="true" />
 
-             <RelativeLayout
+    </RelativeLayout>
+
+    <!--用户未登录状态-->
+    <RelativeLayout
+        android:id="@+id/lin_status_nodenglu"
+        android:layout_width="match_parent"
+        android:layout_height="176dp"
+        android:background="@color/WHITE"
+        android:visibility="gone" >
+
+        <ImageView
+            android:id="@+id/lin_image_0"
+            android:layout_width="match_parent"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:layout_centerHorizontal="true"
+            android:text="我的"
+            android:textColor="@color/white"
+            android:textSize="17sp" />
+
+        <ImageView
+            android:id="@+id/image_nodenglu"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="51dp"
+            android:src="@mipmap/person_nologinimage" />
+
+        <TextView
+            android:id="@+id/text_denglu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="点击登录"
+            android:textColor="@color/wt_login_third"
+            android:textSize="12sp"
+            android:layout_above="@+id/text_wt"
+            android:layout_centerHorizontal="true"/>
+
+        <TextView
+            android:id="@+id/text_wt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/wt_login_third"
+            android:layout_marginBottom="10dp"
+            android:layout_marginTop="3dp"
+            android:text="用我听，听我想听，说我想说!"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:textSize="12sp" />
+
+        <View
+            style="@style/ViewStyle"
+            android:layout_alignParentBottom="true" />
+
+    </RelativeLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="none"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:id="@+id/lin_album"
+                style="@style/PersonAndSetRelativeStyle"
+                android:visibility="gone"
+                android:layout_marginTop="20dp">
+
+                <View style="@style/ViewStyle"/>
+
+                <ImageView
+                    android:id="@+id/image_album"
+                    style="@style/PersonAndSetLeftStyle"
+                    android:src="@mipmap/wt_image_album" />
+
+                <TextView
+                    style="@style/PersonAndSetTextStyle"
+                    android:text="我的上传"
+                    android:layout_toRightOf="@id/image_album" />
+
+                <ImageView style="@style/PersonAndSetRightStyle" />
+
+                <View
+                    style="@style/ViewStyle"
+                    android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/listener_set"
-                android:layout_width="match_parent"
-                android:layout_height="56dp"
-                android:layout_marginTop="20dp"
-                android:background="@drawable/person_color"
-                android:clickable="true">
-
-            <View
-                android:id="@+id/liner_view_2"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/view_color" />
-
-            <TextView
-                android:id="@+id/text_listener_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="14dp"
-                android:layout_centerVertical="true"
-                android:text="调频"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:id="@+id/image_listener_frequency"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="14dp"
-                android:src="@mipmap/live_more" />
-
-            <TextView
-                android:id="@+id/text_listener_frequency"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@id/image_listener_frequency"
-                android:text="87.5MHz" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/wifi_set"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@drawable/person_color"
-            android:clickable="true">
-
-            <View
-                android:id="@+id/liner_view_4"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/view_color" />
-
-            <TextView
-                android:id="@+id/text_wifi_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="14dp"
-                android:text="WIFI"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:id="@+id/image_wifi_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="14dp"
-                android:src="@mipmap/live_more" />
-
-            <TextView
-                android:id="@+id/text_wifi_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@id/image_wifi_set"
-                android:maxLines="1"
-                android:text="已连接" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/bluetooth_set"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@drawable/person_color"
-            android:clickable="true">
-
-            <View
-                android:id="@+id/liner_view_5"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/view_color" />
-
-            <TextView
-                android:id="@+id/text_bluetooth_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="14dp"
-                android:text="蓝牙"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:id="@+id/image_bluetooth_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="14dp"
-                android:src="@mipmap/live_more" />
-
-            <TextView
-                android:id="@+id/text_bluetooth_state"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="5dp"
-                android:layout_toLeftOf="@id/image_bluetooth_set"
-                android:maxLines="1"
-                android:text="关闭" />
-
-        </RelativeLayout>
-
-        <View
-            android:id="@+id/liner_view_6"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/view_color" />
-
-        <RelativeLayout
-            android:id="@+id/like_set"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/person_color"
-            android:clickable="true">
-
-            <View
-                android:id="@+id/liner_view_7"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/view_color" />
-
-            <TextView
-                android:id="@+id/text_like_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="14dp"
-                android:text="喜好设定"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:id="@+id/image_like_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="14dp"
-                android:src="@mipmap/live_more" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/flow_set"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@drawable/person_color"
-            android:clickable="true">
-
-            <View
-                android:id="@+id/liner_view_8"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/view_color" />
-
-            <TextView
-                android:id="@+id/text_flow_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="14dp"
-                android:text="流量管理"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:id="@+id/image_flow_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="14dp"
-                android:src="@mipmap/live_more" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/cache_set"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@drawable/person_color"
-            android:clickable="true">
-
-            <View
-                android:id="@+id/liner_view_9"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/view_color" />
-
-            <TextView
-                android:id="@+id/text_cache_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="14dp"
-                android:text="清除缓存"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/text_cache_statistics"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="24dp"
-                android:maxLines="1"
-                android:text="99.99M" />
-
-        </RelativeLayout>
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/view_color" />
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/person_color"
-            android:clickable="true">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/view_color" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="14dp"
-                android:text="通知设置"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="14dp"
-                android:src="@mipmap/live_more" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@drawable/person_color"
-            android:clickable="true">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/view_color" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="14dp"
-                android:text="存储空间"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="14dp"
-                android:src="@mipmap/live_more" />
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@drawable/person_color"
-            android:clickable="true">
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/view_color" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="14dp"
-                android:text="时间日期"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="14dp"
-                android:src="@mipmap/live_more" />
-
-        </RelativeLayout>
-
-
-        <View
-            android:id="@+id/liner_view_10"
-            android:layout_width="match_parent"
-            android:layout_height="0.5dp"
-            android:background="@color/view_color" />
-
-        <RelativeLayout
-            android:id="@+id/update_set"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginTop="20dp"
-            android:background="@drawable/person_color"
-            android:clickable="true">
-
-            <View
-                android:id="@+id/liner_view_11"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/view_color" />
-
-            <TextView
-                android:id="@+id/text_update_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="14dp"
-                android:text="检查更新"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/text_update_statistics"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="24dp"
-                android:maxLines="1"
-                android:text="0.1.0.X.021" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/help_set"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@drawable/person_color"
-            android:clickable="true">
-
-            <View
-                android:id="@+id/liner_view_12"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/view_color" />
-
-            <TextView
-                android:id="@+id/text_help_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="14dp"
-                android:text="使用帮助"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:id="@+id/image_help_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="14dp"
-                android:src="@mipmap/live_more" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/feedback_set"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:background="@drawable/person_color"
-            android:clickable="true">
-
-            <View
-                android:id="@+id/liner_view_13"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/view_color" />
-
-            <TextView
-                android:id="@+id/text_feedback_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="14dp"
-                android:text="反馈建议"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:id="@+id/image_feedback_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="14dp"
-                android:src="@mipmap/live_more" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:id="@+id/about_set"
-            android:layout_width="match_parent"
-            android:layout_height="56dp"
-            android:layout_marginBottom="15dp"
-            android:background="@drawable/person_color"
-            android:clickable="true">
-
-            <View
-                android:id="@+id/liner_view_14"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:background="@color/view_color" />
-
-            <TextView
-                android:id="@+id/text_about_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="14dp"
-                android:text="关于我听"
-                android:textSize="16sp" />
-
-            <ImageView
-                android:id="@+id/image_about_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="14dp"
-                android:src="@mipmap/live_more" />
-
-            <View
-                android:id="@+id/liner_view_15"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"
-                android:layout_alignParentBottom="true"
-                android:background="@color/view_color" />
-
-        </RelativeLayout>
-
-        <Button
-            android:id="@+id/exit_login"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginBottom="30dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:background="@drawable/wt_commit_button_background"
-            android:text="退出账号"
-            android:textColor="@color/WHITE" />
-
-    </LinearLayout>
-
-</ScrollView>
+                style="@style/PersonAndSetRelativeStyle"
+                android:layout_marginTop="20dp">
+
+                <View style="@style/ViewStyle" />
+
+                <ImageView
+                    android:id="@+id/image_listener"
+                    style="@style/PersonAndSetLeftStyle"
+                    android:src="@mipmap/wt_image_listener" />
+
+                <TextView
+                    style="@style/PersonAndSetTextStyle"
+                    android:text="调频设置"
+                    android:layout_toRightOf="@id/image_listener" />
+
+                <ImageView
+                    android:id="@+id/image_listener_frequency"
+                    style="@style/PersonAndSetRightStyle" />
+
+                <TextView
+                    android:id="@+id/text_listener_frequency"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/beijing"
+                    android:layout_toLeftOf="@id/image_listener_frequency"
+                    android:text="87.5MHz" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/wifi_set"
+                style="@style/PersonAndSetRelativeStyle">
+
+                <View style="@style/LineStyle"/>
+
+                <ImageView
+                    android:id="@+id/image_wifi"
+                    style="@style/PersonAndSetLeftStyle"
+                    android:src="@mipmap/wt_person_liuliang" />
+
+                <TextView
+                    android:id="@+id/text_wifi_set"
+                    style="@style/PersonAndSetTextStyle"
+                    android:text="WIFI设置"
+                    android:layout_toRightOf="@id/image_wifi"/>
+
+                <ImageView
+                    android:id="@+id/image_wifi_set"
+                    style="@style/PersonAndSetRightStyle" />
+
+                <TextView
+                    android:id="@+id/text_wifi_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/beijing"
+                    android:layout_toLeftOf="@id/image_wifi_set"
+                    android:maxLines="1"
+                    android:text="已连接" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/bluetooth_set"
+                style="@style/PersonAndSetRelativeStyle">
+
+                <View style="@style/LineStyle"/>
+
+                <ImageView
+                    android:id="@+id/image_bluetooth"
+                    style="@style/PersonAndSetLeftStyle"
+                    android:src="@mipmap/wt_image_bluetooth" />
+
+                <TextView
+                    android:id="@+id/text_bluetooth_set"
+                    style="@style/PersonAndSetTextStyle"
+                    android:text="蓝牙设置"
+                    android:layout_toRightOf="@id/image_bluetooth" />
+
+                <ImageView
+                    android:id="@+id/image_bluetooth_set"
+                    style="@style/PersonAndSetRightStyle" />
+
+                <TextView
+                    android:id="@+id/text_bluetooth_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/beijing"
+                    android:layout_toLeftOf="@id/image_bluetooth_set"
+                    android:maxLines="1"
+                    android:text="关闭" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/flow_set"
+                style="@style/PersonAndSetRelativeStyle">
+
+                <View style="@style/LineStyle"/>
+
+                <ImageView
+                    android:id="@+id/image_flow"
+                    style="@style/PersonAndSetLeftStyle"
+                    android:src="@mipmap/wt_image_flow" />
+
+                <TextView
+                    android:id="@+id/text_flow_set"
+                    style="@style/PersonAndSetTextStyle"
+                    android:text="流量管理"
+                    android:layout_toRightOf="@id/image_flow" />
+
+                <ImageView style="@style/PersonAndSetRightStyle"  />
+
+                <View
+                    style="@style/ViewStyle"
+                    android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:id="@+id/lin_set"
+                style="@style/PersonAndSetRelativeStyle"
+                android:layout_marginBottom="40dp"
+                android:layout_marginTop="20dp">
+
+                <View style="@style/ViewStyle"/>
+
+                <ImageView
+                    android:id="@+id/image_set"
+                    style="@style/PersonAndSetLeftStyle"
+                    android:src="@mipmap/wt_person_set" />
+
+                <TextView
+                    style="@style/PersonAndSetTextStyle"
+                    android:text="其它设置"
+                    android:layout_toRightOf="@id/image_set" />
+
+                <ImageView style="@style/PersonAndSetRightStyle" />
+
+                <View
+                    style="@style/ViewStyle"
+                    android:layout_alignParentBottom="true" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </ScrollView>
+
+</LinearLayout>

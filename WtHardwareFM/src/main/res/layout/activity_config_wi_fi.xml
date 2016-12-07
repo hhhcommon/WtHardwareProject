@@ -1,64 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/BaseStyle"
     android:orientation="vertical">
 
     <include android:id="@+id/include_title" layout="@layout/base_activity_title"/>
 
-    <RelativeLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/home_top_title">
+        android:orientation="vertical"
+        android:background="@color/app_bg">
 
-        <TextView
-            android:id="@+id/text_psw"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="密码"
-            android:textSize="16sp"
-            android:textColor="@color/BLACK"
-            android:layout_marginTop="30dp"
-            android:layout_marginLeft="14dp"/>
-
-        <ImageView
-            android:id="@+id/image_visibility"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:src="@mipmap/ic_launcher"
-            android:layout_marginRight="14dp"
-            android:layout_marginTop="20dp"/>
-
-        <EditText
-            android:id="@+id/edit_psw"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:background="@drawable/wt_edit_text_background"
-            android:layout_toRightOf="@id/text_psw"
-            android:padding="5dp"
-            android:layout_toLeftOf="@id/image_visibility"
-            android:maxLines="1"
-            android:hint="密码"
-            android:maxLength="18"
-            android:inputType="textPassword"
-            android:textSize="14sp"
-            android:layout_marginTop="20dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"/>
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
+            android:background="@drawable/wt_edit_text_background">
+
+            <ImageView
+                android:id="@+id/text_psw"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/img_password"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="14dp"/>
+
+            <ImageView
+                android:id="@+id/image_visibility"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:src="@mipmap/ic_launcher"
+                android:visibility="gone"
+                android:layout_marginRight="14dp"
+                android:layout_marginTop="20dp"/>
+
+            <EditText
+                android:id="@+id/edit_psw"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:background="@color/WHITE"
+                android:layout_toRightOf="@id/text_psw"
+                android:layout_marginTop="2dp"
+                android:layout_marginBottom="2dp"
+                android:layout_toLeftOf="@id/image_visibility"
+                android:maxLines="1"
+                android:paddingLeft="10dp"
+                android:hint="WIFI密码"
+                android:maxLength="18"
+                android:inputType="textPassword"
+                android:textSize="14sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="14dp"/>
+
+        </RelativeLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@id/text_psw"
-            android:layout_marginTop="50dp"
-            android:layout_alignLeft="@id/text_psw"
-            android:layout_alignRight="@id/image_visibility">
+            android:layout_marginTop="40dp"
+            android:layout_marginLeft="19dp"
+            android:layout_marginRight="19dp">
 
             <Button
                 android:id="@+id/btn_cancel"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:text="取消"
                 android:layout_marginRight="10dp"
                 android:background="@drawable/background_button_gray"/>
@@ -67,14 +78,15 @@
                 android:id="@+id/btn_confirm"
                 android:layout_width="0dp"
                 android:layout_weight="1"
-                android:layout_height="50dp"
+                android:layout_height="40dp"
                 android:enabled="false"
+                android:textColor="@color/gray"
                 android:text="连接"
                 android:layout_marginLeft="10dp"
-                android:background="@drawable/background_button_gray"/>
+                android:background="@drawable/zhuxiao_press"/>
 
         </LinearLayout>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </LinearLayout>

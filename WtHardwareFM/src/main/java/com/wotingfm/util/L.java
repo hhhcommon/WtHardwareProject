@@ -7,23 +7,19 @@ import android.util.Log;
  */
 public class L {
     private static final String TAG = "main";       // 标签
-    private static String className;                // Log输出所在类
-    private static String methodName;               // Log输出所在方法
-    private static int lineNumber;                  // Log输出所行号
+    private static String className;                // Log 输出所在类
+    private static String methodName;               // Log 输出所在方法
+    private static int lineNumber;                  // Log 输出所行号
     private static boolean IS_DEBUG = true;         // Debug 模式
 
-    /*
-     * 获取输出所在位置的信息className methodName lineNumber
-     */
+    // 获取输出所在位置的信息 className methodName lineNumber
     private static void getDetail(StackTraceElement[] elements) {
         className = elements[1].getFileName().split("\\.")[0];
         methodName = elements[1].getMethodName();
         lineNumber = elements[1].getLineNumber();
     }
 
-    /*
-     * 创建Log输出的基本信息
-     */
+    // 创建 Log 输出的基本信息
     private static String createLog(String log) {
         StringBuffer buffer = new StringBuffer();
         buffer.append("[");
@@ -73,7 +69,7 @@ public class L {
         }
     }
 
-    //自定义TAG
+    // 自定义 TAG
     public static void v(String tag, String message) {
         if (IS_DEBUG) {
             getDetail(new Throwable().getStackTrace());

@@ -7,25 +7,49 @@ import java.util.List;
  * 城市分类
  */
 public class FenLei implements Serializable{
-	private String CatalogName;
-	private List<FenLeiName> SubCata;
-	private String CatalogType;
-	public String getCatalogName() {
-		return CatalogName;
+	private String name;
+	private List<FenLeiName> children;
+	private int tag; //存全选tag的位置
+	private int tagType ; //存全选的类型
+	private String id;
+
+	public String getId() {
+		return id;
 	}
-	public void setCatalogName(String catalogName) {
-		CatalogName = catalogName;
+
+	public void setId(String id) {
+		this.id = id;
 	}
-	public String getCatalogType() {
-		return CatalogType;
+
+	public int getTag() {
+		return tag;
 	}
-	public void setCatalogType(String catalogType) {
-		CatalogType = catalogType;
+
+	public void setTag(int tag) {
+		this.tag = tag;
 	}
-	public List<FenLeiName> getSubCata() {
-		return SubCata;
+
+	public int getTagType() {
+		return tagType;
 	}
-	public void setSubCata(List<FenLeiName> subCata) {
-		SubCata = subCata;
+
+	public void setTagType(int tagType) {
+		this.tagType = tagType;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public List<FenLeiName> getChildren() {
+		return children;
+	}
+
+	public void setChildren(List<FenLeiName> children) {
+		this.children = children;
 	}
 }

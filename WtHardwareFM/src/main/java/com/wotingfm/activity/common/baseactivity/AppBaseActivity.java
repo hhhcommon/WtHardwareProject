@@ -29,9 +29,7 @@ public abstract class AppBaseActivity extends BaseActivity {
         initView();
     }
 
-    /*
-     * 初始化
-     */
+    // 初始化
     private void initView() {
         leftBack = findView(R.id.left_back);
         leftBack.setOnClickListener(new View.OnClickListener() {
@@ -44,6 +42,13 @@ public abstract class AppBaseActivity extends BaseActivity {
         rightMore = findView(R.id.right_more);
         textTitle = findView(R.id.text_title);
         leftImage = findView(R.id.left_image);
+        leftImage.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         rightImage = findView(R.id.right_image);
 
         init();

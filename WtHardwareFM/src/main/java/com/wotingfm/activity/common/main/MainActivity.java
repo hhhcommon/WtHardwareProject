@@ -26,23 +26,23 @@ import com.google.gson.reflect.TypeToken;
 import com.iflytek.cloud.SpeechUtility;
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.preference.activity.PreferenceActivity;
+import com.wotingfm.activity.common.favoritetype.FavoriteProgramTypeActivity;
 import com.wotingfm.activity.im.interphone.main.DuiJiangActivity;
 import com.wotingfm.activity.mine.main.MineActivity;
 import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.program.citylist.dao.CityInfoDao;
-import com.wotingfm.activity.music.program.fenlei.model.FenLei;
-import com.wotingfm.activity.music.program.fenlei.model.FenLeiName;
+import com.wotingfm.activity.music.program.fenlei.model.Catalog;
+import com.wotingfm.activity.music.program.fenlei.model.CatalogName;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.devicecontrol.WtDeviceControl;
 import com.wotingfm.manager.MyActivityManager;
 import com.wotingfm.manager.UpdateManager;
-import com.wotingfm.service.timeroffservice;
+import com.wotingfm.service.TimeOffService;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ScreenUtils;
@@ -70,7 +70,7 @@ public class MainActivity extends TabActivity {
     private String mPageName = "MainActivity";
     private int upDataType = 1;      // 1,不需要强制升级2，需要强制升级
     private boolean isCancelRequest;
-    private List<FenLeiName> list;
+    private List<CatalogName> list;
 
     private CityInfoDao CID;         // 城市列表数据库
 
@@ -87,16 +87,11 @@ public class MainActivity extends TabActivity {
         // Setting.setShowLog(false);
         WtDeviceControl mControl = new WtDeviceControl(context);
         GlobalConfig.device = mControl;
-        String first = BSApplication.SharedPreferences.getString(StringConstant.PREFERENCE, "0");//是否是第一次打开偏好设置界面
-        if (first != null && first.equals("1")) {
-            // 此时已经进行过偏好设置
-        } else {// 1：第一次进入  其它：其它界面进入
-            Intent intent = new Intent(this, PreferenceActivity.class);
-            Bundle bundle = new Bundle();
-            bundle.putString("type", "1");
-            intent.putExtras(bundle);
-            startActivity(intent);
+
+        if(!BSApplication.SharedPreferences.getBoolean(StringConstant.FAVORITE_PROGRAM_TYPE, false)) {
+            startActivity(new Intent(context, FavoriteProgramTypeActivity.class));
         }
+
         MobclickAgent.openActivityDurationTrack(false);//友盟的数据统计
         update();           // 获取版本数据
         InitTextView();     // 设置界面
@@ -242,17 +237,17 @@ public class MainActivity extends TabActivity {
                             try {
                                 // 获取列表
                                 String ResultList = result.getString("CatalogData");
-                                FenLei SubList_all = new Gson().fromJson(ResultList, new TypeToken<FenLei>() {
+                                Catalog SubList_all = new Gson().fromJson(ResultList, new TypeToken<Catalog>() {
                                 }.getType());
-                                List<FenLeiName> srcList = SubList_all.getSubCata();
+                                List<CatalogName> srcList = SubList_all.getSubCata();
                                 if (srcList != null) {
                                     if (srcList.size() == 0) {
                                         ToastUtils.show_short(context, "获取城市列表为空");
                                     } else {
                                         //组装从后台获取到的数据
-                                        List<FenLeiName> mList = new ArrayList<FenLeiName>();
+                                        List<CatalogName> mList = new ArrayList<>();
                                         for (int i = 0; i < srcList.size(); i++) {
-                                            FenLeiName mFenLeiName = new FenLeiName();
+                                            CatalogName mFenLeiName = new CatalogName();
                                             mFenLeiName.setCatalogId(srcList.get(i).getCatalogId());
                                             mFenLeiName.setCatalogName(srcList.get(i).getCatalogName());
                                             mList.add(mFenLeiName);
@@ -360,7 +355,7 @@ public class MainActivity extends TabActivity {
     //版本更新对话框
     private void UpdateDialog() {
         View dialog = LayoutInflater.from(this).inflate(R.layout.dialog_update, null);
-        TextView text_content = (TextView) dialog.findViewById(R.id.text_contnt);
+        TextView text_content = (TextView) dialog.findViewById(R.id.text_content);
         text_content.setText(Html.fromHtml("<font size='26'>" + upDataNews + "</font>"));
         TextView tv_update = (TextView) dialog.findViewById(R.id.tv_update);
         TextView tv_qx = (TextView) dialog.findViewById(R.id.tv_qx);
@@ -400,8 +395,8 @@ public class MainActivity extends TabActivity {
     //注册广播  用于接收定时服务发送过来的广播
     private void registerReceiver() {
         IntentFilter myFilter = new IntentFilter();
-        myFilter.addAction(BroadcastConstant.TIMER_END);
-        myFilter.addAction(BroadcastConstant.ACTIVITY_CHANGE);
+        myFilter.addAction(BroadcastConstants.TIMER_END);
+        myFilter.addAction(BroadcastConstants.ACTIVITY_CHANGE);
         registerReceiver(endApplicationBroadcast, myFilter);
     }
 
@@ -410,16 +405,16 @@ public class MainActivity extends TabActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastConstant.TIMER_END)) {
+            if (action.equals(BroadcastConstants.TIMER_END)) {
                 ToastUtils.show_always(MainActivity.this, "定时关闭应用时间就要到了，应用即将退出");
-                stopService(new Intent(MainActivity.this, timeroffservice.class));    // 停止服务
+                stopService(new Intent(MainActivity.this, TimeOffService.class));    // 停止服务
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
                         finish();
                     }
                 }, 1000);
-            } else if (action.equals(BroadcastConstant.ACTIVITY_CHANGE)) {
+            } else if (action.equals(BroadcastConstants.ACTIVITY_CHANGE)) {
                 if (GlobalConfig.activitytype == 1) {
                     MyActivityManager mam = MyActivityManager.getInstance();
                     mam.finishAllActivity();

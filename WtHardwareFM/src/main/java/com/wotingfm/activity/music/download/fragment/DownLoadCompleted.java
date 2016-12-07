@@ -65,10 +65,10 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
         mListView = (ListView) rootView.findViewById(R.id.list_view);
         LinearLayout linearUnLogin = (LinearLayout) rootView.findViewById(R.id.lin_status_no);
         userId = CommonUtils.getUserId(context);
-        List<FileInfo> fileInfoList = FID.queryFileinfo("true", userId);// 查询当前userId下已经下载完成的list
+        List<FileInfo> fileInfoList = FID.queryFileInfo("true", userId);// 查询当前userId下已经下载完成的list
         if(fileInfoList.size() > 0){
             linearUnLogin.setVisibility(View.GONE);
-            fileSequList = FID.GroupFileinfoAll(userId);
+            fileSequList = FID.GroupFileInfoAll(userId);
             if (fileSequList.size() > 0) {
                 for (int i = 0; i < fileSequList.size(); i++) {
                     if (fileSequList.get(i).getSequid().equals("woting")) {
@@ -148,7 +148,7 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
                 break;
             case R.id.tv_confirm:
                 confirmDialog.dismiss();
-                FID.deletesequ(fileSequList.get(index).getSequname(), userId);
+                FID.deleteSequ(fileSequList.get(index).getSequname(), userId);
                 setDownLoadSource();//重新适配界面操作
                 break;
             case R.id.lin_download_single:

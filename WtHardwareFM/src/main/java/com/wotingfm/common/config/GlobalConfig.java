@@ -1,11 +1,14 @@
 package com.wotingfm.common.config;
 
+import android.os.Environment;
+
 import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
 import com.wotingfm.activity.music.player.model.LanguageSearchInside;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.activity.music.program.fenlei.model.CatalogName;
 import com.wotingfm.devicecontrol.WtDeviceControl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,6 +23,11 @@ public class GlobalConfig {
     public static String latitude;
     public static String CityName;
     public static String AdCode;
+    public static ArrayList<String> staticFacesList;   //从Asset中取出的表情list
+    // 缓存路径
+    public static String playCacheDir= Environment.getExternalStorageDirectory() + "/woting/playCache/";
+    // 缓存的城市列表
+    public static List<CatalogName> CityCatalogList;
     //
     public static List<TalkGroupInside> list_group;
     public static List<TalkPersonInside> list_person;
@@ -34,7 +42,7 @@ public class GlobalConfig {
     // volley请求超时 时间
     public static final int HTTP_CONNECTION_TIMEOUT = 60 * 1000;
     // 数据库版本号
-    public static final int dbversoncode = 2;
+    public static final int dbversoncode = 3;
     // 此时的界面
     public static int activitytype=1;
     // Socket连接客户端配置信息
@@ -42,7 +50,7 @@ public class GlobalConfig {
     // 硬件设备控制器
     public static WtDeviceControl device;
     // 此时的语音搜索界面
-    public static String voicerecognizer= BroadcastConstant.PLAYERVOICE;
+    public static String voicerecognizer;
     // 是否吐司
     public static boolean istusi = true;
     // PersonClientDevice(个人客户端设备) 终端类型1=app,2=设备，3=pc
@@ -85,6 +93,8 @@ public class GlobalConfig {
     public static final String modifyPasswordUrl = baseUrl + "wt/passport/user/updatePwd.do?";
     // 找回密码
     // public static final String retrievePasswordUrl = baseUrl+"wt//passport/user/retrievePwd.do?";
+    // 账号修改
+    public static final String updateUserUrl = baseUrl + "wt/passport/user/updateUserInfo.do?";
     // 账号绑定
     public static final String bindExtUserUrl = baseUrl + "wt/passport/user/bindExtUserInfo.do?";
     // 帮助
@@ -147,7 +157,7 @@ public class GlobalConfig {
     public static final String InvitedDealUrl = baseUrl + "wt/passport/friend/inviteDeal.do?";
     // 查询陌生人
     public static final String searchStrangerUrl = baseUrl + "wt/passport/friend/searchStranger.do?";
-    //查找用户组
+    // 查找用户组
     public static final String searchStrangerGroupUrl = baseUrl + "wt/passport/group/searchGroup.do?";
     // 邀请陌生人为好友
     public static final String sendInviteUrl = baseUrl + "wt/passport/friend/invite.do";
@@ -170,7 +180,7 @@ public class GlobalConfig {
     public static final String updategroupFriendnewsUrl = baseUrl + "wt/passport/group/updateGroupUser.do?";
     // 管理员踢出用户 当踢出用户只剩用户本人时 此群将解散
     public static final String KickOutMembersUrl = baseUrl + "wt/passport/group/kickoutGroup.do";
-    //管理员权限移交
+    // 管理员权限移交
     public static final String changGroupAdminnerUrl = baseUrl + "wt/passport/group/changGroupAdminner.do";
     // 修改群密码 没接口
     public static final String UpdateGroupPassWordUrl = baseUrl + "wt/passport/group/updatePwd.do";
@@ -218,4 +228,31 @@ public class GlobalConfig {
     public static final String getFavoriteListUrl = baseUrl + "wt/content/getFavoriteList.do";
     // 删除喜欢列表
     public static final String delFavoriteListUrl = baseUrl + "wt/content/delFavorites.do";
+    // 获取偏好列表
+    public static final String getPreferenceUrl=baseUrl+"wt/getPreferenceCatalog.do";
+    // 设置偏好列表
+    public static final String setPreferenceUrl=baseUrl+"wt/setPreference.do";
+
+    // "我的上传" 相关接口
+    private static final String uploadBaseUrl = "http://123.56.254.75:908/CM/";
+    // 获取专辑列表
+    public static final String getSequMediaList = uploadBaseUrl + "content/seq/getSeqMediaList.do";
+    // 删除专辑
+    public static final String removeSequMedia = uploadBaseUrl + "content/seq/removeSeqMedia.do";
+    // 获取节目列表
+    public static final String getMediaList = uploadBaseUrl + "content/media/getMediaList.do";
+    // 删除节目
+    public static final String removeMedia = uploadBaseUrl + "content/media/removeMedia.do";
+    // 获取标签列表
+    public static final String getTags = uploadBaseUrl + "content/getTags.do";
+    // 上传文件 SrcType == 1、图片  == 2、音频
+    public static final String uploadFileUrl = uploadBaseUrl + "common/uploadCM.do";
+    // 新增节目
+    public static final String addMediaInfo = uploadBaseUrl + "content/media/addMediaInfo.do";
+    // 获取当前内容的评论列表
+    public static final String getMyCommentListUrl = baseUrl + "wt/discuss/article/getList.do";
+    // 发表评论
+    public static final String pushCommentUrl=baseUrl+"wt/discuss/add.do";
+    // 删除评论
+    public static final String delCommentUrl=baseUrl+"wt/discuss/del.do";
 }

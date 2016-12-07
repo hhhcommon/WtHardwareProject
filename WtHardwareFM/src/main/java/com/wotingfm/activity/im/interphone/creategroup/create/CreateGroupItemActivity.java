@@ -35,7 +35,7 @@ import com.wotingfm.activity.im.interphone.creategroup.model.UserPortaitInside;
 import com.wotingfm.activity.im.interphone.creategroup.photocut.PhotoCutActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailActivity;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -220,7 +220,7 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                         if (viewSuccess == 1) {
                             dealt(groupRation);
                         } else {      // 跳转到群组详情界面
-                            sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
+                            sendBroadcast(new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN));
                             Intent intent = new Intent(context, GroupDetailActivity.class);
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("data", groupRation);
@@ -401,7 +401,7 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
                 if (msg.what == 1) {
-                    sendBroadcast(new Intent(BroadcastConstant.PUSH_REFRESH_LINKMAN));
+                    sendBroadcast(new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN));
                     setResult(1);
                     Toast.makeText(context, "创建成功", Toast.LENGTH_SHORT).show();
                     if (groupRation != null) {

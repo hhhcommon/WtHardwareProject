@@ -11,9 +11,19 @@ public class StringConstant {
     public static final String FIRST = "first";//引导页
     public static final String PREFERENCE = "preference";//偏好设置页
     public static final String PHONENUMBER = "phonenumber";// 用户注册手机号码
-//    public static final String SESSIONID = "sessionid";//sessionid
     public static final String IMAGEURL = "imageurl";//头像Image地址
     public static final String IMAGEURBIG = "imageurlbig";//头像Image地址
+
+    public static final String USER_NUM = "usernum";// woting 号
+    public static final String GENDERUSR = "GENDERUSR";// 性别
+    public static final String EMAIL = "EMAIL";// 用户邮箱
+    public static final String REGION = "Region";// 用户地区
+    public static final String BIRTHDAY = "BIRTHDAY";// 用户生日
+    public static final String USER_SIGN = "UserSign";// 用户签名
+    public static final String STAR_SIGN = "StarSign";// 用户星座
+    public static final String AGE = "age";// 年龄
+    public static final String NICK_NAME = "nick_Name";// 昵称
+
     /*
      * 电台城市列表
      */
@@ -46,7 +56,7 @@ public class StringConstant {
     public static final String PLAYHISTORYENTER = "playhistoryenter";//
     public static final String PLAYHISTORYENTERNEWS = "playhistoryenternews";//
     /*
-	 * 保存下载界面是否有未展示的下载完成的数据
+     * 保存下载界面是否有未展示的下载完成的数据
 	 */
 //	public static final String REFRESHDOWNLOAD="refreshdownload";//
 
@@ -73,9 +83,6 @@ public class StringConstant {
 
     public static final String FIND_CONTENT_TO_RESULT = "searchstr";
 
-    // 蓝牙的设置状态
-    public static final String BLUETOOTH_SET = "BLUETOOTH_SET";
-
     // 保存蓝牙是否开放检测状态
     public static final String BLUETOOTH_OPEN_DETECTION_SET = "BLUETOOTH_OPEN_DETECTION_SET";
 
@@ -90,4 +97,25 @@ public class StringConstant {
 
     // 流量通知
     public static final String FLOW_NOTIFY = "FLOW_NOTIFY";
+
+    // 保存是否已经选择喜欢的节目
+    public static final String FAVORITE_PROGRAM_TYPE = "FavoriteProgramType";
+
+    // 通知设置 声音通知开关状态
+    public static final String NOTIFY_SOUND_STATE = "NOTIFY_SOUND_STATE";
+
+    // 通知设置 群聊通知开关状态
+    public static final String NOTIFY_GROUP_CHAT_STATE = "NOTIFY_GROUP_CHAT_STATE";
+
+    // 通知设置 好友通知开关状态
+    public static final String NOTIFY_FRIEND_STATE = "NOTIFY_FRIEND_STATE";
+
+    // 通知设置 节目推送通知开关状态
+    public static final String NOTIFY_PROGRAM_STATE = "NOTIFY_PROGRAM_STATE";
+
+    // 通知设置 订阅通知开关状态
+    public static final String NOTIFY_SUBSCRIBER_STATE = "NOTIFY_SUBSCRIBER_STATE";
+
+    // 通知设置 关注通知开关状态
+    public static final String NOTIFY_CONCERN_STATE = "NOTIFY_CONCERN_STATE";
 }

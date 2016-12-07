@@ -8,13 +8,13 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
@@ -22,7 +22,7 @@ import java.util.List;
 public class FavorListAdapter extends BaseAdapter {
     private List<RankInfo> list;
     private Context context;
-    private favorCheck favorcheck;
+    private FavoriteCheck favoriteCheck;
     private String url;
 
     public FavorListAdapter(Context context, List<RankInfo> list) {
@@ -45,8 +45,8 @@ public class FavorListAdapter extends BaseAdapter {
         return position;
     }
 
-    public void setOnListener(favorCheck favorcheck) {
-        this.favorcheck = favorcheck;
+    public void setOnListener(FavoriteCheck favoriteCheck) {
+        this.favoriteCheck = favoriteCheck;
     }
 
     @Override
@@ -54,73 +54,139 @@ public class FavorListAdapter extends BaseAdapter {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_favoritelist, null);
-            holder.textview_ranktitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
-            holder.imageview_rankimage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
-            holder.tv_RankContent = (TextView) convertView.findViewById(R.id.RankContent);
-            holder.img_check = (ImageView) convertView.findViewById(R.id.img_check);
-            holder.lin_check = (LinearLayout) convertView.findViewById(R.id.lin_check);
+            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_favoritelist, parent, false);
+            holder.imageMask = (ImageView) convertView.findViewById(R.id.image_mask);// 六边形遮罩
+            holder.imageMask.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b));
+
+            holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);// 节目名
+            holder.imageRankImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 封面图标
+            holder.textRankContent = (TextView) convertView.findViewById(R.id.RankContent);// 来源
+            holder.imageCheck = (ImageView) convertView.findViewById(R.id.img_check);// 编辑状态
+
+            holder.textNumber = (TextView) convertView.findViewById(R.id.tv_num);// 收听次数
+            holder.textLast = (TextView) convertView.findViewById(R.id.tv_last);// 时长 OR 集数
+            holder.imageLast = (ImageView) convertView.findViewById(R.id.image_last);// 图标  时长
+            holder.imageNum = (ImageView) convertView.findViewById(R.id.image_num);// 图标  集数
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         RankInfo lists = list.get(position);
-        if (lists.getContentName() == null || lists.getContentName().equals("")) {
-            holder.textview_ranktitle.setText("未知");
+        String mediaType = lists.getMediaType();// 类型
+
+        // 封面图片
+        String contentImage = lists.getContentImg();
+        if (contentImage == null || contentImage.equals("null") || contentImage.trim().equals("")) {
+            holder.imageRankImage.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx_d));
         } else {
-            holder.textview_ranktitle.setText(lists.getContentName());
-        }
-        if (lists.getContentImg() == null || lists.getContentImg().equals("")
-                || lists.getContentImg().equals("null")
-                || lists.getContentImg().trim().equals("")) {
-            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_bg_noimage);
-            holder.imageview_rankimage.setImageBitmap(bmp);
-        } else {
-            if (lists.getContentImg().startsWith("http:")) {
-                url = lists.getContentImg();
+            if (contentImage.startsWith("http:")) {
+                url = contentImage;
             } else {
-                url = GlobalConfig.imageurl + lists.getContentImg();
+                url = GlobalConfig.imageurl + contentImage;
             }
-            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageview_rankimage);
+            url = AssembleImageUrlUtils.assembleImageUrl150(url);
+            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageRankImage);
         }
-        if (lists.getContentDesc() == null || lists.getContentDesc().equals("")) {
-            holder.tv_RankContent.setText("未知");
-        } else {
-            holder.tv_RankContent.setText(lists.getContentDesc());
+
+        // 节目名
+        String contentName = lists.getContentName();
+        if (contentName != null && !contentName.equals("")) {
+            holder.textRankTitle.setText(contentName);
         }
-        if (lists.getViewtype() == 0) {
-            // 0状态时 为点选框隐藏状态设置当前的选择状态为0
-            holder.lin_check.setVisibility(View.GONE);
+
+        // 来源
+        if(mediaType.equals("RADIO")) {
+            if (lists.getCurrentContent() != null && !lists.getCurrentContent().equals("")) {
+                holder.textRankContent.setText("正在直播：" + lists.getCurrentContent());
+            }
         } else {
-            // 1状态 此时设置choicetype生效
-            holder.lin_check.setVisibility(View.VISIBLE);
+            if (lists.getContentPub() != null && !lists.getContentPub().equals("")) {
+                holder.textRankContent.setText(lists.getContentPub());
+            }
+        }
+
+        // 收听次数
+        String watchNum = lists.getWatchPlayerNum();
+        if (watchNum != null && !watchNum.equals("")) {
+            holder.textNumber.setText(watchNum);
+        }
+
+        switch (mediaType) {
+            case "RADIO":// 电台
+                holder.textLast.setVisibility(View.GONE);
+                holder.imageLast.setVisibility(View.GONE);
+                holder.imageNum.setVisibility(View.GONE);
+                break;
+            case "SEQU":// 专辑
+                holder.imageLast.setVisibility(View.GONE);
+                holder.imageNum.setVisibility(View.VISIBLE);
+                holder.textLast.setVisibility(View.VISIBLE);
+
+                // 集数
+                String contentSubCount = lists.getContentSubCount();
+                if (contentSubCount == null || contentSubCount.equals("") || contentSubCount.equals("null")) {
+                    holder.textLast.setText("0" + "集");
+                } else {
+                    holder.textLast.setText(contentSubCount + "集");
+                }
+                break;
+            case "AUDIO":// 声音
+            case "TTS":// TTS
+                holder.imageNum.setVisibility(View.GONE);
+                holder.imageLast.setVisibility(View.VISIBLE);
+                holder.textLast.setVisibility(View.VISIBLE);
+
+                // 节目时长
+                String contentTime = lists.getContentTimes();
+                if (contentTime == null|| contentTime.equals("") || contentTime.equals("null")) {
+                    holder.textLast.setText(context.getString(R.string.play_time));
+                } else {
+                    int minute = Integer.valueOf(contentTime) / (1000 * 60);
+                    int second = (Integer.valueOf(contentTime) / 1000) % 60;
+                    if(second < 10){
+                        holder.textLast.setText(minute + "\'" + " " + "0" + second + "\"");
+                    }else{
+                        holder.textLast.setText(minute + "\'" + " " + second + "\"");
+                    }
+                }
+                break;
+        }
+
+        if (lists.getViewtype() == 0) {// 0 状态时 为点选框隐藏状态设置当前的选择状态为 0
+            holder.imageCheck.setVisibility(View.GONE);
+        } else {// 1 状态 此时设置 choiceType 生效
+            holder.imageCheck.setVisibility(View.VISIBLE);
             if (lists.getChecktype() == 0) {
                 Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_group_nochecked);// 未点击状态
-                holder.img_check.setImageBitmap(bmp);
+                holder.imageCheck.setImageBitmap(bmp);
             } else {
                 Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_group_checked); // 点击状态
-                holder.img_check.setImageBitmap(bmp);
+                holder.imageCheck.setImageBitmap(bmp);
             }
         }
-        holder.lin_check.setOnClickListener(new OnClickListener() {
-
+        holder.imageCheck.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                favorcheck.checkposition(position);
+                favoriteCheck.checkPosition(position);
             }
         });
         return convertView;
     }
 
-    public interface favorCheck {
-        void checkposition(int position);
+    public interface FavoriteCheck {
+        void checkPosition(int position);
     }
 
     private class ViewHolder {
-        public ImageView imageview_rankimage;
-        public TextView textview_ranktitle;
-        public TextView tv_RankContent;
-        public ImageView img_check;
-        public LinearLayout lin_check;
+        public ImageView imageMask;// 六边形封面遮罩
+        public ImageView imageRankImage;// 封面
+        public TextView textRankTitle;// 标题
+        public TextView textRankContent;// 来源
+        public ImageView imageCheck;// 编辑状态
+
+        public TextView textNumber;// 收听次数
+        public TextView textLast;// 时长 OR 集数
+        public ImageView imageLast;// 图标  时长
+        public ImageView imageNum;// 图标  集数
     }
 }

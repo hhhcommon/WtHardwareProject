@@ -1,6 +1,7 @@
 package com.wotingfm.activity.mine.wifi;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.text.Editable;
 import android.text.InputType;
 import android.text.TextWatcher;
@@ -33,7 +34,7 @@ public class ConfigWiFiActivity extends AppBaseActivity implements View.OnClickL
             String wiFiName = intent.getStringExtra(StringConstant.WIFI_NAME);
             setTitle(wiFiName);
         } else {
-            setTitle("连接WiFi");
+            setTitle("连接 WiFi");
         }
 
         editPsw = findView(R.id.edit_psw);                          // 输入 密码
@@ -86,8 +87,10 @@ public class ConfigWiFiActivity extends AppBaseActivity implements View.OnClickL
         public void afterTextChanged(Editable s) {
             if(s.toString().length() < 8) {
                 btnConfirm.setEnabled(false);
+                btnConfirm.setTextColor(Color.parseColor("#BABAC1"));
             } else {
                 btnConfirm.setEnabled(true);
+                btnConfirm.setTextColor(Color.parseColor("#FFFFFFFF"));
             }
         }
     }

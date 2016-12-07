@@ -20,6 +20,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.util.L;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,16 +38,16 @@ public class SplashActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        first = BSApplication.SharedPreferences.getString(StringConstant.FIRST, "0");//是否是第一次登录
+        first = BSApplication.SharedPreferences.getString(StringConstant.FIRST, "0");// 是否是第一次登录
         Editor et = BSApplication.SharedPreferences.edit();
-        et.putString(StringConstant.PERSONREFRESHB, "true");//默认每次都是刷新通讯录界面
-        et.commit();
+        et.putString(StringConstant.PERSONREFRESHB, "true");// 默认每次都是刷新通讯录界面
+        if(!et.commit()) L.w("数据 commit 失败!");
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
                 send();
             }
-        }, 1000);//延时一秒钟后执行send方法
+        }, 1000);// 延时一秒钟后执行 send 方法
     }
 
     // 获取请求网络公共属性
@@ -55,45 +56,106 @@ public class SplashActivity extends Activity {
         VolleyRequest.RequestPost(GlobalConfig.splashUrl, tag, jsonObject, new VolleyCallback() {
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (isCancelRequest) {
-                    return;
-                }
+                if (isCancelRequest) return;
                 try {
                     String ReturnType = result.getString("ReturnType");
-                    if (ReturnType.equals("1001")) {
-                        try {
-                            String UserInfo = result.getString("UserInfo");
-                            if (UserInfo == null || UserInfo.trim().equals("")) {
-                                Editor et = BSApplication.SharedPreferences.edit();
-                                et.putString(StringConstant.USERID, "userid");
-                                et.putString(StringConstant.USERNAME, "username");
-                                et.putString(StringConstant.IMAGEURL, "imageurl");
-                                et.putString(StringConstant.IMAGEURBIG, "imageurlbig");
-                                et.commit();
-                            } else {
-                                UserInfo list = new Gson().fromJson(UserInfo, new TypeToken<UserInfo>() {
-                                }.getType());
-                                String userId = list.getUserId();
-                                String userName = list.getUserName();
-                                String imageUrl = list.getPortraitMini();
-                                String imageUrlBig = list.getPortraitBig();
-                                Editor et = BSApplication.SharedPreferences.edit();
+                    if (ReturnType != null && ReturnType.equals("1001")) {
+                        Editor et = BSApplication.SharedPreferences.edit();
+                        String UserInfo = result.getString("UserInfo");
+                        if (UserInfo != null && !UserInfo.trim().equals("")) {
+                            UserInfo list = new Gson().fromJson(UserInfo, new TypeToken<UserInfo>() {}.getType());
+                            String userId = list.getUserId();// ID
+                            String userName = list.getUserName();// 用户名
+                            String userNum = list.getUserNum();// 用户号
+                            String imageUrl = list.getPortraitMini();// 用户头像
+                            String imageUrlBig = list.getPortraitBig();// 用户大头像
+                            String gender = list.getSex();// 性别
+                            String region = list.getRegion();// 区域
+                            String birthday = list.getBirthday();// 生日
+                            String age = list.getAge();// 年龄
+                            String starSign = list.getStarSign();// 星座
+                            String email = list.getEmail();// 邮箱
+                            String userSign = list.getUserSign();// 签名
+                            String nickName=list.getNickName();
+
+                            if (userId != null && !userId.equals("")) {
                                 et.putString(StringConstant.USERID, userId);
-                                et.putString(StringConstant.IMAGEURL, imageUrl);
-                                et.putString(StringConstant.IMAGEURBIG, imageUrlBig);
-                                et.putString(StringConstant.USERNAME, userName);
-                                et.commit();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                            Log.e(tag + "异常=", e.toString() + "");
+                            if (userName != null && !userName.equals("")) {
+                                et.putString(StringConstant.USERNAME, userName);
+                            }
+                            if (imageUrl != null && !imageUrl.equals("")) {
+                                et.putString(StringConstant.IMAGEURL, imageUrl);
+                            }
+                            if (imageUrlBig != null && !imageUrlBig.equals("")) {
+                                et.putString(StringConstant.IMAGEURBIG, imageUrlBig);
+                            }
+                            if (userNum != null && !userNum.equals("")) {
+                                et.putString(StringConstant.USER_NUM, userNum);
+                            }
+                            if (gender != null && !gender.equals("")) {
+                                if(gender.equals("男")) {
+                                    et.putString(StringConstant.GENDERUSR, "xb001");
+                                } else if(gender.equals("女")) {
+                                    et.putString(StringConstant.GENDERUSR, "xb002");
+                                }
+                            }
+
+                            /**
+                             * 地区的三种格式
+                             * 1、行政区划\/**市\/市辖区\/**区
+                             * 2、行政区划\/**特别行政区  港澳台三地区
+                             * 3、行政区划\/**自治区\/通辽市  自治区地区
+                             */
+                            if (region != null && !region.equals("")) {
+                                String[] subRegion = region.split("/");
+                                if(subRegion.length > 3) {
+                                    region = subRegion[1] + " " + subRegion[3];
+                                } else if(subRegion.length == 3) {
+                                    region = subRegion[1] + " " + subRegion[2];
+                                } else {
+                                    region = subRegion[1].substring(0, 2);
+                                }
+                                et.putString(StringConstant.REGION, region);
+                            }
+                            if (birthday != null && !birthday.equals("")) {
+                                et.putString(StringConstant.BIRTHDAY, birthday);
+                            }
+                            if (age != null && !age.equals("")) {
+                                et.putString(StringConstant.AGE, age);
+                            }
+                            if (starSign != null && !starSign.equals("")) {
+                                et.putString(StringConstant.STAR_SIGN, starSign);
+                            }
+                            if (email != null && !email.equals("")) {
+                                if(email.equals("&null")) {
+                                    et.putString(StringConstant.EMAIL, "");
+                                } else {
+                                    et.putString(StringConstant.EMAIL, email);
+                                }
+                            }
+                            if (userSign != null && !userSign.equals("")) {
+                                if(userSign.equals("&null")) {
+                                    et.putString(StringConstant.USER_SIGN, "");
+                                } else {
+                                    et.putString(StringConstant.USER_SIGN, userSign);
+                                }
+                            }
+                            if (nickName != null && !nickName.equals("")) {
+                                if(nickName.equals("&null")) {
+                                    et.putString(StringConstant.NICK_NAME, "");
+                                } else {
+                                    et.putString(StringConstant.NICK_NAME, nickName);
+                                }
+                            }
+                            if (!et.commit()) {
+                                Log.v("commit", "数据 commit 失败!");
+                            }
                         }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
-                    Log.e(tag + "异常=", e.toString() + "");
                 }
-
                 if (first != null && first.equals("1")) {
                     startActivity(new Intent(SplashActivity.this, MainActivity.class));//跳转到主页
                 } else {
@@ -114,7 +176,7 @@ public class SplashActivity extends Activity {
         });
     }
 
-    //设置android app 的字体大小不受系统字体大小改变的影响
+    // 设置 android app 的字体大小不受系统字体大小改变的影响
     @Override
     public Resources getResources() {
         Resources res = super.getResources();

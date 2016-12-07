@@ -1,8 +1,11 @@
 package com.wotingfm.activity.music.program.citylist.activity;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -19,21 +22,19 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
+import com.wotingfm.activity.common.baseactivity.BaseActivity;
 import com.wotingfm.activity.im.interphone.linkman.view.CharacterParser;
 import com.wotingfm.activity.im.interphone.linkman.view.PinyinComparator_d;
 import com.wotingfm.activity.im.interphone.linkman.view.SideBar;
 import com.wotingfm.activity.music.program.citylist.adapter.CityListAdapter;
-import com.wotingfm.activity.music.program.fenlei.model.FenLei;
-import com.wotingfm.activity.music.program.fenlei.model.FenLeiName;
-import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.activity.music.program.diantai.activity.CityRadioActivity;
+import com.wotingfm.activity.music.program.fenlei.model.Catalog;
+import com.wotingfm.activity.music.program.fenlei.model.CatalogName;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -45,92 +46,132 @@ import java.util.List;
 
 /**
  * 城市列表
+ *
  * @author 辛龙
  *         2016年4月7日
  */
-public class CityListActivity extends AppBaseActivity {
-    private CharacterParser characterParser = CharacterParser.getInstance();// 实例化汉字转拼音类
-    private PinyinComparator_d pinyinComparator = new PinyinComparator_d();
-    private CityListAdapter adapter;
-
+public class CityListActivity extends BaseActivity implements OnClickListener {
+    private CharacterParser characterParser;
+    private PinyinComparator_d pinyinComparator;
     private Dialog dialog;
+    private TextView tvNoFriend;
     private SideBar sideBar;
+    private TextView dialogs;
     private ListView listView;
-    private TextView textNoFriend;
-    private EditText editSearchContent;
-    private ImageView imageClear;
-
-    private List<FenLeiName> userList = new ArrayList<>();
-    private List<FenLeiName> srcList;
-
+    private EditText et_Search_content;
+    private ImageView image_clear;
+    private List<CatalogName> userList = new ArrayList<>();
+    private CityListAdapter adapter;
+    private List<CatalogName> srcList;
     private String tag = "CITY_LIST_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
+    private String type;
 
     @Override
-    protected int setViewId() {
-        return R.layout.activity_citylists;
-    }
-
-    @Override
-    protected void init() {
-        setTitle("省市台");
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_citylists);
+        type = getIntent().getStringExtra("type");
+        characterParser = CharacterParser.getInstance();// 实例化汉字转拼音类
+        pinyinComparator = new PinyinComparator_d();
         setView();
-
-        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            dialog = DialogUtils.Dialogph(context, "正在获取信息");
-            sendRequest();
+        setListener();
+        if (GlobalConfig.CityCatalogList != null && GlobalConfig.CityCatalogList.size() > 0) {
+            handleCityList(GlobalConfig.CityCatalogList);
         } else {
-            ToastUtils.show_always(context, "网络失败，请检查网络");
+            if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                dialog = DialogUtils.Dialogph(context, "正在获取信息");
+                sendRequest();
+            } else {
+                ToastUtils.show_always(context, "网络失败，请检查网络");
+            }
         }
     }
 
-    // 初始化控件
+
     private void setView() {
-        textNoFriend = (TextView) findViewById(R.id.title_layout_no_friends);
+        findViewById(R.id.head_left_btn).setOnClickListener(this);
 
-        TextView dialogs = (TextView) findViewById(R.id.dialog);
+        tvNoFriend = (TextView) findViewById(R.id.title_layout_no_friends);
         sideBar = (SideBar) findViewById(R.id.sidrbar);
+        dialogs = (TextView) findViewById(R.id.dialog);
         sideBar.setTextView(dialogs);
-
-        listView = (ListView) findViewById(R.id.country_lvcountry);         // listView
-        editSearchContent = (EditText) findViewById(R.id.et_search);        // 搜索控件
-        imageClear = (ImageView) findViewById(R.id.image_clear);
-
-        setListener();
+        listView = (ListView) findViewById(R.id.country_lvcountry);             // listview
+        et_Search_content = (EditText) findViewById(R.id.et_search);         // 搜索控件
+        image_clear = (ImageView) findViewById(R.id.image_clear);
     }
 
-    // 发送网络请求获取数据列表
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.head_left_btn:
+                finish();
+                break;
+        }
+    }
+
+    private void handleCityList(List<CatalogName> srcList) {
+        if (srcList.size() == 0) {
+            ToastUtils.show_always(context, "获取分类列表为空");
+        } else {
+            userList.clear();
+            userList.addAll(srcList);
+            filledData(userList);
+            Collections.sort(userList, pinyinComparator);
+            adapter = new CityListAdapter(context, userList);
+            listView.setAdapter(adapter);
+            setInterface();
+        }
+
+    }
+
+    /**
+     * 发送网络请求
+     */
     private void sendRequest() {
         VolleyRequest.RequestPost(GlobalConfig.getCatalogUrl, tag, setParam(), new VolleyCallback() {
+
+            private String ReturnType;
 
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
+                // 如果网络请求已经执行取消操作  就表示就算请求成功也不需要数据返回了  所以方法就此结束
                 if (isCancelRequest) {
                     return;
                 }
                 try {
-                    String returnType = result.getString("ReturnType");
-                    L.w("returnType -- > > " + returnType);
-
-                    if (returnType != null && returnType.equals("1001")) {
-                        FenLei subListAll = new Gson().fromJson(result.getString("CatalogData"), new TypeToken<FenLei>() {}.getType());
-                        srcList = subListAll.getSubCata();
-                        if (srcList != null && srcList.size() > 0) {
-                            userList.clear();
-                            userList.addAll(srcList);
-                            filledData(userList);
-                            Collections.sort(userList, pinyinComparator);
-                            listView.setAdapter(adapter = new CityListAdapter(context, userList));
-                            setInterface();
-                        }
-                    }else {
-                        ToastUtils.show_always(context, "数据获取异常，请稍候重试");
-                    }
+                    ReturnType = result.getString("ReturnType");
                 } catch (JSONException e) {
                     e.printStackTrace();
+                }
+                // 根据返回值来对程序进行解析
+                if (ReturnType != null) {
+                    if (ReturnType.equals("1001")) {
+                        try {
+                            // 获取列表
+                            String ResultList = result.getString("CatalogData");
+                            Catalog SubList_all = new Gson().fromJson(ResultList, new TypeToken<Catalog>() {
+                            }.getType());
+                            srcList = SubList_all.getSubCata();
+                            GlobalConfig.CityCatalogList = srcList;
+                            handleCityList(srcList);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (ReturnType.equals("1002")) {
+                        ToastUtils.show_always(context, "无此分类信息");
+                    } else if (ReturnType.equals("1003")) {
+                        ToastUtils.show_always(context, "分类不存在");
+                    } else if (ReturnType.equals("1011")) {
+                        ToastUtils.show_always(context, "当前暂无分类");
+                    } else if (ReturnType.equals("T")) {
+                        ToastUtils.show_always(context, "获取列表异常");
+                    }
+                } else {
+                    ToastUtils.show_always(context, "数据获取异常，请稍候重试");
                 }
             }
 
@@ -139,18 +180,21 @@ public class CityListActivity extends AppBaseActivity {
                 if (dialog != null) {
                     dialog.dismiss();
                 }
-                ToastUtils.showVolleyError(context);
             }
         });
     }
 
-    // 请求网络需要提交的参数
+    /**
+     * 设置请求参数
+     *
+     * @return
+     */
     private JSONObject setParam() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("CatalogType", "2");
             jsonObject.put("ResultType", "1");
-            jsonObject.put("RelLevel", "0");
+            jsonObject.put("RelLevel", "3");
             jsonObject.put("Page", "1");
         } catch (JSONException e) {
             e.printStackTrace();
@@ -158,7 +202,7 @@ public class CityListActivity extends AppBaseActivity {
         return jsonObject;
     }
 
-    private void filledData(List<FenLeiName> person) {
+    private void filledData(List<CatalogName> person) {
         for (int i = 0; i < person.size(); i++) {
             person.get(i).setName(person.get(i).getCatalogName());
             // 汉字转换成拼音
@@ -177,26 +221,39 @@ public class CityListActivity extends AppBaseActivity {
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Editor et = BSApplication.SharedPreferences.edit();
-                et.putString(StringConstant.CITYTYPE, "true");
-                if (userList.get(position).getCatalogId() != null && !userList.get(position).getCatalogId().equals("")) {
-                    et.putString(StringConstant.CITYID, userList.get(position).getCatalogId());
-                    GlobalConfig.AdCode = userList.get(position).getCatalogId();
+                if (type != null && !type.trim().equals("") && type.equals("address")) {
+                    SharedPreferences sp = getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
+                    Editor et = sp.edit();
+                    et.putString(StringConstant.CITYTYPE, "true");
+                    if (userList.get(position).getCatalogId() != null && !userList.get(position).getCatalogId().equals("")) {
+                        et.putString(StringConstant.CITYID, userList.get(position).getCatalogId());
+                        GlobalConfig.AdCode = userList.get(position).getCatalogId();
+                    }
+                    if (userList.get(position).getCatalogName() != null && !userList.get(position).getCatalogName().equals("")) {
+                        et.putString(StringConstant.CITYNAME, userList.get(position).getCatalogName());
+                        GlobalConfig.CityName = userList.get(position).getCatalogName();
+                    }
+                    et.commit();
+                    finish();
+                } else {
+                    Intent intent = new Intent(context, CityRadioActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("fromtype", "city");
+                    bundle.putString("name", userList.get(position).getCatalogName());
+                    bundle.putString("type", "2");
+                    bundle.putString("id", userList.get(position).getCatalogId());
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                    finish();
                 }
-                if (userList.get(position).getCatalogName() != null && !userList.get(position).getCatalogName().equals("")) {
-                    et.putString(StringConstant.CITYNAME, userList.get(position).getCatalogName());
-                    GlobalConfig.CityName = userList.get(position).getCatalogName();
-                }
-                if (!et.commit()) {
-                    L.w("数据 commit 失败!");
-                }
-                sendBroadcast(new Intent(BroadcastConstant.CITY_CHANGE));// 发送广播更新城市信息
-                finish();
             }
         });
 
-        // 设置右侧触摸监听
+        /**
+         * 设置右侧触摸监听
+         */
         sideBar.setOnTouchingLetterChangedListener(new SideBar.OnTouchingLetterChangedListener() {
+
             @Override
             public void onTouchingLetterChanged(String s) {
                 // 该字母首次出现的位置
@@ -209,16 +266,22 @@ public class CityListActivity extends AppBaseActivity {
     }
 
     private void setListener() {
-        imageClear.setOnClickListener(new OnClickListener() {
+        image_clear.setOnClickListener(this);
+
+        image_clear.setOnClickListener(new OnClickListener() {
+
             @Override
             public void onClick(View v) {
-                imageClear.setVisibility(View.INVISIBLE);
-                editSearchContent.setText("");
+                image_clear.setVisibility(View.INVISIBLE);
+                et_Search_content.setText("");
             }
         });
 
-        // 当输入框输入过汉字，且回复0后就要调用使用userList1的原表数据
-        editSearchContent.addTextChangedListener(new TextWatcher() {
+        /**
+         * 当输入框输入过汉字，且回复0后就要调用使用userlist1的原表数据
+         */
+        et_Search_content.addTextChangedListener(new TextWatcher() {
+
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
             }
@@ -229,10 +292,10 @@ public class CityListActivity extends AppBaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String searchName = s.toString();
-                if (searchName.equals("") || searchName.trim().equals("")) {
-                    imageClear.setVisibility(View.INVISIBLE);
-                    textNoFriend.setVisibility(View.GONE);
+                String search_name = s.toString();
+                if (search_name == null || search_name.equals("") || search_name.trim().equals("")) {
+                    image_clear.setVisibility(View.INVISIBLE);
+                    tvNoFriend.setVisibility(View.GONE);
                     // 关键词为空
                     if (srcList == null || srcList.size() == 0) {
                         listView.setVisibility(View.GONE);
@@ -249,24 +312,24 @@ public class CityListActivity extends AppBaseActivity {
                 } else {
                     userList.clear();
                     userList.addAll(srcList);
-                    imageClear.setVisibility(View.VISIBLE);
-                    search(searchName);
+                    image_clear.setVisibility(View.VISIBLE);
+                    search(search_name);
                 }
             }
         });
     }
 
-    // 根据输入框中的值来过滤数据并更新ListView
+    // 根据输入框中的值来过滤数据并更新 ListView
     private void search(String search_name) {
-        List<FenLeiName> filterDateList = new ArrayList<>();
+        List<CatalogName> filterDateList = new ArrayList<>();
         if (TextUtils.isEmpty(search_name)) {
             filterDateList = userList;
-            textNoFriend.setVisibility(View.GONE);
+            tvNoFriend.setVisibility(View.GONE);
         } else {
             filterDateList.clear();
-            for (FenLeiName sortModel : userList) {
+            for (CatalogName sortModel : userList) {
                 String name = sortModel.getName();
-                if (name.indexOf(search_name) != -1 || characterParser.getSelling(name).startsWith(search_name)) {
+                if (name.contains(search_name) || characterParser.getSelling(name).startsWith(search_name)) {
                     filterDateList.add(sortModel);
                 }
             }
@@ -278,7 +341,7 @@ public class CityListActivity extends AppBaseActivity {
         userList.clear();
         userList.addAll(filterDateList);
         if (filterDateList.size() == 0) {
-            textNoFriend.setVisibility(View.VISIBLE);
+            tvNoFriend.setVisibility(View.VISIBLE);
         }
     }
 
@@ -289,13 +352,15 @@ public class CityListActivity extends AppBaseActivity {
         srcList = null;
         userList = null;
         adapter = null;
-        textNoFriend = null;
+        tvNoFriend = null;
         sideBar = null;
+        dialogs = null;
         listView = null;
-        editSearchContent = null;
+        et_Search_content = null;
         listView = null;
-        imageClear = null;
+        image_clear = null;
         pinyinComparator = null;
         characterParser = null;
+        setContentView(R.layout.activity_null);
     }
 }
