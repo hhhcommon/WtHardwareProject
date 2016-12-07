@@ -1,7 +1,6 @@
 package com.wotingfm.activity.music.program.radiolist.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,6 +12,7 @@ import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.program.radiolist.model.ListInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
@@ -47,73 +47,76 @@ public class ListInfoAdapter extends BaseAdapter  {
 		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_item_radiolist, parent, false);
-			holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
-			holder.imageRank = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
-			holder.textNumber = (TextView) convertView.findViewById(R.id.tv_num);
-			holder.textTime = (TextView) convertView.findViewById(R.id.tv_time);
-			holder.textRankPlaying = (TextView) convertView.findViewById(R.id.RankPlaying);
+
+            // 六边形封面遮罩
+            holder.imageMask = (ImageView) convertView.findViewById(R.id.image_mask);
+            holder.imageMask.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b));
+
+            holder.imageRank = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 封面图片
+			holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);// 节目名
+            holder.textRankPlaying = (TextView) convertView.findViewById(R.id.RankPlaying);// 来源
+			holder.textNumber = (TextView) convertView.findViewById(R.id.tv_num);// 收听次数
+			holder.textTime = (TextView) convertView.findViewById(R.id.tv_time);// 节目时长
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		ListInfo lists = list.get(position);
-		if (lists.getContentName() == null || lists.getContentName().equals("")) {
-			holder.textRankTitle.setText("未知");
-		} else {
-			holder.textRankTitle.setText(lists.getContentName());
-		}
-		if (lists.getContentImg() == null || lists.getContentImg().equals("")
-				|| lists.getContentImg().equals("null")
-				|| lists.getContentImg().trim().equals("")) {
-			Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_bg_noimage);
-			holder.imageRank.setImageBitmap(bmp);
-		} else {
-			String url;
-			if(lists.getContentImg().startsWith("http")){
-				 url =  lists.getContentImg();
-			}else{
-				 url = GlobalConfig.imageurl + lists.getContentImg();
-			}
-			Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageRank);
-		}
-		if (lists.getPlayCount() == null
-				|| lists.getPlayCount().equals("")
-				|| lists.getPlayCount().equals("null")) {
-			holder.textNumber.setText("8000");
-		} else {
-			holder.textNumber.setText(lists.getPlayCount());
+
+        // 封面图片
+        String contentImage = lists.getContentImg();
+        if (contentImage == null || contentImage.equals("null") || contentImage.trim().equals("")) {
+            holder.imageRank.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx));
+        } else {
+            String url;
+            if(lists.getContentImg().startsWith("http")){
+                url =  contentImage;
+            }else{
+                url = GlobalConfig.imageurl + contentImage;
+            }
+            url = AssembleImageUrlUtils.assembleImageUrl150(url);
+            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageRank);
+        }
+
+        // 节目名
+        String contentName = lists.getContentName();
+		if (contentName != null && !contentName.equals("")) {
+            holder.textRankTitle.setText(contentName);
 		}
 
-		if (lists.getContentPub() == null
-				|| lists.getContentPub().equals("")
-				|| lists.getContentPub().equals("null")) {
-			holder.textRankPlaying.setText("未知");
-		} else {
-			holder.textRankPlaying.setText(lists.getContentPub());
+        // 来源
+        String contentPub = lists.getContentPub();
+        if (contentPub != null && !contentPub.equals("")) {
+            holder.textRankPlaying.setText(contentPub);
+        }
+
+        // 收听次数
+        String playCount = lists.getPlayCount();
+		if (playCount != null && !playCount.equals("")) {
+            holder.textNumber.setText(playCount);
 		}
 
-		//节目时长
-		if (lists.getContentTimes() == null
-				|| lists.getContentTimes().equals("")
-				|| lists.getContentTimes().equals("null")) {
-			holder.textTime.setText(context.getString(R.string.play_time));
-		} else {
-			int minute = Integer.valueOf(lists.getContentTimes()) / (1000 * 60);
-			int second = (Integer.valueOf(lists.getContentTimes()) / 1000) % 60;
-			if(second < 10){
-				holder.textTime.setText(minute + "\'" + " " + "0" + second + "\"");
-			}else{
-				holder.textTime.setText(minute + "\'" + " " + second + "\"");
-			}
+		// 节目时长
+        String contentTime = lists.getContentTimes();
+		if (contentTime != null && !contentTime.equals("")) {
+            int minute = Integer.valueOf(contentTime) / (1000 * 60);
+            int second = (Integer.valueOf(contentTime) / 1000) % 60;
+            if(second < 10){
+                contentTime = minute + "\'" + " " + "0" + second + "\"";
+            }else{
+                contentTime = minute + "\'" + " " + second + "\"";
+            }
+            holder.textTime.setText(contentTime);
 		}
 		return convertView;
 	}
 
     private class ViewHolder {
-		public ImageView imageRank;
-		public TextView textRankTitle;
-		public TextView textNumber;
-		public TextView textTime;
-		public TextView textRankPlaying;
+        public ImageView imageMask;// 六边形封面遮罩
+		public ImageView imageRank;// 封面图片
+		public TextView textRankTitle;// 节目名
+        public TextView textRankPlaying;// 来源
+		public TextView textNumber;// 收听次数
+		public TextView textTime;// 节目时长
     }
 }

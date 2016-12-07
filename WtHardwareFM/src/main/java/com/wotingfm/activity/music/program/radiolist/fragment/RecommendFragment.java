@@ -50,26 +50,26 @@ import java.util.List;
  * @author woting11
  */
 public class RecommendFragment extends Fragment{
+    private Context context;
+    private SearchPlayerHistoryDao dbDao;	// 数据库
+    private RadioListAdapter adapter;
+    private ArrayList<RankInfo> newList = new ArrayList<>();
+    private List<RankInfo> subList;
+
+    private Dialog dialog;					// 加载对话框
 	private View rootView;
-	private Context context;
 	private XListView mListView;			// 列表
-	private Dialog dialog;					// 加载对话框
+
 	private int page = 1;					// 页码
-	private ArrayList<RankInfo> newList = new ArrayList<>();
 	private int pageSizeNum;
-	private SearchPlayerHistoryDao dbDao;	// 数据库
-	protected List<RankInfo> SubList;
-	protected RadioListAdapter adapter;
-	private int RefreshType;				// refreshType 1为下拉加载 2为上拉加载更多
-//	private View headView;					// 头部视图
-//	private RollPagerView mLoopViewPager;
+	private int refreshType = 1;			// refreshType 1 为下拉加载  2 为上拉加载更多
+    private boolean isFirst = true;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		context = getActivity();
 		initDao();
-		RefreshType = 1;
 	}
 
 	@Override
@@ -88,11 +88,7 @@ public class RecommendFragment extends Fragment{
 		return rootView;
 	}
 
-	private boolean isFirst = true;
-
-	/**
-	 * 与onActivityCreated()方法 解决预加载问题
-	 */
+	// 与onActivityCreated()方法 解决预加载问题
 	@Override
 	public void setUserVisibleHint(boolean isVisibleToUser) {
 		if(isVisibleToUser && adapter == null && getActivity() != null){
@@ -115,10 +111,19 @@ public class RecommendFragment extends Fragment{
 		setUserVisibleHint(getUserVisibleHint());
 	}
 
-	/**
-	 * 请求网络数据
-	 */
-	public void sendRequest(){
+	// 请求网络数据
+	public void sendRequest() {
+        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            ToastUtils.show_always(context, "网络连接失败，请检查网络设置!");
+            if(dialog != null) dialog.dismiss();
+            ((RadioListActivity)getActivity()).closeDialog();
+            if(refreshType == 1) {
+                mListView.stopRefresh();
+            } else {
+                mListView.stopLoadMore();
+            }
+            return ;
+        }
 		VolleyRequest.RequestPost(GlobalConfig.getContentUrl, RadioListActivity.tag, setParam(), new VolleyCallback() {
 			private String ReturnType;
 
@@ -132,42 +137,46 @@ public class RecommendFragment extends Fragment{
 					ReturnType = result.getString("ReturnType");
 					if (ReturnType != null && ReturnType.equals("1001")) {
 						JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
-						SubList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
-						String pageSizeString = arg1.getString("PageSize");
-						String allCountString = arg1.getString("AllCount");
-						if (allCountString != null && !allCountString.equals("") && pageSizeString != null && !pageSizeString.equals("")) {
-							int allCountInt = Integer.valueOf(allCountString);
-							int pageSizeInt = Integer.valueOf(pageSizeString);
-							if(allCountInt < 10 || pageSizeInt < 10){
-								mListView.stopLoadMore();
-								mListView.setPullLoadEnable(false);
-							}else{
-								mListView.setPullLoadEnable(true);
-								if (allCountInt  % pageSizeInt == 0) {
-									pageSizeNum = allCountInt  / pageSizeInt;
-								} else {
-									pageSizeNum = allCountInt  / pageSizeInt + 1;
-								}
-							}
-						}
-						if (RefreshType == 1) {
-							mListView.stopRefresh();
-							newList.clear();
-							newList.addAll(SubList);
-							adapter = new RadioListAdapter(context, newList);
-							mListView.setAdapter(adapter);
-						} else if (RefreshType == 2) {
-							mListView.stopLoadMore();
-							newList.addAll(SubList);
-							adapter.notifyDataSetChanged();
-						}
+						subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
+                        try {
+                            String pageSizeString = arg1.getString("PageSize");
+                            String allCountString = arg1.getString("AllCount");
+                            if (allCountString != null && !allCountString.equals("") && pageSizeString != null && !pageSizeString.equals("")) {
+                                int allCountInt = Integer.valueOf(allCountString);
+                                int pageSizeInt = Integer.valueOf(pageSizeString);
+                                if(allCountInt < 10 || pageSizeInt < 10){
+                                    mListView.stopLoadMore();
+                                    mListView.setPullLoadEnable(false);
+                                }else{
+                                    mListView.setPullLoadEnable(true);
+                                    if (allCountInt  % pageSizeInt == 0) {
+                                        pageSizeNum = allCountInt  / pageSizeInt;
+                                    } else {
+                                        pageSizeNum = allCountInt  / pageSizeInt + 1;
+                                    }
+                                }
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+						if (refreshType == 1) newList.clear();
+                        newList.addAll(subList);
+                        if(adapter == null) {
+                            mListView.setAdapter(adapter = new RadioListAdapter(context, newList));
+                        } else {
+                            adapter.notifyDataSetChanged();
+                        }
 						setOnItem();
-					} else {
-						ToastUtils.show_always(context, "暂没有该分类数据");
 					}
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
+
+                if(refreshType == 1) {
+                    mListView.stopRefresh();
+                } else {
+                    mListView.stopLoadMore();
+                }
 			}
 
 			@Override
@@ -247,8 +256,6 @@ public class RecommendFragment extends Fragment{
 							bundle.putSerializable("list", newList.get(position - 2));
 							intent.putExtras(bundle);
 							startActivityForResult(intent, 1);
-						} else {
-							ToastUtils.show_short(context, "暂不支持的Type类型");
 						}
 					}
 				}
@@ -257,9 +264,7 @@ public class RecommendFragment extends Fragment{
 		});
 	}
 
-	/**
-	 * 设置刷新、加载更多参数
-	 */
+	// 设置刷新、加载更多参数
 	private void setListener() {
 		mListView.setPullLoadEnable(true);
 		mListView.setPullRefreshEnable(true);
@@ -267,38 +272,26 @@ public class RecommendFragment extends Fragment{
 		mListView.setXListViewListener(new XListView.IXListViewListener() {
 			@Override
 			public void onRefresh() {
-				if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-					RefreshType = 1;
-					page = 1;
-					sendRequest();
-				} else {
-					ToastUtils.show_short(context, "网络失败，请检查网络");
-				}
+                refreshType = 1;
+                page = 1;
+                sendRequest();
 			}
 
 			@Override
 			public void onLoadMore() {
 				if (page <=pageSizeNum) {
-					if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-						RefreshType = 2;
-						sendRequest();
-						ToastUtils.show_short(context, "正在请求" + page + "页信息");
-					} else {
-						ToastUtils.show_short(context, "网络失败，请检查网络");
-					}
+                    refreshType = 2;
+                    sendRequest();
 				} else {
 					mListView.stopLoadMore();
 					mListView.setPullLoadEnable(false);
-					ToastUtils.show_short(context, "已经没有最新的数据了");
 				}
 
 			}
 		});
 	}
 
-	/**
-	 * 初始化数据库命令执行对象
-	 */
+	// 初始化数据库命令执行对象
 	private void initDao() {
 		dbDao = new SearchPlayerHistoryDao(context);
 	}
