@@ -176,16 +176,15 @@ public class SearchContentAdapter extends BaseExpandableListAdapter {
 
                 // 节目时长
                 String contentTime = lists.getContentTimes();
-                if (contentTime == null|| contentTime.equals("") || contentTime.equals("null")) {
-                    holder.textLast.setText(context.getString(R.string.play_time));
-                } else {
+                if (contentTime != null&& !contentTime.equals("")) {
                     int minute = Integer.valueOf(contentTime) / (1000 * 60);
                     int second = (Integer.valueOf(contentTime) / 1000) % 60;
                     if(second < 10){
-                        holder.textLast.setText(minute + "\'" + " " + "0" + second + "\"");
+                        contentTime = minute + "\'" + " " + "0" + second + "\"";
                     }else{
-                        holder.textLast.setText(minute + "\'" + " " + second + "\"");
+                        contentTime = minute + "\'" + " " + second + "\"";
                     }
+                    holder.textLast.setText(contentTime);
                 }
                 break;
         }

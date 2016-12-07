@@ -56,12 +56,14 @@ public class ListInfoAdapter extends BaseAdapter  {
 			holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);// 节目名
             holder.textRankPlaying = (TextView) convertView.findViewById(R.id.RankPlaying);// 来源
 			holder.textNumber = (TextView) convertView.findViewById(R.id.tv_num);// 收听次数
-			holder.textTime = (TextView) convertView.findViewById(R.id.tv_time);// 节目时长
+			holder.textLast = (TextView) convertView.findViewById(R.id.tv_time);// 时长 OR 集数
+            holder.imageLast = (ImageView) convertView.findViewById(R.id.image_last);// 时长 OR 集数 图标
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
 		ListInfo lists = list.get(position);
+        String mediaType = lists.getMediaType();
 
         // 封面图片
         String contentImage = lists.getContentImg();
@@ -96,18 +98,34 @@ public class ListInfoAdapter extends BaseAdapter  {
             holder.textNumber.setText(playCount);
 		}
 
-		// 节目时长
-        String contentTime = lists.getContentTimes();
-		if (contentTime != null && !contentTime.equals("")) {
-            int minute = Integer.valueOf(contentTime) / (1000 * 60);
-            int second = (Integer.valueOf(contentTime) / 1000) % 60;
-            if(second < 10){
-                contentTime = minute + "\'" + " " + "0" + second + "\"";
-            }else{
-                contentTime = minute + "\'" + " " + second + "\"";
+        if(mediaType != null) {
+            switch (mediaType) {
+                case "SEQU":
+                    // 集数
+                    holder.imageLast.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.image_program_number));
+                    String contentSubCount = lists.getContentSubCount();
+                    if (contentSubCount != null && !contentSubCount.equals("")) {
+                        contentSubCount = contentSubCount + "集";
+                    }
+                    holder.textLast.setText(contentSubCount);
+                    break;
+                default:
+                    // 节目时长
+                    holder.imageLast.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.image_program_time));
+                    String contentTime = lists.getContentTimes();
+                    if (contentTime != null && !contentTime.equals("")) {
+                        int minute = Integer.valueOf(contentTime) / (1000 * 60);
+                        int second = (Integer.valueOf(contentTime) / 1000) % 60;
+                        if(second < 10){
+                            contentTime = minute + "\'" + " " + "0" + second + "\"";
+                        }else{
+                            contentTime = minute + "\'" + " " + second + "\"";
+                        }
+                        holder.textLast.setText(contentTime);
+                    }
+                    break;
             }
-            holder.textTime.setText(contentTime);
-		}
+        }
 		return convertView;
 	}
 
@@ -117,6 +135,7 @@ public class ListInfoAdapter extends BaseAdapter  {
 		public TextView textRankTitle;// 节目名
         public TextView textRankPlaying;// 来源
 		public TextView textNumber;// 收听次数
-		public TextView textTime;// 节目时长
+		public TextView textLast;// 时长 OR 集数
+        public ImageView imageLast;// 时长 OR 集数 图标
     }
 }
