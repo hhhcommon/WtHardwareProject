@@ -50,8 +50,8 @@
             android:gravity="center_vertical">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="12dp"
+                android:layout_height="12dp"
                 android:src="@mipmap/image_program_album"/>
 
             <TextView
@@ -86,17 +86,17 @@
                 android:textSize="@dimen/text_size_9"/>
 
             <ImageView
+                android:id="@+id/image_last"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="13dp"
-                android:src="@mipmap/image_program_time"/>
+                android:layout_marginLeft="13dp"/>
 
             <TextView
                 android:id="@+id/tv_time"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="6dp"
-                android:text="@string/play_time"
+                android:text="0"
                 android:textColor="@color/beijing"
                 android:textSize="@dimen/text_size_9"/>
 

@@ -200,9 +200,8 @@ public class SetActivity extends BaseActivity implements OnClickListener {
         }
     }
 
-    // 初始化对话框
+    // 清除缓存对话框
     private void initDialog() {
-        // 清除缓存对话框
         View dialog1 = LayoutInflater.from(context).inflate(R.layout.dialog_exit_confirm, null);
         dialog1.findViewById(R.id.tv_confirm).setOnClickListener(this); // 清空
         dialog1.findViewById(R.id.tv_cancle).setOnClickListener(this);  // 取消
@@ -213,8 +212,10 @@ public class SetActivity extends BaseActivity implements OnClickListener {
         clearCacheDialog.setContentView(dialog1);
         clearCacheDialog.setCanceledOnTouchOutside(false);
         clearCacheDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+    }
 
-        // 更新弹出框
+    // 更新弹出框
+    private void initUpdateDialog() {
         View dialog2 = LayoutInflater.from(this).inflate(R.layout.dialog_update, null);
         dialog2.findViewById(R.id.tv_update).setOnClickListener(this);  // 开始更新
         dialog2.findViewById(R.id.tv_qx).setOnClickListener(this);      // 取消
@@ -225,6 +226,7 @@ public class SetActivity extends BaseActivity implements OnClickListener {
         updateDialog.setContentView(dialog2);
         updateDialog.setCanceledOnTouchOutside(false);
         updateDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+        updateDialog.show();
     }
 
     // 注销数据交互
@@ -238,7 +240,7 @@ public class SetActivity extends BaseActivity implements OnClickListener {
                 try {
                     String returnType = result.getString("ReturnType");
                     String message = result.getString("Message");
-                    Log.v("returnType", "returnType -- > > " + returnType + " -- message -- > > " + message);
+                    Log.v("returnType", "returnType -- > " + returnType + ", message -- > " + message);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -343,7 +345,7 @@ public class SetActivity extends BaseActivity implements OnClickListener {
                         updateNews = "本次版本升级较大，需要更新";
                     }
                     updateType = 2;
-                    updateDialog.show();
+                    initUpdateDialog();
                 } else {            // 普通升级
                     if (Descn != null && !Descn.trim().equals("")) {
                         updateNews = Descn;
@@ -351,11 +353,11 @@ public class SetActivity extends BaseActivity implements OnClickListener {
                         updateNews = "有新的版本需要升级喽";
                     }
                     updateType = 1;// 不需要强制升级
-                    updateDialog.show();
+                    initUpdateDialog();
                 }
-            } else if (versionNew == versionOld) {
+            } else if(versionNew == versionOld) {
                 ToastUtils.show_always(context, "已经是最新版本");
-            }else{
+            } else {
                 ToastUtils.show_always(context, "已经是最新版本");
             }
         } catch (Exception e) {
