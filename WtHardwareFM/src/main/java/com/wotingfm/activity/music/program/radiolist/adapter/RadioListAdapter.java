@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
@@ -74,7 +75,8 @@ public class RadioListAdapter extends BaseAdapter  {
 			}else{
 				 url = GlobalConfig.imageurl + lists.getContentImg();
 			}
-			Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageRank);
+			url= AssembleImageUrlUtils.assembleImageUrl180(url);
+			Picasso.with(context).load(url.replace("\\/", "/")).into(holder.imageRank);
 		}
 		if (lists.getPlayCount() == null
 				|| lists.getPlayCount().equals("")
@@ -83,15 +85,19 @@ public class RadioListAdapter extends BaseAdapter  {
 		} else {
 			holder.textNumber.setText(lists.getPlayCount());
 		}
-		
-		if (lists.getContentPub() == null
-				|| lists.getContentPub().equals("")
-				|| lists.getContentPub().equals("null")) {
+		try {
+			if (lists.getContentPub() == null
+					|| lists.getContentPub().equals("")
+					|| lists.getContentPub().equals("null")) {
+				holder.textRankPlaying.setText("未知");
+			} else {
+				holder.textRankPlaying.setText(lists.getContentPub());
+			}
+		}catch (Exception e){
 			holder.textRankPlaying.setText("未知");
-		} else {
-			holder.textRankPlaying.setText(lists.getContentPub());
 		}
-		
+
+		try{
 		//节目时长
 		if (lists.getContentTimes() == null
 				|| lists.getContentTimes().equals("")
@@ -105,6 +111,8 @@ public class RadioListAdapter extends BaseAdapter  {
 			}else{
 				holder.textTime.setText(minute + "\'" + " " + second + "\"");
 			}
+		}}catch (Exception e){
+			holder.textTime.setText(context.getString(R.string.play_time));
 		}
 		return convertView;
 	}

@@ -43,6 +43,7 @@ import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ShareUtils;
@@ -360,10 +361,14 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
                 break;
             case R.id.lin_pinglun: // 评论
                 if(!TextUtils.isEmpty(id)){
-                    Intent intent=new Intent(context, CommentActivity.class);
-                    intent.putExtra("contentId",id);
-                    intent.putExtra("MediaType","SEQU");
-                    startActivity(intent);
+                    if(CommonUtils.getUserIdNoImei(context)!=null&&!CommonUtils.getUserIdNoImei(context).equals("")){
+                        Intent intent=new Intent(context, CommentActivity.class);
+                        intent.putExtra("contentId",GlobalConfig.playerobject.getContentId());
+                        intent.putExtra("MediaType","SEQU");
+                        startActivity(intent);
+                    }else{
+                        ToastUtils.show_always(context,"请先登录~~");
+                    }
                 }else{
                     ToastUtils.show_always(context,"当前播放的节目的信息有误，无法获取评论列表");
                 }
