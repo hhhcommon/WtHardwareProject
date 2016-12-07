@@ -104,6 +104,7 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 			holder.imageViewPlayImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 节目图片
 			holder.textNumber = (TextView) convertView.findViewById(R.id.text_number);
 			holder.textRankContent = (TextView) convertView.findViewById(R.id.RankContent);
+            holder.imageLast = (ImageView) convertView.findViewById(R.id.image_last);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -139,11 +140,19 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
         }
 
         // 上次播放时间
-        String playInTime = lists.getPlayerInTime();
-        if (playInTime != null && !playInTime.equals("")) {
-            format.setTimeZone(TimeZone.getTimeZone("GMT"));
-            playInTime = "上次播放至" + format.format(Integer.valueOf(playInTime));
-            holder.textViewPlayIntroduce.setText(playInTime);
+        String mediaType = lists.getPlayerMediaType();
+        if(mediaType.equals("RADIO")) {
+            holder.imageLast.setVisibility(View.GONE);
+            holder.textViewPlayIntroduce.setVisibility(View.GONE);
+        } else {
+            holder.imageLast.setVisibility(View.VISIBLE);
+            holder.textViewPlayIntroduce.setVisibility(View.VISIBLE);
+            String playInTime = lists.getPlayerInTime();
+            if (playInTime != null && !playInTime.equals("")) {
+                format.setTimeZone(TimeZone.getTimeZone("GMT"));
+                playInTime = "上次播放至" + format.format(Integer.valueOf(playInTime));
+                holder.textViewPlayIntroduce.setText(playInTime);
+            }
         }
 		return convertView;
 	}
@@ -161,5 +170,6 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
 		public ImageView imageViewPlayImage;
 		public TextView textNumber;
 		public TextView textRankContent;
+        public ImageView imageLast;
 	}
 }

@@ -173,7 +173,7 @@ public class RadioFragment extends Fragment {
                             String playerurI = newList.get(position - 1).getContentURI();
                             String playermediatype = newList.get(position - 1).getMediaType();
                             String playercontentshareurl = newList.get(position - 1).getContentShareURL();
-                            String plaplayeralltime = "0";
+                            String plaplayeralltime = newList.get(position - 1).getContentTimes();
                             String playerintime = "0";
                             String playercontentdesc = newList.get(position - 1).getContentDescn();
                             String playernum = newList.get(position - 1).getWatchPlayerNum();
