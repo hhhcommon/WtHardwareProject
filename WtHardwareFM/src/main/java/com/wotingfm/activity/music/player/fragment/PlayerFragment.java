@@ -48,6 +48,7 @@ import com.umeng.socialize.UMShareAPI;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.wotingfm.R;
+import com.wotingfm.activity.music.comment.CommentActivity;
 import com.wotingfm.activity.music.common.service.DownloadService;
 import com.wotingfm.activity.music.download.activity.DownloadActivity;
 import com.wotingfm.activity.music.download.dao.FileInfoDao;
@@ -186,6 +187,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private static ImageView img_download;
     private static KSYProxyService proxy;
     private static long currPosition = -1;                 // 当前的播放时间
+    private LinearLayout lin_comment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -244,9 +246,10 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         lin_right = (LinearLayout) headView.findViewById(R.id.lin_right);
         img_news = (ImageView) headView.findViewById(R.id.img_news);
         img_play = (ImageView) headView.findViewById(R.id.img_play);
-        lin_more= (LinearLayout) headView.findViewById(R.id.lin_more);//更多
-        lin_sequ= (LinearLayout) headView.findViewById(R.id.lin_sequ);//专辑
-        lin_schedule=(LinearLayout) headView.findViewById(R.id.lin_schedule);//节目单
+        lin_more= (LinearLayout) headView.findViewById(R.id.lin_more);             // 更多
+        lin_sequ= (LinearLayout) headView.findViewById(R.id.lin_sequ);             // 专辑
+        lin_schedule=(LinearLayout) headView.findViewById(R.id.lin_schedule);      // 节目单
+        lin_comment=(LinearLayout)headView.findViewById(R.id.lin_comment);         // 评论
 
         rv_details = (RelativeLayout) headView.findViewById(R.id.rv_details);      // 节目详情布局
         tv_like = (TextView) headView.findViewById(R.id.tv_like);
@@ -287,6 +290,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         lin_more.setOnClickListener(this);
         lin_sequ.setOnClickListener(this);
         lin_schedule.setOnClickListener(this);
+        lin_comment.setOnClickListener(this);
 
 
         // seekBar事件
@@ -594,10 +598,16 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     shareDialog.show();
                 break;
             case R.id.lin_like:
-                if (GlobalConfig.playerobject.getContentFavorite() != null && !GlobalConfig.playerobject.getContentFavorite().equals("")) {
+                if(CommonUtils.getUserIdNoImei(context)!=null&&
+                        !CommonUtils.getUserIdNoImei(context).equals("")){
+                if (GlobalConfig.playerobject.getContentFavorite() != null
+                        && !GlobalConfig.playerobject.getContentFavorite().equals("")) {
                     sendFavorite();
                 } else {
                     ToastUtils.show_long(context, "本节目信息获取有误，暂时不支持喜欢");
+                }
+                }else{
+                    ToastUtils.show_always(context,"请先登录~~");
                 }
                 break;
             case R.id.lin_left:
@@ -692,6 +702,17 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     tv_details_flag.setText("  显示  ");
                     rv_details.setVisibility(View.GONE);
                 }
+                break;
+            case R.id.lin_comment:
+                if(CommonUtils.getUserIdNoImei(context)!=null&&!CommonUtils.getUserIdNoImei(context).equals("")){
+                    Intent intent=new Intent(context, CommentActivity.class);
+                    intent.putExtra("contentId",GlobalConfig.playerobject.getContentId());
+                    intent.putExtra("MediaType","SEQU");
+                    startActivity(intent);
+                }else{
+                    ToastUtils.show_always(context,"请先登录~~");
+                }
+
                 break;
         }
     }
