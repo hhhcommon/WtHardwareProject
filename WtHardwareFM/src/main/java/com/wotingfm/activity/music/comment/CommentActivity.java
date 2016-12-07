@@ -269,7 +269,7 @@ public class CommentActivity extends BaseActivity implements View.OnClickListene
                     String ReturnType = result.getString("ReturnType");
                     if (ReturnType != null && ReturnType.equals("1001")) {
                         try {
-                            String ResponseString = result.getString("OpinionList");
+                            String ResponseString = result.getString("DiscussList");
                             OM = new Gson().fromJson(ResponseString, new TypeToken<List<opinion>>() {
                             }.getType());
                             if (OM == null || OM.size() == 0) {
