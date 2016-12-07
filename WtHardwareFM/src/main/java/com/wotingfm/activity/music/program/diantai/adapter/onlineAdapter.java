@@ -79,10 +79,10 @@ public class onlineAdapter extends BaseExpandableListAdapter {
     public View getGroupView(int groupPosition, boolean isExpanded,View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fragment_radio_list, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fragment_radio_list, parent, false);
             holder = new ViewHolder();
             holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
-            holder.lin_more = (LinearLayout) convertView.findViewById(R.id.lin_head_more);
+            holder.lin_more = convertView.findViewById(R.id.lin_head_more);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -94,7 +94,7 @@ public class onlineAdapter extends BaseExpandableListAdapter {
             holder.tv_name.setText(lists.getCatalogName());
         }
 
-        // 判断回调对象决定是哪个fragment的对象调用的词adapter 从而实现多种布局
+        // 判断回调对象决定是哪个 fragment 的对象调用的词 adapter 从而实现多种布局
         holder.lin_more.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,12 +113,11 @@ public class onlineAdapter extends BaseExpandableListAdapter {
      * 显示：child
      */
     @Override
-    public View getChildView(int groupPosition, int childPosition,
-                             boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_rankinfo, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_rankinfo, parent, false);
             holder.textview_ranktitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
             holder.textview_rankplaying = (TextView) convertView.findViewById(R.id.RankPlaying);// 正在播放的节目
             holder.imageview_rankimage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
@@ -128,9 +127,6 @@ public class onlineAdapter extends BaseExpandableListAdapter {
             holder.image_last = (ImageView) convertView.findViewById(R.id.image_last);//
             holder.image_num = (ImageView) convertView.findViewById(R.id.image_num);//
             holder.tv_last = (TextView) convertView.findViewById(R.id.tv_last);
-            holder.image_last.setVisibility(View.GONE);
-            holder.image_num.setVisibility(View.GONE);
-            holder.tv_last.setVisibility(View.GONE);
 
             holder.img_zhezhao = (ImageView) convertView.findViewById(R.id.img_zhezhao);
             Bitmap bmp_zhezhao = BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b);
@@ -151,11 +147,10 @@ public class onlineAdapter extends BaseExpandableListAdapter {
 //					if (lists.getContentPub() == null|| lists.getContentPub().equals("")) {
 //						holder.textview_rankplaying.setText("未知");
 //					} else {
-//						holder.textview_rankplaying.setText(lists.getContentPub());
+//						holder.textview_rankplaying.setText("正在直播：" + lists.getContentPub());
 //					}
-                    holder.textview_rankplaying.setText("测试-无节目单数据");
+                    holder.textview_rankplaying.setText("正在直播：测试-无节目单数据");
                     if (lists.getContentImg() == null
-                            || lists.getContentImg().equals("")
                             || lists.getContentImg().equals("null")
                             || lists.getContentImg().trim().equals("")) {
                         Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx_d);
@@ -171,14 +166,13 @@ public class onlineAdapter extends BaseExpandableListAdapter {
                         Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageview_rankimage);
                     }
                 } else {
-                    // 判断mediatype==AUDIO的情况
+                    // 判断 mediaType == AUDIO 的情况
                     if (lists.getContentName() == null|| lists.getContentName().equals("")) {
                         holder.textview_ranktitle.setText("未知");
                     } else {
                         holder.textview_ranktitle.setText(lists.getContentName());
                     }
                     if (lists.getContentImg() == null
-                            || lists.getContentImg().equals("")
                             || lists.getContentImg().equals("null")
                             || lists.getContentImg().trim().equals("")) {
                         Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
@@ -216,7 +210,7 @@ public class onlineAdapter extends BaseExpandableListAdapter {
         public TextView textview_rankplaying;
         public TextView textview_ranktitle;
         public TextView tv_name;
-        public LinearLayout lin_more;
+        public View lin_more;
         public TextView mTv_number;
         public LinearLayout lin_CurrentPlay;
         public ImageView img_zhezhao;

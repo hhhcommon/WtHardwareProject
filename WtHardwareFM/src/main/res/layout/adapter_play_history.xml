@@ -9,8 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="81dp"
         android:background="@color/WHITE"
-        android:gravity="left|center"
-        android:orientation="horizontal">
+        android:gravity="center_vertical">
         
         <LinearLayout
             android:id="@+id/lin_check"
@@ -42,24 +41,23 @@
                 android:src="@mipmap/wt_image_playertx" />
 
             <ImageView
+                android:id="@+id/image_mask"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:layout_centerInParent="true"
-                android:src="@mipmap/wt_6_b_y_b" />
+                android:layout_centerInParent="true" />
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_width="0dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginLeft="13dp"
-            android:layout_weight="1"
             android:orientation="vertical" >
 
             <TextView
                 android:id="@+id/RankTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="我听之声"
+                android:text="未知"
                 android:singleLine="true"
                 android:layout_marginTop="11dp"
                 android:textColor="@color/dinglan_orange"
@@ -69,7 +67,7 @@
                 android:layout_width="wrap_content"
 	            android:layout_height="0dp"
 	            android:layout_weight="1"
-	            android:gravity="left|center">
+	            android:gravity="center_vertical">
             
 	            <ImageView
 		             android:layout_width="wrap_content"
@@ -83,7 +81,7 @@
 	                android:layout_height="wrap_content"
 	                android:ellipsize="end"
 	                android:maxLines="1"
-	                android:text="我听科技"
+	                android:text="未知"
 	                android:textSize="13sp"
 	                android:textColor="@color/beijing"/>
             
@@ -92,8 +90,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left|center"
-                android:visibility="visible"
+                android:gravity="center_vertical"
                 android:layout_marginBottom="11dp">
 	            
                 <ImageView
@@ -107,11 +104,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="9sp"
-                    android:text="8888"
+                    android:text="0"
                     android:gravity="center"
                     android:textColor="@color/beijing"/>
 	            
                 <ImageView
+                    android:id="@+id/image_last"
 		             android:layout_width="wrap_content"
 		             android:layout_height="wrap_content"
 		             android:src="@mipmap/image_program_time"
@@ -123,14 +121,18 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="9sp"
-                    android:text="播放时长"
+                    android:text="未知"
                     android:textColor="@color/beijing"/>
+
             </LinearLayout>
+
         </LinearLayout>
+
     </LinearLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="@color/view_color"/>
+
 </LinearLayout>

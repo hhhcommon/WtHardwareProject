@@ -25,9 +25,7 @@ import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.AppBaseFragmentActivity;
@@ -37,6 +35,7 @@ import com.wotingfm.activity.music.playhistory.fragment.SoundFragment;
 import com.wotingfm.activity.music.playhistory.fragment.TTSFragment;
 import com.wotingfm.activity.music.playhistory.fragment.TotalFragment;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
 
@@ -65,7 +64,7 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
     private int currIndex; 					// 当前页卡编号
     private int bmpW; 						// 横线图片宽度
     private int offset; 					// 图片移动的偏移量
-    private int dialogFlag = 0; 			// 编辑全选状态的变量 0为未选中，1为选中
+    private int dialogFlag = 0; 			// 编辑全选状态的变量 0 为未选中，1 为选中
 
     public static boolean isEdit = true; 	// 是否为编辑状态
     private boolean isDelete = false;
@@ -83,12 +82,13 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
         intentFilter.addAction(BroadcastConstants.UPDATE_ACTION_CHECK);
         registerReceiver(myBroadcast, intentFilter);
 
+        initDialog();
         initImage();
-        setView();// 设置界面
+        initViews();
     }
 
     // 初始化视图
-    private void setView() {
+    private void initViews() {
         findViewById(R.id.head_left_btn).setOnClickListener(this);  // 左上返回键
 
         clearEmpty = (TextView) findViewById(R.id.clear_empty); 	// 清空
@@ -121,8 +121,8 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
         fragmentList.add(ttsFragment);
 
         viewPager.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager()));
-        viewPager.setOnPageChangeListener(new MyOnPageChangeListener()); 	// 页面变化时的监听器
-        viewPager.setCurrentItem(0); 										// 设置当前显示标签页为第一页
+        viewPager.setOnPageChangeListener(new MyOnPageChangeListener());
+        viewPager.setCurrentItem(0);// 设置当前显示标签页为第一页
     }
 
     // TextView 点击事件
@@ -219,9 +219,8 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
         switch (i) {
             case 2: // 声音
                 if (!SoundFragment.isData) {
-                    Toast.makeText(getApplicationContext(), "没有历史播放数据", Toast.LENGTH_SHORT).show();
+                    ToastUtils.show_always(context, "没有历史播放数据");
                 } else {
-                    delDialog();
                     openEdit.setText("取消");
                     PlayHistoryActivity.isEdit = false;
                     soundFragment.setCheck(true);
@@ -231,9 +230,8 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
                 break;
             case 3: // 电台
                 if (!RadioFragment.isData) {
-                    Toast.makeText(getApplicationContext(), "没有历史播放数据", Toast.LENGTH_SHORT).show();
+                    ToastUtils.show_always(context, "没有历史播放数据");
                 } else {
-                    delDialog();
                     openEdit.setText("取消");
                     PlayHistoryActivity.isEdit = false;
                     radioFragment.setCheck(true);
@@ -243,9 +241,8 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
                 break;
             case 4: // TTS
                 if (!TTSFragment.isData) {
-                    Toast.makeText(getApplicationContext(), "没有历史播放数据", Toast.LENGTH_SHORT).show();
+                    ToastUtils.show_always(context, "没有历史播放数据");
                 } else {
-                    delDialog();
                     openEdit.setText("取消");
                     PlayHistoryActivity.isEdit = false;
                     ttsFragment.setCheck(true);
@@ -295,7 +292,7 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenW = dm.widthPixels;
         offset = (screenW / 4 - bmpW) / 2;
-        // imageView设置平移，使下划线平移到初始位置（平移一个offset）
+        // imageView 设置平移，使下划线平移到初始位置（平移一个 offset）
         Matrix matrix = new Matrix();
         matrix.postTranslate(offset, 0);
         image.setImageMatrix(matrix);
@@ -309,10 +306,9 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
                 break;
             case R.id.clear_empty:		// 清空数据
                 if (TotalFragment.isData) {
-                    confirmDialog();
                     confirmDialog.show();
                 } else {
-                    ToastUtils.show_always(this, "没有历史播放记录");
+                    ToastUtils.show_always(context, "没有历史播放数据");
                 }
                 break;
             case R.id.open_edit:		// 编辑
@@ -324,10 +320,10 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
                 break;
             case R.id.lin_favorite_quanxuan:// 全选
                 if (dialogFlag == 0) {
-                    imgAllCheck.setImageResource(R.mipmap.wt_group_checked);
+                    imgAllCheck.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_group_checked));
                     dialogFlag = 1;
                 } else if(dialogFlag == 1){
-                    imgAllCheck.setImageResource(R.mipmap.wt_group_nochecked);
+                    imgAllCheck.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_group_nochecked));
                     dialogFlag = 0;
                 }
                 handleData(dialogFlag);
@@ -339,7 +335,7 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
                     delDialog.dismiss();
                     setCancel();
                 }else{
-                    Toast.makeText(context, "请选择你要删除的历史播放记录", Toast.LENGTH_SHORT).show();
+                    ToastUtils.show_always(context, "请选择你要删除的历史播放记录");
                 }
                 break;
             case R.id.tv_cancle:// 取消删除
@@ -362,13 +358,12 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
         }
     }
 
-    // 编辑状态下的对话框 在界面底部显示
-    private void delDialog() {
+    // 初始化提示对话框
+    private void initDialog() {
+        // 编辑状态下的对话框 在界面底部显示
         final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_fravorite, null);
-        LinearLayout linearAllCheck = (LinearLayout) dialog.findViewById(R.id.lin_favorite_quanxuan);
-        linearAllCheck.setOnClickListener(this);
-        LinearLayout linearDelete = (LinearLayout) dialog.findViewById(R.id.lin_favorite_shanchu);
-        linearDelete.setOnClickListener(this);
+        dialog.findViewById(R.id.lin_favorite_quanxuan).setOnClickListener(this);
+        dialog.findViewById(R.id.lin_favorite_shanchu).setOnClickListener(this);
         imgAllCheck = (ImageView) dialog.findViewById(R.id.img_fravorite_quanxuan);
         delDialog = new Dialog(context, R.style.MyDialog_duijiang);
         delDialog.setContentView(dialog); // 从底部上升到一个位置
@@ -380,9 +375,20 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
         dialog.setLayoutParams(params);
         window.setGravity(Gravity.BOTTOM);
         window.setWindowAnimations(R.style.sharestyle);
-        // 设置 dialog 不获取焦点
         window.setFlags(WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE, WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE);
         delDialog.setCanceledOnTouchOutside(false);
+
+        // 清空所有数据 对话框
+        final View dialog1 = LayoutInflater.from(this).inflate(R.layout.dialog_exit_confirm, null);
+        dialog1.findViewById(R.id.tv_cancle).setOnClickListener(this);
+        dialog1.findViewById(R.id.tv_confirm).setOnClickListener(this);
+        TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);
+        textTitle.setText("是否清空全部历史记录");
+
+        confirmDialog = new Dialog(context, R.style.MyDialog);
+        confirmDialog.setContentView(dialog1);
+        confirmDialog.setCanceledOnTouchOutside(true);
+        confirmDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
     }
 
     // 处理数据
@@ -420,7 +426,7 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
         }
         if(number > 0){
             isDelete = true;
-            Toast.makeText(context, "删除了 " + number + " 条" + message + "播放历史记录", Toast.LENGTH_SHORT).show();
+            ToastUtils.show_always(context, "删除了 " + number + " 条" + message + "播放历史记录");
         }
     }
 
@@ -439,31 +445,16 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
         }
     }
 
-    // 清空所有数据 对话框
-    private void confirmDialog() {
-        final View dialog1 = LayoutInflater.from(this).inflate(R.layout.dialog_exit_confirm, null);
-        TextView textCancel = (TextView) dialog1.findViewById(R.id.tv_cancle);
-        textCancel.setOnClickListener(this);
-        TextView textConfirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
-        textConfirm.setOnClickListener(this);
-        TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);
-        textTitle.setText("是否清空全部历史记录");
-        confirmDialog = new Dialog(context, R.style.MyDialog);
-        confirmDialog.setContentView(dialog1);
-        confirmDialog.setCanceledOnTouchOutside(true);
-        confirmDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-    }
-
     // 广播接收器  接收 Fragment 发送的广播  用于更新全选状态
     private BroadcastReceiver myBroadcast = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.UPDATE_ACTION_ALL)) {
-                imgAllCheck.setImageResource(R.mipmap.wt_group_checked);
+                imgAllCheck.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_group_checked));
                 dialogFlag = 1;
             }else if(action.equals(BroadcastConstants.UPDATE_ACTION_CHECK)){
-                imgAllCheck.setImageResource(R.mipmap.wt_group_nochecked);
+                imgAllCheck.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_group_nochecked));
                 dialogFlag = 0;
             }
         }
