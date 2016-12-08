@@ -260,10 +260,10 @@ public class RadioFragment extends Fragment {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             if (searchStr != null && !searchStr.equals("")) {
-                jsonObject.put("MediaType", "RADIO");
                 jsonObject.put("SearchStr", searchStr);
-                jsonObject.put("Page", String.valueOf(page));
+                jsonObject.put("MediaType", "RADIO");
                 jsonObject.put("PageSize", "10");
+                jsonObject.put("Page", String.valueOf(page));
             }
         } catch (JSONException e) {
             e.printStackTrace();

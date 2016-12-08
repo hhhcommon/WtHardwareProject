@@ -194,7 +194,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 Intent intentEwm = new Intent(context, EWMShowActivity.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("type", "1");
-                bundle.putString("news", "");
+                bundle.putString("news", userSign);// 签名
                 bundle.putSerializable("person", news);
                 intentEwm.putExtras(bundle);
                 startActivity(intentEwm);
@@ -299,7 +299,7 @@ public class MineActivity extends Activity implements OnClickListener {
                 url = AssembleImageUrlUtils.assembleImageUrl150(url);
                 Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(userHead);
             } else {
-                Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_default_head);
+                Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_hy);
                 userHead.setImageBitmap(bmp);
             }
         } else {

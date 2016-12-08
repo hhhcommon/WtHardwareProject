@@ -11,6 +11,7 @@ import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.helper.CreatQRImageHelper;
+import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
 /**
@@ -19,6 +20,7 @@ import com.wotingfm.util.BitmapUtils;
  * 邮箱：645700751@qq.com
  */
 public class EWMShowActivity extends AppBaseActivity {
+    private ImageView imageBackground;// 背景图片
 	private ImageView imageViewEwm;
 	private ImageView imageHead;
 	private TextView textName;
@@ -34,6 +36,10 @@ public class EWMShowActivity extends AppBaseActivity {
     @Override
     protected void init() {
         setTitle("二维码");
+
+        imageBackground = (ImageView) findViewById(R.id.id_image_background);
+        imageBackground.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_qrcode_background));
+
         Intent data = getIntent();
         if(data != null){
             String news = data.getStringExtra("news");
@@ -80,6 +86,7 @@ public class EWMShowActivity extends AppBaseActivity {
             }else{
                 url = GlobalConfig.imageurl + imageUrl;
             }
+            url = AssembleImageUrlUtils.assembleImageUrl150(url);
             Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(imageHead);
         }
         bitmap = CreatQRImageHelper.getInstance().createQRImage(type, userInfo, 220, 220);

@@ -167,8 +167,6 @@ public class SequFragment extends Fragment {
                         bundle.putSerializable("list", newList.get(position - 1));
                         intent.putExtras(bundle);
                         startActivity(intent);
-                    } else {
-                        ToastUtils.show_always(context, "暂不支持的Type类型");
                     }
                 }
             }
@@ -178,6 +176,7 @@ public class SequFragment extends Fragment {
     private void sendRequest() {
         if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
             ToastUtils.show_always(context, "连接网络失败，请检查网络设置!");
+            if (dialog != null) dialog.dismiss();
             if(refreshType == 1) {
                 mListView.stopRefresh();
             } else {
@@ -254,10 +253,10 @@ public class SequFragment extends Fragment {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             if (searchStr != null && !searchStr.equals("")) {
-                jsonObject.put("MediaType", "SEQU");
                 jsonObject.put("SearchStr", searchStr);
-                jsonObject.put("Page", String.valueOf(page));
+                jsonObject.put("MediaType", "SEQU");
                 jsonObject.put("PageSize", "10");
+                jsonObject.put("Page", String.valueOf(page));
             }
         } catch (JSONException e) {
             e.printStackTrace();
