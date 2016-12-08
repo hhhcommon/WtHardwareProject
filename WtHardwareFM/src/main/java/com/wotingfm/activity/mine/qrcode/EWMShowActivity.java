@@ -20,7 +20,6 @@ import com.wotingfm.util.BitmapUtils;
  * 邮箱：645700751@qq.com
  */
 public class EWMShowActivity extends AppBaseActivity {
-    private ImageView imageBackground;// 背景图片
 	private ImageView imageViewEwm;
 	private ImageView imageHead;
 	private TextView textName;
@@ -37,7 +36,7 @@ public class EWMShowActivity extends AppBaseActivity {
     protected void init() {
         setTitle("二维码");
 
-        imageBackground = (ImageView) findViewById(R.id.id_image_background);
+        ImageView imageBackground = (ImageView) findViewById(R.id.id_image_background);
         imageBackground.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_qrcode_background));
 
         Intent data = getIntent();
