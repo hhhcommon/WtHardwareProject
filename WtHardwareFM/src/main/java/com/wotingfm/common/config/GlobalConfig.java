@@ -42,7 +42,7 @@ public class GlobalConfig {
     // volley请求超时 时间
     public static final int HTTP_CONNECTION_TIMEOUT = 60 * 1000;
     // 数据库版本号
-    public static final int dbversoncode = 3;
+    public static final int dbversoncode = 6;
     // 此时的界面
     public static int activitytype=1;
     // Socket连接客户端配置信息

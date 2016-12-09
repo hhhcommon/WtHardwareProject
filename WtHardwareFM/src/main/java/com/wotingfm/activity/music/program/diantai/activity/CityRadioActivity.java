@@ -191,9 +191,9 @@ public class CityRadioActivity extends BaseActivity implements View.OnClickListe
                         String playUri =  SubList.get(groupPosition).getList().get(childPosition).getContentURI();
                         String playMediaType =  SubList.get(groupPosition).getList().get(childPosition).getMediaType();
                         String playContentShareUrl =  SubList.get(groupPosition).getList().get(childPosition).getContentShareURL();
-                        String playAllTime = "0";
+                        String playAllTime = SubList.get(groupPosition).getList().get(childPosition).getContentTimes();
                         String playInTime = "0";
-                        String playContentDesc = SubList.get(groupPosition).getList().get(childPosition).getCurrentContent();
+                        String playContentDesc = SubList.get(groupPosition).getList().get(childPosition).getContentDescn();
                         String playerNum =  SubList.get(groupPosition).getList().get(childPosition).getPlayCount();
                         String playZanType = "0";
                         String playFrom =  SubList.get(groupPosition).getList().get(childPosition).getContentPub();

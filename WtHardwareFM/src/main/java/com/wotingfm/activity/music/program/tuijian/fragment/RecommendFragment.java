@@ -242,12 +242,12 @@ public class RecommendFragment extends Fragment {
                         String playerurI = newList.get(position - 2).getContentURI();
                         String playermediatype = newList.get(position - 2).getMediaType();
                         String playercontentshareurl = newList.get(position - 2).getContentShareURL();
-                        String plaplayeralltime = "0";
+                        String plaplayeralltime = newList.get(position - 2).getContentTimes();
                         String playerintime = "0";
-                        String playercontentdescn = newList.get(position - 2).getCurrentContent();
-                        String playernum = newList.get(position - 2).getWatchPlayerNum();
+                        String playercontentdescn = newList.get(position - 2).getContentDescn();
+                        String playernum = newList.get(position - 2).getPlayCount();
                         String playerzantype = "0";
-                        String playerfrom = "";
+                        String playerfrom =newList.get(position - 2).getContentPub();
                         String playerfromid = "";
                         String playerfromurl = "";
                         String playeraddtime = Long.toString(System.currentTimeMillis());
@@ -269,6 +269,7 @@ public class RecommendFragment extends Fragment {
                         dbDao.deleteHistory(playerurl);
                         dbDao.addHistory(history);
                         HomeActivity.UpdateViewPager();
+                        PlayerFragment.TextPage=1;
                         PlayerFragment.SendTextRequest(newList.get(position - 2).getContentName(), context);
                     } else if (MediaType.equals("SEQU")) {
                         Intent intent = new Intent(context, AlbumActivity.class);
