@@ -59,8 +59,8 @@
 
         <ImageView
             android:id="@+id/img_edit_clear"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
             android:src="@mipmap/wt_img_clearnew"
             android:layout_alignRight="@id/et_searchlike"
             android:layout_centerVertical="true"

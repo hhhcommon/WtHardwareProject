@@ -340,7 +340,7 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
             sendBroadcast(mIntent);
             mPager.setCurrentItem(0);
         } else {
-            ToastUtils.show_always(getApplicationContext(), "网络连接失败，请稍后重试");
+            ToastUtils.show_always(context, "网络连接失败，请稍后重试");
         }
     }
 

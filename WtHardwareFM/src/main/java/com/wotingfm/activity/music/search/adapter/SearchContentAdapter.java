@@ -100,6 +100,7 @@ public class SearchContentAdapter extends BaseExpandableListAdapter {
             holder.imageMask.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b));
 
             holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
+            holder.textPlaying = (TextView) convertView.findViewById(R.id.text_playing);// "正在直播"
             holder.textRankPlaying = (TextView) convertView.findViewById(R.id.RankPlaying);// 正在播放的节目
             holder.imageRankImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
             holder.textNumber = (TextView) convertView.findViewById(R.id.tv_num);// 收听次数
@@ -141,7 +142,8 @@ public class SearchContentAdapter extends BaseExpandableListAdapter {
         // 来源
         if(mediaType.equals("RADIO")) {
             if (lists.getCurrentContent() != null && !lists.getCurrentContent().equals("")) {
-                holder.textRankPlaying.setText("正在直播：" + lists.getCurrentContent());
+//                holder.textRankPlaying.setText("正在直播：" + lists.getCurrentContent());
+                holder.textRankPlaying.setText(lists.getCurrentContent());
             }
         } else {
             if (lists.getContentPub() != null && !lists.getContentPub().equals("")) {
@@ -154,8 +156,10 @@ public class SearchContentAdapter extends BaseExpandableListAdapter {
                 holder.textLast.setVisibility(View.GONE);
                 holder.imageLast.setVisibility(View.GONE);
                 holder.imageNum.setVisibility(View.GONE);
+                holder.textPlaying.setVisibility(View.VISIBLE);
                 break;
             case "SEQU":// 专辑
+                holder.textPlaying.setVisibility(View.GONE);
                 holder.imageLast.setVisibility(View.GONE);
                 holder.imageNum.setVisibility(View.VISIBLE);
                 holder.textLast.setVisibility(View.VISIBLE);
@@ -170,6 +174,7 @@ public class SearchContentAdapter extends BaseExpandableListAdapter {
                 break;
             case "AUDIO":// 声音
             case "TTS":// TTS
+                holder.textPlaying.setVisibility(View.GONE);
                 holder.imageNum.setVisibility(View.GONE);
                 holder.imageLast.setVisibility(View.VISIBLE);
                 holder.textLast.setVisibility(View.VISIBLE);
@@ -199,6 +204,7 @@ public class SearchContentAdapter extends BaseExpandableListAdapter {
     class ViewHolder {
         public ImageView imageMask;// 遮罩
         public ImageView imageRankImage;// 图标
+        public TextView textPlaying;// "正在直播"
         public TextView textRankPlaying;// 正在播放的节目
         public TextView textRankTitle;// 台名
         public TextView textName;

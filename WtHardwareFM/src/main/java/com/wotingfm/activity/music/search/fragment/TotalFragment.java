@@ -35,6 +35,7 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -65,7 +66,7 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
 
     @Override
     public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-        ((SearchLikeActivity)context).updateViewPager(list.get(groupPosition).getKey());
+        ((SearchLikeActivity) context).updateViewPager(list.get(groupPosition).getKey());
         return true;
     }
 
@@ -77,7 +78,7 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
         } catch (Exception e) {
             e.printStackTrace();
         }
-        if(mediaType == null) return true;
+        if (mediaType == null) return true;
         switch (mediaType) {
             case "RADIO":
             case "AUDIO":
@@ -100,16 +101,16 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                 String ContentFavorite = list.get(groupPosition).getList().get(childPosition).getContentFavorite();
                 String ContentId = list.get(groupPosition).getList().get(childPosition).getContentId();
                 String localurl = list.get(groupPosition).getList().get(childPosition).getLocalurl();
-                String sequname =list.get(groupPosition).getList().get(childPosition).getSequName();
-                String sequid =list.get(groupPosition).getList().get(childPosition).getSequId();
-                String sequdesc =list.get(groupPosition).getList().get(childPosition).getSequDesc();
-                String sequimg =list.get(groupPosition).getList().get(childPosition).getSequImg();
+                String sequname = list.get(groupPosition).getList().get(childPosition).getSequName();
+                String sequid = list.get(groupPosition).getList().get(childPosition).getSequId();
+                String sequdesc = list.get(groupPosition).getList().get(childPosition).getSequDesc();
+                String sequimg = list.get(groupPosition).getList().get(childPosition).getSequImg();
                 // 如果该数据已经存在数据库则删除原有数据，然后添加最新数据
                 PlayerHistory history = new PlayerHistory(
-                        playername,  playerimage, playerurl, playerurI,playermediatype,
+                        playername, playerimage, playerurl, playerurI, playermediatype,
                         plaplayeralltime, playerintime, playercontentdesc, playernum,
-                        playerzantype,  playerfrom, playerfromid, playerfromurl,playeraddtime,bjuserid,
-                        playcontentshareurl,ContentFavorite,ContentId,localurl,sequname,sequid,sequdesc,sequimg);
+                        playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid,
+                        playcontentshareurl, ContentFavorite, ContentId, localurl, sequname, sequid, sequdesc, sequimg);
                 dbDao.deleteHistory(playerurl);
                 dbDao.addHistory(history);
                 MainActivity.changeToMusic();
@@ -167,23 +168,25 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                 expandListView.setVisibility(View.GONE);
                 try {
                     ReturnType = result.getString("ReturnType");
+                    L.v("ReturnType", "ReturnType -- > > " + ReturnType);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
-                        subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
-                        if(subList == null || subList.size() == 0) return ;
+                        subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {
+                        }.getType());
+                        if (subList == null || subList.size() == 0) return;
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
                     list.clear();
                     if (playList != null) playList.clear();
                     if (sequList != null) sequList.clear();
-                    if(radioList != null) radioList.clear();
-                    if(ttsList != null) ttsList.clear();
-                    for (int i = 0, size=subList.size(); i < size; i++) {
+                    if (radioList != null) radioList.clear();
+                    if (ttsList != null) ttsList.clear();
+                    for (int i = 0, size = subList.size(); i < size; i++) {
                         if (subList.get(i).getMediaType() != null && !subList.get(i).getMediaType().equals("")) {
                             if (subList.get(i).getMediaType().equals("AUDIO")) {
                                 if (playList == null) playList = new ArrayList<>();
@@ -236,7 +239,7 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
 
             @Override
             protected void requestError(VolleyError error) {
-                if(dialog != null) dialog.dismiss();
+                if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
             }
         });
