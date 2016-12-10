@@ -33,6 +33,7 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.xlistview.XListView;
 
@@ -200,6 +201,7 @@ public class SoundFragment extends Fragment {
                 if (isCancelRequest) return;
                 try {
                     ReturnType = result.getString("ReturnType");
+                    L.v("ReturnType", "ReturnType -- > > " + ReturnType);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -259,10 +261,10 @@ public class SoundFragment extends Fragment {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             if (searchStr != null && !searchStr.equals("")) {
-                jsonObject.put("MediaType", "AUDIO");
                 jsonObject.put("SearchStr", searchStr);
-                jsonObject.put("Page", String.valueOf(page));
+                jsonObject.put("MediaType", "AUDIO");
                 jsonObject.put("PageSize", "10");
+                jsonObject.put("Page", String.valueOf(page));
             }
         } catch (JSONException e) {
             e.printStackTrace();

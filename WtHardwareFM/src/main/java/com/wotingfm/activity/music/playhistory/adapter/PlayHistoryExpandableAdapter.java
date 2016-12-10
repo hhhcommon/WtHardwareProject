@@ -128,9 +128,9 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
         }
 
         // 来源
-        String contentPub = lists.getContentPub();
-        if (contentPub != null && !contentPub.equals("")) {
-            holder.textRankContent.setText(contentPub);
+        String playFrom = lists.getPlayerFrom();
+        if (playFrom != null && !playFrom.equals("")) {
+            holder.textRankContent.setText(playFrom);
         }
 
         // 收听次数

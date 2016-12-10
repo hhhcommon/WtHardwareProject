@@ -98,7 +98,8 @@ public class CityNewAdapter extends BaseAdapter {
 //				if (lists.getContentPub() != null && !lists.getContentPub().equals("")) {
 //                    holder.textRankPlaying.setText("正在直播：" + lists.getContentPub());
 //				}
-                holder.textRankPlaying.setText("正在直播：测试-无节目单数据");
+//                holder.textRankPlaying.setText("正在直播：测试-无节目单数据");
+                holder.textRankPlaying.setText("测试-无节目单数据");
             } else {
                 if (lists.getContentPub() != null && !lists.getContentPub().equals("")) {
                     holder.textRankPlaying.setText(lists.getContentPub());

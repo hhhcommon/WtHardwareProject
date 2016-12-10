@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
@@ -21,6 +22,8 @@ import java.util.List;
 public class RankInfoAdapter extends BaseAdapter   {
 	private List<RankInfo> list;
 	private Context context;
+//	private RankInfo rank;
+//	private String url;
 
 	public RankInfoAdapter(Context context, List<RankInfo> list) {
 		super();
@@ -45,14 +48,25 @@ public class RankInfoAdapter extends BaseAdapter   {
 
 	@Override
 	public View getView(final int position, View convertView, ViewGroup parent) {
-		ViewHolder holder;
+		ViewHolder holder ;
 		if (convertView == null) {
 			holder = new ViewHolder();
-			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_rankinfo, parent, false);
-			holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);     // 台名
-			holder.imageRankImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
-			holder.textNumber = (TextView) convertView.findViewById(R.id.tv_num);
-			holder.textRankPlaying=(TextView)convertView.findViewById(R.id.RankPlaying);
+			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_rankinfo, null);
+			holder.textview_ranktitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
+			holder.imageview_rankimage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
+			holder.mTv_number = (TextView) convertView.findViewById(R.id.tv_num);
+			holder.textview_rankplaying=(TextView)convertView.findViewById(R.id.RankPlaying);
+
+			holder.image_last = (ImageView) convertView.findViewById(R.id.image_last);//
+			holder.image_num = (ImageView) convertView.findViewById(R.id.image_num);//
+			holder.tv_last = (TextView) convertView.findViewById(R.id.tv_last);
+			holder.image_last.setVisibility(View.GONE);
+			holder.image_num.setVisibility(View.GONE);
+			holder.tv_last.setVisibility(View.GONE);
+
+			holder.img_zhezhao = (ImageView) convertView.findViewById(R.id.img_zhezhao);
+			Bitmap bmp_zhezhao = BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b);
+			holder.img_zhezhao.setImageBitmap(bmp_zhezhao);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -60,41 +74,49 @@ public class RankInfoAdapter extends BaseAdapter   {
 		RankInfo lists = list.get(position);
 
 		if (lists.getContentName() == null || lists.getContentName().equals("")) {
-			holder.textRankTitle.setText("未知");
+			holder.textview_ranktitle.setText("未知");
 		} else {
-			holder.textRankTitle.setText(lists.getContentName());
+			holder.textview_ranktitle.setText(lists.getContentName());
 		}
-		if(lists.getContentPub()== null|| lists.getContentPub().equals("")){
-			holder.textRankPlaying.setText("未知");
-		}else{
-			holder.textRankPlaying.setText("正在直播：" + lists.getContentPub());
-		}
+
+//		if(lists.getContentPub()== null|| lists.getContentPub().equals("")){
+//			holder.textview_rankplaying.setText("未知");
+//		}else{
+//			holder.textview_rankplaying.setText(lists.getContentPub());
+//		}
+
+		holder.textview_rankplaying.setText("测试-暂无节目单");
+
 		if (lists.getContentImg() == null || lists.getContentImg().equals("")
 				|| lists.getContentImg().equals("null") || lists.getContentImg().trim().equals("")) {
-			Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
-			holder.imageRankImage.setImageBitmap(bmp);
+			Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx_d);
+			holder.imageview_rankimage.setImageBitmap(bmp);
 		} else {
 			String url;
 			if(lists.getContentImg().startsWith("http")){
-				 url =  lists.getContentImg();
+				url =  lists.getContentImg();
 			}else{
-				 url = GlobalConfig.imageurl + lists.getContentImg();
+				url = GlobalConfig.imageurl + lists.getContentImg();
 			}
-			Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageRankImage);
+			url= AssembleImageUrlUtils.assembleImageUrl150(url);
+			Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageview_rankimage);
 		}
-		if (lists.getWatchPlayerNum() == null
-				|| lists.getWatchPlayerNum().equals("") || lists.getWatchPlayerNum().equals("null")) {
-			holder.textNumber.setText("8000");
+		if (lists.getPlayCount() == null
+				|| lists.getPlayCount().equals("") || lists.getPlayCount().equals("null")) {
+			holder.mTv_number.setText("0");
 		} else {
-			holder.textNumber.setText(lists.getWatchPlayerNum());
+			holder.mTv_number.setText(lists.getPlayCount());
 		}
 		return convertView;
 	}
 
 	class ViewHolder {
-		public ImageView imageRankImage;
-		public TextView textRankTitle;
-		public TextView textNumber;
-		public TextView textRankPlaying;
+		public ImageView imageview_rankimage;
+		public TextView textview_ranktitle;
+		public TextView mTv_number,tv_last;
+		public TextView textview_rankplaying;
+		public ImageView img_zhezhao;
+		public ImageView image_last;
+		public ImageView image_num;
 	}
 }

@@ -258,10 +258,10 @@ public class TTSFragment extends Fragment {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             if (searchStr != null && !searchStr.equals("")) {
+                jsonObject.put("SearchStr", searchStr);
                 jsonObject.put("MediaType", "TTS");
-                jsonObject.put("searchStr", searchStr);
-                jsonObject.put("Page", String.valueOf(page));
                 jsonObject.put("PageSize", "10");
+                jsonObject.put("Page", String.valueOf(page));
             }
         } catch (JSONException e) {
             e.printStackTrace();

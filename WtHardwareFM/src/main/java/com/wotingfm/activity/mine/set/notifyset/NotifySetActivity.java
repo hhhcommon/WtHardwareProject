@@ -44,6 +44,7 @@ public class NotifySetActivity extends BaseActivity implements View.OnClickListe
 
     // 初始化设置
     private void initViews() {
+        findViewById(R.id.head_left_btn).setOnClickListener(this);
         findViewById(R.id.view_notify_sound).setOnClickListener(this);// 通知声音
         imageNotifySound = (ImageView) findViewById(R.id.image_notify_sound);// 通知声音开关
         soundState = preferences.getBoolean(StringConstant.NOTIFY_SOUND_STATE, true);
@@ -101,6 +102,8 @@ public class NotifySetActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        if(v.getId() == R.id.head_left_btn) finish();// 返回
+
         SharedPreferences.Editor editor = preferences.edit();
         switch (v.getId()) {
             case R.id.view_notify_sound:// 通知声音

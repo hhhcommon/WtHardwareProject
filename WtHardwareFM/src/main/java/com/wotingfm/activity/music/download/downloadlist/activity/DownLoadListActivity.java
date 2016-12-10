@@ -1,10 +1,10 @@
 package com.wotingfm.activity.music.download.downloadlist.activity;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,6 +24,8 @@ import com.wotingfm.activity.music.main.HomeActivity;
 import com.wotingfm.activity.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.activity.music.player.fragment.PlayerFragment;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
+import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.ToastUtils;
@@ -204,22 +206,22 @@ public class DownLoadListActivity extends BaseActivity implements OnClickListene
 							String playlocalrurl = mFileInfo.getLocalurl();
 							String playermediatype = "AUDIO";
 							String playercontentshareurl = mFileInfo.getContentShareURL();
-							String plaplayeralltime = "0";
+							String plaplayeralltime = mFileInfo.getPlayAllTime();
 							String playerintime = "0";
-							String playercontentdesc = mFileInfo.getPlaycontent();
-							String playernum ="0";
+							String playercontentdesc = mFileInfo.getContentDescn();
+							String playernum = mFileInfo.getPlayCount();
 							String playerzantype = "0";
-							String playerfrom = "";
+							String playerfrom = mFileInfo.getPlayFrom();
 							String playerfromid = "";
 							String playerfromurl = "";
 							String playeraddtime = Long.toString(System.currentTimeMillis());
 							String bjuserid = CommonUtils.getUserId(context);
 							String ContentFavorite = mFileInfo.getContentFavorite();
 							String ContentId = mFileInfo.getContentId();
-							String sequName=mFileInfo.getSequname();
-							String sequId=mFileInfo.getSequid();
-							String sequImg=mFileInfo.getSequimgurl();
-							String sequDesc=mFileInfo.getSequdesc();
+							String sequName = mFileInfo.getSequname();
+							String sequId = mFileInfo.getSequid();
+							String sequImg = mFileInfo.getSequimgurl();
+							String sequDesc = mFileInfo.getSequdesc();
 
 							//如果该数据已经存在数据库则删除原有数据，然后添加最新数据
 							PlayerHistory history = new PlayerHistory(
@@ -229,21 +231,31 @@ public class DownLoadListActivity extends BaseActivity implements OnClickListene
 									ContentId,playlocalrurl,sequName,sequId,sequDesc,sequImg);
 							dbdao.deleteHistory(playerurl);
 							dbdao.addHistory(history);
-							if(PlayerFragment.context != null){
+							if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+								if (PlayerFragment.context != null) {
+									MainActivity.changeToMusic();
+									HomeActivity.UpdateViewPager();
+									PlayerFragment.TextPage=1;
+									PlayerFragment.SendTextRequest(mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4), context);
+								} else {
+									SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+									et.putString(StringConstant.PLAYHISTORYENTER, "true");
+									et.putString(StringConstant.PLAYHISTORYENTERNEWS, mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4));
+									if (!et.commit()) {
+										Log.v("commit", "数据 commit 失败!");
+									}
+									MainActivity.changeToMusic();
+									HomeActivity.UpdateViewPager();
+								}
+							}else{
+								//没网的状态下
 								MainActivity.changeToMusic();
 								HomeActivity.UpdateViewPager();
-								PlayerFragment.SendTextRequest(mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4), context);
-							}else{
-								SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
-								SharedPreferences.Editor et = sp.edit();
-							et.putString(StringConstant.PLAYHISTORYENTER, "true");
-								et.putString(StringConstant.PLAYHISTORYENTERNEWS,mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4));
-								et.commit();
-							MainActivity.changeToMusic();
-								HomeActivity.UpdateViewPager();
+								PlayerFragment.TextPage=1;
+								PlayerFragment.playNoNet();
 							}
 							setResult(1);
-						    finish();
+							finish();
 							dbdao.closedb();
 						} else {	// 此处要调对话框，点击同意删除对应的文件信息
 							/* ToastUtil.show_always(context, "文件已经被删除，是否删除本条记录"); */
