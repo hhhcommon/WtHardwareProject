@@ -127,7 +127,7 @@ public class SearchPlayerHistoryDao {
 				String playeralltime =cursor.getString(cursor.getColumnIndex("playeralltime"));
 				String playerintime =cursor.getString(cursor.getColumnIndex("playerintime"));
 				String playercontentdesc = cursor.getString(8);
-				String playernum = cursor.getString(9);
+				String playernum = cursor.getString(cursor.getColumnIndex("playernum"));
 				String playerzantype = cursor.getString(10);
 				String playerfrom = cursor.getString(11);
 				String playerfromid = cursor.getString(12);
@@ -180,7 +180,7 @@ public class SearchPlayerHistoryDao {
 				String playeralltime = cursor.getString(6);
 				String playerintime = cursor.getString(7);
 				String playercontentdesc = cursor.getString(8);
-				String playernum = cursor.getString(9);
+				String playernum = cursor.getString(cursor.getColumnIndex("playernum"));
 				String playerzantype = cursor.getString(10);
 				String playerfrom = cursor.getString(11);
 				String playerfromid = cursor.getString(12);

@@ -83,7 +83,7 @@ public class OnLinesRadioAdapter extends BaseExpandableListAdapter  {
 			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fragment_radio_list, null);
 			holder = new ViewHolder();
 			holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
-			holder.lin_more = (TextView) convertView.findViewById(R.id.lin_head_more);
+			holder.lin_more = (LinearLayout) convertView.findViewById(R.id.lin_head_more);
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -221,7 +221,7 @@ public class OnLinesRadioAdapter extends BaseExpandableListAdapter  {
 		public TextView textview_rankplaying;
 		public TextView textview_ranktitle;
 		public TextView tv_name;
-		public TextView lin_more;
+		public LinearLayout lin_more;
 		public TextView mTv_number;
 		public LinearLayout lin_CurrentPlay;
 		public ImageView img_zhezhao;

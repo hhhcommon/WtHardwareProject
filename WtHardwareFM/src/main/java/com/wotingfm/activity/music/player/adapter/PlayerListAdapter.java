@@ -111,8 +111,8 @@ public class PlayerListAdapter extends BaseAdapter {
 			} else {
 				holder.imageview_rankimage.setImageBitmap(bmp);
 			}
-			if (searchlist.getSeqInfo() != null && searchlist.getSeqInfo().getContentName() != null && !searchlist.getSeqInfo().getContentName().equals("")) {
-				holder.RankContent.setText(searchlist.getSeqInfo().getContentName());
+			if (searchlist.getContentPub() != null && searchlist.getContentPub() != null && !searchlist.getContentPub().equals("")) {
+				holder.RankContent.setText(searchlist.getContentPub());
 			} else {
 				holder.RankContent.setText("我听科技");
 			}

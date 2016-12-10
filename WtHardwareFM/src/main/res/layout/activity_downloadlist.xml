@@ -14,9 +14,14 @@
 
         <TextView
             android:id="@+id/head_name_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:text="专辑内容"
+            android:gravity="center"
+            android:layout_marginLeft="45dp"
+            android:layout_marginRight="25dp"
+            android:singleLine="true"
+            android:maxLines="1"
             android:layout_centerInParent="true"
             android:textColor="@color/WHITE_1"
             android:textSize="@dimen/wt_dinglan_text_center"/>
