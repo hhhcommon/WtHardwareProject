@@ -267,6 +267,34 @@
                         android:layout_marginTop="4dp"
                         android:textSize="11sp" />
                 </LinearLayout>
+
+
+
+                <LinearLayout
+                    android:id="@+id/lin_download"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:orientation="vertical"
+                    android:visibility="visible" >
+
+                    <ImageView
+                        android:id="@+id/img_download"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/wt_play_xiazai" />
+
+                    <TextView
+                        android:id="@+id/tv_download"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="下载"
+                        android:textColor="@color/dinglan_orange"
+                        android:layout_marginTop="4dp"
+                        android:textSize="11sp" />
+                </LinearLayout>
+
                 <LinearLayout
                     android:id="@+id/lin_schedule"
                     android:layout_width="0dp"
@@ -296,7 +324,7 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:orientation="vertical"
-                    android:visibility="gone"
+                    android:visibility="visible"
                     >
 
                     <ImageView
@@ -311,59 +339,8 @@
                         android:textColor="@color/dinglan_orange"
                         android:layout_marginTop="4dp"
                         android:textSize="11sp"
-
-
                         />
                 </LinearLayout>
-                <LinearLayout
-                    android:id="@+id/lin_download"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:visibility="visible" >
-
-                    <ImageView
-                        android:id="@+id/img_download"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/wt_play_xiazai" />
-
-                    <TextView
-                        android:id="@+id/tv_download"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="下载"
-                        android:textColor="@color/dinglan_orange"
-                        android:layout_marginTop="4dp"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:id="@+id/lin_comment"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:gravity="center"
-                    android:orientation="vertical"
-                    android:visibility="visible"
-                    >
-
-                    <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:src="@mipmap/wt_comment_image" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="评论"
-                        android:textColor="@color/dinglan_orange"
-                        android:layout_marginTop="4dp"
-                        android:textSize="11sp" />
-                </LinearLayout>
-
 
                 <LinearLayout
                     android:id="@+id/lin_more"

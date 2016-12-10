@@ -67,7 +67,6 @@ import com.wotingfm.activity.music.playhistory.activity.PlayHistoryActivity;
 import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.album.model.ContentInfo;
 import com.wotingfm.activity.music.program.schedule.activity.ScheduleActivity;
-import com.wotingfm.activity.music.timeset.TimerPowerOffActivity;
 import com.wotingfm.activity.music.video.TtsPlayer;
 import com.wotingfm.activity.music.video.VlcPlayer;
 import com.wotingfm.activity.music.video.WtAudioPlay;
@@ -189,7 +188,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
     private static ImageView img_download;
     private static KSYProxyService proxy;
     private static long currPosition = -1;                 // 当前的播放时间
-    private LinearLayout lin_comment;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -252,7 +250,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         lin_more= (LinearLayout) headView.findViewById(R.id.lin_more);             // 更多
         lin_sequ= (LinearLayout) headView.findViewById(R.id.lin_sequ);             // 专辑
         lin_schedule=(LinearLayout) headView.findViewById(R.id.lin_schedule);      // 节目单
-        lin_comment=(LinearLayout)headView.findViewById(R.id.lin_comment);         // 评论
 
         headView.findViewById(R.id.lin_download).setOnClickListener(this);         // 下载
         img_download = (ImageView) headView.findViewById(R.id.img_download);
@@ -302,7 +299,6 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         lin_more.setOnClickListener(this);
         lin_sequ.setOnClickListener(this);
         lin_schedule.setOnClickListener(this);
-        lin_comment.setOnClickListener(this);
 
 
         // seekBar事件
@@ -665,7 +661,50 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                 moreDialog.show();
                 break;
             case R.id.lin_sequ:
-
+                if(GlobalConfig.playerobject!=null){
+                    try {
+                        if(GlobalConfig.playerobject.getSequId()!=null){
+                            if(GlobalConfig.playerobject.getSequId()!=null){
+                                SequId = GlobalConfig.playerobject.getSequId();
+                                SequDesc = GlobalConfig.playerobject.getSequDesc();
+                                SequImage = GlobalConfig.playerobject.getSequImg();
+                                SequName = GlobalConfig.playerobject.getSequName();
+                                IsSequ=true;
+                            }else{
+                                IsSequ=false;
+                            }
+                        } else{
+                            if(GlobalConfig.playerobject.getSeqInfo()!=null){
+                                if(GlobalConfig.playerobject.getSeqInfo().getContentId()!=null){
+                                    SequId = GlobalConfig.playerobject.getSeqInfo().getContentId();
+                                    SequDesc = GlobalConfig.playerobject.getSeqInfo().getContentDesc();
+                                    SequImage = GlobalConfig.playerobject.getSeqInfo().getContentImg();
+                                    SequName = GlobalConfig.playerobject.getSeqInfo().getContentName();
+                                    IsSequ=true;
+                                }else{
+                                    IsSequ=false;
+                                }
+                            }else{
+                                IsSequ=false;
+                            }
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+                if(IsSequ){
+                    Intent intent = new Intent(context, AlbumActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("type", "player");
+                    bundle.putString("contentName",SequName);
+                    bundle.putString("contentDesc",SequDesc);
+                    bundle.putString("contentId",SequId);
+                    bundle.putString("contentImg",SequImage);
+                    intent.putExtras(bundle);
+                    startActivity(intent);
+                }else{
+                    ToastUtils.show_always(context,"此节目目前没有所属专辑");
+                }
                 break;
             case R.id.tv_details_flag:
                 if (details_flag == false) {
@@ -678,17 +717,7 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                     rv_details.setVisibility(View.GONE);
                 }
                 break;
-            case R.id.lin_comment:
-                if(CommonUtils.getUserIdNoImei(context)!=null&&!CommonUtils.getUserIdNoImei(context).equals("")){
-                    Intent intent=new Intent(context, CommentActivity.class);
-                    intent.putExtra("contentId",GlobalConfig.playerobject.getContentId());
-                    intent.putExtra("MediaType","SEQU");
-                    startActivity(intent);
-                }else{
-                    ToastUtils.show_always(context,"请先登录~~");
-                }
 
-                break;
             case R.id.lin_download:
                 if (GlobalConfig.playerobject != null) {
                     if (GlobalConfig.playerobject.getMediaType().equals("AUDIO")) {
@@ -1590,15 +1619,20 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
      */
     private static void resetHeadView() {
         if (GlobalConfig.playerobject != null) {
-            //判断下载类型的方法
+            //判断下载类型的方法.
+
             if (GlobalConfig.playerobject.getMediaType().equals("AUDIO")) {
                 img_download.setImageResource(R.mipmap.wt_play_xiazai);
                 tv_download.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
                 tv_download.setText("下载");
+                lin_schedule.setVisibility(View.GONE);
+                lin_sequ.setVisibility(View.VISIBLE);
             } else {
                 img_download.setImageResource(R.mipmap.wt_play_xiazai_no);
                 tv_download.setTextColor(context.getResources().getColor(R.color.gray));
                 tv_download.setText("下载");
+                lin_sequ.setVisibility(View.GONE);
+                lin_schedule.setVisibility(View.VISIBLE);
             }
 
             if (!TextUtils.isEmpty(GlobalConfig.playerobject.getLocalurl())) {
@@ -2000,27 +2034,25 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         if(moreType==0){
             //电台调用
             switch (position){
-                case 0://定时关闭
-                    startActivity(new Intent(context,TimerPowerOffActivity.class));
-                    break;
-                case 1://播放历史
+                case 0:// 播放历史
                     startActivity(new Intent(context,PlayHistoryActivity.class));
                     break;
-                case 2://我喜欢的
+                case 1:// 我喜欢的
                     startActivity(new Intent(context,FavoriteActivity.class));
                     break;
-                case 3://预定节目单
-                    Intent intent =new Intent(context,ScheduleActivity.class);
+                case 2:// 分享
+                /*    Intent intent =new Intent(context,ScheduleActivity.class);
                     if(GlobalConfig.playerobject.getContentName()!=null){
                         intent.putExtra("ContentName",GlobalConfig.playerobject.getContentName());
                     }
                     if(GlobalConfig.playerobject.getContentId()!=null){
                         intent.putExtra("ContentId",GlobalConfig.playerobject.getContentId());
                     }
-                    startActivity(intent);
+                    startActivity(intent);*/
+                    ToastUtils.show_always(context,"点击了分享按钮");
                     break;
-                case 4://实时路况
-                    if (audioPlay == null) {
+                case 3://评论
+                  /*  if (audioPlay == null) {
                         audioPlay = TtsPlayer.getInstance(context);
                     } else {
                         // 不为空
@@ -2035,6 +2067,14 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                         getLuKuangTTS();// 获取路况数据播报
                     } else {
                         ToastUtils.show_always(context, "网络连接失败，请稍后重试");
+                    }*/
+                    if(CommonUtils.getUserIdNoImei(context)!=null&&!CommonUtils.getUserIdNoImei(context).equals("")){
+                        Intent intent=new Intent(context, CommentActivity.class);
+                        intent.putExtra("contentId",GlobalConfig.playerobject.getContentId());
+                        intent.putExtra("MediaType","SEQU");
+                        startActivity(intent);
+                    }else{
+                        ToastUtils.show_always(context,"请先登录~~");
                     }
                     break;
             }
@@ -2042,68 +2082,20 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
         }else{
             //节目类调用
             switch(position){
-                case 0://定时关闭
-                    startActivity(new Intent(context,TimerPowerOffActivity.class));
-                    break;
-                case 1://专辑
-                    if(GlobalConfig.playerobject!=null){
-                        try {
-                            if(GlobalConfig.playerobject.getSequId()!=null){
-                                if(GlobalConfig.playerobject.getSequId()!=null){
-                                    SequId = GlobalConfig.playerobject.getSequId();
-                                    SequDesc = GlobalConfig.playerobject.getSequDesc();
-                                    SequImage = GlobalConfig.playerobject.getSequImg();
-                                    SequName = GlobalConfig.playerobject.getSequName();
-                                    IsSequ=true;
-                                }else{
-                                    IsSequ=false;
-                                }
-                            } else{
-                                if(GlobalConfig.playerobject.getSeqInfo()!=null){
-                                    if(GlobalConfig.playerobject.getSeqInfo().getContentId()!=null){
-                                        SequId = GlobalConfig.playerobject.getSeqInfo().getContentId();
-                                        SequDesc = GlobalConfig.playerobject.getSeqInfo().getContentDesc();
-                                        SequImage = GlobalConfig.playerobject.getSeqInfo().getContentImg();
-                                        SequName = GlobalConfig.playerobject.getSeqInfo().getContentName();
-                                        IsSequ=true;
-                                    }else{
-                                        IsSequ=false;
-                                    }
-                                }else{
-                                    IsSequ=false;
-                                }
-                            }
-                        }catch (Exception e){
-                            e.printStackTrace();
-                        }
-                    }
-                    if(IsSequ){
-                        Intent intent = new Intent(context, AlbumActivity.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("type", "player");
-                        bundle.putString("contentName",SequName);
-                        bundle.putString("contentDesc",SequDesc);
-                        bundle.putString("contentId",SequId);
-                        bundle.putString("contentImg",SequImage);
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-                    }else{
-                        ToastUtils.show_always(context,"此节目目前没有所属专辑");
-                    }
-                    break;
-                case 2://播放历史
+                case 0:// 播放历史
                     startActivity(new Intent(context,PlayHistoryActivity.class));
                     break;
-                case 3://我喜欢的
+                case 1:// 我喜欢的
                     startActivity(new Intent(context,FavoriteActivity.class));
                     break;
-                case 4://本地音频
+                case 2:// 本地音频
                     startActivity(new Intent(context,DownloadActivity.class));
                     break;
-                case 5://预定节目单
+                case 3:// 分享
+                    ToastUtils.show_always(context,"分享");
                     break;
-                case 6://实时路况
-                    if (audioPlay == null) {
+                case 4:// 评论
+           /*         if (audioPlay == null) {
                         audioPlay = TtsPlayer.getInstance(context);
                     } else {
                         // 不为空
@@ -2118,6 +2110,14 @@ public class PlayerFragment extends Fragment implements OnClickListener, XListVi
                         getLuKuangTTS();// 获取路况数据播报
                     } else {
                         ToastUtils.show_always(context, "网络连接失败，请稍后重试");
+                    }*/
+                    if(CommonUtils.getUserIdNoImei(context)!=null&&!CommonUtils.getUserIdNoImei(context).equals("")){
+                        Intent intent=new Intent(context, CommentActivity.class);
+                        intent.putExtra("contentId",GlobalConfig.playerobject.getContentId());
+                        intent.putExtra("MediaType","SEQU");
+                        startActivity(intent);
+                    }else{
+                        ToastUtils.show_always(context,"请先登录~~");
                     }
                     break;
             }
