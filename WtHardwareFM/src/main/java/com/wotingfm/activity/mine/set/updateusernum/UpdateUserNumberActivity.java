@@ -116,14 +116,14 @@ public class UpdateUserNumberActivity extends AppBaseActivity implements View.On
                 try {
                     String returnType = result.getString("ReturnType");
                     if (returnType != null && returnType.equals("1001")) {
-                        ToastUtils.show_always(context, "用户号修改成功!");
+                        ToastUtils.show_always(context, "设置用户号成功!");
                         SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
                         et.putString(StringConstant.USER_NUM, userNum);
                         if (!et.commit()) L.w("commit", " 数据 commit 失败!");
                         setResult(1);
                         finish();
                     } else {
-                        ToastUtils.show_always(context, "用户号修改失败!");
+                        ToastUtils.show_always(context, "设置用户号失败!");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

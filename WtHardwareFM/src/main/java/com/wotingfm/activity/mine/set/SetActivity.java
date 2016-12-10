@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.kingsoft.media.httpcache.KSYProxyService;
@@ -129,7 +128,7 @@ public class SetActivity extends BaseActivity implements OnClickListener {
                     dialog = DialogUtils.Dialogph(context, "正在获取数据");
                     sendRequestLogout();    // 清空数据
                 } else {
-                    ToastUtils.show_short(context, "网络失败，请检查网络");
+                    ToastUtils.show_always(context, "网络连接失败，请检查网络设置!");
                 }
                 break;
             case R.id.lin_clear:            // 清空缓存
@@ -151,7 +150,7 @@ public class SetActivity extends BaseActivity implements OnClickListener {
                     dialog = DialogUtils.Dialogph(context, "通讯中");
                     sendRequestUpdate();
                 } else {
-                    ToastUtils.show_short(context, "网络失败，请检查网络");
+                    ToastUtils.show_always(context, "网络连接失败，请检查网络设置!");
                 }
                 break;
             case R.id.lin_help:             // 使用帮助
@@ -216,7 +215,7 @@ public class SetActivity extends BaseActivity implements OnClickListener {
 
     // 更新弹出框
     private void initUpdateDialog() {
-        View dialog2 = LayoutInflater.from(this).inflate(R.layout.dialog_update, null);
+        View dialog2 = LayoutInflater.from(context).inflate(R.layout.dialog_update, null);
         dialog2.findViewById(R.id.tv_update).setOnClickListener(this);  // 开始更新
         dialog2.findViewById(R.id.tv_qx).setOnClickListener(this);      // 取消
         TextView textContent = (TextView) dialog2.findViewById(R.id.text_content);
@@ -263,7 +262,7 @@ public class SetActivity extends BaseActivity implements OnClickListener {
                 logOut.setVisibility(View.GONE);
                 lin_IsLogin.setVisibility(View.GONE);
                 sendBroadcast(new Intent(BroadcastConstants.PUSH_DOWN_COMPLETED));// 发送广播 更新已下载和未下载界面
-                Toast.makeText(context, "注销成功", Toast.LENGTH_SHORT).show();
+                ToastUtils.show_always(context, "注销成功");
             }
 
             @Override
@@ -355,8 +354,6 @@ public class SetActivity extends BaseActivity implements OnClickListener {
                     updateType = 1;// 不需要强制升级
                     initUpdateDialog();
                 }
-            } else if(versionNew == versionOld) {
-                ToastUtils.show_always(context, "已经是最新版本");
             } else {
                 ToastUtils.show_always(context, "已经是最新版本");
             }

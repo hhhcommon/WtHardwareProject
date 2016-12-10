@@ -295,13 +295,16 @@ public class PreferenceActivity extends BaseActivity implements View.OnClickList
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+        et.putString(StringConstant.PREFERENCE, "1");// 保存偏好设置页查看状态
+        if(!et.commit()) L.w("数据 commit 失败!");
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
-        // 保存偏好设置页查看状态
-        SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
-        et.putString(StringConstant.PREFERENCE, "1");
-        if(!et.commit()) L.w("数据 commit 失败!");
-
         isCancelRequest = VolleyRequest.cancelRequest(tag);
         adapter = null;
         tempList = null;
