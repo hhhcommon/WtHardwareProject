@@ -23,7 +23,7 @@
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_centerHorizontal="true"
-            android:src="@mipmap/wt_image_head_white"
+            android:src="@mipmap/liubianxing_gray"
             android:layout_marginTop="20dp"/>
 
         <EditText
@@ -70,7 +70,7 @@
             android:layout_alignTop="@+id/text_group_verification"
             android:gravity="left|center"
             style="@style/CreateGroupTypeEdit"
-            android:drawableLeft="@mipmap/wt_image_all_check"/>
+            android:drawableLeft="@mipmap/image_all_check"/>
 
         <TextView
             android:id="@+id/text_group_verification"

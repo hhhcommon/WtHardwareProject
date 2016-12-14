@@ -107,7 +107,7 @@ public class TalkPersonNewsActivity extends BaseActivity implements  OnClickList
                 descN = groupTalkInside.getDescn();
                 aliasName = groupTalkInside.getUserAliasName();
                 break;
-            case "TalkGroupNewsActivity_p": // 由群组详情、全部群组成员列表跳转过来
+            case "TalkGroupNewsActivity": // 由群组详情、全部群组成员列表跳转过来
                 UserInfo userInfo = (UserInfo) getIntent().getSerializableExtra("data");
                 name = userInfo.getUserName();
                 imageUrl = userInfo.getPortraitBig();
@@ -141,7 +141,7 @@ public class TalkPersonNewsActivity extends BaseActivity implements  OnClickList
         findViewById(R.id.tv_delete).setOnClickListener(this);              // 删除好友
         findViewById(R.id.image_xiugai).setOnClickListener(this);           // 修改
 
-        imageHead = (ImageView) findViewById(R.id.image_touxiang);          // 头像
+        imageHead = (ImageView) findViewById(R.id.image_portrait);          // 头像
         editName = (EditText) findViewById(R.id.et_b_name);                 // 用户名 备注名
         editSignature = (TextView) findViewById(R.id.et_groupSignature);    // 用户签名
         imageEwm = (ImageView) findViewById(R.id.imageView_ewm);            // 二维码图片

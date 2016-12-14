@@ -27,14 +27,28 @@
         android:layout_height="120dp"
         android:background="@color/WHITE">
 
-        <ImageView
+        <RelativeLayout
             android:id="@+id/image_touxiang"
-            android:layout_width="75dp"
-            android:layout_height="75dp"
-            android:src="@mipmap/ic_launcher"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="20dp"
-            android:scaleType="centerCrop" />
+            android:layout_marginTop="15dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            >
+            <ImageView
+                android:id="@+id/image_portrait"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_centerVertical="true"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/wt_image_playertx"/>
+            <ImageView
+                android:id="@+id/head_frame"
+                android:layout_width="75dp"
+                android:layout_height="75dp"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/wt_6_b_y_b" />
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/image_add"

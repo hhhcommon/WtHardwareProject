@@ -225,6 +225,9 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("data", groupRation);
                             bundle.putString("type", "CreateGroup");
+                            if(filePath!=null&&!filePath.equals("")){
+                                bundle.putString("imageLocal",filePath);
+                            }
                             intent.putExtras(bundle);
                             startActivity(intent);
                             setResult(1);
@@ -410,6 +413,9 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("data", groupRation);
                         bundle.putString("type", "CreateGroup");
+                        if(filePath!=null&&!filePath.equals("")){
+                            bundle.putString("imageLocal",filePath);
+                        }
                         intent.putExtras(bundle);
                         startActivity(intent);
                     }

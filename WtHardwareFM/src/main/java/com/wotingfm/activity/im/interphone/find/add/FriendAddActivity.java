@@ -48,6 +48,7 @@ public class FriendAddActivity extends AppBaseActivity implements OnClickListene
     private TextView tv_id;
     private TextView tv_sign;
     private EditText et_news;
+    private UserInfo userInfo;
 
     @Override
     protected int setViewId() {
@@ -113,32 +114,32 @@ public class FriendAddActivity extends AppBaseActivity implements OnClickListene
                 et_news.setText("我是 " + username);
             }
         } else if (type.equals("talkoldlistfragment")) {
-            UserInfo contact = (UserInfo) this.getIntent().getSerializableExtra("data");
-            if (contact.getUserName() == null || contact.getUserName().equals("")) {
+            userInfo = (UserInfo) this.getIntent().getSerializableExtra("data");
+            if (userInfo.getUserName() == null || userInfo.getUserName().equals("")) {
                 tv_name.setText("未知");
             } else {
-                tv_name.setText(contact.getUserName());
+                tv_name.setText(userInfo.getUserName());
             }
-            if (contact.getUserNum() == null || contact.getUserNum().equals("")) {
+            if (userInfo.getUserNum() == null || userInfo.getUserNum().equals("")) {
                 tv_id.setVisibility(View.INVISIBLE);
             } else {
                 tv_id.setVisibility(View.VISIBLE);
-                tv_id.setText(contact.getUserNum());
+                tv_id.setText(userInfo.getUserNum());
             }
-            if (contact.getDescn() == null || contact.getDescn().equals("")) {
+            if (userInfo.getDescn() == null || userInfo.getDescn().equals("")) {
                 tv_sign.setVisibility(View.INVISIBLE);
             } else {
                 tv_sign.setVisibility(View.VISIBLE);
-                tv_sign.setText(contact.getDescn());
+                tv_sign.setText(userInfo.getDescn());
             }
-            if (contact.getPortraitMini() == null || contact.getPortraitMini().equals("") || contact.getPortraitMini().equals("null") || contact.getPortraitMini().trim().equals("")) {
+            if (userInfo.getPortraitMini() == null ||userInfo.getPortraitMini().equals("") || userInfo.getPortraitMini().equals("null") || userInfo.getPortraitMini().trim().equals("")) {
                 Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_hy);
                 image_touXiang.setImageBitmap(bmp);
             } else {
-                if (contact.getPortraitMini().startsWith("http:")) {
-                    url = contact.getPortraitMini();
+                if (userInfo.getPortraitMini().startsWith("http:")) {
+                    url = userInfo.getPortraitMini();
                 } else {
-                    url = GlobalConfig.imageurl + contact.getPortraitMini();
+                    url = GlobalConfig.imageurl + userInfo.getPortraitMini();
                 }
                 Picasso.with(this).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(image_touXiang);
             }
@@ -148,32 +149,67 @@ public class FriendAddActivity extends AppBaseActivity implements OnClickListene
                 et_news.setText("我是 " + username);
             }
         } else if(type.equals("FriendAddActivity")) {
-            UserInfo contact = (UserInfo) this.getIntent().getSerializableExtra("data");
-            if (contact.getUserName() == null || contact.getUserName().equals("")) {
+            userInfo = (UserInfo) this.getIntent().getSerializableExtra("data");
+            if (userInfo.getUserName() == null ||userInfo.getUserName().equals("")) {
                 tv_name.setText("未知");
             } else {
-                tv_name.setText(contact.getUserName());
+                tv_name.setText(userInfo.getUserName());
             }
-            if (contact.getUserNum() == null || contact.getUserNum().equals("")) {
+            if (userInfo.getUserNum() == null ||userInfo.getUserNum().equals("")) {
                 tv_id.setVisibility(View.INVISIBLE);
             } else {
                 tv_id.setVisibility(View.VISIBLE);
-                tv_id.setText(contact.getUserNum());
+                tv_id.setText(userInfo.getUserNum());
             }
-            if (contact.getDescn() == null || contact.getDescn().equals("")) {
+            if (userInfo.getDescn() == null ||userInfo.getDescn().equals("")) {
                 tv_sign.setVisibility(View.INVISIBLE);
             } else {
                 tv_sign.setVisibility(View.VISIBLE);
-                tv_sign.setText(contact.getDescn());
+                tv_sign.setText(userInfo.getDescn());
             }
-            if (contact.getPortraitMini() == null || contact.getPortraitMini().equals("") || contact.getPortraitMini().equals("null") || contact.getPortraitMini().trim().equals("")) {
+            if (userInfo.getPortraitMini() == null || userInfo.getPortraitMini().equals("") ||userInfo.getPortraitMini().equals("null") || userInfo.getPortraitMini().trim().equals("")) {
                 Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_hy);
                 image_touXiang.setImageBitmap(bmp);
             } else {
-                if (contact.getPortraitMini().startsWith("http:")) {
-                    url = contact.getPortraitMini();
+                if (userInfo.getPortraitMini().startsWith("http:")) {
+                    url = userInfo.getPortraitMini();
                 } else {
-                    url = GlobalConfig.imageurl + contact.getPortraitMini();
+                    url = GlobalConfig.imageurl + userInfo.getPortraitMini();
+                }
+                Picasso.with(this).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(image_touXiang);
+            }
+            if (username == null || username.equals("")) {
+                et_news.setText("");
+            } else {
+                et_news.setText("我是 " + username);
+            }
+        }else if (type.equals("TalkGroupNewsActivity")) {
+            userInfo = (UserInfo) this.getIntent().getSerializableExtra("data");
+            if (userInfo.getUserName() == null || userInfo.getUserName().equals("")) {
+                tv_name.setText("未知");
+            } else {
+                tv_name.setText(userInfo.getUserName());
+            }
+            if (userInfo.getUserNum() == null || userInfo.getUserNum().equals("")) {
+                tv_id.setVisibility(View.INVISIBLE);
+            } else {
+                tv_id.setVisibility(View.VISIBLE);
+                tv_id.setText(userInfo.getUserNum());
+            }
+            if (userInfo.getDescn() == null || userInfo.getDescn().equals("")) {
+                tv_sign.setVisibility(View.INVISIBLE);
+            } else {
+                tv_sign.setVisibility(View.VISIBLE);
+                tv_sign.setText(userInfo.getDescn());
+            }
+            if (userInfo.getPortraitMini() == null || userInfo.getPortraitMini().equals("") || userInfo.getPortraitMini().equals("null") || userInfo.getPortraitMini().trim().equals("")) {
+                Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_hy);
+                image_touXiang.setImageBitmap(bmp);
+            } else {
+                if (userInfo.getPortraitMini().startsWith("http:")) {
+                    url = userInfo.getPortraitMini();
+                } else {
+                    url = GlobalConfig.imageurl + userInfo.getPortraitMini();
                 }
                 Picasso.with(this).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(image_touXiang);
             }
@@ -219,7 +255,11 @@ public class FriendAddActivity extends AppBaseActivity implements OnClickListene
     private void sendRequest() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
+            if(contact!=null&&contact.equals("")){
             jsonObject.put("BeInvitedUserId", contact.getUserId());
+            }else{
+                jsonObject.put("BeInvitedUserId", userInfo.getUserId());
+            }
             jsonObject.put("InviteMsg", et_news.getText().toString().trim());
         } catch (JSONException e) {
             e.printStackTrace();

@@ -23,6 +23,7 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
@@ -126,10 +127,10 @@ public class GroupAddActivity extends AppBaseActivity implements OnClickListener
         } else {
             tv_id.setText("id:" + contact.getGroupNum());
         }
-        if (contact.getGroupOriDesc() == null || contact.getGroupOriDesc().equals("")) {
+        if (contact.getGroupOriDescn() == null || contact.getGroupOriDescn().equals("")) {
             tv_sign.setText("这家伙很懒，什么都没写");
         } else {
-            tv_sign.setText(contact.getGroupOriDesc());
+            tv_sign.setText(contact.getGroupOriDescn());
         }
         if (contact.getGroupImg() == null || contact.getGroupImg().equals("")
                 || contact.getGroupImg().equals("null") || contact.getGroupImg().trim().equals("")) {
@@ -142,6 +143,7 @@ public class GroupAddActivity extends AppBaseActivity implements OnClickListener
             } else {
                 url = GlobalConfig.imageurl + contact.getGroupImg();
             }
+            url= AssembleImageUrlUtils.assembleImageUrl150(url);
             Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(image_touXiang);
         }
         if (username == null || username.equals("")) {

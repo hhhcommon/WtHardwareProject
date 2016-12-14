@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,6 +43,7 @@ import com.wotingfm.activity.im.interphone.groupmanage.modifygrouppassword.Modif
 import com.wotingfm.activity.im.interphone.groupmanage.transferauthority.TransferAuthorityActivity;
 import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
 import com.wotingfm.activity.im.interphone.message.model.GroupInfo;
+import com.wotingfm.activity.mine.qrcode.EWMShowActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
@@ -109,6 +111,8 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
     private boolean isCancelRequest;
     private boolean isCreator;                          // 标识群组 true -> 是群主
     private boolean isUpdate;                           // 标识 是否修改群资料
+    private String imagelocalUrl;
+    private UserInfo userInfo;
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -134,7 +138,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                     ToastUtils.show_always(context, "非好友跳转到群陌生人");
                 }
                 Bundle bundle = new Bundle();
-                bundle.putString("type", "TalkGroupNewsActivity_p");
+                bundle.putString("type", "TalkGroupNewsActivity");
                 bundle.putString("id", groupId);
                 bundle.putSerializable("data", userList.get(position));
                 intent.putExtras(bundle);
@@ -254,8 +258,18 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                 creator = CommonUtils.getUserId(context);
                 channelOne = groupRation.getAlternateChannel1();
                 channelTwo = groupRation.getAlternateChannel2();
+                if(imageUrl==null||imageUrl.equals("")){
+                 imagelocalUrl=getIntent().getStringExtra("imageLocal");
+                }
                 break;
         }
+        userInfo=new UserInfo();
+        userInfo.setGroupName(name);
+        userInfo.setGroupId(groupId);
+        userInfo.setGroupCreator(creator);
+        userInfo.setGroupType(groupType);
+        userInfo.setGroupCreator(creator);
+        userInfo.setPortraitMini(imageUrl);
 
         // 用于查找群内成员
         if (groupId == null || groupId.trim().equals("")) {
@@ -320,8 +334,12 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
 
         // 设置群头像  群组没有设置群头像则使用系统默认的头像
         if (imageUrl == null || imageUrl.equals("") || imageUrl.equals("null") || imageUrl.trim().equals("")) {
-            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_qz);
-            mImageHead.setImageBitmap(bmp);
+            if(imagelocalUrl!=null&& !imagelocalUrl.equals("")){
+                mImageHead.setImageURI(Uri.parse(imagelocalUrl));
+            }else{
+                Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_qz);
+                mImageHead.setImageBitmap(bmp);
+            }
         } else {
             String url;
             if (imageUrl.startsWith("http:")) {
@@ -481,7 +499,27 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                 startActivity(intent);
                 break;
             case R.id.lin_ewm:              // 二维码
-                Toast.makeText(context, "R.id.lin_ewm", Toast.LENGTH_LONG).show();
+                Intent intent1 = new Intent(context, EWMShowActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putString("type","2");
+                if (imageUrl == null || imageUrl.equals("") || imageUrl.equals("null") || imageUrl.trim().equals("")) {
+                    if(imagelocalUrl!=null&& !imagelocalUrl.equals("")){
+                        bundle.putString("image", imagelocalUrl);
+                    }else{
+                      /*  bundle.putString("image", imagelocalUrl);*/
+                    }
+                }else{
+                    bundle.putString("image", imageUrl);
+                }
+                bundle.putString("news",  signature);
+                bundle.putString("name", name);
+                if(userInfo!=null){
+                    bundle.putSerializable("group", userInfo);
+                    intent1.putExtras(bundle);
+                    startActivity(intent1);
+                }else{
+                  ToastUtils.show_always(context,"用户资料获取异常，请返回上一界面重试");
+                }
                 break;
 //            case R.id.auto_add:
 //                Toast.makeText(context, "R.id.auto_add", Toast.LENGTH_LONG).show();

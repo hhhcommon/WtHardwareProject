@@ -27,7 +27,7 @@
             <ImageView
                 android:layout_width="55dip"
                 android:layout_height="55dip"
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="10dp"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/wt_linkman_news" />
 
@@ -78,7 +78,7 @@
         android:background="@color/linkman_bt"
         android:gravity="left|center"
         android:orientation="vertical"
-        android:paddingLeft="35dip" >
+        android:paddingLeft="15dip" >
 
         <TextView
             android:layout_width="wrap_content"
@@ -102,7 +102,7 @@
         android:background="@color/linkman_bt"
         android:gravity="left|center"
         android:orientation="vertical"
-        android:paddingLeft="35dip" >
+        android:paddingLeft="15dip" >
 
         <TextView
             android:layout_width="wrap_content"
