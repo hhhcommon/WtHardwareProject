@@ -93,7 +93,7 @@
                 android:ems="10"
                 android:maxLines="2"
                 android:enabled="false"
-                android:text="茉莉"
+                android:text="我听科技"
                 android:textSize="16sp" />
 
             <TextView

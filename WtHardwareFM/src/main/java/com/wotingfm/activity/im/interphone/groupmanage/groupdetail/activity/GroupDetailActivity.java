@@ -17,7 +17,6 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.GridView;
 import android.widget.ImageView;
-import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,6 +54,7 @@ import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
+import com.wotingfm.widget.pickview.LoopView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -95,8 +95,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
     private View relativeModifyPassword;                // 修改密码
     private View relativeAddGroup;                      // 加群消息
     private View relativeVerifyGroup;                   // 审核消息
-    private Spinner spinnerChannelOne;
-    private Spinner spinnerChannelTwo;
+
     
     private String groupId;                             // 群 ID
     private String imageUrl;                            // 群头像 URL
@@ -113,6 +112,10 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
     private boolean isUpdate;                           // 标识 是否修改群资料
     private String imagelocalUrl;
     private UserInfo userInfo;
+    private TextView textPinLv;
+    private LoopView pickCity;
+    private Dialog frequencyDialog;
+    private int screenWidth;
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -171,6 +174,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
         handleIntent();     // 处理其他页面传入的数据
         setView();          // 设置界面
         initConfirmDialog();// 初始化确认对话框
+        initFrequencyDialog();
 
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             dialog = DialogUtils.Dialogph(context, "正在获取群成员信息");
@@ -178,6 +182,73 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
         } else {
             ToastUtils.show_always(context, "网络失败，请检查网络");
         }
+    }
+
+    /**
+     *频率对话框
+     */
+    private void initFrequencyDialog() {
+     /*   final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_frequency, null);
+        LoopView pickProvince = (LoopView) dialog.findViewById(R.id.pick_province);
+        pickCity = (LoopView) dialog.findViewById(R.id.pick_city);
+
+      *//*  pickProvince.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+                provinceIndex = index;
+                List<String> tempList1 = positionMap.get(provinceList.get(index));
+                pickCity.setItems(tempList1);
+                pickCity.setInitPosition(0);
+            }
+        });
+        pickCity.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+                cityIndex = index;
+            }
+        });
+        pickProvince.setItems(provinceList);
+        List<String> tempList = positionMap.get(provinceList.get(4));*//*
+
+        pickCity.setItems(tempList);
+
+        pickProvince.setInitPosition(4);
+        pickProvince.setTextSize(15);
+        pickCity.setTextSize(15);
+
+        frequencyDialog = new Dialog(context, R.style.MyDialog);
+        frequencyDialog.setContentView(dialog);
+        Window window = frequencyDialog.getWindow();
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        screenWidth = dm.widthPixels;
+        ViewGroup.LayoutParams params = dialog.getLayoutParams();
+        params.width = screenWidth;
+        dialog.setLayoutParams(params);
+        window.setGravity(Gravity.BOTTOM);
+        window.setWindowAnimations(R.style.sharestyle);
+        frequencyDialog.setCanceledOnTouchOutside(true);
+        frequencyDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+
+        dialog.findViewById(R.id.tv_confirm).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                frequencyDialog.dismiss();
+            }
+        });
+
+        dialog.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (frequencyDialog.isShowing()) {
+                    frequencyDialog.dismiss();
+                }
+            }
+        });
+
+*/
+
+
     }
 
     // 处理从其他界面传入的值
@@ -282,27 +353,22 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
     private void setView() {
         findViewById(R.id.rl_allperson).setOnClickListener(this);               // 全部成全
         findViewById(R.id.wt_back).setOnClickListener(this);                    // 返回
-        findViewById(R.id.starttalk).setOnClickListener(this);                  // 对讲
+        findViewById(R.id.imageView4).setOnClickListener(this);                  // 对讲
         findViewById(R.id.text_exit).setOnClickListener(this);                  // 退出群
-        findViewById(R.id.img_update).setOnClickListener(this);                 // 修改群资料
+        findViewById(R.id.imageView3).setOnClickListener(this);                 // 修改群资料
         findViewById(R.id.lin_ewm).setOnClickListener(this);                    // 二维码
 //        findViewById(R.id.auto_add).setOnClickListener(this);
 //        findViewById(R.id.ewm_add).setOnClickListener(this);
 //        mImgEWM = (ImageView) findViewById(R.id.img_ewm);
 
         mImageHead = (ImageView) findViewById(R.id.image_portrait);             // 群头像
-        mGroupName = (EditText) findViewById(R.id.et_group_name);               // 群名称
-        mGroupSign = (EditText) findViewById(R.id.et_group_sign);               // 群签名
+        mGroupName = (EditText) findViewById(R.id.et_b_name);                   // 群名称
+        mGroupSign = (EditText) findViewById(R.id.et_groupSignature);           // 群签名
         mTextNumber = (TextView) findViewById(R.id.tv_number);                  // 群成员数量
 
-        textChannelOne = (TextView) findViewById(R.id.text_channel_one);
-        textChannelTwo = (TextView) findViewById(R.id.text_channel_two);
-
-        spinnerChannelOne = (Spinner) findViewById(R.id.spinner_channel1);
-        spinnerChannelOne.setEnabled(false);
-
-        spinnerChannelTwo = (Spinner) findViewById(R.id.spinner_channel2);
-        spinnerChannelTwo.setEnabled(false);
+        textChannelOne = (TextView) findViewById(R.id.text_channel_one);        // 频道记录TextView1
+        textChannelTwo = (TextView) findViewById(R.id.text_channel_two);        // 频道记录TextView2
+        textPinLv=(TextView) findViewById(R.id.tv_pinlvxuanze);                 // 频率选择
 
         relativeTransferAuthority = findViewById(R.id.rl_transferauthority);    // 移交管理员权限
         relativeTransferAuthority.setOnClickListener(this);
@@ -355,10 +421,6 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
         // 根据群组和群类型初始化界面
         if (creator != null && !creator.equals("")) {
             if (creator.equals(CommonUtils.getUserId(context)) && groupType != null && !groupType.equals("")) {
-                textChannelOne.setVisibility(View.GONE);
-                textChannelTwo.setVisibility(View.GONE);
-                spinnerChannelOne.setVisibility(View.VISIBLE);
-                spinnerChannelTwo.setVisibility(View.VISIBLE);
                 isCreator = true;
                 switch (groupType) {
                     case "2":// 密码群
@@ -374,8 +436,6 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                         break;
                 }
             } else {
-                textChannelOne.setText(channelOne);
-                textChannelTwo.setText(channelTwo);
             }
         }
     }
@@ -490,7 +550,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
             case R.id.wt_back:              // 返回
                 finish();
                 break;
-            case R.id.starttalk:            // 对讲
+            case R.id.imageView4:            // 对讲
                 Toast.makeText(context, "对讲", Toast.LENGTH_LONG).show();
                 break;
             case R.id.rl_allperson:         // 全部成员
@@ -544,13 +604,12 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
             case R.id.rl_vertiygroup:       // 审核消息
                 startToActivity(JoinGroupListActivity.class);
                 break;
-            case R.id.img_update:           // 修改群资料
+            case R.id.imageView3:           // 修改群资料
                 if (!isUpdate) {
                     mGroupName.setEnabled(true);
                     mGroupSign.setEnabled(true);
                     if(isCreator) {
-                        spinnerChannelOne.setEnabled(true);
-                        spinnerChannelTwo.setEnabled(true);
+                    //spiner
                     }
                 } else {
                     String groupName = mGroupName.getText().toString().trim();
@@ -570,8 +629,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                     mGroupName.setEnabled(false);
                     mGroupSign.setEnabled(false);
                     if(isCreator) {
-                        spinnerChannelOne.setEnabled(false);
-                        spinnerChannelTwo.setEnabled(false);
+
                     }
                 }
                 isUpdate = !isUpdate;
@@ -690,12 +748,6 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
         if(requestCode == 100 && resultCode == RESULT_OK) {
             isCreator = false;
             relativeTransferAuthority.setVisibility(View.GONE);
-            textChannelOne.setVisibility(View.VISIBLE);
-            textChannelTwo.setVisibility(View.VISIBLE);
-            spinnerChannelOne.setVisibility(View.GONE);
-            spinnerChannelTwo.setVisibility(View.GONE);
-            textChannelOne.setText(channelOne);
-            textChannelTwo.setText(channelTwo);
             sendBroadcast(new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN));
             SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
             et.putString(StringConstant.PERSONREFRESHB, "true");
