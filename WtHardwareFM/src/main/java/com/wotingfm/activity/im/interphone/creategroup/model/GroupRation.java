@@ -19,6 +19,15 @@ public class GroupRation implements Serializable {
     private String GroupSignature;
     private String GroupCreator;
     private String GroupManager;
+    private String GroupMyAlias;
+
+    public String getGroupMyAlias() {
+        return GroupMyAlias;
+    }
+
+    public void setGroupMyAlias(String groupMyAlias) {
+        GroupMyAlias = groupMyAlias;
+    }
 
     public String getGroupCreator() {
         return GroupCreator;

@@ -65,6 +65,7 @@ public class GroupTalkAdapter extends BaseAdapter {
         lists = list.get(position);
         if(lists.getType() == 1){
             holder.tv_name.setVisibility(View.VISIBLE);
+
             if(lists.getUserAliasName()!=null){
                 holder.tv_name.setText(lists.getUserAliasName());
             }else{
@@ -73,6 +74,7 @@ public class GroupTalkAdapter extends BaseAdapter {
                 }else{
                     holder.tv_name.setText(lists.getUserName());//名
                 }}
+
             if(lists.getPortraitBig()==null||lists.getPortraitBig().equals("")||lists.getPortraitBig().equals("null")||lists.getPortraitBig().trim().equals("")){
                 holder.imageView_touxiang.setImageResource(R.mipmap.wt_image_tx_hy);
             }else{

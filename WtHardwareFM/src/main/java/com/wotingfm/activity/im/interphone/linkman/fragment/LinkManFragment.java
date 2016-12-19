@@ -693,6 +693,9 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 		});
 	}
 
+
+
+
 	/**
 	 * 组listView监听
 	 */

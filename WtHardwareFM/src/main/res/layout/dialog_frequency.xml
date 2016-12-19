@@ -30,13 +30,15 @@
 
             <com.wotingfm.widget.pickview.LoopView
                 android:id="@+id/pick_province"
-                android:layout_width="150dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
                 android:layout_height="match_parent"
                 android:paddingRight="40dp"/>
 
             <com.wotingfm.widget.pickview.LoopView
                 android:id="@+id/pick_city"
-                android:layout_width="150dp"
+                android:layout_width="0dp"
+                android:layout_weight="2"
                 android:layout_height="match_parent"
                 android:paddingRight="40dp"/>
 

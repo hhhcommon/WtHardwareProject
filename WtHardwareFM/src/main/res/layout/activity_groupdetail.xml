@@ -42,18 +42,18 @@
                 android:background="@color/dinglan_orange">
 
                 <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
                     android:src="@mipmap/xiugai"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_marginLeft="15dp"
+                    android:layout_marginLeft="10dp"
                     android:id="@+id/imageView3" />
 
                 <ImageView
                     android:layout_width="40dp"
-                    android:layout_height="40dp"
+                    android:layout_height="38dp"
                     android:src="@mipmap/addgroup_talk"
                     android:layout_alignParentTop="true"
                     android:layout_alignParentRight="true"
@@ -68,7 +68,7 @@
                     android:layout_toRightOf="@+id/imageView3"
                     android:layout_toEndOf="@+id/imageView3"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginLeft="45dp"
+                    android:layout_marginLeft="25dp"
                     android:layout_marginBottom="15dp"
                     >
 
@@ -87,8 +87,6 @@
                         android:src="@mipmap/liubianxing_orange" />
 
                 </RelativeLayout>
-
-
 
                 <EditText
                     android:id="@+id/et_b_name"
@@ -332,7 +330,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:visibility="gone"
-                android:background="@color/umeng_socialize_ucenter_bg">
+                android:background="@color/white">
 
                 <TextView
                     android:layout_width="wrap_content"
