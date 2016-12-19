@@ -183,7 +183,7 @@ public class TalkPersonNewsActivity extends BaseActivity implements  OnClickList
 
         // 好友名称  给好友的备注名  可随时修改 但修改的是给好友的备注好友的名称没有改变
         if (aliasName == null || aliasName.equals("")) {
-            et_beizhu.setText(name);
+          /*  et_beizhu.setText(name);*/
         }else{
             et_beizhu.setText(aliasName);
         }
@@ -216,6 +216,8 @@ public class TalkPersonNewsActivity extends BaseActivity implements  OnClickList
                 break;
             case R.id.imageView3:     // 修改好友备注
                 et_beizhu.setEnabled(false);
+                et_beizhu.setBackgroundColor(getResources().getColor(R.color.dinglan_orange));
+                et_beizhu.setTextColor(getResources().getColor(R.color.white));
                 String beiName;
                 if (update) {           // 此时是修改状态需要进行以下操作
                     Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wancheng);
@@ -238,8 +240,8 @@ public class TalkPersonNewsActivity extends BaseActivity implements  OnClickList
                     Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wancheng);
                     imageModify.setImageBitmap(bmp);
                     et_beizhu.setEnabled(true);
-                    et_beizhu.setBackgroundColor(getResources().getColor(R.color.dinglan_orange));
-                    et_beizhu.setTextColor(getResources().getColor(R.color.white));
+                    et_beizhu.setBackgroundColor(getResources().getColor(R.color.WHITE));
+                    et_beizhu.setTextColor(getResources().getColor(R.color.black));
                 }
                 update = !update;
                 break;

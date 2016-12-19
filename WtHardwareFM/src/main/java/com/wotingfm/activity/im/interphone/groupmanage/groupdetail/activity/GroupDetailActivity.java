@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.EditText;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -42,6 +41,7 @@ import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.BaseActivity;
+import com.wotingfm.activity.im.interphone.alert.CallAlertActivity;
 import com.wotingfm.activity.im.interphone.chat.model.TalkListGP;
 import com.wotingfm.activity.im.interphone.creategroup.frienddetails.TalkPersonNewsActivity;
 import com.wotingfm.activity.im.interphone.creategroup.model.GroupRation;
@@ -79,6 +79,7 @@ import com.wotingfm.util.ImageUploadReturnUtil;
 import com.wotingfm.util.L;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
+import com.wotingfm.widget.MyGridView;
 import com.wotingfm.widget.pickview.LoopView;
 import com.wotingfm.widget.pickview.OnItemSelectedListener;
 
@@ -114,7 +115,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
     private TextView mTextNumber;                       // 群成员人数
     private TextView textChannelOne;                    // 设备备用频道一
     private TextView textChannelTwo;                    // 设备备用频道二
-    private GridView gridAllPerson;                     // 展示全部成全
+    private MyGridView gridAllPerson;                     // 展示全部成全
     private ImageView mImageHead;                       // 头像
 //    private ImageView mImgEWM;
 
@@ -456,7 +457,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
         relativeVerifyGroup = findViewById(R.id.rl_vertiygroup);                // 审核消息
         relativeVerifyGroup.setOnClickListener(this);
 
-        gridAllPerson = (GridView) findViewById(R.id.gridView);                 // 展示全部成全
+        gridAllPerson = (MyGridView)findViewById(R.id.gridView);                 // 展示全部成全
         gridAllPerson.setSelector(new ColorDrawable(Color.TRANSPARENT));        // 取消GridView中Item选中时默
         gridAllPerson.setOnItemClickListener(this);
 
@@ -513,6 +514,7 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                     case "0":// 审核群 审核消息
                         relativeVerifyGroup.setVisibility(View.VISIBLE);
                         relativeTransferAuthority.setVisibility(View.VISIBLE);
+                        relativeAddGroup.setVisibility(View.VISIBLE);
                         break;
                 }
             } else {
@@ -631,7 +633,10 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                 finish();
                 break;
             case R.id.imageView4:            // 对讲
-                Toast.makeText(context, "对讲", Toast.LENGTH_LONG).show();
+                /*Toast.makeText(context, "对讲", Toast.LENGTH_LONG).show();*/
+                if(!TextUtils.isEmpty(groupId)){
+                call(groupId);
+                }
                 break;
             case R.id.rl_allperson:         // 全部成员
                 Intent intent = new Intent(this, AllGroupMemberActivity.class);
@@ -682,7 +687,12 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                 startToActivity(HandleGroupApplyActivity.class);
                 break;
             case R.id.rl_vertiygroup:       // 审核消息
-                startToActivity(JoinGroupListActivity.class);
+                Intent intent2 = new Intent(context, JoinGroupListActivity.class);
+                Bundle bundle2 = new Bundle();
+                bundle2.putString("GroupId", groupId);
+                bundle2.putSerializable("userlist", userList);
+                intent2.putExtras(bundle2);
+                startActivity(intent2);
                 break;
             case R.id.imageView3:           // 修改群资料
           /*      mGroupName.setEnabled(true);
@@ -760,6 +770,17 @@ public class GroupDetailActivity extends BaseActivity implements View.OnClickLis
                 break;
         }
     }
+
+    // 对讲
+    protected void call(String id) {
+        Intent it = new Intent(context, CallAlertActivity.class);
+        Bundle bundle = new Bundle();
+        bundle.putString("id", id);
+        it.putExtras(bundle);
+        startActivity(it);
+    }
+
+
 
     // 更改群备注及信息
     private void update(String GroupName, String GroupSign) {

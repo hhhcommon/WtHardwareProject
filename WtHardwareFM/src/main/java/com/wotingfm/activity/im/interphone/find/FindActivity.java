@@ -201,7 +201,7 @@ public class FindActivity extends BaseActivity implements View.OnClickListener {
                 } else {
                     lin_contactsearch.setVisibility(View.GONE);
                     img_delete.setVisibility(View.GONE);
-                    img_voicesearch.setVisibility(View.VISIBLE);
+                   // img_voicesearch.setVisibility(View.VISIBLE);
                     lin_saoyisao.setVisibility(View.VISIBLE);
                 }
             }

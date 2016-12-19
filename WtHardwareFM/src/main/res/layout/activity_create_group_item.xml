@@ -32,11 +32,15 @@
             android:layout_alignTop="@+id/text_group_name"
             style="@style/CreateGroupTypeEdit"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/text_group_name"
             android:text="群名称"
             android:layout_below="@id/image_head"
-            style="@style/CreateGroupTypeText"/>
+            android:src="@mipmap/wt_group_name"
+            android:layout_width="25dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="15dp"/>
 
         <EditText
             android:id="@+id/edit_group_autograph"
@@ -44,11 +48,15 @@
             android:layout_alignTop="@+id/text_group_autograph"
             style="@style/CreateGroupTypeEdit"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/text_group_autograph"
-            android:text="群签名"
+            android:src="@mipmap/wt_group_sign"
             android:layout_below="@id/text_group_name"
-            style="@style/CreateGroupTypeText"/>
+             android:layout_width="25dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="15dp"
+            />
 
         <EditText
             android:id="@+id/edit_group_password"
@@ -58,11 +66,14 @@
             android:inputType="textPassword"
             android:maxLength="18"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/text_group_password"
-            android:text="群密码"
+            android:src="@mipmap/img_password"
             android:layout_below="@id/text_group_autograph"
-            style="@style/CreateGroupTypeText" />
+            android:layout_width="25dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="15dp"/>
 
         <TextView
             android:id="@+id/edit_group_verification"
@@ -72,10 +83,13 @@
             style="@style/CreateGroupTypeEdit"
             android:drawableLeft="@mipmap/image_all_check"/>
 
-        <TextView
+        <ImageView
             android:id="@+id/text_group_verification"
-            style="@style/CreateGroupTypeText"
-            android:text="群验证"
+            android:src="@mipmap/wt_group_vertify"
+            android:layout_width="25dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="15dp"
             android:layout_below="@id/text_group_password" />
 
         <TextView

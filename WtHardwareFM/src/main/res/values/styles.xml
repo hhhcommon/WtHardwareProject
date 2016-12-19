@@ -61,7 +61,7 @@
         <item name="android:layout_height">50dp</item>
         <item name="android:textSize">15sp</item>
         <item name="android:background">@drawable/wt_edit_text_background</item>
-        <item name="android:paddingLeft">84dp</item>
+        <item name="android:paddingLeft">54dp</item>
         <item name="android:layout_marginLeft">12dp</item>
         <item name="android:layout_marginRight">12dp</item>
         <item name="android:singleLine">true</item>
@@ -73,7 +73,7 @@
         <item name="android:layout_height">50dp</item>
         <item name="android:textSize">18sp</item>
         <item name="android:layout_marginTop">10dp</item>
-        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginLeft">25dp</item>
         <item name="android:gravity">center</item>
     </style>
 

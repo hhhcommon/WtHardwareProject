@@ -3,95 +3,112 @@ package com.wotingfm.activity.im.interphone.find.result.model;
 import java.io.Serializable;
 
 public class UserInviteMeInside implements Serializable {
-    private static final long serialVersionUID = -1698498591552781200L;
+    public String InviteTime;
+    public String InviteMesage;
+    public String UserName;
     public String UserId;
-    public String RealName;            //实名
-    public String UserNum;            //用户码
-    public String UserName;            //用户登录名
-    public String PhoneNum;            //用户主手机号
-    public String Email;
-    public String Descn;
-    public String PortraitBig;
-    public String PortraitMini;
-    public int type = 1;                //判断已接受状态的type 1=接受 2=已接受
+    public int type=1;				//判断已接受状态的type 1=接受 2=已接受
+    private String UserAliasName;
+    private String RealName;		//实名
+    private String UserNum;			//用户码
+    private String PhoneNum;		//用户主手机号
+    private String Email;			//
+    private String Descn;			//
+    private String PortraitBig;		//
+    private String Portrait;		//
+    private String PortraitMini;	//
+    private String UserSign;	    // 签名
 
-    public String getPortraitBig() {
-        return PortraitBig;
+    public String getUserSign() {
+        return UserSign;
     }
 
-    public void setPortraitBig(String portraitBig) {
-        PortraitBig = portraitBig;
+    public void setUserSign(String userSign) {
+        UserSign = userSign;
     }
 
-    public String getPortraitMini() {
-        return PortraitMini;
+    public String getInviteTime() {
+        return InviteTime;
     }
-
-    public void setPortraitMini(String portraitMini) {
-        PortraitMini = portraitMini;
+    public void setInviteTime(String inviteTime) {
+        InviteTime = inviteTime;
     }
-
-    public int getType() {
-        return type;
+    public String getPortrait() {
+        return Portrait;
     }
-
-    public void setType(int type) {
-        this.type = type;
+    public void setPortrait(String portrait) {
+        Portrait = portrait;
     }
-
-    public String getUserId() {
-        return UserId;
+    public String getUserAliasName() {
+        return UserAliasName;
     }
-
-    public void setUserId(String userId) {
-        UserId = userId;
+    public void setUserAliasName(String userAliasName) {
+        UserAliasName = userAliasName;
     }
-
     public String getRealName() {
         return RealName;
     }
-
     public void setRealName(String realName) {
         RealName = realName;
     }
-
     public String getUserNum() {
         return UserNum;
     }
-
     public void setUserNum(String userNum) {
         UserNum = userNum;
     }
-
-    public String getUserName() {
-        return UserName;
-    }
-
-    public void setUserName(String userName) {
-        UserName = userName;
-    }
-
     public String getPhoneNum() {
         return PhoneNum;
     }
-
     public void setPhoneNum(String phoneNum) {
         PhoneNum = phoneNum;
     }
-
     public String getEmail() {
         return Email;
     }
-
     public void setEmail(String email) {
         Email = email;
     }
-
     public String getDescn() {
         return Descn;
     }
-
     public void setDescn(String descn) {
         Descn = descn;
+    }
+    public String getPortraitBig() {
+        return PortraitBig;
+    }
+    public void setPortraitBig(String portraitBig) {
+        PortraitBig = portraitBig;
+    }
+    public String getPortraitMini() {
+        return PortraitMini;
+    }
+    public void setPortraitMini(String portraitMini) {
+        PortraitMini = portraitMini;
+    }
+    public int getType() {
+        return type;
+    }
+    public void setType(int type) {
+        this.type = type;
+    }
+    public String getInviteMesage() {
+        return InviteMesage;
+    }
+    public void setInviteMesage(String inviteMesage) {
+        InviteMesage = inviteMesage;
+    }
+    public String getUserName() {
+        return UserName;
+    }
+    public void setUserName(String userName) {
+        UserName = userName;
+    }
+    public String getUserId() {
+        return UserId;
+    }
+    public void setUserId(String userId) {
+        UserId = userId;
     }
 }
