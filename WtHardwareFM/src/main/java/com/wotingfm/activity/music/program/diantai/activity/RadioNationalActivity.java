@@ -23,6 +23,7 @@ import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.diantai.activity.adapter.RadioNationAdapter;
 import com.wotingfm.activity.music.program.diantai.model.RadioPlay;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
@@ -199,7 +200,11 @@ public class RadioNationalActivity extends BaseActivity implements View.OnClickL
                         HomeActivity.UpdateViewPager();
                         finish();
                         PlayerFragment.TextPage=1;
-                        PlayerFragment.SendTextRequest(SubList.get(groupPosition).getList().get(childPosition).getContentName(), context);
+                        Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                        Bundle bundle1=new Bundle();
+                        bundle1.putString("text",SubList.get(groupPosition).getList().get(childPosition).getContentName());
+                        push.putExtras(bundle1);
+                        context.sendBroadcast(push);
                     } else if (MediaType.equals("SEQU")) {
                         Intent intent = new Intent(context, AlbumActivity.class);
                         Bundle bundle = new Bundle();

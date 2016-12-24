@@ -31,4 +31,11 @@ public class ToastUtils {
 			Toast.makeText(context, "无法连接到服务器!", Toast.LENGTH_LONG).show();
 		}
     }
+	/**没有网络时对用户的提示*/
+	public static void showNoNetwork(Context context){
+//        if(GlobalConfig.isToast) {
+//            Toast.makeText(context, "连接服务器失败!", Toast.LENGTH_SHORT).show();
+//        }
+		Toast.makeText(context, "网路连接失败，请检查网络设置!", Toast.LENGTH_SHORT).show();
+	}
 }

@@ -143,11 +143,11 @@ public class TTSFragment extends Fragment {
                         String playUri = newList.get(position - 1).getContentURI();
                         String playMediaType = newList.get(position - 1).getMediaType();
                         String playContentShareUrl = newList.get(position - 1).getContentShareURL();
-                        String playAllTime = "0";
+                        String playAllTime = newList.get(position - 1).getContentTimes();
                         String playInTime = "0";
-                        String playContentDesc = newList.get(position - 1).getCurrentContent();
-                        String playerNum = newList.get(position - 1).getWatchPlayerNum();
-                        String playZanType = "0";
+                        String playContentDesc = newList.get(position - 1).getContentDescn();
+                        String playerNum = newList.get(position - 1).getPlayCount();
+                        String playZanType = newList.get(position-1).getContentFavorite();
                         String playFrom = newList.get(position - 1).getContentPub();
                         String playFromId = "";
                         String playFromUrl = "";
@@ -172,7 +172,11 @@ public class TTSFragment extends Fragment {
                         MainActivity.changeToMusic();
                         HomeActivity.UpdateViewPager();
                         PlayerFragment.TextPage=1;
-                        PlayerFragment.SendTextRequest(playName, context);
+                        Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                        Bundle bundle1=new Bundle();
+                        bundle1.putString("text",playName);
+                        push.putExtras(bundle1);
+                        context.sendBroadcast(push);
                         context.finish();
                     }
                 }

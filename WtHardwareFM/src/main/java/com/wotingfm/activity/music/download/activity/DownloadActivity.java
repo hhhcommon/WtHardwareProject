@@ -1,19 +1,14 @@
 package com.wotingfm.activity.music.download.activity;
 
-import android.annotation.TargetApi;
-import android.content.Intent;
-import android.os.Build;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.StatFs;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.text.format.Formatter;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.wotingfm.R;
@@ -26,64 +21,136 @@ import java.util.ArrayList;
 /**
  * 下载主页
  */
-public class DownloadActivity extends FragmentActivity {
+public class DownloadActivity extends FragmentActivity implements  OnClickListener{
+    private DownloadActivity context;
+
     private TextView textCompleted;
     private TextView textUncompleted;
-    private TextView textMemory;
-    private ViewPager viewPagerDownload;
-    public static Boolean isVisible = false;
+    private ViewPager viewDownload;
+    public static Boolean isVisible=false;
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.lin_news:            // 返回
+                finish();
+                break;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_download);
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
+        context = this;
         setView();
+        initViewPager();
     }
+
 
     @Override
     protected void onResume() {
         super.onResume();
-        isVisible = true;
+        isVisible=true;
     }
 
-    /**
-     * 设置界面
-     */
+
+
+    // 设置界面
     private void setView() {
-        findViewById(R.id.left_image).setOnClickListener(new OnClickListener() { // 返回
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
+        findViewById(R.id.lin_news).setOnClickListener(this);
 
-        TextView textTitle = (TextView) findViewById(R.id.text_title);
-        textTitle.setText("本地音频");
+        textCompleted = (TextView) findViewById(R.id.tv_completed);
+        textUncompleted = (TextView) findViewById(R.id.tv_uncompleted);
+        viewDownload = (ViewPager) findViewById(R.id.viewpager);
+    }
 
-        textMemory = (TextView) findViewById(R.id.text_memory);
-        getAvailSpace();
-
-        textCompleted = (TextView) findViewById(R.id.tv_completed);     // 已下载
-        textUncompleted = (TextView) findViewById(R.id.tv_uncompleted); // 正在下载
-        viewPagerDownload = (ViewPager) findViewById(R.id.viewpager);
-
+    private void initViewPager() {
         ArrayList<Fragment> fragmentList = new ArrayList<>();
-        Fragment mDownLoadFragment = new DownLoadCompleted();
-        Fragment mDownLoadUnFragment = new DownLoadUnCompleted();
-        fragmentList.add(mDownLoadFragment);
-        fragmentList.add(mDownLoadUnFragment);
-        viewPagerDownload.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList));
-        viewPagerDownload.setOnPageChangeListener(new MyOnPageChangeListener());
-        viewPagerDownload.setCurrentItem(0);
-        viewPagerDownload.setOffscreenPageLimit(1);
+        fragmentList.add(new DownLoadCompleted());
+        fragmentList.add(new DownLoadUnCompleted());
+        viewDownload.setAdapter(new MyFragmentPagerAdapter(getSupportFragmentManager(), fragmentList));
+        viewDownload.setOnPageChangeListener(new MyOnPageChangeListener());
+        viewDownload.setCurrentItem(0);
+        viewDownload.setOffscreenPageLimit(1);
         textCompleted.setOnClickListener(new DownloadClickListener(0));
         textUncompleted.setOnClickListener(new DownloadClickListener(1));
     }
 
-    public class MyOnPageChangeListener implements OnPageChangeListener {
+    // 更新界面
+    private void updateView(int index) {
+        if (index == 0) {
+            handleView(index);
+        } else if (index == 1) {
+            handleView(index);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        finish();
+    }
+
+    private void handleView(int index) {
+        if(index==0){
+            textCompleted.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
+            textCompleted.setBackgroundResource(R.drawable.color_wt_circle_home_white);
+            textUncompleted.setTextColor(context.getResources().getColor(R.color.white));
+            textUncompleted.setBackgroundResource(R.drawable.color_wt_circle_orange);
+        }else{
+            textUncompleted.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
+            textUncompleted.setBackgroundResource(R.drawable.color_wt_circle_home_white);
+            textCompleted.setTextColor(context.getResources().getColor(R.color.white));
+            textCompleted.setBackgroundResource(R.drawable.color_wt_circle_orange);
+        }
+    }
+
+    class DownloadClickListener implements OnClickListener {
+        private int index = 0;
+
+        public DownloadClickListener(int i) {
+            index = i;
+        }
+
+        @Override
+        public void onClick(View v) {
+            viewDownload.setCurrentItem(index);        // 界面切换字体的改变
+            updateView(index);
+        }
+    }
+
+  /*  long waitTime = 2000L;
+    long touchTime = 0;
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
+            long currentTime = System.currentTimeMillis();
+            if ((currentTime - touchTime) >= waitTime) {
+                ToastUtils.show_always(context, "再按一次退出");
+                touchTime = currentTime;
+            } else {
+                MobclickAgent.onKillProcess(context);
+                finish();
+                android.os.Process.killProcess(android.os.Process.myPid());
+            }
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }*/
+
+    // 设置android app 的字体大小不受系统字体大小改变的影响
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        return res;
+    }
+
+    class MyOnPageChangeListener implements OnPageChangeListener {
 
         @Override
         public void onPageScrolled(int arg0, float arg1, int arg2) {
@@ -95,79 +162,18 @@ public class DownloadActivity extends FragmentActivity {
 
         @Override
         public void onPageSelected(int arg0) {
-            if (arg0 == 0) {
-                textCompleted.setBackgroundResource(R.color.dinglan_orange_light);
-                textUncompleted.setBackgroundResource(R.color.WHITE);
-            } else if (arg0 == 1) {
-                textUncompleted.setBackgroundResource(R.color.dinglan_orange_light);
-                textCompleted.setBackgroundResource(R.color.WHITE);
-            }
+            updateView(arg0);
         }
     }
-
-    public class DownloadClickListener implements OnClickListener {
-        private int index = 0;
-
-        public DownloadClickListener(int i) {
-            index = i;
-        }
-
-        @Override
-        public void onClick(View v) {
-            viewPagerDownload.setCurrentItem(index);        // 界面切换字体的改变
-            if (index == 0) {
-                textCompleted.setBackgroundResource(R.color.dinglan_orange_light);
-                textUncompleted.setBackgroundResource(R.color.WHITE);
-            } else if (index == 1) {
-                textUncompleted.setBackgroundResource(R.color.dinglan_orange_light);
-                textCompleted.setBackgroundResource(R.color.WHITE);
-            }
-        }
-    }
-
-    /**
-     * 根据路劲获取某个目录的可用空间
-     */
-    private void getAvailSpace() {
-        StatFs statFs = new StatFs(Environment.getExternalStorageDirectory().getPath());
-        long blockSize;
-        long totalBlocks;
-        long availableBlocks;
-
-        // 由于API18（Android4.3）以后getBlockSize过时并且改为了getBlockSizeLong
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR2) {
-            blockSize = statFs.getBlockSizeLong();// 获取分区的大小
-            totalBlocks = statFs.getBlockCountLong();// 获取分区的个数
-            availableBlocks = statFs.getAvailableBlocksLong();// 获取可用分区的个数
-        } else {
-            blockSize = statFs.getBlockSize();// 获取分区的大小
-            totalBlocks = statFs.getBlockCount();// 获取分区的个数
-            availableBlocks = statFs.getAvailableBlocks();// 获取可用分区的个数
-        }
-
-        // 利用formatFileSize函数把字节转换为用户等看懂的大小数值单位
-        String totalText = Formatter.formatFileSize(getBaseContext(), blockSize * totalBlocks);
-        // String availableText = Formatter.formatFileSize(getBaseContext(), blockSize * availableBlocks);
-        String userText = Formatter.formatFileSize(getBaseContext(), (blockSize * totalBlocks) - (blockSize * availableBlocks));
-        textMemory.setText("已用" + userText + "/总容量" + totalText);
-    }
-
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        isVisible = false;
+        isVisible=false;
         textCompleted = null;
         textUncompleted = null;
-        viewPagerDownload = null;
+        viewDownload = null;
+        context = null;
         setContentView(R.layout.activity_null);
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 1) {
-            finish();
-        }
     }
 }

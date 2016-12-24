@@ -28,6 +28,7 @@ import com.wotingfm.activity.music.program.radiolist.activity.RadioListActivity;
 import com.wotingfm.activity.music.program.radiolist.adapter.ListInfoAdapter;
 import com.wotingfm.activity.music.program.radiolist.model.ListInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
@@ -259,7 +260,11 @@ public class ClassifyFragment extends Fragment {
                         dbDao.addHistory(history);
                         HomeActivity.UpdateViewPager();
                         PlayerFragment.TextPage = 1;
-                        PlayerFragment.SendTextRequest(newList.get(position - 2).getContentName(), context);
+                        Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                        Bundle bundle1=new Bundle();
+                        bundle1.putString("text",newList.get(position - 2).getContentName());
+                        push.putExtras(bundle1);
+                        context.sendBroadcast(push);
                         getActivity().finish();
                     } else if (MediaType.equals("SEQU")) {
                         Intent intent = new Intent(context, AlbumActivity.class);

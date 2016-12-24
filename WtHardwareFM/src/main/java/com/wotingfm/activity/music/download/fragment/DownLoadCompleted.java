@@ -8,14 +8,17 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
@@ -23,8 +26,11 @@ import com.wotingfm.activity.music.download.adapter.DownLoadSequAdapter;
 import com.wotingfm.activity.music.download.dao.FileInfoDao;
 import com.wotingfm.activity.music.download.downloadlist.activity.DownLoadListActivity;
 import com.wotingfm.activity.music.download.model.FileInfo;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.util.CommonUtils;
+import com.wotingfm.util.ToastUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,48 +38,81 @@ import java.util.List;
  */
 public class DownLoadCompleted extends Fragment implements OnClickListener {
     private FragmentActivity context;
-    private View rootView;
-    private View headView;
-    private List<FileInfo> fileSequList;    // 专辑list
+    private MessageReceiver receiver;
     private FileInfoDao FID;
     private DownLoadSequAdapter adapter;
-    private String userId;
-    private ListView mListView;
+
     private Dialog confirmDialog;
-    private MessageReceiver receiver;
-    private int index;
+    private View rootView;
+    private View headView;
+    private RelativeLayout relativeDownload;
+    private LinearLayout linearTop;
+    private LinearLayout linearAllCheck;
+    private LinearLayout linearNoData;
+    private ListView mListView;
+    private ImageView imageAllCheck;
+
+    private List<FileInfo> fileSequList;// 专辑list
+    private List<FileInfo> fileDellList;// 删除list
+
+    private String userId;
+    private boolean flag;// 删除按钮的处理框
+    private boolean allCheckFlag;// 全选flag
+
+    private void initDao() {
+        FID = new FileInfoDao(context);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        context = this.getActivity();
+        context = getActivity();
         if (receiver == null) {
             receiver = new MessageReceiver();
             IntentFilter filter = new IntentFilter();
-            filter.addAction("push_down_completed");
+            filter.addAction(BroadcastConstants.PUSH_DOWN_COMPLETED);
+            filter.addAction(BroadcastConstants.PUSH_ALLURL_CHANGE);
             context.registerReceiver(receiver, filter);
         }
         rootView = inflater.inflate(R.layout.fragment_download_completed, container, false);
+
         initDao();
+        setView();
         setDownLoadSource();
         return rootView;
     }
 
-    /**
-     * 查询数据库当中已完成的数据，此数据传输到adapter中进行适配
-     */
+    private void setView() {
+        relativeDownload = (RelativeLayout) rootView.findViewById(R.id.wt_download_rv);
+        mListView = (ListView) rootView.findViewById(R.id.listView);
+
+        linearTop = (LinearLayout) rootView.findViewById(R.id.lin_dinglan);
+        linearTop.setOnClickListener(this);
+
+        linearAllCheck = (LinearLayout) rootView.findViewById(R.id.lin_quanxuan);
+        linearAllCheck.setOnClickListener(this);
+
+        imageAllCheck = (ImageView) rootView.findViewById(R.id.img_quanxuan);
+        linearNoData = (LinearLayout) rootView.findViewById(R.id.lin_status_no);
+
+        rootView.findViewById(R.id.lin_clear).setOnClickListener(this);
+    }
+
+    // 查询数据库当中已完成的数据，此数据传输到 adapter 中进行适配
     public void setDownLoadSource() {
-        mListView = (ListView) rootView.findViewById(R.id.list_view);
-        LinearLayout linearUnLogin = (LinearLayout) rootView.findViewById(R.id.lin_status_no);
         userId = CommonUtils.getUserId(context);
-        List<FileInfo> fileInfoList = FID.queryFileInfo("true", userId);// 查询当前userId下已经下载完成的list
-        if(fileInfoList.size() > 0){
-            linearUnLogin.setVisibility(View.GONE);
+        flag = false;
+        linearAllCheck.setVisibility(View.INVISIBLE);
+        imageAllCheck.setImageResource(R.mipmap.wt_group_nochecked);
+        allCheckFlag = false;
+        List<FileInfo> f = FID.queryFileInfo("true", userId);
+        if (f.size() > 0) {
+            linearNoData.setVisibility(View.GONE);
             fileSequList = FID.GroupFileInfoAll(userId);
+            Log.e("f", fileSequList.size() + "");
             if (fileSequList.size() > 0) {
                 for (int i = 0; i < fileSequList.size(); i++) {
                     if (fileSequList.get(i).getSequid().equals("woting")) {
-                        //此处应出现添加headView进首项
-                        headView = LayoutInflater.from(context).inflate(R.layout.headview_onlinefragment, null);
+                        headView = LayoutInflater.from(context).inflate(R.layout.adapter_download_complete, null);
                         headView.findViewById(R.id.lin_download_single).setOnClickListener(this);
                         mListView.addHeaderView(headView);
                     } else if (i == fileSequList.size() - 1) {
@@ -82,29 +121,38 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
                         }
                     }
                 }
-                adapter = new DownLoadSequAdapter(context, fileSequList);
+                linearTop.setVisibility(View.VISIBLE);
                 mListView.setVisibility(View.VISIBLE);
-                mListView.setAdapter(adapter);
+                relativeDownload.setVisibility(View.VISIBLE);
+                mListView.setAdapter(adapter = new DownLoadSequAdapter(context, fileSequList));
                 setItemListener();
+                setInterface();
             }
         } else {
+            linearTop.setVisibility(View.GONE);
             mListView.setVisibility(View.GONE);
-            linearUnLogin.setVisibility(View.VISIBLE);
+            relativeDownload.setVisibility(View.GONE);
+            linearNoData.setVisibility(View.VISIBLE);
+            ToastUtils.show_short(context, "还没有下载完成的任务");
         }
     }
 
-    /**
-     * 设置监听事件
-     */
-    private void setItemListener() {
-        adapter.setOnListener(new DownLoadSequAdapter.DownLoadDelete() {
+    // 设置接口回调方法
+    private void setInterface() {
+        adapter.setOnListener(new DownLoadSequAdapter.downloadSequCheck() {
             @Override
-            public void deletePosition(int position) {
-                index = position;
-                deleteConfirmDialog();
+            public void checkposition(int position) {
+                if (fileSequList.get(position).getChecktype() == 0) {
+                    fileSequList.get(position).setChecktype(1);
+                } else {
+                    fileSequList.get(position).setChecktype(0);
+                }
+                adapter.notifyDataSetChanged();
             }
         });
+    }
 
+    private void setItemListener() {
         mListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -113,43 +161,63 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
                 bundle.putString("sequname", fileSequList.get(position).getSequname());
                 bundle.putString("sequid", fileSequList.get(position).getSequid());
                 intent.putExtras(bundle);
-                context.startActivityForResult(intent,1);
+                context.startActivity(intent);
             }
         });
-    }
-
-    private void initDao() {
-        FID = new FileInfoDao(context);
-    }
-
-    /**
-     * 删除对话框
-     */
-    private void deleteConfirmDialog() {
-        final View dialog1 = LayoutInflater.from(context).inflate(R.layout.dialog_exit_confirm, null);
-        TextView textCancel = (TextView) dialog1.findViewById(R.id.tv_cancle);
-        textCancel.setOnClickListener(this);
-        TextView textConfirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
-        textConfirm.setOnClickListener(this);
-        TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);
-        textTitle.setText("确定删除这个已下载的节目?");
-        confirmDialog = new Dialog(context, R.style.MyDialog);
-        confirmDialog.setContentView(dialog1);
-        confirmDialog.setCanceledOnTouchOutside(false);
-        confirmDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-        confirmDialog.show();
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_cancle:
-                confirmDialog.dismiss();
+            case R.id.lin_clear:    // 删除
+                if (!flag) {
+                    linearAllCheck.setVisibility(View.VISIBLE);
+                    for (int i = 0; i < fileSequList.size(); i++) {
+                        fileSequList.get(i).setViewtype(1);
+                    }
+                } else {
+                    // 隐藏删除框  检查当前的 list 当中是否有 checkType == 1 的
+                    // 隐藏删除框时设置所有项目的默认选定状态为 0  设置为未选中状态
+                    if (fileDellList != null) {
+                        fileDellList.clear();
+                    }
+                    for (int i = 0; i < fileSequList.size(); i++) {
+                        if (fileSequList.get(i).getChecktype() == 1) {
+                            if (fileDellList == null) {
+                                fileDellList = new ArrayList<>();
+                            }
+                            fileDellList.add(fileSequList.get(i));
+                        }
+                    }
+                    if (fileDellList != null && fileDellList.size() > 0) {
+                        deleteConfirmDialog();
+                    } else {
+                        linearAllCheck.setVisibility(View.INVISIBLE);
+                        for (int i = 0; i < fileSequList.size(); i++) {
+                            fileSequList.get(i).setViewtype(0);
+                            fileSequList.get(i).setChecktype(0);// 隐藏删除框时设置所有项目的默认选定状态为 0
+                        }
+                        imageAllCheck.setImageResource(R.mipmap.wt_group_nochecked);
+                        allCheckFlag = false;
+                    }
+                }
+                flag = !flag;
+                adapter.notifyDataSetChanged();
                 break;
-            case R.id.tv_confirm:
-                confirmDialog.dismiss();
-                FID.deleteSequ(fileSequList.get(index).getSequname(), userId);
-                setDownLoadSource();//重新适配界面操作
+            case R.id.lin_quanxuan:
+                if (allCheckFlag) {
+                    imageAllCheck.setImageResource(R.mipmap.wt_group_nochecked);// 变更为非全部选中状态
+                    for (int i = 0; i < fileSequList.size(); i++) {
+                        fileSequList.get(i).setChecktype(0);
+                    }
+                } else {
+                    imageAllCheck.setImageResource(R.mipmap.wt_group_checked);// 变更为全部选中状态
+                    for (int i = 0; i < fileSequList.size(); i++) {
+                        fileSequList.get(i).setChecktype(1);
+                    }
+                }
+                allCheckFlag = !allCheckFlag;
+                adapter.notifyDataSetChanged();
                 break;
             case R.id.lin_download_single:
                 Intent intent = new Intent(context, DownLoadListActivity.class);
@@ -159,13 +227,41 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
                 intent.putExtras(bundle);
                 context.startActivity(intent);
                 break;
+            case R.id.tv_confirm:
+                for (int i = 0; i < fileDellList.size(); i++) {
+                    FID.deleteSequ(fileDellList.get(i).getSequname(), userId);
+                }
+                setDownLoadSource();// 重新适配界面操作
+                allCheckFlag = false;// 全选flag
+                flag = false;
+                linearAllCheck.setVisibility(View.INVISIBLE);
+            case R.id.tv_cancle:
+                confirmDialog.dismiss();
+                break;
         }
+    }
+
+    // 删除对话框
+    private void deleteConfirmDialog() {
+        final View dialog1 = LayoutInflater.from(context).inflate(R.layout.dialog_exit_confirm, null);
+        dialog1.findViewById(R.id.tv_cancle).setOnClickListener(this);
+        dialog1.findViewById(R.id.tv_confirm).setOnClickListener(this);
+        TextView textTitle = (TextView) dialog1.findViewById(R.id.tv_title);
+        textTitle.setText("是否删除这" + fileDellList.size() + "条记录");
+
+        confirmDialog = new Dialog(context, R.style.MyDialog);
+        confirmDialog.setContentView(dialog1);
+        confirmDialog.setCanceledOnTouchOutside(false);
+        confirmDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+        confirmDialog.show();
     }
 
     class MessageReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals("push_down_completed")) {
+            if (intent.getAction().equals(BroadcastConstants.PUSH_DOWN_COMPLETED)) {
+                setDownLoadSource();
+            }else if(intent.getAction().equals(BroadcastConstants.PUSH_ALLURL_CHANGE)){
                 setDownLoadSource();
             }
         }

@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import com.wotingfm.R;
 import com.wotingfm.activity.common.baseactivity.AppBaseActivity;
 import com.wotingfm.activity.music.player.fragment.PlayerFragment;
-import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.service.TimeOffService;
 
@@ -69,7 +68,7 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
 
         View linView = findViewById(R.id.lin_view);
 
-        if(GlobalConfig.playerobject != null && PlayerFragment.audioPlay != null &&
+     /*   if(GlobalConfig.playerobject != null && PlayerFragment.audioPlay != null &&
                 PlayerFragment.audioPlay.isPlaying() && !GlobalConfig.playerobject.getMediaType().equals("RADIO")) {
 
             linearPlayEnd.setVisibility(View.VISIBLE);
@@ -81,7 +80,7 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
 
         if(PlayerFragment.isCurrentPlay){
             linearPlayEnd.setClickable(false);
-        }
+        }*/
     }
 
     // 设置选中图片的显示与隐藏

@@ -199,7 +199,12 @@ public class TTSFragment extends Fragment {
                             dbDao.addHistory(history);
 							if (PlayerFragment.context != null) {
 								HomeActivity.UpdateViewPager();
-								PlayerFragment.SendTextRequest(newList.get(position - 1).getContentName(), context);
+								PlayerFragment.TextPage=1;
+								Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+								Bundle bundle1=new Bundle();
+								bundle1.putString("text", newList.get(position - 1).getContentName());
+								push.putExtras(bundle1);
+								context.sendBroadcast(push);
 								getActivity().finish();
 							} else {
 								SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
