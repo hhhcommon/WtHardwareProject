@@ -85,7 +85,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 	 */
 	private PinyinComparator pinyinComparator;
 	private FragmentActivity context;
-//	private boolean headViewShow = true;
+	private boolean headViewShow = true;
 	private MessageReceiver Receiver;
 	private SharedPreferences sharedPreferences= BSApplication.SharedPreferences;
 	private String isLogin;
@@ -477,12 +477,12 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 						TalkPersonNoAdapter adapters = new TalkPersonNoAdapter(context);
 						sortListView.setAdapter(adapters);
 					} else {
-						if(adapter==null){
+				/*		if(adapter==null){*/
 							adapter = new SortGroupMemberAdapter(context, srclist_p);
 							sortListView.setAdapter(adapter);
-						}else{
+						/*}else{
 							adapter.updateListView(srclist_p);
-						}
+						}*/
 					}
 				} else {		// 关键词不为空
 					image_clear.setVisibility(View.VISIBLE);
@@ -491,6 +491,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 				}
 				// 当输入框里面的值为空，更新为原来的列表，否则为过滤数据列表
 				// filterData(s.toString());
+
 			}
 
 			@Override
@@ -519,7 +520,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 						sortListView.setVisibility(View.VISIBLE);
 						//					sortListView.removeHeaderView(headView);
 						lin_grouplist.setVisibility(View.GONE);
-//						headViewShow=false;
+						//headViewShow=false;
 						if(adapter==null){
 							adapter = new SortGroupMemberAdapter(context, list);
 							sortListView.setAdapter(adapter);
@@ -668,11 +669,11 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 				Intent intent = new Intent(context,TalkPersonNewsActivity.class);
 				Bundle bundle = new Bundle();
 				bundle.putString("type", "talkpersonfragment");
-//				if(headViewShow){
+				if(headViewShow){
 					bundle.putSerializable("data", srclist_p.get(position-1));
-//				}else{
-//					bundle.putSerializable("data", srclist_p.get(position));
-//				}
+				}else{
+					bundle.putSerializable("data", srclist_p.get(position));
+				}
 				intent.putExtras(bundle);
 				startActivity(intent);
 			}
@@ -692,6 +693,9 @@ public class LinkManFragment extends Fragment implements SectionIndexer,OnClickL
 			}
 		});
 	}
+
+
+
 
 	/**
 	 * 组listView监听

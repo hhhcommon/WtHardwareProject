@@ -1,6 +1,7 @@
 package com.wotingfm.activity.im.interphone.groupmanage.joingrouplist.activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -105,16 +106,21 @@ public class JoinGroupListActivity extends BaseActivity implements
         textHeadName.setText("审核消息");// 设置标题
 
         findViewById(R.id.wt_back).setOnClickListener(this);// 返回
-
+        handleIntent();
         joinGroupList = (ListView) findViewById(R.id.lv_jiaqun);// 消息列表
-        groupId = getIntent().getStringExtra("GroupId");// 群组 ID
         if(groupId == null || groupId.equals("")) {
             ToastUtils.show_always(context, "获取 groupId 失败，请返回重试!");
             return ;
         }
-
         dialog = DialogUtils.Dialogph(context, "正在获取群成员信息");
         send();
+    }
+
+    private void handleIntent() {
+        Intent intent = this.getIntent();
+        Bundle bundle = intent.getExtras();
+        groupId = bundle.getString("GroupId");
+        list = (ArrayList<UserInfo>) bundle.getSerializable("userlist");;
     }
 
     // 获取需要处理的审核消息
@@ -140,6 +146,7 @@ public class JoinGroupListActivity extends BaseActivity implements
                     L.v("ReturnType -- > > " + ReturnType);
 
                     if (ReturnType != null && ReturnType.equals("1001")) {
+
                         userList = new Gson().fromJson(result.getString("InviteUserList"), new TypeToken<List<UserInfo>>() {}.getType());
                         for (int i = 0; i < userList.size(); i++) {
                             for (int j = 0; j < list.size(); j++) {

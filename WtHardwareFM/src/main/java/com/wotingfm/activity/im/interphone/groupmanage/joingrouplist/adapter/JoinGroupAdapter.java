@@ -2,6 +2,7 @@ package com.wotingfm.activity.im.interphone.groupmanage.joingrouplist.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -80,7 +81,13 @@ public class JoinGroupAdapter extends BaseAdapter implements OnClickListener{
 		} else {
 			holder.textview_invitename.setText(Inviter.getUserName());
 		}
-		holder.textview_invitemessage.setText(Inviter.getInvitedUserName()+"邀请了"+Inviter.getUserName()+"进入群组");
+
+		if(TextUtils.isEmpty(Inviter.getInvitedUserName())){
+			holder.textview_invitemessage.setText(Inviter.getUserName()+"申请进入本群");
+		}else{
+			holder.textview_invitemessage.setText(Inviter.getInvitedUserName()+"邀请了"+Inviter.getUserName()+"进入群组");
+		}
+
 		if (Inviter.getPortraitMini() == null || Inviter.getPortraitMini().equals("")
 				|| Inviter.getPortraitMini().equals("null") || Inviter.getPortraitMini().trim().equals("")) {
 			Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_hy);

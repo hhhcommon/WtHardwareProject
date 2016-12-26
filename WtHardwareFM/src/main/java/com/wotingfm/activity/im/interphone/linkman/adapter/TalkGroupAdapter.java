@@ -81,11 +81,11 @@ public class TalkGroupAdapter extends BaseAdapter {
         } else {
             holder.tv_name.setText(lists.getGroupName());//名
         }
-        if (lists.getGroupMyAlias() == null || lists.getGroupMyAlias().equals("")) {
+        if (lists.getGroupSignature()== null || lists.getGroupSignature().equals("")) {
             holder.tv_b_name.setVisibility(View.GONE);
         } else {
             holder.tv_b_name.setVisibility(View.VISIBLE);
-            holder.tv_b_name.setText(lists.getGroupMyAlias());//名
+            holder.tv_b_name.setText(lists.getGroupSignature());//名
         }
         if (lists.getGroupImg() == null || lists.getGroupImg().equals("") || lists.getGroupImg().equals("null") || lists.getGroupImg().trim().equals("")) {
             Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_qz);

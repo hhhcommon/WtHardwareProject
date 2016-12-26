@@ -22,6 +22,15 @@ public class GroupInfo implements Serializable {
     public String GroupId;
     private String GroupCreator;
     private String GroupManager;
+    private String GroupMyAlias;
+
+    public String getGroupMyAlias() {
+        return GroupMyAlias;
+    }
+
+    public void setGroupMyAlias(String groupMyAlias) {
+        GroupMyAlias = groupMyAlias;
+    }
 
     public String getGroupCreator() {
         return GroupCreator;

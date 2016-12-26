@@ -190,7 +190,9 @@ public class MemberAddActivity extends BaseActivity implements View.OnClickListe
                         Collections.sort(userList2, pinyinComparator);
                         listView.setAdapter(adapter = new MembersAddAdapter(context, userList2));
                         adapter.setOnListener(MemberAddActivity.this);
-                    } else {
+                    } else if(ReturnType.equals("1011")) {
+                        ToastUtils.show_always(context, "您还没有好友，快去添加吧");
+                    }else{
                         ToastUtils.show_always(context, "获取成员失败，请稍后再试");
                     }
                 } catch (JSONException e1) {

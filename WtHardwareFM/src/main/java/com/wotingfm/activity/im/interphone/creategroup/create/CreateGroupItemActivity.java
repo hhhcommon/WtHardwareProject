@@ -100,9 +100,9 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
         editGroupName = (EditText) findViewById(R.id.edit_group_name);
         editGroupAutograph = (EditText) findViewById(R.id.edit_group_autograph);
         editGroupPassWord = (EditText) findViewById(R.id.edit_group_password);
-        TextView textGroupPassWord = (TextView) findViewById(R.id.text_group_password);
+        ImageView textGroupPassWord = (ImageView) findViewById(R.id.text_group_password);
         TextView groupVerification = (TextView) findViewById(R.id.edit_group_verification);
-        TextView textGroupVerification = (TextView) findViewById(R.id.text_group_verification);
+        ImageView textGroupVerification = (ImageView) findViewById(R.id.text_group_verification);
         btnCommit = (Button) findViewById(R.id.btn_commit);
         btnCommit.setOnClickListener(this);
         spinnerChannel1 = (Spinner) findViewById(R.id.spinner_channel1);
@@ -225,6 +225,9 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("data", groupRation);
                             bundle.putString("type", "CreateGroup");
+                            if(filePath!=null&&!filePath.equals("")){
+                                bundle.putString("imageLocal",filePath);
+                            }
                             intent.putExtras(bundle);
                             startActivity(intent);
                             setResult(1);
@@ -410,6 +413,9 @@ public class CreateGroupItemActivity extends AppBaseActivity implements View.OnC
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("data", groupRation);
                         bundle.putString("type", "CreateGroup");
+                        if(filePath!=null&&!filePath.equals("")){
+                            bundle.putString("imageLocal",filePath);
+                        }
                         intent.putExtras(bundle);
                         startActivity(intent);
                     }
