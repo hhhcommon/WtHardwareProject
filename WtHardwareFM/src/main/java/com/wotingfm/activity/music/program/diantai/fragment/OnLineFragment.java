@@ -46,6 +46,7 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.ToastUtils;
+import com.wotingfm.widget.HeightListView;
 import com.wotingfm.widget.pulltorefresh.PullToRefreshLayout;
 
 import org.json.JSONException;
@@ -325,13 +326,27 @@ public class OnLineFragment extends Fragment  {
                         String MainList = arg1.getString("List");
                         mainLists = new Gson().fromJson(MainList, new TypeToken<List<RankInfo>>() {
                         }.getType());
-                        if (adapters == null) {
-                            adapters = new CityNewAdapter(context, mainLists);
-                            gridView.setAdapter(adapters);
+                        if (mainLists != null && mainLists.size() != 0) {
+                            if (mainLists.size() > 3) {
+                                List tempList = new ArrayList();
+                                for (int i = 0; i < 3; i++) {
+                                    tempList.add(mainLists.get(i));
+                                }
+                                mainLists.clear();
+                                mainLists.addAll(tempList);
+                            }
+                            if (adapters == null) {
+                                adapters = new CityNewAdapter(context, mainLists);
+                                gridView.setAdapter(adapters);
+                            } else {
+                                adapters.notifyDataSetChanged();
+                            }
+                            gridListener();
+                            new HeightListView(context).setListViewHeightBasedOnChildren(gridView);
                         } else {
-                            adapters.notifyDataSetChanged();
+                            gridView.setVisibility(View.GONE);
+
                         }
-                        gridListener();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -491,7 +506,7 @@ public class OnLineFragment extends Fragment  {
                         String playUri = newList.get(groupPosition).getList().get(childPosition).getContentURI();
                         String playMediaType = newList.get(groupPosition).getList().get(childPosition).getMediaType();
                         String playContentShareUrl = newList.get(groupPosition).getList().get(childPosition).getContentShareURL();
-                        String playAllTime = "0";
+                        String playAllTime = newList.get(groupPosition).getList().get(childPosition).getContentTimes();
                         String playInTime = "0";
                         String playContentDesc = newList.get(groupPosition).getList().get(childPosition).getCurrentContent();
                         String playerNum = newList.get(groupPosition).getList().get(childPosition).getPlayCount();

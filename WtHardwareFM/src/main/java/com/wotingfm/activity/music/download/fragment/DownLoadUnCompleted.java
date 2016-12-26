@@ -111,8 +111,8 @@ public class DownLoadUnCompleted extends Fragment {
                 textStart.setText("全部开始");
             } else {
                 dwType = true;
-                imageStart.setImageResource(R.mipmap.wt_download_play);
-                textStart.setText("全部开始");
+                imageStart.setImageResource(R.mipmap.wt_download_pause);
+                textStart.setText("全部暂停");
             }
             adapter = new DownloadAdapter(context, fileInfoList);
             listView.setAdapter(adapter);
