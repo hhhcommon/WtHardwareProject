@@ -87,12 +87,12 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                 String playerurl = list.get(groupPosition).getList().get(childPosition).getContentPlay();
                 String playerurI = list.get(groupPosition).getList().get(childPosition).getContentURI();
                 String playermediatype = list.get(groupPosition).getList().get(childPosition).getMediaType();
-                String plaplayeralltime = "0";
+                String plaplayeralltime =list.get(groupPosition).getList().get(childPosition).getContentTimes() ;
                 String playerintime = "0";
-                String playercontentdesc = list.get(groupPosition).getList().get(childPosition).getCurrentContent();
-                String playernum = list.get(groupPosition).getList().get(childPosition).getWatchPlayerNum();
-                String playerzantype = "0";
-                String playerfrom = "";
+                String playercontentdesc = list.get(groupPosition).getList().get(childPosition).getContentDescn();
+                String playernum = list.get(groupPosition).getList().get(childPosition).getPlayCount();
+                String playerzantype =list.get(groupPosition).getList().get(childPosition).getContentFavorite();
+                String playerfrom = list.get(groupPosition).getList().get(childPosition).getContentPub();
                 String playerfromid = "";
                 String playerfromurl = "";
                 String playeraddtime = Long.toString(System.currentTimeMillis());
@@ -115,7 +115,11 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                 dbDao.addHistory(history);
                 MainActivity.changeToMusic();
                 HomeActivity.UpdateViewPager();
-                PlayerFragment.SendTextRequest(playername, context.getApplicationContext());
+                Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                Bundle bundle1=new Bundle();
+                bundle1.putString("text",playername);
+                push.putExtras(bundle1);
+                context.sendBroadcast(push);
                 context.finish();
                 break;
             case "SEQU":

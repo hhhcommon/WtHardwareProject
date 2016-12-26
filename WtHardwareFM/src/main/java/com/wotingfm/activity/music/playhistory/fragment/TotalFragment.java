@@ -2,6 +2,7 @@ package com.wotingfm.activity.music.playhistory.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -24,6 +25,7 @@ import com.wotingfm.activity.music.player.model.PlayerHistory;
 import com.wotingfm.activity.music.playhistory.activity.PlayHistoryActivity;
 import com.wotingfm.activity.music.playhistory.adapter.PlayHistoryExpandableAdapter;
 import com.wotingfm.activity.music.search.model.SuperRankInfo;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.L;
@@ -177,12 +179,12 @@ public class TotalFragment extends Fragment {
 					String playerUrl = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerUrl();
 					String playerUri = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerUrI();
 					String playerMediaType = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerMediaType();
-					String playerAllTime = "0";
+					String playerAllTime =list.get(groupPosition).getHistoryList().get(childPosition).getContentTimes();
 					String playerInTime = "0";
 					String playerContentDesc = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerContentDescn();
-					String playerNum = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerNum();
+					String playerNum = list.get(groupPosition).getHistoryList().get(childPosition).getPlayCount();
 					String playerZanType = "0";
-					String playerFrom = "";
+					String playerFrom = list.get(groupPosition).getHistoryList().get(childPosition).getContentPub();
 					String playerFromId = "";
 					String playerFromUrl = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerFromUrl();
 					String playerAddTime = Long.toString(System.currentTimeMillis());
@@ -211,8 +213,12 @@ public class TotalFragment extends Fragment {
                     dbDao.addHistory(history);
 					if(PlayerFragment.context!=null){
 						HomeActivity.UpdateViewPager();
-						String s = list.get(groupPosition).getHistoryList().get(childPosition).getPlayerName();
-						PlayerFragment.SendTextRequest(s, context);
+						PlayerFragment.TextPage=1;
+						Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+						Bundle bundle1=new Bundle();
+						bundle1.putString("text",list.get(groupPosition).getHistoryList().get(childPosition).getPlayerName());
+						push.putExtras(bundle1);
+						context.sendBroadcast(push);
 						getActivity().finish();
 					}else{
 						SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);

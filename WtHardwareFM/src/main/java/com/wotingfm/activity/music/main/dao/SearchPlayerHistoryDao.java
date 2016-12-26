@@ -39,7 +39,7 @@ public class SearchPlayerHistoryDao {
 						, playerhistory.getPlayerUrl(),playerhistory.getPlayerUrI()
 						,playerhistory.getPlayerMediaType()
 						, playerhistory.getPlayerAllTime(), playerhistory.getPlayerInTime()//这里
-						, playerhistory.getPlayerContentDescn(), playerhistory.getPlayerNum()
+						, playerhistory.getPlayerContentDescn(), playerhistory.getPlayCount()
 						, playerhistory.getPlayerZanType(), playerhistory.getPlayerFrom(), playerhistory.getPlayerFromId(), playerhistory.getPlayerAddTime()
 						, playerhistory.getBJUserid(),playerhistory.getPlayContentShareUrl()
 						,playerhistory.getContentFavorite(),playerhistory.getContentID(),playerhistory.getLocalurl()
@@ -87,11 +87,9 @@ public class SearchPlayerHistoryDao {
 				String sequdesc=cursor.getString(cursor.getColumnIndex("sequdesc"));
 				String sequimg=cursor.getString(cursor.getColumnIndex("sequimg"));
 
-
 				PlayerHistory h = new PlayerHistory(playername, playerimage, playerurl,playerurI, playermediatype, playeralltime,
 						playerintime, playercontentdesc, playernum, playerzantype, playerfrom, playerfromid,playerfromurl,playeraddtime,bjuserid,playcontentshareurl,ContentFavorite,ContentID
 						,localurl,sequname,sequid,sequdesc,sequimg);
-
 
 				myList.add(h);
 			}

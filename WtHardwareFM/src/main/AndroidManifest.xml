@@ -586,6 +586,12 @@
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.NoTitleBar"/>
 
+        <!-- 节目单-->
+        <activity
+            android:name="com.wotingfm.activity.music.player.programme.ProgrammeActivity"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.NoTitleBar"/>
+
         <!--  -->
         <activity
             android:name=".wxapi.WXEntryActivity"
@@ -638,6 +644,11 @@
         <service android:name=".service.TestWindowService"/>
         <service android:name=".service.LocationService"/>
         <service android:name="com.amap.api.location.APSService"/>
+        <!-- 集成播放器服务 -->
+        <service android:name=".service.IntegrationPlayerService"/>
+        <!-- 空服务 -->
+        <service android:name=".service.AssistService"/>
+
 
         <activity android:name=".activity.im.interphone.analog.AnalogueActivity"/>
     </application>

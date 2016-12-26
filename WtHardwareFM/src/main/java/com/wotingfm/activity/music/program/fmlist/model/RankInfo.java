@@ -4,14 +4,14 @@ import java.io.Serializable;
 
 public class RankInfo implements Serializable {
 	private String MediaType;
-	private String CurrentContent; 
+	private String CurrentContent;
 	private String WatchPlayerNum;
 	//以下为media=audio时解析实体类 为SEQU时数据类似 会直接跳转到一个相关的类表项里
 	private String ContentId;
-	private String ContentName; 	
-	private String Actor; 	
-	private String ContentImg; 	
-	private String ContentURI; 	
+	private String ContentName;
+	private String Actor;
+	private String ContentImg;
+	private String ContentURI;
 	private String ContentSubjectWord;
 	private String ContentPlay;
 	private String ContentShareURL;
@@ -21,25 +21,47 @@ public class RankInfo implements Serializable {
 	private String ContentTimes;
 	private String ContentPub;
 	private String ContentSubCount;
+	private String ContentSeqId;
+
+	public String getContentSeqId() {
+		return ContentSeqId;
+	}
+
+	public void setContentSeqId(String contentSeqId) {
+		ContentSeqId = contentSeqId;
+	}
+
 	private String PlayCount;
 	private String sequId;//专辑ID
 	private String sequImg;//专辑图片
 	private String sequDesc;//专辑描述
 	private String sequName;//专辑名称
-    private String ContentSeqId;
-
-    public String getContentSeqId() {
-        return ContentSeqId;
-    }
-
-    public void setContentSeqId(String contentSeqId) {
-        ContentSeqId = contentSeqId;
-    }
 
 	//界面展示状态
 	private int viewtype=0;//界面决定组件 1为显示点选框 0是没有
 	private int checktype=0;//点选框被选中为1 未被选中时为0
-	
+
+	private String playTag;         // 标签<预留>
+	private String ContentPlayType; // 内容后缀
+
+	public String getContentPlayType() {
+		return ContentPlayType;
+	}
+
+	public String getPlayTag() {
+		return playTag;
+	}
+
+	public void setContentPlayType(String contentPlayType) {
+		ContentPlayType = contentPlayType;
+	}
+
+	public void setPlayTag(String playTag) {
+		this.playTag = playTag;
+	}
+
+
+
 	public String getPlayCount() {
 		return PlayCount;
 	}
@@ -88,8 +110,8 @@ public class RankInfo implements Serializable {
 	public String getContentDescn() {
 		return ContentDescn;
 	}
-	public void setContentDescn(String contentDescn) {
-		ContentDescn = contentDescn;
+	public void setContentDescn(String contentDesc) {
+		ContentDescn = contentDesc;
 	}
 	public String getContentFavorite() {
 		return ContentFavorite;

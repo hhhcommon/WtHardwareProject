@@ -173,12 +173,12 @@ public class TTSFragment extends Fragment {
                         String playerUrl = playList.get(position).getPlayerUrl();
                         String playerUri = playList.get(position).getPlayerUrI();
                         String playerMediaType = playList.get(position).getPlayerMediaType();
-                        String playerAllTime = "0";
+                        String playerAllTime = playList.get(position).getContentTimes();
                         String playerInTime = "0";
                         String playerContentDesc = playList.get(position).getPlayerContentDescn();
-                        String playerNum = playList.get(position).getPlayerNum();
+                        String playerNum = playList.get(position).getPlayCount();
                         String playerZanType = "0";
-                        String playerFrom = "";
+                        String playerFrom = playList.get(position).getContentPub();
                         String playerFromId = "";
                         String playerFromUrl = playList.get(position).getPlayerFromUrl();
                         String playerAddTime = Long.toString(System.currentTimeMillis());
@@ -201,10 +201,12 @@ public class TTSFragment extends Fragment {
                         dbDao.deleteHistory(playerUrl);
                         dbDao.addHistory(history);
                         if (PlayerFragment.context != null) {
-//							MainActivity.change();
-                            HomeActivity.UpdateViewPager();
-                            String s = playList.get(position).getPlayerName();
-                            PlayerFragment.SendTextRequest(s, context);
+							PlayerFragment.TextPage=1;
+                            Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                            Bundle bundle1=new Bundle();
+                            bundle1.putString("text", playList.get(position).getPlayerName());
+                            push.putExtras(bundle1);
+                            context.sendBroadcast(push);
                             getActivity().finish();
                         } else {
                             SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();

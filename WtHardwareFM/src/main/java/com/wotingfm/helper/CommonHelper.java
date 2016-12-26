@@ -10,6 +10,7 @@ import android.telephony.TelephonyManager;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.PreferenceConstant;
 import com.wotingfm.manager.SharePreferenceManager;
+import com.wotingfm.util.ToastUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -159,5 +160,17 @@ public class CommonHelper {
 		SharePreferenceManager.saveBatchSharedPreference(mContext,
 					PreferenceConstant.DEVICE, PreferenceConstant.DEVICE_ID, deviceid_);
 		return deviceid_;
+	}
+
+	/**
+	 * 检查是否有网络
+	 */
+	public static boolean checkNetwork(Context context) {
+		if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+			ToastUtils.showNoNetwork(context);
+			return false;
+		} else {
+			return true;
+		}
 	}
 }

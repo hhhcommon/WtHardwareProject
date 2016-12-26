@@ -174,7 +174,7 @@ public class RadioFragment extends Fragment {
                         String plaplayeralltime = "0";
                         String playerintime = "0";
                         String playercontentdesc = playList.get(position).getPlayerContentDescn();
-                        String playernum = playList.get(position).getPlayerNum();
+                        String playernum = playList.get(position).getPlayCount();
                         String playerzantype = "0";
                         String playerfrom = "";
                         String playerfromid = "";
@@ -201,8 +201,12 @@ public class RadioFragment extends Fragment {
 
                         if (PlayerFragment.context != null) {
                             HomeActivity.UpdateViewPager();
-                            String s = playList.get(position).getPlayerName();
-                            PlayerFragment.SendTextRequest(s, context);
+                            PlayerFragment.TextPage=1;
+                            Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                            Bundle bundle1=new Bundle();
+                            bundle1.putString("text", playList.get(position).getPlayerName());
+                            push.putExtras(bundle1);
+                            context.sendBroadcast(push);
                             getActivity().finish();
                         } else {
                             SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);

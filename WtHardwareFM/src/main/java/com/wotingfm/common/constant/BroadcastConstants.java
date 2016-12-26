@@ -15,6 +15,8 @@ public class BroadcastConstants {
 	public static final String ACTION_UPDATE = "ACTION_UPDATE";
 	public static final String ACTION_FINISHED = "ACTION_FINISHED";
 	public static final String ACTION_FINISHED_NO_DOWNLOADVIEW = "ACTION_FINISHED_NO_DOWNLOADVIEW";
+	//PUSH_ALLURL_CHANGE-----新建===更改所有界面为未登录状态
+	public static final String PUSH_ALLURL_CHANGE="PUSH_ALLURL_CHANGE";
 	//城市更改
 	public static final String CITY_CHANGE="CITYCHANGE";
 	//刷新组信息
@@ -100,4 +102,7 @@ public class BroadcastConstants {
 
     // 我喜欢的 在非编辑状态下可以刷新
     public static final String SET_LOAD_REFRESH = "SET_LOAD_REFRESH";
+
+	// 播放界面文字搜索
+	public static final String PLAY_TEXT_VOICE_SEARCH= "play_text_voice_search";
 }

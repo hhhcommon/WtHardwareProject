@@ -28,6 +28,7 @@ import com.wotingfm.activity.music.program.diantai.model.RadioPlay;
 import com.wotingfm.activity.music.program.fmlist.adapter.RankInfoAdapter;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
@@ -219,9 +220,13 @@ public class CityRadioActivity extends BaseActivity implements View.OnClickListe
                         dbDao.deleteHistory(playUrl);
                         dbDao.addHistory(history);
                         HomeActivity.UpdateViewPager();
-                        finish();
                         PlayerFragment.TextPage=1;
-                        PlayerFragment.SendTextRequest(SubList.get(groupPosition).getList().get(childPosition).getContentName(), context);
+                        Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                        Bundle bundle1=new Bundle();
+                        bundle1.putString("text",SubList.get(groupPosition).getList().get(childPosition).getContentName());
+                        push.putExtras(bundle1);
+                        context.sendBroadcast(push);
+                        finish();
                     } else if (MediaType.equals("SEQU")) {
                         Intent intent = new Intent(context, AlbumActivity.class);
                         Bundle bundle = new Bundle();
@@ -374,9 +379,12 @@ public class CityRadioActivity extends BaseActivity implements View.OnClickListe
                         dbDao.deleteHistory(playerurl);
                         dbDao.addHistory(history);
                         HomeActivity.UpdateViewPager();
-
                         PlayerFragment.TextPage=1;
-                        PlayerFragment.SendTextRequest(SubListList.get(position).getContentName(), context);
+                        Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                        Bundle bundle1=new Bundle();
+                        bundle1.putString("text",SubListList.get(position).getContentName());
+                        push.putExtras(bundle1);
+                        context.sendBroadcast(push);
                         finish();
                     }
                 }

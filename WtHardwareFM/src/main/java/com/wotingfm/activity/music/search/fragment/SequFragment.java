@@ -158,7 +158,11 @@ public class SequFragment extends Fragment {
                         MainActivity.changeToMusic();
                         HomeActivity.UpdateViewPager();
                         PlayerFragment.TextPage=1;
-                        PlayerFragment.SendTextRequest(newList.get(position - 1).getContentName(), context);
+                        Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                        Bundle bundle1=new Bundle();
+                        bundle1.putString("text",newList.get(position - 1).getContentName());
+                        push.putExtras(bundle1);
+                        context.sendBroadcast(push);
                         context.finish();
                     } else if(MediaType.equals("SEQU")) {
                         Intent intent = new Intent(context, AlbumActivity.class);
