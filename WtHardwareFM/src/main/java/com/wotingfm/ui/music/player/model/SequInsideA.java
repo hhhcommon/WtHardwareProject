@@ -1,8 +1,8 @@
-package com.wotingfm.activity.music.player.model;
+package com.wotingfm.ui.music.player.model;
 
 import java.io.Serializable;
 
-public class SequInside implements Serializable {
+public class SequInsideA implements Serializable {
     private String ContentURI;
     private String ContentPersons;
     private String ContentKeyWord;
@@ -147,4 +147,5 @@ public class SequInside implements Serializable {
     public void setPlayerInTime(String playerInTime) {
         PlayerInTime = playerInTime;
     }
+
 }

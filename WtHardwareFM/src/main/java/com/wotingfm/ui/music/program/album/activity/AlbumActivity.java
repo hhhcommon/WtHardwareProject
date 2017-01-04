@@ -36,7 +36,7 @@ import com.wotingfm.ui.common.baseadapter.MyFragmentChildPagerAdapter;
 import com.wotingfm.ui.music.comment.CommentActivity;
 import com.wotingfm.ui.music.player.adapter.ImageAdapter;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
-import com.wotingfm.ui.music.player.model.sharemodel;
+import com.wotingfm.ui.music.player.model.ShareModelA;
 import com.wotingfm.ui.music.program.album.fragment.DetailsFragment;
 import com.wotingfm.ui.music.program.album.fragment.ProgramFragment;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
@@ -206,7 +206,7 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
         window.setWindowAnimations(R.style.sharestyle);
         shareDialog.setCanceledOnTouchOutside(true);
         shareDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
-        final List<sharemodel> mList = ShareUtils.getShareModelList();
+        final List<ShareModelA> mList = ShareUtils.getShareModelList();
         ImageAdapter shareAdapter = new ImageAdapter(context, mList);
         mGallery.setAdapter(shareAdapter);
         dialog1 = DialogUtils.Dialogphnoshow(context, "通讯中", dialog1);

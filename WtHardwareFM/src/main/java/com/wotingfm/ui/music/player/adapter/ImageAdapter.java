@@ -9,16 +9,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.wotingfm.R;
-import com.wotingfm.ui.music.player.model.sharemodel;
+import com.wotingfm.ui.music.player.model.ShareModelA;
 
 import java.util.List;
 
 public class ImageAdapter extends BaseAdapter{
-	private List<sharemodel> list;
+	private List<ShareModelA> list;
 	private Context context;
-	private sharemodel lists;
+	private ShareModelA lists;
 
-	public ImageAdapter (Context context, List<sharemodel> list) {
+	public ImageAdapter (Context context, List<ShareModelA> list) {
 		super();
 		this.list = list;
 		this.context = context;
