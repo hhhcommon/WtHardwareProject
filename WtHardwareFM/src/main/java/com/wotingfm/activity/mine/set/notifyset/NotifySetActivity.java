@@ -102,7 +102,10 @@ public class NotifySetActivity extends BaseActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        if(v.getId() == R.id.head_left_btn) finish();// 返回
+        if(v.getId() == R.id.head_left_btn) {
+            finish();// 返回
+            return ;
+        }
 
         SharedPreferences.Editor editor = preferences.edit();
         switch (v.getId()) {

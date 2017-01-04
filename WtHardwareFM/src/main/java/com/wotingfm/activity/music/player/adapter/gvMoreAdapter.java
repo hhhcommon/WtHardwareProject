@@ -10,16 +10,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.activity.music.player.model.sharemodel;
+import com.wotingfm.activity.music.player.model.ShareModelA;
 
 import java.util.List;
 
 
 public class gvMoreAdapter extends BaseAdapter {
 	private Context context;
-	private List<sharemodel> list;
+	private List<ShareModelA> list;
 
-	public gvMoreAdapter(Context context, List<sharemodel> list) {
+	public gvMoreAdapter(Context context, List<ShareModelA> list) {
 		this.context=context;
 		this.list=list;
 	}
@@ -51,7 +51,7 @@ public class gvMoreAdapter extends BaseAdapter {
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		sharemodel mshare=list.get(position);
+		ShareModelA mshare=list.get(position);
 		holder.img.setImageResource(mshare.getShareImageUrl());		
 		holder.tv.setText(mshare.getShareText());
 		return convertView;
