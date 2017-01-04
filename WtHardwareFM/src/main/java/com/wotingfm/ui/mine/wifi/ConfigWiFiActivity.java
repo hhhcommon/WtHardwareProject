@@ -10,13 +10,13 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.AppBaseActivity;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.ui.baseactivity.AppActivity;
 
 /**
  * 配置WiFi密码
  */
-public class ConfigWiFiActivity extends AppBaseActivity implements View.OnClickListener {
+public class ConfigWiFiActivity extends AppActivity implements View.OnClickListener {
     private Button btnConfirm;
     private EditText editPsw;
 

@@ -18,9 +18,9 @@ import android.widget.TextView;
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
 import com.wotingfm.common.service.IntegrationPlayerService;
-import com.wotingfm.ui.common.baseactivity.BaseFragmentActivity;
-import com.wotingfm.ui.common.baseadapter.MyFragmentPagerAdapter;
-import com.wotingfm.ui.im.interphone.notify.activity.NotifyNewActivity;
+import com.wotingfm.ui.baseactivity.BaseFragmentActivity;
+import com.wotingfm.ui.baseadapter.MyFragmentPagerAdapter;
+import com.wotingfm.ui.interphone.notify.activity.NotifyNewsActivity;
 import com.wotingfm.ui.music.player.fragment.PlayerFragment;
 import com.wotingfm.ui.music.program.main.ProgramFragment;
 import com.wotingfm.ui.music.search.activity.SearchLikeActivity;
@@ -99,7 +99,7 @@ public class HomeActivity extends BaseFragmentActivity {
             @Override
             public void onClick(View v) {
                 // 跳转到通知界面
-                startActivity(new Intent(context, NotifyNewActivity.class));
+                startActivity(new Intent(context, NotifyNewsActivity.class));
             }
         });
 	}

@@ -22,7 +22,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.ui.common.main.MainActivity;
+import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.common.service.DownloadService;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.ui.music.download.model.FileInfo;

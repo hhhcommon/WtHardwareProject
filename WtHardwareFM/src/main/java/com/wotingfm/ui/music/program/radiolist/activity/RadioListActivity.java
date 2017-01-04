@@ -13,7 +13,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.AppBaseFragmentActivity;
+import com.wotingfm.ui.baseactivity.AppBaseFragmentActivity;
 import com.wotingfm.ui.music.program.fenlei.model.FenLeiName;
 import com.wotingfm.ui.music.program.radiolist.adapter.MyPagerAdapter;
 import com.wotingfm.ui.music.program.radiolist.fragment.ClassifyFragment;

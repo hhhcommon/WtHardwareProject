@@ -9,7 +9,7 @@ import android.widget.EditText;
 
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.BaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.mine.set.feedback.feedbacklist.activity.FeedbackListActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;

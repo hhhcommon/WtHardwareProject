@@ -91,7 +91,7 @@
 
         <!-- 启动时的欢迎界面 -->
         <activity
-            android:name=".ui.common.splash.activity.SplashActivity"
+            android:name=".ui.common.splash.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -103,7 +103,7 @@
 
         <!-- 主界面 -->
         <activity
-            android:name=".ui.common.main.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan">
@@ -112,82 +112,72 @@
 
         <!-- 创建群组主界面 -->
         <activity
-            android:name=".ui.im.interphone.creategroup.main.CreateGroupMainActivity"
+            android:name=".ui.interphone.group.creategroup.main.CreateGroupMainActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 创建群组子界面  即有创建公开群、密码群、验证群 -->
-        <activity
-            android:name=".ui.im.interphone.creategroup.create.CreateGroupItemActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 消息中心 -->
-        <activity
-            android:name=".ui.im.interphone.notify.activity.NotifyNewActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 头像剪裁界面 -->
         <activity
-            android:name=".ui.im.interphone.creategroup.photocut.PhotoCutActivity"
+            android:name=".ui.common.photocut.PhotoCutActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 查找好友、群组界面 -->
         <activity
-            android:name=".ui.im.interphone.find.FindActivity"
+            android:name=".ui.interphone.find.main.FindActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 查找好友、群组显示结果界面 -->
         <activity
-            android:name=".ui.im.interphone.find.result.FindNewsResultActivity"
+            android:name=".ui.interphone.find.result.FindNewsResultActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 扫描二维码界面 -->
         <activity
-            android:name=".ui.im.interphone.scanning.activity.CaptureActivity"
+            android:name=".ui.common.scanning.activity.CaptureActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 扫描二维码显示结果界面 -->
         <activity
-            android:name=".ui.im.interphone.scanning.activity.ResultActivity"
+            android:name=".ui.common.scanning.activity.ResultActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 添加好友界面 -->
         <activity
-            android:name=".ui.im.interphone.find.add.FriendAddActivity"
+            android:name=".ui.interphone.find.friendadd.FriendAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 添加群组界面 -->
         <activity
-            android:name=".ui.im.interphone.find.add.GroupAddActivity"
+            android:name=".ui.interphone.find.groupadd.GroupAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".ui.im.interphone.alert.CallAlertActivity"
+            android:name=".ui.interphone.alert.CallAlertActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 我的界面 -->
         <activity
-            android:name=".ui.mine.main.MineActivity"
+            android:name=".ui.mine.MineActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -222,7 +212,7 @@
 
         <!-- 修改个人资料 -->
         <activity
-            android:name=".ui.person.updatepersonnews.UpdatePersonActivity"
+            android:name=".ui.mine.person.updatepersonnews.UpdatePersonActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
@@ -249,14 +239,14 @@
 
         <!-- 登录 -->
         <activity
-            android:name=".ui.person.login.LoginActivity"
+            android:name=".ui.mine.person.login.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 注册 -->
         <activity
-            android:name=".ui.person.register.RegisterActivity"
+            android:name=".ui.mine.person.register.RegisterActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
@@ -264,7 +254,7 @@
 
         <!-- 忘记密码 -->
         <activity
-            android:name=".ui.person.forgetpassword.ForgetPasswordActivity"
+            android:name=".ui.mine.person.forgetpassword.ForgetPasswordActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
@@ -272,7 +262,7 @@
 
         <!-- 修改密码 -->
         <activity
-            android:name=".ui.person.modifypassword.ModifyPasswordActivity"
+            android:name=".ui.mine.person.modifypassword.ModifyPasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -305,60 +295,55 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".ui.im.interphone.alert.ReceiveAlertActivity"
+            android:name=".ui.interphone.alert.ReceiveAlertActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".ui.im.interphone.groupmanage.groupdetail.activity.GroupDetailActivity"
+            android:name=".ui.interphone.group.groupcontrol.groupdetail.activity.GroupDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".ui.im.interphone.groupmanage.transferauthority.TransferAuthorityActivity"
+            android:name=".ui.interphone.group.groupcontrol.transferauthority.TransferAuthorityActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".ui.im.interphone.groupmanage.memberadd.activity.MemberAddActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity
-            android:name=".ui.im.interphone.groupmanage.memberdel.MemberDelActivity"
+            android:name=".ui.interphone.group.groupcontrol.memberadd.activity.MemberAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 全部群成员 -->
         <activity
-            android:name=".ui.im.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity"
+            android:name=".ui.interphone.group.groupcontrol.allgroupmember.activity.AllGroupMemberActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 修改群密码 -->
         <activity
-            android:name=".ui.im.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity"
+            android:name=".ui.interphone.group.groupcontrol.modifygrouppassword.ModifyGroupPasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 对讲主页 -->
         <activity
-            android:name=".ui.im.interphone.main.DuiJiangActivity"
+            android:name=".ui.interphone.main.DuiJiangActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 审核消息 -->
         <activity
-            android:name=".ui.im.interphone.groupmanage.joingrouplist.activity.JoinGroupListActivity"
+            android:name=".ui.interphone.group.groupcontrol.joingrouplist.activity.JoinGroupListActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".ui.im.interphone.groupmanage.handlegroupapply.HandleGroupApplyActivity"
+            android:name=".ui.interphone.group.groupcontrol.handlegroupapply.HandleGroupApplyActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -410,12 +395,12 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".ui.im.interphone.creategroup.frienddetails.TalkPersonNewsActivity"
+            android:name=".ui.interphone.group.groupcontrol.personnews.TalkPersonNewsActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".ui.im.interphone.message.activity.NewsActivity"
+            android:name=".ui.interphone.message.activity.NewsActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -434,21 +419,21 @@
 
         <!-- 注册协议 -->
         <activity
-            android:name=".ui.person.agreement.AgreementActivity"
+            android:name=".ui.mine.person.agreement.AgreementActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 流量管理界面 -->
         <activity
-            android:name=".ui.mine.flowmanage.main.FlowManageActivity"
+            android:name=".ui.mine.flowmanage.FlowManageActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 二维码界面 -->
         <activity
-            android:name=".ui.mine.qrcode.EWMShowActivity"
+            android:name=".ui.common.qrcode.EWMShowActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -504,7 +489,7 @@
 
         <!-- 验证手机号 -->
         <activity
-            android:name=".ui.person.phonecheck.PhoneCheckActivity"
+            android:name=".ui.mine.person.phonecheck.PhoneCheckActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -599,7 +584,7 @@
         <service android:name=".common.service.AssistService"/>
 
 
-        <activity android:name=".ui.im.interphone.analog.AnalogueActivity"/>
+        <activity android:name=".ui.interphone.analog.AnalogueActivity"/>
     </application>
 
 </manifest>

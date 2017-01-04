@@ -10,11 +10,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.AppBaseActivity;
-import com.wotingfm.ui.mine.fm.adapter.FMListAdapter;
-import com.wotingfm.ui.mine.fm.model.FMInfo;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.ui.baseactivity.AppActivity;
+import com.wotingfm.ui.mine.fm.adapter.FMListAdapter;
+import com.wotingfm.ui.mine.fm.model.FMInfo;
 import com.wotingfm.util.L;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ import java.util.List;
 /**
  * FM 连接界面
  */
-public class FMConnectActivity extends AppBaseActivity implements View.OnClickListener {
+public class FMConnectActivity extends AppActivity implements View.OnClickListener {
     private ListView fmListView;// 频率列表
 //    private LinearLayout linearScan;// 底部扫描
     private List<FMInfo> list = new ArrayList<>();

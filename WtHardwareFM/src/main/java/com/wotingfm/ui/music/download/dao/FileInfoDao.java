@@ -4,10 +4,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.wotingfm.common.database.SQLiteHelper;
 import com.wotingfm.ui.music.common.service.DownloadService;
 import com.wotingfm.ui.music.download.model.FileInfo;
 import com.wotingfm.ui.music.program.album.model.ContentInfo;
-import com.wotingfm.common.helper.SqliteHelper;
 import com.wotingfm.util.SequenceUUID;
 
 import java.util.ArrayList;
@@ -20,12 +20,12 @@ import java.util.List;
  * 3：修改功能已经完成，目前支持根据文件名对完成状态进行修改 4:删除功能本业务暂不涉及，未处理
  */
 public class FileInfoDao {
-	private SqliteHelper helper;
+	private SQLiteHelper helper;
 	private ContentInfo content;
 
 	// 构造方法
 	public FileInfoDao(Context context) {
-		helper = new SqliteHelper(context);
+		helper = new SQLiteHelper(context);
 	}
 
 	/**

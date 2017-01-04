@@ -210,7 +210,7 @@ public class CacheManager {
 	public static  String getCacheSize(File file)  {
 		try{
 			cache=getFolderSize(file);
-			cache+=getFolderSize(new File(GlobalConfig.playCacheDir));
+			cache+=getFolderSize(new File(GlobalConfig.ksyPlayCache));
 		}catch (Exception e){
 			e.printStackTrace();
 		}

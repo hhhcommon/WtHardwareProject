@@ -2,8 +2,8 @@ package com.wotingfm.util;
 
 import android.util.Log;
 import com.google.gson.Gson;
-import com.wotingfm.ui.im.common.message.Message;
-import com.wotingfm.ui.im.common.message.MessageUtils;
+import com.wotingfm.ui.interphone.common.message.Message;
+import com.wotingfm.ui.interphone.common.message.MessageUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.json.JSONStringer;

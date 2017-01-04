@@ -32,7 +32,7 @@ import com.umeng.socialize.UMShareListener;
 import com.umeng.socialize.bean.SHARE_MEDIA;
 import com.umeng.socialize.media.UMImage;
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseadapter.MyFragmentChildPagerAdapter;
+import com.wotingfm.ui.baseadapter.MyFragmentChildPagerAdapter;
 import com.wotingfm.ui.music.comment.CommentActivity;
 import com.wotingfm.ui.music.player.adapter.ImageAdapter;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
@@ -362,7 +362,7 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
                 if(!TextUtils.isEmpty(id)){
                     if(CommonUtils.getUserIdNoImei(context)!=null&&!CommonUtils.getUserIdNoImei(context).equals("")){
                         Intent intent=new Intent(context, CommentActivity.class);
-                        intent.putExtra("contentId",GlobalConfig.playerobject.getContentId());
+                        intent.putExtra("contentId",GlobalConfig.playerObject.getContentId());
                         intent.putExtra("MediaType","SEQU");
                         startActivity(intent);
                     }else{

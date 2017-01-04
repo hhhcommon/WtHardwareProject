@@ -4,8 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.wotingfm.common.database.SQLiteHelper;
 import com.wotingfm.ui.music.program.fenlei.model.CatalogName;
-import com.wotingfm.common.helper.SqliteHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +16,11 @@ import java.util.List;
  * 邮箱：645700751@qq.com
  */
 public class CityInfoDao {
-    private SqliteHelper helper;
+    private SQLiteHelper helper;
     private Context context;
 
     public CityInfoDao(Context context) {
-        helper = new SqliteHelper(context);
+        helper = new SQLiteHelper(context);
         this.context = context;
     }
 

@@ -13,12 +13,12 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.ui.im.interphone.alert.CallAlertActivity;
-import com.wotingfm.ui.im.interphone.alert.ReceiveAlertActivity;
-import com.wotingfm.ui.im.common.message.MessageUtils;
-import com.wotingfm.ui.im.common.message.MsgNormal;
-import com.wotingfm.ui.im.common.message.content.MapContent;
-import com.wotingfm.ui.im.common.model.CallerInfo;
+import com.wotingfm.ui.interphone.alert.CallAlertActivity;
+import com.wotingfm.ui.interphone.alert.ReceiveAlertActivity;
+import com.wotingfm.ui.interphone.common.message.MessageUtils;
+import com.wotingfm.ui.interphone.common.message.MsgNormal;
+import com.wotingfm.ui.interphone.common.message.content.MapContent;
+import com.wotingfm.ui.interphone.common.model.CallerInfo;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.helper.InterPhoneControlHelper;
 

@@ -118,21 +118,21 @@ public class FloatingWindowService extends Service {
                 //intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP |Intent.FLAG_ACTIVITY_SINGLE_TOP);
                 //intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK| Intent.FLAG_ACTIVITY_RESET_TASK_IF_NEEDED);
                 //startActivity(intent);
-				if(GlobalConfig.activitytype==1){
-					GlobalConfig.activitytype=2;
-					Intent push=new Intent(BroadcastConstants.ACTIVITY_CHANGE);
-					sendBroadcast(push);
-					lin_d.setBackgroundResource(R.mipmap.bb);
-				}else if(GlobalConfig.activitytype==2){
-					GlobalConfig.activitytype=3;
-					Intent push=new Intent(BroadcastConstants.ACTIVITY_CHANGE);
-					sendBroadcast(push);
-					lin_d.setBackgroundResource(R.mipmap.cc);
-				}else if(GlobalConfig.activitytype==3){
-					GlobalConfig.activitytype=1;
+				if(GlobalConfig.activityType ==1){
+					GlobalConfig.activityType =2;
 					Intent push=new Intent(BroadcastConstants.ACTIVITY_CHANGE);
 					sendBroadcast(push);
 					lin_d.setBackgroundResource(R.mipmap.aa);
+				}else if(GlobalConfig.activityType ==2){
+					GlobalConfig.activityType =3;
+					Intent push=new Intent(BroadcastConstants.ACTIVITY_CHANGE);
+					sendBroadcast(push);
+					lin_d.setBackgroundResource(R.mipmap.cc);
+				}else if(GlobalConfig.activityType ==3){
+					GlobalConfig.activityType =1;
+					Intent push=new Intent(BroadcastConstants.ACTIVITY_CHANGE);
+					sendBroadcast(push);
+					lin_d.setBackgroundResource(R.mipmap.bb);
 				}
 
 			}

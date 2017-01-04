@@ -13,7 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.AppBaseFragmentActivity;
+import com.wotingfm.ui.baseactivity.AppBaseFragmentActivity;
 import com.wotingfm.ui.music.player.programme.adapter.MyPagerAdapter;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.PhoneMessage;
