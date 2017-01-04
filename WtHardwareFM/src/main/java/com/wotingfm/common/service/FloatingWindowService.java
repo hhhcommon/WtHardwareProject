@@ -122,7 +122,7 @@ public class FloatingWindowService extends Service {
 					GlobalConfig.activityType =2;
 					Intent push=new Intent(BroadcastConstants.ACTIVITY_CHANGE);
 					sendBroadcast(push);
-					lin_d.setBackgroundResource(R.mipmap.bb);
+					lin_d.setBackgroundResource(R.mipmap.aa);
 				}else if(GlobalConfig.activityType ==2){
 					GlobalConfig.activityType =3;
 					Intent push=new Intent(BroadcastConstants.ACTIVITY_CHANGE);
@@ -132,7 +132,7 @@ public class FloatingWindowService extends Service {
 					GlobalConfig.activityType =1;
 					Intent push=new Intent(BroadcastConstants.ACTIVITY_CHANGE);
 					sendBroadcast(push);
-					lin_d.setBackgroundResource(R.mipmap.aa);
+					lin_d.setBackgroundResource(R.mipmap.bb);
 				}
 
 			}

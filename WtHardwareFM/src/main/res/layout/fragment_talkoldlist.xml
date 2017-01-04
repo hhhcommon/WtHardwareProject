@@ -6,7 +6,7 @@
     android:gravity="center"
     android:orientation="vertical">
 
-    <com.woting.common.widgetui.TipView
+    <com.wotingfm.widget.TipView
         android:id="@+id/tip_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -316,7 +316,7 @@
                 android:background="#ededed"
                 android:visibility="gone" />
 
-            <com.woting.common.widgetui.MyGridView
+            <com.wotingfm.widget.MyGridView
                 android:id="@+id/gridView_person"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -345,7 +345,7 @@
 
         </LinearLayout>
 
-        <com.woting.common.widgetui.MyLinearLayout
+        <com.wotingfm.widget.MyLinearLayout
             android:id="@+id/lin_foot"
             android:layout_width="match_parent"
             android:layout_height="136dp"
@@ -406,6 +406,6 @@
                     </LinearLayout>
                 </LinearLayout>
             </RelativeLayout>
-        </com.woting.common.widgetui.MyLinearLayout>
+        </com.wotingfm.widget.MyLinearLayout>
     </RelativeLayout>
 </LinearLayout>

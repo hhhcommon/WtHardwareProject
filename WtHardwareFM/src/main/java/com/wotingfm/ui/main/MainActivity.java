@@ -173,6 +173,7 @@ public class MainActivity extends TabActivity {
         m.addAction(BroadcastConstants.TIMER_END);
         m.addAction(BroadcastConstants.PUSH_REGISTER);
         m.addAction(BroadcastConstants.PUSH_NOTIFY);
+        m.addAction(BroadcastConstants.ACTIVITY_CHANGE);
         m.addAction(BroadcastConstants.PUSH);
         registerReceiver(endApplicationBroadcast, m);
 
