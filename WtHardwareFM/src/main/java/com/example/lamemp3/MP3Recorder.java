@@ -5,7 +5,7 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Handler;
 
-import com.wotingfm.activity.mine.myupload.util.StorageUtil;
+import com.wotingfm.ui.mine.myupload.util.StorageUtil;
 
 import java.io.File;
 import java.io.FileNotFoundException;
