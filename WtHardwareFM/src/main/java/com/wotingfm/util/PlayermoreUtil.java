@@ -2,7 +2,7 @@ package com.wotingfm.util;
 
 
 import com.wotingfm.R;
-import com.wotingfm.activity.music.player.model.sharemodel;
+import com.wotingfm.ui.music.player.model.sharemodel;
 
 import java.util.ArrayList;
 import java.util.List;

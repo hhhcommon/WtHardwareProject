@@ -2,11 +2,11 @@ package com.wotingfm.common.config;
 
 import android.os.Environment;
 
-import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
-import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
-import com.wotingfm.activity.music.player.model.LanguageSearchInside;
-import com.wotingfm.activity.music.program.fenlei.model.CatalogName;
-import com.wotingfm.devicecontrol.WtDeviceControl;
+import com.wotingfm.ui.im.interphone.linkman.model.TalkGroupInside;
+import com.wotingfm.ui.im.interphone.linkman.model.TalkPersonInside;
+import com.wotingfm.ui.music.player.model.LanguageSearchInside;
+import com.wotingfm.ui.music.program.fenlei.model.CatalogName;
+import com.wotingfm.common.devicecontrol.WtDeviceControl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,8 +45,6 @@ public class GlobalConfig {
     public static final int dbversoncode = 6;
     // 此时的界面
     public static int activitytype=1;
-    // Socket连接客户端配置信息
-    public static SocketClientConfig scc;
     // 硬件设备控制器
     public static WtDeviceControl device;
     // 此时的语音搜索界面

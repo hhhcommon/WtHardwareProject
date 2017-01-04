@@ -24,6 +24,9 @@ public class BroadcastConstants {
 	//
 	public static final String ACTIVITY_CHANGE="ACTIVITY_CHANGE";
 
+	//PUSH_REGISTER-----新加数据
+	public static final String PUSH_REGISTER = "PUSH_REGISTER";
+
 	//SOCKET_PUSH-----push
 	public static final String SOCKET_PUSH="SOCKET_PUSH";
 
