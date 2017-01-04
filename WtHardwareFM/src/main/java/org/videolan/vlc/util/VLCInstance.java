@@ -40,7 +40,7 @@ public class VLCInstance {
             Thread.setDefaultUncaughtExceptionHandler(new VLCCrashHandler());
             instance = LibVLC.getInstance();
 //            VLCApplication vlc = new VLCApplication();
-            final Context context =BSApplication.getAppContext();
+            final Context context = BSApplication.getAppContext();
             System.out.println("context:"+context);
             SharedPreferences pref = PreferenceManager.getDefaultSharedPreferences(context);
             VLCInstance.updateLibVlcSettings(pref);
@@ -100,22 +100,21 @@ public class VLCInstance {
         catch(NumberFormatException nfe) {
             hardwareAcceleration = -1;
         }
-      int networkCaching = pref.getInt("network_caching_value", 1500);
-        if(networkCaching > 60000)
+      /*  int networkCaching = pref.getInt("network_caching_value", 15000);*/
+        int networkCaching=15000;
+    /*    if(networkCaching > 60000)
             networkCaching = 60000;
         else if(networkCaching < 0)
-            networkCaching = 0;
-/*        int networkCaching=15000;*/
+            networkCaching = 0;*/
         instance.setAout(aout);
         instance.setVout(vout);
         instance.setDeblocking(deblocking);
+
         instance.setNetworkCaching(networkCaching);
         instance.setHardwareAcceleration(hardwareAcceleration);
         instance.detachSurface();
         //instance.getBufferContent();
         instance.stopDebugBuffer();
-        
-
     }
 
 

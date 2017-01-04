@@ -36,6 +36,7 @@ import com.wotingfm.activity.music.program.album.adapter.AlbumMainAdapter;
 import com.wotingfm.activity.music.program.album.model.ContentInfo;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -180,7 +181,12 @@ public class ProgramFragment extends Fragment implements OnClickListener {
                             MainActivity.changeToMusic();
                             HomeActivity.UpdateViewPager();
                             PlayerFragment.TextPage=1;
-                            PlayerFragment.SendTextRequest(SubList.get(position).getContentName(), context);
+                            Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                            Bundle bundle1=new Bundle();
+                            bundle1.putString("text",SubList.get(position).getContentName());
+                            push.putExtras(bundle1);
+                            context.sendBroadcast(push);
+                            getActivity().finish();
                         }else{
                             SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
                             et.putString(StringConstant.PLAYHISTORYENTER, "true");

@@ -172,7 +172,11 @@ public class RadioFragment extends Fragment {
                         MainActivity.changeToMusic();
                         HomeActivity.UpdateViewPager();
                         PlayerFragment.TextPage=1;
-                        PlayerFragment.SendTextRequest(playername, context);
+                        Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                        Bundle bundle1=new Bundle();
+                        bundle1.putString("text",playername);
+                        push.putExtras(bundle1);
+                        context.sendBroadcast(push);
                         context.finish();
                     }
                 }

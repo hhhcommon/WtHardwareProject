@@ -1,43 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:roundProgress="http://schemas.android.com/apk/res-auto"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content"
-      android:background="@color/WHITE"
-      android:orientation="vertical">
+    xmlns:roundProgress="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="5dp"
-        android:paddingTop="5dp">
+        android:layout_height="81dp"
+        android:background="@color/WHITE"
+        android:gravity="left|center"
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp">
+            android:layout_marginLeft="15dp">
 
             <ImageView
                 android:id="@+id/img_touxiang"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
+                android:layout_width="65dip"
+                android:layout_height="65dip"
                 android:layout_centerInParent="true"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/wt_image_playertx"/>
+                android:scaleType="centerCrop" />
 
             <ImageView
-                android:layout_width="65dp"
-                android:layout_height="65dp"
-                android:layout_centerInParent="true"
-                android:src="@mipmap/wt_6_b_y_b"/>
+                android:id="@+id/img_liu"
+                android:layout_width="65dip"
+                android:layout_height="65dip"
+                android:layout_centerInParent="true" />
         </RelativeLayout>
 
         <LinearLayout
             android:layout_width="0dip"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="5dp"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="5dp"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="13dp"
+            android:layout_marginRight="5dp"
             android:layout_weight="2"
             android:gravity="left|center"
             android:orientation="vertical">
@@ -50,20 +48,20 @@
                 android:singleLine="true"
                 android:text="我听之声"
                 android:textColor="@color/dinglan_orange"
-                android:textSize="@dimen/wt_group_detail_16"/>
+                android:textSize="@dimen/wt_group_detail_16" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_marginTop="3dp"
-                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="7dp"
                 android:gravity="left|center">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
                     android:layout_marginRight="6dp"
-                    android:src="@mipmap/image_program_album"/>
+                    android:src="@mipmap/image_program_album" />
 
                 <TextView
                     android:id="@+id/tv_author"
@@ -73,44 +71,42 @@
                     android:maxLines="1"
                     android:text="我听科技"
                     android:textColor="@color/beijing"
-                    android:textSize="13sp"/>
+                    android:textSize="13sp" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="6dp"
-                android:layout_marginTop="3dp"
                 android:gravity="left|center">
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
                     android:layout_marginRight="6dp"
-                    android:src="@mipmap/image_program_listener"/>
+                    android:src="@mipmap/image_program_listener" />
 
                 <TextView
                     android:id="@+id/tv_count"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="8888"
+                    android:text="0"
                     android:textColor="@color/beijing"
-                    android:textSize="9sp"/>
+                    android:textSize="9sp" />
 
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="12dp"
+                    android:layout_height="12dp"
                     android:layout_marginLeft="14dp"
                     android:layout_marginRight="6dp"
-                    android:src="@mipmap/image_program_time"/>
+                    android:src="@mipmap/image_program_size" />
 
                 <TextView
                     android:id="@+id/tv_sum"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="播放时长"
+                    android:text="MB"
                     android:textColor="@color/beijing"
-                    android:textSize="9sp"/>
+                    android:textSize="9sp" />
             </LinearLayout>
         </LinearLayout>
 
@@ -130,7 +126,7 @@
                 android:gravity="center"
                 android:padding="10dp"
                 android:src="@mipmap/wt_img_download_waiting"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <RelativeLayout
                 android:id="@+id/rv_download"
@@ -147,7 +143,7 @@
                     roundProgress:Paint_Color="@color/dinglan_orange"
                     roundProgress:Paint_Width="4"
                     roundProgress:fill="true"
-                    roundProgress:max="100"/>
+                    roundProgress:max="100" />
 
                 <ImageView
                     android:id="@+id/image"
@@ -155,7 +151,7 @@
                     android:layout_height="30dp"
                     android:layout_centerInParent="true"
                     android:src="@mipmap/wt_download_circle"
-                    android:visibility="gone"/>
+                    android:visibility="gone" />
             </RelativeLayout>
 
             <LinearLayout
@@ -173,7 +169,7 @@
                     android:layout_height="wrap_content"
                     android:text="--/"
                     android:textColor="#cbccc9"
-                    android:textSize="6sp"/>
+                    android:textSize="6sp" />
 
                 <TextView
                     android:id="@+id/download_end"
@@ -181,7 +177,7 @@
                     android:layout_height="wrap_content"
                     android:text="--"
                     android:textColor="#cbccc9"
-                    android:textSize="6sp"/>
+                    android:textSize="6sp" />
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

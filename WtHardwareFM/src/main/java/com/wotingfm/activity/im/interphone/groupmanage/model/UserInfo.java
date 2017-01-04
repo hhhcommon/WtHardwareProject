@@ -48,7 +48,35 @@ public class UserInfo implements Serializable {
     private String Age;// 年龄
     private String NickName; //昵称
 
-    public String getUserSign() {
+	private String Portrait;
+	private String Id;
+	private String GroupDescn;
+
+	public String getId() {
+		return Id;
+	}
+
+	public String getPortrait() {
+		return Portrait;
+	}
+
+	public void setPortrait(String portrait) {
+		Portrait = portrait;
+	}
+
+	public String getGroupDescn() {
+		return GroupDescn;
+	}
+
+	public void setGroupDescn(String groupDescn) {
+		GroupDescn = groupDescn;
+	}
+
+	public void setId(String id) {
+		Id = id;
+	}
+
+	public String getUserSign() {
         return UserSign;
     }
 

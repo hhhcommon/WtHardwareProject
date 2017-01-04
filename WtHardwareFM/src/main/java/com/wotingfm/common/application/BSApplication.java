@@ -122,12 +122,8 @@ public class BSApplication extends Application {
         return instance;
     }
 
-    public static KSYProxyService getKSYProxy(Context context) {
-        instance = context;
-        if(mBSApplication == null){
-            mBSApplication = new BSApplication();
-        }
-        return mBSApplication.proxyService == null ? (mBSApplication.proxyService = newKSYProxy()) : BSApplication.proxyService;
+    public static KSYProxyService getKSYProxy() {
+        return proxyService == null ? (proxyService = newKSYProxy()) : proxyService;
     }
 
     private static KSYProxyService newKSYProxy() {

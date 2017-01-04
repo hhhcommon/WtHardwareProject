@@ -107,7 +107,7 @@ public class PlayHistoryAdapter extends BaseAdapter {
         }
 
         // 收听次数
-        String playNum = lists.getPlayerNum();
+        String playNum = lists.getPlayCount();
         if (playNum != null && !playNum.equals("")) {
             holder.textNumber.setText(playNum);
         }

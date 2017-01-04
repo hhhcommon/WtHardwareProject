@@ -1,6 +1,7 @@
 package com.wotingfm.activity.music.program.fmlist.activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -24,6 +25,7 @@ import com.wotingfm.activity.music.program.fmlist.adapter.RankInfoAdapter;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -242,7 +244,11 @@ public class FMListActivity extends BaseActivity implements View.OnClickListener
                             finish();
                         }
                         PlayerFragment.TextPage=1;
-                        PlayerFragment.SendTextRequest(newList.get(position - 1).getContentName(), context);
+                        Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                        Bundle bundle1=new Bundle();
+                        bundle1.putString("text",newList.get(position - 1).getContentName());
+                        push.putExtras(bundle1);
+                        context.sendBroadcast(push);
                         finish();
                     }
                 }

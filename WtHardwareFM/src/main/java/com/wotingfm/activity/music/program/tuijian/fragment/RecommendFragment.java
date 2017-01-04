@@ -26,6 +26,7 @@ import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
 import com.wotingfm.activity.music.program.fmlist.model.RankInfo;
 import com.wotingfm.activity.music.program.tuijian.adapter.RecommendListAdapter;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
@@ -270,7 +271,11 @@ public class RecommendFragment extends Fragment {
                         dbDao.addHistory(history);
                         HomeActivity.UpdateViewPager();
                         PlayerFragment.TextPage=1;
-                        PlayerFragment.SendTextRequest(newList.get(position - 2).getContentName(), context);
+                        Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                        Bundle bundle1=new Bundle();
+                        bundle1.putString("text",newList.get(position - 2).getContentName());
+                        push.putExtras(bundle1);
+                        context.sendBroadcast(push);
                     } else if (MediaType.equals("SEQU")) {
                         Intent intent = new Intent(context, AlbumActivity.class);
                         Bundle bundle = new Bundle();

@@ -255,4 +255,6 @@ public class GlobalConfig {
     public static final String pushCommentUrl=baseUrl+"wt/discuss/add.do";
     // 删除评论
     public static final String delCommentUrl=baseUrl+"wt/discuss/del.do";
+    //内容主页获取节目单接口
+    public static final String getProgrammeUrl = baseUrl + "wt/content/getBCProgramme.do";
 }

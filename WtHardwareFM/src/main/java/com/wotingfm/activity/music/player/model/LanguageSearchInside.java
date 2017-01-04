@@ -5,16 +5,14 @@ import java.io.Serializable;
 public class LanguageSearchInside implements Serializable{
 	private String Type="1";
 	private String ContentURI;
-	private String ContentPersons;  
-/*	private String ContentCatalogs;*/
+	private String ContentPersons;
 	private String ContentKeyWord;
 	private String cTime;
 	private String ContentSubjectWord;
 	private String ContentTimes;
-	private String ContentName;  
+	private String ContentName;
 	private String ContentPubTime;
 	private String ContentPub;
-//	private String ContentSource;
 	private String ContentPlay;
 	private String MediaType;
 	private String ContentId;
@@ -23,7 +21,7 @@ public class LanguageSearchInside implements Serializable{
 	private String PlayerAllTime;
 	private String PlayerInTime;
 	private String PlayCount;
-	private sequinside SeqInfo;
+	private SequInside SeqInfo;
 	private String ContentShareURL;
 	private String ContentFavorite;
 	private String localurl;
@@ -31,6 +29,24 @@ public class LanguageSearchInside implements Serializable{
 	private String sequImg;//专辑图片
 	private String sequDesc;//专辑描述
 	private String sequName;//专辑名称
+	private String playTag;         // 标签<预留>
+	private String ContentPlayType; // 内容后缀
+
+	public String getContentPlayType() {
+		return ContentPlayType;
+	}
+
+	public String getPlayTag() {
+		return playTag;
+	}
+
+	public void setContentPlayType(String contentPlayType) {
+		ContentPlayType = contentPlayType;
+	}
+
+	public void setPlayTag(String playTag) {
+		this.playTag = playTag;
+	}
 
 	public String getSequId() {
 		return sequId;
@@ -88,10 +104,10 @@ public class LanguageSearchInside implements Serializable{
 	public void setContentShareURL(String contentShareURL) {
 		ContentShareURL = contentShareURL;
 	}
-	public sequinside getSeqInfo() {
+	public SequInside getSeqInfo() {
 		return SeqInfo;
 	}
-	public void setSeqInfo(sequinside seqInfo) {
+	public void setSeqInfo(SequInside seqInfo) {
 		SeqInfo = seqInfo;
 	}
 	public String getPlayerInTime() {
@@ -112,12 +128,6 @@ public class LanguageSearchInside implements Serializable{
 	public void setContentPersons(String contentPersons) {
 		ContentPersons = contentPersons;
 	}
-/*	public String getContentCatalogs() {
-		return ContentCatalogs;
-	}
-	public void setContentCatalogs(String contentCatalogs) {
-		ContentCatalogs = contentCatalogs;
-	}*/
 	public String getContentPlay() {
 		return ContentPlay;
 	}
@@ -202,8 +212,5 @@ public class LanguageSearchInside implements Serializable{
 	public void setContentImg(String contentImg) {
 		ContentImg = contentImg;
 	}
-
-	
-	
 	
 }

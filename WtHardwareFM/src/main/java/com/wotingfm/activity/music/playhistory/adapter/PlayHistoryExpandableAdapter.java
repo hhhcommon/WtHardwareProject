@@ -134,9 +134,9 @@ public class PlayHistoryExpandableAdapter extends BaseExpandableListAdapter {
         }
 
         // 收听次数
-        String playNum = lists.getPlayerNum();
+        String playNum = lists.getPlayCount();
         if (playNum != null && !playNum.equals("")) {
-            holder.textNumber.setText(lists.getPlayerNum());
+            holder.textNumber.setText(lists.getPlayCount());
         }
 
         // 上次播放时间

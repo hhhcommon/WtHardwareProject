@@ -310,10 +310,9 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener {
             id = this.getIntent().getStringExtra("id");
         } else if (type != null && type.trim().equals("player")) {
             // 再做一个
-            LanguageSearchInside list = (LanguageSearchInside) getIntent().getSerializableExtra("list");
-            RadioName = list.getSequName();
-            ContentDesc = list.getSequDesc();
-            id = list.getSequId();
+            RadioName = this.getIntent().getStringExtra("contentName");
+            ContentDesc = this.getIntent().getStringExtra("contentDesc");
+            id = this.getIntent().getStringExtra("contentId");
         } else {
             LanguageSearchInside list = (LanguageSearchInside) getIntent().getSerializableExtra("list");
             RadioName = list.getContentName();

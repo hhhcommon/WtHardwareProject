@@ -13,6 +13,7 @@ import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.activity.im.interphone.find.result.model.FindGroupNews;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 public class FindGroupResultAdapter extends BaseAdapter {
     private List<FindGroupNews> list;
     private Context context;
+    private String url;
 
     public FindGroupResultAdapter(Context context, List<FindGroupNews> list) {
         super();
@@ -49,48 +51,62 @@ public class FindGroupResultAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        String url;
         ViewHolder holder;
         if (convertView == null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_contactquery, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_contactquery, null);
             holder = new ViewHolder();
-            holder.textInviteName = (TextView) convertView.findViewById(R.id.rank_title);        // 人名
-            holder.textInviteMessage = (TextView) convertView.findViewById(R.id.rank_content);    // 介绍
-            holder.imageInviteImage = (ImageView) convertView.findViewById(R.id.rank_image_url);    // 该人头像
+            holder.textview_invitename = (TextView) convertView.findViewById(R.id.RankTitle);		// 人名
+            holder.textview_invitemessage = (TextView) convertView.findViewById(R.id.RankContent);	// 介绍
+            holder.tv_b_id = (TextView) convertView.findViewById(R.id.RankId);//id
+            holder.imageview_inviteimage = (ImageView) convertView.findViewById(R.id.RankImageUrl);	// 该人头像
+            holder.img_zhezhao = (ImageView) convertView.findViewById(R.id.img_zhezhao);
+            Bitmap bmp_zhezhao = BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b);
+            holder.img_zhezhao.setImageBitmap(bmp_zhezhao);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        FindGroupNews invite = list.get(position);
-        if (invite.getGroupName() == null || invite.getGroupName().equals("")) {
-            holder.textInviteName.setText("未知");
+        FindGroupNews Inviter = list.get(position);
+        if (Inviter.getGroupName() == null || Inviter.getGroupName().equals("")) {
+            holder.textview_invitename.setText("未知");
         } else {
-            holder.textInviteName.setText(invite.getGroupName());
+            holder.textview_invitename.setText(Inviter.getGroupName());
         }
-        if (invite.getGroupOriDesc() == null || invite.getGroupOriDesc().equals("")) {
-            holder.textInviteMessage.setVisibility(View.GONE);
+
+        if (Inviter.getGroupNum()== null || Inviter.getGroupNum().equals("")) {
+            holder.tv_b_id.setVisibility(View.GONE);
         } else {
-            holder.textInviteMessage.setVisibility(View.VISIBLE);
-            holder.textInviteMessage.setText(invite.getGroupOriDesc());
+            holder.tv_b_id.setVisibility(View.VISIBLE);
+            holder.tv_b_id.setText("ID: "+Inviter.getGroupNum());//id
         }
-        if (invite.getGroupImg() == null || invite.getGroupImg().equals("")
-                || invite.getGroupImg().equals("null") || invite.getGroupImg().trim().equals("")) {
+
+        if (Inviter.getGroupOriDescn()== null || Inviter.getGroupOriDescn().equals("")) {
+            holder.textview_invitemessage.setVisibility(View.GONE);
+        } else {
+            holder.textview_invitemessage.setVisibility(View.VISIBLE);
+            holder.textview_invitemessage.setText(Inviter.getGroupOriDescn());
+        }
+        if (Inviter.getGroupImg() == null || Inviter.getGroupImg().equals("")
+                || Inviter.getGroupImg().equals("null") || Inviter.getGroupImg().trim().equals("")) {
             Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_qz);
-            holder.imageInviteImage.setImageBitmap(bmp);
+            holder.imageview_inviteimage.setImageBitmap(bmp);
         } else {
-            if (invite.getGroupImg().startsWith("http:")) {
-                url = invite.getGroupImg();
-            } else {
-                url = GlobalConfig.imageurl + invite.getGroupImg();
+            if(Inviter.getGroupImg().startsWith("http:")){
+                url = Inviter.getGroupImg();
+            }else{
+                url = GlobalConfig.imageurl+Inviter.getGroupImg();
             }
-            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageInviteImage);
+            url= AssembleImageUrlUtils.assembleImageUrl150(url);
+            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageview_inviteimage);
         }
         return convertView;
     }
 
     class ViewHolder {
-        public TextView textInviteName;
-        public TextView textInviteMessage;
-        public ImageView imageInviteImage;
+        public TextView textview_invitename;
+        public TextView textview_invitemessage;
+        public ImageView imageview_inviteimage;
+        public ImageView img_zhezhao;
+        public TextView tv_b_id;
     }
 }

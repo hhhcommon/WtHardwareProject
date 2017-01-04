@@ -142,10 +142,10 @@ public class SoundFragment extends Fragment {
                         String playerurI = newList.get(position - 1).getContentURI();
                         String playermediatype = newList.get(position - 1).getMediaType();
                         String playcontentshareurl = newList.get(position - 1).getContentShareURL();
-                        String plaplayeralltime = "0";
+                        String plaplayeralltime = newList.get(position - 1).getContentTimes();
                         String playerintime = "0";
-                        String playercontentdesc = newList.get(position - 1).getCurrentContent();
-                        String playernum = newList.get(position - 1).getWatchPlayerNum();
+                        String playercontentdesc = newList.get(position - 1).getContentDescn();
+                        String playernum = newList.get(position - 1).getPlayCount();
                         String playerzantype = "0";
                         String playerfrom = newList.get(position - 1).getContentPub();
                         String playerfromid = "";
@@ -172,7 +172,11 @@ public class SoundFragment extends Fragment {
                         MainActivity.changeToMusic();
                         HomeActivity.UpdateViewPager();
                         PlayerFragment.TextPage = 1;
-                        PlayerFragment.SendTextRequest(newList.get(position - 1).getContentName(), context);
+                        Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                        Bundle bundle1=new Bundle();
+                        bundle1.putString("text",newList.get(position - 1).getContentName());
+                        push.putExtras(bundle1);
+                        context.sendBroadcast(push);
                         context.finish();
                     }
                 }

@@ -38,6 +38,7 @@ public class EWMShowActivity extends AppBaseActivity {
 
         ImageView imageBackground = (ImageView) findViewById(R.id.id_image_background);
         imageBackground.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_qrcode_background));
+        TextView tv_descn=(TextView)findViewById(R.id.tv_descn);
 
         Intent data = getIntent();
         if(data != null){
@@ -48,6 +49,9 @@ public class EWMShowActivity extends AppBaseActivity {
                 types = Integer.parseInt(type);
             }else{
                 types = 1;
+            }
+            if(types==2){
+                tv_descn.setText("扫描上面的二维码加入该群");
             }
             imageViewEwm = (ImageView) findViewById(R.id.imageView_ewm);
             imageHead = (ImageView) findViewById(R.id.image);

@@ -8,6 +8,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences.Editor;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -72,6 +73,8 @@ public class TalkPersonNewsActivity extends BaseActivity implements  OnClickList
     private String tag = "TALK_PERSON_NEWS_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
     private boolean update;                 // 标记是否是修改状态
+    private EditText et_beizhu;
+    private ImageView imageModify;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,7 +110,7 @@ public class TalkPersonNewsActivity extends BaseActivity implements  OnClickList
                 descN = groupTalkInside.getDescn();
                 aliasName = groupTalkInside.getUserAliasName();
                 break;
-            case "TalkGroupNewsActivity_p": // 由群组详情、全部群组成员列表跳转过来
+            case "TalkGroupNewsActivity": // 由群组详情、全部群组成员列表跳转过来
                 UserInfo userInfo = (UserInfo) getIntent().getSerializableExtra("data");
                 name = userInfo.getUserName();
                 imageUrl = userInfo.getPortraitBig();
@@ -137,12 +140,14 @@ public class TalkPersonNewsActivity extends BaseActivity implements  OnClickList
     // 初始化界面
     private void initView() {
         findViewById(R.id.head_left_btn).setOnClickListener(this);          // 返回
-        findViewById(R.id.image_add).setOnClickListener(this);              // 对讲
+        findViewById(R.id.imageView4).setOnClickListener(this);             // 对讲
         findViewById(R.id.tv_delete).setOnClickListener(this);              // 删除好友
-        findViewById(R.id.image_xiugai).setOnClickListener(this);           // 修改
 
-        imageHead = (ImageView) findViewById(R.id.image_touxiang);          // 头像
+        imageModify=(ImageView)findViewById(R.id.imageView3);
+        imageModify.setOnClickListener(this);
+        imageHead = (ImageView) findViewById(R.id.image_portrait);          // 头像
         editName = (EditText) findViewById(R.id.et_b_name);                 // 用户名 备注名
+        et_beizhu=(EditText) findViewById(R.id.et_beizhu);
         editSignature = (TextView) findViewById(R.id.et_groupSignature);    // 用户签名
         imageEwm = (ImageView) findViewById(R.id.imageView_ewm);            // 二维码图片
 
@@ -170,11 +175,20 @@ public class TalkPersonNewsActivity extends BaseActivity implements  OnClickList
         }
         editSignature.setText(descN);
 
+        if(!TextUtils.isEmpty(name)){
+            editName.setText(name);
+        }else{
+            editName.setText("未知");
+        }
+
         // 好友名称  给好友的备注名  可随时修改 但修改的是给好友的备注好友的名称没有改变
         if (aliasName == null || aliasName.equals("")) {
-            aliasName = name;
+          /*  et_beizhu.setText(name);*/
+        }else{
+            et_beizhu.setText(aliasName);
         }
-        editName.setText(aliasName);
+        et_beizhu.setVisibility(View.VISIBLE);
+        et_beizhu.setEnabled(false);
 
         // 二维码以及二维码中包含的好友信息
         UserInfo userInfo = new UserInfo();
@@ -194,23 +208,28 @@ public class TalkPersonNewsActivity extends BaseActivity implements  OnClickList
             case R.id.head_left_btn:    // 返回
                 finish();
                 break;
-            case R.id.image_add:        // 对讲
+            case R.id.imageView4:        // 对讲
                 call(id);
                 break;
             case R.id.tv_delete:        // 删除好友
                 confirmDialog.show();
                 break;
-            case R.id.image_xiugai:     // 修改好友备注
-                editName.setEnabled(false);
+            case R.id.imageView3:     // 修改好友备注
+                et_beizhu.setEnabled(false);
+                et_beizhu.setBackgroundColor(getResources().getColor(R.color.dinglan_orange));
+                et_beizhu.setTextColor(getResources().getColor(R.color.white));
                 String beiName;
                 if (update) {           // 此时是修改状态需要进行以下操作
-                    beiName = editName.getText().toString().trim();
+                    Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wancheng);
+                    imageModify.setImageBitmap(bmp);
+                    beiName = et_beizhu.getText().toString().trim();
                     if(beiName.equals(aliasName)) {
                         return ;
                     }
                     if (beiName.equals("")) {
                         beiName = name;
                     }
+
                     if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                         dialogs = DialogUtils.Dialogph(context, "提交中");
                         update(beiName);
@@ -218,7 +237,11 @@ public class TalkPersonNewsActivity extends BaseActivity implements  OnClickList
                         ToastUtils.show_always(context, "网络失败，请检查网络");
                     }
                 } else {                // 此时是未编辑状态
-                    editName.setEnabled(true);
+                    Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wancheng);
+                    imageModify.setImageBitmap(bmp);
+                    et_beizhu.setEnabled(true);
+                    et_beizhu.setBackgroundColor(getResources().getColor(R.color.WHITE));
+                    et_beizhu.setTextColor(getResources().getColor(R.color.black));
                 }
                 update = !update;
                 break;
@@ -260,7 +283,7 @@ public class TalkPersonNewsActivity extends BaseActivity implements  OnClickList
                     String ReturnType = result.getString("ReturnType");
                     if (ReturnType != null) {
                         if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
-                            editName.setText(friendAliasName);
+                        /*    editName.setText(friendAliasName);*/
                             sendBroadcast(new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN));
                             sendBroadcast(new Intent(BroadcastConstants.REFRESH_GROUP));
                             ToastUtils.show_always(context, "修改成功");

@@ -178,7 +178,7 @@ public class MyUploadSoundFragment extends Fragment implements AdapterView.OnIte
                 String playerurI = newList.get(position).getContentURI();
                 String playermediatype = newList.get(position).getMediaType();
                 String playcontentshareurl = newList.get(position).getContentShareURL();
-                String plaplayeralltime = "0";
+                String plaplayeralltime =newList.get(position).getContentTimes();
                 String playerintime = "0";
                 String playercontentdesc = newList.get(position).getCurrentContent();
                 String playernum = newList.get(position).getWatchPlayerNum();
@@ -196,6 +196,7 @@ public class MyUploadSoundFragment extends Fragment implements AdapterView.OnIte
                 String sequId = newList.get(position).getSequId();
                 String sequDesc = newList.get(position).getSequDesc();
                 String sequImg = newList.get(position).getSequImg();
+                String contentPlayType=newList.get(position).getContentPlayType();
 
                 // 如果该数据已经存在数据库则删除原有数据，然后添加最新数据
                 PlayerHistory history = new PlayerHistory(
@@ -210,7 +211,11 @@ public class MyUploadSoundFragment extends Fragment implements AdapterView.OnIte
                     MainActivity.changeToMusic();
                     HomeActivity.UpdateViewPager();
                     PlayerFragment.TextPage = 1;
-                    PlayerFragment.SendTextRequest(newList.get(position).getContentName(), context);
+                    Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                    Bundle bundle1=new Bundle();
+                    bundle1.putString("text", newList.get(position).getContentName());
+                    push.putExtras(bundle1);
+                    context.sendBroadcast(push);
                     getActivity().finish();
                 } else {
                     SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();

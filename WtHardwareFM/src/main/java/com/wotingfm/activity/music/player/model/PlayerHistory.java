@@ -15,7 +15,7 @@ public class PlayerHistory implements Serializable{
 	private String PlayerAllTime;		//播放文件总时长
 	private String PlayerInTime;		//此时播放时长
 	private String PlayerContentDescn;	//播放文件介绍
-	private String PlayerNum;			//播放次数
+	private String PlayCount;			//播放次数
 	private String PlayerZanType;		//String类型的true,false
 	private String PlayerFrom;			//预留字段
 	private String PlayerFromId;		//预留字段
@@ -28,11 +28,46 @@ public class PlayerHistory implements Serializable{
 	private String ContentID;
 	private String ContentPub;
 
-	private String localurl;// 本地播放地址
-	private String sequId;//专辑ID
-	private String sequImg;//专辑图片
-	private String sequDesc;//专辑描述
-	private String sequName;//专辑名称
+	private String localurl;        // 本地播放地址
+	private String sequId;          // 专辑ID
+	private String sequImg;         // 专辑图片
+	private String sequDesc;        // 专辑描述
+	private String sequName;        // 专辑名称
+	private String playTag;         // 标签<预留>
+	private String ContentPlayType; // 内容后缀
+	private String ContentTimes;    //
+
+	public String getPlayCount() {
+		return PlayCount;
+	}
+
+	public void setPlayCount(String playCount) {
+		PlayCount = playCount;
+	}
+
+	public String getContentTimes() {
+		return ContentTimes;
+	}
+
+	public void setContentTimes(String contentTimes) {
+		ContentTimes = contentTimes;
+	}
+
+	public String getContentPlayType() {
+		return ContentPlayType;
+	}
+
+	public String getPlayTag() {
+		return playTag;
+	}
+
+	public void setContentPlayType(String contentPlayType) {
+		ContentPlayType = contentPlayType;
+	}
+
+	public void setPlayTag(String playTag) {
+		this.playTag = playTag;
+	}
 
 	public String getSequImg() {
 		return sequImg;
@@ -75,16 +110,16 @@ public class PlayerHistory implements Serializable{
 	}
 	private int status;		//是否选中状态  0 未选中  1 选中
 	private boolean isCheck;//是否可以选中
-	
+
 	@Override
 	public String toString(){
-		return "播放路径:" + getPlayerUrl() + ", 播放类型:" + getPlayerMediaType() 
+		return "播放路径:" + getPlayerUrl() + ", 播放类型:" + getPlayerMediaType()
 				+ ", 播放显示名称:" + getPlayerName() + ", PlayerFromUrl:" + getPlayerFromUrl()
-				+ ", 此时播放时长:" + getPlayerInTime() + ", 播放次数:" + getPlayerNum()
-				+ ", ContentID:" + getContentID() + ", 播放时间:" + getPlayerAllTime()
+				+ ", 此时播放时长:" + getPlayerInTime() + ", 播放次数:" + getPlayCount()
+				+ ", ContentID:" + getContentID() + ", 播放时间:" + getContentTimes()
 				+ ", 播放类型:" + getPlayerMediaType();
 	}
-	
+
 	public String getContentPub() {
 		return ContentPub;
 	}
@@ -104,11 +139,11 @@ public class PlayerHistory implements Serializable{
 	public void setStatus(int status){
 		this.status = status;
 	}
-	
+
 	public int getStatus(){
 		return this.status;
 	}
- 
+
 	public String getContentID() {
 		return ContentID;
 	}
@@ -156,11 +191,13 @@ public class PlayerHistory implements Serializable{
 	public void setBJUserid(String bJUserid) {
 		BJUserid = bJUserid;
 	}
-	
-	public PlayerHistory(String playername,String  playerimage,String playerurl,String playerurI,String playermediatype, 
-			String playeralltime,String playerintime,String playercontentdesc,String playernum,
-			String playerzantype,String  playerfrom,String playerfromid,String Playerfromurl,
-			String playeraddtime,String bjuserid,String playcontentshareurl,String ContentFavorite,String ContentID,String localurl,String sequName,String sequId,String sequDesc,String sequImg) {
+
+	public PlayerHistory(String playername,String  playerimage,String playerurl,String playerurI,String playermediatype,
+						 String playeralltime,String playerintime,String playercontentdesc,String playernum,
+						 String playerzantype,String  playerfrom,String playerfromid,String Playerfromurl,
+						 String playeraddtime,String bjuserid,String playcontentshareurl,String ContentFavorite,
+						 String ContentID,String localurl,String sequName,
+						 String sequId,String sequDesc,String sequImg) {
 		super();
 		PlayerName = playername;
 		PlayerImage = playerimage;
@@ -170,7 +207,7 @@ public class PlayerHistory implements Serializable{
 		PlayerAllTime = playeralltime;
 		PlayerInTime = playerintime;
 		PlayerContentDescn = playercontentdesc;
-		PlayerNum = playernum;
+        PlayCount=playernum;
 		PlayerZanType = playerzantype;
 		PlayerFrom = playerfrom;
 		PlayerFromId = playerfromid;
@@ -231,18 +268,14 @@ public class PlayerHistory implements Serializable{
 	public void setPlayerInTime(String playerInTime) {
 		PlayerInTime = playerInTime;
 	}
+
 	public String getPlayerContentDescn() {
 		return PlayerContentDescn;
 	}
 	public void setPlayerContentDescn(String playerContentDesc) {
 		PlayerContentDescn = playerContentDesc;
 	}
-	public String getPlayerNum() {
-		return PlayerNum;
-	}
-	public void setPlayerNum(String playerNum) {
-		PlayerNum = playerNum;
-	}
+
 	public String getPlayerZanType() {
 		return PlayerZanType;
 	}

@@ -1,6 +1,7 @@
 package com.wotingfm.activity.im.interphone.groupmanage.handlegroupapply;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,6 +28,7 @@ import com.wotingfm.util.ToastUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,6 +52,7 @@ public class HandleGroupApplyActivity extends BaseActivity implements
     private boolean isCancelRequest;
     private String tag = "HANDLE_GROUP_APPLY_VOLLEY_REQUEST_CANCEL_TAG";
     private String groupId;
+    private ArrayList<UserInfo> list;
 
     @Override
     public void onClick(View v) {
@@ -102,7 +105,9 @@ public class HandleGroupApplyActivity extends BaseActivity implements
         findViewById(R.id.wt_back).setOnClickListener(this);
         joinGroupList = (ListView) findViewById(R.id.lv_jiaqun);
 
-        groupId = getIntent().getStringExtra("GroupId");
+        Intent intent = this.getIntent();
+        Bundle bundle = intent.getExtras();
+        groupId = bundle.getString("GroupId");
         if(groupId == null || groupId.equals("")) {
             ToastUtils.show_always(context, "获取 groupId 失败，请返回重试!");
             return ;
