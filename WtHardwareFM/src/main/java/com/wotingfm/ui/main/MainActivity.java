@@ -44,7 +44,6 @@ import com.wotingfm.common.service.NotificationService;
 import com.wotingfm.common.service.SocketService;
 import com.wotingfm.common.service.SubclassService;
 import com.wotingfm.common.service.TestWindowService;
-import com.wotingfm.common.service.TimeOffService;
 import com.wotingfm.common.service.VoiceStreamPlayerService;
 import com.wotingfm.common.service.VoiceStreamRecordService;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -170,7 +169,6 @@ public class MainActivity extends TabActivity {
 
 
         IntentFilter m = new IntentFilter();
-        m.addAction(BroadcastConstants.TIMER_END);
         m.addAction(BroadcastConstants.PUSH_REGISTER);
         m.addAction(BroadcastConstants.PUSH_NOTIFY);
         m.addAction(BroadcastConstants.ACTIVITY_CHANGE);
@@ -189,16 +187,7 @@ public class MainActivity extends TabActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastConstants.TIMER_END)) {
-                ToastUtils.show_always(MainActivity.this, "定时关闭应用时间就要到了，应用即将退出");
-                stopService(new Intent(MainActivity.this, TimeOffService.class));    // 停止服务
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        finish();
-                    }
-                }, 1000);
-            } else if (action.equals(BroadcastConstants.ACTIVITY_CHANGE)) {
+            if (action.equals(BroadcastConstants.ACTIVITY_CHANGE)) {
                 if (GlobalConfig.activityType == 1) {
                     MyActivityManager mam = MyActivityManager.getInstance();
                     mam.finishAllActivity();
