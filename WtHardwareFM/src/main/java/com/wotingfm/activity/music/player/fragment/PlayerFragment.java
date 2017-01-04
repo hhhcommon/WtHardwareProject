@@ -52,7 +52,7 @@ import com.wotingfm.activity.music.player.adapter.gvMoreAdapter;
 import com.wotingfm.activity.music.player.model.LanguageSearch;
 import com.wotingfm.activity.music.player.model.LanguageSearchInside;
 import com.wotingfm.activity.music.player.model.PlayerHistory;
-import com.wotingfm.activity.music.player.model.ShareModelA;
+import com.wotingfm.activity.music.player.model.ShareModel;
 import com.wotingfm.activity.music.player.programme.ProgrammeActivity;
 import com.wotingfm.activity.music.playhistory.activity.PlayHistoryActivity;
 import com.wotingfm.activity.music.program.album.activity.AlbumActivity;
@@ -172,7 +172,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, XL
     private Dialog moreDialog;
     private int screen;
 
-    private List<ShareModelA>  mList;
+    private List<ShareModel>  mList;
     private String SequId;
     private String SequDesc;
     private String SequImage;
