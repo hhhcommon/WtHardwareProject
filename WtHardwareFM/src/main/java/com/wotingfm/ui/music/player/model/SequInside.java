@@ -2,7 +2,7 @@ package com.wotingfm.ui.music.player.model;
 
 import java.io.Serializable;
 
-public class SequInsideA implements Serializable {
+public class SequInside implements Serializable {
     private String ContentURI;
     private String ContentPersons;
     private String ContentKeyWord;
