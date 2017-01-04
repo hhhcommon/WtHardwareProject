@@ -1,53 +1,53 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:gravity="center"
-    android:orientation="vertical" >
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical" >
-        
+        android:orientation="vertical">
+
         <GridView
-        android:id="@+id/gv_more"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:layout_gravity="center"
-        android:verticalSpacing="10dp"
-        android:numColumns="3"
-        android:gravity="center"
-        android:scrollbars="none"
-        android:paddingLeft="25dp"
-        android:background="@color/WHITE"
-        android:visibility="visible"
-        >
-      </GridView>
-       
-        </LinearLayout>
+            android:id="@+id/gv_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@color/WHITE"
+            android:gravity="center"
+            android:numColumns="3"
+            android:paddingBottom="10dp"
+            android:paddingLeft="25dp"
+            android:paddingTop="10dp"
+            android:scrollbars="none"
+            android:verticalSpacing="10dp"
+            android:visibility="visible"/>
+
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/black"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:background="@color/white"
+        android:orientation="horizontal">
 
         <TextView
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="@color/black" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
+            android:id="@+id/tv_cancle"
+            android:layout_width="0dp"
             android:layout_height="60dp"
-            android:background="@color/white"
-            android:orientation="horizontal" >
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="关闭"
+            android:textSize="16sp"/>
 
-            <TextView
-                android:id="@+id/tv_cancle"
-                android:layout_width="0dp"
-                android:layout_height="60dp"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="关闭"
-                android:textSize="16sp"
-               />
-        </LinearLayout>
     </LinearLayout>
+
+</LinearLayout>

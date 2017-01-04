@@ -195,32 +195,6 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:id="@+id/lin_album"
-                style="@style/PersonAndSetRelativeStyle"
-                android:visibility="gone"
-                android:layout_marginTop="20dp">
-
-                <View style="@style/ViewStyle"/>
-
-                <ImageView
-                    android:id="@+id/image_album"
-                    style="@style/PersonAndSetLeftStyle"
-                    android:src="@mipmap/wt_image_album" />
-
-                <TextView
-                    style="@style/PersonAndSetTextStyle"
-                    android:text="我的上传"
-                    android:layout_toRightOf="@id/image_album" />
-
-                <ImageView style="@style/PersonAndSetRightStyle" />
-
-                <View
-                    style="@style/ViewStyle"
-                    android:layout_alignParentBottom="true"/>
-
-            </RelativeLayout>
-
-            <RelativeLayout
                 android:id="@+id/listener_set"
                 style="@style/PersonAndSetRelativeStyle"
                 android:layout_marginTop="20dp">

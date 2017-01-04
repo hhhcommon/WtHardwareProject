@@ -26,20 +26,10 @@ import com.google.gson.reflect.TypeToken;
 import com.iflytek.cloud.SpeechUtility;
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
-import com.wotingfm.ui.common.favoritetype.FavoriteProgramTypeActivity;
-import com.wotingfm.ui.im.interphone.main.DuiJiangActivity;
-import com.wotingfm.ui.mine.main.MineActivity;
-import com.wotingfm.ui.music.common.service.DownloadService;
-import com.wotingfm.ui.music.main.HomeActivity;
-import com.wotingfm.ui.music.program.citylist.dao.CityInfoDao;
-import com.wotingfm.ui.music.program.fenlei.model.Catalog;
-import com.wotingfm.ui.music.program.fenlei.model.CatalogName;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.common.volley.VolleyCallback;
-import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.common.devicecontrol.WtDeviceControl;
 import com.wotingfm.common.manager.MyActivityManager;
 import com.wotingfm.common.manager.UpdateManager;
@@ -50,9 +40,18 @@ import com.wotingfm.common.service.NotificationService;
 import com.wotingfm.common.service.SocketService;
 import com.wotingfm.common.service.SubclassService;
 import com.wotingfm.common.service.TestWindowService;
-import com.wotingfm.common.service.TimeOffService;
 import com.wotingfm.common.service.VoiceStreamPlayerService;
 import com.wotingfm.common.service.VoiceStreamRecordService;
+import com.wotingfm.common.volley.VolleyCallback;
+import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.ui.common.favoritetype.FavoriteProgramTypeActivity;
+import com.wotingfm.ui.im.interphone.main.DuiJiangActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.music.common.service.DownloadService;
+import com.wotingfm.ui.music.main.HomeActivity;
+import com.wotingfm.ui.music.program.citylist.dao.CityInfoDao;
+import com.wotingfm.ui.music.program.fenlei.model.Catalog;
+import com.wotingfm.ui.music.program.fenlei.model.CatalogName;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ScreenUtils;
@@ -439,7 +438,6 @@ public class MainActivity extends TabActivity {
     //注册广播  用于接收定时服务发送过来的广播
     private void registerReceiver() {
         IntentFilter myFilter = new IntentFilter();
-        myFilter.addAction(BroadcastConstants.TIMER_END);
         myFilter.addAction(BroadcastConstants.ACTIVITY_CHANGE);
         registerReceiver(endApplicationBroadcast, myFilter);
 
@@ -455,16 +453,7 @@ public class MainActivity extends TabActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
-            if (action.equals(BroadcastConstants.TIMER_END)) {
-                ToastUtils.show_always(MainActivity.this, "定时关闭应用时间就要到了，应用即将退出");
-                stopService(new Intent(MainActivity.this, TimeOffService.class));    // 停止服务
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        finish();
-                    }
-                }, 1000);
-            } else if (action.equals(BroadcastConstants.ACTIVITY_CHANGE)) {
+            if (action.equals(BroadcastConstants.ACTIVITY_CHANGE)) {
                 if (GlobalConfig.activitytype == 1) {
                     MyActivityManager mam = MyActivityManager.getInstance();
                     mam.finishAllActivity();

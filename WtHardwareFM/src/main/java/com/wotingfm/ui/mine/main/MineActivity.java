@@ -90,7 +90,6 @@ public class MineActivity extends Activity implements OnClickListener {
 
     private View relativeStatusUnLogin;// 未登录状态
     private View relativeStatusLogin;// 登录状态
-//    private View relativeMyUpload;// 我的上传
     private View circleView;// 点
     private ImageView userHead;// 用户头像
     private TextView textWifiName;
@@ -159,9 +158,6 @@ public class MineActivity extends Activity implements OnClickListener {
         userHead = (ImageView) findViewById(R.id.image_touxiang);// 用户头像
         userHead.setOnClickListener(this);
 
-//        relativeMyUpload = findViewById(R.id.lin_album);// 我的上传
-//        relativeMyUpload.setOnClickListener(this);
-
         textUserName = (TextView) findViewById(R.id.text_user_name);// 用户名
         textUserArea = (TextView) findViewById(R.id.text_user_area);// 城市
         circleView = findViewById(R.id.circle_view);// 点
@@ -199,9 +195,6 @@ public class MineActivity extends Activity implements OnClickListener {
                 intentEwm.putExtras(bundle);
                 startActivity(intentEwm);
                 break;
-//            case R.id.lin_album:// 我的上传
-//                startActivity(new Intent(context, MyUploadActivity.class));
-//                break;
             case R.id.flow_set:// 流量管理
                 startActivity(new Intent(context, FlowManageActivity.class));
                 break;
