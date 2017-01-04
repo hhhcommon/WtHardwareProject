@@ -33,8 +33,8 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.AppBaseFragmentActivity;
-import com.wotingfm.ui.common.baseadapter.MyFragmentPagerAdapter;
+import com.wotingfm.ui.baseactivity.AppBaseFragmentActivity;
+import com.wotingfm.ui.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.ui.music.search.adapter.SearchHistoryAdapter;
 import com.wotingfm.ui.music.search.adapter.SearchKeyAdapter;
 import com.wotingfm.ui.music.search.dao.SearchHistoryDao;
@@ -168,7 +168,7 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_searchlike);
-        GlobalConfig.voicerecognizer = BroadcastConstants.SEARCHVOICE;
+        GlobalConfig.voiceRecognizer = BroadcastConstants.SEARCHVOICE;
 
         initImage();            // 初始化指示器图片
         initViews();            // 初始化视图

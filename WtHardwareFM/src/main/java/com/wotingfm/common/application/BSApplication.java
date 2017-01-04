@@ -3,10 +3,13 @@ package com.wotingfm.common.application;
 import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
+import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.kingsoft.media.httpcache.KSYProxyService;
+import com.kingsoft.media.httpcache.OnErrorListener;
+import com.kingsoft.media.httpcache.stats.OnLogEventListener;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.config.SocketClientConfig;
 import com.wotingfm.common.helper.CommonHelper;
@@ -20,7 +23,7 @@ import java.util.List;
  * 作者：xinlong on 2016/8/23 21:18
  * 邮箱：645700751@qq.com
  */
-public class BSApplication extends Application {
+public class BSApplication extends Application implements OnErrorListener,OnLogEventListener {
     public static Context instance;
     private static RequestQueue queues;
     public static android.content.SharedPreferences SharedPreferences;
@@ -96,4 +99,13 @@ public class BSApplication extends Application {
         super.onTerminate();
     }
 
+    @Override
+    public void OnError(int i) {
+        Log.e("缓存播放路径333","======"+i);
+    }
+
+    @Override
+    public void onLogEvent(String log) {
+        Log.e("缓存播放路径444","======"+log);
+    }
 }

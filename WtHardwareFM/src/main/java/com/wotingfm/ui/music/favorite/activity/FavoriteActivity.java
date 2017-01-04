@@ -27,8 +27,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.AppBaseFragmentActivity;
-import com.wotingfm.ui.common.baseadapter.MyFragmentPagerAdapter;
+import com.wotingfm.ui.baseactivity.AppBaseFragmentActivity;
+import com.wotingfm.ui.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.ui.music.favorite.fragment.RadioFragment;
 import com.wotingfm.ui.music.favorite.fragment.SequFragment;
 import com.wotingfm.ui.music.favorite.fragment.SoundFragment;

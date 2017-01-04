@@ -5,17 +5,13 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.iflytek.cloud.ErrorCode;
-import com.iflytek.cloud.InitListener;
 import com.iflytek.cloud.RecognizerListener;
 import com.iflytek.cloud.RecognizerResult;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechRecognizer;
-import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.helper.JsonParser;
-import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -25,72 +21,48 @@ import java.util.LinkedHashMap;
 
 public class VoiceRecognizer {
 
+    private static VoiceRecognizer mVoiceRecognizer;
     private static SpeechRecognizer mIat;
-    private static HashMap<String, String> mIatResults; // 用HashMap存储听写结果
-    private final Context context;
+    // 用HashMap存储听写结果
+    private static HashMap<String, String> mIatResults;
+    private static Context contexts;
+    private static String fromwhere;
     private String str;
 
-    /**
-     * 初始化讯飞语音搜索
-     */
-    public VoiceRecognizer(Context context) {
-        this.context = context;
-        if (mIat == null) {
-            mIat = SpeechRecognizer.createRecognizer(context, mInitListener);
-            setParam();
-        }
 
+    private VoiceRecognizer(){
+        setParam();
+    }
+    public static VoiceRecognizer getInstance(Context context,String from){
+        if(mIat==null){
+            mIat= SpeechRecognizer.createRecognizer(context, null);
+        }
+        if(mVoiceRecognizer==null){
+            mVoiceRecognizer=new VoiceRecognizer();
+        }
+        contexts=context;
+        if(from!=null&&from!=""){
+            fromwhere=from;
+        }
+        return mVoiceRecognizer;
     }
 
-    /**
-     * 讯飞---开始录音
-     */
-    public void startListen() {
-        if (mIatResults == null) {
+    public void startListen(){
+        if(mIatResults==null){
             mIatResults = new LinkedHashMap<String, String>();
         }
         mIatResults.clear();
         mIat.startListening(mRecoListener);
-
     }
 
-    /**
-     * 初始化监听器。
-     */
-    private InitListener mInitListener = new InitListener() {
-
-        @Override
-        public void onInit(int code) {
-            Log.e("speech", "SpeechRecognizer init() code = " + code);
-            if (code != ErrorCode.SUCCESS) {
-                Log.e("初始化失败，错误码：", "a");
-            }
-        }
-    };
-
-    /**
-     * 讯飞---结束录音
-     */
-    public void stopListen() {
+    public void stopListen(){
         mIat.stopListening();
     }
 
-    /**
-     * 讯飞---销毁
-     */
-    public void onDestroy() {
-        if (mIat != null) {
-            mIat = null;
-        }
-        if (mRecoListener != null) {
-            mRecoListener = null;
-        }
-        if (mIatResults != null) {
-            mIatResults = null;
-        }
+    public String getVoiceStr(){
+        return str;
     }
 
-    //设置讯飞参数
     private void setParam() {
         // 清空参数
         mIat.setParameter(SpeechConstant.PARAMS, null);
@@ -110,6 +82,7 @@ public class VoiceRecognizer {
         mIat.setParameter(SpeechConstant.VAD_BOS, "10000");
         // 设置语音后端点:后端点静音检测时间，即用户停止说话多长时间内即认为不再输入， 自动停止录音
         mIat.setParameter(SpeechConstant.VAD_EOS, "5000");
+
     }
 
     private void printResult(RecognizerResult results) {
@@ -122,7 +95,7 @@ public class VoiceRecognizer {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        if (sn != null && sn.equals("1")) {
+        if(sn!=null&&sn.equals("1")){
             mIatResults.put(sn, text);
             StringBuffer resultBuffer = new StringBuffer();
             for (String key : mIatResults.keySet()) {
@@ -131,26 +104,25 @@ public class VoiceRecognizer {
             str = resultBuffer.toString();
             if (str != null && !str.equals("")) {
                 str = str.replaceAll("[`~!@#$%^&*()+=|{}':;',\\[\\].<>/?~！@#￥%……& amp;*（）——+|{}【】‘；：”“’。，、？|-]", "");
-                Log.e("语音识别到的数据", "==: " + str);
                 //根据发起来源决定调用
-                if (GlobalConfig.voicerecognizer.equals(BroadcastConstants.SEARCHVOICE)) {
-                    Intent intent = new Intent();
-                    intent.putExtra("VoiceContent", str);
+                if(fromwhere.equals(BroadcastConstants.SEARCHVOICE)){
+                    Intent intent =new Intent();
+                    intent.putExtra("VoiceContent",str);
                     intent.setAction(BroadcastConstants.SEARCHVOICE);
-                    context.sendBroadcast(intent);
-                } else if (GlobalConfig.voicerecognizer.equals(BroadcastConstants.PLAYERVOICE)) {
-                    Intent intent = new Intent();
-                    intent.putExtra("VoiceContent", str);
+                    contexts.sendBroadcast(intent);
+                }else if(fromwhere.equals(BroadcastConstants.PLAYERVOICE)){
+                    Intent intent =new Intent();
+                    intent.putExtra("VoiceContent",str);
                     intent.setAction(BroadcastConstants.PLAYERVOICE);
-                    context.sendBroadcast(intent);
-                } else if (GlobalConfig.voicerecognizer.equals(BroadcastConstants.FINDVOICE)) {
-                    Intent intent = new Intent();
-                    intent.putExtra("VoiceContent", str);
+                    contexts.sendBroadcast(intent);
+                }else if(fromwhere.equals(BroadcastConstants.FINDVOICE)){
+                    Intent intent =new Intent();
+                    intent.putExtra("VoiceContent",str);
                     intent.setAction(BroadcastConstants.FINDVOICE);
-                    context.sendBroadcast(intent);
+                    contexts.sendBroadcast(intent);
                 }
             } else {
-                Log.e("语音识别到的数据", "null");
+
             }
         }
     }
@@ -173,8 +145,7 @@ public class VoiceRecognizer {
         // 开始录音
         public void onBeginOfSpeech() {
             // 此回调表示：sdk内部录音机已经准备好了，用户可以开始语音输入
-            ToastUtils.show_always(context, "可以开始说话");
-
+            //			Toast.makeText(context, "可以开始说话", 1).show();
         }
 
         // 音量值0~30
@@ -184,7 +155,7 @@ public class VoiceRecognizer {
         // 结束录音
         public void onEndOfSpeech() {
             // 此回调表示：检测到了语音的尾端点，已经进入识别过程，不再接受语音输入
-            ToastUtils.show_always(context, "结束说话");
+            //			Toast.makeText(context, "结束说话", 1).show();
         }
 
         // 扩展用接口
@@ -204,5 +175,22 @@ public class VoiceRecognizer {
             // Log.d(TAG, "返回音频数据："+arg1.length);
         }
     };
+    public void ondestroy(){
+        if(mIat!=null){
+            mIat=null;
+        }
+        if(mRecoListener!=null){
+            mRecoListener=null;
+        }
+        if(mVoiceRecognizer!=null){
+            mVoiceRecognizer=null;
+        }
+        if(mIatResults!=null){
+            mIatResults=null;
+
+        }
+
+    }
+
 
 }

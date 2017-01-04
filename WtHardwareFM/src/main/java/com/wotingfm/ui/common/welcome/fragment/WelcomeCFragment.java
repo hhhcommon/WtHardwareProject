@@ -15,9 +15,9 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.common.main.MainActivity;
-import com.wotingfm.ui.person.login.LoginActivity;
-import com.wotingfm.ui.person.register.RegisterActivity;
+import com.wotingfm.ui.main.MainActivity;
+import com.wotingfm.ui.mine.person.login.LoginActivity;
+import com.wotingfm.ui.mine.person.register.RegisterActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.BitmapUtils;

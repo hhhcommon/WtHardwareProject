@@ -12,12 +12,12 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.AppBaseActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.ui.baseactivity.AppActivity;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
@@ -29,7 +29,7 @@ import org.json.JSONObject;
  * 设置用户号  只能设置一次
  * Created by Administrator on 2016/11/9 0009.
  */
-public class UpdateUserNumberActivity extends AppBaseActivity implements View.OnClickListener {
+public class UpdateUserNumberActivity extends AppActivity implements View.OnClickListener {
     private Dialog confirmDialog;
     private Dialog dialog;
     private EditText editUserNum;

@@ -93,7 +93,7 @@ public class IntegrationPlayer implements OnErrorListener {
     private void initCache() {
         mProxy = BSApplication.getKSYProxy();
         mProxy.registerErrorListener(this);
-        File file = new File(GlobalConfig.playCacheDir);// 设置缓存目录
+        File file = new File(GlobalConfig.ksyPlayCache);// 设置缓存目录
         if (!file.exists()) if(!file.mkdir()) Log.v("TAG", "KSYProxy MkDir Error");
         mProxy.setCacheRoot(file);
         mProxy.setMaxCacheSize(500 * 1024 * 1024);// 缓存大小 500MB
@@ -145,8 +145,8 @@ public class IntegrationPlayer implements OnErrorListener {
     // 使用 VLC 播放器播放
     private void vlcPlay(String httpUrl, String localUrl) {
         if(isEmpty(localUrl)) {
-            if(GlobalConfig.playerobject != null && GlobalConfig.playerobject.getMediaType() != null) {
-                if(GlobalConfig.playerobject.getMediaType().equals("AUDIO")) {
+            if(GlobalConfig.playerObject != null && GlobalConfig.playerObject.getMediaType() != null) {
+                if(GlobalConfig.playerObject.getMediaType().equals("AUDIO")) {
                     httpUrl = mProxy.getProxyUrl(httpUrl);
                 }
             }
@@ -156,8 +156,8 @@ public class IntegrationPlayer implements OnErrorListener {
             mVlcPlayer.play(localUrl);
         }
         // 从上次停止处开始播放
-        if(GlobalConfig.playerobject != null && GlobalConfig.playerobject.getMediaType().equals("AUDIO")) {
-            String string = GlobalConfig.playerobject.getPlayerInTime();
+        if(GlobalConfig.playerObject != null && GlobalConfig.playerObject.getMediaType().equals("AUDIO")) {
+            String string = GlobalConfig.playerObject.getPlayerInTime();
             if(string != null && !string.equals("")) {
                 long playInTime = Long.valueOf(string);
                 mVlcPlayer.setTime(playInTime);

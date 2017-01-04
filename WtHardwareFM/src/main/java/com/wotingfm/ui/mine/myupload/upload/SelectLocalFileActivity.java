@@ -16,7 +16,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.BaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.mine.myupload.adapter.SelectFileListAdapter;
 import com.wotingfm.ui.mine.myupload.model.MediaStoreInfo;
 import com.wotingfm.ui.mine.myupload.upload.recording.MediaRecorderActivity;

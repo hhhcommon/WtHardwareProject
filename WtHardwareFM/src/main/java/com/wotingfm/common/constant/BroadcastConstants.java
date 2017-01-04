@@ -28,7 +28,7 @@ public class BroadcastConstants {
 	public static final String PUSH_REGISTER = "PUSH_REGISTER";
 
 	//SOCKET_PUSH-----push
-	public static final String SOCKET_PUSH="SOCKET_PUSH";
+	public static final String PUSH="SOCKET_PUSH";
 
 	//UP_DATA_GROUP-----
 	public static final String UP_DATA_GROUP="UP_DATA_GROUP";

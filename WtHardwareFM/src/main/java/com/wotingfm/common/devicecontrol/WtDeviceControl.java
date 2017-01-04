@@ -9,10 +9,7 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.im.interphone.chat.fragment.ChatFragment;
-import com.wotingfm.ui.music.player.fragment.PlayerFragment;
 import com.wotingfm.ui.music.video.VoiceRecognizer;
-import com.wotingfm.util.VibratorUtils;
 
 /**
  * 控制接口的实现类
@@ -31,22 +28,22 @@ public class WtDeviceControl {
      */
     public WtDeviceControl(Context context) {
         this.context = context;
-        if (mVoiceRecognizer == null) {
-            mVoiceRecognizer = new VoiceRecognizer(context);
-            Dialog(context);
-        }
+//        if (mVoiceRecognizer == null) {
+//            mVoiceRecognizer = new VoiceRecognizer(context);
+//            Dialog(context);
+//        }
     }
 
     /**
      * 点击中间按钮
      */
     public void pushCenter() {
-        try {
-            PlayerFragment.enterCenter();
-        } catch (Exception e) {
-            e.printStackTrace();
-            VibratorUtils.Vibrate(context, Vibrate);
-        }
+//        try {
+//            PlayerFragment.enterCenter();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            VibratorUtils.Vibrate(context, Vibrate);
+//        }
 
     }
 
@@ -54,24 +51,24 @@ public class WtDeviceControl {
      * 点击上一首按钮
      */
     public void pushUpButton() {
-        try {
-            PlayerFragment.playLast();
-        } catch (Exception e) {
-            e.printStackTrace();
-            VibratorUtils.Vibrate(context, Vibrate);
-        }
+//        try {
+//            PlayerFragment.playLast();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            VibratorUtils.Vibrate(context, Vibrate);
+//        }
     }
 
     /**
      * 点击下一首按钮
      */
     public void pushDownButton() {
-        try {
-            PlayerFragment.playNext();
-        } catch (Exception e) {
-            e.printStackTrace();
-            VibratorUtils.Vibrate(context, Vibrate);
-        }
+//        try {
+//            PlayerFragment.playNext();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            VibratorUtils.Vibrate(context, Vibrate);
+//        }
     }
 
     /**
@@ -107,24 +104,24 @@ public class WtDeviceControl {
      * 按下语音通话
      */
     public void pushPTT() {
-        try {
-            ChatFragment.press();
-        } catch (Exception e) {
-            e.printStackTrace();
-            VibratorUtils.Vibrate(context, Vibrate);
-        }
+//        try {
+//            ChatFragment.press();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            VibratorUtils.Vibrate(context, Vibrate);
+//        }
     }
 
     /**
      * 抬起语音通话
      */
     public void releasePTT() {
-        try {
-            ChatFragment.jack();
-        } catch (Exception e) {
-            e.printStackTrace();
-            VibratorUtils.Vibrate(context, Vibrate);
-        }
+//        try {
+//            ChatFragment.jack();
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//            VibratorUtils.Vibrate(context, Vibrate);
+//        }
     }
 
     private void Dialog(Context context) {

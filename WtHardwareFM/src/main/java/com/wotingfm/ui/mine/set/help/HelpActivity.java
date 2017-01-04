@@ -12,7 +12,7 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.BaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.util.DialogUtils;
 

@@ -13,17 +13,17 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.AppBaseActivity;
+import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.volley.VolleyCallback;
+import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.ui.baseactivity.AppActivity;
 import com.wotingfm.ui.music.main.HomeActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.ui.music.program.tuijian.adapter.RecommendListAdapter;
-import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.volley.VolleyCallback;
-import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
@@ -41,7 +41,7 @@ import java.util.List;
  * 猜你喜欢  更多列表
  * @author woting11
  */
-public class RecommendLikeListActivity extends AppBaseActivity {
+public class RecommendLikeListActivity extends AppActivity {
     private RecommendListAdapter adapterLikeList;
 	private XListView mListView;			// 列表
 	private Dialog dialog;					// 加载对话框

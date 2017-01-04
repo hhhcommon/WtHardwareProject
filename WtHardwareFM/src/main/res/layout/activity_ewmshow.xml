@@ -1,40 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/BaseStyle"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/dinglan_orange"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
-
-    <include android:id="@+id/include_title" layout="@layout/base_activity_title"/>
 
     <ImageView
         android:id="@+id/id_image_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/include_title"
         android:scaleType="fitXY"/>
+
+    <RelativeLayout
+        android:id="@+id/id_title"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:background="@color/dinglan_orange">
+
+        <ImageView
+            android:id="@+id/head_left_btn"
+            style="@style/LeftImageStyle"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="二维码"
+            android:layout_centerInParent="true"
+            android:textColor="@color/WHITE"
+            android:textSize="@dimen/activity_head_center_s"/>
+
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/include_title"
-        android:gravity="center"
+        android:layout_below="@id/id_title"
         android:orientation="vertical">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="90dp"
             android:background="@drawable/color_wt_white"
-            android:layout_marginTop="60dp"
             android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp">
+            android:layout_marginRight="20dp"
+            android:layout_marginTop="60dp">
 
             <ImageView
                 android:id="@+id/image"
                 android:layout_width="56dp"
                 android:layout_height="56dp"
-                android:scaleType="centerCrop"
                 android:layout_marginLeft="15dp"
                 android:layout_centerVertical="true"
-                android:src="@mipmap/wt_image_tx_hy"/>
+                android:scaleType="centerCrop"/>
 
             <ImageView
                 android:layout_width="56dp"
@@ -82,11 +101,11 @@
                 android:id="@+id/imageView_ewm"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="5dp"
+                android:layout_margin="40dp"
                 android:scaleType="centerCrop"/>
 
             <TextView
-                android:id="@+id/tv_descn"
+                android:id="@+id/id_text_tip"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textColor="@color/gray"

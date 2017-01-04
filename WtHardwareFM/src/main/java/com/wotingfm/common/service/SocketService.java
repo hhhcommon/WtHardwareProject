@@ -10,10 +10,10 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.wotingfm.ui.im.common.message.Message;
-import com.wotingfm.ui.im.common.message.MessageUtils;
-import com.wotingfm.ui.im.common.message.MsgMedia;
-import com.wotingfm.ui.im.common.message.MsgNormal;
+import com.wotingfm.ui.interphone.common.message.Message;
+import com.wotingfm.ui.interphone.common.message.MessageUtils;
+import com.wotingfm.ui.interphone.common.message.MsgMedia;
+import com.wotingfm.ui.interphone.common.message.MsgNormal;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.SocketClientConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
@@ -716,7 +716,7 @@ public class SocketService extends Service {
                             /*
                              * 接收该广播的地方
 							 */
-								Intent push = new Intent(BroadcastConstants.SOCKET_PUSH);
+								Intent push = new Intent(BroadcastConstants.PUSH);
 								Bundle bundle1 = new Bundle();
 								bundle1.putByteArray("outMessage", msg.toBytes());
 								//							Log.e("广播中数据", Arrays.toString(msg.toBytes())+"");
@@ -760,7 +760,7 @@ public class SocketService extends Service {
 										}
 										break;
 									case 2:
-										Intent push2 = new Intent(BroadcastConstants.SOCKET_PUSH);
+										Intent push2 = new Intent(BroadcastConstants.PUSH);
 										Bundle bundle2 = new Bundle();
 										bundle2.putByteArray("outMessage", msg.toBytes());
 										//								Log.e("广播中数据", Arrays.toString(msg.toBytes())+"");
@@ -769,7 +769,7 @@ public class SocketService extends Service {
 										break;
 									case 3:
 										// 上次单对单通话消息
-										Intent push3 = new Intent(BroadcastConstants.SOCKET_PUSH);
+										Intent push3 = new Intent(BroadcastConstants.PUSH);
 										Bundle bundle3 = new Bundle();
 										bundle3.putByteArray("outMessage", msg.toBytes());
 										push3.putExtras(bundle3);

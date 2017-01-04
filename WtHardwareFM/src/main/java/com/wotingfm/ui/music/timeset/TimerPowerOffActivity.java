@@ -10,17 +10,17 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.AppBaseActivity;
-import com.wotingfm.ui.music.player.fragment.PlayerFragment;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.service.TimeOffService;
+import com.wotingfm.ui.baseactivity.AppActivity;
+import com.wotingfm.ui.music.player.fragment.PlayerFragment;
 
 /**
  * 定时关闭 关闭程序要以服务形式出现
  * @author 辛龙
  *         2016年4月1日
  */
-public class TimerPowerOffActivity extends AppBaseActivity implements OnClickListener {
+public class TimerPowerOffActivity extends AppActivity implements OnClickListener {
     private Intent intent;
     private LinearLayout linearPlayEnd;
     private ImageView imageTime10, imageTime20, imageTime30,
@@ -68,8 +68,8 @@ public class TimerPowerOffActivity extends AppBaseActivity implements OnClickLis
 
         View linView = findViewById(R.id.lin_view);
 
-     /*   if(GlobalConfig.playerobject != null && PlayerFragment.audioPlay != null &&
-                PlayerFragment.audioPlay.isPlaying() && !GlobalConfig.playerobject.getMediaType().equals("RADIO")) {
+     /*   if(GlobalConfig.playerObject != null && PlayerFragment.audioPlay != null &&
+                PlayerFragment.audioPlay.isPlaying() && !GlobalConfig.playerObject.getMediaType().equals("RADIO")) {
 
             linearPlayEnd.setVisibility(View.VISIBLE);
             linView.setVisibility(View.VISIBLE);

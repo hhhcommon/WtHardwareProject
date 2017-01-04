@@ -3,7 +3,7 @@ package com.wotingfm.common.receiver;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import com.wotingfm.ui.common.splash.activity.SplashActivity;
+import com.wotingfm.ui.common.splash.SplashActivity;
 
 
 /** 

@@ -4,8 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.wotingfm.common.database.SQLiteHelper;
 import com.wotingfm.ui.music.search.model.History;
-import com.wotingfm.common.helper.SqliteHelper;
 import com.wotingfm.util.CommonUtils;
 
 import java.util.ArrayList;
@@ -17,11 +17,11 @@ import java.util.List;
  * 2016年1月15日
  */
 public class SearchHistoryDao {
-    private SqliteHelper helper;
+    private SQLiteHelper helper;
     private Context context;
 
     public SearchHistoryDao(Context contexts) {
-        helper = new SqliteHelper(contexts);
+        helper = new SQLiteHelper(contexts);
         context = contexts;
     }
 

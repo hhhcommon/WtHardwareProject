@@ -25,7 +25,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.AppBaseFragmentActivity;
+import com.wotingfm.ui.baseactivity.AppBaseFragmentActivity;
 import com.wotingfm.ui.mine.myupload.fragment.MyUploadSequFragment;
 import com.wotingfm.ui.mine.myupload.fragment.MyUploadSoundFragment;
 import com.wotingfm.ui.mine.myupload.upload.SelectLocalFileActivity;

@@ -20,7 +20,7 @@ import android.widget.TextView;
 
 import com.example.lamemp3.MP3Recorder;
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.BaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.mine.myupload.upload.UploadActivity;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.ToastUtils;

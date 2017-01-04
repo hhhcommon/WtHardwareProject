@@ -18,7 +18,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.ui.common.main.MainActivity;
+import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.mine.myupload.MyUploadActivity;
 import com.wotingfm.ui.mine.myupload.adapter.MyUploadListAdapter;
 import com.wotingfm.ui.music.main.HomeActivity;

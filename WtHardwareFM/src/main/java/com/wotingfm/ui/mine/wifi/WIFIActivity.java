@@ -21,10 +21,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.AppBaseActivity;
-import com.wotingfm.ui.mine.wifi.adapter.WiFiListAdapter;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.ui.baseactivity.AppActivity;
+import com.wotingfm.ui.mine.wifi.adapter.WiFiListAdapter;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
 
@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * WIFI界面
  */
-public class WIFIActivity extends AppBaseActivity implements View.OnClickListener {
+public class WIFIActivity extends AppActivity implements View.OnClickListener {
     private WiFiListAdapter adapter;
     private ScanResult wiFiName;
     private WifiInfo mWifiInfo;

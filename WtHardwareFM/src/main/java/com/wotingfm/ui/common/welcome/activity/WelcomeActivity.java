@@ -10,7 +10,7 @@ import android.view.ViewGroup.LayoutParams;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseadapter.MyFragmentPagerAdapter;
+import com.wotingfm.ui.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.ui.common.welcome.fragment.WelcomeAFragment;
 import com.wotingfm.ui.common.welcome.fragment.WelcomeBFragment;
 import com.wotingfm.ui.common.welcome.fragment.WelcomeCFragment;

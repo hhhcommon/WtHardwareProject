@@ -20,7 +20,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.ui.common.main.MainActivity;
+import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.favorite.adapter.FavorListAdapter;
 import com.wotingfm.ui.music.main.HomeActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;

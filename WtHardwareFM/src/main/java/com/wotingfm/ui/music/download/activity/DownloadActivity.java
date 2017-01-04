@@ -12,7 +12,7 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseadapter.MyFragmentPagerAdapter;
+import com.wotingfm.ui.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.ui.music.download.fragment.DownLoadCompleted;
 import com.wotingfm.ui.music.download.fragment.DownLoadUnCompleted;
 

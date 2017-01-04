@@ -4,18 +4,18 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.wotingfm.common.database.SQLiteHelper;
 import com.wotingfm.ui.music.download.model.ThreadInfo;
-import com.wotingfm.common.helper.SqliteHelper;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ThreadDao {
-	private SqliteHelper helper;
+	private SQLiteHelper helper;
 
 	// 构造方法
 	public ThreadDao(Context context) {
-		helper = new SqliteHelper(context);
+		helper = new SQLiteHelper(context);
 	}
 
 	public void insertThread(ThreadInfo threadInfo) {

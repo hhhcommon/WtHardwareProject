@@ -15,8 +15,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.BaseActivity;
-import com.wotingfm.ui.common.main.MainActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
+import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.ui.music.download.downloadlist.adapter.DownLoadListAdapter;
 import com.wotingfm.ui.music.download.model.FileInfo;

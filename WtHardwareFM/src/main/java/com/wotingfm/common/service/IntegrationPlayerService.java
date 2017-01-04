@@ -182,7 +182,7 @@ public class IntegrationPlayerService extends Service {
                 Log.v("TAG", "KSYProxyService Error");
             }
         });
-        File file = new File(GlobalConfig.playCacheDir);// 设置缓存目录
+        File file = new File(GlobalConfig.ksyPlayCache);// 设置缓存目录
         if (!file.exists()) {
             file.mkdir();
         }

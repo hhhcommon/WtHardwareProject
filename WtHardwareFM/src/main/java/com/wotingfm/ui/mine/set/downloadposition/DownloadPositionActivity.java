@@ -5,7 +5,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.BaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.music.common.service.DownloadService;
 
 /**

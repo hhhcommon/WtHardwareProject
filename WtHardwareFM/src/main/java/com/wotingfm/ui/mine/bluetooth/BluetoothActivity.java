@@ -25,12 +25,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.common.baseactivity.AppBaseActivity;
-import com.wotingfm.ui.mine.bluetooth.adapter.UserBluetoothAdapter;
-import com.wotingfm.ui.mine.bluetooth.model.BluetoothInfo;
-import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.ui.baseactivity.AppActivity;
+import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.mine.bluetooth.adapter.UserBluetoothAdapter;
+import com.wotingfm.ui.mine.bluetooth.model.BluetoothInfo;
 import com.wotingfm.util.L;
 
 import java.io.IOException;
@@ -45,7 +45,7 @@ import java.util.UUID;
 /**
  * 蓝牙设置界面
  */
-public class BluetoothActivity extends AppBaseActivity implements View.OnClickListener {
+public class BluetoothActivity extends AppActivity implements View.OnClickListener {
     private UserBluetoothAdapter userAdapter;
     private DeviceReceiver mDevice = new DeviceReceiver();  // 蓝牙广播
 
