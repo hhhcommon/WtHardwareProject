@@ -1,7 +1,7 @@
 package com.wotingfm.util;
 
 
-import com.wotingfm.activity.im.interphone.groupmanage.model.UserInfo;
+import com.wotingfm.ui.common.model.UserInfo;
 
 import java.util.Comparator;
 

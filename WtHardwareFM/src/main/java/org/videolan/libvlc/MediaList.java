@@ -102,7 +102,7 @@ public class MediaList {
      * @return -1 if no subitems were found, 0 if subitems were expanded
      */
     public int expandMedia(int position) {
-        ArrayList<String> children = new ArrayList<>();
+        ArrayList<String> children = new ArrayList<String>();
         int ret = expandMedia(mLibVLC, position, children);
         if(ret == 0) {
             mEventHandler.callback(EventHandler.CustomMediaListExpanding, new Bundle());
@@ -117,7 +117,7 @@ public class MediaList {
     private native int expandMedia(LibVLC libvlc_instance, int position, ArrayList<String> children);
 
     public void loadPlaylist(String mrl) {
-        ArrayList<String> items = new ArrayList<>();
+        ArrayList<String> items = new ArrayList<String>();
         loadPlaylist(mLibVLC, mrl, items);
         this.clear();
         for(String item : items) {

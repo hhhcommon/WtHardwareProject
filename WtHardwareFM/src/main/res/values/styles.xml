@@ -61,7 +61,7 @@
         <item name="android:layout_height">50dp</item>
         <item name="android:textSize">15sp</item>
         <item name="android:background">@drawable/wt_edit_text_background</item>
-        <item name="android:paddingLeft">84dp</item>
+        <item name="android:paddingLeft">54dp</item>
         <item name="android:layout_marginLeft">12dp</item>
         <item name="android:layout_marginRight">12dp</item>
         <item name="android:singleLine">true</item>
@@ -73,7 +73,7 @@
         <item name="android:layout_height">50dp</item>
         <item name="android:textSize">18sp</item>
         <item name="android:layout_marginTop">10dp</item>
-        <item name="android:layout_marginLeft">30dp</item>
+        <item name="android:layout_marginLeft">25dp</item>
         <item name="android:gravity">center</item>
     </style>
 
@@ -110,8 +110,8 @@
 
     <style name="mProgress_circle">
         <item name="android:indeterminateDrawable">@drawable/wt_dialog_progress</item>
-        <item name="android:minWidth">30dp</item>
-        <item name="android:minHeight">30dp</item>
+        <item name="android:minWidth">10dp</item>
+        <item name="android:minHeight">10dp</item>
         <item name="android:maxWidth">45dp</item>
         <item name="android:maxHeight">45dp</item>
     </style>
@@ -248,7 +248,7 @@
 
     <style name="PersonAndSetRelativeStyle">
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">43dp</item>
+        <item name="android:layout_height">62dp</item>
         <item name="android:background">@drawable/person_color</item>
     </style>
 
@@ -265,7 +265,7 @@
         <item name="android:layout_marginLeft">14dp</item>
         <item name="android:layout_centerVertical">true</item>
         <item name="android:textColor">@color/wt_login_third</item>
-        <item name="android:textSize">@dimen/list_text_size</item>
+        <item name="android:textSize">@dimen/activity_person</item>
     </style>
 
     <style name="PersonAndSetRightStyle">
@@ -288,7 +288,7 @@
         <item name="android:src">@mipmap/back_images</item>
     </style>
 
-    <!--左上角返回图片 Style-->
+    <!--Button Style-->
     <style name="ButtonStyle">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">40dp</item>

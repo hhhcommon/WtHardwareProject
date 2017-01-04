@@ -2,12 +2,13 @@ package com.wotingfm.common.config;
 
 import android.os.Environment;
 
-import com.wotingfm.activity.im.interphone.linkman.model.TalkGroupInside;
-import com.wotingfm.activity.im.interphone.linkman.model.TalkPersonInside;
-import com.wotingfm.activity.music.player.model.LanguageSearchInside;
-import com.wotingfm.activity.music.program.fenlei.model.CatalogName;
-import com.wotingfm.devicecontrol.WtDeviceControl;
+import com.wotingfm.common.devicecontrol.WtDeviceControl;
+import com.wotingfm.ui.common.model.GroupInfo;
+import com.wotingfm.ui.common.model.UserInfo;
+import com.wotingfm.ui.music.player.model.LanguageSearchInside;
+import com.wotingfm.ui.music.program.fenlei.model.CatalogName;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,14 +23,19 @@ public class GlobalConfig {
     public static String latitude;
     public static String CityName;
     public static String AdCode;
-    //缓存路径
-    public static String playCacheDir= Environment.getExternalStorageDirectory() + "/woting/playCache/";
-    //缓存的城市列表
-    public static List<CatalogName> CityCatalogList;
-    //
-    public static List<TalkGroupInside> list_group;
-    public static List<TalkPersonInside> list_person;
-    public static LanguageSearchInside playerobject;//播放器播放对象
+    
+    // 缓存路径
+    public static String playCacheDirI = Environment.getRootDirectory() + "";                  // 获取手机根目录
+    public static String playCacheDirO = Environment.getExternalStorageDirectory() + "";       // 获取SD卡根目录
+    public static String ksyPlayCache = "/WTFM/playCache/";                                    // 金山云缓存地址
+    public static String upLoadCache = "/WTFM/APP/";                                           // app更新下载地址
+  
+    public static List<CatalogName> CityCatalogList;                                           // 缓存的城市列表
+    public static ArrayList<String> staticFacesList;                                           // 从Asset中取出的表情list
+    public static List<GroupInfo> list_group;                                                  // 通讯录中的对讲组
+    public static List<UserInfo> list_person;                                                  // 通讯录中的好友
+    public static LanguageSearchInside playerObject;                                           // 播放器播放对象
+    
     // 网络情况 1为成功WiFi已连接，2为cmnet，3为cmwap，4为ctwap， -1为网络未连接
     public static final int NETWORK_STATE_IDLE = -1;
     public static final int NETWORK_STATE_WIFI = 1;
@@ -37,35 +43,29 @@ public class GlobalConfig {
     public static final int NETWORK_STATE_CMWAP = 3;
     public static final int NETWORK_STATE_CTWAP = 4;
     public static int CURRENT_NETWORK_STATE_TYPE = NETWORK_STATE_IDLE;
-    // volley请求超时 时间
-    public static final int HTTP_CONNECTION_TIMEOUT = 60 * 1000;
-    // 数据库版本号
-    public static final int dbversoncode = 2;
-    // 此时的界面
-    public static int activitytype=1;
-    // Socket连接客户端配置信息
-    public static SocketClientConfig scc;
-    // 硬件设备控制器
-    public static WtDeviceControl device;
-    // 此时的语音搜索界面
-    public static String voicerecognizer;
-    // 是否吐司
-    public static boolean istusi = true;
-    // PersonClientDevice(个人客户端设备) 终端类型1=app,2=设备，3=pc
-    public static int PCDType = 2;
-    // 是否活跃状态，有活跃状态才能播放声音，否则即使收到音频包也不播放
-    public static boolean isactive = false;
-    // apk下载默认路径
-    public static String apkUrl = "http://182.92.175.134/download/WoTing.apk";
-    // socket请求ip
-//    public static final String socketUrl = "182.92.175.134";//生产服务器地址
-     public static final String socketUrl = "123.56.254.75";//测试服务器地址
-//     public static final String socketUrl = "192.168.5.17";//
+    public static final int HTTP_CONNECTION_TIMEOUT = 0 * 1000;                                // volley请求超时 时间
+    
+    public static final int dbVersionCode = 6;    // 数据库版本号
+    public static int activityType =1;            // 此时的界面
+    public static WtDeviceControl device;         // 硬件设备控制器
+    public static String voiceRecognizer;         // 此时的语音搜索界面
+    public static boolean isToast = true;         // 是否吐司
+    public static int PCDType = 2;                // PersonClientDevice(个人客户端设备) 终端类型1=app,2=设备，3=pc
+    public static boolean isActive = false;       // 是否活跃状态，有活跃状态才能播放声音，否则即使收到音频包也不播放
+
+    public static String apkUrl = "http://182.92.175.134/download/WoTing.apk";    // apk下载默认路径
+
     // socket请求端口
-    public static final int socketport = 15678;
+    public static final int socketPort = 16789;
+
+    // socket请求ip
+    public static final String socketUrl = "182.92.175.134";//生产服务器地址
+//     public static final String socketUrl = "123.56.254.75";//测试服务器地址
+//     public static final String socketUrl = "192.168.5.17";//
+
     // http请求总url
-//    public static final String baseUrl = "http://182.92.175.134:808/";//生产服务器地址
-     public static final String baseUrl = "http://123.56.254.75:808/";//测试服务器地址
+    public static final String baseUrl = "http://182.92.175.134:808/";//生产服务器地址
+//     public static final String baseUrl = "http://123.56.254.75:808/";//测试服务器地址
 //     public static final String baseUrl = "http://192.168.5.17:808/";//
     // image请求路径前缀
     public static final String imageurl = baseUrl + "wt/";// 服务器
@@ -155,7 +155,7 @@ public class GlobalConfig {
     public static final String InvitedDealUrl = baseUrl + "wt/passport/friend/inviteDeal.do?";
     // 查询陌生人
     public static final String searchStrangerUrl = baseUrl + "wt/passport/friend/searchStranger.do?";
-    //查找用户组
+    // 查找用户组
     public static final String searchStrangerGroupUrl = baseUrl + "wt/passport/group/searchGroup.do?";
     // 邀请陌生人为好友
     public static final String sendInviteUrl = baseUrl + "wt/passport/friend/invite.do";
@@ -178,7 +178,7 @@ public class GlobalConfig {
     public static final String updategroupFriendnewsUrl = baseUrl + "wt/passport/group/updateGroupUser.do?";
     // 管理员踢出用户 当踢出用户只剩用户本人时 此群将解散
     public static final String KickOutMembersUrl = baseUrl + "wt/passport/group/kickoutGroup.do";
-    //管理员权限移交
+    // 管理员权限移交
     public static final String changGroupAdminnerUrl = baseUrl + "wt/passport/group/changGroupAdminner.do";
     // 修改群密码 没接口
     public static final String UpdateGroupPassWordUrl = baseUrl + "wt/passport/group/updatePwd.do";
@@ -247,4 +247,12 @@ public class GlobalConfig {
     public static final String uploadFileUrl = uploadBaseUrl + "common/uploadCM.do";
     // 新增节目
     public static final String addMediaInfo = uploadBaseUrl + "content/media/addMediaInfo.do";
+    // 获取当前内容的评论列表
+    public static final String getMyCommentListUrl = baseUrl + "wt/discuss/article/getList.do";
+    // 发表评论
+    public static final String pushCommentUrl=baseUrl+"wt/discuss/add.do";
+    // 删除评论
+    public static final String delCommentUrl=baseUrl+"wt/discuss/del.do";
+    //内容主页获取节目单接口
+    public static final String getProgrammeUrl = baseUrl + "wt/content/getBCProgramme.do";
 }

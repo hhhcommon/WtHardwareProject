@@ -192,32 +192,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
             android:orientation="vertical">
-
-            <RelativeLayout
-                android:id="@+id/lin_album"
-                style="@style/PersonAndSetRelativeStyle">
-
-                <View style="@style/ViewStyle"/>
-
-                <ImageView
-                    android:id="@+id/image_album"
-                    style="@style/PersonAndSetLeftStyle"
-                    android:src="@mipmap/wt_image_album" />
-
-                <TextView
-                    style="@style/PersonAndSetTextStyle"
-                    android:text="我的上传"
-                    android:layout_toRightOf="@id/image_album" />
-
-                <ImageView style="@style/PersonAndSetRightStyle" />
-
-                <View
-                    style="@style/ViewStyle"
-                    android:layout_alignParentBottom="true"/>
-
-            </RelativeLayout>
 
             <RelativeLayout
                 android:id="@+id/listener_set"
@@ -229,7 +204,7 @@
                 <ImageView
                     android:id="@+id/image_listener"
                     style="@style/PersonAndSetLeftStyle"
-                    android:src="@mipmap/wt_image_album" />
+                    android:src="@mipmap/wt_image_listener" />
 
                 <TextView
                     style="@style/PersonAndSetTextStyle"
@@ -246,6 +221,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
+                    android:textColor="@color/beijing"
                     android:layout_toLeftOf="@id/image_listener_frequency"
                     android:text="87.5MHz" />
 
@@ -260,7 +236,7 @@
                 <ImageView
                     android:id="@+id/image_wifi"
                     style="@style/PersonAndSetLeftStyle"
-                    android:src="@mipmap/wt_image_album" />
+                    android:src="@mipmap/wt_person_liuliang" />
 
                 <TextView
                     android:id="@+id/text_wifi_set"
@@ -278,6 +254,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
+                    android:textColor="@color/beijing"
                     android:layout_toLeftOf="@id/image_wifi_set"
                     android:maxLines="1"
                     android:text="已连接" />
@@ -293,7 +270,7 @@
                 <ImageView
                     android:id="@+id/image_bluetooth"
                     style="@style/PersonAndSetLeftStyle"
-                    android:src="@mipmap/wt_image_album" />
+                    android:src="@mipmap/wt_image_bluetooth" />
 
                 <TextView
                     android:id="@+id/text_bluetooth_set"
@@ -311,6 +288,7 @@
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
                     android:layout_marginRight="5dp"
+                    android:textColor="@color/beijing"
                     android:layout_toLeftOf="@id/image_bluetooth_set"
                     android:maxLines="1"
                     android:text="关闭" />
@@ -326,7 +304,7 @@
                 <ImageView
                     android:id="@+id/image_flow"
                     style="@style/PersonAndSetLeftStyle"
-                    android:src="@mipmap/wt_image_album" />
+                    android:src="@mipmap/wt_image_flow" />
 
                 <TextView
                     android:id="@+id/text_flow_set"

@@ -4,17 +4,14 @@ public class BroadcastConstants {
 	public static final String SEARCHVOICE="SEARCHVOICE";//search
 	public static final String PLAYERVOICE="PLAYERVOICE";//播放主页
 	public static final String FINDVOICE="FINDVOICE";//查找好友
-	//定时
-	public static final String TIMER_START = "TIMER_START";
-	public static final String TIMER_STOP = "TIMER_STOP";
-	public static final String TIMER_UPDATE = "TIMER_UPDATE";
-	public static final String TIMER_END = "TIMER_END";
 	//下载
 	public static final String ACTION_START = "ACTION_START";
 	public static final String ACTION_STOP = "ACTION_STOP";
 	public static final String ACTION_UPDATE = "ACTION_UPDATE";
 	public static final String ACTION_FINISHED = "ACTION_FINISHED";
 	public static final String ACTION_FINISHED_NO_DOWNLOADVIEW = "ACTION_FINISHED_NO_DOWNLOADVIEW";
+	//PUSH_ALLURL_CHANGE-----新建===更改所有界面为未登录状态
+	public static final String PUSH_ALLURL_CHANGE="PUSH_ALLURL_CHANGE";
 	//城市更改
 	public static final String CITY_CHANGE="CITYCHANGE";
 	//刷新组信息
@@ -22,8 +19,11 @@ public class BroadcastConstants {
 	//
 	public static final String ACTIVITY_CHANGE="ACTIVITY_CHANGE";
 
+	//PUSH_REGISTER-----新加数据
+	public static final String PUSH_REGISTER = "PUSH_REGISTER";
+
 	//SOCKET_PUSH-----push
-	public static final String SOCKET_PUSH="SOCKET_PUSH";
+	public static final String PUSH="SOCKET_PUSH";
 
 	//UP_DATA_GROUP-----
 	public static final String UP_DATA_GROUP="UP_DATA_GROUP";
@@ -85,4 +85,22 @@ public class BroadcastConstants {
 
     // 我的上传界面全选
     public static final String UPDATE_MY_UPLOAD_CHECK_ALL = "UPDATE_MY_UPLOAD_CHECK_ALL";
+
+    // 我喜欢的 更新视图
+    public static final String VIEW_UPDATE = "VIEW_UPDATE";
+
+    // 我喜欢的 设置全选
+    public static final String SET_ALL_IMAGE = "SET_ALL_IMAGE";
+
+    // 我喜欢的 取消全选
+    public static final String SET_NOT_ALL_IMAGE = "SET_NOT_ALL_IMAGE";
+
+    // 我喜欢的 在编辑状态下禁止刷新
+    public static final String SET_NOT_LOAD_REFRESH = "SET_NOT_LOAD_REFRESH";
+
+    // 我喜欢的 在非编辑状态下可以刷新
+    public static final String SET_LOAD_REFRESH = "SET_LOAD_REFRESH";
+
+	// 播放界面文字搜索
+	public static final String PLAY_TEXT_VOICE_SEARCH= "play_text_voice_search";
 }

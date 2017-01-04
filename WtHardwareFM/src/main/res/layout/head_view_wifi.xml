@@ -1,58 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/app_bg"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:id="@+id/wifi_set"
         android:layout_width="match_parent"
         android:layout_height="62dp"
-        android:clickable="true"
-        android:background="@drawable/person_color">
+        android:background="@drawable/person_color"
+        android:clickable="true">
 
         <ImageView
             android:id="@+id/image_wifi"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/ic_launcher"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="14dp"
-            android:layout_centerVertical="true"/>
+            android:src="@mipmap/wt_person_liuliang"/>
 
         <TextView
             android:id="@+id/text_wifi_set"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="WiFi"
+            android:layout_centerVertical="true"
             android:layout_marginLeft="14dp"
             android:layout_toRightOf="@id/image_wifi"
-            android:textSize="16sp"
-            android:layout_centerVertical="true"/>
+            android:text="WiFi设置"
+            android:textSize="16sp"/>
 
         <ImageView
             android:id="@+id/image_wifi_set"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/wt_person_close"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="14dp"/>
+            android:layout_marginRight="14dp"
+            android:src="@mipmap/wt_person_close"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
-            android:background="@color/view_color"
-            android:layout_alignParentBottom="true"/>
+            android:layout_alignParentBottom="true"
+            android:background="@color/view_color"/>
 
     </RelativeLayout>
 
     <TextView
         android:id="@+id/user_wifi_list"
         android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:background="@color/linkman_bt"
-        android:text="可用WiFi列表"
+        android:layout_height="40dp"
+        android:layout_marginTop="20dp"
         android:gravity="center_vertical"
-        android:paddingLeft="14dp"/>
+        android:background="@color/WHITE"
+        android:paddingLeft="14dp"
+        android:text="可用WiFi列表"/>
 
 </LinearLayout>

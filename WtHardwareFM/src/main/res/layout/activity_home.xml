@@ -2,8 +2,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/WHITE"
+    android:background="@color/dinglan_orange"
     android:orientation="vertical" >
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="24dp"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,7 +17,7 @@
 
         <LinearLayout
             android:id="@+id/lin_news"
-            android:layout_width="wrap_content"
+            android:layout_width="48dp"
             android:layout_height="match_parent"
             android:background="@drawable/head_press"
             android:gravity="left|center"
@@ -70,7 +74,7 @@
 
         <LinearLayout
             android:id="@+id/lin_find"
-            android:layout_width="wrap_content"
+            android:layout_width="48dp"
             android:layout_height="match_parent"
             android:background="@drawable/head_press"
             android:gravity="center">
@@ -79,6 +83,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/wt_find"
+				android:paddingLeft="5dp"
                 android:layout_marginRight="18dp"/>
         </LinearLayout>
         

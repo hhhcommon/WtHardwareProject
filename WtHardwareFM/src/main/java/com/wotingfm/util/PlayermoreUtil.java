@@ -2,25 +2,25 @@ package com.wotingfm.util;
 
 
 import com.wotingfm.R;
-import com.wotingfm.activity.music.player.model.sharemodel;
+import com.wotingfm.ui.music.player.model.ShareModel;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlayermoreUtil {
 
-	private static List<sharemodel> list=new ArrayList<sharemodel>();
+	private static List<ShareModel> list=new ArrayList<>();
 
-	public static List<sharemodel> getPlayMoreList(String type) {
+	public static List<ShareModel> getPlayMoreList(String type) {
 
 		if(type!=null&&type.equals("AUDIO")){
 			if(list.size()!=0){
 				list.clear();
 			}
-			String[] textlist={"定时关闭","下载","播放历史","我喜欢的","本地音频","预定节目单","实时路况"};
-			int[] imglist={R.mipmap.play_record_img,R.mipmap.wt_play_xiazai,R.mipmap.play_record_img,R.mipmap.wt_dianzan_nomal,R.mipmap.wt_icon_lktts,R.mipmap.wt_icon_lktts,R.mipmap.wt_icon_lktts};
+			String[] textlist={"播放历史","我喜欢的","本地音频","分享","评论"};
+			int[] imglist={R.mipmap.img_play_more_lishi,R.mipmap.img_play_more_like,R.mipmap.img_play_more_local,R.mipmap.img_play_more_share,R.mipmap.img_play_more_comment};
 			for(int i=0;i<textlist.length;i++){
-				sharemodel sm=new sharemodel();
+				ShareModel sm=new ShareModel();
 				sm.setShareImageUrl(imglist[i]);
 				sm.setShareText(textlist[i]);
 				list.add(sm);
@@ -29,10 +29,10 @@ public class PlayermoreUtil {
 			if(list.size()!=0){
 				list.clear();
 			}
-		String[] textlist={"定时关闭","播放历史","我喜欢的","预定节目单","实时路况"};
-		int[] imglist={R.mipmap.play_record_img,R.mipmap.wt_play_xiazai,R.mipmap.play_record_img,R.mipmap.wt_dianzan_nomal,R.mipmap.wt_icon_lktts};
+		String[] textlist={"播放历史","我喜欢的","分享","评论"};
+		int[] imglist={R.mipmap.img_play_more_lishi,R.mipmap.img_play_more_like,R.mipmap.img_play_more_share,R.mipmap.img_play_more_comment};
 		for(int i=0;i<textlist.length;i++){
-		 sharemodel sm=new sharemodel();
+		 ShareModel sm=new ShareModel();
 		 sm.setShareImageUrl(imglist[i]);
 		 sm.setShareText(textlist[i]);
          list.add(sm);		 			
