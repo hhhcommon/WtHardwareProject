@@ -527,28 +527,11 @@
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.NoTitleBar"/>
 
-        <!--  -->
+        <!-- 友盟activity -->
         <activity
-            android:name=".wxapi.WXEntryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-
-        <!-- 騰訊qq -->
-        <activity
-            android:name="com.tencent.tauth.AuthActivity"
-            android:launchMode="singleTask"
-            android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-
-                <data android:scheme="tencent1105341370"/>
-            </intent-filter>
-        </activity>
+            android:name="com.wotingfm.ui.interphone.notify.activity.NotifyNewsActivity"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.NoTitleBar"/>
 
         <meta-data
             android:name="UMENG_APPKEY"
