@@ -293,7 +293,7 @@ public class CityListActivity extends BaseActivity implements OnClickListener {
             @Override
             public void afterTextChanged(Editable s) {
                 String search_name = s.toString();
-                if (search_name == null || search_name.equals("") || search_name.trim().equals("")) {
+                if (search_name.trim().equals("")) {
                     image_clear.setVisibility(View.INVISIBLE);
                     tvNoFriend.setVisibility(View.GONE);
                     // 关键词为空
