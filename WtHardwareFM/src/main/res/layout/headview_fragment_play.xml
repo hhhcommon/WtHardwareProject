@@ -15,14 +15,14 @@
 
             <TextView
                 android:id="@+id/tv_name"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="18dp"
                 android:layout_weight="1"
                 android:ellipsize="end"
-                android:gravity="left"
+                android:gravity="center"
                 android:singleLine="true"
                 android:textColor="@color/wt_login_third"
                 android:textSize="15sp"/>
@@ -35,9 +35,9 @@
 
             <ImageView
                 android:id="@+id/lin_left"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="60dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="40dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:layout_centerVertical="true"
@@ -51,16 +51,16 @@
 
                 <ImageView
                     android:id="@+id/img_news"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
                     android:layout_centerInParent="true"
                     android:scaleType="centerCrop"
                     android:src="@mipmap/wt_image_playertx"/>
 
                 <ImageView
                     android:id="@+id/image_liu"
-                    android:layout_width="100dp"
-                    android:layout_height="100dp"
+                    android:layout_width="110dp"
+                    android:layout_height="110dp"
                     android:layout_centerInParent="true"/>
 
                 <ImageView
@@ -74,9 +74,9 @@
 
             <ImageView
                 android:id="@+id/lin_right"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="60dp"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginRight="40dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:layout_alignParentRight="true"
@@ -89,8 +89,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:layout_marginLeft="18dp"
-            android:layout_marginRight="18dp"
+            android:layout_marginLeft="22dp"
+            android:layout_marginRight="22dp"
             android:gravity="center"
             android:orientation="horizontal">
 
@@ -134,9 +134,7 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="12dp"
             android:layout_marginTop="12dp"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp">
-
+           >
             <TextView
                 android:id="@+id/tv_like"
                 android:layout_width="0dp"
@@ -149,18 +147,7 @@
                 android:textColor="@color/dinglan_orange"
                 android:textSize="12sp"/>
 
-            <TextView
-                android:id="@+id/tv_programme"
-                android:layout_width="0dp"
-                android:layout_weight="1"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:drawablePadding="4dp"
-                android:drawableTop="@mipmap/img_play_more_jiemudan"
-                android:text="节目单"
-                android:visibility="gone"
-                android:textColor="@color/dinglan_orange"
-                android:textSize="12sp"/>
+
 
             <TextView
                 android:id="@+id/tv_download"
@@ -174,9 +161,21 @@
                 android:textColor="@color/dinglan_orange"
                 android:textSize="12sp"/>
 
+            <TextView
+                android:id="@+id/tv_programme"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:drawablePadding="4dp"
+                android:drawableTop="@mipmap/img_play_more_jiemudan"
+                android:text="播单"
+                android:visibility="gone"
+                android:textColor="@color/dinglan_orange"
+                android:textSize="12sp"/>
 
             <TextView
-                android:id="@+id/tv_comment"
+                android:id="@+id/tv_head_sequ"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
@@ -212,7 +211,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:drawableLeft="@mipmap/wt_play_xiangqing"
-                android:layout_marginLeft="18dp"
+                android:layout_marginLeft="11dp"
                 android:gravity="center"
                 android:drawablePadding="3dp"
                 android:text="节目详情"
@@ -385,8 +384,8 @@
             android:paddingLeft="15dp"
             android:gravity="center_vertical"
             android:text="相关推荐"
-            android:textColor="@color/s_green"
-            android:textSize="14sp"/>
+            android:textColor="@color/beijing"
+            android:textSize="12sp"/>
 
     </LinearLayout>
 

@@ -129,8 +129,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, XL
     public static TextView mPlayAudioTextLike;// 喜欢播放节目
     public static TextView mPlayAudioTextProgram;// 节目单
     public static TextView mPlayAudioTextDownLoad;// 下载
-
-    public static TextView mPlayAudioTextComment;// 评论
     public static TextView mPlayAudioTextMore;// 更多
     private View mViewMoreChose;// 点击"更多"显示
 
@@ -178,6 +176,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, XL
     private String SequImage;
     private String SequName;
     private boolean IsSequ;
+    private static TextView mPlayAudioTextSequ;
+    private static String DownLoadUrl;
+
 
     /////////////////////////////////////////////////////////////
     // 以下是生命周期方法
@@ -219,7 +220,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, XL
         mPlayAudioTextLike = (TextView) view.findViewById(R.id.tv_like);// 喜欢播放节目
         mPlayAudioTextProgram = (TextView) view.findViewById(R.id.tv_programme);// 节目单
         mPlayAudioTextDownLoad = (TextView) view.findViewById(R.id.tv_download);// 下载
-        mPlayAudioTextComment = (TextView) view.findViewById(R.id.tv_comment);// 评论
+        mPlayAudioTextSequ = (TextView) view.findViewById(R.id.tv_head_sequ);// 专辑
         mPlayAudioTextMore = (TextView) view.findViewById(R.id.tv_more);// 更多
 
         mProgramDetailsView = view.findViewById(R.id.rv_details);// 节目详情布局
@@ -261,7 +262,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, XL
         mPlayAudioTextLike.setOnClickListener(this);// 喜欢播放节目
         mPlayAudioTextProgram.setOnClickListener(this);// 节目单
         mPlayAudioTextDownLoad.setOnClickListener(this);// 下载
-        mPlayAudioTextComment.setOnClickListener(this);// 评论
+        mPlayAudioTextSequ.setOnClickListener(this);// 专辑
         mPlayAudioTextMore.setOnClickListener(this);// 更多
         mProgramVisible.setOnClickListener(this);// 点击显示节目详情
         setListener();
@@ -708,55 +709,45 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, XL
                 }
             }
 
-            // 节目单 RADIO
-            if(type != null && type.equals("RADIO")) {
-                mPlayAudioTextProgram.setVisibility(View.VISIBLE);
-                mPlayAudioTextProgram.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-                mPlayAudioTextProgram.setCompoundDrawablesWithIntrinsicBounds(
-                        null, context.getResources().getDrawable(R.mipmap.img_play_more_jiemudan), null, null);
-            } else {// 电台 有节目单
-                mPlayAudioTextProgram.setVisibility(View.GONE);
-            }
 
             // 下载状态
             if (type != null && type.equals("AUDIO")) {// 可以下载
                 mPlayAudioTextDownLoad.setVisibility(View.VISIBLE);
+                mPlayAudioTextSequ.setVisibility(View.VISIBLE);
+                mPlayAudioTextProgram.setVisibility(View.GONE);
                 if(!TextUtils.isEmpty(GlobalConfig.playerobject.getLocalurl())) {// 已下载
                     mPlayAudioTextDownLoad.setClickable(false);
-                    mPlayAudioTextDownLoad.setCompoundDrawablesWithIntrinsicBounds(
-                            null, context.getResources().getDrawable(R.mipmap.wt_play_xiazai_no), null, null);
+                    mPlayAudioTextDownLoad.setCompoundDrawablesWithIntrinsicBounds(null, context.getResources().getDrawable(R.mipmap.wt_play_xiazai_no), null, null);
                     mPlayAudioTextDownLoad.setTextColor(context.getResources().getColor(R.color.gray));
                     mPlayAudioTextDownLoad.setText("已下载");
                 } else {// 没有下载
                     mPlayAudioTextDownLoad.setClickable(true);
-                    mPlayAudioTextDownLoad.setCompoundDrawablesWithIntrinsicBounds(
-                            null, context.getResources().getDrawable(R.mipmap.wt_play_xiazai), null, null);
+                    mPlayAudioTextDownLoad.setCompoundDrawablesWithIntrinsicBounds(null, context.getResources().getDrawable(R.mipmap.wt_play_xiazai), null, null);
                     mPlayAudioTextDownLoad.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
                     mPlayAudioTextDownLoad.setText("下载");
                 }
             } else {// 不可以下载
-                if(type != null && type.equals("TTS")) {
                     mPlayAudioTextDownLoad.setVisibility(View.VISIBLE);
+                    mPlayAudioTextProgram.setVisibility(View.VISIBLE);
+                    mPlayAudioTextSequ.setVisibility(View.GONE);
                     mPlayAudioTextDownLoad.setClickable(false);
-                    mPlayAudioTextDownLoad.setCompoundDrawablesWithIntrinsicBounds(
-                            null, context.getResources().getDrawable(R.mipmap.wt_play_xiazai_no), null, null);
+                    mPlayAudioTextProgram.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
+                    mPlayAudioTextProgram.setCompoundDrawablesWithIntrinsicBounds(null, context.getResources().getDrawable(R.mipmap.img_play_more_jiemudan), null, null);
+                    mPlayAudioTextDownLoad.setCompoundDrawablesWithIntrinsicBounds(null, context.getResources().getDrawable(R.mipmap.wt_play_xiazai_no), null, null);
                     mPlayAudioTextDownLoad.setTextColor(context.getResources().getColor(R.color.gray));
                     mPlayAudioTextDownLoad.setText("下载");
-                } else {
-                    mPlayAudioTextDownLoad.setVisibility(View.GONE);
-                }
             }
 
             // 评论  TTS 不支持评论
             if(type != null && type.equals("TTS")) {
-                mPlayAudioTextComment.setClickable(false);
-                mPlayAudioTextComment.setTextColor(context.getResources().getColor(R.color.gray));
-                mPlayAudioTextComment.setCompoundDrawablesWithIntrinsicBounds(
+                mPlayAudioTextSequ.setClickable(false);
+                mPlayAudioTextSequ.setTextColor(context.getResources().getColor(R.color.gray));
+                mPlayAudioTextSequ.setCompoundDrawablesWithIntrinsicBounds(
                         null, context.getResources().getDrawable(R.mipmap.wt_comment_image_gray), null, null);
             } else if(type != null && !type.equals("TTS")) {
-                mPlayAudioTextComment.setClickable(true);
-                mPlayAudioTextComment.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-                mPlayAudioTextComment.setCompoundDrawablesWithIntrinsicBounds(
+                mPlayAudioTextSequ.setClickable(true);
+                mPlayAudioTextSequ.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
+                mPlayAudioTextSequ.setCompoundDrawablesWithIntrinsicBounds(
                         null, context.getResources().getDrawable(R.mipmap.wt_comment_image), null, null);
             }
 
@@ -1071,13 +1062,25 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, XL
 
 
     // 内容的下载
+
+    // 内容的下载
     private void download() {
         LanguageSearchInside data = GlobalConfig.playerobject;
-        if(data == null ||!data.getMediaType().equals("AUDIO")) {
-            ToastUtils.show_always(context, "此节目无法下载");
-            return ;
+        if(DownLoadUrl==null){
+            if(!TextUtils.isEmpty(data.getContentPlay())){
+                DownLoadUrl=data.getContentPlay();
+            }else{
+                ToastUtils.show_always(context,"下载数据有异常");
+                return;
+            }
+        }else{
+            if(DownLoadUrl.equals(data.getContentPlay())){
+                ToastUtils.show_always(context,"下载任务正在进行当中");
+            }else{
+                DownLoadUrl=data.getContentPlay();
+            }
         }
-
+        if (data == null || !data.getMediaType().equals("AUDIO")) return;
         if (data.getLocalurl() != null) {
             ToastUtils.show_always(context, "此节目已经保存到本地，请到已下载界面查看");
             return;
@@ -1241,7 +1244,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, XL
                     ToastUtils.show_always(context, "本节目没有所属专辑");
                 }
                 break;
-            case R.id.tv_comment:// 专辑
+            case R.id.tv_head_sequ:// 专辑
                 if(GlobalConfig.playerobject!=null){
                     try {
                         if(GlobalConfig.playerobject.getSequId()!=null){
@@ -1448,9 +1451,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, XL
                             contentUrlList.clear();
                             if (GlobalConfig.playerobject != null && allList != null) {
                                 for (int i = 0; i < allList.size(); i++) {
+                                    if(allList.get(i).getContentPlay()!=null){
                                     if (allList.get(i).getContentPlay().equals(GlobalConfig.playerobject.getContentPlay())) {
                                         allList.get(i).setType("0");
                                         num = i;
+                                    }
                                     }
                                 }
                             }

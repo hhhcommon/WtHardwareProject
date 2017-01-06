@@ -172,8 +172,11 @@ public class FileInfoDao {
 				String url = cursor.getString(cursor.getColumnIndex("url"));
 				String filename = cursor.getString(cursor.getColumnIndex("filename"));
 				String seqimageurl = cursor.getString(cursor.getColumnIndex("sequimgurl"));
+				String localUrl=cursor.getString(cursor.getColumnIndex("localurl"));
+
 				// 把每个对象都放到history对象里
 				FileInfo h = new FileInfo(url, filename,id,seqimageurl);
+				h.setLocalurl(localUrl);
 				// 网m里储存每个history对象
 				m.add(h);
 			}
