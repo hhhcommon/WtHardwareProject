@@ -393,7 +393,6 @@ public class TotalFragment extends Fragment {
                     dbDao.addHistory(history);
 					if (PlayerFragment.context != null) {
 						HomeActivity.UpdateViewPager();
-                        PlayerFragment.TextPage=1;
                         Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                         Bundle bundle1=new Bundle();
                         bundle1.putString("text", list.get(groupPosition).getList().get(childPosition).getContentName());

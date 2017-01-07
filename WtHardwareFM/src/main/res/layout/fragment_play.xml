@@ -6,13 +6,167 @@
     android:background="@color/beige"
     android:orientation="vertical">
 
-    <com.wotingfm.widget.xlistview.XListView
-        android:id="@+id/listView"
+    <RelativeLayout
+        android:id="@+id/recommend_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:animationCache="false"
-        android:divider="@color/WHITE"
-        android:scrollbars="none"
-        android:scrollingCache="false"/>
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/text_recommend_gone"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="相关推荐"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:textSize="18sp"
+            android:background="@color/app_bg"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/wt_play_recommend_gone"
+            android:layout_alignTop="@+id/text_recommend_gone"
+            android:layout_alignBottom="@+id/text_recommend_gone"
+            android:layout_alignParentRight="true"/>
+
+        <com.wotingfm.widget.TipView
+            android:id="@+id/tip_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/text_recommend_gone"
+            android:visibility="gone"/>
+
+        <com.wotingfm.widget.xlistview.XListView
+            android:id="@+id/list_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/text_recommend_gone"
+            android:animationCache="false"
+            android:divider="@color/WHITE"
+            android:scrollbars="none"
+            android:scrollingCache="false"/>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relative_play"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="20dp">
+
+        <TextView
+            android:id="@+id/play_current_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="00:00:00"
+            android:textSize="20sp"
+            android:textColor="@color/dinglan_orange"/>
+
+        <ImageView
+            android:id="@+id/play_more"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_marginRight="10dp"
+            android:padding="5dp"
+            android:src="@mipmap/wt_play_right_more"
+            android:layout_alignParentRight="true"/>
+
+        <com.wotingfm.widget.MarqueeTextView
+            android:id="@+id/play_audio_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/play_current_time"
+            android:layout_marginTop="35dp"
+            android:gravity="center"
+            android:layout_centerHorizontal="true"
+            android:focusable="true"
+            android:fitsSystemWindows="true"
+            android:marqueeRepeatLimit="marquee_forever"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:text="异次元的治愈系少女"
+            android:singleLine="true"
+            android:textSize="26sp"
+            android:textColor="@color/wt_login_third"/>
+
+        <ImageView
+            android:id="@+id/play_cover"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/wt_image_playertx"
+            android:layout_centerInParent="true"/>
+
+        <ImageView
+            android:id="@+id/play_cover_mask"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"/>
+
+        <ImageView
+            android:id="@+id/image_play"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_centerInParent="true"
+            android:src="@mipmap/wt_play_stop"/>
+
+        <ImageView
+            android:id="@+id/image_left"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/wt_play_left"/>
+
+        <ImageView
+            android:id="@+id/image_right"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="5dp"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/wt_play_right"/>
+
+        <SeekBar
+            android:id="@+id/seek_bar"
+            android:layout_width="328dp"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/text_recommend_visible"
+            android:layout_marginBottom="45dp"
+            android:paddingLeft="20dp"
+            android:paddingRight="20dp"
+            android:minHeight="3dp"
+            android:maxHeight="3dp"
+            android:progressDrawable="@drawable/bg_seekbar"
+            android:thumb="@mipmap/wt_seekbar_thumb"
+            android:thumbOffset="20dp"/>
+
+        <TextView
+            android:id="@+id/text_recommend_visible"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:text="相关推荐"
+            android:gravity="center_vertical"
+            android:paddingLeft="10dp"
+            android:textSize="18sp"
+            android:background="@color/app_bg"
+            android:layout_alignParentBottom="true"/>
+
+        <ImageView
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/wt_play_recommend_visible"
+            android:layout_alignTop="@id/text_recommend_visible"
+            android:layout_alignBottom="@id/text_recommend_visible"
+            android:layout_alignParentRight="true"/>
+
+    </RelativeLayout>
 
 </LinearLayout>
