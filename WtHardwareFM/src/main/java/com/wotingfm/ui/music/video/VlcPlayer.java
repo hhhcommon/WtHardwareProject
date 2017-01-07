@@ -1,12 +1,9 @@
 package com.wotingfm.ui.music.video;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
-
-import com.wotingfm.ui.music.player.fragment.PlayerFragment;
 
 import org.videolan.libvlc.EventHandler;
 import org.videolan.libvlc.LibVLC;
@@ -17,7 +14,6 @@ public class VlcPlayer implements WtAudioPlay {
 	private LibVLC audioPlay;
 	private String Url;
 	private static VlcPlayer vlcplayer;
-	private static Context context;
 
 	private VlcPlayer() {
 		try {
@@ -30,14 +26,9 @@ public class VlcPlayer implements WtAudioPlay {
 	}
 
 	public static VlcPlayer getInstance() {
-		return getInstance(null);
-	}
-
-	public static VlcPlayer getInstance(Context contexts) {
 		if (vlcplayer == null) {
 			vlcplayer = new VlcPlayer();
 		}
-		context = contexts;
 		return vlcplayer;
 	}
 
@@ -117,7 +108,7 @@ public class VlcPlayer implements WtAudioPlay {
 			switch (msg.getData().getInt("event")) {
 				case EventHandler.MediaPlayerEncounteredError:// 播放出现错误播下一首
 					Log.e("TAG", "play error -- > " + Url);
-					PlayerFragment.playNext();
+//					PlayerFragment.playNext();
 					break;
 				case EventHandler.MediaPlayerOpening:
 					Log.e("url", "MediaPlayerOpenning()" + Url);
@@ -133,7 +124,7 @@ public class VlcPlayer implements WtAudioPlay {
 					break;
 				case EventHandler.MediaPlayerEndReached:// 播放完成播下一首
 					Log.e("TAG", "========= MediaPlayerEndReached =========");
-					PlayerFragment.playNext();
+//					PlayerFragment.playNext();
 				case EventHandler.MediaPlayerBuffering:
 					break;
 			}

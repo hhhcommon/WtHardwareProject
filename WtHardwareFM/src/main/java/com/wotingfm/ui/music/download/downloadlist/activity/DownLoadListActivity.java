@@ -236,7 +236,6 @@ public class DownLoadListActivity extends BaseActivity implements OnClickListene
 								if (PlayerFragment.context != null) {
 									MainActivity.changeToMusic();
 									HomeActivity.UpdateViewPager();
-									PlayerFragment.TextPage=1;
 									Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
 									Bundle bundle1=new Bundle();
 									bundle1.putString("text", mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4));
@@ -257,8 +256,7 @@ public class DownLoadListActivity extends BaseActivity implements OnClickListene
 								//没网的状态下
 								MainActivity.changeToMusic();
 								HomeActivity.UpdateViewPager();
-								PlayerFragment.TextPage=1;
-								PlayerFragment.playNoNet();
+//								PlayerFragment.playNoNet();
 							}
 							setResult(1);
 							finish();

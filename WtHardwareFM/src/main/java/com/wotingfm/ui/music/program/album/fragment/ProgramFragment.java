@@ -180,7 +180,6 @@ public class ProgramFragment extends Fragment implements OnClickListener {
                         if(PlayerFragment.context!=null){
                             MainActivity.changeToMusic();
                             HomeActivity.UpdateViewPager();
-                            PlayerFragment.TextPage=1;
                             Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                             Bundle bundle1=new Bundle();
                             bundle1.putString("text",SubList.get(position).getContentName());
