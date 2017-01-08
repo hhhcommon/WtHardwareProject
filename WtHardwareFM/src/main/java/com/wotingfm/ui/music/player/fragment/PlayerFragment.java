@@ -12,6 +12,7 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.SeekBar;
@@ -41,7 +42,7 @@ import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.L;
 import com.wotingfm.util.TimeUtils;
 import com.wotingfm.util.ToastUtils;
-import com.wotingfm.widget.MarqueeTextView;
+import com.wotingfm.widget.AutoScrollTextView;
 import com.wotingfm.widget.TipView;
 import com.wotingfm.widget.xlistview.XListView;
 
@@ -65,6 +66,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     private IntegrationPlayer mPlayer;// 播放器
     private SearchPlayerHistoryDao mSearchHistoryDao;// 搜索历史数据库
     private PlayerListAdapter adapter;
+    private WindowManager windowManager;
 
     private List<LanguageSearchInside> playList = new ArrayList<>();// 播放列表
     private List<LanguageSearchInside> subList = new ArrayList<>();// 保存临时数据
@@ -75,7 +77,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     private ImageView imagePlay;// 播放 OR 暂停
 
     private TextView mPlayCurrentTime;// 当前播放时间
-    private MarqueeTextView mPlayAudioTitle;// 当前播放节目的标题
+    private AutoScrollTextView mPlayAudioTitle;// 当前播放节目的标题
     private ImageView imagePlayCover;// 节目封面图片
 
     private View recommendView;// 相关推荐部分
@@ -147,7 +149,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         mPlayAudioImageCoverMask.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_bd));
 
         mPlayCurrentTime = (TextView) rootView.findViewById(R.id.play_current_time);// 当前播放时间
-        mPlayAudioTitle = (MarqueeTextView) rootView.findViewById(R.id.play_audio_title);// 当前播放节目的标题
+        mPlayAudioTitle = (AutoScrollTextView) rootView.findViewById(R.id.play_audio_title);// 当前播放节目的标题
+        mPlayAudioTitle.init(windowManager);
+        mPlayAudioTitle.startScroll();
         imagePlayCover = (ImageView) rootView.findViewById(R.id.play_cover);// 节目封面图片
 
         mSeekBar = (SeekBar) rootView.findViewById(R.id.seek_bar);// 播放进度
@@ -179,6 +183,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
 
     // 初始化数据
     private void initData() {
+        windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         registeredBroad();
 
         mSearchHistoryDao = new SearchPlayerHistoryDao(context);// 数据库对象
@@ -377,7 +382,10 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     if(title == null || title.trim().equals("")) {
                         title = "未知";
                     }
+
                     mPlayAudioTitle.setText(title);
+                    mPlayAudioTitle.init(windowManager);
+                    mPlayAudioTitle.startScroll();
 
                     // 封面图片
                     String coverUrl = GlobalConfig.playerObject.getContentImg();// imagePlayCover
