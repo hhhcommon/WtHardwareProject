@@ -112,6 +112,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                 recommendView.setVisibility(View.GONE);
                 break;
             case R.id.play_more:// 更多
+                if(GlobalConfig.playerObject == null || GlobalConfig.playerObject.getMediaType() == null) return ;
                 startActivity(new Intent(context, PlayerMoreOperationActivity.class));
                 break;
             case R.id.image_play:// 播放 OR 暂停
