@@ -43,7 +43,7 @@ public class GlobalConfig {
     public static final int NETWORK_STATE_CMWAP = 3;
     public static final int NETWORK_STATE_CTWAP = 4;
     public static int CURRENT_NETWORK_STATE_TYPE = NETWORK_STATE_IDLE;
-    public static final int HTTP_CONNECTION_TIMEOUT = 0 * 1000;                                // volley请求超时 时间
+    public static final int HTTP_CONNECTION_TIMEOUT = 10 * 1000;                                // volley请求超时 时间
     
     public static final int dbVersionCode = 6;    // 数据库版本号
     public static int activityType =1;            // 此时的界面

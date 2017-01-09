@@ -87,6 +87,7 @@ public class OnLineFragment extends Fragment  {
     private PullToRefreshLayout mPullToRefreshLayout;
     private MessageReceiver Receiver;
     private String cityName;
+    private String ResultList;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -317,14 +318,21 @@ public class OnLineFragment extends Fragment  {
                 }
                 try {
                     ReturnType = result.getString("ReturnType");
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
                     if (ReturnType != null && ReturnType.equals("1001")) {
                         // 获取列表
-                        String ResultList = result.getString("ResultList");
-                        JSONTokener jsonParser = new JSONTokener(ResultList);
-                        JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                        String MainList = arg1.getString("List");
-                        mainLists = new Gson().fromJson(MainList, new TypeToken<List<RankInfo>>() {
-                        }.getType());
+                        try {
+                            ResultList = result.getString("ResultList");
+                            JSONTokener jsonParser = new JSONTokener(ResultList);
+                            JSONObject arg1 = (JSONObject) jsonParser.nextValue();
+                            String MainList = arg1.getString("List");
+                            mainLists = new Gson().fromJson(MainList, new TypeToken<List<RankInfo>>() {
+                            }.getType());
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
                         if (mainLists != null && mainLists.size() != 0) {
                             if (mainLists.size() > 3) {
                                 List tempList = new ArrayList();
@@ -344,17 +352,15 @@ public class OnLineFragment extends Fragment  {
                             new HeightListView(context).setListViewHeightBasedOnChildren(gridView);
                         } else {
                             gridView.setVisibility(View.GONE);
-
                         }
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
+
             }
 
             @Override
             protected void requestError(VolleyError error) {
                 // 请求错误信息已经在方法中统一打印了  这里就不需要重复打印
+                error.printStackTrace();
             }
         });
     }
@@ -438,18 +444,26 @@ public class OnLineFragment extends Fragment  {
                     return;
                 }
                 page++;
-                try {
-                    ReturnType = result.getString("ReturnType");
+                  try {
+                      ReturnType = result.getString("ReturnType");
+                  }catch (Exception e){
+                      e.printStackTrace();
+                  }
                     if (ReturnType != null) {
                         if (ReturnType.equals("1001")) {
                             // 获取列表
-                            String ResultList = result.getString("ResultList");
-                            JSONTokener jsonParser = new JSONTokener(ResultList);
-                            JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                            MainList = arg1.getString("List");
-                            BeginCatalogId = arg1.getString("BeginCatalogId");
-                            mainList = new Gson().fromJson(MainList, new TypeToken<List<RadioPlay>>() {
-                            }.getType());
+                            try {
+                                String ResultList = result.getString("ResultList");
+                                JSONTokener jsonParser = new JSONTokener(ResultList);
+                                JSONObject arg1 = (JSONObject) jsonParser.nextValue();
+                                MainList = arg1.getString("List");
+                                BeginCatalogId = arg1.getString("BeginCatalogId");
+                                mainList = new Gson().fromJson(MainList, new TypeToken<List<RadioPlay>>() {
+                                }.getType());
+                            }catch (Exception e){
+                                e.printStackTrace();
+                            }
+                        if(mainList!=null&&mainList.size()>0){
                             if (RefreshType == 1) {
                                 mPullToRefreshLayout.refreshFinish(PullToRefreshLayout.SUCCEED);
                                 newList.clear();
@@ -470,6 +484,9 @@ public class OnLineFragment extends Fragment  {
                                 listView_Main.expandGroup(i);
                             }
                             setItemListener();
+                        }else{
+
+                        }
                         } else {
                             ToastUtils.show_always(context, "暂无数据");
                         }
@@ -477,9 +494,6 @@ public class OnLineFragment extends Fragment  {
 
                         ToastUtils.show_always(context, "暂无数据");
                     }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
             }
 
             @Override
