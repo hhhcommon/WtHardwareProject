@@ -345,7 +345,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
                 protected void requestSuccess(JSONObject result) {
                     if (dialogs != null) dialogs.dismiss();
                     if (isCancelRequest) return;
-                    try {
+                    try{
                         LinkMan list = new Gson().fromJson(result.toString(), new TypeToken<LinkMan>() {}.getType());
                         try {
                             GlobalConfig.list_group = srclist_g = list.getGroupList().getGroups();
@@ -354,6 +354,8 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
                         }
                         try {
                             GlobalConfig.list_person = srclist_p = list.getFriendList().getFriends();
+                            int b=srclist_p.size();
+
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -364,6 +366,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
                             if (srclist_g != null && srclist_g.size() != 0) {
                                 groupList.clear();
                                 groupList.addAll(srclist_g);
+                                int a =  groupList.size();
                                 if (adapter_group == null) {
                                     adapter_group = new TalkGroupAdapter(context, groupList);
                                     listView_group.setAdapter(adapter_group);
@@ -389,16 +392,17 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
                             }
                             if((srclist_g == null || srclist_g.size() <= 0) && (srclist_p == null || srclist_p.size() <= 0)) {
                                 headViewNoFriendTip.setVisibility(View.VISIBLE);
-                                headViewNoFriendTip.setTipView(TipView.TipStatus.NO_DATA, "您还没有俩天对象哟\n快去找好友们聊天吧");
+                                headViewNoFriendTip.setTipView(TipView.TipStatus.NO_DATA, "您还没有聊天对象哟\n快去找好友们聊天吧");
                             } else {
                                 headViewNoFriendTip.setVisibility(View.GONE);
                             }
                             setListViewListener();
                         }
-                    } catch (Exception e) {
+                    }catch (Exception e){
                         e.printStackTrace();
                     }
-                }
+                    }
+
 
                 @Override
                 protected void requestError(VolleyError error) {

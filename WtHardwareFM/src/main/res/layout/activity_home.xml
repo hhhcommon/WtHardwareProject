@@ -17,7 +17,6 @@
             android:id="@+id/lin_news"
             android:layout_width="48dp"
             android:layout_height="match_parent"
-            android:background="@drawable/head_press"
             android:gravity="left|center"
             android:layout_marginRight="12dp">
 
@@ -74,7 +73,6 @@
             android:id="@+id/lin_find"
             android:layout_width="48dp"
             android:layout_height="match_parent"
-            android:background="@drawable/head_press"
             android:gravity="center">
 
             <ImageView

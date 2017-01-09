@@ -7,26 +7,26 @@
     >
 
     <LinearLayout
-        android:layout_width="80dp"
-        android:layout_height="80dp"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
         android:orientation="vertical"
         android:background="@drawable/linkman_bt"
         android:gravity="center"
         >
     <ImageView 
         android:id="@+id/img_gv"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:gravity="center"
         />
     </LinearLayout>
     <TextView
         android:id="@+id/tv_gv"
         android:gravity="center|"
-        android:layout_width="80dp"
+        android:layout_width="75dp"
         android:layout_height="wrap_content"
         android:text="测试"
-        android:layout_marginTop="2dp"
+        android:layout_marginTop="4dp"
         android:textColor="@color/black"
         android:textSize="14sp"
         />
