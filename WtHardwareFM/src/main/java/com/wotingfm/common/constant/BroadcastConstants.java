@@ -4,11 +4,6 @@ public class BroadcastConstants {
 	public static final String SEARCHVOICE="SEARCHVOICE";//search
 	public static final String PLAYERVOICE="PLAYERVOICE";//播放主页
 	public static final String FINDVOICE="FINDVOICE";//查找好友
-	//定时
-	public static final String TIMER_START = "TIMER_START";
-	public static final String TIMER_STOP = "TIMER_STOP";
-	public static final String TIMER_UPDATE = "TIMER_UPDATE";
-	public static final String TIMER_END = "TIMER_END";
 	//下载
 	public static final String ACTION_START = "ACTION_START";
 	public static final String ACTION_STOP = "ACTION_STOP";
@@ -24,8 +19,11 @@ public class BroadcastConstants {
 	//
 	public static final String ACTIVITY_CHANGE="ACTIVITY_CHANGE";
 
+	//PUSH_REGISTER-----新加数据
+	public static final String PUSH_REGISTER = "PUSH_REGISTER";
+
 	//SOCKET_PUSH-----push
-	public static final String SOCKET_PUSH="SOCKET_PUSH";
+	public static final String PUSH="SOCKET_PUSH";
 
 	//UP_DATA_GROUP-----
 	public static final String UP_DATA_GROUP="UP_DATA_GROUP";

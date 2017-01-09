@@ -91,7 +91,7 @@
 
         <!-- 启动时的欢迎界面 -->
         <activity
-            android:name=".activity.common.splash.activity.SplashActivity"
+            android:name=".ui.common.splash.SplashActivity"
             android:screenOrientation="portrait"
             android:theme="@style/SplashTheme">
             <intent-filter>
@@ -103,7 +103,7 @@
 
         <!-- 主界面 -->
         <activity
-            android:name=".activity.common.main.MainActivity"
+            android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan">
@@ -112,117 +112,107 @@
 
         <!-- 创建群组主界面 -->
         <activity
-            android:name=".activity.im.interphone.creategroup.main.CreateGroupMainActivity"
+            android:name=".ui.interphone.group.creategroup.main.CreateGroupMainActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 创建群组子界面  即有创建公开群、密码群、验证群 -->
-        <activity
-            android:name=".activity.im.interphone.creategroup.create.CreateGroupItemActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 消息中心 -->
-        <activity
-            android:name=".activity.im.interphone.notify.activity.NotifyNewActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 头像剪裁界面 -->
         <activity
-            android:name=".activity.im.interphone.creategroup.photocut.PhotoCutActivity"
+            android:name=".ui.common.photocut.PhotoCutActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 查找好友、群组界面 -->
         <activity
-            android:name=".activity.im.interphone.find.FindActivity"
+            android:name=".ui.interphone.find.main.FindActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 查找好友、群组显示结果界面 -->
         <activity
-            android:name=".activity.im.interphone.find.result.FindNewsResultActivity"
+            android:name=".ui.interphone.find.result.FindNewsResultActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 扫描二维码界面 -->
         <activity
-            android:name=".activity.im.interphone.scanning.activity.CaptureActivity"
+            android:name=".ui.common.scanning.activity.CaptureActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 扫描二维码显示结果界面 -->
         <activity
-            android:name=".activity.im.interphone.scanning.activity.ResultActivity"
+            android:name=".ui.common.scanning.activity.ResultActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 添加好友界面 -->
         <activity
-            android:name=".activity.im.interphone.find.add.FriendAddActivity"
+            android:name=".ui.interphone.find.friendadd.FriendAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 添加群组界面 -->
         <activity
-            android:name=".activity.im.interphone.find.add.GroupAddActivity"
+            android:name=".ui.interphone.find.groupadd.GroupAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".activity.im.interphone.alert.CallAlertActivity"
+            android:name=".ui.interphone.alert.CallAlertActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 我的界面 -->
         <activity
-            android:name=".activity.mine.main.MineActivity"
+            android:name=".ui.mine.MineActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 关于我们 -->
         <activity
-            android:name=".activity.mine.set.about.AboutActivity"
+            android:name=".ui.mine.set.about.AboutActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 下载位置 -->
         <activity
-            android:name=".activity.mine.set.downloadposition.DownloadPositionActivity"
+            android:name=".ui.mine.set.downloadposition.DownloadPositionActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 意见反馈 -->
         <activity
-            android:name=".activity.mine.set.feedback.activity.FeedbackActivity"
+            android:name=".ui.mine.set.feedback.activity.FeedbackActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 帮助 -->
         <activity
-            android:name=".activity.mine.set.help.HelpActivity"
+            android:name=".ui.mine.set.help.HelpActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 修改个人资料 -->
         <activity
-            android:name=".activity.person.updatepersonnews.UpdatePersonActivity"
+            android:name=".ui.mine.person.updatepersonnews.UpdatePersonActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
@@ -230,33 +220,33 @@
 
         <!-- 修改用户号 -->
         <activity
-            android:name=".activity.mine.set.updateusernum.UpdateUserNumberActivity"
+            android:name=".ui.mine.set.updateusernum.UpdateUserNumberActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 我喜欢的界面 -->
         <activity
-            android:name=".activity.music.favorite.activity.FavoriteActivity"
+            android:name=".ui.music.favorite.activity.FavoriteActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".activity.music.main.HomeActivity"
+            android:name=".ui.music.main.HomeActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 登录 -->
         <activity
-            android:name=".activity.person.login.LoginActivity"
+            android:name=".ui.mine.person.login.LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 注册 -->
         <activity
-            android:name=".activity.person.register.RegisterActivity"
+            android:name=".ui.mine.person.register.RegisterActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
@@ -264,7 +254,7 @@
 
         <!-- 忘记密码 -->
         <activity
-            android:name=".activity.person.forgetpassword.ForgetPasswordActivity"
+            android:name=".ui.mine.person.forgetpassword.ForgetPasswordActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
@@ -272,309 +262,254 @@
 
         <!-- 修改密码 -->
         <activity
-            android:name=".activity.person.modifypassword.ModifyPasswordActivity"
+            android:name=".ui.mine.person.modifypassword.ModifyPasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 反馈建议历史 -->
         <activity
-            android:name=".activity.mine.set.feedback.feedbacklist.activity.FeedbackListActivity"
+            android:name=".ui.mine.set.feedback.feedbacklist.activity.FeedbackListActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 反馈建议历史 -->
         <activity
-            android:name=".activity.common.favoritetype.FavoriteProgramTypeActivity"
+            android:name=".ui.common.favoritetype.FavoriteProgramTypeActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 播放历史界面 -->
         <activity
-            android:name=".activity.music.playhistory.activity.PlayHistoryActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 定时关闭界面 -->
-        <activity
-            android:name=".activity.music.timeset.TimerPowerOffActivity"
+            android:name=".ui.music.playhistory.activity.PlayHistoryActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 搜索界面 -->
         <activity
-            android:name=".activity.music.search.activity.SearchLikeActivity"
+            android:name=".ui.music.search.activity.SearchLikeActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".activity.im.interphone.alert.ReceiveAlertActivity"
+            android:name=".ui.interphone.alert.ReceiveAlertActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".activity.im.interphone.groupmanage.groupdetail.activity.GroupDetailActivity"
+            android:name=".ui.interphone.group.groupcontrol.groupdetail.activity.GroupDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".activity.im.interphone.groupmanage.transferauthority.TransferAuthorityActivity"
+            android:name=".ui.interphone.group.groupcontrol.transferauthority.TransferAuthorityActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".activity.im.interphone.groupmanage.memberadd.activity.MemberAddActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity
-            android:name=".activity.im.interphone.groupmanage.memberdel.MemberDelActivity"
+            android:name=".ui.interphone.group.groupcontrol.memberadd.activity.MemberAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 全部群成员 -->
         <activity
-            android:name=".activity.im.interphone.groupmanage.allgroupmember.activity.AllGroupMemberActivity"
+            android:name=".ui.interphone.group.groupcontrol.allgroupmember.activity.AllGroupMemberActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 修改群密码 -->
         <activity
-            android:name=".activity.im.interphone.groupmanage.modifygrouppassword.ModifyGroupPasswordActivity"
+            android:name=".ui.interphone.group.groupcontrol.modifygrouppassword.ModifyGroupPasswordActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 对讲主页 -->
         <activity
-            android:name=".activity.im.interphone.main.DuiJiangActivity"
+            android:name=".ui.interphone.main.DuiJiangActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 审核消息 -->
         <activity
-            android:name=".activity.im.interphone.groupmanage.joingrouplist.activity.JoinGroupListActivity"
+            android:name=".ui.interphone.group.groupcontrol.joingrouplist.activity.JoinGroupListActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".activity.im.interphone.groupmanage.handlegroupapply.HandleGroupApplyActivity"
+            android:name=".ui.interphone.group.groupcontrol.handlegroupapply.HandleGroupApplyActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 偏好设置界面 -->
         <activity
-            android:name=".activity.mine.set.preference.activity.PreferenceActivity"
+            android:name=".ui.mine.set.preference.activity.PreferenceActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 城市列表 -->
         <activity
-            android:name=".activity.music.program.citylist.activity.CityListActivity"
+            android:name=".ui.music.program.citylist.activity.CityListActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 下载主页 -->
         <activity
-            android:name=".activity.music.download.activity.DownloadActivity"
+            android:name=".ui.music.download.activity.DownloadActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 节目单页 -->
         <activity
-            android:name=".activity.music.program.schedule.activity.ScheduleActivity"
+            android:name=".ui.music.program.schedule.activity.ScheduleActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 下载列表 -->
         <activity
-            android:name=".activity.music.download.downloadlist.activity.DownLoadListActivity"
+            android:name=".ui.music.download.downloadlist.activity.DownLoadListActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 猜你喜欢更多推荐 -->
         <activity
-            android:name=".activity.music.program.tuijian.activity.RecommendLikeListActivity"
+            android:name=".ui.music.program.tuijian.activity.RecommendLikeListActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".activity.music.program.fmlist.activity.FMListActivity"
+            android:name=".ui.music.program.fmlist.activity.FMListActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".activity.im.interphone.creategroup.frienddetails.TalkPersonNewsActivity"
+            android:name=".ui.interphone.group.groupcontrol.personnews.TalkPersonNewsActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".activity.im.interphone.message.activity.NewsActivity"
+            android:name=".ui.interphone.message.activity.NewsActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
         <activity
-            android:name=".activity.common.welcome.activity.WelcomeActivity"
+            android:name=".ui.common.welcome.activity.WelcomeActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 分类界面 -->
         <activity
-            android:name=".activity.music.program.radiolist.activity.RadioListActivity"
+            android:name=".ui.music.program.radiolist.activity.RadioListActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 注册协议 -->
         <activity
-            android:name=".activity.person.agreement.AgreementActivity"
+            android:name=".ui.mine.person.agreement.AgreementActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 流量管理界面 -->
         <activity
-            android:name=".activity.mine.flowmanage.main.FlowManageActivity"
+            android:name=".ui.mine.flowmanage.FlowManageActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 二维码界面 -->
         <activity
-            android:name=".activity.mine.qrcode.EWMShowActivity"
+            android:name=".ui.common.qrcode.EWMShowActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 蓝牙 -->
         <activity
-            android:name=".activity.mine.bluetooth.BluetoothActivity"
+            android:name=".ui.mine.bluetooth.BluetoothActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- WiFi界面 -->
         <activity
-            android:name=".activity.mine.wifi.WIFIActivity"
+            android:name=".ui.mine.wifi.WIFIActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- WiFi密码配置 -->
         <activity
-            android:name=".activity.mine.wifi.ConfigWiFiActivity"
+            android:name=".ui.mine.wifi.ConfigWiFiActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- FM调频界面 -->
         <activity
-            android:name=".activity.mine.fm.FMConnectActivity"
+            android:name=".ui.mine.fm.FMConnectActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 专辑界面 -->
         <activity
-            android:name=".activity.music.program.album.activity.AlbumActivity"
+            android:name=".ui.music.program.album.activity.AlbumActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 国家台界面 -->
         <activity
-            android:name=".activity.music.program.diantai.activity.RadioNationalActivity"
+            android:name=".ui.music.program.diantai.activity.RadioNationalActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 地方台界面 -->
         <activity
-            android:name=".activity.music.program.diantai.activity.CityRadioActivity"
+            android:name=".ui.music.program.diantai.activity.CityRadioActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 验证手机号 -->
         <activity
-            android:name=".activity.person.phonecheck.PhoneCheckActivity"
+            android:name=".ui.mine.person.phonecheck.PhoneCheckActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 验证手机号 -->
         <activity
-            android:name=".activity.mine.set.SetActivity"
+            android:name=".ui.mine.set.SetActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 我的上传 -->
-        <activity
-            android:name=".activity.mine.myupload.MyUploadActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
-
-        <!-- 选择要上传的音频文件 -->
-        <activity
-            android:name=".activity.mine.myupload.upload.SelectLocalFileActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
-
-        <!-- 发布作品 -->
-        <activity
-            android:name=".activity.mine.myupload.upload.UploadActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
-
-        <!-- 选择专辑 -->
-        <activity
-            android:name=".activity.mine.myupload.upload.SelectSequActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
-
-        <!-- 添加标签 -->
-        <activity
-            android:name=".activity.mine.myupload.upload.AddLabelActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
-
-        <!-- 音频录制 -->
-        <activity
-            android:name=".activity.mine.myupload.upload.recording.MediaRecorderActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
 
         <!--通知设置-->
         <activity
-            android:name=".activity.mine.set.notifyset.NotifySetActivity"
+            android:name=".ui.mine.set.notifyset.NotifySetActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
         <!-- 评论 -->
         <activity
-            android:name=".activity.music.comment.CommentActivity"
+            android:name=".ui.music.comment.CommentActivity"
             android:configChanges="keyboardHidden|orientation"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
@@ -588,32 +523,15 @@
 
         <!-- 节目单-->
         <activity
-            android:name="com.wotingfm.activity.music.player.programme.ProgrammeActivity"
+            android:name="com.wotingfm.ui.music.player.programme.ProgrammeActivity"
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.NoTitleBar"/>
 
-        <!--  -->
+        <!-- 友盟activity -->
         <activity
-            android:name=".wxapi.WXEntryActivity"
-            android:configChanges="keyboardHidden|orientation|screenSize"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
-
-        <!-- 騰訊qq -->
-        <activity
-            android:name="com.tencent.tauth.AuthActivity"
-            android:launchMode="singleTask"
-            android:noHistory="true">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-
-                <data android:scheme="tencent1105341370"/>
-            </intent-filter>
-        </activity>
+            android:name="com.wotingfm.ui.interphone.notify.activity.NotifyNewsActivity"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.NoTitleBar"/>
 
         <meta-data
             android:name="UMENG_APPKEY"
@@ -625,7 +543,7 @@
             android:value="7dabc8027d924f36cd758732c895c261"/>
 
         <!-- 开机启动 -->
-        <receiver android:name=".receiver.AutoStartReceiver">
+        <receiver android:name=".common.receiver.AutoStartReceiver">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
 
@@ -633,24 +551,23 @@
             </intent-filter>
         </receiver>
 
-        <service android:name=".service.SubclassService"/>
-        <service android:name=".service.NotificationService"/>
-        <service android:name=".service.TimeOffService"/>
-        <service android:name=".service.SocketService"/>
-        <service android:name=".service.VoiceStreamRecordService"/>
-        <service android:name=".service.VoiceStreamPlayerService"/>
-        <service android:name=".activity.music.common.service.DownloadService"/>
-        <service android:name=".service.FloatingWindowService"/>
-        <service android:name=".service.TestWindowService"/>
-        <service android:name=".service.LocationService"/>
+        <service android:name=".common.service.SubclassService"/>
+        <service android:name=".common.service.NotificationService"/>
+        <service android:name=".common.service.SocketService"/>
+        <service android:name=".common.service.VoiceStreamRecordService"/>
+        <service android:name=".common.service.VoiceStreamPlayerService"/>
+        <service android:name=".ui.music.common.service.DownloadService"/>
+        <service android:name=".common.service.FloatingWindowService"/>
+        <service android:name=".common.service.TestWindowService"/>
+        <service android:name=".common.service.LocationService"/>
         <service android:name="com.amap.api.location.APSService"/>
         <!-- 集成播放器服务 -->
-        <service android:name=".service.IntegrationPlayerService"/>
+        <service android:name=".common.service.IntegrationPlayerService"/>
         <!-- 空服务 -->
-        <service android:name=".service.AssistService"/>
+        <service android:name=".common.service.AssistService"/>
 
 
-        <activity android:name=".activity.im.interphone.analog.AnalogueActivity"/>
+        <activity android:name=".ui.interphone.analog.AnalogueActivity"/>
     </application>
 
 </manifest>

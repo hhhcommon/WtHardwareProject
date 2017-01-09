@@ -12,6 +12,7 @@
         android:background="@color/setting_bg_color"
         android:orientation="horizontal"
         android:visibility="visible" >
+
         <LinearLayout
             android:id="@+id/lin_quanxuan"
             android:layout_width="0dp"
@@ -32,7 +33,9 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="5dp"
                 android:text="全选" />
+
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/lin_clear"
             android:layout_width="0dp"
@@ -46,8 +49,8 @@
                 android:layout_height="17dp"
                 android:layout_marginRight="10dp"
                 android:src="@mipmap/wt_download_clear" />
-        </LinearLayout>
 
+        </LinearLayout>
 
     </LinearLayout>
 
@@ -64,8 +67,8 @@
             android:dividerHeight="0.5dp"
             android:divider="@color/text_line_1"
             android:scrollbars="none"
-            android:visibility="gone" >
-        </ListView>
+            android:visibility="gone" />
+
     </RelativeLayout>
 
     <LinearLayout
@@ -94,6 +97,7 @@
             android:textColor="@color/beijing"
             android:textSize="@dimen/wt_group_detail_16"
             android:visibility="visible" />
+
     </LinearLayout>
 
 </LinearLayout>

@@ -11,7 +11,7 @@ import android.view.Display;
 import android.view.WindowManager;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.helper.CommonHelper;
+import com.wotingfm.common.helper.CommonHelper;
 
 /**
  * 手机信息类   获取手机的信息

@@ -102,7 +102,7 @@
                 android:textSize="30sp"
                 android:visibility="invisible"/>
 
-            <com.wotingfm.activity.im.interphone.linkman.view.SideBar
+            <com.wotingfm.ui.interphone.linkman.view.SideBar
                 android:id="@+id/sidrbar"
                 android:layout_width="30dp"
                 android:layout_height="match_parent"

@@ -5,7 +5,7 @@
     <LinearLayout
         android:id="@+id/lin_d"
         android:layout_width="match_parent"
-        android:background="@mipmap/aa"
+        android:background="@mipmap/bb"
         android:layout_height="match_parent">
 
         <LinearLayout
