@@ -58,7 +58,6 @@ import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.ui.music.player.model.ShareModel;
 import com.wotingfm.ui.music.player.programme.ProgrammeActivity;
 import com.wotingfm.ui.music.playhistory.activity.PlayHistoryActivity;
-import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
 import com.wotingfm.ui.music.program.album.model.ContentInfo;
 import com.wotingfm.ui.music.video.IntegrationPlayer;
 import com.wotingfm.util.AssembleImageUrlUtils;
@@ -118,7 +117,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, XL
     public static TextView mPlayAudioTextProgram;// 节目单
     public static TextView mPlayAudioTextDownLoad;// 下载
 
-    public static TextView mPlayAudioTextComment;// 评论
     public static TextView mPlayAudioTextMore;// 更多
 
     private View mProgramDetailsView;// 节目详情
@@ -196,7 +194,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, XL
         mPlayAudioTextLike = (TextView) view.findViewById(R.id.tv_like);// 喜欢播放节目
         mPlayAudioTextProgram = (TextView) view.findViewById(R.id.tv_programme);// 节目单
         mPlayAudioTextDownLoad = (TextView) view.findViewById(R.id.tv_download);// 下载
-        mPlayAudioTextComment = (TextView) view.findViewById(R.id.tv_comment);// 评论
         mPlayAudioTextMore = (TextView) view.findViewById(R.id.tv_more);// 更多
 
         mProgramDetailsView = view.findViewById(R.id.rv_details);// 节目详情布局
@@ -236,7 +233,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, XL
         mPlayAudioTextLike.setOnClickListener(this);// 喜欢播放节目
         mPlayAudioTextProgram.setOnClickListener(this);// 节目单
         mPlayAudioTextDownLoad.setOnClickListener(this);// 下载
-        mPlayAudioTextComment.setOnClickListener(this);// 评论
         mPlayAudioTextMore.setOnClickListener(this);// 更多
         mProgramVisible.setOnClickListener(this);// 点击显示节目详情
         setListener();
@@ -663,18 +659,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, XL
                 }
             }
 
-            // 评论  TTS 不支持评论
-            if (type != null && type.equals("TTS")) {
-                mPlayAudioTextComment.setClickable(false);
-                mPlayAudioTextComment.setTextColor(context.getResources().getColor(R.color.gray));
-                mPlayAudioTextComment.setCompoundDrawablesWithIntrinsicBounds(
-                        null, context.getResources().getDrawable(R.mipmap.wt_comment_image_gray), null, null);
-            } else if (type != null && !type.equals("TTS")) {
-                mPlayAudioTextComment.setClickable(true);
-                mPlayAudioTextComment.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-                mPlayAudioTextComment.setCompoundDrawablesWithIntrinsicBounds(
-                        null, context.getResources().getDrawable(R.mipmap.wt_comment_image), null, null);
-            }
 
             // 节目详情 主播  暂没有主播
             mProgramTextAnchor.setText("未知");
@@ -1101,52 +1085,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener, XL
                 b.putString("BcId", GlobalConfig.playerObject.getContentId());
                 p.putExtras(b);
                 startActivity(p);
-                break;
-            case R.id.tv_comment:// 专辑
-                if (GlobalConfig.playerObject != null) {
-                    try {
-                        if (GlobalConfig.playerObject.getSequId() != null) {
-                            if (GlobalConfig.playerObject.getSequId() != null) {
-                                SequId = GlobalConfig.playerObject.getSequId();
-                                SequDesc = GlobalConfig.playerObject.getSequDesc();
-                                SequImage = GlobalConfig.playerObject.getSequImg();
-                                SequName = GlobalConfig.playerObject.getSequName();
-                                IsSequ = true;
-                            } else {
-                                IsSequ = false;
-                            }
-                        } else {
-                            if (GlobalConfig.playerObject.getSeqInfo() != null) {
-                                if (GlobalConfig.playerObject.getSeqInfo().getContentId() != null) {
-                                    SequId = GlobalConfig.playerObject.getSeqInfo().getContentId();
-                                    SequDesc = GlobalConfig.playerObject.getSeqInfo().getContentDesc();
-                                    SequImage = GlobalConfig.playerObject.getSeqInfo().getContentImg();
-                                    SequName = GlobalConfig.playerObject.getSeqInfo().getContentName();
-                                    IsSequ = true;
-                                } else {
-                                    IsSequ = false;
-                                }
-                            } else {
-                                IsSequ = false;
-                            }
-                        }
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                }
-                if (IsSequ) {
-                    Intent intent = new Intent(context, AlbumActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("type", "player");
-                    bundle.putString("contentName", SequName);
-                    bundle.putString("contentDesc", SequDesc);
-                    bundle.putString("contentId", SequId);
-                    bundle.putString("contentImg", SequImage);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
-                } else {
-                    ToastUtils.show_always(context, "此节目目前没有所属专辑");
-                }
                 break;
             case R.id.tv_download:// 下载
                 download();
