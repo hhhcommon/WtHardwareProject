@@ -25,15 +25,172 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:background="@color/app_bg">
 
         <TextView
+            android:id="@+id/text_play_name"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="更多操作"
-            android:textSize="30sp"
-            android:textColor="@color/red"
-            android:gravity="center"/>
+            android:layout_height="40dp"
+            android:text="北京私家车FM99.9"
+            android:gravity="center_vertical"
+            android:drawableLeft="@mipmap/wt_image_play_more_playing"
+            android:drawablePadding="5dp"
+            android:paddingLeft="10dp"
+            android:singleLine="true"
+            android:ellipsize="end"
+            android:textSize="14sp"
+            android:background="@color/WHITE"
+            android:textColor="@color/wt_login_third"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/WHITE"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/text_like"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="喜歡"
+                android:textSize="18sp"
+                android:textColor="@color/wt_login_third"
+                android:drawableTop="@mipmap/wt_image_play_more_like"
+                android:gravity="center"
+                android:drawablePadding="10dp"/>
+
+            <TextView
+                android:id="@+id/text_shape"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="分享"
+                android:textSize="18sp"
+                android:textColor="@color/wt_login_third"
+                android:drawableTop="@mipmap/wt_image_play_more_shape"
+                android:gravity="center"
+                android:drawablePadding="10dp"/>
+
+            <TextView
+                android:id="@+id/text_comment"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="評論"
+                android:textSize="18sp"
+                android:textColor="@color/wt_login_third"
+                android:drawableTop="@mipmap/wt_image_play_more_comment"
+                android:gravity="center"
+                android:drawablePadding="10dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/WHITE"
+            android:gravity="center">
+
+            <TextView
+                android:id="@+id/text_details"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="詳情"
+                android:textSize="18sp"
+                android:textColor="@color/wt_login_third"
+                android:drawableTop="@mipmap/wt_image_play_more_details"
+                android:gravity="center"
+                android:drawablePadding="10dp"/>
+
+            <TextView
+                android:id="@+id/text_program"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="播單"
+                android:textSize="18sp"
+                android:visibility="gone"
+                android:textColor="@color/wt_login_third"
+                android:drawableTop="@mipmap/wt_image_play_more_details"
+                android:gravity="center"
+                android:drawablePadding="10dp"/>
+
+            <TextView
+                android:id="@+id/text_down"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="下載"
+                android:textSize="18sp"
+                android:textColor="@color/wt_login_third"
+                android:drawableTop="@mipmap/wt_image_play_more_down"
+                android:gravity="center"
+                android:drawablePadding="10dp"/>
+
+            <TextView
+                android:id="@+id/text_sequ"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="專輯"
+                android:textSize="18sp"
+                android:textColor="@color/wt_login_third"
+                android:drawableTop="@mipmap/wt_image_play_more_sequ"
+                android:gravity="center"
+                android:drawablePadding="10dp"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/WHITE"
+            android:gravity="center"
+            android:layout_marginTop="20dp">
+
+            <TextView
+                android:id="@+id/text_history"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="历史"
+                android:textSize="18sp"
+                android:textColor="@color/wt_login_third"
+                android:drawableTop="@mipmap/wt_image_play_history"
+                android:drawablePadding="10dp"/>
+
+            <TextView
+                android:id="@+id/text_liked"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="喜欢"
+                android:textSize="18sp"
+                android:textColor="@color/wt_login_third"
+                android:drawablePadding="10dp"
+                android:drawableTop="@mipmap/wt_image_my_liked"
+                android:gravity="center"/>
+
+            <TextView
+                android:id="@+id/text_local"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="本地"
+                android:textSize="18sp"
+                android:textColor="@color/wt_login_third"
+                android:drawablePadding="10dp"
+                android:drawableTop="@mipmap/wt_image_play_more_local"
+                android:gravity="center"/>
+
+        </LinearLayout>
 
     </LinearLayout>
 

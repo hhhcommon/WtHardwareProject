@@ -20,30 +20,38 @@ import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechSynthesizer;
 import com.iflytek.cloud.SynthesizerListener;
+import com.kingsoft.media.httpcache.KSYProxyService;
+import com.kingsoft.media.httpcache.OnCacheStatusListener;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
 import com.wotingfm.util.L;
+import com.wotingfm.util.ResourceUtil;
 
 import org.videolan.libvlc.EventHandler;
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.LibVlcException;
 import org.videolan.vlc.util.VLCInstance;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 /**
  * 集成播放器服务
  * Created by Administrator on 2016/12/14.
  */
-public class IntegrationPlayerService extends Service {
+public class IntegrationPlayerService extends Service implements OnCacheStatusListener {
     private LibVLC mVlc;// VLC 播放器
     private SpeechSynthesizer mTts;// 讯飞播放 TTS
+
+    private KSYProxyService proxyService;// 金山云缓存
 
     private MyBinder mBinder = new MyBinder();
     private AssistServiceConnection mConnection;
 
-    private List<LanguageSearchInside> playList;
+    private List<LanguageSearchInside> playList = new ArrayList<>();
 
     private boolean isVlcPlaying;// VLC 播放器正在播放
     private boolean isTtsPlaying;// TTS 播放器正在播放
@@ -53,6 +61,7 @@ public class IntegrationPlayerService extends Service {
     private String mediaType;// 播放类型
     private String httpUrl;// 网络播放地址
     private String localUrl;// 本地播放地址
+    private long secondProgress;
 
     private Intent updateTimeIntent;// 更新时间
     private Intent totalTimeIntent;// 总时间
@@ -65,6 +74,7 @@ public class IntegrationPlayerService extends Service {
         @Override
         public void run() {
             if(updateTimeIntent != null) {
+                updateTimeIntent.putExtra("SECOND_PROGRESS", secondProgress);
                 updateTimeIntent.putExtra("CURRENT_TIME", getCurrentTime());
                 sendBroadcast(updateTimeIntent);
                 mHandler.postDelayed(this, 1000);
@@ -96,9 +106,20 @@ public class IntegrationPlayerService extends Service {
     @Override
     public void onCreate() {
         setForeground();
+        initCache();
         initVlc();
         initTts();
         initIntent();
+    }
+
+    // 初始化播放缓存
+    private void initCache() {
+        if(proxyService == null) proxyService = new KSYProxyService(this);
+        File file = new File(ResourceUtil.getLocalUrlForKsy());// 设置缓存目录
+        if (!file.exists()) if (!file.mkdir()) L.v("TAG", "KSYProxy MkDir Error");
+        proxyService.setCacheRoot(file);
+        proxyService.setMaxCacheSize(500 * 1024 * 1024);// 缓存大小 500MB
+        proxyService.startServer();
     }
 
     // 初始化广播需要的 Intent
@@ -141,6 +162,7 @@ public class IntegrationPlayerService extends Service {
     public void startPlay(int index) {
         if(index < 0 || index >= playList.size()) return ;
         position = index;
+        secondProgress = 0;
         LanguageSearchInside playObject = playList.get(position);
         if(initPlayObject(playObject)) {
             switch (mediaType) {
@@ -211,7 +233,17 @@ public class IntegrationPlayerService extends Service {
         if(localUrl != null) {// 播放本地 URL
             mVlc.playMRL(localUrl);
         } else {
-            mVlc.playMRL(contentPlay);
+            if(mediaType.equals("AUDIO")) {
+                if (!isCacheFinish(contentPlay)) {// 判断是否已经缓存过  没有则开始缓存
+                    proxyService.registerCacheStatusListener(this, contentPlay);
+                } else {
+                    secondProgress = -1;
+                }
+                contentPlay = proxyService.getProxyUrl(contentPlay);
+                mVlc.playMRL(contentPlay);
+            } else {
+                mVlc.playMRL(contentPlay);
+            }
         }
         mHandler.postDelayed(mTotalTimeRunnable, 1000);
 
@@ -290,6 +322,13 @@ public class IntegrationPlayerService extends Service {
         }
     }
 
+    // 判断是否已经缓存完成
+    private boolean isCacheFinish(String url) {
+        HashMap<String, File> cacheMap = proxyService.getCachedFileList();
+        File cacheFile = cacheMap.get(url);
+        return cacheFile != null && cacheFile.length() > 0;
+    }
+
     @Override
     public IBinder onBind(Intent intent) {
         return mBinder;
@@ -327,6 +366,12 @@ public class IntegrationPlayerService extends Service {
 
         if (null == mConnection) mConnection = new AssistServiceConnection();
         bindService(new Intent(this, AssistService.class), mConnection, Service.BIND_AUTO_CREATE);
+    }
+
+    @Override
+    public void OnCacheStatus(String url, long sourceLength, int percentsAvailable) {
+        L.i("TAG", "OnCacheStatus: percentsAvailable == " + percentsAvailable);
+        secondProgress = getTotalTime() * percentsAvailable / 100;
     }
 
     public class MyBinder extends Binder {

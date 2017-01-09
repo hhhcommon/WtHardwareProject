@@ -74,21 +74,17 @@
             android:src="@mipmap/wt_play_right_more"
             android:layout_alignParentRight="true"/>
 
-        <com.wotingfm.widget.MarqueeTextView
+        <com.wotingfm.widget.AutoScrollTextView
             android:id="@+id/play_audio_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="30dp"
+            android:layout_marginRight="30dp"
             android:layout_below="@id/play_current_time"
             android:layout_marginTop="35dp"
-            android:gravity="center"
-            android:layout_centerHorizontal="true"
-            android:focusable="true"
-            android:fitsSystemWindows="true"
-            android:marqueeRepeatLimit="marquee_forever"
-            android:paddingLeft="30dp"
-            android:paddingRight="30dp"
-            android:text="异次元的治愈系少女"
             android:singleLine="true"
+            android:layout_centerHorizontal="true"
+            android:text="未知"
             android:textSize="26sp"
             android:textColor="@color/wt_login_third"/>
 
