@@ -24,6 +24,7 @@ import com.kingsoft.media.httpcache.KSYProxyService;
 import com.kingsoft.media.httpcache.OnCacheStatusListener;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
 import com.wotingfm.util.L;
 import com.wotingfm.util.ResourceUtil;
@@ -74,8 +75,8 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         @Override
         public void run() {
             if(updateTimeIntent != null) {
-                updateTimeIntent.putExtra("SECOND_PROGRESS", secondProgress);
-                updateTimeIntent.putExtra("CURRENT_TIME", getCurrentTime());
+                updateTimeIntent.putExtra(StringConstant.PLAY_SECOND_PROGRESS, secondProgress);
+                updateTimeIntent.putExtra(StringConstant.PLAY_CURRENT_TIME, getCurrentTime());
                 sendBroadcast(updateTimeIntent);
                 mHandler.postDelayed(this, 1000);
             }
@@ -88,8 +89,8 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         public void run() {
             long totalTime = getTotalTime();
             if(totalTimeIntent != null) {
-                totalTimeIntent.putExtra("TOTAL_TIME", totalTime);
-                totalTimeIntent.putExtra("MEDIA_TYPE", mediaType);
+                totalTimeIntent.putExtra(StringConstant.PLAY_TOTAL_TIME, totalTime);
+                totalTimeIntent.putExtra(StringConstant.PLAY_MEDIA_TYPE, mediaType);
                 L.v("TAG", "mediaType -- > > " + mediaType);
                 sendBroadcast(totalTimeIntent);
             }
@@ -166,7 +167,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         LanguageSearchInside playObject = playList.get(position);
         if(initPlayObject(playObject)) {
             switch (mediaType) {
-                case "TTS":
+                case StringConstant.TYPE_TTS:
                     playTts(httpUrl);
                     break;
                 default:
@@ -177,7 +178,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
             L.w("TAG", "position -- > > " + position);
 
-            updatePlayView.putExtra("PLAY_POSITION", position);
+            updatePlayView.putExtra(StringConstant.PLAY_POSITION, position);
             sendBroadcast(updatePlayView);
         }
     }
@@ -186,7 +187,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     public void pausePlay() {
         if(isVlcPlaying && mVlc.isPlaying()) mVlc.pause();
         else if(isTtsPlaying && mTts.isSpeaking()) mTts.stopSpeaking();
-        if(mediaType.equals("AUDIO")) {
+        if(mediaType.equals(StringConstant.TYPE_AUDIO)) {
             if(mUpdatePlayTimeRunnable != null) mHandler.removeCallbacks(mUpdatePlayTimeRunnable);
         }
     }
@@ -198,7 +199,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         } else {
             if (isVlcPlaying) mVlc.play();
             else playTts(httpUrl);
-            if (mediaType.equals("AUDIO")) {
+            if (mediaType.equals(StringConstant.TYPE_AUDIO)) {
                 mHandler.postDelayed(mUpdatePlayTimeRunnable, 1000);
             }
         }
@@ -233,7 +234,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         if(localUrl != null) {// 播放本地 URL
             mVlc.playMRL(localUrl);
         } else {
-            if(mediaType.equals("AUDIO")) {
+            if(mediaType.equals(StringConstant.TYPE_AUDIO)) {
                 if (!isCacheFinish(contentPlay)) {// 判断是否已经缓存过  没有则开始缓存
                     proxyService.registerCacheStatusListener(this, contentPlay);
                 } else {
@@ -284,11 +285,11 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     private long getCurrentTime() {
         long currentTime = 0;
         switch (mediaType) {
-            case "TTS":
-            case "RADIO":
+            case StringConstant.TYPE_TTS:
+            case StringConstant.TYPE_RADIO:
                 currentTime = System.currentTimeMillis();
                 break;
-            case "AUDIO":
+            case StringConstant.TYPE_AUDIO:
                 currentTime = mVlc.getTime();
                 break;
         }
@@ -298,10 +299,10 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     // 获取时间总长度
     private long getTotalTime() {
         switch (mediaType) {
-            case "TTS":
-            case "RADIO":
+            case StringConstant.TYPE_TTS:
+            case StringConstant.TYPE_RADIO:
                 return -1;
-            case "AUDIO":
+            case StringConstant.TYPE_AUDIO:
                 L.v("TAG", "totalTime -- > > " + mVlc.getLength());
                 return mVlc.getLength();
         }
@@ -317,7 +318,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         if(!isVlcPlaying && !isTtsPlaying) {// 第一次进入应用给 playerObject 赋值
             position = 0;
             GlobalConfig.playerObject = playList.get(position);
-            updatePlayView.putExtra("PLAY_POSITION", position);
+            updatePlayView.putExtra(StringConstant.PLAY_POSITION, position);
             sendBroadcast(updatePlayView);
         }
     }

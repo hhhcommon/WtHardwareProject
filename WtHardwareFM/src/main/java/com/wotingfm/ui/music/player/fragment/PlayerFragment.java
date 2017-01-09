@@ -26,6 +26,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.IntegerConstant;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -90,7 +91,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
      * 3.== "SEARCH_VOICE"  ->  searchByVoiceRequest();
      * Default  == "MAIN_PAGE";
      */
-    private String requestType = "MAIN_PAGE";
+    private String requestType = StringConstant.PLAY_REQUEST_TYPE_MAIN_PAGE;
     private String sendTextContent;// 文字搜索内容
     private String sendVoiceContent;// 语音搜索内容
     private String mediaType;// 当前播放节目类型
@@ -199,7 +200,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         LanguageSearchInside languageSearchInside = getDaoList(context);
         if(languageSearchInside != null) {
             playList.add(languageSearchInside);// 将查询得到的第一条数据加入播放列表中
-            if(requestType.equals("SEARCH_TEXT")) {
+            if(requestType.equals(StringConstant.PLAY_REQUEST_TYPE_SEARCH_TEXT)) {
                 ArrayList<LanguageSearchInside> playerList = new ArrayList<>();
                 playerList.add(languageSearchInside);
                 mPlayer.updatePlayList(playerList);
@@ -220,10 +221,10 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         }
         String requestUrl;
         switch (requestType) {
-            case "SEARCH_TEXT":
+            case StringConstant.PLAY_REQUEST_TYPE_SEARCH_TEXT:
                 requestUrl = GlobalConfig.getSearchByText;// 文字搜索
                 break;
-            case "SEARCH_VOICE":
+            case StringConstant.PLAY_REQUEST_TYPE_SEARCH_VOICE:
                 requestUrl = GlobalConfig.searchvoiceUrl;// 语音搜索
                 break;
             default:
@@ -232,9 +233,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         }
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            if(requestType != null && requestType.equals("SEARCH_TEXT")) {
+            if(requestType != null && requestType.equals(StringConstant.PLAY_REQUEST_TYPE_SEARCH_TEXT)) {
                 jsonObject.put("SearchStr", sendTextContent);
-            } else if(requestType != null && requestType.equals("SEARCH_VOICE")) {
+            } else if(requestType != null && requestType.equals(StringConstant.PLAY_REQUEST_TYPE_SEARCH_VOICE)) {
                 jsonObject.put("SearchStr", sendVoiceContent);
             }
             jsonObject.put("PageType", "0");
@@ -251,7 +252,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     String ReturnType = result.getString("ReturnType");
                     if (ReturnType.equals("1001")) {
                         List<LanguageSearchInside> list;
-                        if(requestType.equals("MAIN_PAGE")) {
+                        if(requestType.equals(StringConstant.PLAY_REQUEST_TYPE_MAIN_PAGE)) {
                             JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
                             String listString = arg1.getString("List");
                             list = new Gson().fromJson(listString, new TypeToken<List<LanguageSearchInside>>() {}.getType());
@@ -327,23 +328,23 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                 case BroadcastConstants.PLAY_TEXT_VOICE_SEARCH:// 文字搜索
                     mainPage = 1;
                     refreshType = 0;
-                    requestType = "SEARCH_TEXT";
-                    sendTextContent = intent.getStringExtra("text");
+                    requestType = StringConstant.PLAY_REQUEST_TYPE_SEARCH_TEXT;
+                    sendTextContent = intent.getStringExtra(StringConstant.TEXT_CONTENT);
                     queryData();
                     break;
                 case BroadcastConstants.PLAYERVOICE:// 语音搜索
-                    sendVoiceContent = intent.getStringExtra("VoiceContent");
+                    sendVoiceContent = intent.getStringExtra(StringConstant.VOICE_CONTENT);
                     if(sendVoiceContent == null || sendVoiceContent.trim().equals("")) return ;
                     if (CommonHelper.checkNetwork(context)) {
                         mainPage = 1;
                         refreshType = 0;
-                        requestType = "SEARCH_VOICE";
+                        requestType = StringConstant.PLAY_REQUEST_TYPE_SEARCH_VOICE;
                         mainPageRequest();
                     }
                     break;
                 case BroadcastConstants.UPDATE_PLAY_TOTAL_TIME:// 更新时间总长度
-                    mediaType = intent.getStringExtra("MEDIA_TYPE");
-                    totalTime = intent.getLongExtra("TOTAL_TIME", -1);
+                    mediaType = intent.getStringExtra(StringConstant.PLAY_MEDIA_TYPE);
+                    totalTime = intent.getLongExtra(StringConstant.PLAY_TOTAL_TIME, -1);
                     if(totalTime == -1) {
                         mSeekBar.setEnabled(false);
                         mSeekBar.setMax(24 * 60 * 60);
@@ -354,7 +355,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     addDb(GlobalConfig.playerObject);// 将播放对象加入数据库
                     break;
                 case BroadcastConstants.UPDATE_PLAY_CURRENT_TIME:// 更新当前播放时间
-                    long secondProgress = intent.getLongExtra("SECOND_PROGRESS", 0);
+                    long secondProgress = intent.getLongExtra(StringConstant.PLAY_SECOND_PROGRESS, 0);
                     if(secondProgress == -1) {
                         mSeekBar.setSecondaryProgress((int) totalTime);
                     } else {
@@ -362,8 +363,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     }
                     L.i("TAG", "OnCacheStatus: secondProgress == " + secondProgress);
 
-                    long currentTime = intent.getLongExtra("CURRENT_TIME", -1);
-                    if(mediaType != null && mediaType.equals("AUDIO")) {
+                    long currentTime = intent.getLongExtra(StringConstant.PLAY_CURRENT_TIME, -1);
+                    if(mediaType != null && mediaType.equals(StringConstant.TYPE_AUDIO)) {
                         mSeekBar.setProgress((int)currentTime);
                         updateTextViewWithTimeFormat(mPlayCurrentTime, (int)(currentTime / 1000));
                     } else {
@@ -376,7 +377,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     mSearchHistoryDao.updatePlayerInTime(GlobalConfig.playerObject.getContentPlay(), currentTime, totalTime);
                     break;
                 case BroadcastConstants.UPDATE_PLAY_VIEW:// 更新界面
-                    index = intent.getIntExtra("PLAY_POSITION", 0);// 列表中的位置
+                    index = intent.getIntExtra(StringConstant.PLAY_POSITION, 0);// 列表中的位置
 
                     // 标题
                     String title = GlobalConfig.playerObject.getContentName();
@@ -563,7 +564,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
 
     // SeekBar 的更改操作
     private void progressChange(int progress, boolean fromUser) {
-        if (fromUser && mediaType != null && mediaType.equals("AUDIO")) {
+        if (fromUser && mediaType != null && mediaType.equals(StringConstant.TYPE_AUDIO)) {
             mPlayer.setPlayCurrentTime((long) progress);
         }
     }
@@ -667,7 +668,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
 
         if (mSearchHistoryDao == null)
             mSearchHistoryDao = new SearchPlayerHistoryDao(context);// 如果数据库没有初始化，则初始化 db
-        if (playerMediaType != null && playerMediaType.trim().length() > 0 && playerMediaType.equals("TTS")) {
+        if (playerMediaType != null && playerMediaType.trim().length() > 0 && playerMediaType.equals(StringConstant.TYPE_TTS)) {
             mSearchHistoryDao.deleteHistoryById(ContentID);
         } else {
             mSearchHistoryDao.deleteHistory(playerUrl);
