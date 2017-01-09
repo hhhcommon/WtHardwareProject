@@ -1,15 +1,10 @@
 package com.wotingfm.ui.music.main;
 
-import android.content.ComponentName;
-import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,7 +12,6 @@ import android.widget.TextView;
 
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
-import com.wotingfm.common.service.IntegrationPlayerService;
 import com.wotingfm.ui.baseactivity.BaseFragmentActivity;
 import com.wotingfm.ui.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.ui.interphone.notify.activity.NotifyNewsActivity;
@@ -38,9 +32,6 @@ public class HomeActivity extends BaseFragmentActivity {
 	private static TextView view2;
 	private static HomeActivity context;
 	private static ViewPager mPager;
-	private MyServiceConnection sc = new MyServiceConnection();
-	private boolean mBound;// 绑定服务
-	private IntegrationPlayerService mService;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -49,35 +40,6 @@ public class HomeActivity extends BaseFragmentActivity {
 		context = this;
 		InitTextView();
 		InitViewPager();
-
-
-	}
-
-	@Override
-	protected void onResume() {
-		super.onResume();
-		if(!mBound) {
-			Intent intent = new Intent(this, IntegrationPlayerService.class);
-			bindService(intent, sc, Context.BIND_AUTO_CREATE);
-			startService(intent);
-		}
-	}
-
-	// 绑定服务
-	private class MyServiceConnection implements ServiceConnection {
-
-		@Override
-		public void onServiceConnected(ComponentName name, IBinder service) {
-			mBound = true;
-			IntegrationPlayerService.MyBinder mBinder = (IntegrationPlayerService.MyBinder) service;
-			mService = mBinder.getService();
-			Log.v("TAG", "Service Bind success");
-		}
-
-		@Override
-		public void onServiceDisconnected(ComponentName name) {
-
-		}
 	}
 
 	private void InitTextView() {

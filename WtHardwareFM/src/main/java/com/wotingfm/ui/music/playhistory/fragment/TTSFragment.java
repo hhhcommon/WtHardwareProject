@@ -201,7 +201,6 @@ public class TTSFragment extends Fragment {
                         dbDao.deleteHistory(playerUrl);
                         dbDao.addHistory(history);
                         if (PlayerFragment.context != null) {
-							PlayerFragment.TextPage=1;
                             Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                             Bundle bundle1=new Bundle();
                             bundle1.putString("text", playList.get(position).getPlayerName());

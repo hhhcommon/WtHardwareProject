@@ -23,4 +23,13 @@ public class IntegerConstant {
 
     // 跳转至图片剪裁页面
     public static final int PHOTO_REQUEST_CUT = 0x00F;
+
+    /**
+     * PlayerFragment 相关
+     */
+    // 更新列表
+    public static final int PLAY_UPDATE_LIST = 1001;
+
+    // 更新列表界面
+    public static final int PLAY_UPDATE_LIST_VIEW = 1002;
 }

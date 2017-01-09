@@ -118,4 +118,46 @@ public class StringConstant {
 
     // 通知设置 关注通知开关状态
     public static final String NOTIFY_CONCERN_STATE = "NOTIFY_CONCERN_STATE";
+
+    // 播放器缓存进度  数据传递
+    public static final String PLAY_SECOND_PROGRESS = "PLAY_SECOND_PROGRESS";
+
+    // 数据传递  当前播放进度
+    public static final String PLAY_CURRENT_TIME = "PLAY_CURRENT_TIME";
+
+    // 数据传递  当前播放总时间
+    public static final String PLAY_TOTAL_TIME = "PLAY_TOTAL_TIME";
+
+    // 数据传递  当前播放类型
+    public static final String PLAY_MEDIA_TYPE = "PLAY_MEDIA_TYPE";
+
+    // 数据传递  当前播放在列表中的位置
+    public static final String PLAY_POSITION = "PLAY_POSITION";
+
+    // 媒体类型 SEQU
+    public static final String TYPE_SEQU = "SEQU";
+
+    // 媒体类型 AUDIO
+    public static final String TYPE_AUDIO = "AUDIO";
+
+    // 媒体类型 RADIO
+    public static final String TYPE_RADIO = "RADIO";
+
+    // 媒体类型 TTS
+    public static final String TYPE_TTS = "TTS";
+
+    // 播放界面请求类型  主网络请求
+    public static final String PLAY_REQUEST_TYPE_MAIN_PAGE = "MAIN_PAGE";
+
+    // 播放界面请求类型  文字请求
+    public static final String PLAY_REQUEST_TYPE_SEARCH_TEXT = "SEARCH_TEXT";
+
+    // 播放界面请求类型  语音请求
+    public static final String PLAY_REQUEST_TYPE_SEARCH_VOICE = "SEARCH_VOICE";
+
+    // 数据获取  语音请求内容
+    public static final String VOICE_CONTENT = "VoiceContent";
+
+    // 数据获取  文字请求内容
+    public static final String TEXT_CONTENT = "text";
 }

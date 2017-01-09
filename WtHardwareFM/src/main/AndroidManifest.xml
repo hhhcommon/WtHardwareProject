@@ -107,7 +107,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan">
-
         </activity>
 
         <!-- 创建群组主界面 -->
@@ -119,7 +118,9 @@
 
         <!-- 创建群组子界面  即有创建公开群、密码群、验证群 -->
 
+
         <!-- 消息中心 -->
+
 
         <!-- 头像剪裁界面 -->
         <activity
@@ -501,7 +502,7 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <!--通知设置-->
+        <!-- 通知设置 -->
         <activity
             android:name=".ui.mine.set.notifyset.NotifySetActivity"
             android:screenOrientation="portrait"
@@ -521,15 +522,20 @@
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.NoTitleBar"/>
 
-        <!-- 节目单-->
+        <!-- 节目单 -->
         <activity
-            android:name="com.wotingfm.ui.music.player.programme.ProgrammeActivity"
+            android:name=".ui.music.player.programme.ProgrammeActivity"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.NoTitleBar"/>
+
+        <activity
+            android:name=".ui.music.player.fragment.more.PlayerMoreOperationActivity"
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.NoTitleBar"/>
 
         <!-- 友盟activity -->
         <activity
-            android:name="com.wotingfm.ui.interphone.notify.activity.NotifyNewsActivity"
+            android:name=".ui.interphone.notify.activity.NotifyNewsActivity"
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.NoTitleBar"/>
 
@@ -566,8 +572,8 @@
         <!-- 空服务 -->
         <service android:name=".common.service.AssistService"/>
 
-
         <activity android:name=".ui.interphone.analog.AnalogueActivity"/>
+
     </application>
 
 </manifest>

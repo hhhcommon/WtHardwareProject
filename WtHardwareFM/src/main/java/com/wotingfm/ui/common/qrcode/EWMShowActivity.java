@@ -61,11 +61,15 @@ public class EWMShowActivity extends AppBaseActivity implements OnClickListener 
         textNews = (TextView) findViewById(R.id.news);
 
         if (getIntent() != null) {
-            String image = getIntent().getStringExtra("image");
-            String news = getIntent().getStringExtra("news");
-            String name = getIntent().getStringExtra("name");
             int type = getIntent().getIntExtra("type", 1);// 1：个人   2：组
-            setData(type, image, news, name);
+            if(type == 0) {
+                shapeContent();
+            } else {
+                String image = getIntent().getStringExtra("image");
+                String news = getIntent().getStringExtra("news");
+                String name = getIntent().getStringExtra("name");
+                setData(type, image, news, name);
+            }
         }
     }
 
@@ -100,6 +104,34 @@ public class EWMShowActivity extends AppBaseActivity implements OnClickListener 
             bmp = BitmapUtils.readBitMap(context, R.mipmap.ewm);
         }
         imageEwm.setImageBitmap(bmp);
+    }
+
+    // 分享
+    private void shapeContent() {
+        if(GlobalConfig.playerObject.getContentImg() == null) {
+            imageHead.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx));
+        } else {
+            String contentImage = GlobalConfig.playerObject.getContentImg();
+            if(!contentImage.startsWith("http")) {
+                contentImage = GlobalConfig.imageurl + contentImage;
+            }
+            contentImage = AssembleImageUrlUtils.assembleImageUrl180(contentImage);
+            Picasso.with(context).load(contentImage.replace("\\/", "/")).into(imageHead);
+        }
+
+        String contentTile = GlobalConfig.playerObject.getContentName();
+        if (contentTile == null || contentTile.equals("")) {
+            contentTile = "未知";
+        }
+        textName.setText(contentTile);
+
+        String contentDescn = GlobalConfig.playerObject.getContentDescn();
+        if(contentDescn == null || contentDescn.equals("")) {
+            contentDescn = "暫無介紹";
+        }
+        textNews.setText(contentDescn);
+
+        textTip.setText("扫面上面的二维码图案");
     }
 
     @Override
