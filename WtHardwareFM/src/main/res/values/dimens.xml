@@ -30,17 +30,40 @@
     <dimen name="activity_vertical_margin1">5dp</dimen>
     <dimen name="activity_verticalone_margin">5dp</dimen>
 
-    <dimen name="activity_person">16sp</dimen>
+    <!--节目标题字体大小-->
+    <dimen name="audio_title_size">22sp</dimen>
+
+    <!--电台直播节目、节目来源字体大小-->
+    <dimen name="audio_program_source_size">18sp</dimen>
+
+    <!--"更多"字体大小-->
+    <dimen name="audio_more_size">17sp</dimen>
+
+    <!--节目类型字体大小-->
+    <dimen name="audio_type_size">18sp</dimen>
+
+    <!--Activity、Fragment标题文字大小-->
+    <dimen name="app_title_size">20sp</dimen>
+
+    <!--我的、设置列表文字大小-->
+    <dimen name="list_name_size">20sp</dimen>
+
+    <dimen name="text_size_20">20sp</dimen>
+    <dimen name="text_size_19">19sp</dimen>
+    <dimen name="text_size_16">16sp</dimen>
+    <dimen name="text_size_15">15sp</dimen>
+
     <dimen name="activity_head_center">18sp</dimen>
-    <dimen name="activity_head_center_s">17sp</dimen>
-    <dimen name="activity_head_right">15sp</dimen>
     <dimen name="activity_normal_text">18sp</dimen>
-    <dimen name="activity_normal_textone">12sp</dimen>
+    <dimen name="activity_head_center_s">17sp</dimen>
+    <dimen name="activity_person">16sp</dimen>
+    <dimen name="activity_head_right">15sp</dimen>
     <dimen name="list_text_size">14sp</dimen>
     <dimen name="text_size_13">13sp</dimen>
+    <dimen name="activity_normal_textone">12sp</dimen>
+    <dimen name="text_size_11">11sp</dimen>
     <dimen name="text_size_10">10sp</dimen>
     <dimen name="text_size_9">9sp</dimen>
-    <dimen name="text_size_11">11sp</dimen>
 
     <dimen name="menu_pop_top">60dp</dimen>
     <dimen name="menu_pop_width">100dp</dimen>

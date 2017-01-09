@@ -355,13 +355,15 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     addDb(GlobalConfig.playerObject);// 将播放对象加入数据库
                     break;
                 case BroadcastConstants.UPDATE_PLAY_CURRENT_TIME:// 更新当前播放时间
-                    long secondProgress = intent.getLongExtra(StringConstant.PLAY_SECOND_PROGRESS, 0);
-                    if(secondProgress == -1) {
-                        mSeekBar.setSecondaryProgress((int) totalTime);
-                    } else {
-                        mSeekBar.setSecondaryProgress((int) secondProgress);
+                    if(mediaType != null && mediaType.equals(StringConstant.TYPE_AUDIO)) {
+                        long secondProgress = intent.getLongExtra(StringConstant.PLAY_SECOND_PROGRESS, 0);
+                        if(secondProgress == -1) {
+                            mSeekBar.setSecondaryProgress((int) totalTime);
+                        } else {
+                            mSeekBar.setSecondaryProgress((int) secondProgress);
+                        }
+                        L.i("TAG", "OnCacheStatus: secondProgress == " + secondProgress);
                     }
-                    L.i("TAG", "OnCacheStatus: secondProgress == " + secondProgress);
 
                     long currentTime = intent.getLongExtra(StringConstant.PLAY_CURRENT_TIME, -1);
                     if(mediaType != null && mediaType.equals(StringConstant.TYPE_AUDIO)) {
@@ -512,6 +514,13 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         if(mReceiver != null) {// 注销广播
             context.unregisterReceiver(mReceiver);
             mReceiver = null;
+        }
+        if(windowManager != null) {
+            windowManager = null;
+        }
+        if(playList != null) {
+            playList.clear();
+            playList = null;
         }
     }
 
@@ -689,7 +698,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     private List<LanguageSearchInside> clearContentPlayNull(List<LanguageSearchInside> list) {
         int index = 0;
         while (index < list.size()) {
-            if(list.get(index).getMediaType().equals("TTS")) {
+            if(list.get(index).getMediaType().equals(StringConstant.TYPE_TTS)) {
                 index++;
             } else {
                 if(list.get(index).getContentPlay() == null || list.get(index).getContentPlay().trim().equals("")

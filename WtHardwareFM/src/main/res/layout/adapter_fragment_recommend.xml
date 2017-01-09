@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="81dp"
+        android:layout_height="94dp"
         android:background="@color/WHITE"
         android:gravity="left|center"
         android:orientation="horizontal">
@@ -45,7 +45,7 @@
                 android:ellipsize="end"
                 android:maxLines="1"
                 android:textColor="@color/dinglan_orange"
-                android:textSize="15sp"
+                android:textSize="@dimen/audio_title_size"
                 android:singleLine="true"/>
             
             <LinearLayout
@@ -57,8 +57,8 @@
             
 	            <ImageView
 	                android:id="@+id/image_hint_visibility"
-	                android:layout_width="12dp"
-	                android:layout_height="12dp"
+	                android:layout_width="20dp"
+	                android:layout_height="20dp"
 	                android:src="@mipmap/image_program_album"
 	                android:layout_marginRight="6dp"
 	                android:visibility="visible"/>
@@ -71,53 +71,15 @@
 	                android:maxLines="1"
 	                android:text="我听科技"
 	                android:textColor="@color/beijing"
-	                android:textSize="13sp"
+                    android:textSize="@dimen/audio_program_source_size"
 	                android:singleLine="true"/>
+
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical">
-
-                <ImageView
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:src="@mipmap/image_program_listener" />
-
-                <TextView
-                    android:id="@+id/tv_num"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"
-                    android:textSize="9sp"
-                    android:textColor="@color/beijing"
-                    android:text="0" />
-                
-                <ImageView
-                    android:id="@+id/image_number_time"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:src="@mipmap/image_program_number"
-                    android:layout_marginLeft="14dp"/>
-
-                <TextView
-                    android:id="@+id/tv_total"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="4dp"
-                    android:textSize="9sp"
-                    android:textColor="@color/beijing"
-                    android:text="0集"/>
-            </LinearLayout>
         </LinearLayout>
+
     </LinearLayout>
 
-  <!--   <TextView
-        android:layout_width="match_parent"
-        android:layout_height="10dp"
-        android:layout_marginBottom="7dp"
-        android:background="@color/setting_bg_color" /> -->
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"   

@@ -46,9 +46,8 @@ import java.util.List;
 
 /**
  * 城市列表
- *
  * @author 辛龙
- *         2016年4月7日
+ * 2016年4月7日
  */
 public class CityListActivity extends BaseActivity implements OnClickListener {
     private CharacterParser characterParser;
@@ -88,7 +87,6 @@ public class CityListActivity extends BaseActivity implements OnClickListener {
         }
     }
 
-
     private void setView() {
         findViewById(R.id.head_left_btn).setOnClickListener(this);
 
@@ -122,73 +120,45 @@ public class CityListActivity extends BaseActivity implements OnClickListener {
             listView.setAdapter(adapter);
             setInterface();
         }
-
     }
 
-    /**
-     * 发送网络请求
-     */
+    // 发送网络请求
     private void sendRequest() {
         VolleyRequest.RequestPost(GlobalConfig.getCatalogUrl, tag, setParam(), new VolleyCallback() {
-
             private String ReturnType;
 
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                // 如果网络请求已经执行取消操作  就表示就算请求成功也不需要数据返回了  所以方法就此结束
-                if (isCancelRequest) {
-                    return;
-                }
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return;
                 try {
                     ReturnType = result.getString("ReturnType");
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                // 根据返回值来对程序进行解析
-                if (ReturnType != null) {
-                    if (ReturnType.equals("1001")) {
-                        try {
-                            // 获取列表
-                            String ResultList = result.getString("CatalogData");
-                            Catalog SubList_all = new Gson().fromJson(ResultList, new TypeToken<Catalog>() {
-                            }.getType());
-                            srcList = SubList_all.getSubCata();
-                            GlobalConfig.CityCatalogList = srcList;
-                            handleCityList(srcList);
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    } else if (ReturnType.equals("1002")) {
-                        ToastUtils.show_always(context, "无此分类信息");
-                    } else if (ReturnType.equals("1003")) {
-                        ToastUtils.show_always(context, "分类不存在");
-                    } else if (ReturnType.equals("1011")) {
-                        ToastUtils.show_always(context, "当前暂无分类");
-                    } else if (ReturnType.equals("T")) {
-                        ToastUtils.show_always(context, "获取列表异常");
+                if (ReturnType != null && ReturnType.equals("1001")) {
+                    try {
+                        Catalog SubList_all = new Gson().fromJson(result.getString("CatalogData"), new TypeToken<Catalog>() {}.getType());
+                        srcList = SubList_all.getSubCata();
+                        GlobalConfig.CityCatalogList = srcList;
+                        handleCityList(srcList);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
                     }
                 } else {
-                    ToastUtils.show_always(context, "数据获取异常，请稍候重试");
+                    ToastUtils.show_always(context, "获取列表失败，请返回重试!");
                 }
             }
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+                if (dialog != null) dialog.dismiss();
+                ToastUtils.showVolleyError(context);
             }
         });
     }
 
-    /**
-     * 设置请求参数
-     *
-     * @return
-     */
+    // 设置请求参数
     private JSONObject setParam() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {

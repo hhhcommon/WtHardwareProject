@@ -90,6 +90,7 @@ public class VolleyRequest {
                 Method.POST, url, jsonObject, callback.loadingListener(), callback.errorListener());
 
         jsonObjectRequest.setTag(tag);// 设置标签
+        jsonObjectRequest.setRetryPolicy(new DefaultRetryPolicy(GlobalConfig.HTTP_CONNECTION_TIMEOUT, 1, 1.0f));
         BSApplication.getHttpQueues().add(jsonObjectRequest);// 加入队列
         //		BSApplication.getHttpQueues().start();// 启动
 

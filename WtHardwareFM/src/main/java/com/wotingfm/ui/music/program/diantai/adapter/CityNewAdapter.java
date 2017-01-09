@@ -18,7 +18,6 @@ import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
 
-
 public class CityNewAdapter extends BaseAdapter {
     private List<RankInfo> list;
     private Context context;
@@ -96,9 +95,8 @@ public class CityNewAdapter extends BaseAdapter {
 
             if (mediaType.equals("RADIO")) {
 //				if (lists.getContentPub() != null && !lists.getContentPub().equals("")) {
-//                    holder.textRankPlaying.setText("正在直播：" + lists.getContentPub());
+//                    holder.textRankPlaying.setText(lists.getContentPub());
 //				}
-//                holder.textRankPlaying.setText("正在直播：测试-无节目单数据");
                 holder.textRankPlaying.setText("测试-无节目单数据");
             } else {
                 if (lists.getContentPub() != null && !lists.getContentPub().equals("")) {

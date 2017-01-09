@@ -14,6 +14,7 @@ import com.android.volley.VolleyError;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -219,22 +220,22 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
 
         // 播放類型
         String mediaType = GlobalConfig.playerObject.getMediaType();
-        if(mediaType != null && mediaType.equals("RADIO")) {
+        if(mediaType != null && mediaType.equals(StringConstant.TYPE_RADIO)) {
             textDetails.setVisibility(View.GONE);// 詳情
-            textProgram.setVisibility(View.VISIBLE);
+            textProgram.setVisibility(View.VISIBLE);// 播单
             textSequ.setVisibility(View.INVISIBLE);// 專輯
-            textComment.setVisibility(View.INVISIBLE);// 評論
+            textDown.setVisibility(View.INVISIBLE);// 下载
         } else {
-            textProgram.setVisibility(View.GONE);
+            textProgram.setVisibility(View.GONE);// 播单
             textDetails.setVisibility(View.VISIBLE);// 詳情
             textSequ.setVisibility(View.VISIBLE);// 專輯
-            textComment.setVisibility(View.VISIBLE);// 評論
+            textDown.setVisibility(View.VISIBLE);// 下载
 
-            if(mediaType != null && mediaType.equals("TTS")) {
+            if(mediaType != null && mediaType.equals(StringConstant.TYPE_TTS)) {
                 textComment.setClickable(false);
                 textComment.setTextColor(context.getResources().getColor(R.color.gray));
                 textComment.setCompoundDrawablesWithIntrinsicBounds(null, context.getResources().getDrawable(R.mipmap.wt_image_play_more_comment_gray), null, null);
-            } else if(mediaType != null && !mediaType.equals("TTS")) {
+            } else {
                 textComment.setClickable(true);
                 textComment.setTextColor(context.getResources().getColor(R.color.wt_login_third));
                 textComment.setCompoundDrawablesWithIntrinsicBounds(null, context.getResources().getDrawable(R.mipmap.wt_image_play_more_comment), null, null);
@@ -243,7 +244,7 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
 
         // 喜欢状态
         String contentFavorite = GlobalConfig.playerObject.getContentFavorite();
-        if(mediaType != null && mediaType.equals("TTS")) {// TTS 不支持喜欢
+        if(mediaType != null && mediaType.equals(StringConstant.TYPE_TTS)) {// TTS 不支持喜欢
             textLike.setClickable(false);
             textLike.setText("喜欢");
             textLike.setTextColor(getResources().getColor(R.color.gray));
@@ -261,8 +262,7 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
         }
 
         // 下載狀態
-        if (mediaType != null && mediaType.equals("AUDIO")) {// 可以下载
-            textDown.setVisibility(View.VISIBLE);
+        if (mediaType != null && mediaType.equals(StringConstant.TYPE_AUDIO)) {// 可以下载
             if(!TextUtils.isEmpty(GlobalConfig.playerObject.getLocalurl())) {// 已下载
                 textDown.setClickable(false);
                 textDown.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.mipmap.wt_image_play_more_down_gray), null, null);
@@ -274,16 +274,11 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
                 textDown.setTextColor(getResources().getColor(R.color.wt_login_third));
                 textDown.setText("下载");
             }
-        } else {// 不可以下载
-            if(mediaType != null && mediaType.equals("TTS")) {
-                textDown.setVisibility(View.VISIBLE);
-                textDown.setClickable(false);
-                textDown.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.mipmap.wt_image_play_more_down_gray), null, null);
-                textDown.setTextColor(getResources().getColor(R.color.gray));
-                textDown.setText("下载");
-            } else {
-                textDown.setVisibility(View.INVISIBLE);
-            }
+        } else if(mediaType != null && mediaType.equals(StringConstant.TYPE_TTS)) {// 不可以下载
+            textDown.setClickable(false);
+            textDown.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.mipmap.wt_image_play_more_down_gray), null, null);
+            textDown.setTextColor(getResources().getColor(R.color.gray));
+            textDown.setText("下载");
         }
     }
 
