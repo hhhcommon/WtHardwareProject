@@ -527,6 +527,15 @@
             android:theme="@android:style/Theme.NoTitleBar"/>
 
         <activity
+            android:name="com.wotingfm.ui.music.program.album.anchor.AnchorDetailsActivity"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.NoTitleBar"/>
+        <activity
+            android:name="com.wotingfm.ui.music.program.album.anchor.activity.AnchorListActivity"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.NoTitleBar"/>
+
+        <activity
             android:name=".ui.music.player.fragment.more.PlayerMoreOperationActivity"
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.NoTitleBar"/>
@@ -554,6 +563,9 @@
                 <category android:name="android.intent.category.HOME"/>
             </intent-filter>
         </receiver>
+
+
+
 
         <service android:name=".common.service.SubclassService"/>
         <service android:name=".common.service.NotificationService"/>
