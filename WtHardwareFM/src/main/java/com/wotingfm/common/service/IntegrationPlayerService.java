@@ -302,13 +302,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
                 L.v("TAG", "contentPlay -- > > " + contentPlay);
             }
-            final String url = contentPlay;
-            new Handler().postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    mVlc.playMRL(url);
-                }
-            }, 300);
+            mVlc.playMRL(contentPlay);
         }
         mHandler.postDelayed(mTotalTimeRunnable, 1000);
 

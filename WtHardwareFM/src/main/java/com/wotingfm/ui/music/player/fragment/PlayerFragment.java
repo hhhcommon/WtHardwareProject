@@ -128,6 +128,17 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         }
     }
 
+    // 初始化数据
+    private void initData() {
+        windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        registeredBroad();
+
+        mSearchHistoryDao = new SearchPlayerHistoryDao(context);// 数据库对象
+
+        mPlayer = IntegrationPlayer.getInstance();// 播放器对象
+        mPlayer.bindService(context);// 绑定服务
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -181,17 +192,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
 
         mSeekBar.setOnSeekBarChangeListener(this);
         mListView.setOnItemClickListener(this);
-    }
-
-    // 初始化数据
-    private void initData() {
-        windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        registeredBroad();
-
-        mSearchHistoryDao = new SearchPlayerHistoryDao(context);// 数据库对象
-
-        mPlayer = IntegrationPlayer.getInstance();// 播放器对象
-        mPlayer.bindService(context);// 绑定服务
     }
 
     // 获取数据库第一条数据并加入播放列表
@@ -262,11 +262,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                             LanguageSearch lists = new Gson().fromJson(result.getString("ResultList"), new TypeToken<LanguageSearch>() {}.getType());
                             list = lists.getList();
                         }
-
-                        for(int i=0; i<list.size(); i++) {
-                            L.i("MAIN", list.get(i).getContentPlay());// "SEARCH_TEXT" == null
-                        }
-
                         subList = clearContentPlayNull(list);// 去空
                         if(subList != null && subList.size() > 0) {
                             mUIHandler.sendEmptyMessageDelayed(IntegerConstant.PLAY_UPDATE_LIST, 1000);
@@ -279,6 +274,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                         if(refreshType == 0 && playList.size() <= 0) {
                             tipView.setVisibility(View.VISIBLE);
                             tipView.setTipView(TipView.TipStatus.NO_DATA, "数据君不翼而飞了\n点击界面会重新获取数据哟");
+                        } else {
+                            mUIHandler.sendEmptyMessageDelayed(IntegerConstant.PLAY_UPDATE_LIST, 1000);
                         }
                     }
                 } catch (Exception e) {
@@ -287,6 +284,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     if(refreshType == 0 && playList.size() <= 0) {
                         tipView.setVisibility(View.VISIBLE);
                         tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                    } else {
+                        mUIHandler.sendEmptyMessageDelayed(IntegerConstant.PLAY_UPDATE_LIST, 1000);
                     }
                 }
             }
@@ -295,9 +294,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
             protected void requestError(VolleyError error) {
                 ToastUtils.showVolleyError(context);
                 setPullAndLoad(false, false);
-                if(refreshType == 0) {
+                if(refreshType == 0 && playList.size() <= 0) {
                     tipView.setVisibility(View.VISIBLE);
                     tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                } else {
+                    mUIHandler.sendEmptyMessageDelayed(IntegerConstant.PLAY_UPDATE_LIST, 1000);
                 }
             }
         });
@@ -430,28 +431,30 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case IntegerConstant.PLAY_UPDATE_LIST:// 更新列表
-                    if(playList.size() > 0) {
-                        List<String> contentIdList = new ArrayList<>();// 保存用于区别是否重复的内容
-                        String contentId;// 用于区别是否重复
-                        for(int i=0, size=playList.size(); i<size; i++) {
-                            contentId = playList.get(i).getContentId();
-                            if(contentId != null && !contentId.trim().equals("")) {
-                                contentIdList.add(contentId);
-                            }
-                        }
-                        for(int i=0, size=subList.size(); i<size; i++) {
-                            if(!contentIdList.contains(subList.get(i).getContentId())) {
-                                if(refreshType == -1) {
-                                    playList.add(0, subList.get(i));
-                                    index++;
-                                } else {
-                                    playList.add(subList.get(i));
+                    if(subList != null && subList.size() > 0) {
+                        if(playList.size() > 0) {
+                            List<String> contentIdList = new ArrayList<>();// 保存用于区别是否重复的内容
+                            String contentId;// 用于区别是否重复
+                            for(int i=0, size=playList.size(); i<size; i++) {
+                                contentId = playList.get(i).getContentId();
+                                if(contentId != null && !contentId.trim().equals("")) {
+                                    contentIdList.add(contentId);
                                 }
                             }
+                            for(int i=0, size=subList.size(); i<size; i++) {
+                                if(!contentIdList.contains(subList.get(i).getContentId())) {
+                                    if(refreshType == -1) {
+                                        playList.add(0, subList.get(i));
+                                        index++;
+                                    } else {
+                                        playList.add(subList.get(i));
+                                    }
+                                }
+                            }
+                            contentIdList.clear();
+                        } else {
+                            playList.addAll(subList);
                         }
-                        contentIdList.clear();
-                    } else {
-                        playList.addAll(subList);
                     }
                     if(adapter == null) {
                         mListView.setAdapter(adapter = new PlayerListAdapter(context, playList));
@@ -478,11 +481,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                             playList.get(i).setType("1");
                         }
                     }
-
-                    for(int i=0; i<playList.size(); i++) {
-                        L.i("MAIN", "Type -- > " + playList.get(i).getType());
-                    }
-
                     adapter.setList(playList);
                     break;
             }
