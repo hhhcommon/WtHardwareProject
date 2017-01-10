@@ -25,7 +25,10 @@ import com.kingsoft.media.httpcache.OnCacheStatusListener;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.ui.music.download.dao.FileInfoDao;
+import com.wotingfm.ui.music.download.model.FileInfo;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
+import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.L;
 import com.wotingfm.util.ResourceUtil;
 
@@ -48,9 +51,11 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     private LibVLC mVlc;// VLC 播放器
     private SpeechSynthesizer mTts;// 讯飞播放 TTS
     private KSYProxyService proxyService;// 金山云缓存
+    private FileInfoDao mFileDao;
 
     private MyBinder mBinder = new MyBinder();
     private AssistServiceConnection mConnection;
+    private List<FileInfo> mFileInfoList;// 下载数据
 
     private boolean isVlcPlaying;// VLC 播放器正在播放
     private boolean isTtsPlaying;// TTS 播放器正在播放
@@ -105,17 +110,23 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     @Override
     public void onCreate() {
         setForeground();
+        initDao();
         initCache();
         initVlc();
         initTts();
         initIntent();
     }
 
+    // 初始化数据库对象
+    private void initDao() {
+        mFileDao = new FileInfoDao(this);
+    }
+
     // 初始化播放缓存
     private void initCache() {
         if(proxyService == null) proxyService = new KSYProxyService(this);
         File file = new File(ResourceUtil.getLocalUrlForKsy());// 设置缓存目录
-        if (!file.exists()) if (!file.mkdir()) L.v("TAG", "KSYProxy MkDir Error");
+        if (!file.exists()) if (!file.mkdirs()) L.w("TAG", "KSYProxy MkDir Error");
         proxyService.setCacheRoot(file);
         proxyService.setMaxCacheSize(500 * 1024 * 1024);// 缓存大小 500MB
         proxyService.startServer();
@@ -157,17 +168,33 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         }
     }
 
+    // 更新下载列表
+    public void updateLocalList() {
+        if(mFileInfoList != null) mFileInfoList.clear();
+        mFileInfoList = getDownList();
+        if(mFileInfoList != null && mFileInfoList.size() > 0) {
+            for(int i=0, size=mFileInfoList.size(); i<size; i++) {
+                if(mFileInfoList.get(i).getUrl().equals(GlobalConfig.playerObject.getContentPlay())) {
+                    GlobalConfig.playerObject.setLocalurl(mFileInfoList.get(i).getLocalurl());
+                }
+            }
+        }
+    }
+
     // 更新播放列表
     public void updatePlayList(List<LanguageSearchInside> list) {
         if(list != null) {
             if(playList != null) playList.clear();
             playList = list;
-        }
-        if(!isVlcPlaying && !isTtsPlaying) {// 第一次进入应用给 playerObject 赋值
-            position = 0;
-            GlobalConfig.playerObject = playList.get(position);
-            updatePlayViewIntent.putExtra(StringConstant.PLAY_POSITION, position);
-            sendBroadcast(updatePlayViewIntent);
+            mFileInfoList = getDownList();
+
+            if(!isVlcPlaying && !isTtsPlaying) {// 第一次进入应用给 playerObject 赋值
+                position = 0;
+                GlobalConfig.playerObject = playList.get(position);
+                updateLocalList();
+                updatePlayViewIntent.putExtra(StringConstant.PLAY_POSITION, position);
+                sendBroadcast(updatePlayViewIntent);
+            }
         }
     }
 
@@ -227,10 +254,23 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         return (isVlcPlaying && mVlc.isPlaying()) || (isTtsPlaying && mTts.isSpeaking());
     }
 
+    // 获取已经下载过的列表
+    private List<FileInfo> getDownList() {
+        return mFileDao.queryFileInfo("true", CommonUtils.getUserId(this));
+    }
+
     // 初始化播放对象
     private boolean initPlayObject(LanguageSearchInside playObject) {
         if(playObject == null) return false;
-        GlobalConfig.playerObject = playList.get(position);
+        GlobalConfig.playerObject = playObject;
+
+        if(mFileInfoList != null && mFileInfoList.size() > 0) {
+            for(int i=0, size=mFileInfoList.size(); i<size; i++) {
+                if(mFileInfoList.get(i).getUrl().equals(GlobalConfig.playerObject.getContentPlay())) {
+                    GlobalConfig.playerObject.setLocalurl(mFileInfoList.get(i).getLocalurl());
+                }
+            }
+        }
         mediaType = GlobalConfig.playerObject.getMediaType();
         httpUrl = GlobalConfig.playerObject.getContentPlay();
         localUrl = GlobalConfig.playerObject.getLocalurl();
@@ -248,6 +288,9 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
         if(localUrl != null) {// 播放本地 URL
             mVlc.playMRL(localUrl);
+            secondProgress = -100;// MAX
+
+            L.v("TAG", "播放本地内容：localUrl -> " + localUrl);
         } else {
             if(mediaType.equals(StringConstant.TYPE_AUDIO)) {
                 if (!isCacheFinish(contentPlay)) {// 判断是否已经缓存过  没有则开始缓存
@@ -256,6 +299,8 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
                     secondProgress = -1;
                 }
                 contentPlay = proxyService.getProxyUrl(contentPlay);
+
+                L.v("TAG", "contentPlay -- > > " + contentPlay);
             }
             mVlc.playMRL(contentPlay);
         }
@@ -408,6 +453,9 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
             if (msg == null || msg.getData() == null) return ;
             switch (msg.getData().getInt("event")) {
                 case EventHandler.MediaPlayerEncounteredError:// 播放出现错误播下一首
+                    mVlc.playMRL(httpUrl);
+
+                    L.e("TAG", "========= MediaPlayerEncounteredError =========");
                     break;
                 case EventHandler.MediaPlayerEndReached:// 播放完成播下一首
                     if(mUpdatePlayTimeRunnable != null) {
@@ -419,7 +467,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
                     }
                     startPlay(position);
 
-                    Log.e("TAG", "========= MediaPlayerEndReached =========");
+                    L.i("TAG", "========= MediaPlayerEndReached =========");
                     break;
             }
         }

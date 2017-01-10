@@ -26,7 +26,7 @@ public class GlobalConfig {
     
     // 缓存路径
     public static String playCacheDirI = Environment.getRootDirectory() + "";                  // 获取手机根目录
-    public static String playCacheDirO = Environment.getExternalStorageDirectory() + "";       // 获取SD卡根目录
+    public static String playCacheDirO = Environment.getExternalStorageDirectory().getAbsolutePath();// 获取SD卡根目录
     public static String ksyPlayCache = "/WTFM/playCache/";                                    // 金山云缓存地址
     public static String upLoadCache = "/WTFM/APP/";                                           // app更新下载地址
   
