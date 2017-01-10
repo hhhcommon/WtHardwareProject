@@ -2,9 +2,7 @@ package com.wotingfm.ui.music.download.downloadlist.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,22 +14,13 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.ui.baseactivity.BaseActivity;
-import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.ui.music.download.downloadlist.adapter.DownLoadListAdapter;
 import com.wotingfm.ui.music.download.model.FileInfo;
-import com.wotingfm.ui.music.main.HomeActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
-import com.wotingfm.ui.music.player.fragment.PlayerFragment;
-import com.wotingfm.ui.music.player.model.PlayerHistory;
-import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.ToastUtils;
 
-import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -197,7 +186,8 @@ public class DownLoadListActivity extends BaseActivity implements OnClickListene
 				if(fileinfolist != null && fileinfolist.size() != 0){
 					positionnow =position;
 					FileInfo mFileInfo = fileinfolist.get(position);
-					if(mFileInfo.getLocalurl() != null && !mFileInfo.getLocalurl().equals("")){
+					ToastUtils.show_always(context,""+fileinfolist.get(position).getLocalurl());
+					/*if(mFileInfo.getLocalurl() != null && !mFileInfo.getLocalurl().equals("")){
 						File file = new File(mFileInfo.getLocalurl());
 						if (file.exists()) {
 							String playername = mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4);
@@ -262,11 +252,11 @@ public class DownLoadListActivity extends BaseActivity implements OnClickListene
 							finish();
 							dbdao.closedb();
 						} else {	// 此处要调对话框，点击同意删除对应的文件信息
-							/* ToastUtil.show_always(context, "文件已经被删除，是否删除本条记录"); */
+							*//* ToastUtil.show_always(context, "文件已经被删除，是否删除本条记录"); *//*
 							positionnow = position;
 							confirmdialog.show();
 						}
-					}
+					}*/
 				}
 			}
 		});
