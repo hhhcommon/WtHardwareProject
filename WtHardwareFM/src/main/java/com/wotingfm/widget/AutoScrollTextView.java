@@ -110,7 +110,8 @@ public class AutoScrollTextView extends TextView implements View.OnClickListener
 
             @Override
             public SavedState createFromParcel(Parcel in) {
-                return new SavedState(in);
+//                return new SavedState(in);
+                return null;
             }
         };
 

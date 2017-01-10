@@ -22,12 +22,10 @@ public class RecommendListAdapter extends BaseAdapter {
     private List<RankInfo> list;
     private Context context;
     private Bitmap bmp;
-    private boolean isHintVisibility;
 
-    public RecommendListAdapter(Context context, List<RankInfo> list, boolean isHintVisibility) {
+    public RecommendListAdapter(Context context, List<RankInfo> list) {
         this.context = context;
         this.list = list;
-        this.isHintVisibility = isHintVisibility;
     }
 
     @Override
@@ -53,97 +51,53 @@ public class RecommendListAdapter extends BaseAdapter {
             holder = new ViewHolder();
             holder.textview_ranktitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
             holder.imageview_rankimage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
-            holder.mTv_number = (TextView) convertView.findViewById(R.id.tv_num);
             holder.textRankContent = (TextView) convertView.findViewById(R.id.RankContent);
-            holder.textTotal = (TextView) convertView.findViewById(R.id.tv_total);
-            holder.imageNumberTime = (ImageView) convertView.findViewById(R.id.image_number_time);
 
             holder.img_zhezhao = (ImageView) convertView.findViewById(R.id.img_zhezhao);
             Bitmap bmp_zhezhao = BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b);
             holder.img_zhezhao.setImageBitmap(bmp_zhezhao);
 
-            holder.imageHintVisibility = (ImageView) convertView.findViewById(R.id.image_hint_visibility);
-            if(isHintVisibility){
-                holder.imageHintVisibility.setVisibility(View.GONE);
-            }else{
-                holder.imageHintVisibility.setVisibility(View.VISIBLE);
-            }
             bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
-
-
         RankInfo lists = list.get(position);
 
-        if (lists.getContentName() == null || lists.getContentName().equals("")) {
-            holder.textview_ranktitle.setText("未知");
-        } else {
-            holder.textview_ranktitle.setText(lists.getContentName());
+        // 标题
+        String contentName = lists.getContentName();
+        if (contentName == null || contentName.equals("")) {
+            contentName = "未知";
         }
+        holder.textview_ranktitle.setText(contentName);
 
-        if (lists.getContentImg() == null || lists.getContentImg().equals("null")|| lists.getContentImg().trim().equals("")) {
+        // 封面图片
+        String contentImg = lists.getContentImg();
+        if (contentImg == null || contentImg.equals("null")|| contentImg.trim().equals("")) {
             holder.imageview_rankimage.setImageBitmap(bmp);
         } else {
-            String url;
-            if(lists.getContentImg().startsWith("http")){
-                url =  lists.getContentImg();
-            }else{
-                url = GlobalConfig.imageurl + lists.getContentImg();
+            if(!contentImg.startsWith("http")){
+                contentImg = GlobalConfig.imageurl + contentImg;
             }
-            url= AssembleImageUrlUtils.assembleImageUrl150(url);
-            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageview_rankimage);
+            contentImg= AssembleImageUrlUtils.assembleImageUrl150(contentImg);
+            Picasso.with(context).load(contentImg.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageview_rankimage);
         }
 
-        if(lists != null || lists.getMediaType() != null){
-            if (lists.getMediaType().equals("SEQU")) {
-                holder.imageNumberTime.setImageResource(R.mipmap.image_program_number);
-                if (lists.getContentSubCount() == null || lists.getContentSubCount().equals("")
-                        || lists.getContentSubCount().equals("null")) {
-                    holder.textTotal.setText("0" + "集");
-                } else {
-                    holder.textTotal.setText(lists.getContentSubCount() + "集");
-                }
-            } else if(lists.getMediaType().equals("RADIO") || lists.getMediaType().equals("AUDIO")) {
-                holder.imageNumberTime.setImageResource(R.mipmap.image_program_time);
-                //节目时长
-                if (lists.getContentTimes() == null|| lists.getContentTimes().equals("") || lists.getContentTimes().equals("null")) {
-                    holder.textTotal.setText(context.getString(R.string.play_time));
-                } else {
-                    int minute = Integer.valueOf(lists.getContentTimes()) / (1000 * 60);
-                    int second = (Integer.valueOf(lists.getContentTimes()) / 1000) % 60;
-                    if(second < 10){
-                        holder.textTotal.setText(minute + "\'" + " " + "0" + second + "\"");
-                    }else{
-                        holder.textTotal.setText(minute + "\'" + " " + second + "\"");
-                    }
-                }
-            }
+        // 来源
+        String contentPub = lists.getContentPub();
+        if (contentPub == null || contentPub.equals("") || contentPub.equals("null")) {
+            contentPub = "未知";
         }
-        if (lists.getPlayCount() == null || lists.getPlayCount().equals("") || lists.getPlayCount().equals("null")) {
-            holder.mTv_number.setText("0");
-        } else {
-            holder.mTv_number.setText(lists.getPlayCount());
-        }
-        if (lists.getContentPub() == null || lists.getContentPub().equals("") || lists.getContentPub().equals("null")) {
-            holder.textRankContent.setText("未知");
-        } else {
-            holder.textRankContent.setText(lists.getContentPub());
-        }
+        holder.textRankContent.setText(contentPub);
 
         return convertView;
     }
 
-    static class  ViewHolder {
+    class  ViewHolder {
         public ImageView imageview_rankimage;
         public TextView textview_ranktitle;
-        public TextView mTv_number;
         public TextView textRankContent;
-        public TextView textTotal;
-        public ImageView imageHintVisibility;
-        public ImageView imageNumberTime;
         public ImageView img_zhezhao;
     }
 }

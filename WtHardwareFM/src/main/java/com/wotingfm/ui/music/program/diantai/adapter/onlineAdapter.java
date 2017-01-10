@@ -15,13 +15,12 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
+import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.ui.music.program.diantai.model.RadioPlay;
 import com.wotingfm.ui.music.program.fmlist.activity.FMListActivity;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
-import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
-import com.wotingfm.util.ToastUtils;
 
 import java.util.List;
 
@@ -94,7 +93,7 @@ public class onlineAdapter extends BaseExpandableListAdapter {
             holder.tv_name.setText(lists.getCatalogName());
         }
 
-        // 判断回调对象决定是哪个fragment的对象调用的词adapter 从而实现多种布局
+        // 判断回调对象决定是哪个 fragment 的对象调用的词 adapter 从而实现多种布局
         holder.lin_more.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,8 +112,7 @@ public class onlineAdapter extends BaseExpandableListAdapter {
      * 显示：child
      */
     @Override
-    public View getChildView(int groupPosition, int childPosition,
-                             boolean isLastChild, View convertView, ViewGroup parent) {
+    public View getChildView(int groupPosition, int childPosition, boolean isLastChild, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
@@ -122,15 +120,7 @@ public class onlineAdapter extends BaseExpandableListAdapter {
             holder.textview_ranktitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
             holder.textview_rankplaying = (TextView) convertView.findViewById(R.id.RankPlaying);// 正在播放的节目
             holder.imageview_rankimage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
-            holder.mTv_number = (TextView) convertView.findViewById(R.id.tv_num);
-            holder.lin_CurrentPlay = (LinearLayout) convertView.findViewById(R.id.lin_currentplay);
 
-            holder.image_last = (ImageView) convertView.findViewById(R.id.image_last);//
-            holder.image_num = (ImageView) convertView.findViewById(R.id.image_num);//
-            holder.tv_last = (TextView) convertView.findViewById(R.id.tv_last);
-            holder.image_last.setVisibility(View.GONE);
-            holder.image_num.setVisibility(View.GONE);
-            holder.tv_last.setVisibility(View.GONE);
             holder.img_zhezhao = (ImageView) convertView.findViewById(R.id.img_zhezhao);
             Bitmap bmp_zhezhao = BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b);
             holder.img_zhezhao.setImageBitmap(bmp_zhezhao);
@@ -139,75 +129,41 @@ public class onlineAdapter extends BaseExpandableListAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         RankInfo lists = group.get(groupPosition).getList().get(childPosition);
-        if(lists!=null){
-            if(lists.getMediaType()!=null&&!lists.getMediaType().equals("")){
-                if (lists.getMediaType().equals("RADIO")) {
-                    if (lists.getContentName() == null|| lists.getContentName().equals("")) {
-                        holder.textview_ranktitle.setText("未知");
-                    } else {
-                        holder.textview_ranktitle.setText(lists.getContentName());
-                    }
-//					if (lists.getContentPub() == null|| lists.getContentPub().equals("")) {
-//						holder.textview_rankplaying.setText("未知");
-//					} else {
-//						holder.textview_rankplaying.setText(lists.getContentPub());
-//					}
-                    holder.textview_rankplaying.setText("测试-无节目单数据");
-                    if (lists.getContentImg() == null
-                            || lists.getContentImg().equals("")
-                            || lists.getContentImg().equals("null")
-                            || lists.getContentImg().trim().equals("")) {
-                        Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx_d);
-                        holder.imageview_rankimage.setImageBitmap(bmp);
-                    } else {
-                        String url;
-                        if(lists.getContentImg().startsWith("http")){
-                            url =  lists.getContentImg();
-                        }else{
-                            url = GlobalConfig.imageurl + lists.getContentImg();
-                        }
-                        url=AssembleImageUrlUtils.assembleImageUrl150(url);
-                        Picasso.with(context).load(url.replace("\\/", "/")).into(holder.imageview_rankimage);
-                    }
-                } else {
-                    // 判断mediatype==AUDIO的情况
-                    if (lists.getContentName() == null|| lists.getContentName().equals("")) {
-                        holder.textview_ranktitle.setText("未知");
-                    } else {
-                        holder.textview_ranktitle.setText(lists.getContentName());
-                    }
-                    if (lists.getContentImg() == null
-                            || lists.getContentImg().equals("")
-                            || lists.getContentImg().equals("null")
-                            || lists.getContentImg().trim().equals("")) {
-                        Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
-                        holder.imageview_rankimage.setImageBitmap(bmp);
-                    } else {
-                        String url;
-                        if(lists.getContentImg().startsWith("http")){
-                            url =  lists.getContentImg();
-                        }else{
-                            url = GlobalConfig.imageurl + lists.getContentImg();
-                        }
-                        url= AssembleImageUrlUtils.assembleImageUrl150(url);
-                        Picasso.with(context).load(url.replace("\\/", "/")).into(holder.imageview_rankimage);
-                    }
-                    holder.lin_CurrentPlay.setVisibility(View.INVISIBLE);
+
+        if(lists != null) {
+            String mediaType = lists.getMediaType();// 类型
+
+            if(mediaType != null && mediaType.equals("RADIO")) {
+                // 播放内容标题
+                String contentName = lists.getContentName();
+                if (contentName == null|| contentName.equals("")) {
+                    contentName = "未知";
                 }
-            }else{
-                ToastUtils.show_short(context, "服务器返回数据MediaType为空");
-            }
-            if (lists.getPlayCount() == null
-                    || lists.getPlayCount().equals("")
-                    || lists.getPlayCount().equals("null")) {
-                holder.mTv_number.setText("0");
-            } else {
-                holder.mTv_number.setText(lists.getPlayCount());
+                holder.textview_ranktitle.setText(contentName);
+
+                // 正在直播的节目
+                String contentPub = lists.getContentPub();
+                if (contentPub == null|| contentPub.equals("")) {
+                    contentPub = "未知";
+                }
+//            holder.textview_rankplaying.setText(contentPub);
+                holder.textview_rankplaying.setText("测试-无节目单数据");
+
+                // 封面图片
+                String contentImg = lists.getContentImg();
+                if (contentImg == null || contentImg.equals("null") || contentImg.trim().equals("")) {
+                    Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx_d);
+                    holder.imageview_rankimage.setImageBitmap(bmp);
+                } else {
+                    if(!contentImg.startsWith("http")){
+                        contentImg =  GlobalConfig.imageurl + contentImg;
+                    }
+                    contentImg = AssembleImageUrlUtils.assembleImageUrl150(contentImg);
+                    Picasso.with(context).load(contentImg.replace("\\/", "/")).into(holder.imageview_rankimage);
+                }
             }
         }
-
         return convertView;
-
     }
 
     class ViewHolder {
@@ -216,12 +172,7 @@ public class onlineAdapter extends BaseExpandableListAdapter {
         public TextView textview_ranktitle;
         public TextView tv_name;
         public LinearLayout lin_more;
-        public TextView mTv_number;
-        public LinearLayout lin_CurrentPlay;
         public ImageView img_zhezhao;
-        public ImageView image_num;
-        public ImageView image_last;
-        public TextView tv_last;
     }
 
     @Override

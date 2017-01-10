@@ -13,7 +13,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="40dp"
+            android:layout_height="46dp"
             android:background="@color/WHITE"
             android:gravity="center_vertical" >
 
@@ -29,6 +29,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="推荐"
+                    android:textSize="@dimen/audio_type_size"
                     android:textColor="@color/dinglan_orange" />
             </LinearLayout>
 
@@ -44,6 +45,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="电台"
+                    android:textSize="@dimen/audio_type_size"
                     android:textColor="@color/group_item_text2" />
             </LinearLayout>
 
@@ -59,6 +61,7 @@
                     android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="分类"
+                    android:textSize="@dimen/audio_type_size"
                     android:textColor="@color/group_item_text2" />
             </LinearLayout>
         </LinearLayout>

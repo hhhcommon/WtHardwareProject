@@ -111,7 +111,7 @@
 
         <!-- 创建群组主界面 -->
         <activity
-            android:name=".ui.interphone.group.creategroup.main.CreateGroupMainActivity"
+            android:name=".ui.interphone.group.creategroup.create.CreateGroupActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -295,11 +295,13 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
+
         <activity
             android:name=".ui.interphone.alert.ReceiveAlertActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
+
         <activity
             android:name=".ui.interphone.group.groupcontrol.groupdetail.activity.GroupDetailActivity"
             android:screenOrientation="portrait"
@@ -310,8 +312,9 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
+
         <activity
-            android:name=".ui.interphone.group.groupcontrol.memberadd.activity.MemberAddActivity"
+            android:name=".ui.interphone.group.groupcontrol.memberadd.GroupMemberAddActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -339,10 +342,11 @@
 
         <!-- 审核消息 -->
         <activity
-            android:name=".ui.interphone.group.groupcontrol.joingrouplist.activity.JoinGroupListActivity"
+            android:name=".ui.interphone.group.groupcontrol.joingrouplist.JoinGroupListActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
+
         <activity
             android:name=".ui.interphone.group.groupcontrol.handlegroupapply.HandleGroupApplyActivity"
             android:screenOrientation="portrait"
@@ -384,12 +388,6 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <!-- 猜你喜欢更多推荐 -->
-        <activity
-            android:name=".ui.music.program.tuijian.activity.RecommendLikeListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".ui.music.program.fmlist.activity.FMListActivity"
             android:screenOrientation="portrait"

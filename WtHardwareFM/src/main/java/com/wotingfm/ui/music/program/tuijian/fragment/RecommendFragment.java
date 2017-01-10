@@ -46,9 +46,8 @@ import java.util.List;
 
 /**
  * 节目页----推荐页
- *
  * @author 辛龙
- *         2016年3月30日
+ * 2016年3月30日
  */
 public class RecommendFragment extends Fragment {
     private SearchPlayerHistoryDao dbDao;
@@ -95,14 +94,6 @@ public class RecommendFragment extends Fragment {
 
             initListView();
             sendRequest();
-
-//            headView.findViewById(R.id.linear_more).setOnClickListener(new OnClickListener() {
-//                @Override
-//                public void onClick(View v) {
-//                    Intent intent = new Intent(context, RecommendLikeListActivity.class);
-//                    context.startActivity(intent);
-//                }
-//            });
         }
         return rootView;
     }
@@ -147,9 +138,7 @@ public class RecommendFragment extends Fragment {
 
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (isCancelRequest) {
-                    return;
-                }
+                if (isCancelRequest) return;
                 page++;
                 try {
                     returnType = result.getString("ReturnType");
@@ -188,7 +177,7 @@ public class RecommendFragment extends Fragment {
                     }
                     newList.addAll(subList);
                     if (adapter == null) {
-                        mListView.setAdapter(adapter = new RecommendListAdapter(context, newList, false));
+                        mListView.setAdapter(adapter = new RecommendListAdapter(context, newList));
                     } else {
                         adapter.notifyDataSetChanged();
                     }

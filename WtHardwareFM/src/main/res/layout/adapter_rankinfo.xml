@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="81dp"
+        android:layout_height="94dp"
         android:background="@color/WHITE"
         android:gravity="left|center"
         android:orientation="horizontal">
@@ -47,7 +47,7 @@
                 android:text="woting"
                 android:maxLines="1"
                 android:textColor="@color/dinglan_orange"
-                android:textSize="@dimen/activity_head_right" />
+                android:textSize="@dimen/audio_title_size" />
 
             <LinearLayout
                 android:id="@+id/lin_currentplay"
@@ -62,6 +62,7 @@
                     android:id="@+id/image_playing"
                     android:layout_width="12dp"
                     android:layout_height="12dp"
+                    android:visibility="gone"
                     android:src="@mipmap/image_program_album"
                     android:layout_marginRight="6dp"/>
 
@@ -71,7 +72,7 @@
                     android:layout_height="wrap_content"
                     android:text="正在直播: "
                     android:textColor="@color/beijing"
-                    android:textSize="@dimen/text_size_13" />
+                    android:textSize="@dimen/audio_program_source_size" />
 
                 <TextView
                     android:id="@+id/RankPlaying"
@@ -79,14 +80,15 @@
                     android:layout_height="wrap_content"
                     android:text="未知"
                     android:textColor="@color/beijing"
-                    android:textSize="@dimen/text_size_13"
-                    android:visibility="visible" />
+                    android:textSize="@dimen/audio_program_source_size" />
+
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="left|center">
+                android:gravity="left|center"
+                android:visibility="gone">
 
                 <ImageView
                     android:id="@+id/image_number"

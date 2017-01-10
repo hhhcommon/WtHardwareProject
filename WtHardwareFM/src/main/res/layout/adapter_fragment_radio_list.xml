@@ -6,7 +6,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="34dp"
+        android:layout_height="40dp"
         android:background="@color/setting_bg_color"
         android:orientation="horizontal">
 
@@ -24,7 +24,7 @@
                 android:gravity="center_vertical"
                 android:text="分类"
                 android:textColor="@color/wt_login_third"
-                android:textSize="14sp" />
+                android:textSize="@dimen/audio_more_size" />
         </LinearLayout>
 
         <LinearLayout
@@ -40,7 +40,7 @@
                 android:layout_height="wrap_content"
                 android:text="更多"
                 android:textColor="@color/wt_login_third"
-                android:textSize="12sp" />
+                android:textSize="@dimen/audio_more_size" />
 
             <ImageView
                 android:layout_width="22dp"
