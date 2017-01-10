@@ -60,11 +60,13 @@ public class FileInfoDao {
 				String playfrom=cursor.getString(cursor.getColumnIndex("playerfrom"));
 				String contentDescn=cursor.getString(cursor.getColumnIndex("contentdescn"));
 				String playcount=cursor.getString(cursor.getColumnIndex("playcount"));
+				String localurl = cursor.getString(cursor.getColumnIndex("localurl"));
 				// 把每个对象都放到history对象里
 				FileInfo h = new FileInfo(url, filename,id,seqimageurl);
 				/*	h.setId(id);*/
 				h.setAuthor(author);
 				//h.setContentPub(author);
+				h.setLocalurl(localurl);
 				h.setStart(start);
 				h.setImageurl(imagurl);
 				h.setDownloadtype(Integer.valueOf(downloadtype));
@@ -108,10 +110,8 @@ public class FileInfoDao {
 			// 循环遍历cursor中储存的键值对
 			while (cursor.moveToNext()) {
 				String localurl = cursor.getString(cursor.getColumnIndex("localurl"));
-				String author = cursor.getColumnName(cursor
-						.getColumnIndex("author"));
-				String filename = cursor.getString(cursor
-						.getColumnIndex("filename"));
+				String author = cursor.getColumnName(cursor.getColumnIndex("author"));
+				String filename = cursor.getString(cursor.getColumnIndex("filename"));
 				String sequimgurl=cursor.getString(cursor.getColumnIndex("sequimgurl"));
 				String imgurl=cursor.getString(cursor.getColumnIndex("imageurl"));
 				int start=cursor.getInt(1);
