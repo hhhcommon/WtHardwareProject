@@ -2,6 +2,7 @@ package com.wotingfm.ui.music.download.downloadlist.activity;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,14 +14,23 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.baseactivity.BaseActivity;
+import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.ui.music.download.downloadlist.adapter.DownLoadListAdapter;
 import com.wotingfm.ui.music.download.model.FileInfo;
+import com.wotingfm.ui.music.main.HomeActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
+import com.wotingfm.ui.music.player.fragment.PlayerFragment;
+import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.util.CommonUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 
+import java.io.File;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
@@ -182,12 +192,10 @@ public class DownLoadListActivity extends BaseActivity implements OnClickListene
 		mlistview.setOnItemClickListener(new OnItemClickListener() {
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-				//ToastUtil.show_always(context, "我的localurl是"+fileinfolist.get(position).getLocalurl());
 				if(fileinfolist != null && fileinfolist.size() != 0){
 					positionnow =position;
 					FileInfo mFileInfo = fileinfolist.get(position);
-					ToastUtils.show_always(context,""+fileinfolist.get(position).getLocalurl());
-					/*if(mFileInfo.getLocalurl() != null && !mFileInfo.getLocalurl().equals("")){
+					if(mFileInfo.getLocalurl() != null && !mFileInfo.getLocalurl().equals("")){
 						File file = new File(mFileInfo.getLocalurl());
 						if (file.exists()) {
 							String playername = mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4);
@@ -214,49 +222,39 @@ public class DownLoadListActivity extends BaseActivity implements OnClickListene
 							String sequImg = mFileInfo.getSequimgurl();
 							String sequDesc = mFileInfo.getSequdesc();
 
-							//如果该数据已经存在数据库则删除原有数据，然后添加最新数据
+							// 如果该数据已经存在数据库则删除原有数据，然后添加最新数据
 							PlayerHistory history = new PlayerHistory(
-									playername,  playerimage, playerurl, playerurI,playermediatype, 
+									playername,  playerimage, playerurl, playerurI,playermediatype,
 									plaplayeralltime, playerintime, playercontentdesc, playernum,
 									playerzantype,  playerfrom, playerfromid, playerfromurl,playeraddtime,bjuserid,playercontentshareurl,ContentFavorite,
 									ContentId,playlocalrurl,sequName,sequId,sequDesc,sequImg);
 							dbdao.deleteHistory(playerurl);
 							dbdao.addHistory(history);
-							if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-								if (PlayerFragment.context != null) {
-									MainActivity.changeToMusic();
-									HomeActivity.UpdateViewPager();
-									Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
-									Bundle bundle1=new Bundle();
-									bundle1.putString("text", mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4));
-									push.putExtras(bundle1);
-									context.sendBroadcast(push);
-									finish();
-								} else {
-									SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
-									et.putString(StringConstant.PLAYHISTORYENTER, "true");
-									et.putString(StringConstant.PLAYHISTORYENTERNEWS, mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4));
-									if (!et.commit()) {
-										Log.v("commit", "数据 commit 失败!");
-									}
-									MainActivity.changeToMusic();
-									HomeActivity.UpdateViewPager();
-								}
-							}else{
-								//没网的状态下
-								MainActivity.changeToMusic();
-								HomeActivity.UpdateViewPager();
-//								PlayerFragment.playNoNet();
-							}
+                            if (PlayerFragment.context != null) {
+                                MainActivity.changeToMusic();
+                                HomeActivity.UpdateViewPager();
+                                Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                                Bundle bundle1=new Bundle();
+                                bundle1.putString("text", mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4));
+                                push.putExtras(bundle1);
+                                context.sendBroadcast(push);
+                            } else {
+                                SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+                                et.putString(StringConstant.PLAYHISTORYENTER, "true");
+                                et.putString(StringConstant.PLAYHISTORYENTERNEWS, mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4));
+                                if (!et.commit()) L.v("commit", "数据 commit 失败!");
+                                MainActivity.changeToMusic();
+                                HomeActivity.UpdateViewPager();
+                            }
 							setResult(1);
 							finish();
 							dbdao.closedb();
-						} else {	// 此处要调对话框，点击同意删除对应的文件信息
-							*//* ToastUtil.show_always(context, "文件已经被删除，是否删除本条记录"); *//*
+						} else {// 此处要调对话框，点击同意删除对应的文件信息
+							 ToastUtils.show_always(context, "文件已经被删除，是否删除本条记录");
 							positionnow = position;
 							confirmdialog.show();
 						}
-					}*/
+					}
 				}
 			}
 		});

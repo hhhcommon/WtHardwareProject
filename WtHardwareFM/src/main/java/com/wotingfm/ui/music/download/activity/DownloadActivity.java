@@ -1,5 +1,6 @@
 package com.wotingfm.ui.music.download.activity;
 
+import android.content.Intent;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -21,18 +22,18 @@ import java.util.ArrayList;
 /**
  * 下载主页
  */
-public class DownloadActivity extends FragmentActivity implements  OnClickListener{
+public class DownloadActivity extends FragmentActivity implements OnClickListener {
     private DownloadActivity context;
 
     private TextView textCompleted;
     private TextView textUncompleted;
     private ViewPager viewDownload;
-    public static Boolean isVisible=false;
+    public static Boolean isVisible = false;
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.lin_news:            // 返回
+            case R.id.lin_news:// 返回
                 finish();
                 break;
         }
@@ -51,10 +52,8 @@ public class DownloadActivity extends FragmentActivity implements  OnClickListen
     @Override
     protected void onResume() {
         super.onResume();
-        isVisible=true;
+        isVisible = true;
     }
-
-
 
     // 设置界面
     private void setView() {
@@ -93,16 +92,29 @@ public class DownloadActivity extends FragmentActivity implements  OnClickListen
     }
 
     private void handleView(int index) {
-        if(index==0){
+        if (index == 0) {
             textCompleted.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
             textCompleted.setBackgroundResource(R.drawable.color_wt_circle_home_white);
             textUncompleted.setTextColor(context.getResources().getColor(R.color.white));
             textUncompleted.setBackgroundResource(R.drawable.color_wt_circle_orange);
-        }else{
+        } else {
             textUncompleted.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
             textUncompleted.setBackgroundResource(R.drawable.color_wt_circle_home_white);
             textCompleted.setTextColor(context.getResources().getColor(R.color.white));
             textCompleted.setBackgroundResource(R.drawable.color_wt_circle_orange);
+        }
+    }
+
+    // 跳转
+    public void toActivity(Intent intent) {
+        startActivityForResult(intent, 1001);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 1001 && resultCode == 1) {
+            context.finish();
         }
     }
 
@@ -119,26 +131,6 @@ public class DownloadActivity extends FragmentActivity implements  OnClickListen
             updateView(index);
         }
     }
-
-  /*  long waitTime = 2000L;
-    long touchTime = 0;
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
-            long currentTime = System.currentTimeMillis();
-            if ((currentTime - touchTime) >= waitTime) {
-                ToastUtils.show_always(context, "再按一次退出");
-                touchTime = currentTime;
-            } else {
-                MobclickAgent.onKillProcess(context);
-                finish();
-                android.os.Process.killProcess(android.os.Process.myPid());
-            }
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }*/
 
     // 设置android app 的字体大小不受系统字体大小改变的影响
     @Override
@@ -169,7 +161,7 @@ public class DownloadActivity extends FragmentActivity implements  OnClickListen
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        isVisible=false;
+        isVisible = false;
         textCompleted = null;
         textUncompleted = null;
         viewDownload = null;

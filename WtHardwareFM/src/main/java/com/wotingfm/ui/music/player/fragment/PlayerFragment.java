@@ -214,8 +214,10 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     // 内容主页网络请求
     private void mainPageRequest() {
         if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
-            tipView.setVisibility(View.VISIBLE);
-            tipView.setTipView(TipView.TipStatus.NO_NET);
+            if(refreshType == 0 && playList.size() <= 0) {
+                tipView.setVisibility(View.VISIBLE);
+                tipView.setTipView(TipView.TipStatus.NO_NET);
+            }
             setPullAndLoad(false, false);
             return ;
         }
@@ -271,9 +273,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                         }
                         setPullAndLoad(true, true);
                         mainPage++;
-                        if(tipView.getVisibility() == View.VISIBLE) {
-                            tipView.setVisibility(View.GONE);
-                        }
+                        if(tipView.getVisibility() == View.VISIBLE) tipView.setVisibility(View.GONE);
                     } else {
                         setPullAndLoad(true, false);
                         if(refreshType == 0 && playList.size() <= 0) {
@@ -284,7 +284,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                 } catch (Exception e) {
                     e.printStackTrace();
                     setPullAndLoad(true, false);
-                    if(refreshType == 0) {
+                    if(refreshType == 0 && playList.size() <= 0) {
                         tipView.setVisibility(View.VISIBLE);
                         tipView.setTipView(TipView.TipStatus.IS_ERROR);
                     }
@@ -315,6 +315,10 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
             filter.addAction(BroadcastConstants.UPDATE_PLAY_TOTAL_TIME);// 更新当前播放总时间
             filter.addAction(BroadcastConstants.UPDATE_PLAY_LIST);// 更新播放列表
             filter.addAction(BroadcastConstants.UPDATE_PLAY_VIEW);// 更新播放界面
+
+            // 下载完成更新 LocalUrl
+            filter.addAction(BroadcastConstants.PUSH_DOWN_COMPLETED);
+            filter.addAction(BroadcastConstants.PUSH_ALLURL_CHANGE);
 
             context.registerReceiver(mReceiver, filter);
         }
@@ -359,6 +363,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                         long secondProgress = intent.getLongExtra(StringConstant.PLAY_SECOND_PROGRESS, 0);
                         if(secondProgress == -1) {
                             mSeekBar.setSecondaryProgress((int) totalTime);
+                        } else if(secondProgress == -100) {
+                            mSeekBar.setSecondaryProgress(mSeekBar.getMax());
                         } else {
                             mSeekBar.setSecondaryProgress((int) secondProgress);
                         }
@@ -409,6 +415,10 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                         isPlaying = true;
                     }
                     isInitData = true;
+                    break;
+                case BroadcastConstants.PUSH_DOWN_COMPLETED:// 更新下载列表
+                case BroadcastConstants.PUSH_ALLURL_CHANGE:
+                    if(mPlayer != null) mPlayer.updateLocalList();
                     break;
             }
         }

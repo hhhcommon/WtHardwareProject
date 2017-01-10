@@ -233,10 +233,12 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
 
             if(mediaType != null && mediaType.equals(StringConstant.TYPE_TTS)) {
                 textComment.setClickable(false);
+                textComment.setClickable(false);
                 textComment.setTextColor(context.getResources().getColor(R.color.gray));
                 textComment.setCompoundDrawablesWithIntrinsicBounds(null, context.getResources().getDrawable(R.mipmap.wt_image_play_more_comment_gray), null, null);
             } else {
                 textComment.setClickable(true);
+                textComment.setEnabled(true);
                 textComment.setTextColor(context.getResources().getColor(R.color.wt_login_third));
                 textComment.setCompoundDrawablesWithIntrinsicBounds(null, context.getResources().getDrawable(R.mipmap.wt_image_play_more_comment), null, null);
             }
@@ -246,11 +248,13 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
         String contentFavorite = GlobalConfig.playerObject.getContentFavorite();
         if(mediaType != null && mediaType.equals(StringConstant.TYPE_TTS)) {// TTS 不支持喜欢
             textLike.setClickable(false);
+            textLike.setEnabled(false);
             textLike.setText("喜欢");
             textLike.setTextColor(getResources().getColor(R.color.gray));
             textLike.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.mipmap.wt_image_play_more_like_gray), null, null);
         } else {
             textLike.setClickable(true);
+            textLike.setEnabled(true);
             textLike.setTextColor(getResources().getColor(R.color.wt_login_third));
             if(contentFavorite == null || contentFavorite.equals("0")) {
                 textLike.setText("喜欢");
@@ -265,17 +269,20 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
         if (mediaType != null && mediaType.equals(StringConstant.TYPE_AUDIO)) {// 可以下载
             if(!TextUtils.isEmpty(GlobalConfig.playerObject.getLocalurl())) {// 已下载
                 textDown.setClickable(false);
+                textDown.setEnabled(false);
                 textDown.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.mipmap.wt_image_play_more_down_gray), null, null);
                 textDown.setTextColor(getResources().getColor(R.color.gray));
                 textDown.setText("已下载");
             } else {// 没有下载
                 textDown.setClickable(true);
+                textDown.setEnabled(true);
                 textDown.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.mipmap.wt_image_play_more_down), null, null);
                 textDown.setTextColor(getResources().getColor(R.color.wt_login_third));
                 textDown.setText("下载");
             }
         } else if(mediaType != null && mediaType.equals(StringConstant.TYPE_TTS)) {// 不可以下载
             textDown.setClickable(false);
+            textDown.setEnabled(false);
             textDown.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.mipmap.wt_image_play_more_down_gray), null, null);
             textDown.setTextColor(getResources().getColor(R.color.gray));
             textDown.setText("下载");

@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.ui.music.download.activity.DownloadActivity;
 import com.wotingfm.ui.music.download.adapter.DownLoadSequAdapter;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.ui.music.download.downloadlist.activity.DownLoadListActivity;
@@ -161,7 +162,8 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
                 bundle.putString("sequname", fileSequList.get(position).getSequname());
                 bundle.putString("sequid", fileSequList.get(position).getSequid());
                 intent.putExtras(bundle);
-                context.startActivity(intent);
+                ((DownloadActivity)context).toActivity(intent);
+//                context.startActivityForResult(intent, 1001);
             }
         });
     }
@@ -225,7 +227,8 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
                 bundle.putString("sequname", "单体节目");
                 bundle.putString("sequid", "woting");
                 intent.putExtras(bundle);
-                context.startActivity(intent);
+                ((DownloadActivity)context).toActivity(intent);
+//                context.startActivityForResult(intent, 1001);
                 break;
             case R.id.tv_confirm:
                 for (int i = 0; i < fileDellList.size(); i++) {

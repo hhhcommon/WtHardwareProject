@@ -117,7 +117,17 @@ public class IntegrationPlayer {
         return mService.isAudioPlaying();
     }
 
+    /**
+     * 从指定时间开始播放
+     */
     public void setPlayCurrentTime(long currentTime) {
         mService.setPlayTime(currentTime);
+    }
+
+    /**
+     * 更新下载列表
+     */
+    public void updateLocalList() {
+        mService.updateLocalList();
     }
 }
