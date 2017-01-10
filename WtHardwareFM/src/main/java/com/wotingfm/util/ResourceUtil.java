@@ -58,7 +58,7 @@ public class ResourceUtil {
         } else {
             fileUrl = getSDCardPath()[0] + GlobalConfig.ksyPlayCache;
         }
-        L.e("获取金山云播放器的缓存地址", fileUrl + "");
+        L.e("TAG", "播放器缓存地址 -- > > " + fileUrl);
         return fileUrl;
     }
 

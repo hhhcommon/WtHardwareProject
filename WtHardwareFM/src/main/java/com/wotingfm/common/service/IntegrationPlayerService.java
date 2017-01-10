@@ -115,7 +115,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     private void initCache() {
         if(proxyService == null) proxyService = new KSYProxyService(this);
         File file = new File(ResourceUtil.getLocalUrlForKsy());// 设置缓存目录
-        if (!file.exists()) if (!file.mkdir()) L.v("TAG", "KSYProxy MkDir Error");
+        if (!file.exists()) if (!file.mkdirs()) L.w("TAG", "KSYProxy MkDir Error");
         proxyService.setCacheRoot(file);
         proxyService.setMaxCacheSize(500 * 1024 * 1024);// 缓存大小 500MB
         proxyService.startServer();
@@ -256,8 +256,16 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
                     secondProgress = -1;
                 }
                 contentPlay = proxyService.getProxyUrl(contentPlay);
+
+                L.v("TAG", "contentPlay -- > > " + contentPlay);
             }
-            mVlc.playMRL(contentPlay);
+            final String url = contentPlay;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mVlc.playMRL(url);
+                }
+            }, 300);
         }
         mHandler.postDelayed(mTotalTimeRunnable, 1000);
 
@@ -408,6 +416,9 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
             if (msg == null || msg.getData() == null) return ;
             switch (msg.getData().getInt("event")) {
                 case EventHandler.MediaPlayerEncounteredError:// 播放出现错误播下一首
+                    mVlc.playMRL(httpUrl);
+
+                    L.e("TAG", "========= MediaPlayerEncounteredError =========");
                     break;
                 case EventHandler.MediaPlayerEndReached:// 播放完成播下一首
                     if(mUpdatePlayTimeRunnable != null) {
@@ -419,7 +430,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
                     }
                     startPlay(position);
 
-                    Log.e("TAG", "========= MediaPlayerEndReached =========");
+                    L.i("TAG", "========= MediaPlayerEndReached =========");
                     break;
             }
         }

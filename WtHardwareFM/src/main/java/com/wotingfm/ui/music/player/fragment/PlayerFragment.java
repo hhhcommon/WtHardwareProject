@@ -362,7 +362,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                         } else {
                             mSeekBar.setSecondaryProgress((int) secondProgress);
                         }
-                        L.i("TAG", "OnCacheStatus: secondProgress == " + secondProgress);
                     }
 
                     long currentTime = intent.getLongExtra(StringConstant.PLAY_CURRENT_TIME, -1);

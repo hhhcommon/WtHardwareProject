@@ -44,8 +44,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:singleLine="true"
+                android:ellipsize="end"
                 android:text="woting"
-                android:maxLines="1"
                 android:textColor="@color/dinglan_orange"
                 android:textSize="@dimen/audio_title_size" />
 
@@ -79,6 +79,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="未知"
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:textColor="@color/beijing"
                     android:textSize="@dimen/audio_program_source_size" />
 

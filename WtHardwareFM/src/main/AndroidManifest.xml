@@ -85,7 +85,7 @@
     <application
         android:name=".common.application.BSApplication"
         android:allowBackup="false"
-        android:hardwareAccelerated="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/app_logo"
         android:label="@string/app_name">
 
@@ -106,8 +106,7 @@
             android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan">
-        </activity>
+            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 创建群组主界面 -->
         <activity
@@ -115,12 +114,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 创建群组子界面  即有创建公开群、密码群、验证群 -->
-
-
-        <!-- 消息中心 -->
-
 
         <!-- 头像剪裁界面 -->
         <activity
