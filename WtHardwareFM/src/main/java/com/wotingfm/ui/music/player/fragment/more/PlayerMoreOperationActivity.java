@@ -146,13 +146,12 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
                     } else {
                         ToastUtils.show_always(context, "请先登录~~");
                     }
-
                 } else {
                     ToastUtils.show_always(context, "当前播放的节目的信息有误，无法获取评论列表");
                 }
                 break;
             case R.id.text_details:// 詳情
-
+                startActivity(new Intent(context, PlayDetailsActivity.class));
                 break;
             case R.id.text_program:// 播單
                 if(!CommonHelper.checkNetwork(context)) return ;
@@ -233,7 +232,7 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
 
             if(mediaType != null && mediaType.equals(StringConstant.TYPE_TTS)) {
                 textComment.setClickable(false);
-                textComment.setClickable(false);
+                textComment.setEnabled(false);
                 textComment.setTextColor(context.getResources().getColor(R.color.gray));
                 textComment.setCompoundDrawablesWithIntrinsicBounds(null, context.getResources().getDrawable(R.mipmap.wt_image_play_more_comment_gray), null, null);
             } else {
