@@ -17,7 +17,6 @@ import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.DisplayMetrics;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup.LayoutParams;
 import android.view.animation.Animation;
@@ -33,10 +32,15 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
+import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.volley.VolleyCallback;
+import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.baseactivity.AppBaseFragmentActivity;
 import com.wotingfm.ui.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.ui.music.search.adapter.SearchHistoryAdapter;
 import com.wotingfm.ui.music.search.adapter.SearchKeyAdapter;
+import com.wotingfm.ui.music.search.adapter.SearchLikeAdapter;
 import com.wotingfm.ui.music.search.dao.SearchHistoryDao;
 import com.wotingfm.ui.music.search.fragment.RadioFragment;
 import com.wotingfm.ui.music.search.fragment.SequFragment;
@@ -44,17 +48,10 @@ import com.wotingfm.ui.music.search.fragment.SoundFragment;
 import com.wotingfm.ui.music.search.fragment.TTSFragment;
 import com.wotingfm.ui.music.search.fragment.TotalFragment;
 import com.wotingfm.ui.music.search.model.History;
-import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.volley.VolleyCallback;
-import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
-import com.zhy.view.flowlayout.FlowLayout;
-import com.zhy.view.flowlayout.TagAdapter;
-import com.zhy.view.flowlayout.TagFlowLayout;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -64,22 +61,22 @@ import java.util.List;
 
 /**
  * 界面搜索界面
- *
  * @author 辛龙
- *         2016年4月16日
+ * 2016年4月16日
  */
 public class SearchLikeActivity extends AppBaseFragmentActivity implements
-        View.OnClickListener, TagFlowLayout.OnTagClickListener, AdapterView.OnItemClickListener {
+        View.OnClickListener, AdapterView.OnItemClickListener {
 
     private SearchHistoryDao shd;               // 搜索数据库
     private History history;                    // 数据库信息
+    private SearchLikeAdapter adapter;
     private SearchKeyAdapter searchKeyAdapter;
     private List<History> historyDatabaseList;
     private List<String> topSearchList = new ArrayList<>();
     private List<String> hotSearchList = new ArrayList<>();
 
     private Dialog dialog;                      // 加载数据对话框
-    private TagFlowLayout flowTopSearch;        // 热门搜索内容
+    private GridView flowTopSearch;             // 热门搜索内容
     private RelativeLayout linearHistory;       // 搜索历史
     private LinearLayout linearStatusFirst;     // 搜索初始化状态
     private LinearLayout linearStatusThird;     // 搜索结束展示搜索结果状态
@@ -120,20 +117,22 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
     };
 
     @Override
-    public boolean onTagClick(View view, int position, FlowLayout parent) {
-        linearStatusFirst.setVisibility(View.GONE);
-        mListView.setVisibility(View.GONE);
-        mEtSearchContent.setText(hotSearchList.get(position));
-//        mEtSearchContent.setSelection();
-        return true;
-    }
-
-    @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         // 跳转到第三页的结果当中 并且默认打开第一页
         linearStatusFirst.setVisibility(View.GONE);
         mListView.setVisibility(View.GONE);
         mEtSearchContent.setText(historyDatabaseList.get(position).getPlayName());
+    }
+
+    // GridView Item OnClick
+    class MyGridViewListener implements AdapterView.OnItemClickListener {
+
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            linearStatusFirst.setVisibility(View.GONE);
+            mListView.setVisibility(View.GONE);
+            mEtSearchContent.setText(hotSearchList.get(position));
+        }
     }
 
     @Override
@@ -198,8 +197,9 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
 
         mEtSearchContent = (EditText) findViewById(R.id.et_searchlike);                     // 搜索框输入的内容
 
-        flowTopSearch = (TagFlowLayout) findViewById(R.id.gv_topsearch);                    // 展示热门搜索词
-        flowTopSearch.setOnTagClickListener(this);
+        flowTopSearch = (GridView) findViewById(R.id.gv_topsearch);                         // 展示热门搜索词
+        flowTopSearch.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        flowTopSearch.setOnItemClickListener(new MyGridViewListener());
 
         gridHistory = (GridView) findViewById(R.id.gv_history);                             // 展示搜索历史词
         gridHistory.setSelector(new ColorDrawable(Color.TRANSPARENT));
@@ -437,16 +437,10 @@ public class SearchLikeActivity extends AppBaseFragmentActivity implements
                         e1.printStackTrace();
                     }
                     if (ReturnType != null && ReturnType.equals("1001")) {
-                        linearStatusFirst.setVisibility(View.VISIBLE);
                         if (hotSearchList != null && hotSearchList.size() != 0) {
-                            flowTopSearch.setAdapter(new TagAdapter<String>(hotSearchList) {
-                                @Override
-                                public View getView(FlowLayout parent, int position, String s) {
-                                    TextView tv = (TextView) LayoutInflater.from(context).inflate(R.layout.adapter_searchlike, flowTopSearch, false);
-                                    tv.setText(s);
-                                    return tv;
-                                }
-                            });
+                            linearStatusFirst.setVisibility(View.VISIBLE);
+                            adapter = new SearchLikeAdapter(context, hotSearchList);
+                            flowTopSearch.setAdapter(adapter);
                         } else {
                             linearTopTitle.setVisibility(View.GONE);
                             flowTopSearch.setVisibility(View.GONE);

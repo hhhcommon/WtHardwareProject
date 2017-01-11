@@ -84,17 +84,17 @@
             android:gravity="center_vertical"
             android:text="热门搜索"
             android:textColor="@color/wt_login_third"
-            android:textSize="@dimen/wt_login_text_wjmm" />
+            android:textSize="@dimen/text_size_16" />
 
-        <com.zhy.view.flowlayout.TagFlowLayout
+        <GridView
             android:id="@+id/gv_topsearch"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:horizontalSpacing="20dp"
+            android:horizontalSpacing="10dp"
             android:numColumns="3"
             android:padding="11dp"
             android:scrollbars="none"
-            android:verticalSpacing="15dp"/>
+            android:verticalSpacing="15dp" />
 
         <RelativeLayout
             android:id="@+id/lin_history"
@@ -110,7 +110,7 @@
                 android:layout_marginLeft="16dp"
                 android:text="搜索历史"
                 android:textColor="@color/wt_login_third"
-                android:textSize="@dimen/wt_login_text_wjmm" />
+                android:textSize="@dimen/text_size_16" />
 
             <LinearLayout
                 android:id="@+id/img_clear"
@@ -130,7 +130,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="清除历史"
-                    android:textSize="@dimen/wt_regist_text_xieyi" />
+                    android:textSize="@dimen/text_size_14" />
 
             </LinearLayout>
 
@@ -139,8 +139,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_below="@id/text_history"
-                android:horizontalSpacing="20dp"
-                android:numColumns="4"
+                android:horizontalSpacing="10dp"
+                android:numColumns="3"
                 android:padding="11dp"
                 android:scrollbars="none"
                 android:verticalSpacing="15dp"/>

@@ -1,30 +1,125 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:scrollbars="none"
-    android:orientation="vertical">
+    style="@style/BaseStyle"
+    android:background="@color/WHITE">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:orientation="vertical"
-        android:layout_marginLeft="18dp"
-        android:layout_marginRight="24dp">
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:background="@color/dinglan_orange"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center_horizontal">
+
+                <ImageView
+                    android:id="@+id/img_album"
+                    android:layout_width="85dp"
+                    android:layout_height="85dp"
+                    android:layout_centerInParent="true"
+                    android:scaleType="centerCrop" />
+
+                <ImageView
+                    android:layout_width="85dp"
+                    android:layout_height="85dp"
+                    android:layout_centerInParent="true"
+                    android:src="@mipmap/liubianxing_orange" />
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="15dp"
+                android:layout_gravity="center_horizontal">
+
+                <TextView
+                    android:id="@+id/tv_favorite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="喜欢"
+                    android:textColor="@color/WHITE"
+                    android:drawableBottom="@mipmap/wt_img_like"
+                    android:drawablePadding="3dp"
+                    android:textSize="@dimen/text_size_15" />
+
+                <TextView
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/WHITE"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="分享"
+                    android:drawableBottom="@mipmap/wt_img_share"
+                    android:drawablePadding="3dp"
+                    android:textColor="@color/WHITE"
+                    android:textSize="@dimen/text_size_15" />
+
+                <TextView
+                    android:id="@+id/view_line"
+                    android:layout_width="1dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginBottom="3dp"
+                    android:layout_marginLeft="25dp"
+                    android:layout_marginRight="25dp"
+                    android:layout_marginTop="3dp"
+                    android:background="@color/WHITE" />
+
+                <LinearLayout
+                    android:id="@+id/lin_pinglun"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="评论"
+                        android:textColor="@color/WHITE"
+                        android:textSize="@dimen/text_size_15" />
+
+                    <ImageView
+                        android:layout_width="24dp"
+                        android:layout_height="24dp"
+                        android:layout_marginTop="3dp"
+                        android:src="@mipmap/wt_img_pinglun_white" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="主播介绍"
-            android:textSize="@dimen/text_size_13"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="15dp"
+            android:textSize="@dimen/text_size_15"
             android:textColor="@color/beijing"/>
 
         <RelativeLayout
-
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:layout_marginTop="15dp">
+            android:layout_marginTop="15dp"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp">
 
             <com.wotingfm.widget.RoundImageView
                 android:id="@+id/round_image_head"
@@ -80,6 +175,7 @@
             android:text="内容介绍"
             android:textSize="@dimen/text_size_13"
             android:textColor="@color/beijing"
+            android:layout_marginLeft="15dp"
             android:layout_marginTop="20dp"/>
 
         <TextView
@@ -89,6 +185,8 @@
             android:text="我听我享听"
             android:textSize="@dimen/list_text_size"
             android:textColor="@color/wt_login_third"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="15dp"
             android:ellipsize="end"/>
 
@@ -98,6 +196,7 @@
             android:text="标签"
             android:textSize="@dimen/text_size_13"
             android:textColor="@color/beijing"
+            android:layout_marginLeft="15dp"
             android:layout_marginTop="20dp"/>
 
         <TextView
@@ -107,6 +206,8 @@
             android:text="我听我享听"
             android:textSize="@dimen/list_text_size"
             android:textColor="@color/wt_login_third"
+            android:layout_marginLeft="15dp"
+            android:layout_marginRight="15dp"
             android:layout_marginTop="15dp"/>
 
         <View

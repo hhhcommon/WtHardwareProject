@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="81dp"
+        android:layout_height="94dp"
         android:background="@color/WHITE"
         android:gravity="left|center"
         android:orientation="horizontal">
@@ -47,11 +47,11 @@
                 android:text="woting"
                 android:maxLines="1"
                 android:textColor="@color/dinglan_orange"
-                android:textSize="@dimen/activity_head_right" />
+                android:textSize="@dimen/text_size_18" />
 
             <LinearLayout
                 android:id="@+id/lin_currentplay"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="7dp"
                 android:layout_marginTop="5dp"
@@ -60,12 +60,11 @@
 
                 <ImageView
                     android:id="@+id/image_playing"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:src="@mipmap/image_program_album"
                     android:layout_marginRight="6dp"
-                    android:visibility="gone"
-                    />
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/RankPlaying"
@@ -73,19 +72,20 @@
                     android:layout_height="wrap_content"
                     android:text="未知"
                     android:textColor="@color/beijing"
-                    android:textSize="@dimen/text_size_13"
+                    android:textSize="@dimen/text_size_15"
                     android:visibility="visible" />
+
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="left|center">
 
                 <ImageView
                     android:id="@+id/image_number"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:src="@mipmap/image_program_listener" />
 
                 <TextView
@@ -96,24 +96,23 @@
                     android:text="0"
                     android:textColor="@color/beijing"
                     android:layout_marginRight="14dp"
-                    android:textSize="@dimen/text_size_9" />
+                    android:textSize="12sp" />
 
                 <ImageView
                     android:id="@+id/image_last"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_marginRight="6dp"
                     android:visibility="gone"
                     android:src="@mipmap/image_program_time"/>
 
                 <ImageView
                     android:id="@+id/image_num"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:layout_marginRight="6dp"
                     android:src="@mipmap/image_program_number"
-                    android:visibility="gone"
-                    />
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/tv_last"
@@ -121,9 +120,8 @@
                     android:layout_height="wrap_content"
                     android:text="时长"
                     android:textColor="@color/beijing"
-                    android:textSize="9sp"
-                    android:visibility="gone"
-                    />
+                    android:textSize="12sp"
+                    android:visibility="gone"/>
 
             </LinearLayout>
 

@@ -347,7 +347,7 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
         // 对数据进行转换
         List<ContentInfo> dataList = new ArrayList<>();
         ContentInfo m = new ContentInfo();
-        m.setAuthor(data.getContentPersons());
+//        m.setAuthor(data.getContentPersons());
         m.setContentPlay(data.getContentPlay());
         m.setContentImg(data.getContentImg());
         m.setContentName(data.getContentName());

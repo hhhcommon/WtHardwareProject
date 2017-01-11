@@ -72,7 +72,6 @@ public class AnchorDetailsActivity extends AppBaseActivity implements View.OnCli
     private boolean isCancelRequest;
 
     @Override
-
     public void onWhiteViewClick() {
         if (!TextUtils.isEmpty(PersonId)) {
             if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {

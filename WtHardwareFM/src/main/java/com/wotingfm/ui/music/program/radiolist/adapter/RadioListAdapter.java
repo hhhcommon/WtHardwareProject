@@ -94,9 +94,19 @@ public class RadioListAdapter extends BaseAdapter  {
 
         // 收听次数
         String playCount = lists.getPlayCount();
-        if (playCount != null && !playCount.equals("")) {
-            holder.textNumber.setText(playCount);
+        if (playCount == null || playCount.equals("")) {
+            playCount = "1234";
         }
+        Float count = Float.valueOf(playCount);
+        if(count > 10000) {
+            count = count / 10000;
+            playCount = count + "万";
+            if(count > 10000) {
+                count = count / 10000;
+                playCount = count + "亿";
+            }
+        }
+        holder.textNumber.setText(playCount);
 
         if(mediaType != null) {
             switch (mediaType) {

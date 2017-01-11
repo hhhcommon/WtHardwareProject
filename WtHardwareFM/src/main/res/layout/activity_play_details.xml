@@ -35,7 +35,7 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="81dp"
+                android:layout_height="94dp"
                 android:background="@color/WHITE"
                 android:layout_marginBottom="20dp">
 
@@ -59,7 +59,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="异次元的治愈系少女"
-                    android:textSize="15sp"
+                    android:textSize="@dimen/text_size_18"
                     android:singleLine="true"
                     android:layout_toRightOf="@id/image_mask"
                     android:layout_marginLeft="6dp"
@@ -69,8 +69,8 @@
 
                 <ImageView
                     android:id="@+id/image_pub"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
+                    android:layout_width="15dp"
+                    android:layout_height="15dp"
                     android:src="@mipmap/image_program_album"
                     android:layout_toRightOf="@id/image_mask"
                     android:layout_marginLeft="6dp"
@@ -86,7 +86,7 @@
                     android:ellipsize="end"
                     android:maxLines="1"
                     android:text="我听科技"
-                    android:textSize="12sp"
+                    android:textSize="15sp"
                     android:textColor="@color/beijing"/>
 
                 <LinearLayout
@@ -99,8 +99,8 @@
                     android:layout_marginBottom="11dp">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:src="@mipmap/image_program_listener"
                         android:layout_marginRight="6dp"/>
 
@@ -108,15 +108,15 @@
                         android:id="@+id/text_number"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="9sp"
+                        android:textSize="12sp"
                         android:text="0"
                         android:gravity="center"
                         android:textColor="@color/beijing"/>
 
                     <ImageView
                         android:id="@+id/image_last"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
                         android:src="@mipmap/image_program_time"
                         android:layout_marginRight="6dp"
                         android:layout_marginLeft="14dp"/>
@@ -125,7 +125,7 @@
                         android:id="@+id/tv_last"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:textSize="9sp"
+                        android:textSize="12sp"
                         android:text="未知"
                         android:textColor="@color/beijing"/>
 

@@ -8,6 +8,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.baseactivity.AppBaseActivity;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
@@ -76,7 +77,7 @@ public class PlayDetailsActivity extends AppBaseActivity implements View.OnClick
         // 节目时长
         ImageView imageLast = (ImageView) findViewById(R.id.image_last);// 节目时长小图标
         TextView textLast = (TextView) findViewById(R.id.tv_last);
-        if(mediaType.equals("AUDIO")) {
+        if(mediaType.equals(StringConstant.TYPE_AUDIO)) {
             String contentTime = GlobalConfig.playerObject.getContentTimes();
             if (contentTime == null|| contentTime.equals("") || contentTime.equals("null")) {
                 contentTime = context.getString(R.string.play_time);

@@ -594,7 +594,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
             LanguageSearchInside historyNews = new LanguageSearchInside();
             historyNews.setType("1");
             historyNews.setContentURI(historyNew.getPlayerUrI());
-            historyNews.setContentPersons(historyNew.getPlayCount());
             historyNews.setContentKeyWord("");
             historyNews.setcTime(historyNew.getPlayerInTime());
             historyNews.setContentSubjectWord("");
@@ -608,6 +607,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
             historyNews.setContentDescn(historyNew.getPlayerContentDescn());
             historyNews.setPlayCount(historyNew.getPlayCount());
             historyNews.setContentImg(historyNew.getPlayerImage());
+            try {
+                historyNews.setContentPersons(historyNew.getContentPersons());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
             try {
                 if (historyNew.getPlayerAllTime() != null && historyNew.getPlayerAllTime().equals("")) {
                     historyNews.setPlayerAllTime("0");

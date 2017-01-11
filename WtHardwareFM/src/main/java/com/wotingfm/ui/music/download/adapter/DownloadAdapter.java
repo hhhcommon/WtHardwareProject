@@ -2,7 +2,6 @@ package com.wotingfm.ui.music.download.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +21,9 @@ import com.wotingfm.widget.CircleProgress;
 import java.text.DecimalFormat;
 import java.util.List;
 
+/**
+ * 下载中数据展示
+ */
 public class DownloadAdapter extends BaseAdapter {
     private List<FileInfo> list;
     private Context context;
@@ -49,107 +51,95 @@ public class DownloadAdapter extends BaseAdapter {
     }
 
     @Override
-    public View getView( int position, View convertView, ViewGroup parent) {
-        ViewHolder holder ;
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_uncompelete, null);
-            holder.textview_ranktitle = (TextView)convertView.findViewById(R.id.RankTitle);		// 台名
-            holder.imageview_rankimage = (ImageView)convertView.findViewById(R.id.img_touxiang);// 电台图标
-            holder.ncb=(CircleProgress)convertView.findViewById(R.id.roundBar2);
-            holder.tv_start = (TextView)convertView.findViewById(R.id.download_start);
-            holder.tv_end = (TextView)convertView.findViewById(R.id.download_end);
-            holder.img_download_delete = (ImageView)convertView.findViewById(R.id.img_play);
-            holder.tv_author = (TextView)convertView.findViewById(R.id.tv_author);
-            holder.lin_board=(LinearLayout)convertView.findViewById(R.id.lin_downloadboard);
-            holder.rv_download=(RelativeLayout)convertView.findViewById(R.id.rv_download);
-            holder.tv_count=(TextView)convertView.findViewById(R.id.tv_count);                 //  人数
-            holder.tv_sum=(TextView)convertView.findViewById(R.id.tv_sum);                     //  大小
-            holder.img_liu = (ImageView)convertView.findViewById(R.id.img_liu);
-            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b);
-            holder.img_liu.setImageBitmap(bmp);
+
+            // 六边形封面图片遮罩
+            Bitmap maskBitmap = BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b);
+            holder.imageMask = (ImageView) convertView.findViewById(R.id.img_liu);
+            holder.imageMask.setImageBitmap(maskBitmap);
+
+            holder.imageCover = (ImageView) convertView.findViewById(R.id.img_touxiang);// 封面图片
+            holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);// 节目标题
+            holder.textAuthor = (TextView) convertView.findViewById(R.id.tv_author);// 来源
+
+            holder.imageWaitDownload = (ImageView) convertView.findViewById(R.id.img_play);// 图标 等待下载
+            holder.viewDownload = (RelativeLayout) convertView.findViewById(R.id.rv_download);// 下载中视图
+            holder.imageCircle = (CircleProgress) convertView.findViewById(R.id.roundBar2);// 下载中显示进度圆形图片
+            holder.viewBoard = (LinearLayout) convertView.findViewById(R.id.lin_downloadboard);// 下载大小视图
+
+            holder.textStart = (TextView) convertView.findViewById(R.id.download_start);// 已下载文件大小
+            holder.textEnd = (TextView) convertView.findViewById(R.id.download_end);// 文件总大小
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
 
         FileInfo lists = list.get(position);
-        if (lists.getFileName() == null || lists.getFileName().equals("")) {
-            holder.textview_ranktitle.setText("未知");
+
+        // 封面图片
+        String imageUrl = lists.getImageurl();
+        if (imageUrl == null || imageUrl.equals("null") || imageUrl.trim().equals("")) {
+            holder.imageCover.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx));
         } else {
-            holder.textview_ranktitle.setText(lists.getFileName());
+            imageUrl = AssembleImageUrlUtils.assembleImageUrl150(imageUrl);
+            Picasso.with(context).load(imageUrl.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageCover);
         }
-        if (lists.getPlayCount() == null || lists.getPlayCount().equals("")) {
-            holder.tv_count.setText("未知");
-        } else {
-            holder.tv_count.setText(lists.getPlayCount());
+
+        // 节目标题
+        String fileName = lists.getFileName();
+        if (fileName == null || fileName.equals("")) {
+            fileName = "未知";
         }
-        try {
-            if (lists.getLength()!=-1){
-                holder.tv_sum.setVisibility(View.GONE);
-                holder.tv_sum.setText(df.format(lists.getSum() / 1000.0 / 1000.0) + "MB");
-            }else{
-                holder.tv_sum.setVisibility(View.GONE);
+        holder.textRankTitle.setText(fileName);
+
+        // 来源
+        String playFrom = lists.getPlayFrom();
+        if (playFrom == null || playFrom.equals("null") || playFrom.trim().equals("") || playFrom.trim().equals("author")) {
+            playFrom = "未知";
+        }
+        holder.textAuthor.setText(playFrom);
+
+        // 下载状态  下载中 OR  等待下载
+        int downLoadType = lists.getDownloadtype();
+        if (downLoadType == 0) {// 未下载
+            holder.imageWaitDownload.setImageResource(R.mipmap.wt_img_download_waiting);
+            holder.imageWaitDownload.setVisibility(View.VISIBLE);
+
+            holder.viewBoard.setVisibility(View.GONE);
+            holder.viewDownload.setVisibility(View.GONE);
+        } else {// 暂停
+            holder.imageWaitDownload.setVisibility(View.GONE);
+
+            holder.viewBoard.setVisibility(View.VISIBLE);
+            holder.viewDownload.setVisibility(View.VISIBLE);
+
+            // 文件总大小
+            String endString;
+            int end = lists.getEnd();
+            if (end >= 0) {
+                endString = df.format(end / 1000.0 / 1000.0) + "MB";
+            } else {
+                endString = df.format(0 / 1000.0 / 1000.0) + "MB";
             }
-        }catch (Exception e){
-            holder.tv_sum.setVisibility(View.GONE);
-        }
+            holder.textEnd.setText(endString);
 
-        if (lists.getImageurl() == null || lists.getImageurl().equals("")
-                || lists.getImageurl().equals("null") || lists.getImageurl().trim().equals("")) {
-            Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
-            holder.imageview_rankimage.setImageBitmap(bmp);
-        } else {
-            String url = AssembleImageUrlUtils.assembleImageUrl150(lists.getImageurl());
-            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageview_rankimage);
-        }
-
-        if (lists.getPlayFrom() == null || lists.getPlayFrom().equals("")|| lists.getPlayFrom().equals("null")|| lists.getPlayFrom().trim().equals("")|| lists.getPlayFrom().trim().equals("author")) {
-            holder.tv_author.setText("by 我听科技");
-        } else {
-            holder.tv_author.setText(""+ lists.getPlayFrom());
-        }
-
-        if (lists.getDownloadtype() == 0) {		// 未下载
-            holder.img_download_delete.setImageResource(R.mipmap.wt_img_download_waiting);
-            holder.lin_board.setVisibility(View.GONE);
-            holder.rv_download.setVisibility(View.GONE);
-            holder.img_download_delete.setVisibility(View.VISIBLE);
-        }
-//		else if (lists.getDownloadtype() == 1) {
-//			//下载中
-//			/*	holder.img_download_delete.setImageResource(R.drawable.wt_group_checked_new);*/
-//			holder.img_download_delete.setVisibility(View.GONE);
-//			holder.lin_board.setVisibility(View.VISIBLE);
-//			holder.rv_download.setVisibility(View.VISIBLE);
-//		}
-        else {									//暂停
-            holder.img_download_delete.setVisibility(View.GONE);
-            holder.lin_board.setVisibility(View.VISIBLE);
-            holder.rv_download.setVisibility(View.VISIBLE);
-            if (lists.getEnd() >= 0) {
-//				holder.pro_bar.setMax(lists.getEnd());
-                holder.tv_end.setText(df.format(lists.getEnd() / 1000.0 / 1000.0) + "MB");
-            }else{
-                holder.tv_end.setText(df.format(0/ 1000.0 / 1000.0) + "MB");
-            }
-            if (lists.getStart() >= 0) {
-//				holder.pro_bar.setProgress(lists.getStart());
-                float a = (float)lists.getStart();
-//				Log.e("a", a+"");
-                float b = (float)lists.getEnd();
-//				Log.e("b", b+"");
+            // 已下载文件大小
+            int start = lists.getStart();
+            if (start >= 0) {
+                float a = (float) start;
+                float b = (float) end;
                 String c = df.format(a / b);
-//				Log.e("c", c+"");
-                int d = (int)(Float.parseFloat(c)*100);
-                Log.e("d", d+"");
-//				int progress = (lists.getStart()/lists.getEnd()*100.0);
-//				Log.e("int",lists.getStart()+"*100/"+lists.getEnd()+"="+ progress+"");
-                holder.ncb.setMainProgress(d);
-                holder.tv_start.setText(df.format(lists.getStart() / 1000.0 / 1000.0)+ "MB/");
-            }else{
-                holder.ncb.setMainProgress(0);
-                holder.tv_start.setText(df.format(0 / 1000.0 / 1000.0)+ "MB/");
+                int d = (int) (Float.parseFloat(c) * 100);
+                holder.imageCircle.setMainProgress(d);
+                holder.textStart.setText(df.format(start / 1000.0 / 1000.0) + "MB/");
+            } else {
+                holder.imageCircle.setMainProgress(0);
+                holder.textStart.setText(df.format(0 / 1000.0 / 1000.0) + "MB/");
             }
         }
         return convertView;
@@ -157,11 +147,9 @@ public class DownloadAdapter extends BaseAdapter {
 
     public void updateProgress(String url, int start, int end) {
         int id = 0;
-        Log.e("测试下载功能", "list的大小"+list.size()+"");
         for (int i = 0; i < list.size(); i++) {
             if (list.get(i).getUrl().trim().equals(url)) {
                 id = i;
-                Log.e("测试下载功能", "更新的单体名称"+list.get(i).getFileName()+"");
                 break;
             }
         }
@@ -175,17 +163,18 @@ public class DownloadAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        public CircleProgress ncb;
-        private ImageView imageview_rankimage;
-        private TextView tv_author;
-        private TextView textview_ranktitle;
-        private TextView tv_start;
-        private TextView tv_end;
-        private ImageView img_download_delete;
-        private LinearLayout lin_board;
-        private RelativeLayout rv_download;
-        public ImageView img_liu;
-        public TextView tv_count;
-        public TextView tv_sum;
+        public ImageView imageMask;// 六边形封面图片遮罩
+        public ImageView imageCover;// 封面图片
+        public TextView textRankTitle;// 节目标题
+        public TextView textAuthor;// 来源
+
+        public ImageView imageWaitDownload;// 图标 等待下载
+        public RelativeLayout viewDownload;// 下载中视图
+
+        public CircleProgress imageCircle;// 下载中显示进度圆形图片
+        public LinearLayout viewBoard;// 下载大小视图
+
+        public TextView textStart;// 已下载的文件大小
+        public TextView textEnd;// 文件总大小
     }
 }
