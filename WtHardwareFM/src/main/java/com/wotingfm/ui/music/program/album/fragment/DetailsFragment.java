@@ -2,8 +2,10 @@ package com.wotingfm.ui.music.program.album.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,12 +19,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
-import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
-import com.wotingfm.ui.music.program.album.model.ContentCatalogs;
-import com.wotingfm.ui.music.program.album.model.ContentInfo;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
+import com.wotingfm.ui.music.program.album.anchor.AnchorDetailsActivity;
+import com.wotingfm.ui.music.program.album.anchor.model.PersonInfo;
+import com.wotingfm.ui.music.program.album.model.ContentCatalogs;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
@@ -49,6 +52,8 @@ public class DetailsFragment extends Fragment implements OnClickListener {
     private String tag = "DETAILS_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
     private boolean isConcern;
+    private String PersonId;
+    private String ContentPub;
 
 
     @Override
@@ -84,6 +89,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
         textConcern = (TextView) view.findViewById(R.id.text_concern);
         LinearLayout linearConcern = (LinearLayout) view.findViewById(R.id.linear_concern);
         linearConcern.setOnClickListener(this);
+        textAnchor.setOnClickListener(this);
     }
 
     @Override
@@ -101,12 +107,21 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                 }
                 isConcern = !isConcern;
                 break;
+            case R.id.text_anchor_name:
+                if(!TextUtils.isEmpty(PersonId)){
+                    Intent intent=new Intent(context, AnchorDetailsActivity.class);
+                    intent.putExtra("PersonId",PersonId);
+                    intent.putExtra("ContentPub",ContentPub);
+                    startActivity(intent);
+                }else{
+                    ToastUtils.show_always(context,"此专辑还没有主播哦");
+                }
+
+                break;
         }
     }
 
-    /**
-     * 向服务器发送请求
-     */
+    // 向服务器发送请求
     public void send() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
@@ -121,139 +136,136 @@ public class DetailsFragment extends Fragment implements OnClickListener {
 
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                if (isCancelRequest) {
-                    return;
-                }
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return;
                 try {
                     String ReturnType = result.getString("ReturnType");
-                    if (ReturnType != null) {// 根据返回值来对程序进行解析
-                        if (ReturnType.equals("1001")) {
-                            try {
-                                // 获取列表
-                                String ResultList = result.getString("ResultInfo");
-                                JSONObject arg1 = (JSONObject) new JSONTokener(ResultList).nextValue();
-                                Gson gson = new Gson();
-                                ContentInfo contentInfo = gson.fromJson(ResultList, new TypeToken<ContentInfo>() {
-                                }.getType());
-                                contentCatalogsList = contentInfo.getContentCatalogs();
-                                try {
-                                    contentDesc = arg1.getString("ContentDescn");
-                                } catch (Exception e) {
-                                    e.printStackTrace();
+                    if (ReturnType != null && ReturnType.equals("1001")) {
+                        String ResultList = result.getString("ResultInfo");
+                        JSONObject arg1 = (JSONObject) new JSONTokener(ResultList).nextValue();
+
+                        try {
+                            String s = arg1.getString("ContentCatalogs");
+                            contentCatalogsList = new Gson().fromJson(s, new TypeToken<List<ContentCatalogs>>() {
+                            }.getType());
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        try {
+                            contentDesc = arg1.getString("ContentDescn");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            AlbumActivity.ContentImg = arg1.getString("ContentImg");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            AlbumActivity.ContentName = arg1.getString("ContentName");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            AlbumActivity.ContentShareURL = arg1.getString("ContentShareURL");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            AlbumActivity.ContentFavorite = arg1.getString("ContentFavorite");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                        try {
+                            ContentPub = arg1.getString("ContentPub");
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+
+                        try{
+                            String ContentPersons=arg1.getString("ContentPersons");
+                            List<PersonInfo> mPersonInfoList= new Gson().fromJson(ContentPersons, new TypeToken<List<PersonInfo>>() {
+                            }.getType());
+                            if(mPersonInfoList!=null&&mPersonInfoList.size()>0){
+
+                                if(mPersonInfoList.get(0).getPerId()!=null){
+                                    PersonId=mPersonInfoList.get(0).getPerId();
+                                }else{
+                                    PersonId="";
                                 }
 
-                                try {
-                                    AlbumActivity.ContentImg = arg1.getString("ContentImg");
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                try {
-                                    AlbumActivity.ContentName = arg1.getString("ContentName");
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                try {
-                                    AlbumActivity.ContentShareURL = arg1.getString("ContentShareURL");
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                                try {
-                                    AlbumActivity.ContentFavorite = arg1.getString("ContentFavorite");
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-
-                            } catch (Exception e) {
-                                e.printStackTrace();
+                            }else{
+                                PersonId="";
                             }
 
-                            AlbumActivity.returnResult = 1;
-                            if (AlbumActivity.ContentFavorite != null && !AlbumActivity.ContentFavorite.equals("")) {
-                                if (AlbumActivity.ContentFavorite.equals("0")) {
-                                    AlbumActivity.tv_favorite.setText("喜欢");
-                                    AlbumActivity.imageFavorite.setImageDrawable(context.getResources().getDrawable(R.mipmap.wt_img_like));
-                                } else {
-                                    AlbumActivity.tv_favorite.setText("已喜欢");
-                                    AlbumActivity.imageFavorite.setImageDrawable(context.getResources().getDrawable(R.mipmap.wt_img_liked));
-                                }
-                            }
-
-                            if (AlbumActivity.ContentName != null && !AlbumActivity.ContentName.equals("")) {
-                                AlbumActivity.tv_album_name.setText(AlbumActivity.ContentName);
-                                textAnchor.setText(AlbumActivity.ContentName);
+                        }catch (Exception e){
+                            e.printStackTrace();
+                        }
+                        AlbumActivity.returnResult = 1;
+                        if (AlbumActivity.ContentFavorite != null && !AlbumActivity.ContentFavorite.equals("")) {
+                            if (AlbumActivity.ContentFavorite.equals("0")) {
+                                AlbumActivity.tv_favorite.setText("喜欢");
+                                AlbumActivity.imageFavorite.setImageDrawable(context.getResources().getDrawable(R.mipmap.wt_img_like));
                             } else {
-                                textAnchor.setText("我听我享听");
-                            }
-
-                            if (AlbumActivity.ContentImg == null || AlbumActivity.ContentImg.equals("")) {
-                                AlbumActivity.img_album.setImageResource(R.mipmap.wt_image_playertx);
-                            } else {
-                                String url;
-                                if (AlbumActivity.ContentImg.startsWith("http")) {
-                                    url = AlbumActivity.ContentImg;
-                                } else {
-                                    url = GlobalConfig.imageurl + AlbumActivity.ContentImg;
-                                }
-                                url= AssembleImageUrlUtils.assembleImageUrl150(url);
-                                Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(AlbumActivity.img_album);
-                                Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(imageHead);
-                            }
-
-                            if (contentDesc != null && !contentDesc.equals("") && !contentDesc.equals("null")) {
-                                textContent.setText(contentDesc);
-                            } else {
-                                textContent.setText("暂无介绍内容");
-                            }
-
-                            // 标签设置
-                            if (contentCatalogsList != null && contentCatalogsList.size() > 0) {
-                                StringBuilder builder = new StringBuilder();
-                                for (int i = 0; i < contentCatalogsList.size(); i++) {
-                                    String str = contentCatalogsList.get(i).getCataTitle();
-                                    builder.append(str);
-                                    if (i != contentCatalogsList.size() - 1) {
-                                        builder.append("  ");
-                                    }
-                                }
-                                textLabel.setText(builder.toString());
-                            }
-                        } else {
-                            if (ReturnType.equals("0000")) {
-//                                ToastUtils.show_always(context, "无法获取相关的参数");
-                                ToastUtils.show_always(context, "出错了，请您稍后再试");
-                            } else if (ReturnType.equals("1002")) {
-//                                ToastUtils.show_always(context, "无此分类信息");
-                                ToastUtils.show_always(context, "出错了，请您稍后再试");
-                            } else if (ReturnType.equals("1003")) {
-//                                ToastUtils.show_always(context, "无法获得列表");
-                                ToastUtils.show_always(context, "出错了，请您稍后再试");
-                            } else if (ReturnType.equals("1011")) {
-//                                ToastUtils.show_always(context, "列表为空（列表为空[size==0]");
-                                ToastUtils.show_always(context, "出错了，请您稍后再试");
-                            } else if (ReturnType.equals("T")) {
-//                                ToastUtils.show_always(context, "获取列表异常");
-                                ToastUtils.show_always(context, "出错了，请您稍后再试");
+                                AlbumActivity.tv_favorite.setText("已喜欢");
+                                AlbumActivity.imageFavorite.setImageDrawable(context.getResources().getDrawable(R.mipmap.wt_img_liked));
                             }
                         }
+                        if (AlbumActivity.ContentName != null && !AlbumActivity.ContentName.equals("")) {
+                            AlbumActivity.tv_album_name.setText(AlbumActivity.ContentName);
+                            textAnchor.setText(AlbumActivity.ContentName);
+                        } else {
+                            textAnchor.setText("我听我享听");
+                        }
+                        if (AlbumActivity.ContentImg == null || AlbumActivity.ContentImg.equals("")) {
+                            AlbumActivity.img_album.setImageResource(R.mipmap.wt_image_playertx);
+                        } else {
+                            String url;
+                            if (AlbumActivity.ContentImg.startsWith("http")) {
+                                url = AlbumActivity.ContentImg;
+                            } else {
+                                url = GlobalConfig.imageurl + AlbumActivity.ContentImg;
+                            }
+                            url = AssembleImageUrlUtils.assembleImageUrl150(url);
+                            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(AlbumActivity.img_album);
+                            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(imageHead);
+                        }
+                        if (contentDesc != null && !contentDesc.equals("") && !contentDesc.equals("null")) {
+                            textContent.setText(contentDesc);
+                            AlbumActivity.ContentDesc=contentDesc;
+                        } else {
+                            textContent.setText("暂无介绍内容");
+                        }
+
+                        // 标签设置
+                        if (contentCatalogsList != null && contentCatalogsList.size() > 0) {
+                            StringBuilder builder = new StringBuilder();
+                            for (int i = 0; i < contentCatalogsList.size(); i++) {
+
+                                String str = contentCatalogsList.get(i).getCataTitle();
+                                builder.append(str);
+                                if (i != contentCatalogsList.size() - 1) builder.append("  ");
+                            }
+                            textLabel.setText(builder.toString());
+                        }
+             /*           ((AlbumActivity) context).hideTip();*/
                     } else {
-                        ToastUtils.show_always(context, "出错了，请您稍后再试");
+                   /*     ((AlbumActivity) context).setTip(TipView.TipStatus.IS_ERROR);*/
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                 /*   ((AlbumActivity) context).setTip(TipView.TipStatus.IS_ERROR);*/
                 }
             }
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+                if (dialog != null) dialog.dismiss();
+           /*     ((AlbumActivity) context).setTip(TipView.TipStatus.IS_ERROR);*/
             }
         });
     }
+
 
     @Override
     public void onDestroyView() {

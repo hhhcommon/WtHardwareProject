@@ -255,4 +255,8 @@ public class GlobalConfig {
     public static final String delCommentUrl=baseUrl+"wt/discuss/del.do";
     //内容主页获取节目单接口
     public static final String getProgrammeUrl = baseUrl + "wt/content/getBCProgramme.do";
+    // 获取主播信息
+    public static final String getPersonInfo = baseUrl +"wt/person/getPersonInfo.do";
+    // 新增主播内容
+    public static final String getPersonContents = baseUrl +"wt/person/getPersonContents.do";
 }
