@@ -42,7 +42,7 @@ import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
 import com.wotingfm.ui.music.program.citylist.activity.CityListActivity;
 import com.wotingfm.ui.music.program.diantai.activity.RadioNationalActivity;
 import com.wotingfm.ui.music.program.diantai.adapter.CityNewAdapter;
-import com.wotingfm.ui.music.program.diantai.adapter.OnLinesAdapter;
+import com.wotingfm.ui.music.program.diantai.adapter.OnlinesAdapter;
 import com.wotingfm.ui.music.program.diantai.model.RadioPlay;
 import com.wotingfm.ui.music.program.fmlist.activity.FMListActivity;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
@@ -71,7 +71,7 @@ public class OnLineFragment extends Fragment implements TipView.WhiteViewClick {
     private SharedPreferences shared = BSApplication.SharedPreferences;
     private SearchPlayerHistoryDao dbDao;
     private MessageReceiver Receiver;
-    private OnLinesAdapter adapter;
+    private OnlinesAdapter adapter;
     private List<RadioPlay> mainList;
     private List<RankInfo> mainLists;
     private List<RadioPlay> newList = new ArrayList<>();
@@ -472,7 +472,7 @@ public class OnLineFragment extends Fragment implements TipView.WhiteViewClick {
                         }
                         newList.addAll(mainList);
                         if (adapter == null) {
-                            expandableListMain.setAdapter(adapter = new OnLinesAdapter(context, newList));
+                            expandableListMain.setAdapter(adapter = new OnlinesAdapter(context, newList));
                         } else {
                             adapter.notifyDataSetChanged();
                         }

@@ -115,6 +115,20 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
+        com.wotingfm.ui.interphone.group.creategroup
+
+        <!-- 创建群组主界面 -->
+        <activity
+            android:name="com.wotingfm.ui.interphone.group.creategroup.CreateGroupContentActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+        <activity
+            android:name="com.wotingfm.ui.interphone.group.groupcontrol.grouppersonnews.GroupPersonNewsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
         <!-- 头像剪裁界面 -->
         <activity
             android:name=".ui.common.photocut.PhotoCutActivity"
@@ -314,7 +328,7 @@
 
         <!-- 全部群成员 -->
         <activity
-            android:name=".ui.interphone.group.groupcontrol.allgroupmember.activity.AllGroupMemberActivity"
+            android:name="com.wotingfm.ui.interphone.group.groupcontrol.allgroupmember.activity.AllGroupMemberActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
