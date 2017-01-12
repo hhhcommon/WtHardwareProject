@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.woting.common.widgetui.MyLinearLayout
+    <com.wotingfm.widget.MyLinearLayout
         android:id="@+id/rl_voice"
         android:layout_width="match_parent"
         android:layout_height="171dp"
@@ -83,6 +83,6 @@
 
         </LinearLayout>
 
-    </com.woting.common.widgetui.MyLinearLayout>
+    </com.wotingfm.widget.MyLinearLayout>
 
 </LinearLayout>

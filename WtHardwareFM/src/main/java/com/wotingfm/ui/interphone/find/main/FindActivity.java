@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.ui.baseactivity.AppBaseActivity;
 import com.wotingfm.ui.common.scanning.activity.CaptureActivity;
@@ -70,10 +71,10 @@ public class FindActivity extends AppBaseActivity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_find);
         mVoiceRecognizer = VoiceRecognizer.getInstance(context, BroadcastConstants.FINDVOICE);// 初始化语音搜索
-        type = getIntent().getStringExtra("type");// 先要看到 type
+        type = getIntent().getStringExtra(StringConstant.FIND_TYPE);// 先要看到 type
         setView();
         if (type != null && !type.equals("")) {
-            if (type.equals("group")) {
+            if (type.equals(StringConstant.FIND_TYPE_GROUP)) {
                 et_news.setHint("群名称");
             }
         }
@@ -213,11 +214,11 @@ public class FindActivity extends AppBaseActivity implements OnClickListener {
                     ToastUtils.show_always(context, "您所输入的内容为空");
                     return;
                 }
+                String s=et_news.getText().toString().trim();
+                String s1=type;
                 Intent intent1 = new Intent(context, FindNewsResultActivity.class);
-                Bundle bundle1 = new Bundle();
-                bundle1.putString("searchstr", et_news.getText().toString().trim());
-                bundle1.putString("type", type);
-                intent1.putExtras(bundle1);
+                intent1.putExtra("searchstr", et_news.getText().toString().trim());
+                intent1.putExtra(StringConstant.FIND_TYPE, type);
                 startActivity(intent1);
                 break;
         }

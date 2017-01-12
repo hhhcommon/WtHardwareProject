@@ -3,6 +3,7 @@ package com.wotingfm.ui.interphone.find.result;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -13,6 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -69,8 +71,9 @@ public class FindNewsResultActivity extends AppBaseActivity implements OnClickLi
         setView();
         setListener();
         searchstr = getIntent().getStringExtra("searchstr");
-        type = getIntent().getStringExtra("type");
-        if (!type.trim().equals("")) {
+        type = getIntent().getStringExtra(StringConstant.FIND_TYPE);
+
+        if (!TextUtils.isEmpty(type)) {
             searchFriendOrGroup();
         } else {
             tipView.setVisibility(View.VISIBLE);
@@ -87,7 +90,7 @@ public class FindNewsResultActivity extends AppBaseActivity implements OnClickLi
 
     // 搜索好友或群组
     private void searchFriendOrGroup() {
-        if (type.equals("friend")) {// 搜索好友
+        if (type.equals(StringConstant.FIND_TYPE_PERSON)) {// 搜索好友
             if (!searchstr.trim().equals("")) {
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                     dialog = DialogUtils.Dialogph(context, "正在获取数据");
@@ -102,7 +105,7 @@ public class FindNewsResultActivity extends AppBaseActivity implements OnClickLi
                 tipView.setVisibility(View.VISIBLE);
                 tipView.setTipView(TipView.TipStatus.IS_ERROR);
             }
-        } else if (type.equals("group")) {// 搜索群组
+        } else if (type.equals(StringConstant.FIND_TYPE_GROUP)) {// 搜索群组
             if (!searchstr.trim().equals("")) {
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                     dialog = DialogUtils.Dialogph(context, "正在获取数据");
@@ -128,7 +131,7 @@ public class FindNewsResultActivity extends AppBaseActivity implements OnClickLi
         mxlistview.setXListViewListener(new XListView.IXListViewListener() {
             @Override
             public void onRefresh() {
-                if (type.equals("friend")) {// 获取刷新好友数据
+                if (type.equals(StringConstant.FIND_TYPE_PERSON)) {// 获取刷新好友数据
                     if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                         RefreshType = 1;
                         PageNum = 1;
@@ -152,13 +155,13 @@ public class FindNewsResultActivity extends AppBaseActivity implements OnClickLi
             @Override
             public void onLoadMore() {
                 if (!type.trim().equals("")) {
-                    if (type.equals("friend")) {// 获取加载更多好友数据
+                    if (type.equals(StringConstant.FIND_TYPE_PERSON)) {// 获取加载更多好友数据
                         if(CommonHelper.checkNetwork(context)) {
                             RefreshType = 2;
                             PageNum = PageNum + 1;
                             getFriend();
                         }
-                    } else if (type.equals("group")) {// 获取加载更多群组数据
+                    } else if (type.equals(StringConstant.FIND_TYPE_GROUP)) {// 获取加载更多群组数据
                         if(CommonHelper.checkNetwork(context)) {
                             RefreshType = 2;
                             PageNum = PageNum + 1;
@@ -175,7 +178,7 @@ public class FindNewsResultActivity extends AppBaseActivity implements OnClickLi
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
                 if (!type.trim().equals("")) {
-                    if (type.equals("friend")) {
+                    if (type.equals(StringConstant.FIND_TYPE_PERSON)) {
                         if (position > 0) {
                             if (UserList != null && UserList.size() > 0) {
                                 Intent intent = new Intent(FindNewsResultActivity.this, FriendAddActivity.class);
@@ -187,7 +190,7 @@ public class FindNewsResultActivity extends AppBaseActivity implements OnClickLi
                                 ToastUtils.show_always(context, "获取数据异常");
                             }
                         }
-                    } else if (type.equals("group")) {
+                    } else if (type.equals(StringConstant.FIND_TYPE_GROUP)) {
                         if (position > 0) {
                             if (GroupList != null && GroupList.size() > 0) {
                                 if (GroupList.get(position - 1).getGroupCreator().equals(CommonUtils.getUserId(context))) {
