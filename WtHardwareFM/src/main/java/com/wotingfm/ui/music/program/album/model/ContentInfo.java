@@ -1,5 +1,7 @@
 package com.wotingfm.ui.music.program.album.model;
 
+import com.wotingfm.ui.music.player.model.ContentPersons;
+
 import java.io.Serializable;
 import java.util.List;
 
@@ -10,12 +12,12 @@ public class ContentInfo implements Serializable {
     private static final long serialVersionUID = 1231243519566434965L;
 
     private String ContentURI;
-    private String ContentPersons;
     private String CTime;
     private String ContentKeyWord;
     private String ContentSubjectWord;
     private String ContentTimes;
     private String ContentName;
+    private List<ContentPersons> ContentPersons;
 
     private String ContentPubTime;
     private String ContentPub;
@@ -157,21 +159,13 @@ public class ContentInfo implements Serializable {
         ContentURI = contentURI;
     }
 
-    public String getContentPersons() {
+    public List<ContentPersons> getContentPersons() {
         return ContentPersons;
     }
 
-    public void setContentPersons(String contentPersons) {
+    public void setContentPersons(List<ContentPersons> contentPersons) {
         ContentPersons = contentPersons;
     }
-
-    //	public String getContentCatalogs() {
-    //		return ContentCatalogs;
-    //	}
-    //
-    //	public void setContentCatalogs(String contentCatalogs) {
-    //		ContentCatalogs = contentCatalogs;
-    //	}
 
     public String getCTime() {
         return CTime;

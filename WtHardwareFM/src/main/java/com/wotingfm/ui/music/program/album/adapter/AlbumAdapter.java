@@ -13,6 +13,9 @@ import com.wotingfm.ui.music.program.album.model.ContentInfo;
 
 import java.util.List;
 
+/**
+ * 专辑下载列表数据展示
+ */
 public class AlbumAdapter extends BaseAdapter {
 	private List<ContentInfo> list;
 	private Context context;
