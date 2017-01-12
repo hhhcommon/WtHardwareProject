@@ -19,7 +19,9 @@ import com.wotingfm.widget.MyGridView;
 
 import java.util.List;
 
-
+/**
+ * 分类数据展示
+ */
 public class CatalogListAdapter extends BaseAdapter {
     private List<FenLei> list;
     private Context context;
@@ -54,12 +56,18 @@ public class CatalogListAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fenlei_group, null);
             holder = new ViewHolder();
             holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
+            holder.topView = convertView.findViewById(R.id.id_view);
             holder.gv = (MyGridView) convertView.findViewById(R.id.gridView);
             holder.gv.setSelector(new ColorDrawable(Color.TRANSPARENT));
 
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
+        }
+        if(position == 0) {
+            holder.topView.setVisibility(View.GONE);
+        } else {
+            holder.topView.setVisibility(View.VISIBLE);
         }
         holder.tv_name.setText(list.get(position).getName());
         adapters = new CatalogGridAdapter(context,list.get(position).getChildren());
@@ -80,6 +88,7 @@ public class CatalogListAdapter extends BaseAdapter {
 
     class ViewHolder {
         public TextView tv_name;
+        public View topView;// 6dp TopView
         public MyGridView gv;
     }
 }

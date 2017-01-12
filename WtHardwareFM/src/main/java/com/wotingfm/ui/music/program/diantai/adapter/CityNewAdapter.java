@@ -56,7 +56,6 @@ public class CityNewAdapter extends BaseAdapter {
             holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
             holder.textRankPlaying = (TextView) convertView.findViewById(R.id.RankPlaying);// 正在播放的节目
             holder.imageRankImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
-            holder.textNumber = (TextView) convertView.findViewById(R.id.tv_num);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -87,12 +86,6 @@ public class CityNewAdapter extends BaseAdapter {
                 Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageRankImage);
             }
 
-            // 收听人数
-            String playCount = lists.getPlayCount();
-            if (playCount != null && !playCount.equals("") && !playCount.equals("null")) {
-                holder.textNumber.setText(lists.getPlayCount());
-            }
-
             if (mediaType.equals("RADIO")) {
 //				if (lists.getContentPub() != null && !lists.getContentPub().equals("")) {
 //                    holder.textRankPlaying.setText(lists.getContentPub());
@@ -108,7 +101,7 @@ public class CityNewAdapter extends BaseAdapter {
     }
 
     private class ViewHolder {
-        public TextView textRankTitle, textNumber, textRankPlaying;// 标题  收听人数  正在直播的节目
+        public TextView textRankTitle, textRankPlaying;// 标题  正在直播的节目
         public ImageView imageRankImage;// 封面
         public ImageView imageMask;// 六边形封面遮罩
     }

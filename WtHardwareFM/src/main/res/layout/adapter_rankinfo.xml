@@ -86,52 +86,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="left|center"
-                android:visibility="gone">
-
-                <ImageView
-                    android:id="@+id/image_number"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:src="@mipmap/image_program_listener" />
-
-                <TextView
-                    android:id="@+id/tv_num"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"
-                    android:text="0"
-                    android:textColor="@color/beijing"
-                    android:layout_marginRight="14dp"
-                    android:textSize="@dimen/text_size_9" />
-
-                <ImageView
-                    android:id="@+id/image_last"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:layout_marginRight="6dp"
-                    android:src="@mipmap/image_program_time"/>
-
-                <ImageView
-                    android:id="@+id/image_num"
-                    android:layout_width="12dp"
-                    android:layout_height="12dp"
-                    android:layout_marginRight="6dp"
-                    android:src="@mipmap/image_program_number"/>
-
-                <TextView
-                    android:id="@+id/tv_last"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="时长"
-                    android:textColor="@color/beijing"
-                    android:textSize="9sp"/>
-
-            </LinearLayout>
-
         </LinearLayout>
 
     </LinearLayout>

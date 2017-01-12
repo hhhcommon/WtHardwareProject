@@ -1,41 +1,34 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical" >
+    android:layout_height="match_parent"
+    android:background="@color/setting_bg_color"
+    android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="94dp"
         android:background="@color/WHITE"
-        android:gravity="center_vertical">
-
-        <ImageView
-            android:id="@+id/img_check"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginLeft="12dp"
-            android:src="@mipmap/wt_group_nochecked" />
+        android:gravity="left|center"
+        android:orientation="horizontal">
 
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="18dp" >
+            android:layout_marginLeft="15dp">
 
             <ImageView
                 android:id="@+id/RankImageUrl"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
                 android:layout_centerInParent="true"
-                android:scaleType="centerCrop"
-                android:src="@mipmap/wt_image_playertx" />
+                android:scaleType="centerCrop" />
 
             <ImageView
-                android:id="@+id/image_mask"
+                android:id="@+id/img_zhezhao"
                 android:layout_width="65dp"
                 android:layout_height="65dp"
-                android:layout_centerInParent="true"
-                android:src="@mipmap/wt_6_b_y_b" />
+                android:layout_centerInParent="true" />
 
         </RelativeLayout>
 
@@ -44,17 +37,17 @@
             android:layout_height="match_parent"
             android:layout_marginLeft="13dp"
             android:gravity="center_vertical"
-            android:orientation="vertical" >
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/RankTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:ellipsize="end"
                 android:singleLine="true"
-                android:text="未知"
+                android:ellipsize="end"
+                android:text="woting"
                 android:textColor="@color/dinglan_orange"
-                android:textSize="18sp" />
+                android:textSize="@dimen/text_size_18" />
 
             <LinearLayout
                 android:id="@+id/lin_currentplay"
@@ -68,23 +61,33 @@
                     android:id="@+id/image_playing"
                     android:layout_width="15dp"
                     android:layout_height="15dp"
+                    android:visibility="gone"
                     android:src="@mipmap/image_program_album"
                     android:layout_marginRight="6dp"/>
 
                 <TextView
-                    android:id="@+id/RankContent"
+                    android:id="@+id/text_playing"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="正在直播: "
+                    android:textColor="@color/beijing"
+                    android:textSize="@dimen/text_size_16" />
+
+                <TextView
+                    android:id="@+id/RankPlaying"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="未知"
+                    android:singleLine="true"
+                    android:ellipsize="end"
                     android:textColor="@color/beijing"
-                    android:textSize="@dimen/text_size_15"/>
+                    android:textSize="@dimen/text_size_16" />
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical">
+                android:layout_height="wrap_content">
 
                 <ImageView
                     android:id="@+id/image_number"
@@ -107,7 +110,6 @@
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_marginRight="6dp"
-                    android:visibility="gone"
                     android:src="@mipmap/image_program_time"/>
 
                 <ImageView
@@ -115,15 +117,13 @@
                     android:layout_width="15dp"
                     android:layout_height="15dp"
                     android:layout_marginRight="6dp"
-                    android:visibility="gone"
                     android:src="@mipmap/image_program_number"/>
 
                 <TextView
                     android:id="@+id/tv_last"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="00' 00''"
-                    android:visibility="gone"
+                    android:text="时长"
                     android:textColor="@color/beijing"
                     android:textSize="12sp"/>
 
@@ -132,10 +132,5 @@
         </LinearLayout>
 
     </LinearLayout>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/view_color" />
 
 </LinearLayout>

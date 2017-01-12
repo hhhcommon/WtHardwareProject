@@ -59,7 +59,6 @@ public class DownLoadListAdapter extends BaseAdapter {
 			holder.imageview_rankimage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
 			holder.tv_RankContent = (TextView) convertView.findViewById(R.id.RankContent);
 
-			holder.tv_count = (TextView) convertView.findViewById(R.id.tv_count);//节目时长
 			holder.tv_sum = (TextView) convertView.findViewById(R.id.tv_sum);//节目大小
 
 			holder.lin_delete = (LinearLayout) convertView.findViewById(R.id.lin_clear);
@@ -98,23 +97,6 @@ public class DownLoadListAdapter extends BaseAdapter {
 		} else {
 			holder.tv_RankContent.setText(lists.getPlayFrom());
 		}
-		//  时长
-		try {
-			if (lists.getPlayAllTime() == null || lists.getPlayAllTime().equals("")) {
-				holder.tv_count.setText(context.getString(R.string.play_time));
-			} else {
-				int minute = Integer.valueOf(lists.getPlayAllTime()) / (1000 * 60);
-				int second = (Integer.valueOf(lists.getPlayAllTime()) / 1000) % 60;
-				if (second < 10) {
-					holder.tv_count.setText(minute + "\'" + " " + "0" + second + "\"");
-				} else {
-					holder.tv_count.setText(minute + "\'" + " " + second + "\"");
-				}
-			}
-		}catch (Exception e){
-			e.printStackTrace();
-			holder.tv_count.setText(context.getString(R.string.play_time));
-		}
 
 		// 大小
 		try {
@@ -128,8 +110,6 @@ public class DownLoadListAdapter extends BaseAdapter {
 			holder.tv_sum.setText("0MB");
 		}
 
-
-
 		holder.lin_delete.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
@@ -140,12 +120,12 @@ public class DownLoadListAdapter extends BaseAdapter {
 	}
 
 	public interface downloadlist {
-		public void checkposition(int position);
+        void checkposition(int position);
 	}
 
 	private class ViewHolder {
 		public ImageView imageview_rankimage, img_liu;
 		public LinearLayout lin_delete;
-		public TextView tv_count, tv_sum, tv_RankContent, textview_ranktitle;
+		public TextView tv_sum, tv_RankContent, textview_ranktitle;
 	}
 }

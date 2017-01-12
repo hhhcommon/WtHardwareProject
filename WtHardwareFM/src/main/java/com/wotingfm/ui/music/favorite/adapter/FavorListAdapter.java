@@ -106,10 +106,20 @@ public class FavorListAdapter extends BaseAdapter {
         }
 
         // 收听次数
-        String watchNum = lists.getWatchPlayerNum();
-        if (watchNum != null && !watchNum.equals("")) {
-            holder.textNumber.setText(watchNum);
+        String watchNum = lists.getPlayCount();
+        if (watchNum == null || watchNum.equals("")) {
+            watchNum = "1234";
         }
+        float playCount = Float.valueOf(watchNum);
+        if(playCount > 10000) {
+            playCount = playCount / 10000;
+            watchNum = playCount + "万";
+            if(playCount >= 10000) {
+                playCount = playCount / 10000;
+                watchNum = playCount + "亿";
+            }
+        }
+        holder.textNumber.setText(watchNum);
 
         switch (mediaType) {
             case "RADIO":// 电台

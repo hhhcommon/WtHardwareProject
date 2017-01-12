@@ -302,13 +302,11 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-
         <activity
             android:name=".ui.interphone.alert.ReceiveAlertActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-
         <activity
             android:name=".ui.interphone.group.groupcontrol.groupdetail.activity.GroupDetailActivity"
             android:screenOrientation="portrait"
@@ -319,7 +317,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-
         <activity
             android:name=".ui.interphone.group.groupcontrol.memberadd.GroupMemberAddActivity"
             android:screenOrientation="portrait"
@@ -353,7 +350,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-
         <activity
             android:name=".ui.interphone.group.groupcontrol.handlegroupapply.HandleGroupApplyActivity"
             android:screenOrientation="portrait"
@@ -394,7 +390,6 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-
         <activity
             android:name=".ui.music.program.fmlist.activity.FMListActivity"
             android:screenOrientation="portrait"
@@ -513,6 +508,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
+
         <!-- 评论 -->
         <activity
             android:name=".ui.music.comment.CommentActivity"
@@ -520,6 +516,13 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+
+        <!--播放节目详情-->
+        <activity
+            android:name=".ui.music.player.fragment.more.PlayDetailsActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
 
         <!-- 友盟activity -->
         <activity

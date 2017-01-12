@@ -95,11 +95,12 @@ public class SearchContentAdapter extends BaseExpandableListAdapter {
         final ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_rankinfo, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_search_content, parent, false);
             holder.imageMask = (ImageView) convertView.findViewById(R.id.img_zhezhao);// 六边形遮罩
             holder.imageMask.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b));
 
             holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
+            holder.imagePlaying = (ImageView) convertView.findViewById(R.id.image_playing);// 来源小图标
             holder.textPlaying = (TextView) convertView.findViewById(R.id.text_playing);// "正在直播"
             holder.textRankPlaying = (TextView) convertView.findViewById(R.id.RankPlaying);// 正在播放的节目
             holder.imageRankImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
@@ -115,14 +116,27 @@ public class SearchContentAdapter extends BaseExpandableListAdapter {
         String mediaType = lists.getMediaType();// 类型
 
         // 标题
-        if (lists.getContentName() != null && !lists.getContentName().equals("")) {
-            holder.textRankTitle.setText(lists.getContentName());
+        String contentName = lists.getContentName();
+        if (contentName == null || contentName.equals("")) {
+            contentName = "未知";
         }
+        holder.textRankTitle.setText(contentName);
 
         // 收听次数
-        if (lists.getWatchPlayerNum() != null && !lists.getWatchPlayerNum().equals("")) {
-            holder.textNumber.setText(lists.getWatchPlayerNum());
+        String playCount = lists.getPlayCount();
+        if (playCount == null || playCount.equals("")) {
+            playCount = "1234";
         }
+        float count = Float.valueOf(playCount);
+        if(count >= 10000) {
+            count = count / 10000;
+            playCount = count + "万";
+            if(count >= 10000) {
+                count = count / 10000;
+                playCount = count + "亿";
+            }
+        }
+        holder.textNumber.setText(playCount);
 
         // 封面
         String contentImage = lists.getContentImg();
@@ -142,7 +156,7 @@ public class SearchContentAdapter extends BaseExpandableListAdapter {
         // 来源
         if(mediaType.equals("RADIO")) {
             if (lists.getCurrentContent() != null && !lists.getCurrentContent().equals("")) {
-//                holder.textRankPlaying.setText("正在直播：" + lists.getCurrentContent());
+//                holder.textRankPlaying.setText(lists.getCurrentContent());
                 holder.textRankPlaying.setText(lists.getCurrentContent());
             }
         } else {
@@ -156,11 +170,13 @@ public class SearchContentAdapter extends BaseExpandableListAdapter {
                 holder.textLast.setVisibility(View.GONE);
                 holder.imageLast.setVisibility(View.GONE);
                 holder.imageNum.setVisibility(View.GONE);
+                holder.imagePlaying.setVisibility(View.GONE);
                 holder.textPlaying.setVisibility(View.VISIBLE);
                 break;
             case "SEQU":// 专辑
                 holder.textPlaying.setVisibility(View.GONE);
                 holder.imageLast.setVisibility(View.GONE);
+                holder.imagePlaying.setVisibility(View.VISIBLE);
                 holder.imageNum.setVisibility(View.VISIBLE);
                 holder.textLast.setVisibility(View.VISIBLE);
 
@@ -176,6 +192,7 @@ public class SearchContentAdapter extends BaseExpandableListAdapter {
             case "TTS":// TTS
                 holder.textPlaying.setVisibility(View.GONE);
                 holder.imageNum.setVisibility(View.GONE);
+                holder.imagePlaying.setVisibility(View.VISIBLE);
                 holder.imageLast.setVisibility(View.VISIBLE);
                 holder.textLast.setVisibility(View.VISIBLE);
 
@@ -204,6 +221,7 @@ public class SearchContentAdapter extends BaseExpandableListAdapter {
     class ViewHolder {
         public ImageView imageMask;// 遮罩
         public ImageView imageRankImage;// 图标
+        public ImageView imagePlaying;// 来源小图标
         public TextView textPlaying;// "正在直播"
         public TextView textRankPlaying;// 正在播放的节目
         public TextView textRankTitle;// 台名

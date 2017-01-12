@@ -1,11 +1,11 @@
 package com.wotingfm.ui.music.player.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class LanguageSearchInside implements Serializable{
 	private String Type="1";
 	private String ContentURI;
-	private String ContentPersons;
 	private String ContentKeyWord;
 	private String cTime;
 	private String ContentSubjectWord;
@@ -32,7 +32,17 @@ public class LanguageSearchInside implements Serializable{
 	private String playTag;         // 标签<预留>
 	private String ContentPlayType; // 内容后缀
 
-	public String getContentPlayType() {
+    private List<ContentPersons> ContentPersons;// 主播信息
+
+    public List<com.wotingfm.ui.music.player.model.ContentPersons> getContentPersons() {
+        return ContentPersons;
+    }
+
+    public void setContentPersons(List<com.wotingfm.ui.music.player.model.ContentPersons> contentPersons) {
+        ContentPersons = contentPersons;
+    }
+
+    public String getContentPlayType() {
 		return ContentPlayType;
 	}
 
@@ -121,12 +131,6 @@ public class LanguageSearchInside implements Serializable{
 	}
 	public void setPlayerAllTime(String playerAllTime) {
 		PlayerAllTime = playerAllTime;
-	}
-	public String getContentPersons() {
-		return ContentPersons;
-	}
-	public void setContentPersons(String contentPersons) {
-		ContentPersons = contentPersons;
 	}
 	public String getContentPlay() {
 		return ContentPlay;

@@ -30,7 +30,7 @@
 
     </RelativeLayout>
 
-    <com.woting.common.widgetui.xlistview.XListView
+    <com.wotingfm.widget.xlistview.XListView
         android:id="@+id/list_anchor"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -44,7 +44,7 @@
         android:layout_below="@id/relative_title"
         android:background="@color/dinglan_orange"/>
 
-    <com.woting.common.widgetui.TipView
+    <com.wotingfm.widget.TipView
         android:id="@+id/tip_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

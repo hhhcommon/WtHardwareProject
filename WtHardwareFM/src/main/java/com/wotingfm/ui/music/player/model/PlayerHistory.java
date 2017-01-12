@@ -1,6 +1,7 @@
 package com.wotingfm.ui.music.player.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 播放历史的数据库表
@@ -28,6 +29,8 @@ public class PlayerHistory implements Serializable{
 	private String ContentID;
 	private String ContentPub;
 
+    private List<ContentPersons> ContentPersons;// 主播信息
+
 	private String localurl;        // 本地播放地址
 	private String sequId;          // 专辑ID
 	private String sequImg;         // 专辑图片
@@ -37,7 +40,15 @@ public class PlayerHistory implements Serializable{
 	private String ContentPlayType; // 内容后缀
 	private String ContentTimes;    //
 
-	public String getPlayCount() {
+    public List<com.wotingfm.ui.music.player.model.ContentPersons> getContentPersons() {
+        return ContentPersons;
+    }
+
+    public void setContentPersons(List<com.wotingfm.ui.music.player.model.ContentPersons> contentPersons) {
+        ContentPersons = contentPersons;
+    }
+
+    public String getPlayCount() {
 		return PlayCount;
 	}
 

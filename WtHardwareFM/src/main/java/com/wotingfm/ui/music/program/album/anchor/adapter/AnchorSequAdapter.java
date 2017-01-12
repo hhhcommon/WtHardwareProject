@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
+ * 主播的专辑
  * Created by Administrator on 2016/12/27 0027.
  */
 public class AnchorSequAdapter extends BaseAdapter {
@@ -78,7 +79,7 @@ public class AnchorSequAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         lists = list.get(position);
-        //头像
+        // 头像
         if (lists.getContentImg() == null
                 || lists.getContentImg().equals("")
                 || lists.getContentImg().equals("null")
@@ -101,7 +102,7 @@ public class AnchorSequAdapter extends BaseAdapter {
         } else {
             holder.textview_ranktitle.setText(lists.getContentName());
         }
-        //  播放次数
+        // 播放次数
         if (lists.getPlayCount() == null
                 || lists.getPlayCount().equals("")
                 || lists.getPlayCount().equals("null")) {
@@ -109,11 +110,11 @@ public class AnchorSequAdapter extends BaseAdapter {
         } else {
             holder.mTv_number.setText(lists.getPlayCount());
         }
-        //  正在播放内容
+        // 正在播放内容
         if(TextUtils.isEmpty(lists.getNewMedia())){
             holder.textview_rankplaying.setText("暂无更新数据");
         }else{
-            holder.textview_rankplaying.setText("更新至: "+lists.getNewMedia());
+            holder.textview_rankplaying.setText("更新至: " + lists.getNewMedia());
         }
 
         return convertView;

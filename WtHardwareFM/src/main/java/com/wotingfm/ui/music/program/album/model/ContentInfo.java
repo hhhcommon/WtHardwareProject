@@ -3,291 +3,294 @@ package com.wotingfm.ui.music.program.album.model;
 import java.io.Serializable;
 import java.util.List;
 
+/**
+ * 专辑信息
+ */
 public class ContentInfo implements Serializable {
-	private static final long serialVersionUID = 1231243519566434965L;
-	
-	private String ContentURI;
-	private String ContentPersons;
-	private String CTime;
-	private String ContentKeyWord;
-	private String ContentSubjectWord;
-	private String ContentTimes;
-	private String ContentName;
-	
-	private String ContentPubTime;
-	private String ContentPub;
-	private String ContentSource;
-	private String ContentURIS;
-	private String MediaType;
-	private String ContentDescn;
-	private String ContentImg;
-	//以上全部内容针对内容
-	private String sequname;
-	private String sequimgurl;
-	private String sequdesc;
-	private String ContentPlay;
-	private String PlayCount;
-	private String author;
-	//2016.4.23新增字段
-	private String sequid;
-	private String userid;
-	private String downloadtype;
-	private String ContentShareURL;
-	private String ContentFavorite;
-	private String ContentId;
-	private String localurl;
-	
-	public String getLocalurl() {
-		return localurl;
-	}
+    private static final long serialVersionUID = 1231243519566434965L;
 
-	public void setLocalurl(String localurl) {
-		this.localurl = localurl;
-	}
+    private String ContentURI;
+    private String ContentPersons;
+    private String CTime;
+    private String ContentKeyWord;
+    private String ContentSubjectWord;
+    private String ContentTimes;
+    private String ContentName;
 
-	private List<ContentCatalogs> ContentCatalogs;
+    private String ContentPubTime;
+    private String ContentPub;
+    private String ContentSource;
+    private String ContentURIS;
+    private String MediaType;
+    private String ContentDescn;
+    private String ContentImg;
+    //以上全部内容针对内容
+    private String sequname;
+    private String sequimgurl;
+    private String sequdesc;
+    private String ContentPlay;
+    private String PlayCount;
+    private String author;
+    //2016.4.23新增字段
+    private String sequid;
+    private String userid;
+    private String downloadtype;
+    private String ContentShareURL;
+    private String ContentFavorite;
+    private String ContentId;
+    private String localurl;
 
-	public List<ContentCatalogs> getContentCatalogs() {
-		return ContentCatalogs;
-	}
+    public String getLocalurl() {
+        return localurl;
+    }
 
-	public void setContentCatalogs(List<ContentCatalogs> contentCatalogs) {
-		ContentCatalogs = contentCatalogs;
-	}
+    public void setLocalurl(String localurl) {
+        this.localurl = localurl;
+    }
 
-	public String getContentFavorite() {
-		return ContentFavorite;
-	}
+    private List<ContentCatalogs> ContentCatalogs;
 
-	public void setContentFavorite(String contentFavorite) {
-		ContentFavorite = contentFavorite;
-	}
+    public List<ContentCatalogs> getContentCatalogs() {
+        return ContentCatalogs;
+    }
 
-	public String getContentShareURL() {
-		return ContentShareURL;
-	}
+    public void setContentCatalogs(List<ContentCatalogs> contentCatalogs) {
+        ContentCatalogs = contentCatalogs;
+    }
 
-	public void setContentShareURL(String contentShareURL) {
-		ContentShareURL = contentShareURL;
-	}
+    public String getContentFavorite() {
+        return ContentFavorite;
+    }
 
-	public String getAuthor() {
-		return author;
-	}
+    public void setContentFavorite(String contentFavorite) {
+        ContentFavorite = contentFavorite;
+    }
 
-	public void setAuthor(String author) {
-		this.author = author;
-	}
+    public String getContentShareURL() {
+        return ContentShareURL;
+    }
 
-	public String getSequid() {
-		return sequid;
-	}
+    public void setContentShareURL(String contentShareURL) {
+        ContentShareURL = contentShareURL;
+    }
 
-	public void setSequid(String sequid) {
-		this.sequid = sequid;
-	}
+    public String getAuthor() {
+        return author;
+    }
 
-	public String getUserid() {
-		return userid;
-	}
+    public void setAuthor(String author) {
+        this.author = author;
+    }
 
-	public void setUserid(String userid) {
-		this.userid = userid;
-	}
+    public String getSequid() {
+        return sequid;
+    }
 
-	public String getDownloadtype() {
-		return downloadtype;
-	}
+    public void setSequid(String sequid) {
+        this.sequid = sequid;
+    }
 
-	public void setDownloadtype(String downloadtype) {
-		this.downloadtype = downloadtype;
-	}
+    public String getUserid() {
+        return userid;
+    }
 
-	private int Type = 1;// 标记是否为最后一项的，新加入尾部的数据会设置type为2，在adapter里针对此属性设置对应的gridview
-	private int CheckType = 1;// 标记item是否被选中，1为未选中，2为选中,3已经下载过
+    public void setUserid(String userid) {
+        this.userid = userid;
+    }
 
-	public String getPlayCount() {
-		return PlayCount;
-	}
+    public String getDownloadtype() {
+        return downloadtype;
+    }
 
-	public void setPlayCount(String playCount) {
-		PlayCount = playCount;
-	}
+    public void setDownloadtype(String downloadtype) {
+        this.downloadtype = downloadtype;
+    }
 
-	public String getContentPlay() {
-		return ContentPlay;
-	}
+    private int Type = 1;// 标记是否为最后一项的，新加入尾部的数据会设置type为2，在adapter里针对此属性设置对应的gridview
+    private int CheckType = 1;// 标记item是否被选中，1为未选中，2为选中,3已经下载过
 
-	public void setContentPlay(String contentPlay) {
-		ContentPlay = contentPlay;
-	}
+    public String getPlayCount() {
+        return PlayCount;
+    }
 
-	public String getSequname() {
-		return sequname;
-	}
+    public void setPlayCount(String playCount) {
+        PlayCount = playCount;
+    }
 
-	public void setSequname(String sequname) {
-		this.sequname = sequname;
-	}
+    public String getContentPlay() {
+        return ContentPlay;
+    }
 
-	public String getSequimgurl() {
-		return sequimgurl;
-	}
+    public void setContentPlay(String contentPlay) {
+        ContentPlay = contentPlay;
+    }
 
-	public void setSequimgurl(String sequimgurl) {
-		this.sequimgurl = sequimgurl;
-	}
+    public String getSequname() {
+        return sequname;
+    }
 
-	public String getSequdesc() {
-		return sequdesc;
-	}
+    public void setSequname(String sequname) {
+        this.sequname = sequname;
+    }
 
-	public void setSequdesc(String sequdesc) {
-		this.sequdesc = sequdesc;
-	}
+    public String getSequimgurl() {
+        return sequimgurl;
+    }
 
-	public String getContentURI() {
-		return ContentURI;
-	}
+    public void setSequimgurl(String sequimgurl) {
+        this.sequimgurl = sequimgurl;
+    }
 
-	public void setContentURI(String contentURI) {
-		ContentURI = contentURI;
-	}
+    public String getSequdesc() {
+        return sequdesc;
+    }
 
-	public String getContentPersons() {
-		return ContentPersons;
-	}
+    public void setSequdesc(String sequdesc) {
+        this.sequdesc = sequdesc;
+    }
 
-	public void setContentPersons(String contentPersons) {
-		ContentPersons = contentPersons;
-	}
+    public String getContentURI() {
+        return ContentURI;
+    }
 
-	//	public String getContentCatalogs() {
-	//		return ContentCatalogs;
-	//	}
-	//
-	//	public void setContentCatalogs(String contentCatalogs) {
-	//		ContentCatalogs = contentCatalogs;
-	//	}
+    public void setContentURI(String contentURI) {
+        ContentURI = contentURI;
+    }
 
-	public String getCTime() {
-		return CTime;
-	}
+    public String getContentPersons() {
+        return ContentPersons;
+    }
 
-	public void setCTime(String cTime) {
-		CTime = cTime;
-	}
+    public void setContentPersons(String contentPersons) {
+        ContentPersons = contentPersons;
+    }
 
-	public String getContentKeyWord() {
-		return ContentKeyWord;
-	}
+    //	public String getContentCatalogs() {
+    //		return ContentCatalogs;
+    //	}
+    //
+    //	public void setContentCatalogs(String contentCatalogs) {
+    //		ContentCatalogs = contentCatalogs;
+    //	}
 
-	public void setContentKeyWord(String contentKeyWord) {
-		ContentKeyWord = contentKeyWord;
-	}
+    public String getCTime() {
+        return CTime;
+    }
 
-	public String getContentSubjectWord() {
-		return ContentSubjectWord;
-	}
+    public void setCTime(String cTime) {
+        CTime = cTime;
+    }
 
-	public void setContentSubjectWord(String contentSubjectWord) {
-		ContentSubjectWord = contentSubjectWord;
-	}
+    public String getContentKeyWord() {
+        return ContentKeyWord;
+    }
 
-	public String getContentTimes() {
-		return ContentTimes;
-	}
+    public void setContentKeyWord(String contentKeyWord) {
+        ContentKeyWord = contentKeyWord;
+    }
 
-	public void setContentTimes(String contentTimes) {
-		ContentTimes = contentTimes;
-	}
+    public String getContentSubjectWord() {
+        return ContentSubjectWord;
+    }
 
-	public String getContentName() {
-		return ContentName;
-	}
+    public void setContentSubjectWord(String contentSubjectWord) {
+        ContentSubjectWord = contentSubjectWord;
+    }
 
-	public void setContentName(String contentName) {
-		ContentName = contentName;
-	}
+    public String getContentTimes() {
+        return ContentTimes;
+    }
 
-	public String getContentPubTime() {
-		return ContentPubTime;
-	}
+    public void setContentTimes(String contentTimes) {
+        ContentTimes = contentTimes;
+    }
 
-	public void setContentPubTime(String contentPubTime) {
-		ContentPubTime = contentPubTime;
-	}
+    public String getContentName() {
+        return ContentName;
+    }
 
-	public String getContentPub() {
-		return ContentPub;
-	}
+    public void setContentName(String contentName) {
+        ContentName = contentName;
+    }
 
-	public void setContentPub(String contentPub) {
-		ContentPub = contentPub;
-	}
+    public String getContentPubTime() {
+        return ContentPubTime;
+    }
 
-	public String getContentSource() {
-		return ContentSource;
-	}
+    public void setContentPubTime(String contentPubTime) {
+        ContentPubTime = contentPubTime;
+    }
 
-	public void setContentSource(String contentSource) {
-		ContentSource = contentSource;
-	}
+    public String getContentPub() {
+        return ContentPub;
+    }
 
-	public String getContentURIS() {
-		return ContentURIS;
-	}
+    public void setContentPub(String contentPub) {
+        ContentPub = contentPub;
+    }
 
-	public void setContentURIS(String contentURIS) {
-		ContentURIS = contentURIS;
-	}
+    public String getContentSource() {
+        return ContentSource;
+    }
 
-	public String getMediaType() {
-		return MediaType;
-	}
+    public void setContentSource(String contentSource) {
+        ContentSource = contentSource;
+    }
 
-	public void setMediaType(String mediaType) {
-		MediaType = mediaType;
-	}
+    public String getContentURIS() {
+        return ContentURIS;
+    }
 
-	public String getContentId() {
-		return ContentId;
-	}
+    public void setContentURIS(String contentURIS) {
+        ContentURIS = contentURIS;
+    }
 
-	public void setContentId(String contentId) {
-		ContentId = contentId;
-	}
+    public String getMediaType() {
+        return MediaType;
+    }
 
-	public String getContentDescn() {
-		return ContentDescn;
-	}
+    public void setMediaType(String mediaType) {
+        MediaType = mediaType;
+    }
 
-	public void setContentDescn(String contentDescn) {
-		ContentDescn = contentDescn;
-	}
+    public String getContentId() {
+        return ContentId;
+    }
 
-	public String getContentImg() {
-		return ContentImg;
-	}
+    public void setContentId(String contentId) {
+        ContentId = contentId;
+    }
 
-	public void setContentImg(String contentImg) {
-		ContentImg = contentImg;
-	}
+    public String getContentDescn() {
+        return ContentDescn;
+    }
 
-	public int getType() {
-		return Type;
-	}
+    public void setContentDescn(String contentDescn) {
+        ContentDescn = contentDescn;
+    }
 
-	public void setType(int type) {
-		Type = type;
-	}
+    public String getContentImg() {
+        return ContentImg;
+    }
 
-	public int getCheckType() {
-		return CheckType;
-	}
+    public void setContentImg(String contentImg) {
+        ContentImg = contentImg;
+    }
 
-	public void setCheckType(int checkType) {
-		CheckType = checkType;
-	}
+    public int getType() {
+        return Type;
+    }
+
+    public void setType(int type) {
+        Type = type;
+    }
+
+    public int getCheckType() {
+        return CheckType;
+    }
+
+    public void setCheckType(int checkType) {
+        CheckType = checkType;
+    }
 
 }

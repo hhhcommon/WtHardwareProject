@@ -22,6 +22,7 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.main.MainActivity;
@@ -235,7 +236,7 @@ public class RadioFragment extends Fragment {
                         }
                         if (refreshType == 1) newList.clear();
                         for(int i=0; i<SubList.size(); i++) {
-                            if(SubList.get(i).getMediaType().equals("RADIO")) newList.add(SubList.get(i));
+                            if(SubList.get(i).getMediaType().equals(StringConstant.TYPE_RADIO)) newList.add(SubList.get(i));
                         }
                         adapter.notifyDataSetChanged();
                         setListener();

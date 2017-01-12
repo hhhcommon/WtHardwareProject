@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.util.AssembleImageUrlUtils;
@@ -128,7 +129,7 @@ public class PlayerListAdapter extends BaseAdapter {
             if (contentPub == null || contentPub.equals("")) {
                 contentPub = "未知";
             }
-            if(mediaType != null && mediaType.equals("RADIO")) {
+            if(mediaType != null && mediaType.equals(StringConstant.TYPE_RADIO)) {
                 contentPub = "正在直播：" + contentPub;
                 holder.imagePub.setVisibility(View.GONE);
             } else {

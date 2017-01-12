@@ -9,13 +9,11 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ListView;
 
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.helper.CommonHelper;
@@ -25,9 +23,6 @@ import com.wotingfm.ui.music.program.fenlei.adapter.CatalogListAdapter;
 import com.wotingfm.ui.music.program.fenlei.model.FenLei;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
-import com.wotingfm.widget.rollviewpager.RollPagerView;
-import com.wotingfm.widget.rollviewpager.adapter.LoopPagerAdapter;
-import com.wotingfm.widget.rollviewpager.hintview.IconHintView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -62,16 +57,16 @@ public class FenLeiFragment extends Fragment {
             rootView = inflater.inflate(R.layout.fragment_fenlei_new, container, false);
             EBL_Catalog = (ListView) rootView.findViewById(R.id.ebl_fenlei);
 
-            View headView = LayoutInflater.from(context).inflate(R.layout.headview_fragment_fenlei, null);
+//            View headView = LayoutInflater.from(context).inflate(R.layout.headview_fragment_fenlei, null);
             View footView = LayoutInflater.from(context).inflate(R.layout.footview_fragment_fenlei, null);
-            EBL_Catalog.addHeaderView(headView);
+//            EBL_Catalog.addHeaderView(headView);
             EBL_Catalog.setSelector(new ColorDrawable(Color.TRANSPARENT));
             EBL_Catalog.addFooterView(footView);
 
             // 轮播图
-            RollPagerView mLoopViewPager = (RollPagerView) headView.findViewById(R.id.slideshowView);
-            mLoopViewPager.setAdapter(new LoopAdapter(mLoopViewPager));
-            mLoopViewPager.setHintView(new IconHintView(context, R.mipmap.indicators_now, R.mipmap.indicators_default));
+//            RollPagerView mLoopViewPager = (RollPagerView) headView.findViewById(R.id.slideshowView);
+//            mLoopViewPager.setAdapter(new LoopAdapter(mLoopViewPager));
+//            mLoopViewPager.setHintView(new IconHintView(context, R.mipmap.indicators_now, R.mipmap.indicators_default));
 
             if (CommonHelper.checkNetwork(context)) {
                 sendRequest();
@@ -136,34 +131,34 @@ public class FenLeiFragment extends Fragment {
         });
     }
 
-    private class LoopAdapter extends LoopPagerAdapter {
-        public LoopAdapter(RollPagerView viewPager) {
-            super(viewPager);
-        }
+//    private class LoopAdapter extends LoopPagerAdapter {
+//        public LoopAdapter(RollPagerView viewPager) {
+//            super(viewPager);
+//        }
+//
+//        private int count = imgs.length;
+//
+//        @Override
+//        public View getView(ViewGroup container, int position) {
+//            ImageView view = new ImageView(container.getContext());
+//            view.setScaleType(ImageView.ScaleType.FIT_XY);
+//            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+//            Picasso.with(context).load(imgs[position % count]).resize(1080, 450).centerCrop().into(view);
+//            return view;
+//        }
+//
+//        @Override
+//        public int getRealCount() {
+//            return count;
+//        }
+//    }
 
-        private int count = imgs.length;
-
-        @Override
-        public View getView(ViewGroup container, int position) {
-            ImageView view = new ImageView(container.getContext());
-            view.setScaleType(ImageView.ScaleType.FIT_XY);
-            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            Picasso.with(context).load(imgs[position % count]).resize(1080, 450).centerCrop().into(view);
-            return view;
-        }
-
-        @Override
-        public int getRealCount() {
-            return count;
-        }
-    }
-
-    public String[] imgs = {
-            "http://pic.500px.me/picurl/vcg5da48ce9497b91f9c81c17958d4f882e?code=e165fb4d228d4402",
-            "http://pic.500px.me/picurl/49431365352e4e94936d4562a7fbc74a---jpg?code=647e8e97cd219143",
-            "http://pic.500px.me/picurl/vcgd5d3cfc7257da293f5d2686eec1068d1?code=2597028fc68bd766",
-            "http://pic.500px.me/picurl/vcg1aa807a1b8bd1369e4f983e555d5b23b?code=c0c4bb78458e5503",
-    };
+//    public String[] imgs = {
+//            "http://pic.500px.me/picurl/vcg5da48ce9497b91f9c81c17958d4f882e?code=e165fb4d228d4402",
+//            "http://pic.500px.me/picurl/49431365352e4e94936d4562a7fbc74a---jpg?code=647e8e97cd219143",
+//            "http://pic.500px.me/picurl/vcgd5d3cfc7257da293f5d2686eec1068d1?code=2597028fc68bd766",
+//            "http://pic.500px.me/picurl/vcg1aa807a1b8bd1369e4f983e555d5b23b?code=c0c4bb78458e5503",
+//    };
 
     @Override
     public void onDestroyView() {
