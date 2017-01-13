@@ -124,7 +124,6 @@
                     android:textColor="@color/WHITE"
                     android:textSize="15sp" >
 
-                    <requestFocus />
                 </EditText>
 
             <TextView
