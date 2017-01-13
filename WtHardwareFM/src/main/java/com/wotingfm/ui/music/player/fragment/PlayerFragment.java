@@ -158,7 +158,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
 
     // 初始化视图
     private void initView() {
-        // 百度云播放器
+        // IjkPlayer 播放器
         IjkVideoView BDAudio = (IjkVideoView) rootView.findViewById(R.id.video_view);
         mPlayer.bindService(context, BDAudio);// 绑定服务
 
