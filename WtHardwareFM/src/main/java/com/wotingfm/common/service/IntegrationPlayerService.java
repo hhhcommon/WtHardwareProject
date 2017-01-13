@@ -46,7 +46,8 @@ import java.util.List;
  * 集成播放器服务
  * Created by Administrator on 2016/12/14.
  */
-public class IntegrationPlayerService extends Service implements OnCacheStatusListener {
+public class IntegrationPlayerService extends Service implements OnCacheStatusListener, BVideoView.OnPreparedListener, BVideoView.OnCompletionListener,
+        BVideoView.OnErrorListener {
     private List<LanguageSearchInside> playList = new ArrayList<>();
 
     private BVideoView mVV;// 百度云播放器
@@ -177,6 +178,10 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         BVideoView.setAK("b53ba2453fa3451d8aa65a2b48ded30c");
         mVV = BDAudio;
         mVV.setDecodeMode(BVideoView.DECODE_SW);// 设置解码格式
+
+        mVV.setOnPreparedListener(this);
+        mVV.setOnCompletionListener(this);
+        mVV.setOnErrorListener(this);
     }
 
     // 更新下载列表
@@ -573,6 +578,22 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         public void onSpeakResumed() {
         }
     };
+
+    @Override
+    public void onCompletion() {
+        L.v("MAIN", "onCompletion 播放完成!");
+    }
+
+    @Override
+    public boolean onError(int i, int i1) {
+        L.e("MAIN", "onError 播放出错!");
+        return false;
+    }
+
+    @Override
+    public void onPrepared() {
+        L.i("MAIN", "onPrepared 播放准备!");
+    }
 
     // 回收资源
     private void recovery() {
