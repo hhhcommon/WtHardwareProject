@@ -16,7 +16,6 @@ import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
-import com.baidu.cyberplayer.core.BVideoView;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechSynthesizer;
@@ -32,6 +31,7 @@ import com.wotingfm.ui.music.player.model.LanguageSearchInside;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.L;
 import com.wotingfm.util.ResourceUtil;
+import com.wotingfm.widget.ijkvideo.IjkVideoView;
 
 import org.videolan.libvlc.EventHandler;
 import org.videolan.libvlc.LibVLC;
@@ -46,11 +46,10 @@ import java.util.List;
  * 集成播放器服务
  * Created by Administrator on 2016/12/14.
  */
-public class IntegrationPlayerService extends Service implements OnCacheStatusListener, BVideoView.OnPreparedListener, BVideoView.OnCompletionListener,
-        BVideoView.OnErrorListener {
+public class IntegrationPlayerService extends Service implements OnCacheStatusListener {
     private List<LanguageSearchInside> playList = new ArrayList<>();
 
-    private BVideoView mVV;// 百度云播放器
+    private IjkVideoView mVV;// 百度云播放器
     private LibVLC mVlc;// VLC 播放器
     private SpeechSynthesizer mTts;// 讯飞播放 TTS
     private KSYProxyService proxyService;// 金山云缓存
@@ -174,14 +173,19 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     }
 
     // 设置百度播放器
-    public void setBDAudio(BVideoView BDAudio) {
-        BVideoView.setAK("b53ba2453fa3451d8aa65a2b48ded30c");
-        mVV = BDAudio;
-        mVV.setDecodeMode(BVideoView.DECODE_SW);// 设置解码格式
+    public void setBDAudio(IjkVideoView BDAudio) {
+//        BVideoView.setAK("b53ba2453fa3451d8aa65a2b48ded30c");
 
-        mVV.setOnPreparedListener(this);
-        mVV.setOnCompletionListener(this);
-        mVV.setOnErrorListener(this);
+//        try {
+//            IjkMediaPlayer.loadLibrariesOnce(null);
+//            IjkMediaPlayer.native_profileBegin("libijkplayer.so");
+//        } catch (Throwable e) {
+//            Log.e("GiraffePlayer", "loadLibraries error", e);
+//        }
+        mVV = BDAudio;
+//        mVV.setDecodeMode(BVideoView.DECODE_SW);// 设置解码格式
+
+//        mVV.setOnErrorListener();
     }
 
     // 更新下载列表
@@ -257,8 +261,9 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
             startPlay(0);
         } else {
             if (isVlcPlaying) mVlc.play();
-            else if(isBVVPlaying) mVV.resume();
-            else playTts(httpUrl);
+            else if(isBVVPlaying) {
+                mVV.resume();
+            } else playTts(httpUrl);
             if (mediaType.equals(StringConstant.TYPE_AUDIO)) {
                 mHandler.postDelayed(mUpdatePlayTimeRunnable, 1000);
             }
@@ -324,7 +329,13 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
                 L.v("TAG", "contentPlay -- > > " + contentPlay);
             }
-            mVlc.playMRL(contentPlay);
+            final String url = contentPlay;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mVlc.playMRL(url);
+                }
+            }, 1000);
         }
         mHandler.postDelayed(mTotalTimeRunnable, 1000);
 
@@ -349,7 +360,6 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
             return ;
         } else if(mVV.isPlaying() && isBVVPlaying) {
             mVV.stopPlayback();
-            mVV.onPrePared();
         }
         if(mTts != null && mTts.isSpeaking() && isTtsPlaying) stopTts();
         if(mVlc != null && mVlc.isPlaying() && isVlcPlaying) stopVlc();
@@ -578,22 +588,6 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         public void onSpeakResumed() {
         }
     };
-
-    @Override
-    public void onCompletion() {
-        L.v("MAIN", "onCompletion 播放完成!");
-    }
-
-    @Override
-    public boolean onError(int i, int i1) {
-        L.e("MAIN", "onError 播放出错!");
-        return false;
-    }
-
-    @Override
-    public void onPrepared() {
-        L.i("MAIN", "onPrepared 播放准备!");
-    }
 
     // 回收资源
     private void recovery() {

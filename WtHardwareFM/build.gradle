@@ -29,6 +29,13 @@ android {
     }
 }
 
+repositories {
+    mavenCentral()
+    flatDir {
+        dirs 'libs' /**在libs文件夹下找aar文件*/
+    }
+}
+
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
     testCompile 'junit:junit:4.12'
@@ -38,5 +45,6 @@ dependencies {
     compile files('libs/picasso-2.5.2.jar')
     compile files('libs/libksyhttpcache-proguard.jar')
     compile files('libs/libksystat.jar')
-    compile files('libs/cyberplayer-sdk.jar')
+
+    compile(name: 'ijkplayer-java-release', ext: 'aar') /**编译ijkplayer-java-release.aar文件*/
 }

@@ -139,6 +139,7 @@
             android:paddingRight="20dp"
             android:minHeight="3dp"
             android:maxHeight="3dp"
+            android:clickable="true"
             android:progressDrawable="@drawable/bg_seekbar"
             android:thumb="@mipmap/wt_seekbar_thumb"
             android:thumbOffset="20dp"/>
@@ -165,10 +166,9 @@
 
     </RelativeLayout>
 
-    <com.baidu.cyberplayer.core.BVideoView
+    <com.wotingfm.widget.ijkvideo.IjkVideoView
         android:id="@+id/video_view"
         android:layout_width="match_parent"
-        android:background="@color/beige"
-        android:layout_height="0.001dp"/>
+        android:layout_height="0.1dp"/>
 
 </LinearLayout>
