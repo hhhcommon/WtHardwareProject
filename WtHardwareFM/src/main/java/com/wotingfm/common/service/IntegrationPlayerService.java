@@ -42,6 +42,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
+
 /**
  * 集成播放器服务
  * Created by Administrator on 2016/12/14.
@@ -174,18 +176,13 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     // 设置百度播放器
     public void setBDAudio(IjkVideoView BDAudio) {
-//        BVideoView.setAK("b53ba2453fa3451d8aa65a2b48ded30c");
-
-//        try {
-//            IjkMediaPlayer.loadLibrariesOnce(null);
-//            IjkMediaPlayer.native_profileBegin("libijkplayer.so");
-//        } catch (Throwable e) {
-//            Log.e("GiraffePlayer", "loadLibraries error", e);
-//        }
+        try {
+            IjkMediaPlayer.loadLibrariesOnce(null);
+            IjkMediaPlayer.native_profileBegin("libijkplayer.so");
+        } catch (Throwable e) {
+            Log.e("GiraffePlayer", "loadLibraries error", e);
+        }
         mVV = BDAudio;
-//        mVV.setDecodeMode(BVideoView.DECODE_SW);// 设置解码格式
-
-//        mVV.setOnErrorListener();
     }
 
     // 更新下载列表
