@@ -7,6 +7,7 @@ import android.content.ServiceConnection;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.baidu.cyberplayer.core.BVideoView;
 import com.wotingfm.common.service.IntegrationPlayerService;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
 
@@ -37,7 +38,7 @@ public class IntegrationPlayer {
     /**
      * 绑定服务
      */
-    public void bindService(Context context) {
+    public void bindService(Context context, final BVideoView BDAudio) {
         if(context == null) return ;
         context = context.getApplicationContext();
         if(!mBound) {
@@ -48,6 +49,8 @@ public class IntegrationPlayer {
                     IntegrationPlayerService.MyBinder mBinder = (IntegrationPlayerService.MyBinder) service;
                     mService = mBinder.getService();
                     Log.v("TAG", "Service Bind success");
+
+                    setBDAudio(BDAudio);
                 }
 
                 @Override
@@ -58,6 +61,14 @@ public class IntegrationPlayer {
             };
             mBound = context.bindService(intent, mAudioServiceConnection, Context.BIND_AUTO_CREATE);
         }
+    }
+
+    /**
+     * 设置百度播放器
+     * @param BDAudio 百度播放器
+     */
+    private void setBDAudio(BVideoView BDAudio) {
+        mService.setBDAudio(BDAudio);
     }
 
     /**

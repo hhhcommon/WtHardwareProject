@@ -38,4 +38,5 @@ dependencies {
     compile files('libs/picasso-2.5.2.jar')
     compile files('libs/libksyhttpcache-proguard.jar')
     compile files('libs/libksystat.jar')
+    compile files('libs/cyberplayer-sdk.jar')
 }

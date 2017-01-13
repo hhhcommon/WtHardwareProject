@@ -16,6 +16,7 @@ import android.os.Message;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
+import com.baidu.cyberplayer.core.BVideoView;
 import com.iflytek.cloud.SpeechConstant;
 import com.iflytek.cloud.SpeechError;
 import com.iflytek.cloud.SpeechSynthesizer;
@@ -48,6 +49,7 @@ import java.util.List;
 public class IntegrationPlayerService extends Service implements OnCacheStatusListener {
     private List<LanguageSearchInside> playList = new ArrayList<>();
 
+    private BVideoView mVV;// 百度云播放器
     private LibVLC mVlc;// VLC 播放器
     private SpeechSynthesizer mTts;// 讯飞播放 TTS
     private KSYProxyService proxyService;// 金山云缓存
@@ -59,6 +61,8 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     private boolean isVlcPlaying;// VLC 播放器正在播放
     private boolean isTtsPlaying;// TTS 播放器正在播放
+    private boolean isBVVPlaying;// mVV 播放器正在播放
+
     private int count = 0;// 获取次数
     private int position = 0;// 当前播放节目在列表中的位置
     private long secondProgress;
@@ -168,6 +172,13 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         }
     }
 
+    // 设置百度播放器
+    public void setBDAudio(BVideoView BDAudio) {
+        BVideoView.setAK("b53ba2453fa3451d8aa65a2b48ded30c");
+        mVV = BDAudio;
+        mVV.setDecodeMode(BVideoView.DECODE_SW);// 设置解码格式
+    }
+
     // 更新下载列表
     public void updateLocalList() {
         if(mFileInfoList != null) mFileInfoList.clear();
@@ -206,10 +217,13 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         LanguageSearchInside playObject = playList.get(position);
         if(initPlayObject(playObject)) {
             switch (mediaType) {
-                case StringConstant.TYPE_TTS:
+                case StringConstant.TYPE_TTS:// TTS
                     playTts(httpUrl);
                     break;
-                default:
+                case StringConstant.TYPE_RADIO:// 电台
+                    playRadio(httpUrl);
+                    break;
+                default:// 单体节目
                     playAudio(httpUrl, localUrl);
                     break;
             }
@@ -225,6 +239,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     // 暂停播放
     public void pausePlay() {
         if(isVlcPlaying && mVlc.isPlaying()) mVlc.pause();
+        else if(isBVVPlaying && mVV.isPlaying()) mVV.pause();
         else if(isTtsPlaying && mTts.isSpeaking()) mTts.stopSpeaking();
         if(mediaType.equals(StringConstant.TYPE_AUDIO)) {
             if(mUpdatePlayTimeRunnable != null) mHandler.removeCallbacks(mUpdatePlayTimeRunnable);
@@ -237,6 +252,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
             startPlay(0);
         } else {
             if (isVlcPlaying) mVlc.play();
+            else if(isBVVPlaying) mVV.resume();
             else playTts(httpUrl);
             if (mediaType.equals(StringConstant.TYPE_AUDIO)) {
                 mHandler.postDelayed(mUpdatePlayTimeRunnable, 1000);
@@ -251,7 +267,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     // 是否正在播放
     public boolean isAudioPlaying() {
-        return (isVlcPlaying && mVlc.isPlaying()) || (isTtsPlaying && mTts.isSpeaking());
+        return (isVlcPlaying && mVlc.isPlaying()) || (isTtsPlaying && mTts.isSpeaking() || (isBVVPlaying && mVV.isPlaying()));
     }
 
     // 获取已经下载过的列表
@@ -280,6 +296,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     // 播放节目
     private void playAudio(String contentPlay, final String localUrl) {
         if(mTts != null && mTts.isSpeaking() && isTtsPlaying) stopTts();
+        if(mVV != null && mVV.isPlaying() && isBVVPlaying) stopRadio();
         if(mVlc == null) initVlc();
         else if(mVlc.isPlaying() && isVlcPlaying) {
             mVlc.stop();
@@ -308,6 +325,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
         isVlcPlaying = true;
         isTtsPlaying = false;
+        isBVVPlaying = false;
     }
 
     // 停止 VLC 播放
@@ -319,15 +337,49 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         }
     }
 
+    // 播放 mVV  用于播放电台
+    private void playRadio(String contentPlay) {
+        if(mVV == null) {// 如果播放器初始化失败 则用 VLC 播放电台
+            playAudio(contentPlay, null);
+            return ;
+        } else if(mVV.isPlaying() && isBVVPlaying) {
+            mVV.stopPlayback();
+            mVV.onPrePared();
+        }
+        if(mTts != null && mTts.isSpeaking() && isTtsPlaying) stopTts();
+        if(mVlc != null && mVlc.isPlaying() && isVlcPlaying) stopVlc();
+
+        mVV.setVideoPath(contentPlay);
+        mVV.start();
+
+        mHandler.postDelayed(mTotalTimeRunnable, 1000);
+
+        isBVVPlaying = true;
+        isTtsPlaying = false;
+        isVlcPlaying = false;
+    }
+
+    // 电台停止播放
+    private void stopRadio() {
+        if(mVV != null && isBVVPlaying) {
+            if(mUpdatePlayTimeRunnable != null) mHandler.removeCallbacks(mUpdatePlayTimeRunnable);
+            isBVVPlaying = false;
+            mVV.stopPlayback();
+        }
+    }
+
     // 播放 TTS
     private void playTts(String contentPlay) {
         if(mVlc != null && mVlc.isPlaying() && isVlcPlaying) stopVlc();
+        if(mVV != null && mVV.isPlaying() && isBVVPlaying) stopRadio();
         if(mTts == null) initTts();
+        else if(mTts.isSpeaking() && isTtsPlaying) mTts.stopSpeaking();
         mTts.startSpeaking(contentPlay, mTtsListener);
         mHandler.postDelayed(mTotalTimeRunnable, 1000);
 
         isTtsPlaying = true;
         isVlcPlaying = false;
+        isBVVPlaying = false;
     }
 
     // 停止播放 TTS

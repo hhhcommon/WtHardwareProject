@@ -19,6 +19,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.baidu.cyberplayer.core.BVideoView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
@@ -136,7 +137,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         mSearchHistoryDao = new SearchPlayerHistoryDao(context);// 数据库对象
 
         mPlayer = IntegrationPlayer.getInstance();// 播放器对象
-        mPlayer.bindService(context);// 绑定服务
     }
 
     @Override
@@ -158,6 +158,10 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
 
     // 初始化视图
     private void initView() {
+        // 百度云播放器
+        BVideoView BDAudio = (BVideoView) rootView.findViewById(R.id.video_view);
+        mPlayer.bindService(context, BDAudio);// 绑定服务
+
         ImageView mPlayAudioImageCoverMask = (ImageView) rootView.findViewById(R.id.play_cover_mask);// 封面图片的六边形遮罩
         mPlayAudioImageCoverMask.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_bd));
 

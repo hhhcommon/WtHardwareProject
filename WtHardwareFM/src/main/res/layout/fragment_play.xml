@@ -165,4 +165,10 @@
 
     </RelativeLayout>
 
+    <com.baidu.cyberplayer.core.BVideoView
+        android:id="@+id/video_view"
+        android:layout_width="match_parent"
+        android:background="@color/beige"
+        android:layout_height="0.001dp"/>
+
 </LinearLayout>
