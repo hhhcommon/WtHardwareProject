@@ -174,7 +174,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         }
     }
 
-    // 设置百度播放器
+    // 设置 mVV 播放器
     public void setBDAudio(IjkVideoView BDAudio) {
         try {
             IjkMediaPlayer.loadLibrariesOnce(null);

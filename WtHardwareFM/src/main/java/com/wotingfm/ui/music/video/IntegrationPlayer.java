@@ -64,8 +64,7 @@ public class IntegrationPlayer {
     }
 
     /**
-     * 设置百度播放器
-     * @param BDAudio 百度播放器
+     * 设置 mVV 播放器
      */
     private void setBDAudio(IjkVideoView BDAudio) {
         mService.setBDAudio(BDAudio);
