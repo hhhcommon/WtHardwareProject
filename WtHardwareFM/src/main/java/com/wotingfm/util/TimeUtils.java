@@ -1,7 +1,6 @@
 package com.wotingfm.util;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -78,7 +77,7 @@ public class TimeUtils {
         int m = Integer.parseInt(new SimpleDateFormat("mm").format(new Date(time)));
         int s = Integer.parseInt(new SimpleDateFormat("ss").format(new Date(time)));
         int _time = h*60*60+m*60+s;
-        Log.e("时分秒", h+"-"+m+"-"+s+"");
+//        Log.e("时分秒", h+"-"+m+"-"+s+"");
         return _time;
     }
 

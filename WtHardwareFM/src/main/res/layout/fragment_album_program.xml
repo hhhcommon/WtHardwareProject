@@ -4,80 +4,70 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/lin_ewm"
+    <com.wotingfm.widget.TipView
+        android:id="@+id/tip_view"
         android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:background="@color/setting_bg_color"
-        android:orientation="horizontal"
-        android:visibility="visible">
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginLeft="18dp"
-            android:layout_weight="1"
-            android:gravity="left|center">
-
-            <TextView
-                android:id="@+id/text_total"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:gravity="center"
-                android:text="共0集"
-                android:textColor="@color/wt_login_third"
-                android:textSize="@dimen/text_size_13"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_marginRight="27dp"
-            android:layout_weight="1"
-            android:gravity="right|center">
-
-            <ImageView
-                android:id="@+id/img_sort"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="13dp"
-                android:clickable="true"
-                android:src="@mipmap/image_sort"
-                android:visibility="visible"/>
-
-            <ImageView
-                android:id="@+id/img_sort_down"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="7dp"
-                android:clickable="true"
-                android:src="@mipmap/img_sort_down"
-                android:visibility="gone"/>
-
-            <ImageView
-                android:id="@+id/img_download"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:src="@mipmap/image_down_load"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <View
-        android:id="@+id/text_view"
+    <RelativeLayout
+        android:id="@+id/view_top"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_below="@id/lin_ewm"
-        android:background="@color/view_color"/>
+        android:layout_height="43dp"
+        android:background="@color/setting_bg_color">
+
+        <TextView
+            android:id="@+id/text_total"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="共0集"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="15dp"
+            android:textColor="@color/wt_login_third"
+            android:textSize="@dimen/text_size_15"/>
+
+        <ImageView
+            android:id="@+id/img_download"
+            android:layout_width="42dp"
+            android:layout_height="match_parent"
+            android:padding="6dp"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="15dp"
+            android:src="@mipmap/image_down_load"/>
+
+        <ImageView
+            android:id="@+id/img_sort"
+            android:layout_width="42dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/img_download"
+            android:padding="6dp"
+            android:layout_marginRight="6dp"
+            android:src="@mipmap/image_sort"
+            android:visibility="visible"/>
+
+        <ImageView
+            android:id="@+id/img_sort_down"
+            android:layout_width="42dp"
+            android:layout_height="match_parent"
+            android:layout_toLeftOf="@id/img_download"
+            android:padding="6dp"
+            android:src="@mipmap/img_sort_down"
+            android:visibility="gone"/>
+
+        <View
+            android:id="@+id/text_view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/view_color"/>
+
+    </RelativeLayout>
 
     <ListView
         android:id="@+id/lv_album"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@id/text_view"
+        android:layout_below="@id/view_top"
         android:scrollbars="none"/>
 
     <LinearLayout
@@ -90,10 +80,9 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="36dp"
+            android:layout_height="43dp"
             android:background="@color/WHITE"
-            android:gravity="center"
-            android:orientation="horizontal">
+            android:gravity="center">
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -131,8 +120,9 @@
 
             <TextView
                 android:id="@+id/tv_quxiao"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="42dp"
+                android:layout_height="match_parent"
+                android:gravity="center"
                 android:layout_marginRight="25dp"
                 android:text="取 消"
                 android:textSize="@dimen/text_size_13"/>
@@ -161,52 +151,45 @@
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:background="@color/WHITE"
-            android:orientation="vertical">
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/lin_quanxuan"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/img_quanxuan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="20dp"
+                    android:layout_marginRight="15dp"
+                    android:src="@mipmap/image_not_all_check"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center"
+                    android:text="全 选"/>
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:gravity="right|center">
 
-                <LinearLayout
-                    android:id="@+id/lin_quanxuan"
+                <TextView
+                    android:id="@+id/tv_download"
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-
-                    <ImageView
-                        android:id="@+id/img_quanxuan"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="15dp"
-                        android:src="@mipmap/image_not_all_check"/>
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="left|center"
-                        android:text="全 选"/>
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:gravity="right|center">
-
-                    <TextView
-                        android:id="@+id/tv_download"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="20dp"
-                        android:background="@drawable/color_wt_circle_orange5"
-                        android:padding="5dp"
-                        android:text="开始下载"
-                        android:textColor="@color/WHITE"
-                        android:textSize="14sp"/>
-
-                </LinearLayout>
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="20dp"
+                    android:background="@drawable/color_wt_circle_orange5"
+                    android:padding="5dp"
+                    android:text="开始下载"
+                    android:textColor="@color/WHITE"
+                    android:textSize="14sp"/>
 
             </LinearLayout>
 

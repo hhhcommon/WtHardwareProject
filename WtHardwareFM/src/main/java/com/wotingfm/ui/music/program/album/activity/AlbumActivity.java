@@ -4,7 +4,6 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -13,10 +12,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.ui.baseactivity.AppBaseFragmentActivity;
 import com.wotingfm.ui.baseadapter.MyFragmentChildPagerAdapter;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
 import com.wotingfm.ui.music.program.album.fragment.DetailsFragment;
@@ -26,6 +28,8 @@ import com.wotingfm.ui.music.program.album.model.ResultInfo;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
+import com.wotingfm.util.ToastUtils;
+import com.wotingfm.widget.TipView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,17 +42,16 @@ import java.util.List;
  * @author 辛龙
  * 2016年4月1日
  */
-public class AlbumActivity extends FragmentActivity implements OnClickListener, ViewPager.OnPageChangeListener {
-    private AlbumActivity context;
+public class AlbumActivity extends AppBaseFragmentActivity implements OnClickListener, ViewPager.OnPageChangeListener, TipView.WhiteViewClick {
+    private DetailsFragment detailsFragment;// 专辑详情
+    private ProgramFragment programFragment;// 专辑列表
+    private ResultInfo resultInfo;// 获取的专辑信息
     private ImageView[] imageViews;
 
-    private ResultInfo resultInfo;// 获取的专辑信息
-
+    private TipView tipView;// 没有网络、没有数据提示
     private Dialog dialog;// 加载数据对话框
-
     private TextView textAlbumName;// 专辑名字
 
-    private String contentDesc;// 专辑介绍  从上一个界面传递过来
     private String albumId;// 专辑 ID  从上一个界面传递过来
     private String tag = "ALBUM_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
@@ -60,14 +63,9 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener, 
                 finish();
                 break;
             case R.id.head_right_btn:// 播放专辑
-
+                // 专辑列表中的数据一集一集往下播
                 break;
         }
-    }
-
-    // 获取专辑介绍
-    public String getContentDesc() {
-        return contentDesc;
     }
 
     // 获取专辑信息
@@ -85,7 +83,6 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener, 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_album);
-        context = this;
 
         initView();
         initEvent();
@@ -94,6 +91,9 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener, 
 
     // 初始化视图
     private void initView() {
+        tipView = (TipView) findViewById(R.id.tip_view);
+        tipView.setWhiteClick(this);
+
         LinearLayout viewLinear = (LinearLayout) findViewById(R.id.view_group);// viewGroup 添加小圆点
         imageViews = new ImageView[2];// 设置页面下标小红点
         for (int i = 0; i < 2; i++) {
@@ -113,8 +113,13 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener, 
         textAlbumName = (TextView) findViewById(R.id.head_name_tv);// 专辑名字
         handleIntent();
 
-        dialog = DialogUtils.Dialogph(context, "数据加载中...");
-        sendRequest();
+        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+            dialog = DialogUtils.Dialogph(context, "数据加载中...");
+            sendRequest();
+        } else {
+            tipView.setVisibility(View.VISIBLE);
+            tipView.setTipView(TipView.TipStatus.NO_NET);
+        }
     }
 
     // 点击事件监听
@@ -128,8 +133,8 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener, 
         ViewPager mPager = (ViewPager) findViewById(R.id.viewpager);
         mPager.setOffscreenPageLimit(1);
         ArrayList<Fragment> fragmentList = new ArrayList<>();
-        DetailsFragment detailsFragment = new DetailsFragment();// 专辑详情页
-        ProgramFragment programFragment = new ProgramFragment();// 专辑列表页
+        detailsFragment = new DetailsFragment();// 专辑详情页
+        programFragment = new ProgramFragment();// 专辑列表页
         fragmentList.add(detailsFragment);
         fragmentList.add(programFragment);
         mPager.setAdapter(new MyFragmentChildPagerAdapter(getSupportFragmentManager(), fragmentList));
@@ -148,19 +153,16 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener, 
             case "radiolistactivity":
                 list = (RankInfo) getIntent().getSerializableExtra("list");
                 albumName = list.getContentName();
-                contentDesc = list.getContentDescn();
                 albumId = list.getContentId();
                 break;
             case "recommend":
                 list = (RankInfo) getIntent().getSerializableExtra("list");
                 albumName = list.getContentName();
-                contentDesc = list.getContentDescn();
                 albumId = list.getContentId();
                 break;
             case "search":
                 list = (RankInfo) getIntent().getSerializableExtra("list");
                 albumName = list.getContentName();
-                contentDesc = list.getContentDescn();
                 albumId = list.getContentId();
                 break;
             case "main":
@@ -169,13 +171,11 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener, 
                 break;
             case "player":
                 albumName = getIntent().getStringExtra("contentName");
-                contentDesc = getIntent().getStringExtra("contentDesc");
                 albumId = getIntent().getStringExtra("contentId");
                 break;
             default:
                 LanguageSearchInside inside = (LanguageSearchInside) getIntent().getSerializableExtra("list");
                 albumName = inside.getContentName();
-                contentDesc = inside.getContentDescn();
                 albumId = inside.getContentId();
                 break;
         }
@@ -196,7 +196,6 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener, 
             e.printStackTrace();
         }
         VolleyRequest.RequestPost(GlobalConfig.getContentById, tag, jsonObject, new VolleyCallback() {
-
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) dialog.dismiss();
@@ -204,19 +203,38 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener, 
                 try {
                     String ReturnType = result.getString("ReturnType");
                     if (ReturnType != null && ReturnType.equals("1001")) {
-                        String resultInfoString = result.getString("ResultInfo");
-                        L.i("TAG", resultInfoString);
-//                        resultInfo = new Gson().fromJson(, new TypeToken<ResultInfo>() {}.getType());
-//                        L.i("TAG", resultInfo.toString());
+                        resultInfo = new Gson().fromJson(result.getString("ResultInfo"), new TypeToken<ResultInfo>() {}.getType());
+                        L.i("TAG", resultInfo.toString());
+
+                        if(resultInfo != null) {
+                            tipView.setVisibility(View.GONE);
+                            if(detailsFragment != null) detailsFragment.initData(resultInfo);// 设置数据
+                            if(programFragment != null) {
+                                programFragment.initData(getContentList());// 加载列表
+                                String descn = resultInfo.getContentDescn();
+                                String name = resultInfo.getContentName();
+                                String img = resultInfo.getContentImg();
+                                String id = resultInfo.getContentId();
+                                programFragment.setInfo(descn, name, img, id);// 设置下载需要的信息
+                            }
+                        } else {
+                            tipView.setVisibility(View.VISIBLE);
+                            tipView.setTipView(TipView.TipStatus.NO_DATA, "数据君不翼而飞了\n点击界面会重新获取数据哟");
+                        }
                     }
-                } catch (JSONException e) {
+                } catch (Exception e) {
                     e.printStackTrace();
+                    tipView.setVisibility(View.VISIBLE);
+                    tipView.setTipView(TipView.TipStatus.IS_ERROR);
                 }
             }
 
             @Override
             protected void requestError(VolleyError error) {
                 if (dialog != null) dialog.dismiss();
+                ToastUtils.showVolleyError(context);
+                tipView.setVisibility(View.VISIBLE);
+                tipView.setTipView(TipView.TipStatus.IS_ERROR);
             }
         });
     }
@@ -235,7 +253,6 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener, 
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
-        context = null;
         setContentView(R.layout.activity_null);
     }
 
@@ -245,5 +262,16 @@ public class AlbumActivity extends FragmentActivity implements OnClickListener, 
 
     @Override
     public void onPageScrollStateChanged(int arg0) {
+    }
+
+    @Override
+    public void onWhiteViewClick() {
+        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+            dialog = DialogUtils.Dialogph(context, "数据加载中...");
+            sendRequest();
+        } else {
+            tipView.setVisibility(View.VISIBLE);
+            tipView.setTipView(TipView.TipStatus.NO_NET);
+        }
     }
 }

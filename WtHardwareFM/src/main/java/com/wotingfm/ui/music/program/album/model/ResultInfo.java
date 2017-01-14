@@ -8,6 +8,12 @@ import java.util.List;
  */
 public class ResultInfo {
 
+    private String ContentName;// 专辑名
+
+    private long ContentPubTime;
+
+    private String ContentDescn;// 专辑介绍
+
     private String ContentPub;// 来源
 
     private String PlayCount;// 播放次数
@@ -23,6 +29,24 @@ public class ResultInfo {
     private String ContentFavorite;// 是否喜欢  == "1" 喜欢   =="0" 没有喜欢
 
     private List<ContentInfo> SubList;// 专辑中的列表信息
+
+    private String ContentURI;// ContentURI
+
+    private List<ContentCatalogs> ContentCatalogs;
+
+    private long CTime;
+
+    private String ContentKeyWord;
+
+    private int Page;
+
+    private String ContentSubjectWord;
+
+    private String ContentStatus;
+
+    private String ContentShareURL;// 分享 URL
+
+    private String ContentImg;// 专辑封面图片
 
     public String getContentPub() {
         return ContentPub;
@@ -88,10 +112,109 @@ public class ResultInfo {
         SubList = subList;
     }
 
+    public String getContentName() {
+        return ContentName;
+    }
+
+    public void setContentName(String contentName) {
+        ContentName = contentName;
+    }
+
+    public long getContentPubTime() {
+        return ContentPubTime;
+    }
+
+    public void setContentPubTime(long contentPubTime) {
+        ContentPubTime = contentPubTime;
+    }
+
+    public String getContentDescn() {
+        return ContentDescn;
+    }
+
+    public void setContentDescn(String contentDescn) {
+        ContentDescn = contentDescn;
+    }
+
+    public String getContentURI() {
+        return ContentURI;
+    }
+
+    public void setContentURI(String contentURI) {
+        ContentURI = contentURI;
+    }
+
+    public List<com.wotingfm.ui.music.program.album.model.ContentCatalogs> getContentCatalogs() {
+        return ContentCatalogs;
+    }
+
+    public void setContentCatalogs(List<com.wotingfm.ui.music.program.album.model.ContentCatalogs> contentCatalogs) {
+        ContentCatalogs = contentCatalogs;
+    }
+
+    public long getCTime() {
+        return CTime;
+    }
+
+    public void setCTime(long CTime) {
+        this.CTime = CTime;
+    }
+
+    public String getContentKeyWord() {
+        return ContentKeyWord;
+    }
+
+    public void setContentKeyWord(String contentKeyWord) {
+        ContentKeyWord = contentKeyWord;
+    }
+
+    public int getPage() {
+        return Page;
+    }
+
+    public void setPage(int page) {
+        Page = page;
+    }
+
+    public String getContentSubjectWord() {
+        return ContentSubjectWord;
+    }
+
+    public void setContentSubjectWord(String contentSubjectWord) {
+        ContentSubjectWord = contentSubjectWord;
+    }
+
+    public String getContentStatus() {
+        return ContentStatus;
+    }
+
+    public void setContentStatus(String contentStatus) {
+        ContentStatus = contentStatus;
+    }
+
+    public String getContentShareURL() {
+        return ContentShareURL;
+    }
+
+    public void setContentShareURL(String contentShareURL) {
+        ContentShareURL = contentShareURL;
+    }
+
+    public String getContentImg() {
+        return ContentImg;
+    }
+
+    public void setContentImg(String contentImg) {
+        ContentImg = contentImg;
+    }
+
     @Override
     public String toString() {
         return "ResultInfo{" +
-                "ContentPub='" + ContentPub + '\'' +
+                "ContentName='" + ContentName + '\'' +
+                ", ContentPubTime=" + ContentPubTime +
+                ", ContentDescn='" + ContentDescn + '\'' +
+                ", ContentPub='" + ContentPub + '\'' +
                 ", PlayCount='" + PlayCount + '\'' +
                 ", MediaType='" + MediaType + '\'' +
                 ", PageSize='" + PageSize + '\'' +
@@ -99,6 +222,15 @@ public class ResultInfo {
                 ", ContentId='" + ContentId + '\'' +
                 ", ContentFavorite='" + ContentFavorite + '\'' +
                 ", SubList=" + SubList +
+                ", ContentURI='" + ContentURI + '\'' +
+                ", ContentCatalogs=" + ContentCatalogs +
+                ", CTime=" + CTime +
+                ", ContentKeyWord='" + ContentKeyWord + '\'' +
+                ", Page=" + Page +
+                ", ContentSubjectWord='" + ContentSubjectWord + '\'' +
+                ", ContentStatus='" + ContentStatus + '\'' +
+                ", ContentShareURL='" + ContentShareURL + '\'' +
+                ", ContentImg='" + ContentImg + '\'' +
                 '}';
     }
 }

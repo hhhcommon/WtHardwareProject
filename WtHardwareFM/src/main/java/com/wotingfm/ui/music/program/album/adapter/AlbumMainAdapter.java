@@ -5,8 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
@@ -15,18 +13,20 @@ import com.wotingfm.ui.music.program.album.model.ContentInfo;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+/**
+ * 专辑列表界面数据适配
+ */
 public class AlbumMainAdapter extends BaseAdapter {
 	private List<ContentInfo> list;
 	private Context context;
-	private ContentInfo lists;
 	private SimpleDateFormat format;
 
 	public AlbumMainAdapter(Context context, List<ContentInfo> subList) {
-		super();
 		this.list = subList;
 		this.context = context;
-		 format = new SimpleDateFormat("yyyy-MM-dd");
+        format = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA);
 	}
 
 	public void ChangeDate(List<ContentInfo> list) {
@@ -55,59 +55,76 @@ public class AlbumMainAdapter extends BaseAdapter {
 		if (convertView == null) {
 			holder = new ViewHolder();
 			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_album_main, null);
-			holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
-			holder.tv_playnum = (TextView) convertView.findViewById(R.id.tv_playnum);
-			holder.tv_time = (TextView) convertView.findViewById(R.id.tv_time);
-			holder.textTime = (TextView) convertView.findViewById(R.id.text_time);
+			holder.textName = (TextView) convertView.findViewById(R.id.tv_name);// 节目名
+			holder.textPlayNum = (TextView) convertView.findViewById(R.id.tv_playnum);// 播放次数
+            holder.textTime = (TextView) convertView.findViewById(R.id.text_time);// 节目时长
+			holder.textCTime = (TextView) convertView.findViewById(R.id.tv_time);// CTime
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
 		}
-		lists = list.get(position);
-		if (lists.getContentName() == null || lists.getContentName().equals("")) {
-			holder.tv_name.setText("未知");
-		} else {
-			holder.tv_name.setText(lists.getContentName());
+        ContentInfo lists = list.get(position);
+
+        // 节目名
+        String contentName = lists.getContentName();
+		if (contentName == null || contentName.equals("")) {
+            contentName = "未知";
 		}
-		if (lists.getPlayCount() == null || lists.getPlayCount().equals("")) {
-			holder.tv_playnum.setText("000");
-		} else {
-			holder.tv_playnum.setText(lists.getPlayCount());
+        holder.textName.setText(contentName);
+
+        // 播放次数
+        String playCount = lists.getPlayCount();
+		if (playCount == null || playCount.equals("")) {
+            playCount = "1234";
 		}
-		if (lists.getCTime() == null || lists.getCTime().equals("")) {
-			holder.tv_time.setText("0000-00-00");
-		} else {
-			holder.tv_time.setText(format.format(new Date(Long.parseLong(lists.getCTime()))));
-		}
-		
-		//节目时长
-		if (lists.getContentTimes() == null
-				|| lists.getContentTimes().equals("")
-				|| lists.getContentTimes().equals("null")) {
-			holder.textTime.setText(context.getString(R.string.play_time));
-		} else {
-			try {
-				int minute = Integer.valueOf(lists.getContentTimes()) / (1000 * 60);
-				int second = (Integer.valueOf(lists.getContentTimes()) / 1000) % 60;
-				if(second < 10){
-                    holder.textTime.setText(minute + "\'" + " " + "0" + second + "\"");
+        Float count = Float.valueOf(playCount);
+        if(count > 10000) {
+            count = count / 10000;
+            playCount = count + "万";
+            if(count > 10000) {
+                count = count / 10000;
+                playCount = count + "亿";
+            }
+        }
+        holder.textPlayNum.setText(playCount);
+
+        // 节目时长
+        String contentTime = lists.getContentTimes();
+        if (contentTime == null || contentTime.equals("") || contentTime.equals("null")) {
+            holder.textTime.setText(context.getString(R.string.play_time));
+        } else {
+            try {
+                int time = Integer.valueOf(contentTime);
+                int minute = time / (1000 * 60);
+                int second = (time / 1000) % 60;
+                if(second < 10){
+                    contentTime = minute + "\'" + " " + "0" + second + "\"";
                 }else{
-                    holder.textTime.setText(minute + "\'" + " " + second + "\"");
+                    contentTime = minute + "\'" + " " + second + "\"";
                 }
-			} catch (NumberFormatException e) {
-				e.printStackTrace();
-			}
+                holder.textTime.setText(contentTime);
+            } catch (NumberFormatException e) {
+                e.printStackTrace();
+                holder.textTime.setText(context.getString(R.string.play_time));
+            }
+        }
+
+        // CTime
+        String cTime = lists.getCTime();
+		if (cTime == null || cTime.equals("")) {
+            cTime = "1970-01-18";
+		} else {
+            cTime = format.format(new Date(Long.parseLong(cTime)));
 		}
+        holder.textCTime.setText(cTime);
+		
 		return convertView;
 	}
 
 	class ViewHolder {
-		public TextView tv_time;
-		public TextView tv_playnum;
-		public ImageView imageView_touxiang;
-		public TextView tv_name;
-		public LinearLayout lin_onclick;
-		public ImageView imageView_check;
-		public TextView textTime;
+        public TextView textName;// 节目名
+        public TextView textPlayNum;// 播放次数
+        public TextView textTime;// 节目时长
+		public TextView textCTime;// CTime
 	}
 }

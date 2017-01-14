@@ -26,7 +26,7 @@ public class AutoScrollTextView extends TextView implements View.OnClickListener
     private float temp_view_plus_two_text_length = 0.0f;// 用于计算的临时变量
     public boolean isStarting = false;// 是否开始滚动
     private Paint paint = null;// 绘图样式
-    private String text = "";// 文本内容
+    private String text;// 文本内容
 
     public AutoScrollTextView(Context context) {
         super(context);
@@ -142,6 +142,7 @@ public class AutoScrollTextView extends TextView implements View.OnClickListener
 
     @Override
     public void onDraw(Canvas canvas) {
+        if(text == null) return ;
         canvas.drawText(text, temp_view_plus_text_length - step, y, paint);
         if(!isStarting) return;
         step += 2.5;

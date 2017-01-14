@@ -61,9 +61,11 @@ public class EWMShowActivity extends AppBaseActivity implements OnClickListener 
         textNews = (TextView) findViewById(R.id.news);
 
         if (getIntent() != null) {
-            int type = getIntent().getIntExtra("type", 1);// 1：个人   2：组
+            int type = getIntent().getIntExtra("type", 1);// 0：单体节目分享  1：个人   2：组  3：专辑分享
             if(type == 0) {
                 shapeContent();
+            } else if(type == 3) {
+
             } else {
                 String image = getIntent().getStringExtra("image");
                 String news = getIntent().getStringExtra("news");
@@ -106,7 +108,7 @@ public class EWMShowActivity extends AppBaseActivity implements OnClickListener 
         imageEwm.setImageBitmap(bmp);
     }
 
-    // 分享
+    // 单体节目分享
     private void shapeContent() {
         if(GlobalConfig.playerObject.getContentImg() == null) {
             imageHead.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx));
@@ -132,6 +134,11 @@ public class EWMShowActivity extends AppBaseActivity implements OnClickListener 
         textNews.setText(contentDescn);
 
         textTip.setText("扫面上面的二维码图案");
+    }
+
+    // 专辑分享
+    private void shapeAlbum() {
+
     }
 
     @Override
