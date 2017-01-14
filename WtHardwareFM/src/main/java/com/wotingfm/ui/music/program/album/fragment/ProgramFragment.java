@@ -288,6 +288,7 @@ public class ProgramFragment extends Fragment implements OnClickListener {
                     FID.updataDownloadStatus(tempList.get(kk).getUrl(), "2");
                 }
             }
+            ToastUtils.show_always(context, "已将选中条目加载下载列表");
             tempList.get(0).setDownloadtype(1);
             FID.updataDownloadStatus(tempList.get(0).getUrl(), "1");
             DownloadService.workStart(tempList.get(0));

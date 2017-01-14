@@ -60,8 +60,7 @@ public class VLCInstance {
 
     public static void updateLibVlcSettings(SharedPreferences pref) {
         LibVLC instance = LibVLC.getExistingInstance();
-        if (instance == null)
-            return;
+        if (instance == null) return;
 
         instance.setSubtitlesEncoding(pref.getString("subtitle_text_encoding", ""));
         instance.setTimeStretching(pref.getBoolean("enable_time_stretching_audio", false));
@@ -100,12 +99,7 @@ public class VLCInstance {
         catch(NumberFormatException nfe) {
             hardwareAcceleration = -1;
         }
-      /*  int networkCaching = pref.getInt("network_caching_value", 15000);*/
         int networkCaching=15000;
-    /*    if(networkCaching > 60000)
-            networkCaching = 60000;
-        else if(networkCaching < 0)
-            networkCaching = 0;*/
         instance.setAout(aout);
         instance.setVout(vout);
         instance.setDeblocking(deblocking);
@@ -113,9 +107,6 @@ public class VLCInstance {
         instance.setNetworkCaching(networkCaching);
         instance.setHardwareAcceleration(hardwareAcceleration);
         instance.detachSurface();
-        //instance.getBufferContent();
         instance.stopDebugBuffer();
     }
-
-
 }

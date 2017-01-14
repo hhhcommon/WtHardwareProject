@@ -33,6 +33,7 @@ import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
 import com.wotingfm.ui.music.program.album.model.ContentInfo;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -450,7 +451,7 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
         if (mReceiver == null) {
             mReceiver = new MessageReceiver();
             IntentFilter filter = new IntentFilter();
-            filter.addAction(BroadcastConstants.UPDATE_PLAY_VIEW);// 更新界面
+            filter.addAction(BroadcastConstants.UPDATE_MORE_OPERATION_VIEW);// 更新界面
             context.registerReceiver(mReceiver, filter);
         }
     }
@@ -460,7 +461,8 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
-                case BroadcastConstants.UPDATE_PLAY_VIEW:// 更新界面
+                case BroadcastConstants.UPDATE_MORE_OPERATION_VIEW:// 更新界面
+                    L.w("TAG", "updateLocalList -- > " + GlobalConfig.playerObject.getLocalurl());
                     resetDate();// 設置 View
                     break;
             }

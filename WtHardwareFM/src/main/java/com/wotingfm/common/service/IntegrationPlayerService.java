@@ -50,8 +50,9 @@ import tv.danmaku.ijk.media.player.IjkMediaPlayer;
  */
 public class IntegrationPlayerService extends Service implements OnCacheStatusListener {
     private List<LanguageSearchInside> playList = new ArrayList<>();
+    private List<FileInfo> mFileInfoList;// 下载数据
 
-    private IjkVideoView mVV;// 百度云播放器
+    private IjkVideoView mVV;// mVV 播放器
     private LibVLC mVlc;// VLC 播放器
     private SpeechSynthesizer mTts;// 讯飞播放 TTS
     private KSYProxyService proxyService;// 金山云缓存
@@ -59,7 +60,6 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     private MyBinder mBinder = new MyBinder();
     private AssistServiceConnection mConnection;
-    private List<FileInfo> mFileInfoList;// 下载数据
 
     private boolean isVlcPlaying;// VLC 播放器正在播放
     private boolean isTtsPlaying;// TTS 播放器正在播放
@@ -76,6 +76,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     private Intent updateTimeIntent;// 更新时间
     private Intent totalTimeIntent;// 总时间
     private Intent updatePlayViewIntent;// 更新播放界面
+    private Intent updateMoreOperationViewIntent;// 更新 More View
 
     private Handler mHandler = new Handler();
 
@@ -152,6 +153,10 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
             updatePlayViewIntent = new Intent();
             updatePlayViewIntent.setAction(BroadcastConstants.UPDATE_PLAY_VIEW);
         }
+        if(updateMoreOperationViewIntent == null) {
+            updateMoreOperationViewIntent = new Intent();
+            updateMoreOperationViewIntent.setAction(BroadcastConstants.UPDATE_MORE_OPERATION_VIEW);
+        }
     }
 
     // 初始化 VLC 播放器
@@ -168,7 +173,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     // 初始化讯飞播放 TTS
     private void initTts() {
-        if(mTts == null){
+        if(mTts == null) {
             mTts = SpeechSynthesizer.createSynthesizer(this, null);
             setParamTTS();
         }
@@ -193,6 +198,8 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
             for(int i=0, size=mFileInfoList.size(); i<size; i++) {
                 if(mFileInfoList.get(i).getUrl().equals(GlobalConfig.playerObject.getContentPlay())) {
                     GlobalConfig.playerObject.setLocalurl(mFileInfoList.get(i).getLocalurl());
+                    sendBroadcast(updateMoreOperationViewIntent);
+                    break;
                 }
             }
         }
@@ -446,7 +453,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     @Override
     public boolean onUnbind(Intent intent) {
         hideNotification();
-        recovery();
+        recycleSource();
         return super.onUnbind(intent);
     }
 
@@ -587,7 +594,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     };
 
     // 回收资源
-    private void recovery() {
+    private void recycleSource() {
         if(mUpdatePlayTimeRunnable != null) {
             mHandler.removeCallbacks(mUpdatePlayTimeRunnable);
             mUpdatePlayTimeRunnable = null;
@@ -600,6 +607,10 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
             playList.clear();
             playList = null;
         }
+        if(mFileInfoList != null) {
+            mFileInfoList.clear();
+            mFileInfoList = null;
+        }
         if(mVlc != null) {
             mVlc.stop();
             mVlc.destroy();
@@ -610,14 +621,23 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
             mTts.destroy();
             mTts = null;
         }
+        if(mVV != null) {
+            mVV.stopPlayback();
+            mVV = null;
+        }
         if(proxyService != null) {
             proxyService.shutDownServer();
             proxyService = null;
+        }
+        if(mFileDao != null) {
+            mFileDao.closeDB();
+            mFileDao = null;
         }
 
         mHandler = null;
         isVlcPlaying = false;
         isTtsPlaying = false;
+        isBVVPlaying = false;
         mBinder = null;
         mConnection = null;
         mediaType = null;

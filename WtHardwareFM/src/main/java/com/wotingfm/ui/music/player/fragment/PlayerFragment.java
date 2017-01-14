@@ -54,11 +54,11 @@ import org.json.JSONTokener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * 播放主页
  * 2016年2月4日
- *
  * @author 辛龙
  */
 public class PlayerFragment extends Fragment implements View.OnClickListener,
@@ -323,9 +323,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
             filter.addAction(BroadcastConstants.UPDATE_PLAY_VIEW);// 更新播放界面
 
             // 下载完成更新 LocalUrl
-            filter.addAction(BroadcastConstants.PUSH_DOWN_COMPLETED);
             filter.addAction(BroadcastConstants.PUSH_ALLURL_CHANGE);
-
             context.registerReceiver(mReceiver, filter);
         }
     }
@@ -372,6 +370,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     addDb(GlobalConfig.playerObject);// 将播放对象加入数据库
                     break;
                 case BroadcastConstants.UPDATE_PLAY_CURRENT_TIME:// 更新当前播放时间
+                    // 缓存进度
                     if (mediaType != null && mediaType.equals(StringConstant.TYPE_AUDIO)) {
                         long secondProgress = intent.getLongExtra(StringConstant.PLAY_SECOND_PROGRESS, 0);
                         if (secondProgress == -1) {
@@ -383,6 +382,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                         }
                     }
 
+                    // 当前播放进度
                     long currentTime = intent.getLongExtra(StringConstant.PLAY_CURRENT_TIME, -1);
                     if (mediaType != null && mediaType.equals(StringConstant.TYPE_AUDIO)) {
                         mSeekBar.setProgress((int) currentTime);
@@ -401,10 +401,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
 
                     // 标题
                     String title = GlobalConfig.playerObject.getContentName();
-                    if (title == null || title.trim().equals("")) {
-                        title = "未知";
-                    }
-
+                    if (title == null || title.trim().equals("")) title = "未知";
                     mPlayAudioTitle.setText(title);
                     mPlayAudioTitle.init(windowManager);
                     mPlayAudioTitle.startScroll();
@@ -412,9 +409,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     // 封面图片
                     String coverUrl = GlobalConfig.playerObject.getContentImg();// imagePlayCover
                     if (coverUrl != null) {// 有封面图片
-                        if (!coverUrl.startsWith("http")) {
-                            coverUrl = GlobalConfig.imageurl + coverUrl;
-                        }
+                        if (!coverUrl.startsWith("http")) coverUrl = GlobalConfig.imageurl + coverUrl;
                         coverUrl = AssembleImageUrlUtils.assembleImageUrl180(coverUrl);
                         Picasso.with(context).load(coverUrl.replace("\\/", "/")).into(imagePlayCover);
                     } else {// 没有封面图片设置默认图片
@@ -429,8 +424,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     }
                     isInitData = true;
                     break;
-                case BroadcastConstants.PUSH_DOWN_COMPLETED:// 更新下载列表
-                case BroadcastConstants.PUSH_ALLURL_CHANGE:
+                case BroadcastConstants.PUSH_ALLURL_CHANGE:// 更新下载列表
                     if (mPlayer != null) mPlayer.updateLocalList();
                     break;
             }
@@ -484,11 +478,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                 case IntegerConstant.PLAY_UPDATE_LIST_VIEW:// 更新列表界面
                     for (int i = 0, size = playList.size(); i < size; i++) {
                         if (i == index) {
-                            if (isPlaying) {
-                                playList.get(i).setType("2");
-                            } else {
-                                playList.get(i).setType("0");
-                            }
+                            if (isPlaying) playList.get(i).setType("2");
+                            else playList.get(i).setType("0");
                         } else {
                             playList.get(i).setType("1");
                         }
@@ -561,18 +552,14 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     // 下一首
     private void next() {
         index = index + 1;
-        if (index >= playList.size()) {
-            index = 0;
-        }
+        if (index >= playList.size()) index = 0;
         mPlayer.startPlay(index);
     }
 
     // 上一首
     private void last() {
         index = index - 1;
-        if (index < 0) {
-            index = playList.size() - 1;
-        }
+        if (index < 0) index = playList.size() - 1;
         mPlayer.startPlay(index);
     }
 
@@ -714,7 +701,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         int hh = (int) (second / 3600);
         int mm = (int) (second % 3600 / 60);
         int ss = (int) (second % 60);
-        String strTemp = String.format("%02d:%02d:%02d", hh, mm, ss);
+        String strTemp = String.format(Locale.CHINA, "%02d:%02d:%02d", hh, mm, ss);
         view.setText(strTemp);
     }
 
@@ -740,11 +727,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     private void setPullAndLoad(boolean isPull, boolean isLoad) {
         mListView.setPullRefreshEnable(isPull);
         mListView.setPullLoadEnable(isLoad);
-        if (refreshType == -1) {
-            mListView.stopRefresh();
-        } else {
-            mListView.stopLoadMore();
-        }
+        if (refreshType == -1) mListView.stopRefresh();
+        else mListView.stopLoadMore();
     }
 
     @Override
