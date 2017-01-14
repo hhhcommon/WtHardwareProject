@@ -124,6 +124,7 @@
                     android:paddingLeft="30dp"
                     android:paddingRight="30dp"
                     android:layout_below="@id/tv_name"
+                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="3dp"
                     android:layout_alignLeft="@id/et_groupSignature"
                     android:layout_alignStart="@id/et_groupSignature"

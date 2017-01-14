@@ -704,7 +704,6 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
                     ToastUtils.show_always(context,"您不是本群的管理员，无法修改对讲频率");
                 }
                 break;
-
         }
     }
 
