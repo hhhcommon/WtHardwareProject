@@ -693,6 +693,9 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
                 Bundle bundle = new Bundle();
                 bundle.putString("type", "talkpersonfragment");
                 bundle.putSerializable("data", groupList.get(position));
+
+                String s=groupList.get(position).getGroupName();
+                String s1=groupList.get(position).getGroupMyAlias();
                 intent.putExtras(bundle);
                 startActivity(intent);
             }

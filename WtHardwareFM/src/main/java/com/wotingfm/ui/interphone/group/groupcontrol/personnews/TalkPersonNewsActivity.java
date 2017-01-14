@@ -58,7 +58,6 @@ public class TalkPersonNewsActivity extends AppBaseActivity {
 
     private TipView tipView;// 数据加载出错提示
     private LinearLayout lin_ewm;
-    private LinearLayout lin_person_xiugai;
     private ImageView image_add;
     private ImageView image_xiugai;
     private ImageView image_touxiang;
@@ -78,6 +77,7 @@ public class TalkPersonNewsActivity extends AppBaseActivity {
     private boolean update;
     private boolean isCancelRequest;
     private UserInviteMeInside news;
+    private ImageView img_EWM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,6 +89,21 @@ public class TalkPersonNewsActivity extends AppBaseActivity {
         setData();
         setListener();
         dialogDelete();
+        createEWM();      //  创建二维码
+
+    }
+
+    private void createEWM() {
+        UserInviteMeInside meInside = new UserInviteMeInside();
+        meInside.setUserId(num);
+        meInside.setUserName(name);
+        meInside.setDescn(descN);
+        meInside.setPortraitMini(imageUrl);
+        bmp = CreateQRImageHelper.getInstance().createQRImage(1, null, meInside, 220, 220);
+        if (bmp == null) {
+            bmp = BitmapUtils.readBitMap(context, R.mipmap.ewm);
+        }
+        img_EWM.setImageBitmap(bmp);
     }
 
     private void dialogDelete() {
@@ -129,17 +144,17 @@ public class TalkPersonNewsActivity extends AppBaseActivity {
     private void setView() {
         tipView = (TipView) findViewById(R.id.tip_view);
 
-        image_touxiang = (ImageView) findViewById(R.id.image_touxiang);
+        image_touxiang = (ImageView) findViewById(R.id.image_portrait);
         tv_name = (TextView) findViewById(R.id.tv_name);
         et_b_name = (EditText) findViewById(R.id.et_b_name);
         et_groupSignature = (EditText) findViewById(R.id.et_groupSignature);
         tv_id = (TextView) findViewById(R.id.tv_id);
         lin_ewm = (LinearLayout) findViewById(R.id.lin_ewm);
         imageView_ewm = (ImageView) findViewById(R.id.imageView_ewm);
-        image_add = (ImageView) findViewById(R.id.image_add);
-        image_xiugai = (ImageView) findViewById(R.id.image_xiugai);
+        image_add = (ImageView) findViewById(R.id.imageView4);
+        image_xiugai = (ImageView) findViewById(R.id.imageView3);
         tv_delete = (TextView) findViewById(R.id.tv_delete);
-        lin_person_xiugai = (LinearLayout) findViewById(R.id.lin_person_xiugai);
+        img_EWM=(ImageView)findViewById(R.id.img_EWM);
         et_b_name.setEnabled(false);
         et_groupSignature.setEnabled(false);
     }
@@ -185,7 +200,6 @@ public class TalkPersonNewsActivity extends AppBaseActivity {
             num = data.getUserNum();
             b_name = data.getUserAliasName();
             tv_delete.setVisibility(View.GONE);
-            lin_person_xiugai.setVisibility(View.INVISIBLE);
         } else if (type.equals("GroupMemers")) {
             UserInfo data = (UserInfo) getIntent().getSerializableExtra("data");
             groupId = this.getIntent().getStringExtra("id");
@@ -527,7 +541,6 @@ public class TalkPersonNewsActivity extends AppBaseActivity {
         image_touxiang = null;
         tv_name = null;
         tv_id = null;
-        lin_person_xiugai = null;
         dialogs = null;
         et_groupSignature = null;
         et_b_name = null;
