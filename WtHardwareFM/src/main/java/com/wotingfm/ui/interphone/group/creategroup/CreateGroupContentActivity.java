@@ -588,7 +588,7 @@ public class CreateGroupContentActivity extends AppBaseActivity implements OnCli
 					for(int i=0;i<imageNum;i++){
 						filePath= PhotoCutAfterImagePath;
 						String ExtName = filePath.substring(filePath.lastIndexOf("."));
-						String TestURI = GlobalConfig.baseUrl + "wt/common/upload4App.do?FType=GrouP&ExtName=";
+						String TestURI =  GlobalConfig.baseUrl + "/wt/common/upload4App.do?FType=GroupP&ExtName=";// 测试用 URI
 						String Response = MyHttp.postFile(new File(filePath),TestURI+ ExtName+ "&PCDType=" + GlobalConfig.PCDType + "&GroupId="+ groupinfo.GroupId
 								+ "&IMEI="+ PhoneMessage.imei);
 						Log.e("图片上传数据",	TestURI+ ExtName

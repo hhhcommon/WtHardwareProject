@@ -991,15 +991,14 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
                             new File(filePath),
                             TestURI
                                     + ExtName
-                                    + "&PCDType=" + "1" + "&GroupId="
+                                    + "&PCDType=" + GlobalConfig.PCDType + "&GroupId="
                                     + groupId + "&IMEI="
                                     + PhoneMessage.imei);
                     Log.e("图片上传数据",
                             TestURI
                                     + ExtName
-                                    + "&UserId="
-                                    + CommonUtils.getUserId(getApplicationContext())
-                                    + "&IMEI=" + PhoneMessage.imei);
+                                    + "&UserId="+"&PCDType=" + GlobalConfig.PCDType +"&GroupId="
+                                    + groupId);
                     Log.e("图片上传结果", Response);
                     Gson gson = new Gson();
                     Response = ImageUploadReturnUtil.getResPonse(Response);
