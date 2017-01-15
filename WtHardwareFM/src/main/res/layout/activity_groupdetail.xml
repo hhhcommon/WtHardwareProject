@@ -121,13 +121,10 @@
                     android:textSize="12sp"
                     android:maxWidth="200dp"
                     android:gravity="center"
-                    android:paddingLeft="30dp"
-                    android:paddingRight="30dp"
                     android:layout_below="@id/tv_name"
-                    android:layout_marginLeft="10dp"
                     android:layout_marginTop="3dp"
-                    android:layout_alignLeft="@id/et_groupSignature"
-                    android:layout_alignStart="@id/et_groupSignature"
+                    android:layout_alignLeft="@id/tv_name"
+                    android:layout_alignRight="@id/tv_name"
                     />
 
                 <TextView
@@ -139,12 +136,10 @@
                     android:textSize="12sp"
                     android:maxWidth="200dp"
                     android:gravity="center"
-                    android:paddingLeft="30dp"
-                    android:paddingRight="30dp"
                     android:layout_below="@id/et_b_name"
                     android:layout_marginTop="3dp"
-                    android:layout_alignLeft="@id/et_b_name"
-                    android:layout_alignStart="@id/et_b_name" />
+                    android:layout_alignLeft="@id/tv_name"
+                    android:layout_alignRight="@id/tv_name" />
 
                 <EditText
                     android:id="@+id/et_groupSignature"
@@ -154,7 +149,6 @@
                     android:ellipsize="end"
                     android:singleLine="true"
                     android:ems="10"
-                    android:paddingRight="10dp"
                     android:gravity="center"
                     android:enabled="false"
                     android:maxWidth="240dp"
@@ -162,8 +156,8 @@
                     android:textColor="@color/WHITE"
                     android:textSize="12sp"
                     android:layout_alignBottom="@id/rv_touxiang"
-                    android:layout_alignRight="@id/tv_name"
-                    android:layout_alignEnd="@+id/tv_name" />
+                    android:layout_alignLeft="@id/tv_name"
+                    android:layout_alignRight="@id/tv_name" />
 
 
 
