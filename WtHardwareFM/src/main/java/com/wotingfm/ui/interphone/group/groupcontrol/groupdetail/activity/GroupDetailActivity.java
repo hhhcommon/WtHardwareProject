@@ -911,7 +911,7 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
                 break;
             case PHOTO_REQUEST_CUT:
                 if (resultCode == 1) {
-                    photoCutAfterImagePath = data.getStringExtra("return");
+                    photoCutAfterImagePath = data.getStringExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH);
                     dialog = DialogUtils.Dialogph(context, "提交中");
                     dealt();
                 }
@@ -922,8 +922,8 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
     // 图片裁剪
     private void startPhotoZoom(Uri uri) {
         Intent intent = new Intent(context, PhotoCutActivity.class);
-        intent.putExtra("URI", uri.toString());
-        intent.putExtra("type", 1);
+        intent.putExtra(StringConstant.START_PHOTO_ZOOM_URI, uri.toString());
+        intent.putExtra(StringConstant.START_PHOTO_ZOOM_TYPE,1);
         startActivityForResult(intent, PHOTO_REQUEST_CUT);
     }
 
@@ -991,15 +991,14 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
                             new File(filePath),
                             TestURI
                                     + ExtName
-                                    + "&PCDType=" + "1" + "&GroupId="
+                                    + "&PCDType=" + GlobalConfig.PCDType + "&GroupId="
                                     + groupId + "&IMEI="
                                     + PhoneMessage.imei);
                     Log.e("图片上传数据",
                             TestURI
                                     + ExtName
-                                    + "&UserId="
-                                    + CommonUtils.getUserId(getApplicationContext())
-                                    + "&IMEI=" + PhoneMessage.imei);
+                                    + "&UserId="+"&PCDType=" + GlobalConfig.PCDType +"&GroupId="
+                                    + groupId);
                     Log.e("图片上传结果", Response);
                     Gson gson = new Gson();
                     Response = ImageUploadReturnUtil.getResPonse(Response);

@@ -36,6 +36,7 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.manager.FileManager;
 import com.wotingfm.common.manager.MyHttp;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -390,6 +391,7 @@ public class CreateGroupContentActivity extends AppBaseActivity implements OnCli
      	ImageUrl = (ImageView) findViewById(R.id.ImageUrl);
 		et_group_password = (EditText) findViewById(R.id.edittext_password);
 
+
 		lin_channel1= (LinearLayout) findViewById(R.id.lin_channel1);
 		tv_channel1 = (TextView) findViewById(R.id.tv_channel1);
 		lin_channel2= (LinearLayout) findViewById(R.id.lin_channel2);
@@ -515,7 +517,7 @@ public class CreateGroupContentActivity extends AppBaseActivity implements OnCli
 		case PHOTO_REQUEST_CUT:
 			if (resultCode == 1) {
 				imageNum=1;
-				 PhotoCutAfterImagePath= data.getStringExtra("return");
+				 PhotoCutAfterImagePath= data.getStringExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH);
                  ImageUrl.setImageURI(Uri.parse(PhotoCutAfterImagePath));
 				 ViewSuccess=1;
 			}else{
@@ -528,8 +530,8 @@ public class CreateGroupContentActivity extends AppBaseActivity implements OnCli
 	/** 图片裁剪 */
 	private void startPhotoZoom(Uri uri) {
 		Intent intent=new Intent(context,PhotoCutActivity.class);
-		intent.putExtra("URI", uri.toString());
-		intent.putExtra("type",1);
+		intent.putExtra(StringConstant.START_PHOTO_ZOOM_URI, uri.toString());
+		intent.putExtra(StringConstant.START_PHOTO_ZOOM_TYPE,1);
 		startActivityForResult(intent, PHOTO_REQUEST_CUT);
 	}
 
@@ -586,7 +588,7 @@ public class CreateGroupContentActivity extends AppBaseActivity implements OnCli
 					for(int i=0;i<imageNum;i++){
 						filePath= PhotoCutAfterImagePath;
 						String ExtName = filePath.substring(filePath.lastIndexOf("."));
-						String TestURI = GlobalConfig.baseUrl + "wt/common/upload4App.do?FType=GrouP&ExtName=";
+						String TestURI =  GlobalConfig.baseUrl + "/wt/common/upload4App.do?FType=GroupP&ExtName=";// 测试用 URI
 						String Response = MyHttp.postFile(new File(filePath),TestURI+ ExtName+ "&PCDType=" + GlobalConfig.PCDType + "&GroupId="+ groupinfo.GroupId
 								+ "&IMEI="+ PhoneMessage.imei);
 						Log.e("图片上传数据",	TestURI+ ExtName
