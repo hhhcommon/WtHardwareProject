@@ -171,6 +171,13 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
+        <!-- 全部群成员 -->
+        <activity
+            android:name="com.wotingfm.ui.interphone.group.groupcontrol.membershow.GroupMembersActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
         <!-- 添加群组界面 -->
         <activity
             android:name=".ui.interphone.find.groupadd.GroupAddActivity"
