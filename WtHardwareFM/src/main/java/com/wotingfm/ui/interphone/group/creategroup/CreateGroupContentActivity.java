@@ -15,10 +15,15 @@ import android.os.Handler;
 import android.os.Message;
 import android.provider.DocumentsContract;
 import android.provider.MediaStore;
+import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -39,17 +44,21 @@ import com.wotingfm.ui.baseactivity.AppBaseActivity;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.common.photocut.PhotoCutActivity;
 import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.activity.GroupDetailActivity;
+import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.util.FrequencyUtil;
 import com.wotingfm.ui.mine.model.UserPortaitInside;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ImageUploadReturnUtil;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
+import com.wotingfm.widget.pickview.LoopView;
+import com.wotingfm.widget.pickview.OnItemSelectedListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.List;
 
 /**
  * 创建组的实现界面 1：edittext已经做出限制，只可以设置英文和数字输入
@@ -90,6 +99,14 @@ public class CreateGroupContentActivity extends AppBaseActivity implements OnCli
 	private int imageNum;
 	private boolean isCancelRequest;
 	private Uri outputFileUri;
+	private LinearLayout lin_channel1;
+	private TextView tv_channel1;
+	private LinearLayout lin_channel2;
+	private TextView tv_channel2;
+	private int pRate=-1;
+	private int pFrequency=-1;
+	private Dialog frequencyDialog;
+	private int screenWidth;
 
 
 	@Override
@@ -102,6 +119,83 @@ public class CreateGroupContentActivity extends AppBaseActivity implements OnCli
 		handleIntent();
 		setListener();
 		Dialog();
+		initFrequencyDialog();
+	}
+
+
+	/**
+	 *频率对话框
+	 */
+	private void initFrequencyDialog() {
+		final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_frequency, null);
+		LoopView pickProvince = (LoopView) dialog.findViewById(R.id.pick_province);
+		LoopView pickCity = (LoopView) dialog.findViewById(R.id.pick_city);
+
+		pickProvince.setListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(int index) {
+				pRate=index;
+
+			}
+		});
+
+		pickCity.setListener(new OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(int index) {
+				pFrequency=index;
+			}
+		});
+		final List<String> rateList = FrequencyUtil.getFrequency();
+		final List<String> frequencyList=FrequencyUtil.getFrequencyList();
+
+		pickProvince.setItems(rateList);
+		pickCity.setItems(frequencyList);
+		pickProvince.setInitPosition(3);
+		pickProvince.setTextSize(15);
+		pickCity.setTextSize(15);
+
+		frequencyDialog = new Dialog(context, R.style.MyDialog);
+		frequencyDialog.setContentView(dialog);
+		Window window = frequencyDialog.getWindow();
+		DisplayMetrics dm = new DisplayMetrics();
+		getWindowManager().getDefaultDisplay().getMetrics(dm);
+		screenWidth = dm.widthPixels;
+		ViewGroup.LayoutParams params = dialog.getLayoutParams();
+		params.width = screenWidth;
+		dialog.setLayoutParams(params);
+		window.setGravity(Gravity.BOTTOM);
+		window.setWindowAnimations(R.style.sharestyle);
+		frequencyDialog.setCanceledOnTouchOutside(true);
+		frequencyDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+
+		dialog.findViewById(R.id.tv_confirm).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				int a=pRate;
+				if(pFrequency==-1){
+					 tv_channel1.setText(frequencyList.get(1).trim());
+				}else{
+					String rate=rateList.get(pRate);
+					if(!TextUtils.isEmpty(rate.trim())){
+						if(rate.equals("频道一")){
+							tv_channel1.setText(frequencyList.get(pFrequency).trim());
+						}else if(rate.equals("频道二")){
+							tv_channel2.setText(frequencyList.get(pFrequency).trim());
+						}
+					}
+				}
+				frequencyDialog.dismiss();
+			}
+		});
+
+		dialog.findViewById(R.id.tv_cancel).setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				if (frequencyDialog.isShowing()) {
+					frequencyDialog.dismiss();
+				}
+			}
+		});
 	}
 
 	private void Dialog() {
@@ -295,6 +389,13 @@ public class CreateGroupContentActivity extends AppBaseActivity implements OnCli
 		et_group_sign = (EditText) findViewById(R.id.et_group_sign);
      	ImageUrl = (ImageView) findViewById(R.id.ImageUrl);
 		et_group_password = (EditText) findViewById(R.id.edittext_password);
+
+		lin_channel1= (LinearLayout) findViewById(R.id.lin_channel1);
+		tv_channel1 = (TextView) findViewById(R.id.tv_channel1);
+		lin_channel2= (LinearLayout) findViewById(R.id.lin_channel2);
+		tv_channel2 = (TextView) findViewById(R.id.tv_channel2);
+		lin_channel1.setOnClickListener(this);
+		lin_channel2.setOnClickListener(this);
 	}
 
 	@Override
@@ -328,6 +429,12 @@ public class CreateGroupContentActivity extends AppBaseActivity implements OnCli
 				}
 			}
 			break;
+			case R.id.lin_channel1:
+				 frequencyDialog.show();
+				break;
+			case R.id.lin_channel2:
+				 frequencyDialog.show();
+				break;
 		}
 	}
 
