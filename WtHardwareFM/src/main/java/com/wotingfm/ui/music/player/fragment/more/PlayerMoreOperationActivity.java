@@ -451,6 +451,7 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
         if (mReceiver == null) {
             mReceiver = new MessageReceiver();
             IntentFilter filter = new IntentFilter();
+            filter.addAction(BroadcastConstants.UPDATE_PLAY_VIEW);
             filter.addAction(BroadcastConstants.UPDATE_MORE_OPERATION_VIEW);// 更新界面
             context.registerReceiver(mReceiver, filter);
         }
@@ -461,6 +462,9 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
+                case BroadcastConstants.UPDATE_PLAY_VIEW:
+                    resetDate();// 設置 View
+                    break;
                 case BroadcastConstants.UPDATE_MORE_OPERATION_VIEW:// 更新界面
                     L.w("TAG", "updateLocalList -- > " + GlobalConfig.playerObject.getLocalurl());
                     resetDate();// 設置 View

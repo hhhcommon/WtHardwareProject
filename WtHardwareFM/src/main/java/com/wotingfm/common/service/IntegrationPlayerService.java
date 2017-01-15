@@ -198,6 +198,9 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
             for(int i=0, size=mFileInfoList.size(); i<size; i++) {
                 if(mFileInfoList.get(i).getUrl().equals(GlobalConfig.playerObject.getContentPlay())) {
                     GlobalConfig.playerObject.setLocalurl(mFileInfoList.get(i).getLocalurl());
+
+                    L.w("TAG", "updateLocalList -- > " + GlobalConfig.playerObject.getLocalurl());
+
                     sendBroadcast(updateMoreOperationViewIntent);
                     break;
                 }
@@ -210,9 +213,9 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         if(list != null) {
             if(playList != null) playList.clear();
             playList = list;
-            mFileInfoList = getDownList();
 
             if(!isVlcPlaying && !isTtsPlaying) {// 第一次进入应用给 playerObject 赋值
+                mFileInfoList = getDownList();
                 position = 0;
                 GlobalConfig.playerObject = playList.get(position);
                 updateLocalList();

@@ -323,7 +323,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
             filter.addAction(BroadcastConstants.UPDATE_PLAY_VIEW);// 更新播放界面
 
             // 下载完成更新 LocalUrl
-            filter.addAction(BroadcastConstants.PUSH_ALLURL_CHANGE);
+            filter.addAction(BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW);
+            filter.addAction(BroadcastConstants.ACTION_FINISHED);
             context.registerReceiver(mReceiver, filter);
         }
     }
@@ -424,7 +425,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     }
                     isInitData = true;
                     break;
-                case BroadcastConstants.PUSH_ALLURL_CHANGE:// 更新下载列表
+                case BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW:// 更新下载列表
+                case BroadcastConstants.ACTION_FINISHED:
                     if (mPlayer != null) mPlayer.updateLocalList();
                     break;
             }
