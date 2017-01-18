@@ -48,8 +48,7 @@ import java.util.List;
  * @author 辛龙
  * 2016年4月13日
  */
-public class GroupMembersActivity extends AppBaseActivity implements
-        OnClickListener, TextWatcher, OnItemClickListener, SideBar.OnTouchingLetterChangedListener, TipView.WhiteViewClick {
+public class GroupMembersActivity extends AppBaseActivity implements OnClickListener, TextWatcher, OnItemClickListener, SideBar.OnTouchingLetterChangedListener, TipView.WhiteViewClick {
 
     private CharacterParser characterParser = CharacterParser.getInstance();// 实例化汉字转拼音类
     private PinyinComparator pinyinComparator = new PinyinComparator();
@@ -87,7 +86,6 @@ public class GroupMembersActivity extends AppBaseActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_groupmembers);
-
         initView();
     }
 

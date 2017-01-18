@@ -116,7 +116,7 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
     private MyGridView gridView;// 展示群组成员
     private EditText editAliasName;// 群别名
     private EditText editSignature;// 群描述
-    private TextView textIntroduce;// 群介绍
+    //private TextView textIntroduce;// 群介绍
     private ImageView imageHead;// 群头像
     private ImageView imageModify;// 修改
     private ImageView imageEwm;// 二维码
@@ -345,14 +345,14 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
         gridView.setSelector(new ColorDrawable(Color.TRANSPARENT));
 
         textGroupName = (TextView) findViewById(R.id.tv_name);// 群名
-        textIntroduce = (TextView) findViewById(R.id.et_jieshao);// 群介绍
+        //textIntroduce = (TextView) findViewById(R.id.et_jieshao);// 群介绍
     }
 
     // 数据初始化
     private void setData() {
-        if (groupIntroduce != null && !groupIntroduce.equals("")) {// 群介绍
+      /*  if (groupIntroduce != null && !groupIntroduce.equals("")) {// 群介绍
             textIntroduce.setText(groupIntroduce);
-        }
+        }*/
         if (groupName == null || groupName.equals("")) {// 群名称
             groupName = "我听科技";
         }
@@ -1220,7 +1220,7 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
         linearGroupApply = null;
         linearAddMessage = null;
         textGroupName = null;
-        textIntroduce = null;
+        //textIntroduce = null;
         setContentView(R.layout.activity_null);
     }
 }

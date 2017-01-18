@@ -127,83 +127,6 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/lin_channel1"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/bg_edittext_normal"
-            android:gravity="left|center"
-            android:orientation="horizontal"
-            android:padding="5dip" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="12dp"
-                android:gravity="center"
-                android:text="频道一" />
-
-            <TextView
-                android:id="@+id/tv_channel1"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/WHITE"
-                android:ems="10"
-                android:gravity="left|center"
-                android:hint="备用频道一"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textColor="@color/wt_login_third"
-                android:textColorHint="@color/gray"
-                android:textCursorDrawable="@drawable/wt_edittext_cursor"
-                android:textSize="@dimen/wt_edittext_default_text" />
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/lin_channel2"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/bg_edittext_normal"
-            android:gravity="left|center"
-            android:orientation="horizontal"
-            android:padding="5dip" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="12dp"
-                android:gravity="center"
-                android:text="频道二" />
-
-            <TextView
-                android:id="@+id/tv_channel2"
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/WHITE"
-                android:ems="10"
-                android:gravity="left|center"
-                android:hint="备用频道二"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textColor="@color/wt_login_third"
-                android:textColorHint="@color/gray"
-                android:textCursorDrawable="@drawable/wt_edittext_cursor"
-                android:textSize="@dimen/wt_edittext_default_text" />
-        </LinearLayout>
-
-
-
-        <LinearLayout
             android:id="@+id/lin_groupcreate_status_first"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -289,7 +212,80 @@
                 android:textSize="12sp" >
             </EditText>
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/lin_channel1"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/bg_edittext_normal"
+            android:gravity="left|center"
+            android:orientation="horizontal"
+            android:padding="5dip" >
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="12dp"
+                android:gravity="center"
+                android:text="频道一" />
+
+            <TextView
+                android:id="@+id/tv_channel1"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/WHITE"
+                android:ems="10"
+                android:gravity="left|center"
+                android:hint="备用频道一"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/wt_login_third"
+                android:textColorHint="@color/gray"
+                android:textCursorDrawable="@drawable/wt_edittext_cursor"
+                android:textSize="@dimen/wt_edittext_default_text" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/lin_channel2"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:layout_marginTop="15dp"
+            android:background="@drawable/bg_edittext_normal"
+            android:gravity="left|center"
+            android:orientation="horizontal"
+            android:padding="5dip" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp"
+                android:layout_marginRight="12dp"
+                android:gravity="center"
+                android:text="频道二" />
+
+            <TextView
+                android:id="@+id/tv_channel2"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/WHITE"
+                android:ems="10"
+                android:gravity="left|center"
+                android:hint="备用频道二"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/wt_login_third"
+                android:textColorHint="@color/gray"
+                android:textCursorDrawable="@drawable/wt_edittext_cursor"
+                android:textSize="@dimen/wt_edittext_default_text" />
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"

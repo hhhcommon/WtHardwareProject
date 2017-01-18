@@ -172,6 +172,7 @@ public class CreateGroupContentActivity extends AppBaseActivity implements OnCli
 		dialog.findViewById(R.id.tv_confirm).setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
+				try{
 				int a=pRate;
 				if(pFrequency==-1){
 					 tv_channel1.setText(frequencyList.get(1).trim());
@@ -186,6 +187,10 @@ public class CreateGroupContentActivity extends AppBaseActivity implements OnCli
 					}
 				}
 				frequencyDialog.dismiss();
+				}catch (Exception e){
+					e.printStackTrace();
+					frequencyDialog.dismiss();
+				}
 			}
 		});
 
