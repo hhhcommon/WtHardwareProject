@@ -94,6 +94,15 @@ public class IntegrationPlayer {
     }
 
     /**
+     * 更新播放列表
+     */
+    public void updatePlayList(List<LanguageSearchInside> list, int position) {
+        if(mBound && mService != null) {
+            mService.updatePlayList(list, position);
+        }
+    }
+
+    /**
      * 播放
      */
     public void startPlay(int index) {

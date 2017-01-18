@@ -210,16 +210,24 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     // 更新播放列表
     public void updatePlayList(List<LanguageSearchInside> list) {
+        updatePlayList(list, -1);
+    }
+
+    // 更新播放列表  position
+    public void updatePlayList(List<LanguageSearchInside> list, int position) {
         if(list != null) {
             if(playList != null) playList.clear();
             playList = list;
 
-            if(!isVlcPlaying && !isTtsPlaying) {// 第一次进入应用给 playerObject 赋值
+            if(position != -1) {
+                this.position = position;
+            }
+
+            if(this.position == 0 && !isVlcPlaying && !isTtsPlaying) {// 第一次进入应用给 playerObject 赋值
                 mFileInfoList = getDownList();
-                position = 0;
-                GlobalConfig.playerObject = playList.get(position);
+                GlobalConfig.playerObject = playList.get(this.position);
                 updateLocalList();
-                updatePlayViewIntent.putExtra(StringConstant.PLAY_POSITION, position);
+                updatePlayViewIntent.putExtra(StringConstant.PLAY_POSITION, this.position);
                 sendBroadcast(updatePlayViewIntent);
             }
         }
@@ -268,9 +276,8 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
             startPlay(0);
         } else {
             if (isVlcPlaying) mVlc.play();
-            else if(isBVVPlaying) {
-                mVV.resume();
-            } else playTts(httpUrl);
+            else if (isBVVPlaying) mVV.resume();
+            else playTts(httpUrl);
             if (mediaType.equals(StringConstant.TYPE_AUDIO)) {
                 mHandler.postDelayed(mUpdatePlayTimeRunnable, 1000);
             }

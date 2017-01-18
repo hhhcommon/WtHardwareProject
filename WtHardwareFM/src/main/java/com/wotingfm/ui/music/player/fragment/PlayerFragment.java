@@ -268,28 +268,30 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                         }
                         subList = clearContentPlayNull(list);// 去空
                         if (subList != null && subList.size() > 0) {
-                            mUIHandler.sendEmptyMessageDelayed(IntegerConstant.PLAY_UPDATE_LIST, 1000);
+                            mUIHandler.sendEmptyMessageDelayed(IntegerConstant.PLAY_UPDATE_LIST, 300);
                         }
                         setPullAndLoad(true, true);
                         mainPage++;
                         if (tipView.getVisibility() == View.VISIBLE)
                             tipView.setVisibility(View.GONE);
                     } else {
-                        setPullAndLoad(true, false);
                         if (refreshType == 0 && playList.size() <= 0) {
                             tipView.setVisibility(View.VISIBLE);
                             tipView.setTipView(TipView.TipStatus.NO_DATA, "数据君不翼而飞了\n点击界面会重新获取数据哟");
+                            setPullAndLoad(false, false);
                         } else {
+                            setPullAndLoad(true, false);
                             mUIHandler.sendEmptyMessageDelayed(IntegerConstant.PLAY_UPDATE_LIST, 1000);
                         }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    setPullAndLoad(true, false);
                     if (refreshType == 0 && playList.size() <= 0) {
                         tipView.setVisibility(View.VISIBLE);
                         tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                        setPullAndLoad(false, false);
                     } else {
+                        setPullAndLoad(true, false);
                         mUIHandler.sendEmptyMessageDelayed(IntegerConstant.PLAY_UPDATE_LIST, 1000);
                     }
                 }
@@ -298,11 +300,12 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
             @Override
             protected void requestError(VolleyError error) {
                 ToastUtils.showVolleyError(context);
-                setPullAndLoad(false, false);
                 if (refreshType == 0 && playList.size() <= 0) {
                     tipView.setVisibility(View.VISIBLE);
                     tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                    setPullAndLoad(false, false);
                 } else {
+                    setPullAndLoad(true, false);
                     mUIHandler.sendEmptyMessageDelayed(IntegerConstant.PLAY_UPDATE_LIST, 1000);
                 }
             }
@@ -473,7 +476,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     }
                     ArrayList<LanguageSearchInside> playerList = new ArrayList<>();
                     playerList.addAll(playList);
-                    mPlayer.updatePlayList(playerList);
+                    if(refreshType == -1) {
+                        mPlayer.updatePlayList(playerList, index);
+                    } else {
+                        mPlayer.updatePlayList(playerList);
+                    }
 
                     subList.clear();
                     break;
