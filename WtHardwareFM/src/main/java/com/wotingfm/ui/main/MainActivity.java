@@ -109,6 +109,7 @@ public class MainActivity extends TabActivity {
     private String callId, callerId;
     public static DBTalkHistorary talkdb;
     private SearchTalkHistoryDao talkDao;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -161,12 +162,11 @@ public class MainActivity extends TabActivity {
         FloatingWindow = new Intent(this, FloatingWindowService.class);//启动全局弹出框服务
         startService(FloatingWindow);
         TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
-        startService(TestFloatingWindow);
+//        startService(TestFloatingWindow);
     }
 
     //注册广播  用于接收定时服务发送过来的广播
     private void registerReceiver() {
-
 
         IntentFilter m = new IntentFilter();
         m.addAction(BroadcastConstants.PUSH_REGISTER);
@@ -201,7 +201,7 @@ public class MainActivity extends TabActivity {
                     mam.finishAllActivity();
                     tabHost.setCurrentTabByTag("three");
                 }
-            }else if (intent.getAction().equals(BroadcastConstants.PUSH)) {
+            } else if (intent.getAction().equals(BroadcastConstants.PUSH)) {
 
                 byte[] bt = intent.getByteArrayExtra("outMessage");
                 Log.e("mainActivity接收器中数据=原始数据", Arrays.toString(bt) + "");
@@ -227,20 +227,23 @@ public class MainActivity extends TabActivity {
                                             JSONObject arg1 = (JSONObject) jsonParser.nextValue();
                                             String groupList = arg1.getString("GroupList");
 
-
-                                            List<MessageForMainGroup> gList = new Gson().fromJson(groupList, new TypeToken<List<MessageForMainGroup>>() {
-                                            }.getType());
-
-                                            if (gList != null && gList.size() > 0) {
-                                                try {
-                                                    MessageForMainGroup gInfo = gList.get(0);   // 本版本（2017元旦前）暂时只获取第一条数据，后续需要修改
-                                                    groupInfo = gInfo.getGroupInfo();
+                                            try {
+                                                List<MessageForMainGroup> gList = null;
+                                                gList = new Gson().fromJson(groupList, new TypeToken<List<MessageForMainGroup>>() {
+                                                }.getType());
+                                                if (gList != null && gList.size() > 0) {
+                                                    try {
+                                                        MessageForMainGroup gInfo = gList.get(0);   // 本版本（2017元旦前）暂时只获取第一条数据，后续需要修改
+                                                        groupInfo = gInfo.getGroupInfo();
 //                                                    userIds = gInfo.getGroupEntryUserIds();
-                                                    String groupName = groupInfo.getGroupName();
-                                                    showGroup(groupName); // 展示上次存在的对讲组
-                                                } catch (Exception e) {
-                                                    e.printStackTrace();
+                                                        String groupName = groupInfo.getGroupName();
+                                                        showGroup(groupName); // 展示上次存在的对讲组
+                                                    } catch (Exception e) {
+                                                        e.printStackTrace();
+                                                    }
                                                 }
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
                                             }
                                         } catch (Exception e) {
                                             e.printStackTrace();
@@ -265,10 +268,15 @@ public class MainActivity extends TabActivity {
 
                                             JSONTokener jsonParser = new JSONTokener(news);
                                             JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                                            String callingList = arg1.getString("CallingList");
+                                            List<Data> userList = null;
+                                            try {
+                                                String callingList = arg1.getString("CallingList");
 
-                                            List<Data> userList = new Gson().fromJson(callingList, new TypeToken<List<Data>>() {
-                                            }.getType());
+                                                userList = new Gson().fromJson(callingList, new TypeToken<List<Data>>() {
+                                                }.getType());
+                                            } catch (Exception e) {
+                                                e.printStackTrace();
+                                            }
 
                                             if (userList != null && userList.size() > 0) {
                                                 Data userInfo = userList.get(0);   // 本版本（2017元旦前）暂时只获取第一条数据，后续需要修改
@@ -283,7 +291,6 @@ public class MainActivity extends TabActivity {
 //                                                                String callerInfo = arg1.getString("CallerInfo");
 //                                                                CallerInfo caller = new Gson().fromJson(callerInfo, new TypeToken<CallerInfo>() {
 //                                                                 }.getType());
-
 
                                                                 CallerInfo caller = userInfo.getCallerInfo();
                                                                 String name = caller.getUserName();

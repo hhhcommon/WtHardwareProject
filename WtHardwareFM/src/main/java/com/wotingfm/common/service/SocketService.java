@@ -490,7 +490,7 @@ public class SocketService extends Service {
 					}
 				} catch (Exception e) {
 					e.printStackTrace();
-					workStart();
+//					workStart();
 				}
 			}
 		}

@@ -31,7 +31,7 @@
                 android:layout_height="140dp"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:visibility="gone" >
+                android:visibility="visible" >
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -66,7 +66,7 @@
                 android:layout_height="140dp"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:visibility="gone" >
+                android:visibility="visible" >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -127,7 +127,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="140dp"
                 android:orientation="vertical"
-                android:visibility="gone" >
+                android:visibility="visible" >
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -314,7 +314,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="#ededed"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <com.wotingfm.widget.MyGridView
                 android:id="@+id/gridView_person"
@@ -327,7 +327,7 @@
                 android:numColumns="4"
                 android:scrollbars="none"
                 android:verticalSpacing="10dp"
-                android:visibility="gone" />
+                android:visibility="visible" />
 
             <View
                 android:layout_width="match_parent"
@@ -339,6 +339,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:animationCache="false"
+                android:visibility="gone"
                 android:scrollbars="none"
                 android:divider="@color/WHITE"
                 android:scrollingCache="false" />
