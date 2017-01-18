@@ -64,10 +64,10 @@ public class Media implements Comparable<Media> {
                 "/media/audio/ringtones",
                 "/Android/data/" };
 
-        VIDEO_EXTENSIONS = new HashSet<String>();
+        VIDEO_EXTENSIONS = new HashSet<>();
         for (String item : video_extensions)
             VIDEO_EXTENSIONS.add(item);
-        AUDIO_EXTENSIONS = new HashSet<String>();
+        AUDIO_EXTENSIONS = new HashSet<>();
         for (String item : audio_extensions)
             AUDIO_EXTENSIONS.add(item);
 
@@ -84,7 +84,7 @@ public class Media implements Comparable<Media> {
         }
         sb.append("))");
         EXTENSIONS_REGEX = sb.toString();
-        FOLDER_BLACKLIST = new HashSet<String>();
+        FOLDER_BLACKLIST = new HashSet<>();
         for (String item : folder_blacklist)
             FOLDER_BLACKLIST.add(android.os.Environment.getExternalStorageDirectory().getPath() + item);
     }
@@ -206,8 +206,6 @@ public class Media implements Comparable<Media> {
      * hard-coded dependency gracefully for 3rd party libvlc apps while still
      * maintaining good l10n in VLC for Android.
      *
-     * @see org.videolan.vlc.util.Util#getValue(String, int)
-     *
      * @param string The default string
      * @param type Alias for R.string.xxx
      * @return The default string if not empty or string from introspection
@@ -324,10 +322,6 @@ public class Media implements Comparable<Media> {
     /**
      * Returns the raw picture object. Likely to be NULL in VLC for Android
      * due to lazy-loading.
-     *
-     * Use {@link org.videolan.vlc.util.Bitmap#getPictureFromCache(Media)} instead.
-     *
-     * @return The raw picture or NULL
      */
     public Bitmap getPicture() {
         return mPicture;
@@ -335,10 +329,6 @@ public class Media implements Comparable<Media> {
 
     /**
      * Sets the raw picture object.
-     *
-     * In VLC for Android, use {@link org.videolan.vlc.MediaDatabase#setPicture(Media, Bitmap)} instead.
-     *
-     * @param p
      */
     public void setPicture(Bitmap p) {
         mPicture = p;

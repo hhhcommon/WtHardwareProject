@@ -44,6 +44,7 @@
             android:textColor="@color/wt_login_third"/>
 
         <LinearLayout
+            android:id="@+id/view_linear_1"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
@@ -89,10 +90,12 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/view_linear_2"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@color/WHITE"
+            android:layout_marginBottom="20dp"
             android:gravity="center">
 
             <TextView
@@ -151,8 +154,7 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@color/WHITE"
-            android:gravity="center"
-            android:layout_marginTop="20dp">
+            android:gravity="center">
 
             <TextView
                 android:id="@+id/text_history"

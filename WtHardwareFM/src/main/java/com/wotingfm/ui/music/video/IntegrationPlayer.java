@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.wotingfm.common.service.IntegrationPlayerService;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
+import com.wotingfm.widget.ijkvideo.IjkVideoView;
 
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class IntegrationPlayer {
     /**
      * 绑定服务
      */
-    public void bindService(Context context) {
+    public void bindService(Context context, final IjkVideoView BDAudio) {
         if(context == null) return ;
         context = context.getApplicationContext();
         if(!mBound) {
@@ -48,6 +49,8 @@ public class IntegrationPlayer {
                     IntegrationPlayerService.MyBinder mBinder = (IntegrationPlayerService.MyBinder) service;
                     mService = mBinder.getService();
                     Log.v("TAG", "Service Bind success");
+
+                    setBDAudio(BDAudio);
                 }
 
                 @Override
@@ -58,6 +61,13 @@ public class IntegrationPlayer {
             };
             mBound = context.bindService(intent, mAudioServiceConnection, Context.BIND_AUTO_CREATE);
         }
+    }
+
+    /**
+     * 设置 mVV 播放器
+     */
+    private void setBDAudio(IjkVideoView BDAudio) {
+        mService.setBDAudio(BDAudio);
     }
 
     /**
@@ -80,6 +90,15 @@ public class IntegrationPlayer {
     public void updatePlayList(List<LanguageSearchInside> list) {
         if(mBound && mService != null) {
             mService.updatePlayList(list);
+        }
+    }
+
+    /**
+     * 更新播放列表
+     */
+    public void updatePlayList(List<LanguageSearchInside> list, int position) {
+        if(mBound && mService != null) {
+            mService.updatePlayList(list, position);
         }
     }
 

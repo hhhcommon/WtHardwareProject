@@ -31,6 +31,7 @@ import com.wotingfm.ui.music.player.model.LanguageSearchInside;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.L;
 import com.wotingfm.util.ResourceUtil;
+import com.wotingfm.widget.ijkvideo.IjkVideoView;
 
 import org.videolan.libvlc.EventHandler;
 import org.videolan.libvlc.LibVLC;
@@ -41,13 +42,17 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import tv.danmaku.ijk.media.player.IjkMediaPlayer;
+
 /**
  * 集成播放器服务
  * Created by Administrator on 2016/12/14.
  */
 public class IntegrationPlayerService extends Service implements OnCacheStatusListener {
     private List<LanguageSearchInside> playList = new ArrayList<>();
+    private List<FileInfo> mFileInfoList;// 下载数据
 
+    private IjkVideoView mVV;// mVV 播放器
     private LibVLC mVlc;// VLC 播放器
     private SpeechSynthesizer mTts;// 讯飞播放 TTS
     private KSYProxyService proxyService;// 金山云缓存
@@ -55,10 +60,11 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     private MyBinder mBinder = new MyBinder();
     private AssistServiceConnection mConnection;
-    private List<FileInfo> mFileInfoList;// 下载数据
 
     private boolean isVlcPlaying;// VLC 播放器正在播放
     private boolean isTtsPlaying;// TTS 播放器正在播放
+    private boolean isBVVPlaying;// mVV 播放器正在播放
+
     private int count = 0;// 获取次数
     private int position = 0;// 当前播放节目在列表中的位置
     private long secondProgress;
@@ -70,6 +76,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     private Intent updateTimeIntent;// 更新时间
     private Intent totalTimeIntent;// 总时间
     private Intent updatePlayViewIntent;// 更新播放界面
+    private Intent updateMoreOperationViewIntent;// 更新 More View
 
     private Handler mHandler = new Handler();
 
@@ -146,6 +153,10 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
             updatePlayViewIntent = new Intent();
             updatePlayViewIntent.setAction(BroadcastConstants.UPDATE_PLAY_VIEW);
         }
+        if(updateMoreOperationViewIntent == null) {
+            updateMoreOperationViewIntent = new Intent();
+            updateMoreOperationViewIntent.setAction(BroadcastConstants.UPDATE_MORE_OPERATION_VIEW);
+        }
     }
 
     // 初始化 VLC 播放器
@@ -162,10 +173,21 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     // 初始化讯飞播放 TTS
     private void initTts() {
-        if(mTts == null){
+        if(mTts == null) {
             mTts = SpeechSynthesizer.createSynthesizer(this, null);
             setParamTTS();
         }
+    }
+
+    // 设置 mVV 播放器
+    public void setBDAudio(IjkVideoView BDAudio) {
+        try {
+            IjkMediaPlayer.loadLibrariesOnce(null);
+            IjkMediaPlayer.native_profileBegin("libijkplayer.so");
+        } catch (Throwable e) {
+            Log.e("GiraffePlayer", "loadLibraries error", e);
+        }
+        mVV = BDAudio;
     }
 
     // 更新下载列表
@@ -176,6 +198,11 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
             for(int i=0, size=mFileInfoList.size(); i<size; i++) {
                 if(mFileInfoList.get(i).getUrl().equals(GlobalConfig.playerObject.getContentPlay())) {
                     GlobalConfig.playerObject.setLocalurl(mFileInfoList.get(i).getLocalurl());
+
+                    L.w("TAG", "updateLocalList -- > " + GlobalConfig.playerObject.getLocalurl());
+
+                    sendBroadcast(updateMoreOperationViewIntent);
+                    break;
                 }
             }
         }
@@ -183,16 +210,24 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     // 更新播放列表
     public void updatePlayList(List<LanguageSearchInside> list) {
+        updatePlayList(list, -1);
+    }
+
+    // 更新播放列表  position
+    public void updatePlayList(List<LanguageSearchInside> list, int position) {
         if(list != null) {
             if(playList != null) playList.clear();
             playList = list;
-            mFileInfoList = getDownList();
 
-            if(!isVlcPlaying && !isTtsPlaying) {// 第一次进入应用给 playerObject 赋值
-                position = 0;
-                GlobalConfig.playerObject = playList.get(position);
+            if(position != -1) {
+                this.position = position;
+            }
+
+            if(this.position == 0 && !isVlcPlaying && !isTtsPlaying) {// 第一次进入应用给 playerObject 赋值
+                mFileInfoList = getDownList();
+                GlobalConfig.playerObject = playList.get(this.position);
                 updateLocalList();
-                updatePlayViewIntent.putExtra(StringConstant.PLAY_POSITION, position);
+                updatePlayViewIntent.putExtra(StringConstant.PLAY_POSITION, this.position);
                 sendBroadcast(updatePlayViewIntent);
             }
         }
@@ -206,10 +241,13 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         LanguageSearchInside playObject = playList.get(position);
         if(initPlayObject(playObject)) {
             switch (mediaType) {
-                case StringConstant.TYPE_TTS:
+                case StringConstant.TYPE_TTS:// TTS
                     playTts(httpUrl);
                     break;
-                default:
+                case StringConstant.TYPE_RADIO:// 电台
+                    playRadio(httpUrl);
+                    break;
+                default:// 单体节目
                     playAudio(httpUrl, localUrl);
                     break;
             }
@@ -225,6 +263,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     // 暂停播放
     public void pausePlay() {
         if(isVlcPlaying && mVlc.isPlaying()) mVlc.pause();
+        else if(isBVVPlaying && mVV.isPlaying()) mVV.pause();
         else if(isTtsPlaying && mTts.isSpeaking()) mTts.stopSpeaking();
         if(mediaType.equals(StringConstant.TYPE_AUDIO)) {
             if(mUpdatePlayTimeRunnable != null) mHandler.removeCallbacks(mUpdatePlayTimeRunnable);
@@ -237,6 +276,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
             startPlay(0);
         } else {
             if (isVlcPlaying) mVlc.play();
+            else if (isBVVPlaying) mVV.resume();
             else playTts(httpUrl);
             if (mediaType.equals(StringConstant.TYPE_AUDIO)) {
                 mHandler.postDelayed(mUpdatePlayTimeRunnable, 1000);
@@ -251,7 +291,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     // 是否正在播放
     public boolean isAudioPlaying() {
-        return (isVlcPlaying && mVlc.isPlaying()) || (isTtsPlaying && mTts.isSpeaking());
+        return (isVlcPlaying && mVlc.isPlaying()) || (isTtsPlaying && mTts.isSpeaking() || (isBVVPlaying && mVV.isPlaying()));
     }
 
     // 获取已经下载过的列表
@@ -280,6 +320,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     // 播放节目
     private void playAudio(String contentPlay, final String localUrl) {
         if(mTts != null && mTts.isSpeaking() && isTtsPlaying) stopTts();
+        if(mVV != null && mVV.isPlaying() && isBVVPlaying) stopRadio();
         if(mVlc == null) initVlc();
         else if(mVlc.isPlaying() && isVlcPlaying) {
             mVlc.stop();
@@ -302,12 +343,19 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
                 L.v("TAG", "contentPlay -- > > " + contentPlay);
             }
-            mVlc.playMRL(contentPlay);
+            final String url = contentPlay;
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    mVlc.playMRL(url);
+                }
+            }, 1000);
         }
         mHandler.postDelayed(mTotalTimeRunnable, 1000);
 
         isVlcPlaying = true;
         isTtsPlaying = false;
+        isBVVPlaying = false;
     }
 
     // 停止 VLC 播放
@@ -319,15 +367,48 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         }
     }
 
+    // 播放 mVV  用于播放电台
+    private void playRadio(String contentPlay) {
+        if(mVV == null) {// 如果播放器初始化失败 则用 VLC 播放电台
+            playAudio(contentPlay, null);
+            return ;
+        } else if(mVV.isPlaying() && isBVVPlaying) {
+            mVV.stopPlayback();
+        }
+        if(mTts != null && mTts.isSpeaking() && isTtsPlaying) stopTts();
+        if(mVlc != null && mVlc.isPlaying() && isVlcPlaying) stopVlc();
+
+        mVV.setVideoPath(contentPlay);
+        mVV.start();
+
+        mHandler.postDelayed(mTotalTimeRunnable, 1000);
+
+        isBVVPlaying = true;
+        isTtsPlaying = false;
+        isVlcPlaying = false;
+    }
+
+    // 电台停止播放
+    private void stopRadio() {
+        if(mVV != null && isBVVPlaying) {
+            if(mUpdatePlayTimeRunnable != null) mHandler.removeCallbacks(mUpdatePlayTimeRunnable);
+            isBVVPlaying = false;
+            mVV.stopPlayback();
+        }
+    }
+
     // 播放 TTS
     private void playTts(String contentPlay) {
         if(mVlc != null && mVlc.isPlaying() && isVlcPlaying) stopVlc();
+        if(mVV != null && mVV.isPlaying() && isBVVPlaying) stopRadio();
         if(mTts == null) initTts();
+        else if(mTts.isSpeaking() && isTtsPlaying) mTts.stopSpeaking();
         mTts.startSpeaking(contentPlay, mTtsListener);
         mHandler.postDelayed(mTotalTimeRunnable, 1000);
 
         isTtsPlaying = true;
         isVlcPlaying = false;
+        isBVVPlaying = false;
     }
 
     // 停止播放 TTS
@@ -382,7 +463,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     @Override
     public boolean onUnbind(Intent intent) {
         hideNotification();
-        recovery();
+        recycleSource();
         return super.onUnbind(intent);
     }
 
@@ -523,7 +604,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     };
 
     // 回收资源
-    private void recovery() {
+    private void recycleSource() {
         if(mUpdatePlayTimeRunnable != null) {
             mHandler.removeCallbacks(mUpdatePlayTimeRunnable);
             mUpdatePlayTimeRunnable = null;
@@ -536,6 +617,10 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
             playList.clear();
             playList = null;
         }
+        if(mFileInfoList != null) {
+            mFileInfoList.clear();
+            mFileInfoList = null;
+        }
         if(mVlc != null) {
             mVlc.stop();
             mVlc.destroy();
@@ -546,14 +631,23 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
             mTts.destroy();
             mTts = null;
         }
+        if(mVV != null) {
+            mVV.stopPlayback();
+            mVV = null;
+        }
         if(proxyService != null) {
             proxyService.shutDownServer();
             proxyService = null;
+        }
+        if(mFileDao != null) {
+            mFileDao.closeDB();
+            mFileDao = null;
         }
 
         mHandler = null;
         isVlcPlaying = false;
         isTtsPlaying = false;
+        isBVVPlaying = false;
         mBinder = null;
         mConnection = null;
         mediaType = null;

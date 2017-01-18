@@ -2,6 +2,7 @@ package com.wotingfm.ui.interphone.group.groupcontrol.grouppersonnews;
 
 import android.app.Dialog;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -16,12 +17,15 @@ import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.common.helper.CreateQRImageHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.baseactivity.AppBaseActivity;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.common.model.UserInfo;
+import com.wotingfm.ui.interphone.model.UserInviteMeInside;
 import com.wotingfm.util.AssembleImageUrlUtils;
+import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
@@ -57,6 +61,8 @@ public class GroupPersonNewsActivity extends AppBaseActivity {
     private SharedPreferences sharedPreferences = BSApplication.SharedPreferences;
     private boolean update;
     private boolean isCancelRequest;
+    private ImageView img_EWM;
+    private Bitmap bmp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,18 +74,33 @@ public class GroupPersonNewsActivity extends AppBaseActivity {
         handleIntent();
         setData();
         setListener();
+        createEWM();
     }
 
+
+    private void createEWM() {
+        UserInviteMeInside meInside = new UserInviteMeInside();
+        meInside.setUserId(num);
+        meInside.setUserName(name);
+        meInside.setDescn(descN);
+        meInside.setPortraitMini(imageUrl);
+        bmp = CreateQRImageHelper.getInstance().createQRImage(1, null, meInside, 220, 220);
+        if (bmp == null) {
+            bmp = BitmapUtils.readBitMap(context, R.mipmap.ewm);
+        }
+        img_EWM.setImageBitmap(bmp);
+    }
     private void setView() {
         lin_delete = (LinearLayout) findViewById(R.id.lin_delete);    //验证信息清空
         et_news = (EditText) findViewById(R.id.et_news);                //验证信息输入框
         tv_add = (TextView) findViewById(R.id.tv_add);                //添加好友
-        image_touxiang = (ImageView) findViewById(R.id.image_touxiang);
+        image_touxiang = (ImageView) findViewById(R.id.image_portrait);
         tv_name = (TextView) findViewById(R.id.tv_name);
         et_b_name = (EditText) findViewById(R.id.et_b_name);
         et_groupSignature = (EditText) findViewById(R.id.et_groupSignature);
         tv_id = (TextView) findViewById(R.id.tv_id);
-        image_xiugai = (ImageView) findViewById(R.id.image_xiugai);
+        image_xiugai = (ImageView) findViewById(R.id.imageView3);
+        img_EWM=(ImageView)findViewById(R.id.img_EWM);
     }
 
     private void handleIntent() {

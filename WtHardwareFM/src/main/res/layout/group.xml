@@ -4,12 +4,6 @@
     style="@style/BaseStyle"
     android:orientation="vertical">
 
-    <com.wotingfm.widget.TipView
-        android:id="@+id/tip_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:visibility="gone"/>
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="48dp">
@@ -31,9 +25,9 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:scrollbars="none"
         android:background="@color/WHITE"
-        android:orientation="vertical"
-        android:scrollbars="none">
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -43,39 +37,39 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="170dp"
-                android:background="@color/dinglan_orange"
                 android:paddingTop="12dp"
-                android:visibility="visible">
+                android:visibility="visible"
+                android:background="@color/dinglan_orange">
 
                 <ImageView
-                    android:id="@+id/imageView3"
                     android:layout_width="42dp"
                     android:layout_height="42dp"
+                    android:src="@mipmap/xiugai"
+                    android:layout_alignParentTop="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:layout_alignParentTop="true"
                     android:layout_marginLeft="10dp"
-                    android:src="@mipmap/xiugai"/>
+                    android:id="@+id/imageView3" />
 
                 <ImageView
-                    android:id="@+id/imageView4"
                     android:layout_width="40dp"
                     android:layout_height="38dp"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
+                    android:src="@mipmap/addgroup_talk"
                     android:layout_alignParentTop="true"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
                     android:layout_marginRight="10dp"
-                    android:src="@mipmap/addgroup_talk"/>
+                    android:id="@+id/imageView4" />
 
                 <RelativeLayout
                     android:id="@+id/rv_touxiang"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginBottom="25dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_toEndOf="@+id/imageView3"
                     android:layout_toRightOf="@+id/imageView3"
+                    android:layout_toEndOf="@+id/imageView3"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginBottom="25dp"
                     >
 
                     <ImageView
@@ -83,92 +77,72 @@
                         android:layout_width="75dp"
                         android:layout_height="75dp"
                         android:layout_centerInParent="true"
-                        android:scaleType="centerCrop"/>
+                        android:scaleType="centerCrop" />
 
                     <ImageView
                         android:id="@+id/head_frame"
                         android:layout_width="75dp"
                         android:layout_height="75dp"
                         android:layout_centerInParent="true"
-                        android:src="@mipmap/liubianxing_orange"/>
+                        android:src="@mipmap/liubianxing_orange" />
 
                 </RelativeLayout>
-
-                <EditText
-                    android:id="@+id/tv_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/rv_touxiang"
-                    android:layout_toEndOf="@id/rv_touxiang"
-                    android:layout_toRightOf="@id/rv_touxiang"
-                    android:layout_toLeftOf="@id/imageView4"
-                    android:background="@color/dinglan_orange"
-                    android:ellipsize="end"
-                    android:ems="10"
-                    android:enabled="false"
-                    android:gravity="center"
-                    android:maxWidth="200dp"
-                    android:singleLine="true"
-                    android:text="我听科技"
-                    android:textColor="@color/WHITE"
-                    android:textSize="13sp"/>
 
                 <EditText
                     android:id="@+id/et_b_name"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_name"
-                    android:layout_alignLeft="@id/tv_name"
-                    android:layout_alignRight="@id/tv_name"
-                    android:layout_marginTop="3dp"
-                    android:background="@color/dinglan_orange"
-                    android:enabled="false"
+                    android:ellipsize="end"
+                    android:singleLine="true"
+                    android:ems="10"
                     android:gravity="center"
-                    android:maxWidth="200dp"
-                    android:paddingLeft="30dp"
-                    android:paddingRight="30dp"
-                    android:text="群名称"
+                    android:text="我听科技"
                     android:textColor="@color/WHITE"
-                    android:textSize="12sp"
-                    />
+                    android:enabled="false"
+                    android:background="@color/dinglan_orange"
+                    android:maxWidth="200dp"
+                    android:textSize="13sp"
+                    android:layout_alignTop="@+id/rv_touxiang"
+                    android:layout_toRightOf="@+id/rv_touxiang"
+                    android:layout_toEndOf="@+id/rv_touxiang" />
 
                 <TextView
                     android:id="@+id/tv_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/tv_name"
-                    android:layout_alignRight="@id/tv_name"
-                    android:layout_below="@id/et_b_name"
-                    android:layout_marginTop="3dp"
-                    android:gravity="center"
-                    android:maxWidth="200dp"
-                    android:paddingLeft="30dp"
-                    android:paddingRight="30dp"
                     android:text="群号:100001"
                     android:textColor="@color/WHITE"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp"
+                    android:layout_marginLeft="36dp"
+                    android:layout_marginStart="36dp"
+                    android:layout_marginBottom="10dp"
+                    android:gravity="center"
+                    android:layout_above="@+id/et_groupSignature"
+                    android:layout_alignLeft="@+id/et_groupSignature"
+                    android:layout_alignStart="@+id/et_groupSignature" />
 
                 <EditText
                     android:id="@+id/et_groupSignature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_alignBottom="@id/rv_touxiang"
-                    android:layout_alignLeft="@id/tv_name"
-                    android:layout_alignRight="@id/tv_name"
                     android:background="@color/dinglan_orange"
                     android:ellipsize="end"
-                    android:ems="10"
-                    android:enabled="false"
-                    android:gravity="center"
-                    android:maxWidth="240dp"
                     android:singleLine="true"
+                    android:ems="10"
+                    android:gravity="center"
+                    android:enabled="false"
+                    android:maxWidth="240dp"
                     android:text="不忘初心，方得始终"
                     android:textColor="@color/WHITE"
-                    android:textSize="12sp"/>
+                    android:textSize="12sp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_alignBottom="@+id/rv_touxiang"
+                    android:layout_alignRight="@+id/et_b_name"
+                    android:layout_alignEnd="@+id/et_b_name" />
+
 
 
             </RelativeLayout>
-
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="0.1dp"
@@ -189,15 +163,14 @@
                     android:text="备用频道"
                     android:textColor="@color/beijing"
                     android:textSize="15sp"/>
-
                 <TextView
                     android:id="@+id/tv_pinlvxuanze"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="选择频率"
+                    android:layout_marginTop="5dp"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="15dp"
-                    android:layout_marginTop="5dp"
-                    android:text="选择频率"
                     android:textColor="@color/dinglan_orange"
                     />
 
@@ -217,9 +190,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="12dp"
                     android:layout_marginTop="30dp"
-                    android:layout_toRightOf="@id/text_channel1"
+                    android:visibility="visible"
                     android:hint="尚未选择对讲频道"
-                    android:visibility="visible"/>
+                    android:layout_toRightOf="@id/text_channel1"/>
 
                 <TextView
                     android:id="@+id/tv_channel1"
@@ -227,8 +200,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="12dp"
                     android:layout_marginTop="7dp"
-                    android:layout_toRightOf="@id/text_channel1"
                     android:visibility="visible"
+                    android:layout_toRightOf="@id/text_channel1"
                     />
 
                 <TextView
@@ -236,9 +209,9 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/text_channel1"
-                    android:layout_marginBottom="17dp"
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
+                    android:layout_marginBottom="17dp"
                     android:text="设备备用频道2: "
                     android:textColor="@color/beijing"
                     android:textSize="15sp"/>
@@ -247,11 +220,11 @@
                     android:id="@+id/text_channel_two"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignTop="@+id/text_channel2"
-                    android:layout_toEndOf="@+id/text_channel2"
-                    android:layout_toRightOf="@+id/text_channel2"
+                    android:visibility="visible"
                     android:hint="尚未选择对讲频道"
-                    android:visibility="visible"/>
+                    android:layout_alignTop="@+id/text_channel2"
+                    android:layout_toRightOf="@+id/text_channel2"
+                    android:layout_toEndOf="@+id/text_channel2" />
 
 
             </RelativeLayout>
@@ -266,7 +239,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/WHITE">
-
                 <TextView
                     android:id="@+id/tv_allperson"
                     android:layout_width="wrap_content"
@@ -298,6 +270,7 @@
                     android:src="@mipmap/live_more"/>
 
             </RelativeLayout>
+
 
 
             <com.wotingfm.widget.MyGridView
@@ -351,8 +324,8 @@
                 android:id="@+id/rl_transferauthority"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:background="@color/white">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -388,8 +361,8 @@
                 android:id="@+id/rl_modifygpassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:background="@color/white">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -426,8 +399,8 @@
                 android:id="@+id/rl_addGroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:background="@color/white">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -463,8 +436,8 @@
                 android:id="@+id/rl_vertiygroup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:visibility="gone">
+                android:visibility="gone"
+                android:background="@color/white">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -494,7 +467,6 @@
                     android:background="@color/gray_z"/>
 
             </RelativeLayout>
-
             <RelativeLayout
                 android:id="@+id/lin_ewm"
                 android:layout_width="match_parent"

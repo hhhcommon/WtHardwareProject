@@ -29,8 +29,6 @@ public class AudioOutput {
     /**
      * Java side of the audio output module for Android.
      * Uses an AudioTrack to play decoded audio buffers.
-     *
-     * TODO Use MODE_STATIC instead of MODE_STREAM with a MemoryFile (ashmem)
      */
 
     public AudioOutput() {

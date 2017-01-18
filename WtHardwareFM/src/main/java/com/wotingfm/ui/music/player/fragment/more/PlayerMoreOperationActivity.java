@@ -33,6 +33,7 @@ import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
 import com.wotingfm.ui.music.program.album.model.ContentInfo;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -50,6 +51,9 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
     private MessageReceiver mReceiver;// 廣播
     private FileInfoDao mFileDao;// 文件相关数据库
 
+    private View viewLinearOne;
+    private View viewLinearTwo;
+
     private Dialog dialog;
     private TextView textLike;// 喜歡
     private TextView textShape;// 分享
@@ -59,6 +63,7 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
     private TextView textDown;// 下載
     private TextView textSequ;// 專輯
 
+    private String contentFavorite;// 是否喜欢  == "1" 喜欢  == null or "0" 还没喜欢
     private String SequId;
     private String SequDesc;
     private String SequImage;
@@ -82,6 +87,9 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
 
     // 初始化视图
     private void initView() {
+        viewLinearOne = findViewById(R.id.view_linear_1);
+        viewLinearTwo = findViewById(R.id.view_linear_2);
+
         textPlayName = (TextView) findViewById(R.id.text_play_name);// 當前正在播放的節目名
         textLike = (TextView) findViewById(R.id.text_like);// 喜歡
         textShape = (TextView) findViewById(R.id.text_shape);// 分享
@@ -206,11 +214,20 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
 
     // 重置數據
     private void resetDate() {
-        if(GlobalConfig.playerObject == null || GlobalConfig.playerObject.getMediaType() == null) return ;
+        if(GlobalConfig.playerObject == null || GlobalConfig.playerObject.getMediaType() == null) {
+            textPlayName.setVisibility(View.GONE);
+            viewLinearOne.setVisibility(View.GONE);
+            viewLinearTwo.setVisibility(View.GONE);
+            return ;
+        }
+
+        textPlayName.setVisibility(View.VISIBLE);
+        viewLinearOne.setVisibility(View.VISIBLE);
+        viewLinearTwo.setVisibility(View.VISIBLE);
 
         // 標題
         String contentName;
-        if(GlobalConfig.playerObject != null && GlobalConfig.playerObject.getContentName() != null) {
+        if(GlobalConfig.playerObject.getContentName() != null) {
             contentName = GlobalConfig.playerObject.getContentName();
         } else {
             contentName = "未知";
@@ -219,7 +236,7 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
 
         // 播放類型
         String mediaType = GlobalConfig.playerObject.getMediaType();
-        if(mediaType != null && mediaType.equals(StringConstant.TYPE_RADIO)) {
+        if(mediaType.equals(StringConstant.TYPE_RADIO)) {
             textDetails.setVisibility(View.GONE);// 詳情
             textProgram.setVisibility(View.VISIBLE);// 播单
             textSequ.setVisibility(View.INVISIBLE);// 專輯
@@ -230,7 +247,7 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
             textSequ.setVisibility(View.VISIBLE);// 專輯
             textDown.setVisibility(View.VISIBLE);// 下载
 
-            if(mediaType != null && mediaType.equals(StringConstant.TYPE_TTS)) {
+            if(mediaType.equals(StringConstant.TYPE_TTS)) {
                 textComment.setClickable(false);
                 textComment.setEnabled(false);
                 textComment.setTextColor(context.getResources().getColor(R.color.gray));
@@ -244,8 +261,8 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
         }
 
         // 喜欢状态
-        String contentFavorite = GlobalConfig.playerObject.getContentFavorite();
-        if(mediaType != null && mediaType.equals(StringConstant.TYPE_TTS)) {// TTS 不支持喜欢
+        contentFavorite = GlobalConfig.playerObject.getContentFavorite();
+        if(mediaType.equals(StringConstant.TYPE_TTS)) {// TTS 不支持喜欢
             textLike.setClickable(false);
             textLike.setEnabled(false);
             textLike.setText("喜欢");
@@ -256,16 +273,18 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
             textLike.setEnabled(true);
             textLike.setTextColor(getResources().getColor(R.color.wt_login_third));
             if(contentFavorite == null || contentFavorite.equals("0")) {
+                contentFavorite = "0";
                 textLike.setText("喜欢");
                 textLike.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.mipmap.wt_image_play_more_like), null, null);
             } else {
+                contentFavorite = "1";
                 textLike.setText("已喜欢");
                 textLike.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.mipmap.wt_image_play_more_liked), null, null);
             }
         }
 
         // 下載狀態
-        if (mediaType != null && mediaType.equals(StringConstant.TYPE_AUDIO)) {// 可以下载
+        if (mediaType.equals(StringConstant.TYPE_AUDIO)) {// 可以下载
             if(!TextUtils.isEmpty(GlobalConfig.playerObject.getLocalurl())) {// 已下载
                 textDown.setClickable(false);
                 textDown.setEnabled(false);
@@ -279,7 +298,7 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
                 textDown.setTextColor(getResources().getColor(R.color.wt_login_third));
                 textDown.setText("下载");
             }
-        } else if(mediaType != null && mediaType.equals(StringConstant.TYPE_TTS)) {// 不可以下载
+        } else if(mediaType.equals(StringConstant.TYPE_TTS)) {// 不可以下载
             textDown.setClickable(false);
             textDown.setEnabled(false);
             textDown.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.mipmap.wt_image_play_more_down_gray), null, null);
@@ -295,11 +314,8 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
         try {
             jsonObject.put("MediaType", GlobalConfig.playerObject.getMediaType());
             jsonObject.put("ContentId", GlobalConfig.playerObject.getContentId());
-            if (GlobalConfig.playerObject.getContentFavorite().equals("0")) {
-                jsonObject.put("Flag", 1);
-            } else {
-                jsonObject.put("Flag", 0);
-            }
+            if (contentFavorite.equals("0")) jsonObject.put("Flag", 1);
+            else jsonObject.put("Flag", 0);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -311,14 +327,16 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
                 try {
                     String returnType = result.getString("ReturnType");
                     if (returnType != null && (returnType.equals("1001") || returnType.equals("1005"))) {
-                        if (GlobalConfig.playerObject.getContentFavorite().equals("0")) {
+                        if (contentFavorite.equals("0")) {
                             textLike.setText("已喜欢");
                             textLike.setCompoundDrawablesWithIntrinsicBounds(null, context.getResources().getDrawable(R.mipmap.wt_image_play_more_liked), null, null);
                             GlobalConfig.playerObject.setContentFavorite("1");
+                            contentFavorite = "1";
                         } else {
                             textLike.setText("喜欢");
                             textLike.setCompoundDrawablesWithIntrinsicBounds(null, context.getResources().getDrawable(R.mipmap.wt_image_play_more_like), null, null);
                             GlobalConfig.playerObject.setContentFavorite("0");
+                            contentFavorite = "0";
                         }
                     } else {
                         ToastUtils.show_always(context, "数据出错了，请您稍后再试!");
@@ -433,7 +451,8 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
         if (mReceiver == null) {
             mReceiver = new MessageReceiver();
             IntentFilter filter = new IntentFilter();
-            filter.addAction(BroadcastConstants.UPDATE_PLAY_VIEW);// 更新界面
+            filter.addAction(BroadcastConstants.UPDATE_PLAY_VIEW);
+            filter.addAction(BroadcastConstants.UPDATE_MORE_OPERATION_VIEW);// 更新界面
             context.registerReceiver(mReceiver, filter);
         }
     }
@@ -443,7 +462,11 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
-                case BroadcastConstants.UPDATE_PLAY_VIEW:// 更新界面
+                case BroadcastConstants.UPDATE_PLAY_VIEW:
+                    resetDate();// 設置 View
+                    break;
+                case BroadcastConstants.UPDATE_MORE_OPERATION_VIEW:// 更新界面
+                    L.w("TAG", "updateLocalList -- > " + GlobalConfig.playerObject.getLocalurl());
                     resetDate();// 設置 View
                     break;
             }
