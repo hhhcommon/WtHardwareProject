@@ -272,8 +272,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                         }
                         setPullAndLoad(true, true);
                         mainPage++;
-                        if (tipView.getVisibility() == View.VISIBLE)
-                            tipView.setVisibility(View.GONE);
+                        if (tipView.getVisibility() == View.VISIBLE) tipView.setVisibility(View.GONE);
                     } else {
                         if (refreshType == 0 && playList.size() <= 0) {
                             tipView.setVisibility(View.VISIBLE);
@@ -338,10 +337,10 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case BroadcastConstants.PLAY_TEXT_VOICE_SEARCH:// 文字搜索
+                    sendTextContent = intent.getStringExtra(StringConstant.TEXT_CONTENT);
                     mainPage = 1;
                     refreshType = 0;
                     requestType = StringConstant.PLAY_REQUEST_TYPE_SEARCH_TEXT;
-                    sendTextContent = intent.getStringExtra(StringConstant.TEXT_CONTENT);
                     new Handler().postDelayed(new Runnable() {
                         @Override
                         public void run() {

@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
+import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
-import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
@@ -71,8 +71,8 @@ public class PlayerListAdapter extends BaseAdapter {
             // 节目信息
             holder.imageRankImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
             holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
-            holder.textRankContent = (TextView) convertView.findViewById(R.id.RankContent);// 来源
-            holder.imagePub = (ImageView) convertView.findViewById(R.id.image_pub);// 来源小图标
+            holder.textRankContent = (TextView) convertView.findViewById(R.id.RankContent);// 来源 -> 专辑
+            holder.imagePub = (ImageView) convertView.findViewById(R.id.image_pub);// 小图标
 
             convertView.setTag(holder);
         } else {
@@ -124,18 +124,23 @@ public class PlayerListAdapter extends BaseAdapter {
             }
             holder.textRankTitle.setText(contentName);
 
-            // 节目来源
-            String contentPub = searchList.getContentPub();
-            if (contentPub == null || contentPub.equals("")) {
-                contentPub = "未知";
-            }
+            // 节目来源 -> 专辑
             if(mediaType != null && mediaType.equals(StringConstant.TYPE_RADIO)) {
+                String contentPub = searchList.getContentPub();
+                if (contentPub == null || contentPub.equals("")) {
+                    contentPub = "未知";
+                }
                 contentPub = "正在直播：" + contentPub;
                 holder.imagePub.setVisibility(View.GONE);
+                holder.textRankContent.setText(contentPub);
             } else {
+                String contentSequName = searchList.getSequName();
+                if(contentSequName == null || contentSequName.equals("")) {
+                    contentSequName = "未知";
+                }
                 holder.imagePub.setVisibility(View.VISIBLE);
+                holder.textRankContent.setText(contentSequName);
             }
-            holder.textRankContent.setText(contentPub);
         }
         return convertView;
     }
@@ -146,7 +151,7 @@ public class PlayerListAdapter extends BaseAdapter {
         public ImageView imageCoverMask;// 六边形封面图片遮罩
         public ImageView imageRankImage;// 封面图片
         public TextView textRankTitle;// 节目标题
-        public TextView textRankContent;// 来源
-        public ImageView imagePub;// 来源小图标
+        public TextView textRankContent;// 来源 -> 专辑
+        public ImageView imagePub;// 小图标
     }
 }

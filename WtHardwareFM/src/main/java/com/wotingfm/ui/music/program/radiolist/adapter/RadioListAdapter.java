@@ -54,7 +54,7 @@ public class RadioListAdapter extends BaseAdapter  {
 
             holder.imageRank = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 封面图片
             holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);// 节目名
-            holder.textRankPlaying = (TextView) convertView.findViewById(R.id.RankPlaying);// 来源
+            holder.textRankPlaying = (TextView) convertView.findViewById(R.id.RankPlaying);// 来源 -> 专辑
             holder.textNumber = (TextView) convertView.findViewById(R.id.tv_num);// 收听次数
             holder.textLast = (TextView) convertView.findViewById(R.id.tv_time);// 时长 OR 集数
             holder.imageLast = (ImageView) convertView.findViewById(R.id.image_last);// 时长 OR 集数 图标
@@ -82,15 +82,17 @@ public class RadioListAdapter extends BaseAdapter  {
 
         // 节目名
         String contentName = lists.getContentName();
-        if (contentName != null && !contentName.equals("")) {
-            holder.textRankTitle.setText(contentName);
+        if (contentName == null || contentName.equals("")) {
+            contentName = "未知";
         }
+        holder.textRankTitle.setText(contentName);
 
-        // 来源
-        String contentPub = lists.getContentPub();
-        if (contentPub != null && !contentPub.equals("")) {
-            holder.textRankPlaying.setText(contentPub);
+        // 来源 -> 专辑
+        String contentSequ = lists.getSequName();
+        if (contentSequ == null || contentSequ.equals("")) {
+            contentSequ = "未知";
         }
+        holder.textRankPlaying.setText(contentSequ);
 
         // 收听次数
         String playCount = lists.getPlayCount();
@@ -143,7 +145,7 @@ public class RadioListAdapter extends BaseAdapter  {
         public ImageView imageMask;// 六边形封面遮罩
         public ImageView imageRank;// 封面图片
         public TextView textRankTitle;// 节目名
-        public TextView textRankPlaying;// 来源
+        public TextView textRankPlaying;// 来源 -> 专辑
         public TextView textNumber;// 收听次数
         public TextView textLast;// 时长 OR 集数
         public ImageView imageLast;// 时长 OR 集数 图标

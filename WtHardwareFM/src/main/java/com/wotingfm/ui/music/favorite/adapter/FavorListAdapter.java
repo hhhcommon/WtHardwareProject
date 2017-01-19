@@ -23,7 +23,6 @@ public class FavorListAdapter extends BaseAdapter {
     private List<RankInfo> list;
     private Context context;
     private FavoriteCheck favoriteCheck;
-    private String url;
 
     public FavorListAdapter(Context context, List<RankInfo> list) {
         this.context = context;
@@ -79,13 +78,11 @@ public class FavorListAdapter extends BaseAdapter {
         if (contentImage == null || contentImage.equals("null") || contentImage.trim().equals("")) {
             holder.imageRankImage.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx_d));
         } else {
-            if (contentImage.startsWith("http:")) {
-                url = contentImage;
-            } else {
-                url = GlobalConfig.imageurl + contentImage;
+            if (!contentImage.startsWith("http:")) {
+                contentImage = GlobalConfig.imageurl + contentImage;
             }
-            url = AssembleImageUrlUtils.assembleImageUrl150(url);
-            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageRankImage);
+            contentImage = AssembleImageUrlUtils.assembleImageUrl150(contentImage);
+            Picasso.with(context).load(contentImage.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageRankImage);
         }
 
         // 节目名
@@ -94,15 +91,20 @@ public class FavorListAdapter extends BaseAdapter {
             holder.textRankTitle.setText(contentName);
         }
 
-        // 来源
-        if(mediaType.equals("RADIO")) {
-            if (lists.getCurrentContent() != null && !lists.getCurrentContent().equals("")) {
-                holder.textRankContent.setText("正在直播：" + lists.getCurrentContent());
+        // 来源 -> 专辑
+        if (mediaType.equals("RADIO")) {
+            String currentContent = lists.getCurrentContent();
+            if (currentContent == null || currentContent.equals("")) {
+                currentContent = "未知";
             }
+            currentContent = "正在直播：" + currentContent;
+            holder.textRankContent.setText(currentContent);
         } else {
-            if (lists.getContentPub() != null && !lists.getContentPub().equals("")) {
-                holder.textRankContent.setText(lists.getContentPub());
+            String contentSequ = lists.getSequName();
+            if (contentSequ == null || contentSequ.equals("")) {
+                contentSequ = "未知";
             }
+            holder.textRankContent.setText(contentSequ);
         }
 
         // 收听次数
@@ -111,10 +113,10 @@ public class FavorListAdapter extends BaseAdapter {
             watchNum = "1234";
         }
         float playCount = Float.valueOf(watchNum);
-        if(playCount > 10000) {
+        if (playCount > 10000) {
             playCount = playCount / 10000;
             watchNum = playCount + "万";
-            if(playCount >= 10000) {
+            if (playCount >= 10000) {
                 playCount = playCount / 10000;
                 watchNum = playCount + "亿";
             }
@@ -148,14 +150,14 @@ public class FavorListAdapter extends BaseAdapter {
 
                 // 节目时长
                 String contentTime = lists.getContentTimes();
-                if (contentTime == null|| contentTime.equals("") || contentTime.equals("null")) {
+                if (contentTime == null || contentTime.equals("") || contentTime.equals("null")) {
                     holder.textLast.setText(context.getString(R.string.play_time));
                 } else {
                     int minute = Integer.valueOf(contentTime) / (1000 * 60);
                     int second = (Integer.valueOf(contentTime) / 1000) % 60;
-                    if(second < 10){
+                    if (second < 10) {
                         holder.textLast.setText(minute + "\'" + " " + "0" + second + "\"");
-                    }else{
+                    } else {
                         holder.textLast.setText(minute + "\'" + " " + second + "\"");
                     }
                 }

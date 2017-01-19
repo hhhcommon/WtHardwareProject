@@ -42,7 +42,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class CityRadioActivity extends BaseActivity implements View.OnClickListener {
     private ImageView head_left_btn;
     private TextView mTextView_Head;
@@ -65,7 +64,6 @@ public class CityRadioActivity extends BaseActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_radio_nation);
-        context = this;
         setView();
         handleIntent();
         setListener();
@@ -95,14 +93,6 @@ public class CityRadioActivity extends BaseActivity implements View.OnClickListe
         } else {
             ToastUtils.show_always(this, "网络连接失败，请稍后重试");
         }
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-
     }
 
     private void send() {
@@ -162,7 +152,6 @@ public class CityRadioActivity extends BaseActivity implements View.OnClickListe
                         e.printStackTrace();
                     }
                 } else {
-
                     ToastUtils.show_always(context, "已经没有相关数据啦");
                 }
             }
@@ -300,7 +289,6 @@ public class CityRadioActivity extends BaseActivity implements View.OnClickListe
                 }
             }
         });
-
     }
 
     private JSONObject setParam() {
@@ -389,8 +377,6 @@ public class CityRadioActivity extends BaseActivity implements View.OnClickListe
         });
     }
 
-
-
     private void setView() {
         mListView = (ExpandableListView) findViewById(R.id.listview_fm);
         mlistView_main=(ListView)findViewById(R.id.listview_lv);
@@ -438,7 +424,6 @@ public class CityRadioActivity extends BaseActivity implements View.OnClickListe
             SubList = null;
         }
         adapter = null;
-        context = null;
         setContentView(R.layout.activity_null);
     }
 }

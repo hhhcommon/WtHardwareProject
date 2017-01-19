@@ -49,15 +49,18 @@ public class RecommendListAdapter extends BaseAdapter {
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fragment_recommend, null);
             holder = new ViewHolder();
-            holder.textview_ranktitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
-            holder.imageview_rankimage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
-            holder.textRankContent = (TextView) convertView.findViewById(R.id.RankContent);
 
-            holder.img_zhezhao = (ImageView) convertView.findViewById(R.id.img_zhezhao);
-            Bitmap bmp_zhezhao = BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b);
-            holder.img_zhezhao.setImageBitmap(bmp_zhezhao);
+            // 六边形封面图片遮罩
+            Bitmap bitmapMask = BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b);
+            holder.imageCoverMask = (ImageView) convertView.findViewById(R.id.img_zhezhao);
+            holder.imageCoverMask.setImageBitmap(bitmapMask);
 
-            bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
+            bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);// 封面图片的默认图片
+            holder.imageCover = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 封面图片
+
+            holder.textTitle = (TextView) convertView.findViewById(R.id.RankTitle);// 标题
+            holder.textContent = (TextView) convertView.findViewById(R.id.RankContent);// 来源 -> 专辑
+
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -70,34 +73,34 @@ public class RecommendListAdapter extends BaseAdapter {
         if (contentName == null || contentName.equals("")) {
             contentName = "未知";
         }
-        holder.textview_ranktitle.setText(contentName);
+        holder.textTitle.setText(contentName);
 
         // 封面图片
         String contentImg = lists.getContentImg();
         if (contentImg == null || contentImg.equals("null")|| contentImg.trim().equals("")) {
-            holder.imageview_rankimage.setImageBitmap(bmp);
+            holder.imageCover.setImageBitmap(bmp);
         } else {
             if(!contentImg.startsWith("http")){
                 contentImg = GlobalConfig.imageurl + contentImg;
             }
             contentImg= AssembleImageUrlUtils.assembleImageUrl150(contentImg);
-            Picasso.with(context).load(contentImg.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageview_rankimage);
+            Picasso.with(context).load(contentImg.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageCover);
         }
 
-        // 来源
-        String contentPub = lists.getContentPub();
-        if (contentPub == null || contentPub.equals("") || contentPub.equals("null")) {
-            contentPub = "未知";
+        // 来源 -> 专辑
+        String contentSequ = lists.getSequName();
+        if (contentSequ == null || contentSequ.equals("") || contentSequ.equals("null")) {
+            contentSequ = "未知";
         }
-        holder.textRankContent.setText(contentPub);
+        holder.textContent.setText(contentSequ);
 
         return convertView;
     }
 
     class  ViewHolder {
-        public ImageView imageview_rankimage;
-        public TextView textview_ranktitle;
-        public TextView textRankContent;
-        public ImageView img_zhezhao;
+        public ImageView imageCoverMask;// 六边形封面图片遮罩
+        public ImageView imageCover;// 封面图片
+        public TextView textTitle;// 标题
+        public TextView textContent;// 来源 -> 专辑
     }
 }

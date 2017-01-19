@@ -37,9 +37,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-
 public class RadioNationalActivity extends BaseActivity implements View.OnClickListener {
-
     private ImageView head_left_btn;
     private TextView mTextView_Head;
     private Dialog dialog;
@@ -56,7 +54,6 @@ public class RadioNationalActivity extends BaseActivity implements View.OnClickL
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_radio_nation);
-        context = this;
         setView();
         setListener();
         initDao();
@@ -107,11 +104,9 @@ public class RadioNationalActivity extends BaseActivity implements View.OnClickL
                             } else {
                                 adapter.notifyDataSetChanged();
                             }
-
                             for (int i = 0; i < SubList.size(); i++) {
                                 mListView.expandGroup(i);
                             }
-
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -120,7 +115,6 @@ public class RadioNationalActivity extends BaseActivity implements View.OnClickL
                         e.printStackTrace();
                     }
                 } else {
-
                     ToastUtils.show_always(context,"已经没有相关数据啦");
                 }
             }
@@ -219,8 +213,6 @@ public class RadioNationalActivity extends BaseActivity implements View.OnClickL
         });
     }
 
-
-
     private void setView() {
         mListView = (ExpandableListView) findViewById(R.id.listview_fm);
         head_left_btn = (ImageView) findViewById(R.id.head_left_btn);
@@ -268,7 +260,6 @@ public class RadioNationalActivity extends BaseActivity implements View.OnClickL
             SubList = null;
         }
         adapter = null;
-        context = null;
         setContentView(R.layout.activity_null);
     }
 }

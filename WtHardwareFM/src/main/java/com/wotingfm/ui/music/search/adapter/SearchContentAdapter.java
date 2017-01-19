@@ -102,7 +102,7 @@ public class SearchContentAdapter extends BaseExpandableListAdapter {
             holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
             holder.imagePlaying = (ImageView) convertView.findViewById(R.id.image_playing);// 来源小图标
             holder.textPlaying = (TextView) convertView.findViewById(R.id.text_playing);// "正在直播"
-            holder.textRankPlaying = (TextView) convertView.findViewById(R.id.RankPlaying);// 正在播放的节目
+            holder.textRankPlaying = (TextView) convertView.findViewById(R.id.RankPlaying);// 来源 -> 专辑
             holder.imageRankImage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
             holder.textNumber = (TextView) convertView.findViewById(R.id.tv_num);// 收听次数
             holder.textLast = (TextView) convertView.findViewById(R.id.tv_last);// 时长 OR 集数
@@ -153,16 +153,19 @@ public class SearchContentAdapter extends BaseExpandableListAdapter {
             Picasso.with(context).load(url1.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageRankImage);
         }
 
-        // 来源
+        // 来源 -> 专辑
         if(mediaType.equals("RADIO")) {
-            if (lists.getCurrentContent() != null && !lists.getCurrentContent().equals("")) {
-//                holder.textRankPlaying.setText(lists.getCurrentContent());
-                holder.textRankPlaying.setText(lists.getCurrentContent());
+            String currentContent = lists.getCurrentContent();
+            if (currentContent == null || currentContent.equals("")) {
+                currentContent = "未知";
             }
+            holder.textRankPlaying.setText(currentContent);
         } else {
-            if (lists.getContentPub() != null && !lists.getContentPub().equals("")) {
-                holder.textRankPlaying.setText(lists.getContentPub());
+            String contentSequ = lists.getSequName();
+            if (contentSequ == null || contentSequ.equals("")) {
+                contentSequ = "未知";
             }
+            holder.textRankPlaying.setText(contentSequ);
         }
 
         switch (mediaType) {
@@ -223,7 +226,7 @@ public class SearchContentAdapter extends BaseExpandableListAdapter {
         public ImageView imageRankImage;// 图标
         public ImageView imagePlaying;// 来源小图标
         public TextView textPlaying;// "正在直播"
-        public TextView textRankPlaying;// 正在播放的节目
+        public TextView textRankPlaying;// 来源 -> 专辑
         public TextView textRankTitle;// 台名
         public TextView textName;
         public TextView textNumber;// 收听次数

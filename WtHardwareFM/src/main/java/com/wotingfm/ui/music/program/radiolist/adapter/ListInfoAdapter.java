@@ -17,52 +17,52 @@ import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
 
-public class ListInfoAdapter extends BaseAdapter  {
-	private List<ListInfo> list;
-	private Context context;
+public class ListInfoAdapter extends BaseAdapter {
+    private List<ListInfo> list;
+    private Context context;
 
-	public ListInfoAdapter(Context context, List<ListInfo> list) {
-		this.context = context;
-		this.list = list;
-	}
+    public ListInfoAdapter(Context context, List<ListInfo> list) {
+        this.context = context;
+        this.list = list;
+    }
 
-	@Override
-	public int getCount() {
-		return list.size();
-	}
+    @Override
+    public int getCount() {
+        return list.size();
+    }
 
-	@Override
-	public Object getItem(int position) {
-		return list.get(position);
-	}
+    @Override
+    public Object getItem(int position) {
+        return list.get(position);
+    }
 
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		ViewHolder holder;
-		if (convertView == null) {
-			holder = new ViewHolder();
-			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_item_radiolist, parent, false);
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder holder;
+        if (convertView == null) {
+            holder = new ViewHolder();
+            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_item_radiolist, parent, false);
 
             // 六边形封面遮罩
             holder.imageMask = (ImageView) convertView.findViewById(R.id.image_mask);
             holder.imageMask.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b));
 
             holder.imageRank = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 封面图片
-			holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);// 节目名
-            holder.textRankPlaying = (TextView) convertView.findViewById(R.id.RankPlaying);// 来源
-			holder.textNumber = (TextView) convertView.findViewById(R.id.tv_num);// 收听次数
-			holder.textLast = (TextView) convertView.findViewById(R.id.tv_time);// 时长 OR 集数
+            holder.textRankTitle = (TextView) convertView.findViewById(R.id.RankTitle);// 节目名
+            holder.textRankPlaying = (TextView) convertView.findViewById(R.id.RankPlaying);// 来源 -> 专辑
+            holder.textNumber = (TextView) convertView.findViewById(R.id.tv_num);// 收听次数
+            holder.textLast = (TextView) convertView.findViewById(R.id.tv_time);// 时长 OR 集数
             holder.imageLast = (ImageView) convertView.findViewById(R.id.image_last);// 时长 OR 集数 图标
-			convertView.setTag(holder);
-		} else {
-			holder = (ViewHolder) convertView.getTag();
-		}
-		ListInfo lists = list.get(position);
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
+        }
+        ListInfo lists = list.get(position);
         String mediaType = lists.getMediaType();
 
         // 封面图片
@@ -71,9 +71,9 @@ public class ListInfoAdapter extends BaseAdapter  {
             holder.imageRank.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx));
         } else {
             String url;
-            if(lists.getContentImg().startsWith("http")){
-                url =  contentImage;
-            }else{
+            if (lists.getContentImg().startsWith("http")) {
+                url = contentImage;
+            } else {
                 url = GlobalConfig.imageurl + contentImage;
             }
             url = AssembleImageUrlUtils.assembleImageUrl150(url);
@@ -82,33 +82,35 @@ public class ListInfoAdapter extends BaseAdapter  {
 
         // 节目名
         String contentName = lists.getContentName();
-		if (contentName != null && !contentName.equals("")) {
-            holder.textRankTitle.setText(contentName);
-		}
-
-        // 来源
-        String contentPub = lists.getContentPub();
-        if (contentPub != null && !contentPub.equals("")) {
-            holder.textRankPlaying.setText(contentPub);
+        if (contentName == null || contentName.equals("")) {
+            contentName = "未知";
         }
+        holder.textRankTitle.setText(contentName);
+
+        // 来源 -> 专辑
+        String contentSequ = lists.getSequName();
+        if (contentSequ == null || contentSequ.equals("")) {
+            contentSequ = "未知";
+        }
+        holder.textRankPlaying.setText(contentSequ);
 
         // 收听次数
         String playCount = lists.getPlayCount();
-		if (playCount == null || playCount.equals("")) {
+        if (playCount == null || playCount.equals("")) {
             playCount = "1234";
-		}
+        }
         Float count = Float.valueOf(playCount);
-        if(count > 10000) {
+        if (count > 10000) {
             count = count / 10000;
             playCount = count + "万";
-            if(count > 10000) {
+            if (count > 10000) {
                 count = count / 10000;
                 playCount = count + "亿";
             }
         }
         holder.textNumber.setText(playCount);
 
-        if(mediaType != null) {
+        if (mediaType != null) {
             switch (mediaType) {
                 case "SEQU":
                     // 集数
@@ -126,9 +128,9 @@ public class ListInfoAdapter extends BaseAdapter  {
                     if (contentTime != null && !contentTime.equals("")) {
                         int minute = Integer.valueOf(contentTime) / (1000 * 60);
                         int second = (Integer.valueOf(contentTime) / 1000) % 60;
-                        if(second < 10){
+                        if (second < 10) {
                             contentTime = minute + "\'" + " " + "0" + second + "\"";
-                        }else{
+                        } else {
                             contentTime = minute + "\'" + " " + second + "\"";
                         }
                         holder.textLast.setText(contentTime);
@@ -136,16 +138,16 @@ public class ListInfoAdapter extends BaseAdapter  {
                     break;
             }
         }
-		return convertView;
-	}
+        return convertView;
+    }
 
     private class ViewHolder {
         public ImageView imageMask;// 六边形封面遮罩
-		public ImageView imageRank;// 封面图片
-		public TextView textRankTitle;// 节目名
-        public TextView textRankPlaying;// 来源
-		public TextView textNumber;// 收听次数
-		public TextView textLast;// 时长 OR 集数
+        public ImageView imageRank;// 封面图片
+        public TextView textRankTitle;// 节目名
+        public TextView textRankPlaying;// 来源 -> 专辑
+        public TextView textNumber;// 收听次数
+        public TextView textLast;// 时长 OR 集数
         public ImageView imageLast;// 时长 OR 集数 图标
     }
 }
