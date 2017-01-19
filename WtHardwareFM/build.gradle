@@ -10,8 +10,8 @@ android {
         applicationId "com.wotingfm"
         minSdkVersion 11
         targetSdkVersion 21
-        versionCode 1
-        versionName "1.0.0.X.001"
+        versionCode 27
+        versionName "1.0.0.X.0027"
 
         multiDexEnabled true
     }

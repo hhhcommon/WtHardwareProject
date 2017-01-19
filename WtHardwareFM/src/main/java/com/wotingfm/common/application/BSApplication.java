@@ -12,7 +12,9 @@ import com.kingsoft.media.httpcache.OnErrorListener;
 import com.kingsoft.media.httpcache.stats.OnLogEventListener;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.config.SocketClientConfig;
+import com.wotingfm.common.helper.CollocationHelper;
 import com.wotingfm.common.helper.CommonHelper;
+import com.wotingfm.common.helper.CrashHandler;
 import com.wotingfm.util.PhoneMessage;
 
 import java.util.ArrayList;
@@ -34,7 +36,11 @@ public class BSApplication extends Application implements OnErrorListener,OnLogE
     public void onCreate() {
         super.onCreate();
         instance = this;
+        CrashHandler handler = CrashHandler.getInstance();
+        handler.init(getApplicationContext());
+
         SharedPreferences = this.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
+        CollocationHelper.setCollocation();  //设置配置文件
 
         queues = Volley.newRequestQueue(this);    // 初始化网络请求
         PhoneMessage.getPhoneInfo(instance);      // 获取手机信息
