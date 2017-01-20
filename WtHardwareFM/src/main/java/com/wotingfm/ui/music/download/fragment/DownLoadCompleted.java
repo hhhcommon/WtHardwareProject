@@ -52,12 +52,12 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
     private ListView mListView;
     private ImageView imageAllCheck;
 
-    private List<FileInfo> fileSequList;// 专辑list
-    private List<FileInfo> fileDellList;// 删除list
+    private List<FileInfo> fileSequList;// 专辑 list
+    private List<FileInfo> fileDellList;// 删除 list
 
     private String userId;
     private boolean flag;// 删除按钮的处理框
-    private boolean allCheckFlag;// 全选flag
+    private boolean allCheckFlag;// 全选 flag
 
     private void initDao() {
         FID = new FileInfoDao(context);
@@ -76,12 +76,13 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
         rootView = inflater.inflate(R.layout.fragment_download_completed, container, false);
 
         initDao();
-        setView();
+        initView();
         setDownLoadSource();
         return rootView;
     }
 
-    private void setView() {
+    // 初始化视图
+    private void initView() {
         relativeDownload = (RelativeLayout) rootView.findViewById(R.id.wt_download_rv);
         mListView = (ListView) rootView.findViewById(R.id.listView);
 
@@ -140,7 +141,7 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
     private void setInterface() {
         adapter.setOnListener(new DownLoadSequAdapter.downloadSequCheck() {
             @Override
-            public void checkposition(int position) {
+            public void checkPosition(int position) {
                 if (fileSequList.get(position).getChecktype() == 0) {
                     fileSequList.get(position).setChecktype(1);
                 } else {
@@ -231,7 +232,7 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
                     FID.deleteSequ(fileDellList.get(i).getSequname(), userId);
                 }
                 setDownLoadSource();// 重新适配界面操作
-                allCheckFlag = false;// 全选flag
+                allCheckFlag = false;// 全选 flag
                 flag = false;
                 linearAllCheck.setVisibility(View.INVISIBLE);
             case R.id.tv_cancle:

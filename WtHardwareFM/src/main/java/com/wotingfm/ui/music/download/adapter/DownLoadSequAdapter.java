@@ -118,14 +118,14 @@ public class DownLoadSequAdapter extends BaseAdapter {
 
             @Override
             public void onClick(View v) {
-                downloadCheck.checkposition(position);
+                downloadCheck.checkPosition(position);
             }
         });
         return convertView;
     }
 
     public interface downloadSequCheck {
-        void checkposition(int position);
+        void checkPosition(int position);
     }
 
     private class ViewHolder {

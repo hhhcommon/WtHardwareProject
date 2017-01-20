@@ -39,7 +39,7 @@ public class DownloadActivity extends AppBaseFragmentActivity implements OnClick
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_download);
-        setView();
+        initView();
         initViewPager();
     }
 
@@ -50,14 +50,15 @@ public class DownloadActivity extends AppBaseFragmentActivity implements OnClick
     }
 
     // 设置界面
-    private void setView() {
-        findViewById(R.id.lin_news).setOnClickListener(this);
+    private void initView() {
+        findViewById(R.id.lin_news).setOnClickListener(this);// 返回
 
         textCompleted = (TextView) findViewById(R.id.tv_completed);
         textUncompleted = (TextView) findViewById(R.id.tv_uncompleted);
         mViewPager = (ViewPager) findViewById(R.id.viewpager);
     }
 
+    // 初始化 ViewPager
     private void initViewPager() {
         ArrayList<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(new DownLoadCompleted());
