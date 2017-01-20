@@ -11,8 +11,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -45,6 +43,7 @@ import com.wotingfm.common.manager.FileManager;
 import com.wotingfm.common.manager.MyHttp;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.common.model.UserInfo;
 import com.wotingfm.ui.common.photocut.PhotoCutActivity;
 import com.wotingfm.ui.common.qrcode.EWMShowActivity;
@@ -76,8 +75,7 @@ import java.util.regex.Pattern;
 /**
  * 个人信息主页
  */
-public class MineActivity extends Activity implements OnClickListener {
-    private MineActivity context;
+public class MineActivity extends BaseActivity implements OnClickListener {
     public static BluetoothAdapter blueAdapter = BluetoothAdapter.getDefaultAdapter();
     private DeviceReceiver mDevice = new DeviceReceiver();
     private WifiManager wifiManager;
@@ -125,7 +123,6 @@ public class MineActivity extends Activity implements OnClickListener {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine);
-        context = this;
         sharedPreferences = BSApplication.SharedPreferences;
         wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);// 获取 WiFi 服务
         initViews();
@@ -259,7 +256,6 @@ public class MineActivity extends Activity implements OnClickListener {
         if (isLogin.equals("true")) {
             relativeStatusUnLogin.setVisibility(View.GONE);
             relativeStatusLogin.setVisibility(View.VISIBLE);
-//            relativeMyUpload.setVisibility(View.VISIBLE);
             String imageUrl = sharedPreferences.getString(StringConstant.IMAGEURL, "");// 头像
             userName = sharedPreferences.getString(StringConstant.USERNAME, "");// 用户名
             userId = sharedPreferences.getString(StringConstant.USERID, "");// 用户 ID
@@ -297,7 +293,6 @@ public class MineActivity extends Activity implements OnClickListener {
             }
         } else {
             relativeStatusLogin.setVisibility(View.GONE);
-//            relativeMyUpload.setVisibility(View.GONE);
             relativeStatusUnLogin.setVisibility(View.VISIBLE);
         }
     }
@@ -613,7 +608,6 @@ public class MineActivity extends Activity implements OnClickListener {
                 ToastUtils.show_always(context, "再按一次退出");
                 touchTime = currentTime;
             } else {
-//                BSApplication.onStop();
                 MobclickAgent.onKillProcess(context);
                 finish();
                 android.os.Process.killProcess(android.os.Process.myPid());
@@ -621,16 +615,6 @@ public class MineActivity extends Activity implements OnClickListener {
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    // 设置android app 的字体大小不受系统字体大小改变的影响
-    @Override
-    public Resources getResources() {
-        Resources res = super.getResources();
-        Configuration config = new Configuration();
-        config.setToDefaults();
-        res.updateConfiguration(config, res.getDisplayMetrics());
-        return res;
     }
 
     private String getDataColumn(Context context, Uri uri, String selection, String[] selectionArgs) {

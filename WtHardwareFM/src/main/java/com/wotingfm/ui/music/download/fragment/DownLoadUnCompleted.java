@@ -20,14 +20,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.ui.music.common.service.DownloadService;
 import com.wotingfm.ui.music.common.service.DownloadTask;
 import com.wotingfm.ui.music.download.adapter.DownloadAdapter;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.ui.music.download.model.FileInfo;
-import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.util.CommonUtils;
-import com.wotingfm.util.ToastUtils;
 
 import java.util.List;
 
@@ -173,7 +172,6 @@ public class DownLoadUnCompleted extends Fragment {
                             @Override
                             public void run() {
                                 if (DownloadTask.downloadStatus == -1) {
-                            /*        ToastUtils.show_always(context, fileInfoList.get(num).getFileName() + "的下载出现问题");*/
                                     getFileInfo(fileInfoList.get(getNum()));
                                 }
                             }
@@ -195,16 +193,7 @@ public class DownLoadUnCompleted extends Fragment {
     }
 
     private int getNum() {
-     /*   if (num < fileInfoList.size()) {
-            if(fileInfoList.size()==1){
-                num=0;
-            }else{
-                num++;
-            }
-        } else {
-            num = 0;
-        }*/
-        num=0;
+        num = 0;
         return num;
     }
 
@@ -213,7 +202,7 @@ public class DownLoadUnCompleted extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (fileInfoList.get(position).getDownloadtype() == 0) {
-					/*
+                    /**
 					 * 点击该项目时，此时是未下载状态需要把下载中状态的数据变为暂停状态暂停状态的数据不需要改变
 					 * 最后把该数据状态变为开始下载中状态
 					 */
@@ -267,7 +256,6 @@ public class DownLoadUnCompleted extends Fragment {
             } else if (BroadcastConstants.ACTION_FINISHED.equals(intent.getAction())) {
                 // 下载结束
                 FileInfo fileInfo = (FileInfo) intent.getSerializableExtra("fileInfo");
-                ToastUtils.show_short(contexts, fileInfo.getFileName() + "已经下载完毕");
                 FID.updataFileInfo(fileInfo.getFileName());
                 context.sendBroadcast(new Intent(BroadcastConstants.PUSH_DOWN_COMPLETED));// 发送更新界面数据广播
                 if (dwType) {
@@ -306,7 +294,7 @@ public class DownLoadUnCompleted extends Fragment {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(BroadcastConstants.PUSH_DOWN_UNCOMPLETED)) {
                 setDownLoadSource();
-            }else if (intent.getAction().equals(BroadcastConstants.PUSH_ALLURL_CHANGE)) {
+            } else if (intent.getAction().equals(BroadcastConstants.PUSH_ALLURL_CHANGE)) {
                 setDownLoadSource();
             }
         }
@@ -324,7 +312,6 @@ public class DownLoadUnCompleted extends Fragment {
             context.unregisterReceiver(mReceiver);
             mReceiver = null;
         }
-
         context = null;
     }
 }

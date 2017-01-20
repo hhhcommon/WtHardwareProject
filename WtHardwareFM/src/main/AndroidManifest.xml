@@ -115,8 +115,6 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        com.wotingfm.ui.interphone.group.creategroup
-
         <!-- 创建群组主界面 -->
         <activity
             android:name="com.wotingfm.ui.interphone.group.creategroup.CreateGroupContentActivity"

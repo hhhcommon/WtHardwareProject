@@ -8,7 +8,6 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,14 +21,14 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.ui.music.download.activity.DownloadActivity;
 import com.wotingfm.ui.music.download.adapter.DownLoadSequAdapter;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.ui.music.download.downloadlist.activity.DownLoadListActivity;
 import com.wotingfm.ui.music.download.model.FileInfo;
-import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.util.CommonUtils;
-import com.wotingfm.util.ToastUtils;
+import com.wotingfm.util.L;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,7 +108,7 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
         if (f.size() > 0) {
             linearNoData.setVisibility(View.GONE);
             fileSequList = FID.GroupFileInfoAll(userId);
-            Log.e("f", fileSequList.size() + "");
+            L.e("f", fileSequList.size() + "");
             if (fileSequList.size() > 0) {
                 for (int i = 0; i < fileSequList.size(); i++) {
                     if (fileSequList.get(i).getSequid().equals("woting")) {
@@ -134,7 +133,6 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
             mListView.setVisibility(View.GONE);
             relativeDownload.setVisibility(View.GONE);
             linearNoData.setVisibility(View.VISIBLE);
-            ToastUtils.show_short(context, "还没有下载完成的任务");
         }
     }
 
@@ -162,8 +160,7 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
                 bundle.putString("sequname", fileSequList.get(position).getSequname());
                 bundle.putString("sequid", fileSequList.get(position).getSequid());
                 intent.putExtras(bundle);
-                ((DownloadActivity)context).toActivity(intent);
-//                context.startActivityForResult(intent, 1001);
+                ((DownloadActivity) context).toActivity(intent);
             }
         });
     }
@@ -227,8 +224,7 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
                 bundle.putString("sequname", "单体节目");
                 bundle.putString("sequid", "woting");
                 intent.putExtras(bundle);
-                ((DownloadActivity)context).toActivity(intent);
-//                context.startActivityForResult(intent, 1001);
+                ((DownloadActivity) context).toActivity(intent);
                 break;
             case R.id.tv_confirm:
                 for (int i = 0; i < fileDellList.size(); i++) {
@@ -264,7 +260,7 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
         public void onReceive(Context context, Intent intent) {
             if (intent.getAction().equals(BroadcastConstants.PUSH_DOWN_COMPLETED)) {
                 setDownLoadSource();
-            }else if(intent.getAction().equals(BroadcastConstants.PUSH_ALLURL_CHANGE)){
+            } else if (intent.getAction().equals(BroadcastConstants.PUSH_ALLURL_CHANGE)) {
                 setDownLoadSource();
             }
         }
