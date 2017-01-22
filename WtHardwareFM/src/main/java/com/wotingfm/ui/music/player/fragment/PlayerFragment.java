@@ -160,7 +160,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     private void initView() {
         // IjkPlayer 播放器
         IjkVideoView BDAudio = (IjkVideoView) rootView.findViewById(R.id.video_view);
-        mPlayer.bindService(context, BDAudio);// 绑定服务
+//        mPlayer.bindService(context, BDAudio);// 绑定服务
+        mPlayer.bindService(context, null);// 绑定服务
 
         ImageView mPlayAudioImageCoverMask = (ImageView) rootView.findViewById(R.id.play_cover_mask);// 封面图片的六边形遮罩
         mPlayAudioImageCoverMask.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_bd));
