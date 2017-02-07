@@ -88,9 +88,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     private TipView tipView;// 没有数据、没有网络提示
 
     /**
-     * 1.== "MAIN_PAGE"  ->  mainPageRequest();
-     * 2.== "SEARCH_TEXT"  ->  searchByTextRequest();
-     * 3.== "SEARCH_VOICE"  ->  searchByVoiceRequest();
+     * 1.== "MAIN_PAGE"  ->  mainPageRequest;
+     * 2.== "SEARCH_TEXT"  ->  searchByTextRequest;
+     * 3.== "SEARCH_VOICE"  ->  searchByVoiceRequest;
      * Default  == "MAIN_PAGE";
      */
     private String requestType = StringConstant.PLAY_REQUEST_TYPE_MAIN_PAGE;
@@ -104,6 +104,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     private int refreshType = 0;// == -1 刷新  == 1 加载更多  == 0 第一次加载
     private boolean isPlaying;// 是否正在播放
     private boolean isInitData;// 第一次进入应用加载数据
+    private boolean isResetData;// 重新获取了数据  searchByText
 
     @Override
     public void onClick(View v) {
@@ -160,8 +161,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     private void initView() {
         // IjkPlayer 播放器
         IjkVideoView BDAudio = (IjkVideoView) rootView.findViewById(R.id.video_view);
-//        mPlayer.bindService(context, BDAudio);// 绑定服务
-        mPlayer.bindService(context, null);// 绑定服务
+        mPlayer.bindService(context, BDAudio);// 绑定服务
+//        mPlayer.bindService(context, null);// 绑定服务
 
         ImageView mPlayAudioImageCoverMask = (ImageView) rootView.findViewById(R.id.play_cover_mask);// 封面图片的六边形遮罩
         mPlayAudioImageCoverMask.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_bd));
@@ -211,6 +212,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                 mPlayer.updatePlayList(playerList);
                 index = 0;
                 mPlayer.startPlay(index);
+                isResetData = true;
             }
         }
         mainPageRequest();
@@ -442,29 +444,57 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         public void handleMessage(Message msg) {
             switch (msg.what) {
                 case IntegerConstant.PLAY_UPDATE_LIST:// 更新列表
-                    if (subList != null && subList.size() > 0) {
-                        if (playList.size() > 0) {
-                            List<String> contentIdList = new ArrayList<>();// 保存用于区别是否重复的内容
-                            String contentId;// 用于区别是否重复
-                            for (int i = 0, size = playList.size(); i < size; i++) {
-                                contentId = playList.get(i).getContentId();
-                                if (contentId != null && !contentId.trim().equals("")) {
-                                    contentIdList.add(contentId);
-                                }
-                            }
-                            for (int i = 0, size = subList.size(); i < size; i++) {
-                                if (!contentIdList.contains(subList.get(i).getContentId())) {
-                                    if (refreshType == -1) {
-                                        playList.add(0, subList.get(i));
-                                        index++;
+                    if (isResetData) {
+                        isResetData = false;
+
+                        if (subList != null && subList.size() != 0) {
+                            if (mediaType != null && !mediaType.equals("TTS")) {
+                                String contentPlay;
+                                for (int i=0, size=subList.size(); i<size; i++) {
+                                    contentPlay = subList.get(i).getContentPlay();
+                                    if (contentPlay != null && contentPlay.equals(GlobalConfig.playerObject.getContentPlay())) {
+                                        playList.clear();
+                                        index = i;// 记录当前播放节目在列表中的位置
+                                        subList.get(i).setType("2");
                                     } else {
-                                        playList.add(subList.get(i));
+                                        subList.get(i).setType("1");
                                     }
                                 }
                             }
-                            contentIdList.clear();
-                        } else {
                             playList.addAll(subList);
+                        }
+                    } else {
+                        if (subList != null && subList.size() > 0) {
+                            if (playList.size() > 0) {
+                                List<String> contentPlayList = new ArrayList<>();// 保存用于区别是否重复的内容
+                                String contentPlay;// 用于区别是否重复 URL
+                                String media;// 媒体类型  TTS 没有 contentPlay 需要特殊处理
+
+                                for (int a = 0, s = playList.size(); a < s; a++) {
+                                    media = playList.get(a).getMediaType();
+                                    if (media != null && !media.equals("TTS")) {
+                                        contentPlay = playList.get(a).getContentPlay();
+                                        if (contentPlay != null && !contentPlay.trim().equals("") && !contentPlay.toUpperCase().equals("NULL")) {
+                                            contentPlayList.add(contentPlay);
+                                        }
+                                    }
+                                }
+                                for (int i = 0, size = subList.size(); i < size; i++) {
+                                    if (subList.get(i).getMediaType() != null && subList.get(i).getMediaType().equals("TTS")) continue;
+                                    if (!contentPlayList.contains(subList.get(i).getContentPlay())) {
+                                        if (refreshType == -1) {
+                                            playList.add(0, subList.get(i));
+                                            index++;
+                                        } else {
+                                            playList.add(subList.get(i));
+                                        }
+                                    }
+                                }
+
+                                contentPlayList.clear();
+                            } else {
+                                playList.addAll(subList);
+                            }
                         }
                     }
                     if (adapter == null) {
@@ -476,10 +506,10 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     }
                     ArrayList<LanguageSearchInside> playerList = new ArrayList<>();
                     playerList.addAll(playList);
-                    if(refreshType == -1) {
-                        mPlayer.updatePlayList(playerList, index);
-                    } else {
+                    if(refreshType == 1) {
                         mPlayer.updatePlayList(playerList);
+                    } else {
+                        mPlayer.updatePlayList(playerList, index);
                     }
 
                     subList.clear();

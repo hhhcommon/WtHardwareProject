@@ -82,7 +82,7 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
     @Override
     protected void onResume() {
         super.onResume();
-        registeredBroad();
+        registeredBroad();// 注册广播
     }
 
     // 初始化视图
@@ -423,8 +423,7 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
                         FileInfo file = fileUnDownLoadList.get(k);
                         mFileDao.updataDownloadStatus(m.getContentPlay(), "1");
                         DownloadService.workStart(file);
-                        Intent p_intent = new Intent(BroadcastConstants.PUSH_DOWN_UNCOMPLETED);
-                        context.sendBroadcast(p_intent);
+                        context.sendBroadcast(new Intent(BroadcastConstants.PUSH_DOWN_UNCOMPLETED));
                         break;
                     }
                 }
@@ -438,8 +437,7 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
                     FileInfo file = fileUnDownloadList.get(k);
                     mFileDao.updataDownloadStatus(m.getContentPlay(), "1");
                     DownloadService.workStart(file);
-                    Intent p_intent = new Intent(BroadcastConstants.PUSH_DOWN_UNCOMPLETED);
-                    context.sendBroadcast(p_intent);
+                    context.sendBroadcast(new Intent(BroadcastConstants.PUSH_DOWN_UNCOMPLETED));
                     break;
                 }
             }

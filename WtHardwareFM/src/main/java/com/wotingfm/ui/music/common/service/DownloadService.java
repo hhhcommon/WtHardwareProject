@@ -10,10 +10,11 @@ import android.os.Handler;
 import android.os.IBinder;
 import android.util.Log;
 
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.ui.music.download.model.FileInfo;
-import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.util.CommonUtils;
+import com.wotingfm.util.L;
 
 import org.apache.http.HttpStatus;
 
@@ -31,13 +32,11 @@ public class DownloadService extends Service {
     public static final String DOWNLOAD_PATH = Environment.getExternalStorageDirectory() + "/woting/download/";
 
     public static final int MSG_INIT = 0;
-    private static String TAG = "DownloadService";
     private static DownloadService context;
     private static DownloadTask mTask;
     private static FileInfo fileTemp = null;
     private static FileInfoDao FID;
-    private static List<FileInfo> fileInfoList;
-    private static int downloadStatus = -1;  //
+    private static int downloadStatus = -1;
 
     @Override
     public void onCreate() {
@@ -46,11 +45,7 @@ public class DownloadService extends Service {
     }
 
     public static void workStart(FileInfo fileInfo) {
-        // 启动初始化线程
-        String s = fileInfo.getFileName();
-        String s1 = fileInfo.getUrl();
-        new InitThread(fileInfo).start();
-        // 注册广播接收器
+        new InitThread(fileInfo).start();// http://audio.xmcdn.com/group13/M05/02/9E/wKgDXVbBJY3QZQkmABblyjUSkbI912.m4a
         IntentFilter filter = new IntentFilter();
         filter.addAction(BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW);
         context.registerReceiver(mReceiver, filter);
@@ -60,7 +55,7 @@ public class DownloadService extends Service {
         }
     }
 
-    public static void workStop(FileInfo fileInFo) {
+    public static void workStop(FileInfo fileInfo) {
         if (mTask != null) {
             DownloadTask.isPause = true;
         }
@@ -72,7 +67,7 @@ public class DownloadService extends Service {
                 case MSG_INIT:
                     FileInfo fileInfo = (FileInfo) msg.obj;
 
-                    Log.i(TAG, "Init:" + fileInfo);
+                    L.i("TAG", "Init:" + fileInfo);
                     // 启动下载任务
                     DownloadTask.isPause = false;
                     if (fileTemp == null) {
@@ -80,26 +75,24 @@ public class DownloadService extends Service {
                         mTask = new DownloadTask(context, fileInfo);
                         mTask.downLoad();
                     } else {
-                        if (fileTemp.getUrl().equals(fileInfo.getUrl())) {
-
-                        } else {
-                            if (mTask != null) {
-                                DownloadTask.isPause = true;
-                            }
+                        if (!fileTemp.getUrl().equals(fileInfo.getUrl())) {
                             mTask = new DownloadTask(context, fileInfo);
+                            DownloadTask.isPause = false;
                             mTask.downLoad();
                         }
                     }
                     break;
             }
         }
+
+        ;
     };
 
     private static class InitThread extends Thread {
         private FileInfo mFileInfo = null;
 
-        public InitThread(FileInfo mFileInFos) {
-            mFileInfo = mFileInFos;
+        public InitThread(FileInfo mFileInfos) {
+            mFileInfo = mFileInfos;
         }
 
         @Override
@@ -115,7 +108,6 @@ public class DownloadService extends Service {
                 connection.setConnectTimeout(5000);
                 connection.setRequestMethod("GET");
                 int length = -1;
-                int a = connection.getResponseCode();
                 if (connection.getResponseCode() == HttpStatus.SC_OK) {
                     // 获得文件的长度
                     length = connection.getContentLength();
@@ -152,12 +144,14 @@ public class DownloadService extends Service {
         }
     }
 
+    private static List<FileInfo> fileInfoList;
     private static BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context contexts, Intent intent) {
+
             if (BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW.equals(intent.getAction())) {
-                FileInfo fileInfo = (FileInfo) intent.getSerializableExtra("fileInfo");
-                FID.updataFileInfo(fileInfo.getFileName());
+//                FileInfo fileInfo = (FileInfo) intent.getSerializableExtra("fileInfo");
+//                FID.updataFileInfo(fileInfo.getFileName());
                 fileInfoList = FID.queryFileInfo("false", CommonUtils.getUserId(context));
                 if (fileInfoList != null && fileInfoList.size() > 0) {
                     fileInfoList.get(0).setDownloadtype(1);

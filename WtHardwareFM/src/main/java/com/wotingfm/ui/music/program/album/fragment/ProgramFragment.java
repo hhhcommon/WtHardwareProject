@@ -18,7 +18,9 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.common.service.DownloadService;
+import com.wotingfm.ui.music.download.activity.DownloadActivity;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
+import com.wotingfm.ui.music.download.fragment.DownLoadUnCompleted;
 import com.wotingfm.ui.music.download.model.FileInfo;
 import com.wotingfm.ui.music.main.HomeActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
@@ -292,6 +294,12 @@ public class ProgramFragment extends Fragment implements OnClickListener {
             tempList.get(0).setDownloadtype(1);
             FID.updataDownloadStatus(tempList.get(0).getUrl(), "1");
             DownloadService.workStart(tempList.get(0));
+            if(DownloadActivity.isVisible==true){
+                      /*  if(DownLoadUnCompleted.dwType!){
+
+                        }*/
+                DownLoadUnCompleted.dwType=true;
+            }
 
             // 发送更新界面数据广播
             Intent pushIntent = new Intent(BroadcastConstants.PUSH_DOWN_UNCOMPLETED);
