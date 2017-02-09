@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.Html;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -151,7 +152,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
         if(content == null || content.trim().equals("")) {
             content = "暂无介绍";
         }
-        textContent.setText(content);
+        textContent.setText(Html.fromHtml("<font size='28'>" + content + "</font>"));
 
         // 标签
         List<ContentCatalogs> contentCatalogsList = resultInfo.getContentCatalogs();

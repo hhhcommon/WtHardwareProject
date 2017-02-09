@@ -166,7 +166,7 @@
 
     </RelativeLayout>
 
-    <com.wotingfm.widget.ijkvideo.IjkVideoView
+    <com.baidu.cyberplayer.core.BVideoView
         android:id="@+id/video_view"
         android:layout_width="match_parent"
         android:layout_height="0.1dp"/>

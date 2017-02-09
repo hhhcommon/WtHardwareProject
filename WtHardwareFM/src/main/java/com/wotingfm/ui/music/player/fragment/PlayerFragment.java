@@ -19,6 +19,7 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
+import com.baidu.cyberplayer.core.BVideoView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
@@ -45,7 +46,6 @@ import com.wotingfm.util.TimeUtils;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.AutoScrollTextView;
 import com.wotingfm.widget.TipView;
-import com.wotingfm.widget.ijkvideo.IjkVideoView;
 import com.wotingfm.widget.xlistview.XListView;
 
 import org.json.JSONException;
@@ -159,8 +159,9 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
 
     // 初始化视图
     private void initView() {
-        // IjkPlayer 播放器
-        IjkVideoView BDAudio = (IjkVideoView) rootView.findViewById(R.id.video_view);
+        // 播放器
+        BVideoView.setAK("b53ba2453fa3451d8aa65a2b48ded30c");
+        BVideoView BDAudio = (BVideoView) rootView.findViewById(R.id.video_view);
         mPlayer.bindService(context, BDAudio);// 绑定服务
 //        mPlayer.bindService(context, null);// 绑定服务
 

@@ -3,12 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clipToPadding="true"
-    android:fitsSystemWindows="true"
     android:background="@color/dinglan_orange"
     android:orientation="vertical">
 
     <View
+        android:id="@+id/tv_main"
         android:layout_width="match_parent"
         android:layout_height="24dp"/>
 
@@ -18,21 +17,11 @@
         android:background="@color/dinglan_orange"
         android:gravity="center_vertical">
 
-        <LinearLayout
+        <ImageView
             android:id="@+id/lin_news"
-            android:layout_width="48dp"
-            android:layout_height="match_parent"
-
-            android:gravity="right|center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="18dp"
-                android:src="@mipmap/news"/>
-
-        </LinearLayout>
+            style="@style/LeftImageStyle"
+            android:src="@mipmap/news"
+            android:layout_marginLeft="6dp"/>
 
         <LinearLayout
             android:layout_width="0dp"
@@ -40,58 +29,34 @@
             android:layout_weight="1"
             android:gravity="center">
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_guid1"
                 android:layout_width="81dp"
                 android:layout_height="28dp"
                 android:layout_marginRight="8dp"
-                android:gravity="center">
+                android:background="@drawable/color_wt_circle_home_white"
+                android:gravity="center"
+                android:text="聊 天"
+                android:textColor="@color/dinglan_orange"
+                android:textSize="15sp"/>
 
-                <TextView
-                    android:id="@+id/tv_guid1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/color_wt_circle_home_white"
-                    android:gravity="center"
-                    android:text="聊 天"
-                    android:textColor="@color/dinglan_orange"
-                    android:textSize="15sp"/>
-
-            </LinearLayout>
-
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_guid2"
                 android:layout_width="81dp"
                 android:layout_height="28dp"
                 android:layout_marginLeft="8dp"
-                android:gravity="center">
-
-                <TextView
-                    android:id="@+id/tv_guid2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@drawable/color_wt_circle_orange"
-                    android:gravity="center"
-                    android:text="通讯录"
-                    android:textColor="@color/WHITE"
-                    android:textSize="15sp"/>
-
-            </LinearLayout>
+                android:background="@drawable/color_wt_circle_orange"
+                android:gravity="center"
+                android:text="通讯录"
+                android:textColor="@color/WHITE"
+                android:textSize="15sp"/>
 
         </LinearLayout>
 
-        <LinearLayout
+        <ImageView
             android:id="@+id/lin_more"
-            android:layout_width="48dp"
-            android:layout_height="match_parent"
-            android:gravity="right|center"
-            android:orientation="vertical">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="15dp"
-                android:src="@mipmap/wt_more_white"/>
-
-        </LinearLayout>
+            style="@style/LeftImageStyle"
+            android:src="@mipmap/wt_more_white"/>
 
     </LinearLayout>
 

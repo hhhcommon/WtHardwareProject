@@ -3,13 +3,9 @@ package com.wotingfm.common.application;
 import android.app.Application;
 import android.content.Context;
 import android.os.Handler;
-import android.util.Log;
 
 import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
-import com.kingsoft.media.httpcache.KSYProxyService;
-import com.kingsoft.media.httpcache.OnErrorListener;
-import com.kingsoft.media.httpcache.stats.OnLogEventListener;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.config.SocketClientConfig;
 import com.wotingfm.common.helper.CollocationHelper;
@@ -25,12 +21,11 @@ import java.util.List;
  * 作者：xinlong on 2016/8/23 21:18
  * 邮箱：645700751@qq.com
  */
-public class BSApplication extends Application implements OnErrorListener,OnLogEventListener {
+public class BSApplication extends Application {
     public static Context instance;
     private static RequestQueue queues;
     public static android.content.SharedPreferences SharedPreferences;
     public static SocketClientConfig scc;         // Socket连接客户端配置信息
-    private static KSYProxyService proxyService = null;
 
     @Override
     public void onCreate() {
@@ -46,7 +41,7 @@ public class BSApplication extends Application implements OnErrorListener,OnLogE
         PhoneMessage.getPhoneInfo(instance);      // 获取手机信息
         CommonHelper.checkNetworkStatus(instance);// 网络设置获取
 
-        List<String> _l = new ArrayList<String>();     // 其中每个间隔要是0.5秒的倍数
+        List<String> _l = new ArrayList<>();      // 其中每个间隔要是0.5秒的倍数
         _l.add("INTE::500");                      // 第1次检测到未连接成功，隔0.5秒重连
         _l.add("INTE::500");                      // 第2次检测到未连接成功，隔0.5秒重连
         _l.add("INTE::1000");                     // 第3次检测到未连接成功，隔1秒重连
@@ -70,7 +65,7 @@ public class BSApplication extends Application implements OnErrorListener,OnLogE
 
     private void initStaticFaces() {
         try {
-            ArrayList<String> staticFacesList = new ArrayList<String>();
+            ArrayList<String> staticFacesList = new ArrayList<>();
             String[] faces = getAssets().list("face/png");
             //将Assets中的表情名称转为字符串一一添加进staticFacesList
             for (int i = 0; i < faces.length; i++) {
@@ -88,14 +83,6 @@ public class BSApplication extends Application implements OnErrorListener,OnLogE
         return instance;
     }
 
-    public static KSYProxyService getKSYProxy() {
-        return proxyService == null ? (proxyService = newKSYProxy()) : proxyService;
-    }
-
-    private static KSYProxyService newKSYProxy() {
-        return new KSYProxyService(instance);
-    }
-
     public static RequestQueue getHttpQueues() {
         return queues;
     }
@@ -103,15 +90,5 @@ public class BSApplication extends Application implements OnErrorListener,OnLogE
     @Override
     public void onTerminate() {
         super.onTerminate();
-    }
-
-    @Override
-    public void OnError(int i) {
-        Log.e("缓存播放路径333","======"+i);
-    }
-
-    @Override
-    public void onLogEvent(String log) {
-        Log.e("缓存播放路径444","======"+log);
     }
 }

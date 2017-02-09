@@ -110,6 +110,25 @@ public class MainActivity extends TabActivity {
     public static DBTalkHistorary talkdb;
     private SearchTalkHistoryDao talkDao;
 
+    private void setType() {
+        try {
+            String a = android.os.Build.VERSION.RELEASE;
+            Log.e("系统版本号", a + "");
+            Log.e("系统版本号截取", a.substring(0, a.indexOf(".")) + "");
+            boolean v = false;
+            if (Integer.parseInt(a.substring(0, a.indexOf("."))) >= 5) {
+                v = true;
+            }
+            if (v) {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        //透明状态栏
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    //透明导航栏
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -130,6 +149,7 @@ public class MainActivity extends TabActivity {
         InitTextView();     // 设置界面
         InitDao();          // 加载数据库
         registerReceiver(); // 注册广播
+        setType();
         // mask();          // 蒙版
 
 

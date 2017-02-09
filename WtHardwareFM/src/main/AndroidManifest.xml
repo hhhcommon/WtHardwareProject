@@ -322,8 +322,17 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
+
+        <!--添加群成员-->
         <activity
             android:name=".ui.interphone.group.groupcontrol.memberadd.GroupMemberAddActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <!--剔除群成员-->
+        <activity
+            android:name=".ui.interphone.group.groupcontrol.groupnumdel.GroupMemberDelActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>

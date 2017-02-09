@@ -28,7 +28,6 @@ import com.wotingfm.common.application.BSApplication;
 
 import org.videolan.libvlc.LibVLC;
 import org.videolan.libvlc.LibVlcException;
-import org.videolan.vlc.VLCCrashHandler;
 
 public class VLCInstance {
     public final static String TAG = "VLC/Util/VLCInstance";
@@ -37,7 +36,7 @@ public class VLCInstance {
     public static LibVLC getLibVlcInstance() throws LibVlcException {
         LibVLC instance = LibVLC.getExistingInstance();
         if (instance == null) {
-            Thread.setDefaultUncaughtExceptionHandler(new VLCCrashHandler());
+//            Thread.setDefaultUncaughtExceptionHandler(new VLCCrashHandler());// VLC 打印日志线程 不需要就关闭
             instance = LibVLC.getInstance();
 //            VLCApplication vlc = new VLCApplication();
             final Context context = BSApplication.getAppContext();

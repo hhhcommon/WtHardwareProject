@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,7 +43,7 @@ import java.util.ArrayList;
 public class DuiJiangActivity extends BaseFragmentActivity {
     private static TextView view1;
     private static TextView view2;
-    private LinearLayout lin_more;
+    private View lin_more;
     private SharedPreferences sharedPreferences = BSApplication.SharedPreferences;
     private PopupWindow addDialog;
     private static ViewPager mPager;
@@ -55,6 +56,24 @@ public class DuiJiangActivity extends BaseFragmentActivity {
         InitTextView();        // 初始化视图
         InitViewPager();    // 初始化ViewPager
         dialog();            // 初始化功能弹出框
+        setType();
+    }
+
+    // 适配顶栏样式
+    private void setType() {
+        String a = android.os.Build.VERSION.RELEASE;
+        Log.e("系统版本号", a + "");
+        Log.e("系统版本号截取", a.substring(0, a.indexOf(".")) + "");
+        boolean v = false;
+        if (Integer.parseInt(a.substring(0, a.indexOf("."))) >= 5) {
+            v = true;
+        }
+        View tv_main = findViewById(R.id.tv_main);
+        if (v) {
+            tv_main.setVisibility(View.VISIBLE);
+        } else {
+            tv_main.setVisibility(View.GONE);
+        }
     }
 
     /*
@@ -62,7 +81,7 @@ public class DuiJiangActivity extends BaseFragmentActivity {
      */
     private void dialog() {
         View dialog = LayoutInflater.from(context).inflate(R.layout.dialoga, null);
-        LinearLayout lin_news = (LinearLayout) dialog.findViewById(R.id.lin_news);    // 新消息
+        View lin_news = dialog.findViewById(R.id.lin_news);    // 新消息
         LinearLayout lin_a = (LinearLayout) dialog.findViewById(R.id.lin_a);        // 添加好友
         LinearLayout lin_b = (LinearLayout) dialog.findViewById(R.id.lin_b);        // 加入群组
         LinearLayout lin_c = (LinearLayout) dialog.findViewById(R.id.lin_c);        // 创建群组
@@ -197,8 +216,8 @@ public class DuiJiangActivity extends BaseFragmentActivity {
      * 初始化视图
      */
     private void InitTextView() {
-        lin_more = (LinearLayout) findViewById(R.id.lin_more);
-        LinearLayout lin_news = (LinearLayout) findViewById(R.id.lin_news);
+        lin_more = findViewById(R.id.lin_more);
+        View lin_news = findViewById(R.id.lin_news);
 
 		/*
 		 * 跳转到新消息界面

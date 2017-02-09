@@ -16,9 +16,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
-import com.kingsoft.media.httpcache.KSYProxyService;
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.common.manager.CacheManager;
+import com.wotingfm.common.manager.UpdateManager;
+import com.wotingfm.common.volley.VolleyCallback;
+import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.baseactivity.BaseActivity;
+import com.wotingfm.ui.mine.person.modifypassword.ModifyPasswordActivity;
+import com.wotingfm.ui.mine.person.phonecheck.PhoneCheckActivity;
 import com.wotingfm.ui.mine.set.about.AboutActivity;
 import com.wotingfm.ui.mine.set.downloadposition.DownloadPositionActivity;
 import com.wotingfm.ui.mine.set.feedback.activity.FeedbackActivity;
@@ -26,16 +35,6 @@ import com.wotingfm.ui.mine.set.help.HelpActivity;
 import com.wotingfm.ui.mine.set.notifyset.NotifySetActivity;
 import com.wotingfm.ui.mine.set.preference.activity.PreferenceActivity;
 import com.wotingfm.ui.mine.set.updateusernum.UpdateUserNumberActivity;
-import com.wotingfm.ui.mine.person.modifypassword.ModifyPasswordActivity;
-import com.wotingfm.ui.mine.person.phonecheck.PhoneCheckActivity;
-import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.common.volley.VolleyCallback;
-import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.common.manager.CacheManager;
-import com.wotingfm.common.manager.UpdateManager;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
@@ -66,13 +65,12 @@ public class SetActivity extends BaseActivity implements OnClickListener {
     private String cachePath;           // 缓存路径
     private String tag = "SET_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
-    private KSYProxyService proxy;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_set);
-        cachePath = Environment.getExternalStorageDirectory() + "/woting/image";// 缓存路径
+        cachePath = Environment.getExternalStorageDirectory() + "/WTFM/playCache";// 缓存路径
         initDialog();
         initViews();
     }
@@ -107,7 +105,6 @@ public class SetActivity extends BaseActivity implements OnClickListener {
 
         textCache = (TextView) findViewById(R.id.text_cache);               // 缓存
         initCache();
-        proxy = BSApplication.getKSYProxy();                         // 播放缓存
     }
 
     @Override
@@ -400,7 +397,6 @@ public class SetActivity extends BaseActivity implements OnClickListener {
         @Override
         protected Void doInBackground(Void... params) {
             clearResult = CacheManager.delAllFile(cachePath);
-            proxy.cleanCaches();
             return null;
         }
 

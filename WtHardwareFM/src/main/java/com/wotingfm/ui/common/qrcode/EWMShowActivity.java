@@ -77,6 +77,14 @@ public class EWMShowActivity extends AppBaseActivity implements OnClickListener 
 
     // 初始化数据
     private void setData(int type, String imageUrl, String news, String name) {
+        /**
+         * type == 1 的界面有两个
+         * 1、TalkPersonNewsActivity
+         * 2、MineActivity
+         * 两个界面跳转过来携带的对象不一样
+         * TalkPersonNewsActivity - > UserInviteMeInside  --> "person"
+         * MineActivity -> UserInfo     --> "person"
+         */
         if (type == 1) {
             UserInviteMeInside meInside = (UserInviteMeInside) getIntent().getSerializableExtra("person");
             bmp = CreateQRImageHelper.getInstance().createQRImage(type, null, meInside, 220, 220);
