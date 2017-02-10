@@ -53,7 +53,7 @@ public class RadioFragment extends Fragment {
     private FragmentActivity context;
     private FavorListAdapter adapter;
     private SearchPlayerHistoryDao dbDao;
-    
+
     private Dialog dialog;
     private View rootView;
     private View linearNull;
@@ -62,20 +62,22 @@ public class RadioFragment extends Fragment {
     private List<RankInfo> subList;
     private List<String> delList;
     private ArrayList<RankInfo> newList = new ArrayList<>();
-    
+
     private int page = 1;
     private int refreshType = 1;     // refreshType 1为下拉加载 2为上拉加载更多
     private int pageSizeNum = -1;    // 前端自己算 //先求余 如果等于0 最后结果不加1 如果不等于0 结果加一
-    
+
     private String tag = "RADIO_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
     private boolean isDel;
+
+    public static boolean isData = false;// 记录是否有数据
 
     // 初始化数据库
     private void initDao() {
         dbDao = new SearchPlayerHistoryDao(context);
     }
-    
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,7 +124,6 @@ public class RadioFragment extends Fragment {
                 } else {
                     mListView.stopLoadMore();
                     mListView.setPullLoadEnable(false);
-                    ToastUtils.show_always(context, "已经是最后一页了");
                 }
             }
         });
@@ -201,8 +202,8 @@ public class RadioFragment extends Fragment {
 
                             if (PlayerFragment.context != null) {
                                 HomeActivity.UpdateViewPager();
-                                Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
-                                Bundle bundle1=new Bundle();
+                                Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                                Bundle bundle1 = new Bundle();
                                 bundle1.putString("text", newList.get(position - 1).getContentName());
                                 push.putExtras(bundle1);
                                 context.sendBroadcast(push);
@@ -212,7 +213,7 @@ public class RadioFragment extends Fragment {
                                 SharedPreferences.Editor et = sp.edit();
                                 et.putString(StringConstant.PLAYHISTORYENTER, "true");
                                 et.putString(StringConstant.PLAYHISTORYENTERNEWS, newList.get(position - 1).getContentName());
-                                if(!et.commit()) L.w("数据 commit 失败!");
+                                if (!et.commit()) L.w("数据 commit 失败!");
                                 HomeActivity.UpdateViewPager();
                                 getActivity().finish();
                             }
@@ -225,15 +226,16 @@ public class RadioFragment extends Fragment {
 
     // 发送网络请求
     private void send() {
-        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
-            if(dialog != null) dialog.dismiss();
-            if(refreshType == 1) {
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            if (dialog != null) dialog.dismiss();
+            if (refreshType == 1) {
                 mListView.stopRefresh();
+                isData = false;
             } else {
                 mListView.stopLoadMore();
             }
             ToastUtils.show_always(context, "网络连接失败，请检查网络设置!");
-            return ;
+            return;
         }
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
@@ -261,7 +263,8 @@ public class RadioFragment extends Fragment {
                             isDel = false;
                         }
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
-                        subList = new Gson().fromJson(arg1.getString("FavoriteList"), new TypeToken<List<RankInfo>>() {}.getType());
+                        subList = new Gson().fromJson(arg1.getString("FavoriteList"), new TypeToken<List<RankInfo>>() {
+                        }.getType());
                         try {
                             String allCountString = arg1.getString("AllCount");
                             String pageSizeString = arg1.getString("PageSize");
@@ -291,9 +294,17 @@ public class RadioFragment extends Fragment {
                             adapter.notifyDataSetChanged();
                         }
                         setListener();
+                        isData = true;
+                    } else {
+                        if (refreshType == 1) {
+                            isData = false;
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    if (refreshType == 1) {
+                        isData = false;
+                    }
                 }
                 // 无论何种返回值，都需要终止掉上拉刷新及下拉加载的滚动状态
                 if (refreshType == 1) {
@@ -307,6 +318,9 @@ public class RadioFragment extends Fragment {
             protected void requestError(VolleyError error) {
                 if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
+                if (refreshType == 1) {
+                    isData = false;
+                }
             }
         });
     }

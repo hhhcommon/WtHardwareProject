@@ -63,7 +63,7 @@ public class TotalFragment extends Fragment {
     private Dialog dialog;
     private View rootView;
     private ExpandableListView expandListView;
-    
+
     private ArrayList<RankInfo> playList;// 节目list
     private ArrayList<RankInfo> sequList;// 专辑list
     private ArrayList<RankInfo> ttsList;// tts
@@ -71,11 +71,13 @@ public class TotalFragment extends Fragment {
     private ArrayList<SuperRankInfo> list = new ArrayList<>();// 返回的节目list，拆分之前的list
     private List<RankInfo> subList;
     private List<String> delList;
-    
+
     private int delChildPosition = -1;
     private int delGroupPosition = -1;
     private String tag = "TOTAL_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
+
+    public static boolean isData = false;// 是否有数据
 
     // 初始化数据库
     private void initDao() {
@@ -113,7 +115,7 @@ public class TotalFragment extends Fragment {
         expandListView.setOnGroupClickListener(new OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-				FavoriteActivity.updateViewPager(list.get(groupPosition).getKey());
+                FavoriteActivity.updateViewPager(list.get(groupPosition).getKey());
                 return true;
             }
         });
@@ -221,10 +223,10 @@ public class TotalFragment extends Fragment {
 
     // 请求网络获取数据
     private void send() {
-        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
-            if(dialog != null) dialog.dismiss();
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            if (dialog != null) dialog.dismiss();
             ToastUtils.show_always(context, "网络连接失败，请检查网络设置!");
-            return ;
+            return;
         }
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
@@ -250,7 +252,8 @@ public class TotalFragment extends Fragment {
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
-                        subList = new Gson().fromJson(arg1.getString("FavoriteList"), new TypeToken<List<RankInfo>>() {}.getType());
+                        subList = new Gson().fromJson(arg1.getString("FavoriteList"), new TypeToken<List<RankInfo>>() {
+                        }.getType());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -331,9 +334,16 @@ public class TotalFragment extends Fragment {
                                 expandListView.expandGroup(i);
                             }
                             setItemListener();
+                            isData = true;
+                            ((FavoriteActivity) context).setQkVisibleOrHide(true);
+                        } else {
+                            isData = false;
+                            ((FavoriteActivity) context).setQkVisibleOrHide(false);
                         }
                     }
                 } else {
+                    isData = false;
+                    ((FavoriteActivity) context).setQkVisibleOrHide(false);
                     if (Message != null && !Message.trim().equals("")) {
                         ToastUtils.show_always(context, Message);
                     }
@@ -344,6 +354,8 @@ public class TotalFragment extends Fragment {
             protected void requestError(VolleyError error) {
                 if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
+                isData = false;
+                ((FavoriteActivity) context).setQkVisibleOrHide(false);
             }
         });
     }
@@ -388,32 +400,32 @@ public class TotalFragment extends Fragment {
                     PlayerHistory history = new PlayerHistory(playername, playerimage, playerurl, playerurI,
                             playermediatype, plaplayeralltime, playerintime, playercontentdesc, playernum,
                             playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid,
-                            playcontentshareurl, ContentFavorite, ContentId, localurl,sequname,sequid,sequdesc,sequimg);
+                            playcontentshareurl, ContentFavorite, ContentId, localurl, sequname, sequid, sequdesc, sequimg);
                     dbDao.deleteHistory(playerurl);
                     dbDao.addHistory(history);
-					if (PlayerFragment.context != null) {
-						HomeActivity.UpdateViewPager();
-                        Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
-                        Bundle bundle1=new Bundle();
+                    if (PlayerFragment.context != null) {
+                        HomeActivity.UpdateViewPager();
+                        Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                        Bundle bundle1 = new Bundle();
                         bundle1.putString("text", list.get(groupPosition).getList().get(childPosition).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
                         getActivity().finish();
-					} else {
-						SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
-						et.putString(StringConstant.PLAYHISTORYENTER, "true");
-						et.putString(StringConstant.PLAYHISTORYENTERNEWS, list.get(groupPosition).getList().get(childPosition).getContentName());
-						if(!et.commit()) L.w("数据 commit 失败!");
-						HomeActivity.UpdateViewPager();
-						getActivity().finish();
-					}
+                    } else {
+                        SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+                        et.putString(StringConstant.PLAYHISTORYENTER, "true");
+                        et.putString(StringConstant.PLAYHISTORYENTERNEWS, list.get(groupPosition).getList().get(childPosition).getContentName());
+                        if (!et.commit()) L.w("数据 commit 失败!");
+                        HomeActivity.UpdateViewPager();
+                        getActivity().finish();
+                    }
                 } else if (MediaType != null && MediaType.equals("SEQU")) {
-					Intent intent = new Intent(context, AlbumActivity.class);
-					Bundle bundle = new Bundle();
-					bundle.putString("type", "search");
-					bundle.putSerializable("list", list.get(groupPosition).getList().get(childPosition));
-					intent.putExtras(bundle);
-					startActivityForResult(intent, 1);
+                    Intent intent = new Intent(context, AlbumActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("type", "search");
+                    bundle.putSerializable("list", list.get(groupPosition).getList().get(childPosition));
+                    intent.putExtras(bundle);
+                    startActivityForResult(intent, 1);
                 }
                 return true;
             }

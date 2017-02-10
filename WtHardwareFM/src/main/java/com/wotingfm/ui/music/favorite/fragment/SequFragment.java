@@ -64,6 +64,8 @@ public class SequFragment extends Fragment {
     private boolean isCancelRequest;
     private boolean isDel;
 
+    public static boolean isData = false;// 记录是否有数据
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -109,7 +111,6 @@ public class SequFragment extends Fragment {
                 } else {
                     mListView.stopLoadMore();
                     mListView.setPullLoadEnable(false);
-                    ToastUtils.show_always(context, "已经是最后一页了");
                 }
             }
         });
@@ -166,15 +167,16 @@ public class SequFragment extends Fragment {
 
     // 发送网络请求
     private void send() {
-        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
-            if(dialog != null) dialog.dismiss();
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            if (dialog != null) dialog.dismiss();
             if (refreshType == 1) {
                 mListView.stopRefresh();
+                isData = false;
             } else {
                 mListView.stopLoadMore();
             }
             ToastUtils.show_always(context, "网络连接失败，请检查网络设置!");
-            return ;
+            return;
         }
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
@@ -202,7 +204,8 @@ public class SequFragment extends Fragment {
                             isDel = false;
                         }
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
-                        subList = new Gson().fromJson(arg1.getString("FavoriteList"), new TypeToken<List<RankInfo>>() {}.getType());
+                        subList = new Gson().fromJson(arg1.getString("FavoriteList"), new TypeToken<List<RankInfo>>() {
+                        }.getType());
                         try {
                             String allCountString = arg1.getString("AllCount");
                             String pageSizeString = arg1.getString("PageSize");
@@ -233,10 +236,18 @@ public class SequFragment extends Fragment {
                             adapter.notifyDataSetChanged();
                         }
                         setListener();
+                        isData = true;
                         if (subList != null) subList.clear();
+                    } else {
+                        if (refreshType == 1) {
+                            isData = false;
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    if (refreshType == 1) {
+                        isData = false;
+                    }
                 }
                 // 无论何种返回值，都需要终止掉上拉刷新及下拉加载的滚动状态
                 if (refreshType == 1) {
@@ -250,6 +261,9 @@ public class SequFragment extends Fragment {
             protected void requestError(VolleyError error) {
                 if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
+                if (refreshType == 1) {
+                    isData = false;
+                }
             }
         });
     }

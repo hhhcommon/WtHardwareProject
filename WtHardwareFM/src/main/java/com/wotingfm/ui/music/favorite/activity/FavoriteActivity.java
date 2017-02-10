@@ -27,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.ui.baseactivity.AppBaseFragmentActivity;
 import com.wotingfm.ui.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.ui.music.favorite.fragment.RadioFragment;
@@ -34,7 +35,6 @@ import com.wotingfm.ui.music.favorite.fragment.SequFragment;
 import com.wotingfm.ui.music.favorite.fragment.SoundFragment;
 import com.wotingfm.ui.music.favorite.fragment.TTSFragment;
 import com.wotingfm.ui.music.favorite.fragment.TotalFragment;
-import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ToastUtils;
@@ -63,7 +63,7 @@ public class FavoriteActivity extends AppBaseFragmentActivity implements OnClick
     private static TextView textRadio;// 电台
     private static TextView textTts;// TTS
     private static ViewPager mPager;
-    private static TextView textEmpty ;// 清空
+    private static TextView textEmpty;// 清空
     private static TextView textEditor;// 加一个 bol 值，如果 key 值为 0 是为编辑状态，为 1 时显示完成
 
     private int bmpW;
@@ -211,7 +211,7 @@ public class FavoriteActivity extends AppBaseFragmentActivity implements OnClick
     }
 
     public static void updateViewPager(String mediaType) {
-        if(mediaType == null || mediaType.equals("")) return ;
+        if (mediaType == null || mediaType.equals("")) return;
         int index;
         switch (mediaType) {
             case "SEQU":
@@ -483,7 +483,11 @@ public class FavoriteActivity extends AppBaseFragmentActivity implements OnClick
             textRadio.setTextColor(context.getResources().getColor(R.color.group_item_text2));
             textTts.setTextColor(context.getResources().getColor(R.color.group_item_text2));
             textEditor.setVisibility(View.GONE);
-            textEmpty.setVisibility(View.VISIBLE);
+            if (TotalFragment.isData) {
+                textEmpty.setVisibility(View.VISIBLE);
+            } else {
+                textEmpty.setVisibility(View.GONE);
+            }
         } else if (index == 1) {
             textTotal.setTextColor(context.getResources().getColor(R.color.group_item_text2));
             textSequ.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
@@ -491,7 +495,11 @@ public class FavoriteActivity extends AppBaseFragmentActivity implements OnClick
             textRadio.setTextColor(context.getResources().getColor(R.color.group_item_text2));
             textTts.setTextColor(context.getResources().getColor(R.color.group_item_text2));
             textEmpty.setVisibility(View.GONE);
-            textEditor.setVisibility(View.VISIBLE);
+            if (SequFragment.isData) {
+                textEditor.setVisibility(View.VISIBLE);
+            } else {
+                textEditor.setVisibility(View.GONE);
+            }
         } else if (index == 2) {
             textTotal.setTextColor(context.getResources().getColor(R.color.group_item_text2));
             textSequ.setTextColor(context.getResources().getColor(R.color.group_item_text2));
@@ -499,7 +507,11 @@ public class FavoriteActivity extends AppBaseFragmentActivity implements OnClick
             textRadio.setTextColor(context.getResources().getColor(R.color.group_item_text2));
             textTts.setTextColor(context.getResources().getColor(R.color.group_item_text2));
             textEmpty.setVisibility(View.GONE);
-            textEditor.setVisibility(View.VISIBLE);
+            if (SoundFragment.isData) {
+                textEditor.setVisibility(View.VISIBLE);
+            } else {
+                textEditor.setVisibility(View.GONE);
+            }
         } else if (index == 3) {
             textTotal.setTextColor(context.getResources().getColor(R.color.group_item_text2));
             textSequ.setTextColor(context.getResources().getColor(R.color.group_item_text2));
@@ -507,7 +519,11 @@ public class FavoriteActivity extends AppBaseFragmentActivity implements OnClick
             textRadio.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
             textTts.setTextColor(context.getResources().getColor(R.color.group_item_text2));
             textEmpty.setVisibility(View.GONE);
-            textEditor.setVisibility(View.VISIBLE);
+            if (RadioFragment.isData) {
+                textEditor.setVisibility(View.VISIBLE);
+            } else {
+                textEditor.setVisibility(View.GONE);
+            }
         } else if (index == 4) {
             textTotal.setTextColor(context.getResources().getColor(R.color.group_item_text2));
             textSequ.setTextColor(context.getResources().getColor(R.color.group_item_text2));
@@ -515,7 +531,20 @@ public class FavoriteActivity extends AppBaseFragmentActivity implements OnClick
             textRadio.setTextColor(context.getResources().getColor(R.color.group_item_text2));
             textTts.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
             textEmpty.setVisibility(View.GONE);
-            textEditor.setVisibility(View.VISIBLE);
+            if (TTSFragment.isData) {
+                textEditor.setVisibility(View.VISIBLE);
+            } else {
+                textEditor.setVisibility(View.GONE);
+            }
+        }
+    }
+
+    // 设置清空可见或隐藏
+    public void setQkVisibleOrHide(boolean visible) {
+        if(visible) {
+            textEmpty.setVisibility(View.VISIBLE);
+        } else {
+            textEmpty.setVisibility(View.GONE);
         }
     }
 

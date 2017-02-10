@@ -80,7 +80,7 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
         IntentFilter intentFilter = new IntentFilter();	// 注册广播
         intentFilter.addAction(BroadcastConstants.UPDATE_ACTION_ALL);
         intentFilter.addAction(BroadcastConstants.UPDATE_ACTION_CHECK);
-        registerReceiver(myBroadcast, intentFilter);
+        registerReceiver(mBroadcast, intentFilter);
 
         initDialog();
         initImage();
@@ -182,7 +182,11 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
                 soundText.setTextColor(context.getResources().getColor(R.color.group_item_text2));
                 radioText.setTextColor(context.getResources().getColor(R.color.group_item_text2));
                 ttsText.setTextColor(context.getResources().getColor(R.color.group_item_text2));
-                clearEmpty.setVisibility(View.VISIBLE);
+                if (!TotalFragment.isData) {
+                    clearEmpty.setVisibility(View.GONE);
+                } else {
+                    clearEmpty.setVisibility(View.VISIBLE);
+                }
                 openEdit.setVisibility(View.GONE);
             }  else if (i == 2) { // 声音
                 soundText.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
@@ -191,7 +195,11 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
                 radioText.setTextColor(context.getResources().getColor(R.color.group_item_text2));
                 ttsText.setTextColor(context.getResources().getColor(R.color.group_item_text2));
                 clearEmpty.setVisibility(View.GONE);
-                openEdit.setVisibility(View.VISIBLE);
+                if (!SoundFragment.isData) {
+                    openEdit.setVisibility(View.GONE);
+                } else {
+                    openEdit.setVisibility(View.VISIBLE);
+                }
             } else if (i == 3) { // 电台
                 radioText.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
                 allText.setTextColor(context.getResources().getColor(R.color.group_item_text2));
@@ -199,7 +207,11 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
                 soundText.setTextColor(context.getResources().getColor(R.color.group_item_text2));
                 ttsText.setTextColor(context.getResources().getColor(R.color.group_item_text2));
                 clearEmpty.setVisibility(View.GONE);
-                openEdit.setVisibility(View.VISIBLE);
+                if (!RadioFragment.isData) {
+                    openEdit.setVisibility(View.GONE);
+                } else {
+                    openEdit.setVisibility(View.VISIBLE);
+                }
             } else if (i == 4) { // TTS
                 ttsText.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
                 allText.setTextColor(context.getResources().getColor(R.color.group_item_text2));
@@ -207,7 +219,11 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
                 soundText.setTextColor(context.getResources().getColor(R.color.group_item_text2));
                 radioText.setTextColor(context.getResources().getColor(R.color.group_item_text2));
                 clearEmpty.setVisibility(View.GONE);
-                openEdit.setVisibility(View.VISIBLE);
+                if (!TTSFragment.isData) {
+                    openEdit.setVisibility(View.GONE);
+                } else {
+                    openEdit.setVisibility(View.VISIBLE);
+                }
             }
             setCancel();
         }
@@ -446,7 +462,7 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
     }
 
     // 广播接收器  接收 Fragment 发送的广播  用于更新全选状态
-    private BroadcastReceiver myBroadcast = new BroadcastReceiver() {
+    private BroadcastReceiver mBroadcast = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -476,9 +492,9 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        unregisterReceiver(myBroadcast);// 反注册广播
+        unregisterReceiver(mBroadcast);// 反注册广播
         SoundFragment.isLoad = false;
-        RadioFragment.isData = false;
+        RadioFragment.isLoad = false;
         TTSFragment.isLoad = false;
         context = null;
         image = null;

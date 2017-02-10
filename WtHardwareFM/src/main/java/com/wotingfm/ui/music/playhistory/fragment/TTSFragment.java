@@ -13,18 +13,17 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.music.main.HomeActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.fragment.PlayerFragment;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.ui.music.playhistory.activity.PlayHistoryActivity;
 import com.wotingfm.ui.music.playhistory.adapter.PlayHistoryAdapter;
-import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.L;
-import com.wotingfm.util.ToastUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -111,12 +110,12 @@ public class TTSFragment extends Fragment {
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
-        if (isVisibleToUser && isLoad && !isData) {
-            ToastUtils.show_always(context, "没有历史播放记录");
-        }
         if (isVisibleToUser && TotalFragment.isDeleteTTS) {
             getData();
             TotalFragment.isDeleteTTS = false;
+        }
+        if (isVisibleToUser && isLoad && !isData) {
+            L.w("TAG", "TTS 没有历史播放记录");
         }
     }
 

@@ -21,6 +21,11 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
+import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.common.volley.VolleyCallback;
+import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.music.favorite.activity.FavoriteActivity;
 import com.wotingfm.ui.music.favorite.adapter.FavorListAdapter;
 import com.wotingfm.ui.music.main.HomeActivity;
@@ -28,11 +33,6 @@ import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.fragment.PlayerFragment;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
-import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.common.volley.VolleyCallback;
-import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
@@ -70,6 +70,8 @@ public class SoundFragment extends Fragment {
     private String tag = "SOUND_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
     private boolean isDel;
+
+    public static boolean isData = false;// 记录是否有数据
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,7 +119,6 @@ public class SoundFragment extends Fragment {
                 } else {
                     mListView.stopLoadMore();
                     mListView.setPullLoadEnable(false);
-                    ToastUtils.show_always(context, "已经是最后一页了");
                 }
             }
         });
@@ -200,8 +201,8 @@ public class SoundFragment extends Fragment {
 
                             if (PlayerFragment.context != null) {
                                 HomeActivity.UpdateViewPager();
-                                Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
-                                Bundle bundle1=new Bundle();
+                                Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                                Bundle bundle1 = new Bundle();
                                 bundle1.putString("text", newList.get(position - 1).getContentName());
                                 push.putExtras(bundle1);
                                 context.sendBroadcast(push);
@@ -228,6 +229,7 @@ public class SoundFragment extends Fragment {
             if (dialog != null) dialog.dismiss();
             if (refreshType == 1) {
                 mListView.stopRefresh();
+                isData = false;
             } else {
                 mListView.stopLoadMore();
             }
@@ -260,7 +262,8 @@ public class SoundFragment extends Fragment {
                             isDel = false;
                         }
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
-                        subList = new Gson().fromJson(arg1.getString("FavoriteList"), new TypeToken<List<RankInfo>>() {}.getType());
+                        subList = new Gson().fromJson(arg1.getString("FavoriteList"), new TypeToken<List<RankInfo>>() {
+                        }.getType());
                         try {
                             String allCountString = arg1.getString("AllCount");
                             String pageSizeString = arg1.getString("PageSize");
@@ -292,9 +295,21 @@ public class SoundFragment extends Fragment {
                             adapter.notifyDataSetChanged();
                         }
                         setListener();
+                        isData = true;
+                    } else {
+                        if(refreshType == 1) {
+//                            tipView.setVisibility(View.VISIBLE);
+//                            tipView.setTipView(TipView.TipStatus.NO_DATA, "您还没有喜欢的节目\n快去收听喜欢的节目吧");
+                            isData = false;
+                        }
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    if(refreshType == 1) {
+//                        tipView.setVisibility(View.VISIBLE);
+//                        tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                        isData = false;
+                    }
                 }
 
                 // 无论何种返回值，都需要终止掉上拉刷新及下拉加载的滚动状态
@@ -309,6 +324,11 @@ public class SoundFragment extends Fragment {
             protected void requestError(VolleyError error) {
                 if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
+                if(refreshType == 1) {
+//                    tipView.setVisibility(View.VISIBLE);
+//                    tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                    isData = false;
+                }
             }
         });
     }
