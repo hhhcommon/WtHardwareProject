@@ -34,11 +34,11 @@ public class LanguageSearchInside implements Serializable{
 
     private List<ContentPersons> ContentPersons;// 主播信息
 
-    public List<com.wotingfm.ui.music.player.model.ContentPersons> getContentPersons() {
+    public List<ContentPersons> getContentPersons() {
         return ContentPersons;
     }
 
-    public void setContentPersons(List<com.wotingfm.ui.music.player.model.ContentPersons> contentPersons) {
+    public void setContentPersons(List<ContentPersons> contentPersons) {
         ContentPersons = contentPersons;
     }
 

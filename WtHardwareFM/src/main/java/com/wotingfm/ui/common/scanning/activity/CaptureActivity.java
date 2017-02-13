@@ -180,7 +180,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         beepManager.playBeepSoundAndVibrate();
         String news = rawResult.getText().trim();
         if(news!=null&&!news.equals("")){
-            if(news.contains("http")){
+            if(!news.contains("Type")){
                 bundle.putString("result", news);
                 startActivity(new Intent(CaptureActivity.this, ResultActivity.class).putExtras(bundle));
             }else{

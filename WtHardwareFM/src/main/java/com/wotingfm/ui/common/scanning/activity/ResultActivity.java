@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.manager.MyActivityManager;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.ToastUtils;
 
 /**
  * 扫描结果界面
@@ -37,7 +38,7 @@ public class ResultActivity extends Activity {
         MyActivityManager mam = MyActivityManager.getInstance();
         mam.pushOneActivity(context);
         Bundle extras = getIntent().getExtras();
-        findViewById(R.id.head_left_btn).setOnClickListener(new OnClickListener() {
+        findViewById(R.id.left_image).setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
@@ -48,33 +49,37 @@ public class ResultActivity extends Activity {
         mResultText = (TextView) findViewById(R.id.result_text);
         if (null != extras) {
             String result = extras.getString("result");
-            Log.e("扫描结果", result);
-            if (result.contains("http")) {
-                webview.setVisibility(View.VISIBLE);
-                mResultText.setVisibility(View.GONE);
-                dialog = DialogUtils.Dialogph(context, "正在加载");
-                WebSettings setting = webview.getSettings();
-                setting.setJavaScriptEnabled(true);    // 支持 js
-                webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);// 解决缓存问题
-                webview.loadUrl(result);
-                webview.setWebViewClient(new WebViewClient() {
-                    @Override
-                    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                        view.loadUrl(url);            // 使用当前的 WebView 加载页面
-                        return true;
-                    }
+            if(result!=null&&!result.trim().equals("")) {
+                Log.e("扫描结果", result);
+                if (result.contains("http")) {
+                    webview.setVisibility(View.VISIBLE);
+                    mResultText.setVisibility(View.GONE);
+                    dialog = DialogUtils.Dialogph(context, "正在加载");
+                    WebSettings setting = webview.getSettings();
+                    setting.setJavaScriptEnabled(true);    // 支持 js
+                    webview.getSettings().setCacheMode(WebSettings.LOAD_NO_CACHE);// 解决缓存问题
+                    webview.loadUrl(result);
+                    webview.setWebViewClient(new WebViewClient() {
+                        @Override
+                        public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                            view.loadUrl(url);            // 使用当前的 WebView 加载页面
+                            return true;
+                        }
 
-                    @Override
-                    public void onPageFinished(WebView view, String url) {
-                        super.onPageFinished(view, url);
-                        if (dialog != null) dialog.dismiss();
-                    }
-                });
-                webview.setWebChromeClient(new WebChromeClient());
-            } else {
-                webview.setVisibility(View.GONE);
-                mResultText.setVisibility(View.VISIBLE);
-                mResultText.setText(result);
+                        @Override
+                        public void onPageFinished(WebView view, String url) {
+                            super.onPageFinished(view, url);
+                            if (dialog != null) dialog.dismiss();
+                        }
+                    });
+                    webview.setWebChromeClient(new WebChromeClient());
+                } else {
+                    webview.setVisibility(View.GONE);
+                    mResultText.setVisibility(View.VISIBLE);
+                    mResultText.setText(result);
+                }
+            }else{
+                ToastUtils.show_always(context,"暂没有扫描结果");
             }
         } else {
             webview.setVisibility(View.GONE);
