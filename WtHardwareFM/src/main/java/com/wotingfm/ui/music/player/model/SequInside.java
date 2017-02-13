@@ -1,10 +1,11 @@
 package com.wotingfm.ui.music.player.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class SequInside implements Serializable {
     private String ContentURI;
-    private String ContentPersons;
+    private List<ContentPersons> ContentPersons;
     private String ContentKeyWord;
     private String cTime;
     private String ContentSubjectWord;
@@ -28,11 +29,11 @@ public class SequInside implements Serializable {
         ContentURI = contentURI;
     }
 
-    public String getContentPersons() {
+    public List<ContentPersons> getContentPersons() {
         return ContentPersons;
     }
 
-    public void setContentPersons(String contentPersons) {
+    public void setContentPersons(List<ContentPersons> contentPersons) {
         ContentPersons = contentPersons;
     }
 
