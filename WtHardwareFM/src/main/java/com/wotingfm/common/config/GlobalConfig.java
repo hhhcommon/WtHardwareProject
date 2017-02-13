@@ -228,6 +228,10 @@ public class GlobalConfig {
     public static final String afterThirdAuthUrl ="wt/passport/user/afterThirdAuth.do";
     // 喜欢content/clickFavorite.do
     public static final String clickFavoriteUrl ="wt/content/clickFavorite.do";
+    //发送订阅信息（订阅/取消订阅）
+    public static final String clickSubscribe = "wt/content/clickSubscribe.do";
+    //获取订阅信息
+    public static final String getSubscribeList = "wt/content/getSubscribeList.do";
     // 获取路况数据
     public static final String getLKTTS ="wt/lkTTS.do";
     // 获取favorite列表

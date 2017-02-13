@@ -26,7 +26,9 @@ public class ResultInfo {
 
     private String ContentId;// ID
 
-    private String ContentFavorite;// 是否喜欢  == "1" 喜欢   =="0" 没有喜欢
+    private String ContentFavorite;// 是否喜欢  == "1" 喜欢   == "0" 没有喜欢
+
+    private String ContentSubscribe;// 是否订阅  == "1" 订阅  == "0" 没有订阅
 
     private List<ContentInfo> SubList;// 专辑中的列表信息
 
@@ -206,6 +208,14 @@ public class ResultInfo {
 
     public void setContentImg(String contentImg) {
         ContentImg = contentImg;
+    }
+
+    public String getContentSubscribe() {
+        return ContentSubscribe;
+    }
+
+    public void setContentSubscribe(String contentSubscribe) {
+        ContentSubscribe = contentSubscribe;
     }
 
     @Override
