@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.helper.CommonHelper;
@@ -200,7 +201,10 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                 }
                 break;
             case R.id.tv_subscriber:// 订阅
-//                if()
+                if(BSApplication.SharedPreferences.getString(StringConstant.ISLOGIN, "false").equals("false")) {
+                    ToastUtils.show_always(context, "请先登录~");
+                    return ;
+                }
                 if(CommonHelper.checkNetwork(context)) {
                     dialog = DialogUtils.Dialogph(context, "加载中...");
                     sendSubscribe();

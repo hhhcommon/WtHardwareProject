@@ -24,7 +24,7 @@ import com.wotingfm.ui.music.main.HomeActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.fragment.PlayerFragment;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
-import com.wotingfm.ui.music.playhistory.activity.PlayHistoryActivity;
+import com.wotingfm.ui.music.playhistory.activity.PlayHistoryActivity_0;
 import com.wotingfm.ui.music.playhistory.adapter.PlayHistoryExpandableAdapter;
 import com.wotingfm.ui.music.search.model.SuperRankInfo;
 import com.wotingfm.util.CommonUtils;
@@ -241,7 +241,7 @@ public class TotalFragment extends Fragment {
         mListView.setOnGroupClickListener(new OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                ((PlayHistoryActivity) getActivity()).updateViewPager(list.get(groupPosition).getKey());
+                ((PlayHistoryActivity_0) getActivity()).updateViewPager(list.get(groupPosition).getKey());
                 return true;
             }
         });
@@ -284,7 +284,7 @@ public class TotalFragment extends Fragment {
             public void onClick(View v) {
                 String playType = list.get(delGroupPosition).getHistoryList().get(delChildPosition).getPlayerMediaType();
 
-                //"TTS" 类型的删除条件为 ContentID, 其他类型为 url
+                // "TTS" 类型的删除条件为 ContentID, 其他类型为 url
                 if (playType != null && !playType.equals("") && playType.equals("TTS")) {
                     String contentId = list.get(delGroupPosition).getHistoryList().get(delChildPosition).getContentID();
                     dbDao.deleteHistoryById(contentId);
