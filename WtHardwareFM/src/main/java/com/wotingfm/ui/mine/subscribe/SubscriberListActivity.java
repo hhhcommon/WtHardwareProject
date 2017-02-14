@@ -1,4 +1,4 @@
-package com.wotingfm.ui.music.subscribe;
+package com.wotingfm.ui.mine.subscribe;
 
 import android.app.Dialog;
 import android.graphics.Color;
@@ -17,8 +17,8 @@ import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.baseactivity.AppBaseActivity;
-import com.wotingfm.ui.music.subscribe.adapter.SubscriberAdapter;
-import com.wotingfm.ui.music.subscribe.model.SubscriberInfo;
+import com.wotingfm.ui.mine.subscribe.adapter.SubscriberAdapter;
+import com.wotingfm.ui.mine.subscribe.model.SubscriberInfo;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.TipView;

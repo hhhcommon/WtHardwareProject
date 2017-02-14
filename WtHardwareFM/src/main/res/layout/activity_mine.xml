@@ -195,6 +195,28 @@
             android:orientation="vertical">
 
             <RelativeLayout
+                android:id="@+id/view_subscriber"
+                style="@style/PersonAndSetRelativeStyle"
+                android:layout_marginTop="20dp">
+
+                <View style="@style/ViewStyle" />
+
+                <ImageView
+                    android:id="@+id/image_subscriber"
+                    style="@style/PersonAndSetLeftStyle"
+                    android:src="@mipmap/wt_image_listener" />
+
+                <TextView
+                    style="@style/PersonAndSetTextStyle"
+                    android:text="我的订阅"
+                    android:layout_toRightOf="@id/image_subscriber" />
+
+                <ImageView
+                    style="@style/PersonAndSetRightStyle" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
                 android:id="@+id/listener_set"
                 style="@style/PersonAndSetRelativeStyle"
                 android:layout_marginTop="20dp">

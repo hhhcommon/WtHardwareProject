@@ -247,7 +247,7 @@
 
         <!-- 我的订阅列表界面 -->
         <activity
-            android:name=".ui.music.subscribe.SubscriberListActivity"
+            android:name=".ui.mine.subscribe.SubscriberListActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>

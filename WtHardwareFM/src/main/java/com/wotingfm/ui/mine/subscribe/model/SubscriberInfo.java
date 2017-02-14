@@ -1,4 +1,4 @@
-package com.wotingfm.ui.music.subscribe.model;
+package com.wotingfm.ui.mine.subscribe.model;
 
 /**
  * 订阅信息
@@ -17,6 +17,16 @@ public class SubscriberInfo {
     private String ContentMediaName;
 
     private String ContentMediaId;
+
+    private long ContentPubTime;// 更新时间
+
+    public long getContentPubTime() {
+        return ContentPubTime;
+    }
+
+    public void setContentPubTime(long contentPubTime) {
+        ContentPubTime = contentPubTime;
+    }
 
     public int getUpdateCount() {
         return UpdateCount;

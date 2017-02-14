@@ -23,6 +23,12 @@
 
     </RelativeLayout>
 
+    <com.wotingfm.widget.TipView
+        android:id="@+id/tip_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
     <com.wotingfm.widget.xlistview.XListView
         android:id="@+id/listview_fm"
         android:layout_width="match_parent"

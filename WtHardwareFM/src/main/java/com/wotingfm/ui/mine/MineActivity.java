@@ -55,6 +55,7 @@ import com.wotingfm.ui.mine.person.login.LoginActivity;
 import com.wotingfm.ui.mine.person.updatepersonnews.UpdatePersonActivity;
 import com.wotingfm.ui.mine.person.updatepersonnews.model.UpdatePerson;
 import com.wotingfm.ui.mine.set.SetActivity;
+import com.wotingfm.ui.mine.subscribe.SubscriberListActivity;
 import com.wotingfm.ui.mine.wifi.WIFIActivity;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
@@ -96,6 +97,8 @@ public class MineActivity extends BaseActivity implements OnClickListener {
     private TextView textUserArea;// 用户所在城市
     private TextView textUserId;// 用户号
     private TextView textUserAutograph;// 用户签名
+
+    private View viewSubscriber;// 我的订阅
 
     private String MiniUri;
     private String outputFilePath;
@@ -165,6 +168,9 @@ public class MineActivity extends BaseActivity implements OnClickListener {
         textWifiName = (TextView) findViewById(R.id.text_wifi_name);// 连接的 WIFI 的名字
 //        TextView textChannel = (TextView) findViewById(R.id.text_listener_frequency);// 频率
 
+        viewSubscriber = findViewById(R.id.view_subscriber);// 我的订阅
+        viewSubscriber.setOnClickListener(this);
+
         getBluetoothState();// 获取蓝牙的打开关闭状态
     }
 
@@ -221,6 +227,9 @@ public class MineActivity extends BaseActivity implements OnClickListener {
                 intentSet.putExtra("LOGIN_STATE", isLogin);
                 startActivityForResult(intentSet, 0x222);
                 break;
+            case R.id.view_subscriber:// 我的订阅
+                startActivity(new Intent(context, SubscriberListActivity.class));
+                break;
         }
     }
 
@@ -256,6 +265,8 @@ public class MineActivity extends BaseActivity implements OnClickListener {
         if (isLogin.equals("true")) {
             relativeStatusUnLogin.setVisibility(View.GONE);
             relativeStatusLogin.setVisibility(View.VISIBLE);
+            viewSubscriber.setVisibility(View.VISIBLE);
+
             String imageUrl = sharedPreferences.getString(StringConstant.IMAGEURL, "");// 头像
             userName = sharedPreferences.getString(StringConstant.USERNAME, "");// 用户名
             userId = sharedPreferences.getString(StringConstant.USERID, "");// 用户 ID
@@ -292,6 +303,7 @@ public class MineActivity extends BaseActivity implements OnClickListener {
                 userHead.setImageBitmap(bmp);
             }
         } else {
+            viewSubscriber.setVisibility(View.GONE);
             relativeStatusLogin.setVisibility(View.GONE);
             relativeStatusUnLogin.setVisibility(View.VISIBLE);
         }

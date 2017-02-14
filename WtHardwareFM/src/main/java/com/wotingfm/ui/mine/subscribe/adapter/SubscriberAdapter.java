@@ -1,4 +1,4 @@
-package com.wotingfm.ui.music.subscribe.adapter;
+package com.wotingfm.ui.mine.subscribe.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,18 +12,19 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.ui.music.subscribe.model.SubscriberInfo;
+import com.wotingfm.ui.mine.subscribe.model.SubscriberInfo;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Locale;
 
 /**
- *
+ * 订阅列表
  * Created by Administrator on 2017/2/13.
  */
 public class SubscriberAdapter extends BaseAdapter {
-
     private List<SubscriberInfo> list;
     private Context context;
 
@@ -52,24 +53,18 @@ public class SubscriberAdapter extends BaseAdapter {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_rankinfo, null);
+            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_subscriber_list, parent, false);
 
             // 六边形封面图片遮罩
             Bitmap bitmapMask = BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b);
-            holder.imageMask = (ImageView) convertView.findViewById(R.id.img_zhezhao);
+            holder.imageMask = (ImageView) convertView.findViewById(R.id.image_mask);
             holder.imageMask.setImageBitmap(bitmapMask);
 
-            holder.imageCover = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 封面图片
-            holder.textTitle = (TextView) convertView.findViewById(R.id.RankTitle);// 订阅的专辑名
-            holder.textContentPub = (TextView) convertView.findViewById(R.id.RankPlaying);// 来源
-            holder.textNumber = (TextView) convertView.findViewById(R.id.tv_num);// 播放次数
-
-            holder.image_last = (ImageView) convertView.findViewById(R.id.image_last);
-            holder.image_last.setVisibility(View.GONE);
-            holder.image_num = (ImageView) convertView.findViewById(R.id.image_num);
-            holder.image_num.setVisibility(View.GONE);
-            holder.tv_last = (TextView) convertView.findViewById(R.id.tv_last);
-            holder.tv_last.setVisibility(View.GONE);
+            holder.imageCover = (ImageView) convertView.findViewById(R.id.image_cover);// 封面图片
+            holder.textTitle = (TextView) convertView.findViewById(R.id.text_sequ_title);// 订阅的专辑名
+            holder.textMediaName = (TextView) convertView.findViewById(R.id.text_media_name);// ContentMediaName
+            holder.textUpdateTime = (TextView) convertView.findViewById(R.id.text_update_time);// 更新时间
+            holder.textUpdateCount = (TextView) convertView.findViewById(R.id.text_update_count);// 更新数量
 
             convertView.setTag(holder);
         } else {
@@ -97,6 +92,29 @@ public class SubscriberAdapter extends BaseAdapter {
         }
         holder.textTitle.setText(sequName);
 
+        // ContentMediaName
+        String contentName = lists.getContentMediaName();
+        if (contentName == null || contentName.trim().equals("")) {
+            contentName = "未知";
+        }
+        holder.textMediaName.setText(contentName);
+
+        // 更新时间
+        String updateTime = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).format(lists.getContentPubTime());
+        if (updateTime == null) {
+            updateTime = new SimpleDateFormat("yyyy-MM-dd", Locale.CHINA).format(System.currentTimeMillis());
+        }
+        holder.textUpdateTime.setText(updateTime);
+
+        // 更新数量
+        int count = lists.getUpdateCount();
+        if (count > 0) {
+            holder.textUpdateCount.setVisibility(View.VISIBLE);
+            holder.textUpdateCount.setText(count + "更新");
+        } else {
+            holder.textUpdateCount.setVisibility(View.GONE);
+        }
+
         return convertView;
     }
 
@@ -104,10 +122,8 @@ public class SubscriberAdapter extends BaseAdapter {
         public ImageView imageMask;// 六边形封面图片遮罩
         public ImageView imageCover;// 封面图片
         public TextView textTitle;// 订阅的专辑名
-        public TextView textContentPub;// 来源
-        public TextView textNumber;// 播放次数
-        public TextView tv_last;
-        public ImageView image_last;
-        public ImageView image_num;
+        public TextView textMediaName;// ContentMediaName
+        public TextView textUpdateTime;// 更新时间
+        public TextView textUpdateCount;// 更新数量
     }
 }
