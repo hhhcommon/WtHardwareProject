@@ -212,6 +212,8 @@ public class GlobalConfig {
     public static final String getContentUrl ="wt/content/getContents.do";
     // 根据contentID获取内容列表
     public static final String getContentById ="wt/content/getContentInfo.do";
+    // 得到专辑下节目列表
+    public static final String getSmSubMedias = "wt/content/getSmSubMedias.do";
     // 搜索检索热词
     public static final String searchHotKeysUrl ="wt/searchHotKeys.do";
     // 通过手机号码注册

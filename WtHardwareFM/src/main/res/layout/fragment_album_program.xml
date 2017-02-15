@@ -63,7 +63,7 @@
 
     </RelativeLayout>
 
-    <ListView
+    <com.wotingfm.widget.xlistview.XListView
         android:id="@+id/lv_album"
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -294,10 +294,7 @@ public class ProgramFragment extends Fragment implements OnClickListener {
             tempList.get(0).setDownloadtype(1);
             FID.updataDownloadStatus(tempList.get(0).getUrl(), "1");
             DownloadService.workStart(tempList.get(0));
-            if(DownloadActivity.isVisible==true){
-                      /*  if(DownLoadUnCompleted.dwType!){
-
-                        }*/
+            if(DownloadActivity.isVisible){
                 DownLoadUnCompleted.dwType=true;
             }
 
