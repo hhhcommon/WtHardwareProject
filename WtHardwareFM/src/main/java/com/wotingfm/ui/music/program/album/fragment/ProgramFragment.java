@@ -1,5 +1,6 @@
 package com.wotingfm.ui.music.program.album.fragment;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -13,9 +14,15 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.android.volley.VolleyError;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
+import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.common.volley.VolleyCallback;
+import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.common.service.DownloadService;
 import com.wotingfm.ui.music.download.activity.DownloadActivity;
@@ -30,23 +37,29 @@ import com.wotingfm.ui.music.program.album.adapter.AlbumAdapter;
 import com.wotingfm.ui.music.program.album.adapter.AlbumMainAdapter;
 import com.wotingfm.ui.music.program.album.model.ContentInfo;
 import com.wotingfm.util.CommonUtils;
+import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.TipView;
+import com.wotingfm.widget.xlistview.XListView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
  * 专辑列表页
  * @author woting11
  */
-public class ProgramFragment extends Fragment implements OnClickListener {
+public class ProgramFragment extends Fragment implements OnClickListener, XListView.IXListViewListener {
     private Context context;
-    private List<ContentInfo> contentList;// 列表
+    private List<ContentInfo> contentList = new ArrayList<>();// 列表
     private List<ContentInfo> downLoadList = new ArrayList<>();// 下载列表
     private List<ContentInfo> subList = new ArrayList<>();
+    private List<ContentInfo> list = new ArrayList<>();
     private AlbumMainAdapter albumMainAdapter;
     private AlbumAdapter albumAdapter;
 
@@ -55,18 +68,23 @@ public class ProgramFragment extends Fragment implements OnClickListener {
     private ImageView imageSort;// 排序
     private ImageView imageSortDown;// 倒序
 
-    private ListView listAlbum;// 专辑列表
+    private XListView listAlbum;// 专辑列表
 
+    private Dialog dialog;// 加载数据对话框
     private TipView tipView;// 没有数据提示
     private View viewStatus;// 下载状态
     private TextView textSum;// 选择下载的数量
     private ListView listDownload;// 下载列表
     private ImageView imageAllCheck;// 全选图标
 
-    private boolean isInitData;// 是否初始化数据
-    private boolean isInitView;// 是否初始化界面
     private boolean flag;// 是否全选
     private int sum;// 选择的数量
+    private int sortType = 1;// == 1 按卷号从大到小排序 默认排序；== 2 按卷号从小到大排序；
+    private int page = 1;// 列表页码
+
+    private String albumId;
+    private String tag = "ALBUM_PROGRAM_LIST_VOLLEY_REQUEST_CANCEL_TAG";
+    private boolean isCancelRequest;
 
     private SearchPlayerHistoryDao dbDao;
     private FileInfoDao FID;
@@ -107,7 +125,9 @@ public class ProgramFragment extends Fragment implements OnClickListener {
 
         rootView.findViewById(R.id.img_download).setOnClickListener(this);// 下载
 
-        listAlbum = (ListView) rootView.findViewById(R.id.lv_album);// 展示专辑列表
+        listAlbum = (XListView) rootView.findViewById(R.id.lv_album);// 展示专辑列表
+        listAlbum.setPullRefreshEnable(false);
+        listAlbum.setXListViewListener(this);
 
         viewStatus = rootView.findViewById(R.id.lin_status2);// 下载状态
         textSum = (TextView) rootView.findViewById(R.id.tv_sum);// 选择下载的数量
@@ -119,30 +139,86 @@ public class ProgramFragment extends Fragment implements OnClickListener {
 
         setListener();
 
-        isInitView = true;
-
-        contentList = ((AlbumActivity) context).getContentList();// 获取列表
-        initData(contentList);
+        albumId = ((AlbumActivity) context).getAlbumId();
+        sendSubMediaList();
     }
 
-    // 初始化数据
-    public void initData(List<ContentInfo> contentList) {
-        if (isInitData || !isInitView || contentList == null || contentList.size() <= 0) return;
-        isInitData = true;
-
-        // 总共集数
-        int size = contentList.size();
-        textTotal.setText("列表 (共" + size + "集)");
-
-        // 列表
-        this.contentList = contentList;
-        if(size <= 0) {// 没有数据
-            tipView.setVisibility(View.VISIBLE);
-            tipView.setTipView(TipView.TipStatus.NO_DATA, "数据君不翼而飞了\n点击界面会重新获取数据哟");
-        } else {
-            tipView.setVisibility(View.GONE);
-            listAlbum.setAdapter(albumMainAdapter = new AlbumMainAdapter(context, this.contentList));
+    // 获取专辑列表
+    private void sendSubMediaList() {
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
+        try {
+            jsonObject.put("ContentId", albumId);
+            jsonObject.put("Page", String.valueOf(page));
+            jsonObject.put("PageSize", "20");
+            jsonObject.put("SortType", String.valueOf(sortType));
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+
+        VolleyRequest.RequestPost(GlobalConfig.getSmSubMedias, tag, jsonObject, new VolleyCallback() {
+            private String subListString;
+            @Override
+            protected void requestSuccess(JSONObject result) {
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return;
+                try {
+                    String ReturnType = result.getString("ReturnType");
+                    if (ReturnType != null && ReturnType.equals("1001")) {
+                        try {
+                            JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultInfo")).nextValue();
+                            try {
+                                String total = arg1.getString("ContentSubCount");
+                                textTotal.setText("列表 (共" + total + "集)");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                subListString = arg1.getString("SubList");
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                list = new Gson().fromJson(subListString, new TypeToken<List<ContentInfo>>() {}.getType());
+                                if (list != null && list.size() > 0) {
+                                    if (page == 1) contentList.clear();
+                                    if (list.size() >= 20) page++;
+                                    else listAlbum.setPullLoadEnable(false);
+                                    contentList.addAll(list);
+
+                                    listAlbum.setAdapter(albumMainAdapter = new AlbumMainAdapter(context, contentList));
+                                    listDownload.setAdapter(albumAdapter = new AlbumAdapter(context, contentList));// 下载列表
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+
+                            tipView.setVisibility(View.GONE);
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                            tipView.setVisibility(View.VISIBLE);
+                            tipView.setTipView(TipView.TipStatus.NO_DATA, "专辑中没有节目\n换个专辑看看吧");
+                        }
+                    } else {
+                        listAlbum.stopLoadMore();
+                        tipView.setVisibility(View.VISIBLE);
+                        tipView.setTipView(TipView.TipStatus.NO_DATA, "专辑中没有节目\n换个专辑看看吧");
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    listAlbum.stopLoadMore();
+                    tipView.setVisibility(View.VISIBLE);
+                    tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                }
+            }
+
+            @Override
+            protected void requestError(VolleyError error) {
+                if (dialog != null) dialog.dismiss();
+                listAlbum.stopLoadMore();
+                tipView.setVisibility(View.VISIBLE);
+                tipView.setTipView(TipView.TipStatus.IS_ERROR);
+            }
+        });
     }
 
     @Override
@@ -200,16 +276,26 @@ public class ProgramFragment extends Fragment implements OnClickListener {
                 break;
             case R.id.img_sort:// 排序
                 if (contentList.size() != 0 && albumMainAdapter != null) {
-                    Collections.reverse(contentList);
-                    albumMainAdapter.notifyDataSetChanged();
+                    sortType = 2;
+                    page = 1;
+                    dialog = DialogUtils.Dialogph(context, "正在加载数据...");
+                    sendSubMediaList();
+
+//                    Collections.reverse(contentList);
+//                    albumMainAdapter.notifyDataSetChanged();
                     imageSortDown.setVisibility(View.VISIBLE);
                     imageSort.setVisibility(View.GONE);
                 }
                 break;
             case R.id.img_sort_down:// 倒序
                 if (contentList.size() != 0 && albumMainAdapter != null) {
-                    Collections.reverse(contentList);
-                    albumMainAdapter.notifyDataSetChanged();
+                    sortType = 1;
+                    page = 1;
+                    dialog = DialogUtils.Dialogph(context, "正在加载数据...");
+                    sendSubMediaList();
+
+//                    Collections.reverse(contentList);
+//                    albumMainAdapter.notifyDataSetChanged();
                     imageSortDown.setVisibility(View.GONE);
                     imageSort.setVisibility(View.VISIBLE);
                 }
@@ -410,6 +496,15 @@ public class ProgramFragment extends Fragment implements OnClickListener {
     }
 
     @Override
+    public void onRefresh() {
+    }
+
+    @Override
+    public void onLoadMore() {
+        sendSubMediaList();
+    }
+
+    @Override
     public void onDestroyView() {
         super.onDestroyView();
         if (null != rootView) {
@@ -420,6 +515,7 @@ public class ProgramFragment extends Fragment implements OnClickListener {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        isCancelRequest = VolleyRequest.cancelRequest(tag);
         rootView = null;
         context = null;
         if(dbDao != null) {

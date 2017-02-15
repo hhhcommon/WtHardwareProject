@@ -23,7 +23,6 @@ import com.wotingfm.ui.baseadapter.MyFragmentChildPagerAdapter;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
 import com.wotingfm.ui.music.program.album.fragment.DetailsFragment;
 import com.wotingfm.ui.music.program.album.fragment.ProgramFragment;
-import com.wotingfm.ui.music.program.album.model.ContentInfo;
 import com.wotingfm.ui.music.program.album.model.ResultInfo;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.util.DialogUtils;
@@ -35,7 +34,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  * 专辑页
@@ -71,12 +69,6 @@ public class AlbumActivity extends AppBaseFragmentActivity implements OnClickLis
     // 获取专辑信息
     public ResultInfo getResultInfo() {
         return resultInfo;
-    }
-
-    // 获取专辑列表
-    public List<ContentInfo> getContentList() {
-        if(resultInfo != null) return resultInfo.getSubList();
-        else return null;
     }
 
     @Override
@@ -185,6 +177,11 @@ public class AlbumActivity extends AppBaseFragmentActivity implements OnClickLis
         textAlbumName.setText(albumName);
     }
 
+    // 获取 ID
+    public String getAlbumId() {
+        return albumId;
+    }
+
     // 获取网络数据
     private void sendRequest() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
@@ -210,7 +207,6 @@ public class AlbumActivity extends AppBaseFragmentActivity implements OnClickLis
                             tipView.setVisibility(View.GONE);
                             if(detailsFragment != null) detailsFragment.initData(resultInfo);// 设置数据
                             if(programFragment != null) {
-                                programFragment.initData(getContentList());// 加载列表
                                 String descn = resultInfo.getContentDescn();
                                 String name = resultInfo.getContentName();
                                 String img = resultInfo.getContentImg();
