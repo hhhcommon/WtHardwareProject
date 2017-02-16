@@ -19,7 +19,7 @@ import com.wotingfm.ui.music.main.HomeActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.fragment.PlayerFragment;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
-import com.wotingfm.ui.music.playhistory.activity.PlayHistoryActivity;
+import com.wotingfm.ui.music.playhistory.activity.PlayHistoryActivity_0;
 import com.wotingfm.ui.music.playhistory.adapter.PlayHistoryAdapter;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.L;
@@ -175,7 +175,7 @@ public class SoundFragment extends Fragment {
         listView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (!PlayHistoryActivity.isEdit) {
+                if (!PlayHistoryActivity_0.isEdit) {
                     if (playList.get(position).getStatus() == 0) {
                         playList.get(position).setStatus(1);
                     } else if (playList.get(position).getStatus() == 1) {

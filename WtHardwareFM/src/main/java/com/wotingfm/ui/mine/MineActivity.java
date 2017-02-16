@@ -55,6 +55,7 @@ import com.wotingfm.ui.mine.person.login.LoginActivity;
 import com.wotingfm.ui.mine.person.updatepersonnews.UpdatePersonActivity;
 import com.wotingfm.ui.mine.person.updatepersonnews.model.UpdatePerson;
 import com.wotingfm.ui.mine.set.SetActivity;
+import com.wotingfm.ui.mine.subscribe.SubscriberListActivity;
 import com.wotingfm.ui.mine.wifi.WIFIActivity;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
@@ -97,6 +98,8 @@ public class MineActivity extends BaseActivity implements OnClickListener {
     private TextView textUserId;// 用户号
     private TextView textUserAutograph;// 用户签名
 
+    private View viewSubscriber;// 我的订阅
+
     private String MiniUri;
     private String outputFilePath;
     private String url;
@@ -124,49 +127,51 @@ public class MineActivity extends BaseActivity implements OnClickListener {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mine);
         sharedPreferences = BSApplication.SharedPreferences;
-        wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);                         // 获取 WiFi 服务
+        wifiManager = (WifiManager) getSystemService(Context.WIFI_SERVICE);// 获取 WiFi 服务
         initViews();
     }
 
     // 设置 view
     private void initViews() {
-        imageDialog();                                                                              // 更换头像对话框
+        imageDialog();// 更换头像对话框
 
         Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.img_person_background);
-        ImageView loginBackgroundImage = (ImageView) findViewById(R.id.lin_image);                  // 登录背景图片
+        ImageView loginBackgroundImage = (ImageView) findViewById(R.id.lin_image);// 登录背景图片
         loginBackgroundImage.setImageBitmap(bmp);
-        ImageView lin_image_0 = (ImageView) findViewById(R.id.lin_image_0);                         // 未登录背景图片
+        ImageView lin_image_0 = (ImageView) findViewById(R.id.lin_image_0);// 未登录背景图片
         lin_image_0.setImageBitmap(bmp);
 
-        findViewById(R.id.lin_xiugai).setOnClickListener(this);                                     // 修改个人资料
-        findViewById(R.id.imageView_ewm).setOnClickListener(this);                                  // 二维码
-        findViewById(R.id.flow_set).setOnClickListener(this);                                       // 流量管理
-        findViewById(R.id.bluetooth_set).setOnClickListener(this);                                  // 蓝牙设置
-        findViewById(R.id.test_set).setOnClickListener(this);                                       // 对讲测试
-        findViewById(R.id.wifi_set).setOnClickListener(this);                                       // WIFI设置
-        findViewById(R.id.listener_set).setOnClickListener(this);                                   // 频道设置
-        findViewById(R.id.image_nodenglu).setOnClickListener(this);                                 // 没有登录时的默认头像 点击跳转至登录界面
-        findViewById(R.id.text_denglu).setOnClickListener(this);                                    // "点击登录"
-        findViewById(R.id.lin_set).setOnClickListener(this);                                        // 设置
+        findViewById(R.id.lin_xiugai).setOnClickListener(this);// 修改个人资料
+        findViewById(R.id.imageView_ewm).setOnClickListener(this);// 二维码
+        findViewById(R.id.flow_set).setOnClickListener(this);// 流量管理
+        findViewById(R.id.bluetooth_set).setOnClickListener(this);// 蓝牙设置
+        findViewById(R.id.wifi_set).setOnClickListener(this);// WIFI设置
+        findViewById(R.id.listener_set).setOnClickListener(this);// 频道设置
+        findViewById(R.id.image_nodenglu).setOnClickListener(this);// 没有登录时的默认头像 点击跳转至登录界面
+        findViewById(R.id.text_denglu).setOnClickListener(this);// "点击登录"
+        findViewById(R.id.lin_set).setOnClickListener(this);// 设置
 
-        relativeStatusUnLogin = findViewById(R.id.lin_status_nodenglu);                             // 未登录时的状态
+        relativeStatusUnLogin = findViewById(R.id.lin_status_nodenglu);// 未登录时的状态
 
-        relativeStatusLogin = findViewById(R.id.lin_status_denglu);                                 // 登录时的状态
+        relativeStatusLogin = findViewById(R.id.lin_status_denglu);// 登录时的状态
 
-        userHead = (ImageView) findViewById(R.id.image_touxiang);                                   // 用户头像
+        userHead = (ImageView) findViewById(R.id.image_touxiang);// 用户头像
         userHead.setOnClickListener(this);
 
-        textUserName = (TextView) findViewById(R.id.text_user_name);                                // 用户名
-        textUserArea = (TextView) findViewById(R.id.text_user_area);                                // 城市
-        circleView = findViewById(R.id.circle_view);                                                // 点
-        textUserId = (TextView) findViewById(R.id.text_user_id);                                    // 用户号
-        textUserAutograph = (TextView) findViewById(R.id.text_user_autograph);                      // 用户签名
+        textUserName = (TextView) findViewById(R.id.text_user_name);// 用户名
+        textUserArea = (TextView) findViewById(R.id.text_user_area);// 城市
+        circleView = findViewById(R.id.circle_view);// 点
+        textUserId = (TextView) findViewById(R.id.text_user_id);// 用户号
+        textUserAutograph = (TextView) findViewById(R.id.text_user_autograph);// 用户签名
 
-        textBluetoothState = (TextView) findViewById(R.id.text_bluetooth_state);                    // 蓝牙的状态 打开 OR 关闭
-        textWifiName = (TextView) findViewById(R.id.text_wifi_name);                                // 连接的 WIFI 的名字
-//        TextView textChannel = (TextView) findViewById(R.id.text_listener_frequency);             // 频率
+        textBluetoothState = (TextView) findViewById(R.id.text_bluetooth_state);// 蓝牙的状态 打开 OR 关闭
+        textWifiName = (TextView) findViewById(R.id.text_wifi_name);// 连接的 WIFI 的名字
+//        TextView textChannel = (TextView) findViewById(R.id.text_listener_frequency);// 频率
 
-        getBluetoothState();                                                                        // 获取蓝牙的打开关闭状态
+        viewSubscriber = findViewById(R.id.view_subscriber);// 我的订阅
+        viewSubscriber.setOnClickListener(this);
+
+        getBluetoothState();// 获取蓝牙的打开关闭状态
     }
 
     @Override
@@ -199,9 +204,6 @@ public class MineActivity extends BaseActivity implements OnClickListener {
             case R.id.bluetooth_set:// 蓝牙
                 startActivity(new Intent(context, BluetoothActivity.class));
                 break;
-            case R.id.test_set:// 对讲测试
-                startActivity(new Intent(context, FMTestActivity.class));
-                break;
             case R.id.wifi_set:// WIFI连接设置
                 startActivity(new Intent(context, WIFIActivity.class));
                 break;
@@ -224,6 +226,9 @@ public class MineActivity extends BaseActivity implements OnClickListener {
                 Intent intentSet = new Intent(context, SetActivity.class);
                 intentSet.putExtra("LOGIN_STATE", isLogin);
                 startActivityForResult(intentSet, 0x222);
+                break;
+            case R.id.view_subscriber:// 我的订阅
+                startActivity(new Intent(context, SubscriberListActivity.class));
                 break;
         }
     }
@@ -260,6 +265,8 @@ public class MineActivity extends BaseActivity implements OnClickListener {
         if (isLogin.equals("true")) {
             relativeStatusUnLogin.setVisibility(View.GONE);
             relativeStatusLogin.setVisibility(View.VISIBLE);
+            viewSubscriber.setVisibility(View.VISIBLE);
+
             String imageUrl = sharedPreferences.getString(StringConstant.IMAGEURL, "");// 头像
             userName = sharedPreferences.getString(StringConstant.USERNAME, "");// 用户名
             userId = sharedPreferences.getString(StringConstant.USERID, "");// 用户 ID
@@ -296,6 +303,7 @@ public class MineActivity extends BaseActivity implements OnClickListener {
                 userHead.setImageBitmap(bmp);
             }
         } else {
+            viewSubscriber.setVisibility(View.GONE);
             relativeStatusLogin.setVisibility(View.GONE);
             relativeStatusUnLogin.setVisibility(View.VISIBLE);
         }

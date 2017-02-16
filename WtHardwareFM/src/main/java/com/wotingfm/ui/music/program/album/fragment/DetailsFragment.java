@@ -17,6 +17,7 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.helper.CommonHelper;
@@ -56,6 +57,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
     private ImageView imageAlbum;// 专辑封面图片
     private RoundImageView imageHead;// 主播头像
     private TextView textFavorite;// 喜欢
+    private TextView textSubscriber;// 订阅
     private TextView textAnchor;// 主播
     private TextView textContent;// 内容介绍
     private TextView textLabel;// 标签
@@ -64,6 +66,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
     private String contentPub;
     private String contentId;// ID
     private String contentFavorite;// 是否喜欢  == 1 喜欢  == 0 还没喜欢
+    private String contentSubscribe;// 是否订阅  == 1 订阅  == 0 还没订阅
     private String tag = "ALBUM_DETAILS_FRAGMENT_VOLLEY_REQUEST_CANCEL_TAG";
 
     private boolean isConcern;// 是否关注
@@ -93,6 +96,9 @@ public class DetailsFragment extends Fragment implements OnClickListener {
 
         textFavorite = (TextView) view.findViewById(R.id.tv_favorite);// 喜欢状态
         textFavorite.setOnClickListener(this);
+
+        textSubscriber = (TextView) view.findViewById(R.id.tv_subscriber);// 订阅
+        textSubscriber.setOnClickListener(this);
 
         view.findViewById(R.id.text_shape).setOnClickListener(this);// 分享
         view.findViewById(R.id.lin_pinglun).setOnClickListener(this);// 评论
@@ -140,6 +146,14 @@ public class DetailsFragment extends Fragment implements OnClickListener {
             textFavorite.setCompoundDrawablesWithIntrinsicBounds(null, null, null, context.getResources().getDrawable(R.mipmap.wt_img_liked));
         }
 
+        // 订阅状态
+        contentSubscribe = resultInfo.getContentSubscribe();
+        if(contentSubscribe != null && contentSubscribe.equals("1")) {
+            textSubscriber.setText("已订阅");
+            // 差图
+//            textSubscriber.setCompoundDrawablesWithIntrinsicBounds(null, null, null, context.getResources().getDrawable(R.mipmap.wt_img_liked));
+        }
+
         // 主播名字 OR 节目名
         String anchorName = resultInfo.getContentName();
         if(anchorName == null || anchorName.trim().equals("")) {
@@ -184,6 +198,16 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                 if(CommonHelper.checkNetwork(context)) {
                     dialog = DialogUtils.Dialogph(context, "加载中...");
                     sendFavorite();
+                }
+                break;
+            case R.id.tv_subscriber:// 订阅
+                if(BSApplication.SharedPreferences.getString(StringConstant.ISLOGIN, "false").equals("false")) {
+                    ToastUtils.show_always(context, "请先登录~");
+                    return ;
+                }
+                if(CommonHelper.checkNetwork(context)) {
+                    dialog = DialogUtils.Dialogph(context, "加载中...");
+                    sendSubscribe();
                 }
                 break;
             case R.id.text_shape:// 分享
@@ -281,6 +305,55 @@ public class DetailsFragment extends Fragment implements OnClickListener {
             protected void requestError(VolleyError error) {
                 if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
+            }
+        });
+    }
+
+    // 发送订阅信息（订阅/取消订阅）
+    private void sendSubscribe() {
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
+        try {
+            jsonObject.put("MediaType", "SEQU");
+            jsonObject.put("ContentId", contentId);
+            if (contentSubscribe.equals("0")) {
+                jsonObject.put("Flag", "1");
+            } else {
+                jsonObject.put("Flag", "0");
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        VolleyRequest.RequestPost(GlobalConfig.clickSubscribe, tag, jsonObject, new VolleyCallback() {
+            private String returnType;
+
+            @Override
+            protected void requestSuccess(JSONObject result) {
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return;
+                try {
+                    returnType = result.getString("ReturnType");
+                    L.i("TAG", "returnType -- > > " + returnType);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (returnType != null && returnType.equals("1001")) {
+                    if (contentSubscribe.equals("1")) {
+                        contentSubscribe = "0";// 已经取消订阅
+                        textSubscriber.setText("订阅");
+                    } else {
+                        contentSubscribe = "1";// 订阅成功
+                        textSubscriber.setText("已订阅");
+                    }
+                } else {
+                    ToastUtils.show_always(context, "获取数据出错了，请重试!");
+                }
+            }
+
+            @Override
+            protected void requestError(VolleyError error) {
+                ToastUtils.showVolleyError(context);
+                if (dialog != null) dialog.dismiss();
             }
         });
     }

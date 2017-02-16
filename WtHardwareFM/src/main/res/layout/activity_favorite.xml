@@ -107,6 +107,7 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:text="TTS"
+                android:visibility="gone"
                 android:textColor="@color/group_item_text2"
                 android:textSize="@dimen/wt_edittext_default_text" />
 

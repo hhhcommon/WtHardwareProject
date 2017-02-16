@@ -48,10 +48,23 @@
 
     </RelativeLayout>
 
+    <com.wotingfm.widget.TipView
+        android:id="@+id/tip_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
+
+    <ListView
+        android:id="@+id/list_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/app_bg"/>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/WHITE"
+        android:visibility="gone"
         android:orientation="vertical">
 
         <LinearLayout
