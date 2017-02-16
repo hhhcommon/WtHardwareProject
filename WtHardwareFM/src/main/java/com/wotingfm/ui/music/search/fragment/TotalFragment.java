@@ -36,6 +36,7 @@ import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
+import com.wotingfm.widget.TipView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,10 +45,11 @@ import org.json.JSONTokener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class TotalFragment extends Fragment implements OnGroupClickListener, OnChildClickListener {
+public class TotalFragment extends Fragment implements OnGroupClickListener, OnChildClickListener, TipView.WhiteViewClick {
     private FragmentActivity context;
     private SearchPlayerHistoryDao dbDao;
 
+    private TipView tipView;// 没有网络、没有数据、数据错误提示
     private View rootView;
     private Dialog dialog;
     private ExpandableListView expandListView;
@@ -59,9 +61,15 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
     private ArrayList<SuperRankInfo> list = new ArrayList<>();// 返回的节目list，拆分之前的list
     private List<RankInfo> subList;
 
-    protected String searchString;
+    private String searchString;
     private String tag = "TOTAL_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
+
+    @Override
+    public void onWhiteViewClick() {
+        dialog = DialogUtils.Dialogph(context, "通讯中");
+        sendRequest();
+    }
 
     @Override
     public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
@@ -152,6 +160,10 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_favorite_total, container, false);
+
+            tipView = (TipView) rootView.findViewById(R.id.tip_view);
+            tipView.setWhiteClick(this);
+
             expandListView = (ExpandableListView) rootView.findViewById(R.id.ex_listview);
             expandListView.setGroupIndicator(null);// 去除 indicator
             expandListView.setOnGroupClickListener(this);
@@ -161,6 +173,12 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
     }
 
     private void sendRequest() {
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            tipView.setVisibility(View.VISIBLE);
+            tipView.setTipView(TipView.TipStatus.NO_NET);
+            return ;
+        }
+
         VolleyRequest.RequestPost(GlobalConfig.getSearchByText, tag, setParam(), new VolleyCallback() {
             private String ReturnType;
 
@@ -178,8 +196,7 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
-                        subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {
-                        }.getType());
+                        subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
                         if (subList == null || subList.size() == 0) return;
                     } catch (Exception e) {
                         e.printStackTrace();
@@ -236,7 +253,14 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                         for (int i = 0; i < list.size(); i++) {
                             expandListView.expandGroup(i);
                         }
+                        tipView.setVisibility(View.GONE);
+                    } else {
+                        tipView.setVisibility(View.VISIBLE);
+                        tipView.setTipView(TipView.TipStatus.NO_DATA, "没有找到相关结果\n试试其他词，不要太逆天哟");
                     }
+                } else {
+                    tipView.setVisibility(View.VISIBLE);
+                    tipView.setTipView(TipView.TipStatus.NO_DATA, "没有找到相关结果\n试试其他词，不要太逆天哟");
                 }
             }
 
@@ -244,6 +268,8 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
             protected void requestError(VolleyError error) {
                 if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
+                tipView.setVisibility(View.VISIBLE);
+                tipView.setTipView(TipView.TipStatus.IS_ERROR);
             }
         });
     }
