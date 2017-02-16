@@ -31,6 +31,7 @@ import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
+import com.wotingfm.widget.TipView;
 import com.wotingfm.widget.xlistview.XListView;
 import com.wotingfm.widget.xlistview.XListView.IXListViewListener;
 
@@ -44,62 +45,144 @@ import java.util.List;
 /**
  * 电台列表
  * @author 辛龙
- *         2016年8月8日
+ * 2016年8月8日
  */
-public class FMListActivity extends BaseActivity implements View.OnClickListener {
-    private FMListActivity context;
-    private XListView mListView;
-    private TextView mTextView_Head;
-    private Dialog dialog;
-    protected RankInfoAdapter adapter;
-
-    private int ViewType = 1;
-    private int page = 1;
-    private int RefreshType;// refreshType 1为下拉加载 2为上拉加载更多
-
-    private String CatalogName;
-    private String CatalogId;
-    private String tag = "FMLIST_VOLLEY_REQUEST_CANCEL_TAG";
-    private boolean isCancelRequest;
-    private ArrayList<RankInfo> newList = new ArrayList<RankInfo>();
-    protected List<RankInfo> SubList;
+public class FMListActivity extends BaseActivity implements View.OnClickListener, TipView.WhiteViewClick {
+    private RankInfoAdapter adapter;
     private SharedPreferences shared = BSApplication.SharedPreferences;
     private SearchPlayerHistoryDao dbDao;
+    private List<RankInfo> newList = new ArrayList<>();
+    private List<RankInfo> subList;
+
+    private Dialog dialog;
+    private XListView mListView;
+    private TextView textHead;
+    private TipView tipView;// 没有网络、没有数据、数据错误提示
+
+    private int viewType = 1;
+    private int page = 1;
+    private int refreshType = 1;// == 1 为下拉加载  == 2 为上拉加载更多
+
     private String CatalogType;
+    private String CatalogId;
+    private String tag = "FM_LIST_VOLLEY_REQUEST_CANCEL_TAG";
+    private boolean isCancelRequest;
+
+    @Override
+    public void onWhiteViewClick() {
+        dialog = DialogUtils.Dialogph(context, "正在获取数据");
+        sendRequest();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fmlist);
-        context = this;
-        RefreshType = 1;
-        setView();
-        setListener();
-        HandleRequestType();
-        initDao();
-        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            dialog = DialogUtils.Dialogph(FMListActivity.this, "正在获取数据");
-            sendRequest();
+
+        initView();
+        initEvent();
+        initData();
+
+        dialog = DialogUtils.Dialogph(context, "正在获取数据");
+        sendRequest();
+    }
+
+    // 初始化视图
+    private void initView() {
+        tipView = (TipView) findViewById(R.id.tip_view);
+        tipView.setWhiteClick(this);
+
+        mListView = (XListView) findViewById(R.id.listview_fm);
+        textHead = (TextView) findViewById(R.id.head_name_tv);
+    }
+
+    // 初始化数据
+    private void initData() {
+        dbDao = new SearchPlayerHistoryDao(context);// 初始化数据库对象
+
+        String CatalogName;
+        String type = getIntent().getStringExtra("fromtype");
+        String Position = getIntent().getStringExtra("Position");
+        if (Position == null || Position.trim().equals("")) {
+            viewType = 1;
         } else {
-            ToastUtils.show_always(this, "网络连接失败，请稍后重试");
+            viewType = -1;
+        }
+        RadioPlay list;
+        if (type != null && type.trim().equals("online")) {
+            CatalogName = getIntent().getStringExtra("name");
+            CatalogId = getIntent().getStringExtra("id");
+        } else if (type != null && type.trim().equals("net")) {
+            CatalogName = getIntent().getStringExtra("name");
+            CatalogId = getIntent().getStringExtra("id");
+            CatalogType = getIntent().getStringExtra("type");
+            viewType = 2;
+        } else if (type != null && type.trim().equals("cityRadio")) {
+            CatalogName = getIntent().getStringExtra("name");
+            CatalogId = getIntent().getStringExtra("id");
+            CatalogType = getIntent().getStringExtra("type");
+            viewType = 3;
+        } else {
+            list = (RadioPlay) getIntent().getSerializableExtra("list");
+            CatalogName = list.getCatalogName();
+            CatalogId = list.getCatalogId();
+        }
+        textHead.setText(CatalogName);
+    }
+
+    // 初始化点击事件
+    private void initEvent() {
+        findViewById(R.id.head_left_btn).setOnClickListener(this);
+
+        mListView.setPullLoadEnable(true);
+        mListView.setPullRefreshEnable(true);
+        mListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
+        mListView.setXListViewListener(new IXListViewListener() {
+            @Override
+            public void onRefresh() {
+                refreshType = 1;
+                page = 1;
+                sendRequest();
+            }
+
+            @Override
+            public void onLoadMore() {
+                refreshType = 2;
+                sendRequest();
+            }
+        });
+    }
+
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.head_left_btn:// 返回
+                finish();
+                break;
         }
     }
 
+    // 发送网络请求获取数据
     private void sendRequest() {
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            if (dialog != null) dialog.dismiss();
+            if (refreshType == 1) {
+                tipView.setVisibility(View.VISIBLE);
+                tipView.setTipView(TipView.TipStatus.NO_NET);
+                mListView.stopRefresh();
+            } else {
+                mListView.stopLoadMore();
+                ToastUtils.show_always(context, "请检查网络设置");
+            }
+            return ;
+        }
+
         VolleyRequest.RequestPost(GlobalConfig.getContentUrl, tag, setParam(), new VolleyCallback() {
-            private String ResultList;
-            private String StringSubList;
             private String ReturnType;
 
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                if (isCancelRequest) {
-                    return;
-                }
-                page++;
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return;
                 try {
                     ReturnType = result.getString("ReturnType");
                 } catch (JSONException e) {
@@ -107,46 +190,55 @@ public class FMListActivity extends BaseActivity implements View.OnClickListener
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
-                        ResultList = result.getString("ResultList");
-                        JSONTokener jsonParser = new JSONTokener(ResultList);
-                        JSONObject arg1 = (JSONObject) jsonParser.nextValue();
-                        try {
-                            StringSubList = arg1.getString("List");
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
+                        subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
+                        if (subList != null && subList.size() >= 10) {
+                            page++;
+                            mListView.setPullLoadEnable(true);
+                        } else {
+                            mListView.stopLoadMore();
+                            mListView.setPullLoadEnable(false);
                         }
 
-                        try {
-                            SubList = new Gson().fromJson(StringSubList, new TypeToken<List<RankInfo>>() {
-                            }.getType());
-                            if (RefreshType == 1) {
-                                mListView.stopRefresh();
-                                newList.clear();
-                                newList.addAll(SubList);
-                                adapter = new RankInfoAdapter(FMListActivity.this, newList);
-                                mListView.setAdapter(adapter);
-                            } else if (RefreshType == 2) {
-                                mListView.stopLoadMore();
-                                newList.addAll(SubList);
-                                adapter.notifyDataSetChanged();
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        if (refreshType == 1) newList.clear();
+                        newList.addAll(subList);
+                        if (adapter == null) {
+                            mListView.setAdapter(adapter = new RankInfoAdapter(context, newList));
+                        } else {
+                            adapter.notifyDataSetChanged();
                         }
                         setListView();
+                        tipView.setVisibility(View.GONE);
                     } catch (Exception e) {
                         e.printStackTrace();
+                        if (refreshType == 1) {
+                            tipView.setVisibility(View.VISIBLE);
+                            tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                        }
+                    }
+
+                    if (refreshType == 1) {
+                        mListView.stopRefresh();
+                    } else {
+                        mListView.stopLoadMore();
                     }
                 } else {
-                    mListView.stopLoadMore();
-                    mListView.setPullLoadEnable(false);
+                    if (refreshType == 1) {
+                        tipView.setVisibility(View.VISIBLE);
+                        tipView.setTipView(TipView.TipStatus.NO_DATA, "没有找到相关结果\n换个电台试试吧");
+                    } else {
+                        mListView.stopLoadMore();
+                        mListView.setPullLoadEnable(false);
+                    }
                 }
             }
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
+                if (dialog != null) dialog.dismiss();
+                if (refreshType == 1) {
+                    tipView.setVisibility(View.VISIBLE);
+                    tipView.setTipView(TipView.TipStatus.IS_ERROR);
                 }
             }
         });
@@ -157,29 +249,29 @@ public class FMListActivity extends BaseActivity implements View.OnClickListener
         try {
             jsonObject.put("MediaType", "RADIO");
             String cityId = shared.getString(StringConstant.CITYID, "110000");
-            if (ViewType == 1) {
-                //获取当前城市下所有分类内容
+            if (viewType == 1) {
+                // 获取当前城市下所有分类内容
                 jsonObject.put("CatalogId", cityId);
-                jsonObject.put("CatalogType", "2");//
+                jsonObject.put("CatalogType", "2");
                 jsonObject.put("PerSize", "3");
                 jsonObject.put("ResultType", "3");
                 jsonObject.put("PageSize", "10");
                 jsonObject.put("Page", String.valueOf(page));
-            } else if(ViewType ==2){
-                jsonObject.put("CatalogId",CatalogId);
-                jsonObject.put("CatalogType",CatalogType);
+            } else if (viewType == 2) {
+                jsonObject.put("CatalogId", CatalogId);
+                jsonObject.put("CatalogType", CatalogType);
                 jsonObject.put("PerSize", "3");
                 jsonObject.put("ResultType", "3");
                 jsonObject.put("PageSize", "10");
                 jsonObject.put("Page", String.valueOf(page));
-            }else if(ViewType==3){
-                jsonObject.put("CatalogId",CatalogId);
-                jsonObject.put("CatalogType",CatalogType);
+            } else if (viewType == 3) {
+                jsonObject.put("CatalogId", CatalogId);
+                jsonObject.put("CatalogType", CatalogType);
                 jsonObject.put("ResultType", "3");
                 jsonObject.put("PageSize", "50");
                 jsonObject.put("Page", String.valueOf(page));
-            }else{
-                //按照分类获取内容
+            } else {
+                // 按照分类获取内容
                 JSONObject js = new JSONObject();
                 jsonObject.put("CatalogType", "1");
                 jsonObject.put("CatalogId", CatalogId);
@@ -187,15 +279,10 @@ public class FMListActivity extends BaseActivity implements View.OnClickListener
                 js.put("CatalogId", cityId);
                 jsonObject.put("FilterData", js);
             }
-
         } catch (JSONException e) {
             e.printStackTrace();
         }
         return jsonObject;
-    }
-
-    private void initDao() {// 初始化数据库命令执行对象
-        dbDao = new SearchPlayerHistoryDao(context);
     }
 
     // 这里要改
@@ -230,7 +317,7 @@ public class FMListActivity extends BaseActivity implements View.OnClickListener
                         String sequDesc = newList.get(position - 1).getSequDesc();
                         String sequImg = newList.get(position - 1).getSequImg();
 
-                        //如果该数据已经存在数据库则删除原有数据，然后添加最新数据
+                        // 如果该数据已经存在数据库则删除原有数据，然后添加最新数据
                         PlayerHistory history = new PlayerHistory(
                                 playername, playerimage, playerurl, playerurI, playermediatype,
                                 plaplayeralltime, playerintime, playercontentdesc, playernum,
@@ -239,12 +326,12 @@ public class FMListActivity extends BaseActivity implements View.OnClickListener
                         dbDao.deleteHistory(playerurl);
                         dbDao.addHistory(history);
                         HomeActivity.UpdateViewPager();
-                        if(ViewType==3){
+                        if (viewType == 3) {
                             finish();
                         }
-                        Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
-                        Bundle bundle1=new Bundle();
-                        bundle1.putString("text",newList.get(position - 1).getContentName());
+                        Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                        Bundle bundle1 = new Bundle();
+                        bundle1.putString("text", newList.get(position - 1).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
                         finish();
@@ -254,98 +341,24 @@ public class FMListActivity extends BaseActivity implements View.OnClickListener
         });
     }
 
-    private void HandleRequestType() {
-        String type = this.getIntent().getStringExtra("fromtype");
-        String Position = this.getIntent().getStringExtra("Position");
-        if (Position == null || Position.trim().equals("")) {
-            ViewType = 1;
-        } else {
-            ViewType = -1;
-        }
-        RadioPlay list;
-        if (type != null && type.trim().equals("online")) {
-            CatalogName = this.getIntent().getStringExtra("name");
-            CatalogId = this.getIntent().getStringExtra("id");
-        } else if (type != null && type.trim().equals("net")) {
-            CatalogName = this.getIntent().getStringExtra("name");
-            CatalogId = this.getIntent().getStringExtra("id");
-            CatalogType = this.getIntent().getStringExtra("type");
-            ViewType=2;
-        }else if(type != null && type.trim().equals("cityRadio")) {
-            CatalogName = this.getIntent().getStringExtra("name");
-            CatalogId = this.getIntent().getStringExtra("id");
-            CatalogType = this.getIntent().getStringExtra("type");
-            ViewType=3;
-        } else{
-            list = (RadioPlay) this.getIntent().getSerializableExtra("list");
-            CatalogName = list.getCatalogName();
-            CatalogId = list.getCatalogId();
-        }
-        mTextView_Head.setText(CatalogName);
-    }
-
-    private void setView() {
-        mListView = (XListView) findViewById(R.id.listview_fm);
-        mTextView_Head = (TextView) findViewById(R.id.head_name_tv);
-    }
-
-    private void setListener() {
-        findViewById(R.id.head_left_btn).setOnClickListener(this);
-        // 设置上下拉参数
-        mListView.setPullLoadEnable(true);
-        mListView.setPullRefreshEnable(true);
-        mListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
-        mListView.setXListViewListener(new IXListViewListener() {
-            @Override
-            public void onRefresh() {
-                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    RefreshType = 1;
-                    page = 1;
-                    sendRequest();
-                } else {
-                    ToastUtils.show_short(FMListActivity.this, "网络失败，请检查网络");
-                }
-            }
-
-            @Override
-            public void onLoadMore() {
-                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    RefreshType = 2;
-                    sendRequest();
-                }
-            }
-        });
-    }
-
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.head_left_btn:
-                finish();
-                break;
-        }
-    }
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
         mListView = null;
         dialog = null;
-        mTextView_Head = null;
+        textHead = null;
         if (dbDao != null) {
             dbDao.closedb();
             dbDao = null;
         }
         newList.clear();
         newList = null;
-        if (SubList != null) {
-            SubList.clear();
-            SubList = null;
-            SubList = null;
+        if (subList != null) {
+            subList.clear();
+            subList = null;
         }
         adapter = null;
-        context = null;
         setContentView(R.layout.activity_null);
     }
-
 }

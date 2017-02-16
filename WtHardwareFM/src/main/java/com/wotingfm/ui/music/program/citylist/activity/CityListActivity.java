@@ -35,7 +35,9 @@ import com.wotingfm.ui.music.program.diantai.activity.CityRadioActivity;
 import com.wotingfm.ui.music.program.fenlei.model.Catalog;
 import com.wotingfm.ui.music.program.fenlei.model.CatalogName;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
+import com.wotingfm.widget.TipView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -49,11 +51,10 @@ import java.util.List;
  * @author 辛龙
  * 2016年4月7日
  */
-public class CityListActivity extends BaseActivity implements OnClickListener {
+public class CityListActivity extends BaseActivity implements OnClickListener, TipView.WhiteViewClick {
     private CharacterParser characterParser;
     private PinyinComparator_d pinyinComparator;
     private Dialog dialog;
-    private TextView tvNoFriend;
     private SideBar sideBar;
     private TextView dialogs;
     private ListView listView;
@@ -65,6 +66,20 @@ public class CityListActivity extends BaseActivity implements OnClickListener {
     private String tag = "CITY_LIST_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
     private String type;
+
+    private TipView tipView;// 没有网络、没有数据、数据错误提示
+    private TipView tipSearchNull;// 搜索没有结果提示
+
+    @Override
+    public void onWhiteViewClick() {
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+            dialog = DialogUtils.Dialogph(context, "正在获取信息");
+            sendRequest();
+        } else {
+            tipView.setVisibility(View.VISIBLE);
+            tipView.setTipView(TipView.TipStatus.NO_NET);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,7 +97,8 @@ public class CityListActivity extends BaseActivity implements OnClickListener {
                 dialog = DialogUtils.Dialogph(context, "正在获取信息");
                 sendRequest();
             } else {
-                ToastUtils.show_always(context, "网络失败，请检查网络");
+                tipView.setVisibility(View.VISIBLE);
+                tipView.setTipView(TipView.TipStatus.NO_NET);
             }
         }
     }
@@ -90,19 +106,23 @@ public class CityListActivity extends BaseActivity implements OnClickListener {
     private void setView() {
         findViewById(R.id.head_left_btn).setOnClickListener(this);
 
-        tvNoFriend = (TextView) findViewById(R.id.title_layout_no_friends);
+        tipView = (TipView) findViewById(R.id.tip_view);
+        tipView.setWhiteClick(this);
+
+        tipSearchNull = (TipView) findViewById(R.id.tip_search_null);
+
         sideBar = (SideBar) findViewById(R.id.sidrbar);
         dialogs = (TextView) findViewById(R.id.dialog);
         sideBar.setTextView(dialogs);
-        listView = (ListView) findViewById(R.id.country_lvcountry);             // listview
-        et_Search_content = (EditText) findViewById(R.id.et_search);         // 搜索控件
+        listView = (ListView) findViewById(R.id.country_lvcountry);// listView
+        et_Search_content = (EditText) findViewById(R.id.et_search);// 搜索控件
         image_clear = (ImageView) findViewById(R.id.image_clear);
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.head_left_btn:
+            case R.id.head_left_btn:// 返回
                 finish();
                 break;
         }
@@ -110,8 +130,10 @@ public class CityListActivity extends BaseActivity implements OnClickListener {
 
     private void handleCityList(List<CatalogName> srcList) {
         if (srcList.size() == 0) {
-            ToastUtils.show_always(context, "获取分类列表为空");
+            tipView.setVisibility(View.VISIBLE);
+            tipView.setTipView(TipView.TipStatus.NO_DATA, "数据君不翼而飞了\n点击界面会重新获取数据哟");
         } else {
+            tipView.setVisibility(View.GONE);
             userList.clear();
             userList.addAll(srcList);
             filledData(userList);
@@ -142,11 +164,14 @@ public class CityListActivity extends BaseActivity implements OnClickListener {
                         srcList = SubList_all.getSubCata();
                         GlobalConfig.CityCatalogList = srcList;
                         handleCityList(srcList);
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
+                        tipView.setVisibility(View.VISIBLE);
+                        tipView.setTipView(TipView.TipStatus.IS_ERROR);
                     }
                 } else {
-                    ToastUtils.show_always(context, "获取列表失败，请返回重试!");
+                    tipView.setVisibility(View.VISIBLE);
+                    tipView.setTipView(TipView.TipStatus.IS_ERROR);
                 }
             }
 
@@ -154,6 +179,8 @@ public class CityListActivity extends BaseActivity implements OnClickListener {
             protected void requestError(VolleyError error) {
                 if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
+                tipView.setVisibility(View.VISIBLE);
+                tipView.setTipView(TipView.TipStatus.IS_ERROR);
             }
         });
     }
@@ -203,7 +230,7 @@ public class CityListActivity extends BaseActivity implements OnClickListener {
                         et.putString(StringConstant.CITYNAME, userList.get(position).getCatalogName());
                         GlobalConfig.CityName = userList.get(position).getCatalogName();
                     }
-                    et.commit();
+                    if (!et.commit()) L.w("TAG", "数据 commit 失败!");
                     finish();
                 } else {
                     Intent intent = new Intent(context, CityRadioActivity.class);
@@ -265,7 +292,7 @@ public class CityListActivity extends BaseActivity implements OnClickListener {
                 String search_name = s.toString();
                 if (search_name.trim().equals("")) {
                     image_clear.setVisibility(View.INVISIBLE);
-                    tvNoFriend.setVisibility(View.GONE);
+                    tipSearchNull.setVisibility(View.GONE);
                     // 关键词为空
                     if (srcList == null || srcList.size() == 0) {
                         listView.setVisibility(View.GONE);
@@ -294,7 +321,7 @@ public class CityListActivity extends BaseActivity implements OnClickListener {
         List<CatalogName> filterDateList = new ArrayList<>();
         if (TextUtils.isEmpty(search_name)) {
             filterDateList = userList;
-            tvNoFriend.setVisibility(View.GONE);
+            tipSearchNull.setVisibility(View.GONE);
         } else {
             filterDateList.clear();
             for (CatalogName sortModel : userList) {
@@ -311,7 +338,8 @@ public class CityListActivity extends BaseActivity implements OnClickListener {
         userList.clear();
         userList.addAll(filterDateList);
         if (filterDateList.size() == 0) {
-            tvNoFriend.setVisibility(View.VISIBLE);
+            tipSearchNull.setVisibility(View.VISIBLE);
+            tipSearchNull.setTipView(TipView.TipStatus.NO_DATA, "没有找到相关城市\n换个城市搜索一下吧");
         }
     }
 
@@ -322,7 +350,6 @@ public class CityListActivity extends BaseActivity implements OnClickListener {
         srcList = null;
         userList = null;
         adapter = null;
-        tvNoFriend = null;
         sideBar = null;
         dialogs = null;
         listView = null;
