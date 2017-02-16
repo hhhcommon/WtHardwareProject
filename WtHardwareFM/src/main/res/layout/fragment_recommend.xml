@@ -5,6 +5,11 @@
     android:background="@color/beige"
     android:orientation="vertical" >
 
+    <com.wotingfm.widget.TipView
+        android:id="@+id/tip_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
 
     <com.wotingfm.widget.xlistview.XListView
         android:id="@+id/listView"

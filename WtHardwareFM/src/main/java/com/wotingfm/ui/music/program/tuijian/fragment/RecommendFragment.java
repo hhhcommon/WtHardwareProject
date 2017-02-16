@@ -1,5 +1,6 @@
 package com.wotingfm.ui.music.program.tuijian.fragment;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
@@ -29,8 +30,10 @@ import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.ui.music.program.tuijian.adapter.RecommendListAdapter;
 import com.wotingfm.util.CommonUtils;
+import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
+import com.wotingfm.widget.TipView;
 import com.wotingfm.widget.rollviewpager.RollPagerView;
 import com.wotingfm.widget.rollviewpager.adapter.LoopPagerAdapter;
 import com.wotingfm.widget.rollviewpager.hintview.IconHintView;
@@ -49,10 +52,12 @@ import java.util.List;
  * @author 辛龙
  * 2016年3月30日
  */
-public class RecommendFragment extends Fragment {
+public class RecommendFragment extends Fragment implements TipView.WhiteViewClick {
     private SearchPlayerHistoryDao dbDao;
     private FragmentActivity context;
     private RecommendListAdapter adapter;
+
+    private Dialog dialog;// 加载数据对话框
     private View rootView;
     private View headView;
     private XListView mListView;
@@ -61,10 +66,17 @@ public class RecommendFragment extends Fragment {
     private List<RankInfo> newList = new ArrayList<>();
 
     private String tag = "RECOMMEND_VOLLEY_REQUEST_CANCEL_TAG";
-    private int pageSizeNum;
     private int page = 1;
     private int refreshType = 1; // refreshType 1为下拉加载 2为上拉加载更多
     private boolean isCancelRequest;
+
+    private TipView tipView;// 没有网络、没有数据、加载错误提示
+
+    @Override
+    public void onWhiteViewClick() {
+        dialog = DialogUtils.Dialogph(context, "数据加载中...");
+        sendRequest();
+    }
 
     // 初始化数据库命令执行对象
     private void initDao() {
@@ -82,6 +94,10 @@ public class RecommendFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_recommend, container, false);
+
+            tipView = (TipView) rootView.findViewById(R.id.tip_view);
+            tipView.setWhiteClick(this);
+
             mListView = (XListView) rootView.findViewById(R.id.listView);
             headView = LayoutInflater.from(context).inflate(R.layout.headview_fragment_recommend, null);
             mListView.addHeaderView(headView);
@@ -112,13 +128,8 @@ public class RecommendFragment extends Fragment {
 
             @Override
             public void onLoadMore() {
-                if (page <= pageSizeNum) {
-                    refreshType = 2;
-                    sendRequest();
-                } else {
-                    mListView.stopLoadMore();
-                    ToastUtils.show_always(context, "已经没有最新的数据了");
-                }
+                refreshType = 2;
+                sendRequest();
             }
         });
     }
@@ -127,7 +138,11 @@ public class RecommendFragment extends Fragment {
     private void sendRequest() {
         // 以下操作需要网络支持 所以没有网络则直接提示用户设置网络
         if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
-            ToastUtils.show_always(context, "网络连接失败，请检查网络设置!");
+            if (dialog != null) dialog.dismiss();
+            if (refreshType == 1) {
+                tipView.setVisibility(View.VISIBLE);
+                tipView.setTipView(TipView.TipStatus.NO_NET);
+            }
             mListView.stopRefresh();
             mListView.stopLoadMore();
             return ;
@@ -138,8 +153,8 @@ public class RecommendFragment extends Fragment {
 
             @Override
             protected void requestSuccess(JSONObject result) {
+                if (dialog != null) dialog.dismiss();
                 if (isCancelRequest) return;
-                page++;
                 try {
                     returnType = result.getString("ReturnType");
                     L.w("returnType -- > > " + returnType);
@@ -150,31 +165,16 @@ public class RecommendFragment extends Fragment {
                     try {
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
                         subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
-
-                        // 以下是根据请求数据的总 size 和 每页的 size 判断是否可以加载更多
-                        String pageSizeString = arg1.getString("PageSize");
-                        String allCountString = arg1.getString("AllCount");
-                        if (allCountString != null && !allCountString.equals("") && pageSizeString != null && !pageSizeString.equals("")) {
-                            int allCountInt = Integer.valueOf(allCountString);
-                            int pageSizeInt = Integer.valueOf(pageSizeString);
-                            if(allCountInt < 10 || pageSizeInt < 10) {
-                                mListView.stopLoadMore();
-                                mListView.setPullLoadEnable(false);
-                            } else{
-                                mListView.setPullLoadEnable(true);
-                                if (allCountInt % pageSizeInt == 0) {
-                                    pageSizeNum = allCountInt / pageSizeInt;
-                                } else {
-                                    pageSizeNum = allCountInt / pageSizeInt + 1;
-                                }
-                            }
+                        if (subList != null && subList.size() >= 10) {
+                            page++;
+                        } else {
+                            mListView.stopLoadMore();
+                            mListView.setPullLoadEnable(false);
                         }
-                    } catch (JSONException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    if (refreshType == 1) {
-                        newList.clear();
-                    }
+                    if (refreshType == 1) newList.clear();
                     newList.addAll(subList);
                     if (adapter == null) {
                         mListView.setAdapter(adapter = new RecommendListAdapter(context, newList));
@@ -182,8 +182,14 @@ public class RecommendFragment extends Fragment {
                         adapter.notifyDataSetChanged();
                     }
                     setListener();
+                    tipView.setVisibility(View.GONE);
                 } else {
-                    ToastUtils.show_always(context, "暂无推荐列表");
+                    if (refreshType == 1) {
+                        tipView.setVisibility(View.VISIBLE);
+                        tipView.setTipView(TipView.TipStatus.NO_DATA, "专辑中没有节目\n换个专辑看看吧");
+                    } else {
+                        ToastUtils.show_always(context, "已经没有更多推荐了!");
+                    }
                 }
 
                 // 无论何种返回值，都需要终止掉下拉刷新及上拉加载的滚动状态
@@ -196,7 +202,12 @@ public class RecommendFragment extends Fragment {
 
             @Override
             protected void requestError(VolleyError error) {
+                if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
+                if (refreshType == 1) {
+                    tipView.setVisibility(View.VISIBLE);
+                    tipView.setTipView(TipView.TipStatus.NO_DATA, "专辑中没有节目\n换个专辑看看吧");
+                }
             }
         });
     }
