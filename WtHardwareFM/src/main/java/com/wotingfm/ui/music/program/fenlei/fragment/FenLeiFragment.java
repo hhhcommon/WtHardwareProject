@@ -16,13 +16,13 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.music.program.fenlei.adapter.CatalogListAdapter;
 import com.wotingfm.ui.music.program.fenlei.model.FenLei;
+import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.PhoneMessage;
-import com.wotingfm.util.ToastUtils;
+import com.wotingfm.widget.TipView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -35,7 +35,7 @@ import java.util.List;
  * @author 辛龙
  * 2016年3月31日
  */
-public class FenLeiFragment extends Fragment {
+public class FenLeiFragment extends Fragment implements TipView.WhiteViewClick {
     private FragmentActivity context;
     private View rootView;
     private ListView EBL_Catalog;
@@ -44,6 +44,19 @@ public class FenLeiFragment extends Fragment {
 
     private String tag = "CATALOG_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
+
+    private TipView tipView;// 没有网络、没有数据、数据加载出错提示
+
+    @Override
+    public void onWhiteViewClick() {
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+            dialog = DialogUtils.Dialogph(context, "加载数据中...");
+            sendRequest();
+        } else {
+            tipView.setVisibility(View.VISIBLE);
+            tipView.setTipView(TipView.TipStatus.NO_NET);
+        }
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -55,6 +68,10 @@ public class FenLeiFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_fenlei_new, container, false);
+
+            tipView = (TipView) rootView.findViewById(R.id.tip_view);
+            tipView.setWhiteClick(this);
+
             EBL_Catalog = (ListView) rootView.findViewById(R.id.ebl_fenlei);
 
 //            View headView = LayoutInflater.from(context).inflate(R.layout.headview_fragment_fenlei, null);
@@ -68,8 +85,11 @@ public class FenLeiFragment extends Fragment {
 //            mLoopViewPager.setAdapter(new LoopAdapter(mLoopViewPager));
 //            mLoopViewPager.setHintView(new IconHintView(context, R.mipmap.indicators_now, R.mipmap.indicators_default));
 
-            if (CommonHelper.checkNetwork(context)) {
+            if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 sendRequest();
+            } else {
+                tipView.setVisibility(View.VISIBLE);
+                tipView.setTipView(TipView.TipStatus.NO_NET);
             }
         }
         return rootView;
@@ -108,7 +128,8 @@ public class FenLeiFragment extends Fragment {
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("PrefTree")).nextValue();
                         List<FenLei> c = new Gson().fromJson(arg1.getString("children"), new TypeToken<List<FenLei>>() {}.getType());
                         if (c == null || c.size() == 0) {
-                            ToastUtils.show_always(context, "获取分类列表为空");
+                            tipView.setVisibility(View.VISIBLE);
+                            tipView.setTipView(TipView.TipStatus.NO_DATA, "数据君不翼而飞了\n点击界面会重新获取数据哟");
                             return ;
                         }
                         if (adapter == null) {
@@ -116,17 +137,22 @@ public class FenLeiFragment extends Fragment {
                         } else {
                             adapter.notifyDataSetChanged();
                         }
+                        tipView.setVisibility(View.GONE);
                     } catch (JSONException e) {
                         e.printStackTrace();
+                        tipView.setVisibility(View.VISIBLE);
+                        tipView.setTipView(TipView.TipStatus.IS_ERROR, "数据君不翼而飞了\n点击界面会重新获取数据哟");
                     }
                 } else {
-                    ToastUtils.show_always(context, "数据获取失败，请稍候重试");
+                    tipView.setVisibility(View.VISIBLE);
+                    tipView.setTipView(TipView.TipStatus.IS_ERROR, "数据君不翼而飞了\n点击界面会重新获取数据哟");
                 }
             }
             @Override
             protected void requestError(VolleyError error) {
                 if (dialog != null) dialog.dismiss();
-                ToastUtils.showVolleyError(context);
+                tipView.setVisibility(View.VISIBLE);
+                tipView.setTipView(TipView.TipStatus.IS_ERROR, "数据君不翼而飞了\n点击界面会重新获取数据哟");
             }
         });
     }

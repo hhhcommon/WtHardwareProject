@@ -26,6 +26,7 @@ import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.PagerSlidingTabStrip;
+import com.wotingfm.widget.TipView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -38,7 +39,7 @@ import java.util.List;
  * @author 辛龙
  * 2016年4月5日
  */
-public class RadioListActivity extends AppBaseFragmentActivity implements OnClickListener {
+public class RadioListActivity extends AppBaseFragmentActivity implements OnClickListener, TipView.WhiteViewClick {
     private RecommendFragment recommend;
     private List<String> list = new ArrayList<>();
     private List<Fragment> fragments = new ArrayList<>();
@@ -56,6 +57,19 @@ public class RadioListActivity extends AppBaseFragmentActivity implements OnClic
     public static String id;
     public static final String tag = "RADIO_LIST_VOLLEY_REQUEST_CANCEL_TAG";
 
+    private TipView tipView;// 没有数据、没有网络提示
+
+    @Override
+    public void onWhiteViewClick() {
+        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            tipView.setVisibility(View.VISIBLE);
+            tipView.setTipView(TipView.TipStatus.NO_NET);
+            return ;
+        }
+        dialog = DialogUtils.Dialogph(context, "正在获取数据");
+        sendRequest();
+    }
+
     public boolean isCancel() {
         return isCancelRequest;
     }
@@ -70,6 +84,9 @@ public class RadioListActivity extends AppBaseFragmentActivity implements OnClic
 
     // 初始化界面
     private void initViews() {
+        tipView = (TipView) findViewById(R.id.tip_view);
+        tipView.setWhiteClick(this);
+
         findViewById(R.id.head_left_btn).setOnClickListener(this);
         mTextTitle = (TextView) findViewById(R.id.head_name_tv);
 
@@ -88,7 +105,8 @@ public class RadioListActivity extends AppBaseFragmentActivity implements OnClic
         fragments.add(recommend);
 
         if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
-            ToastUtils.show_always(context, "网络连接失败，请检查网络设置!");
+            tipView.setVisibility(View.VISIBLE);
+            tipView.setTipView(TipView.TipStatus.NO_NET);
             return ;
         }
         dialog = DialogUtils.Dialogph(context, "正在获取数据");
@@ -112,7 +130,6 @@ public class RadioListActivity extends AppBaseFragmentActivity implements OnClic
                     mTextTitle.setText("分类");
                 }
             }
-
         }
     }
 
@@ -144,8 +161,10 @@ public class RadioListActivity extends AppBaseFragmentActivity implements OnClic
                     viewPager.setAdapter(new MyPagerAdapter(getSupportFragmentManager(), list, fragments));
                     pageSlidingTab.setViewPager(viewPager);
                     if (count == 1) pageSlidingTab.setVisibility(View.GONE);
+                    tipView.setVisibility(View.GONE);
                 } else {
-                    ToastUtils.show_always(context, "暂没有该分类数据");
+                    tipView.setVisibility(View.VISIBLE);
+                    tipView.setTipView(TipView.TipStatus.NO_DATA, "该分类暂没有节目推荐\n还有更多精彩节目赶紧去看看吧");
                 }
             }
 
@@ -153,6 +172,8 @@ public class RadioListActivity extends AppBaseFragmentActivity implements OnClic
             protected void requestError(VolleyError error) {
                 closeDialog();
                 ToastUtils.showVolleyError(context);
+                tipView.setVisibility(View.VISIBLE);
+                tipView.setTipView(TipView.TipStatus.IS_ERROR);
             }
         });
     }
