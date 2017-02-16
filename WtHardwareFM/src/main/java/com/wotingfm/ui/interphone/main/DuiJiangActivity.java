@@ -30,6 +30,7 @@ import com.wotingfm.ui.interphone.find.main.FindActivity;
 import com.wotingfm.ui.interphone.group.creategroup.create.CreateGroupActivity;
 import com.wotingfm.ui.interphone.linkman.fragment.LinkManFragment;
 import com.wotingfm.ui.interphone.notify.activity.NotifyNewsActivity;
+import com.wotingfm.ui.interphone.simulation.SimulationInterphoneActivity;
 import com.wotingfm.ui.mine.person.login.LoginActivity;
 import com.wotingfm.util.ToastUtils;
 
@@ -54,8 +55,8 @@ public class DuiJiangActivity extends BaseFragmentActivity {
         setContentView(R.layout.activity_duijiang);
         context = this;
         InitTextView();        // 初始化视图
-        InitViewPager();    // 初始化ViewPager
-        dialog();            // 初始化功能弹出框
+        InitViewPager();       // 初始化ViewPager
+        dialog();              // 初始化功能弹出框
         setType();
     }
 
@@ -184,7 +185,7 @@ public class DuiJiangActivity extends BaseFragmentActivity {
         lin_e.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                ToastUtils.show_always(context, "跳转到模拟对讲界面");
+                startActivity(new Intent(context, SimulationInterphoneActivity.class));
                 addDialog.dismiss();
             }
         });

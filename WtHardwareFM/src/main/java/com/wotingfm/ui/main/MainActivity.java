@@ -142,16 +142,15 @@ public class MainActivity extends TabActivity {
             @Override
             public void run() {
                 createService();
+                registerReceiver(); // 注册广播
             }
         }, 0);
 
         update();           // 获取版本数据
         InitTextView();     // 设置界面
         InitDao();          // 加载数据库
-        registerReceiver(); // 注册广播
         setType();
         // mask();          // 蒙版
-
 
         // 以下语句用于设置日志开关（默认开启），设置成false时关闭语音云SDK日志打印
         // Setting.setShowLog(false);

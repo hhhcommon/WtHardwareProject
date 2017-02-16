@@ -223,6 +223,13 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
+        <!-- 模拟对讲 -->
+        <activity
+            android:name=".ui.interphone.simulation.SimulationInterphoneActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
         <!-- 修改个人资料 -->
         <activity
             android:name=".ui.mine.person.updatepersonnews.UpdatePersonActivity"
@@ -456,6 +463,13 @@
         <!-- 蓝牙 -->
         <activity
             android:name=".ui.mine.bluetooth.BluetoothActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+        <!-- fm -->
+        <activity
+            android:name=".ui.mine.FMTestActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
