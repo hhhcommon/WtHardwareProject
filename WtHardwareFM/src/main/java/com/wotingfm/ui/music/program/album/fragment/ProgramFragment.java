@@ -186,7 +186,7 @@ public class ProgramFragment extends Fragment implements OnClickListener, XListV
                                     contentList.addAll(list);
 
                                     listAlbum.setAdapter(albumMainAdapter = new AlbumMainAdapter(context, contentList));
-                                    listDownload.setAdapter(albumAdapter = new AlbumAdapter(context, contentList));// 下载列表
+//                                    listDownload.setAdapter(albumAdapter = new AlbumAdapter(context, contentList));// 下载列表
                                 }
                             } catch (Exception e) {
                                 e.printStackTrace();

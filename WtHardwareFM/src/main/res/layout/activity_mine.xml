@@ -204,7 +204,7 @@
                 <ImageView
                     android:id="@+id/image_subscriber"
                     style="@style/PersonAndSetLeftStyle"
-                    android:src="@mipmap/wt_image_listener" />
+                    android:src="@mipmap/wt_image_subscribe" />
 
                 <TextView
                     style="@style/PersonAndSetTextStyle"

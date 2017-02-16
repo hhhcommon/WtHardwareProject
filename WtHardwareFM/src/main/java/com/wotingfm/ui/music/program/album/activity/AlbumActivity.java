@@ -212,6 +212,8 @@ public class AlbumActivity extends AppBaseFragmentActivity implements OnClickLis
                                 String img = resultInfo.getContentImg();
                                 String id = resultInfo.getContentId();
                                 programFragment.setInfo(descn, name, img, id);// 设置下载需要的信息
+
+                                L.w("TAG", "img -- > " + img);
                             }
                         } else {
                             tipView.setVisibility(View.VISIBLE);
