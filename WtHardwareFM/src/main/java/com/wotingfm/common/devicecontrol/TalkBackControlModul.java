@@ -16,7 +16,7 @@ import android_serialport_api.SerialHelper;
  * 邮箱：645700751@qq.com
  */
 
-public class TalkBackControlModule {
+public class TalkBackControlModul {
 
     final int GPIO_DEVICE_OPEN = 12;
     final int GPIO_AUDIO_EN = 58;
@@ -28,10 +28,10 @@ public class TalkBackControlModule {
         /**
          * 单例对象实例
          */
-        static final TalkBackControlModule INSTANCE = new TalkBackControlModule();
+        static final TalkBackControlModul INSTANCE = new TalkBackControlModul();
     }
 
-    public static TalkBackControlModule getInstance() {
+    public static TalkBackControlModul getInstance() {
         return TalkBackControlModuleHolder.INSTANCE;
     }
 
@@ -45,7 +45,7 @@ public class TalkBackControlModule {
     /**
      * private的构造函数用于避免外界直接使用new来实例化对象
      */
-    private TalkBackControlModule() {
+    private TalkBackControlModul() {
 
         //
         EmGpio.gpioInit();
