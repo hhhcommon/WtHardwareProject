@@ -34,6 +34,7 @@ import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
+import com.wotingfm.widget.TipView;
 import com.wotingfm.widget.xlistview.XListView;
 
 import org.json.JSONException;
@@ -46,13 +47,14 @@ import java.util.List;
 /**
  * 搜索声音界面
  */
-public class SoundFragment extends Fragment {
+public class SoundFragment extends Fragment implements TipView.WhiteViewClick {
     private FragmentActivity context;
     private FavorListAdapter adapter;
     private SearchPlayerHistoryDao dbDao;
     private List<RankInfo> subList;
     private ArrayList<RankInfo> newList = new ArrayList<>();
 
+    private TipView tipView;// 没有网络、没有数据提示
     private Dialog dialog;
     private View rootView;
     private XListView mListView;
@@ -62,7 +64,12 @@ public class SoundFragment extends Fragment {
     private boolean isCancelRequest;
     private int refreshType = 1;
     private int page = 1;
-    private int pageSizeNum;
+
+    @Override
+    public void onWhiteViewClick() {
+        dialog = DialogUtils.Dialogph(context, "通讯中");
+        sendRequest();
+    }
 
     // 初始化数据库对象
     private void initDao() {
@@ -84,6 +91,10 @@ public class SoundFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_search_sound, container, false);
+
+            tipView = (TipView) rootView.findViewById(R.id.tip_view);
+            tipView.setWhiteClick(this);
+
             mListView = (XListView) rootView.findViewById(R.id.listView);
             mListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
             setLoadListener();
@@ -105,13 +116,8 @@ public class SoundFragment extends Fragment {
 
             @Override
             public void onLoadMore() {
-                if (page <= pageSizeNum) {
-                    refreshType = 2;
-                    sendRequest();
-                } else {
-                    mListView.stopLoadMore();
-                    mListView.setPullLoadEnable(false);
-                }
+                refreshType = 2;
+                sendRequest();
             }
         });
     }
@@ -184,12 +190,14 @@ public class SoundFragment extends Fragment {
 
     private void sendRequest() {
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
-            ToastUtils.show_always(context, "连接网络失败，请检查网络设置!");
             if (dialog != null) dialog.dismiss();
             if (refreshType == 1) {
+                tipView.setVisibility(View.VISIBLE);
+                tipView.setTipView(TipView.TipStatus.NO_NET);
                 mListView.stopRefresh();
             } else {
                 mListView.stopLoadMore();
+                ToastUtils.show_always(context, "请检查网络连接!");
             }
             return;
         }
@@ -207,41 +215,41 @@ public class SoundFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
-                page++;
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
                         subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
-
-                        try {
-                            String allCountString = arg1.getString("AllCount");
-                            String pageSizeString = arg1.getString("PageSize");
-                            if (allCountString != null && !allCountString.equals("") && pageSizeString != null && !pageSizeString.equals("")) {
-                                int allCountInt = Integer.valueOf(allCountString);
-                                int pageSizeInt = Integer.valueOf(allCountString);
-                                if (allCountInt < 10 || pageSizeInt < 10) {
-                                    mListView.stopLoadMore();
-                                    mListView.setPullLoadEnable(false);
-                                } else {
-                                    mListView.setPullLoadEnable(true);
-                                    if (allCountInt % pageSizeInt == 0) {
-                                        pageSizeNum = allCountInt / pageSizeInt;
-                                    } else {
-                                        pageSizeNum = allCountInt / pageSizeInt + 1;
-                                    }
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                        if (subList != null && subList.size() >= 10) {
+                            page++;
+                        } else {
+                            mListView.stopLoadMore();
+                            mListView.setPullLoadEnable(false);
                         }
                         if (refreshType == 1) newList.clear();
                         for (int i = 0; i < subList.size(); i++) {
                             if (subList.get(i).getMediaType().equals("AUDIO")) newList.add(subList.get(i));
                         }
-                        adapter.notifyDataSetChanged();
-                        setListener();
-                    } catch (JSONException e) {
+                        if (newList.size() > 0) {
+                            tipView.setVisibility(View.GONE);
+                            adapter.notifyDataSetChanged();
+                            setListener();
+                        } else {
+                            tipView.setVisibility(View.VISIBLE);
+                            tipView.setTipView(TipView.TipStatus.NO_DATA, "没有找到相关结果\n试试其他词，不要太逆天哟");
+                        }
+                    } catch (Exception e) {
                         e.printStackTrace();
+                        if (refreshType == 1) {
+                            tipView.setVisibility(View.VISIBLE);
+                            tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                        } else {
+                            ToastUtils.show_always(context, "数据加载错误!");
+                        }
+                    }
+                } else {
+                    if (refreshType == 1) {
+                        tipView.setVisibility(View.VISIBLE);
+                        tipView.setTipView(TipView.TipStatus.NO_DATA, "没有找到相关结果\n试试其他词，不要太逆天哟");
                     }
                 }
 
@@ -255,6 +263,12 @@ public class SoundFragment extends Fragment {
             @Override
             protected void requestError(VolleyError error) {
                 if (dialog != null) dialog.dismiss();
+                if (refreshType == 1) {
+                    tipView.setVisibility(View.VISIBLE);
+                    tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                } else {
+                    ToastUtils.showVolleyError(context);
+                }
             }
         });
     }

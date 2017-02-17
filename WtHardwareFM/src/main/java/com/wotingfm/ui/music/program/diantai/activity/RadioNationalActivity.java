@@ -28,6 +28,7 @@ import com.wotingfm.ui.music.program.diantai.model.RadioPlay;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
+import com.wotingfm.widget.TipView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -37,18 +38,34 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RadioNationalActivity extends BaseActivity implements View.OnClickListener {
+/**
+ * 国家电台
+ */
+public class RadioNationalActivity extends BaseActivity implements View.OnClickListener, TipView.WhiteViewClick {
+    private SearchPlayerHistoryDao dbDao;
+    private RadioNationAdapter adapter;
+    private List<RadioPlay> newList = new ArrayList<>();
+    private List<RadioPlay> SubList;
+
+    private TipView tipView;// 没有网络、没有数据、数据错误提示
     private ImageView head_left_btn;
     private TextView mTextView_Head;
+    private ExpandableListView mListView;
     private Dialog dialog;
 
     private String tag = "RADIO_NATION_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
-    private ArrayList<RadioPlay> newList = new ArrayList<>();
-    protected List<RadioPlay> SubList;
-    private SearchPlayerHistoryDao dbDao;
-    private ExpandableListView mListView;
-    private RadioNationAdapter adapter;
+
+    @Override
+    public void onWhiteViewClick() {
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+            dialog = DialogUtils.Dialogph(context, "正在获取数据");
+            sendRequest();
+        } else {
+            tipView.setVisibility(View.VISIBLE);
+            tipView.setTipView(TipView.TipStatus.NO_NET);
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +78,8 @@ public class RadioNationalActivity extends BaseActivity implements View.OnClickL
             dialog = DialogUtils.Dialogph(context, "正在获取数据");
             sendRequest();
         } else {
-            ToastUtils.show_always(this, "网络连接失败，请稍后重试");
+            tipView.setVisibility(View.VISIBLE);
+            tipView.setTipView(TipView.TipStatus.NO_NET);
         }
     }
 
@@ -73,12 +91,8 @@ public class RadioNationalActivity extends BaseActivity implements View.OnClickL
 
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
-                if (isCancelRequest) {
-                    return;
-                }
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return;
                 try {
                     ReturnType = result.getString("ReturnType");
                 } catch (JSONException e) {
@@ -107,23 +121,29 @@ public class RadioNationalActivity extends BaseActivity implements View.OnClickL
                             for (int i = 0; i < SubList.size(); i++) {
                                 mListView.expandGroup(i);
                             }
+                            tipView.setVisibility(View.GONE);
                         } catch (Exception e) {
                             e.printStackTrace();
+                            tipView.setVisibility(View.VISIBLE);
+                            tipView.setTipView(TipView.TipStatus.IS_ERROR);
                         }
                         setListView();
                     } catch (Exception e) {
                         e.printStackTrace();
+                        tipView.setVisibility(View.VISIBLE);
+                        tipView.setTipView(TipView.TipStatus.IS_ERROR);
                     }
                 } else {
-                    ToastUtils.show_always(context,"已经没有相关数据啦");
+                    tipView.setVisibility(View.VISIBLE);
+                    tipView.setTipView(TipView.TipStatus.NO_DATA);
                 }
             }
 
             @Override
             protected void requestError(VolleyError error) {
-                if (dialog != null) {
-                    dialog.dismiss();
-                }
+                if (dialog != null) dialog.dismiss();
+                tipView.setVisibility(View.VISIBLE);
+                tipView.setTipView(TipView.TipStatus.IS_ERROR);
             }
         });
     }
@@ -214,6 +234,9 @@ public class RadioNationalActivity extends BaseActivity implements View.OnClickL
     }
 
     private void setView() {
+        tipView = (TipView) findViewById(R.id.tip_view);
+        tipView.setWhiteClick(this);
+
         mListView = (ExpandableListView) findViewById(R.id.listview_fm);
         head_left_btn = (ImageView) findViewById(R.id.head_left_btn);
         mTextView_Head = (TextView) findViewById(R.id.head_name_tv);

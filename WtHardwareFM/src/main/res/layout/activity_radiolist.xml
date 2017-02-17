@@ -16,12 +16,18 @@
             android:id="@+id/head_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="群组信息"
+            android:text="分类"
             android:layout_centerInParent="true"
             android:textColor="@color/WHITE"
             android:textSize="@dimen/activity_head_center_s" />
         
     </RelativeLayout>
+
+    <com.wotingfm.widget.TipView
+        android:id="@+id/tip_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"/>
     
     <com.wotingfm.widget.PagerSlidingTabStrip
         android:id="@+id/tabs_title"

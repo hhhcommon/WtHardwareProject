@@ -33,6 +33,7 @@ import com.wotingfm.ui.music.program.radiolist.model.ListInfo;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
+import com.wotingfm.widget.TipView;
 import com.wotingfm.widget.rollviewpager.RollPagerView;
 import com.wotingfm.widget.rollviewpager.adapter.LoopPagerAdapter;
 import com.wotingfm.widget.rollviewpager.hintview.IconHintView;
@@ -50,7 +51,7 @@ import java.util.List;
  * 分类列表
  * @author woting11
  */
-public class ClassifyFragment extends Fragment {
+public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick {
     private Context context;
     private SearchPlayerHistoryDao dbDao;  // 数据库
     private ListInfoAdapter adapter;
@@ -60,13 +61,20 @@ public class ClassifyFragment extends Fragment {
     private View rootView;
     private XListView mListView;            // 列表
     private Dialog dialog;                  // 加载对话框
+    private TipView tipView;                // 没有网络、没有数据提示
 
     private int page = 1;                   // 页码
-    private int pageSizeNum;
+//    private int pageSizeNum;
     private int refreshType = 1;            // refreshType 1 为下拉加载  2 为上拉加载更多
 
     private String CatalogId;
     private String CatalogType;
+
+    @Override
+    public void onWhiteViewClick() {
+        dialog = DialogUtils.Dialogph(context, "正在获取数据");
+        sendRequest();
+    }
 
     /**
      * 创建 Fragment 实例
@@ -94,6 +102,10 @@ public class ClassifyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_radio_list_layout, container, false);
+
+            tipView = (TipView) rootView.findViewById(R.id.tip_view);
+            tipView.setWhiteClick(this);
+
             View headView = LayoutInflater.from(context).inflate(R.layout.headview_acitivity_radiolist, null);
             // 轮播图
             RollPagerView mLoopViewPager = (RollPagerView) headView.findViewById(R.id.slideshowView);
@@ -126,9 +138,10 @@ public class ClassifyFragment extends Fragment {
     // 请求网络获取分类信息
     private void sendRequest() {
         if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
-            ToastUtils.show_always(context, "网络连接失败，请检查网络设置!");
             if(dialog != null) dialog.dismiss();
             if(refreshType == 1) {
+                tipView.setVisibility(View.VISIBLE);
+                tipView.setTipView(TipView.TipStatus.NO_NET);
                 mListView.stopRefresh();
             } else {
                 mListView.stopLoadMore();
@@ -143,7 +156,6 @@ public class ClassifyFragment extends Fragment {
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) dialog.dismiss();
                 if (((RadioListActivity) getActivity()).isCancel()) return;
-                page++;
                 try {
                     ReturnType = result.getString("ReturnType");
                 } catch (JSONException e) {
@@ -152,28 +164,33 @@ public class ClassifyFragment extends Fragment {
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
-                        try {
-                            String pageSizeString = arg1.getString("PageSize");
-                            String allCountString = arg1.getString("AllCount");
-                            if (allCountString != null && !allCountString.equals("") && pageSizeString != null && !pageSizeString.equals("")) {
-                                int allCountInt = Integer.valueOf(allCountString);
-                                int pageSizeInt = Integer.valueOf(pageSizeString);
-                                if (allCountInt < 10 || pageSizeInt < 10) {
-                                    mListView.stopLoadMore();
-                                    mListView.setPullLoadEnable(false);
-                                } else {
-                                    mListView.setPullLoadEnable(true);
-                                    if (allCountInt % pageSizeInt == 0) {
-                                        pageSizeNum = allCountInt / pageSizeInt;
-                                    } else {
-                                        pageSizeNum = allCountInt / pageSizeInt + 1;
-                                    }
-                                }
-                            }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
                         subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<ListInfo>>() {}.getType());
+                        if (subList != null && subList.size() >= 10) {
+                            page++;
+                        } else {
+                            mListView.setPullLoadEnable(false);
+                        }
+//                        try {
+//                            String pageSizeString = arg1.getString("PageSize");
+//                            String allCountString = arg1.getString("AllCount");
+//                            if (allCountString != null && !allCountString.equals("") && pageSizeString != null && !pageSizeString.equals("")) {
+//                                int allCountInt = Integer.valueOf(allCountString);
+//                                int pageSizeInt = Integer.valueOf(pageSizeString);
+//                                if (allCountInt < 10 || pageSizeInt < 10) {
+//                                    mListView.stopLoadMore();
+//                                    mListView.setPullLoadEnable(false);
+//                                } else {
+//                                    mListView.setPullLoadEnable(true);
+//                                    if (allCountInt % pageSizeInt == 0) {
+//                                        pageSizeNum = allCountInt / pageSizeInt;
+//                                    } else {
+//                                        pageSizeNum = allCountInt / pageSizeInt + 1;
+//                                    }
+//                                }
+//                            }
+//                        } catch (JSONException e) {
+//                            e.printStackTrace();
+//                        }
                         if (refreshType == 1) newList.clear();
                         newList.addAll(subList);
                         if(adapter == null) {
@@ -182,14 +199,24 @@ public class ClassifyFragment extends Fragment {
                             adapter.notifyDataSetChanged();
                         }
                         setOnItem();
-                    } catch (JSONException e) {
+                        tipView.setVisibility(View.GONE);
+                    } catch (Exception e) {
                         e.printStackTrace();
+                        if (refreshType == 1) {
+                            tipView.setVisibility(View.VISIBLE);
+                            tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                        }
                     }
 
                     if(refreshType == 1) {
                         mListView.stopRefresh();
                     } else {
                         mListView.stopLoadMore();
+                    }
+                } else {
+                    if (refreshType == 1) {
+                        tipView.setVisibility(View.VISIBLE);
+                        tipView.setTipView(TipView.TipStatus.NO_DATA, "数据君不翼而飞了\n点击界面会重新获取数据哟");
                     }
                 }
             }
@@ -198,6 +225,10 @@ public class ClassifyFragment extends Fragment {
             protected void requestError(VolleyError error) {
                 if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
+                if (refreshType == 1) {
+                    tipView.setVisibility(View.VISIBLE);
+                    tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                }
             }
         });
     }
@@ -292,13 +323,8 @@ public class ClassifyFragment extends Fragment {
 
             @Override
             public void onLoadMore() {
-                if (page <= pageSizeNum) {
-                    refreshType = 2;
-                    sendRequest();
-                } else {
-                    mListView.stopLoadMore();
-                    mListView.setPullLoadEnable(false);
-                }
+                refreshType = 2;
+                sendRequest();
             }
         });
     }
