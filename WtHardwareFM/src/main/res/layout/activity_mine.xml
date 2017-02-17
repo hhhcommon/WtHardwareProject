@@ -316,7 +316,39 @@
                     android:text="关闭" />
 
             </RelativeLayout>
+            <RelativeLayout
+                android:id="@+id/test_set"
+                style="@style/PersonAndSetRelativeStyle">
 
+                <View style="@style/LineStyle"/>
+
+                <ImageView
+                    android:id="@+id/image_test"
+                    style="@style/PersonAndSetLeftStyle"
+                    android:src="@mipmap/wt_image_bluetooth" />
+
+                <TextView
+                    android:id="@+id/text_test_set"
+                    style="@style/PersonAndSetTextStyle"
+                    android:text="对讲测试"
+                    android:layout_toRightOf="@id/image_test" />
+
+                <ImageView
+                    android:id="@+id/image_test_set"
+                    style="@style/PersonAndSetRightStyle" />
+
+                <TextView
+                    android:id="@+id/text_test_state"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/beijing"
+                    android:layout_toLeftOf="@id/image_test_set"
+                    android:maxLines="1"
+                    android:text="关闭" />
+
+            </RelativeLayout>
             <RelativeLayout
                 android:id="@+id/flow_set"
                 style="@style/PersonAndSetRelativeStyle">

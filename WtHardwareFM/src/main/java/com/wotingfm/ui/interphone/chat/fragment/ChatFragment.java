@@ -24,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -68,7 +69,6 @@ import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.JsonEncloseUtils;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.util.VibratorUtils;
-import com.wotingfm.widget.MyGridView;
 import com.wotingfm.widget.MyLinearLayout;
 import com.wotingfm.widget.TipView;
 
@@ -108,14 +108,13 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
     private static TextView tv_personname;
     private TextView talkingName;
     private TextView talking_news;
-    private TextView gridView_tv;
     private ImageView image_personvoice;
     private ImageView image_group_persontx;
     private ImageView image_voice;
 
     private Button image_button;
     private View rootView;
-    private MyGridView gridView_person;
+    private GridView gridView_person;
     private Dialog dialog;
     private static Dialog confirmDialog;
 
@@ -145,6 +144,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
     private static ArrayList<GroupInfo> allList = new ArrayList<>();//所有数据库数据
     private static List<DBTalkHistorary> historyDataBaseList;//list里边的数据
     private static List<ListInfo> listInfo;
+    private RelativeLayout relative_view;
 
     @Override
     public void onTipViewClick() {
@@ -213,7 +213,8 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_talkoldlist, container, false);
+//        rootView = inflater.inflate(R.layout.fragment_talkoldlist, container, false);
+        rootView = inflater.inflate(R.layout.fragment_interphone, container, false);
         setView();//设置界面
         setOnResumeView();
 
@@ -252,11 +253,18 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         tv_allnum = (TextView) rootView.findViewById(R.id.tv_allnum);                           // 群组对讲时候的群所有成员人数
         talkingName = (TextView) rootView.findViewById(R.id.talkingname);                       // 群组对讲时候对讲人姓名
         image_group_persontx = (ImageView) rootView.findViewById(R.id.image_group_persontx);    // 群组对讲时候对讲人头像
-        gridView_person = (MyGridView) rootView.findViewById(R.id.gridView_person);             // 群组对讲时候对讲成员展示
+        gridView_person = (GridView) rootView.findViewById(R.id.gridView_person);             // 群组对讲时候对讲成员展示
         gridView_person.setSelector(new ColorDrawable(Color.TRANSPARENT));                      // 取消GridView的默认背景色
-        gridView_tv = (TextView) rootView.findViewById(R.id.gridView_tv);                       // 群组对讲时候通话解释
         image_voice = (ImageView) rootView.findViewById(R.id.image_voice);                      // 群组对讲声音波
         talking_news = (TextView) rootView.findViewById(R.id.talking_news);                     // 群组对讲时候通话解释
+
+
+
+        rootView.findViewById(R.id.lin_tv_show).setOnClickListener(this);                     //
+        rootView.findViewById(R.id.lin_tv_close).setOnClickListener(this);                     //
+        relative_view = (RelativeLayout) rootView.findViewById(R.id.relative_view);                       //
+
+
         mListView = (ListView) rootView.findViewById(R.id.listView);                            //
         lin_foot = (MyLinearLayout) rootView.findViewById(R.id.lin_foot);                       // 对讲按钮
         imageView_answer = (ImageView) rootView.findViewById(R.id.imageView_answer);            //
@@ -298,6 +306,12 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
+            case R.id.lin_tv_show:
+                relative_view.setVisibility(View.VISIBLE);
+                break;
+            case R.id.lin_tv_close:
+                relative_view.setVisibility(View.GONE);
+                break;
             case R.id.image_grouptx:
                 //查看群成员
                 checkGroup();
@@ -340,7 +354,6 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
             lin_foot.setVisibility(View.GONE);
             GlobalConfig.isActive = false;
             gridView_person.setVisibility(View.GONE);
-            gridView_tv.setVisibility(View.GONE);
         } else {
             InterPhoneControlHelper.Quit(context, interPhoneId);//退出小组
             historyDataBaseList = dbDao.queryHistory();//得到数据库里边数据
@@ -368,7 +381,6 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
             lin_foot.setVisibility(View.GONE);
             GlobalConfig.isActive = false;
             gridView_person.setVisibility(View.GONE);
-            gridView_tv.setVisibility(View.GONE);
         }
     }
 
@@ -446,10 +458,8 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
 
             if (gridView_person.getVisibility() == View.VISIBLE) {
                 gridView_person.setVisibility(View.GONE);
-                gridView_tv.setVisibility(View.GONE);
             } else {
                 gridView_person.setVisibility(View.VISIBLE);
-                gridView_tv.setVisibility(View.VISIBLE);
             }
         }
     }

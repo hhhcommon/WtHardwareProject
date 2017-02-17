@@ -59,10 +59,10 @@
             <TextView
                 android:id="@+id/tv_save"
                 android:layout_width="48dp"
-                android:gravity="center"
-                android:textColor="@color/white"
                 android:layout_height="match_parent"
-                android:text="保存"/>
+                android:gravity="center"
+                android:text="保存"
+                android:textColor="@color/white" />
 
         </LinearLayout>
 

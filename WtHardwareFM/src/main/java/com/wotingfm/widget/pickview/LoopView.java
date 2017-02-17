@@ -217,6 +217,10 @@ public class LoopView extends View {
         isLoop = false;
     }
 
+    /**
+     * 选中跟未选中字体大小相同
+     * @param size
+     */
     public final void setTextSize(float size) {
         if (size > 0.0F) {
             textSize = (int) (context.getResources().getDisplayMetrics().density * size);
@@ -225,6 +229,23 @@ public class LoopView extends View {
         }
     }
 
+    /**
+     * 选中跟未选中字体大小不同
+     * @param OuterText
+     * @param CenterText
+     */
+    public final void setTextSize(float OuterText,float CenterText) {
+        if (OuterText > 0.0F) {
+            textSize = (int) (context.getResources().getDisplayMetrics().density * OuterText);
+            paintOuterText.setTextSize(textSize);
+        }
+        if (CenterText > 0.0F) {
+            textSize = (int) (context.getResources().getDisplayMetrics().density * CenterText);
+            paintCenterText.setTextSize(textSize);
+
+        }
+
+    }
     public final void setInitPosition(int initPosition) {
         this.initPosition = initPosition;
     }
