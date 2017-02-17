@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.TextView;
 
+import com.baidu.cyberplayer.core.BVideoView;
 import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
 import com.wotingfm.ui.baseactivity.BaseFragmentActivity;
@@ -39,6 +40,14 @@ public class HomeActivity extends BaseFragmentActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 		context = this;
+
+        // 解决播放闪屏问题 进入系统之前先加载一次
+        BVideoView videoView = (BVideoView) findViewById(R.id.video_view);
+        videoView.setVideoPath(null);
+        videoView.start();
+        videoView.stopPlayback();
+        videoView.setVisibility(View.GONE);
+
 		InitTextView();
 		InitViewPager();
         setType();
