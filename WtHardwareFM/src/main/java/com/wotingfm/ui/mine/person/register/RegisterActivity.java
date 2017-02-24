@@ -197,8 +197,10 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, T
     private void send() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("UserName", userName);
+            jsonObject.put("NickName",userName);
             jsonObject.put("Password", password);
+            jsonObject.put("MainPhoneNum",phoneNum);
+            jsonObject.put("UsePhone","1");
         } catch (JSONException e) {
             e.printStackTrace();
         }

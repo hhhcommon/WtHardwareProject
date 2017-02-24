@@ -5,6 +5,7 @@ import android.os.Environment;
 import com.wotingfm.common.devicecontrol.WtDeviceControl;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.common.model.UserInfo;
+import com.wotingfm.ui.interphone.group.creategroup.model.Freq;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
 import com.wotingfm.ui.music.program.fenlei.model.CatalogName;
 
@@ -35,6 +36,7 @@ public class GlobalConfig {
     public static List<GroupInfo> list_group;                                                  // 通讯录中的对讲组
     public static List<UserInfo> list_person;                                                  // 通讯录中的好友
     public static LanguageSearchInside playerObject;                                           // 播放器播放对象
+    public static List<Freq> FreqList;                                                         // 对讲频率list
     
     // 网络情况 1为成功WiFi已连接，2为cmnet，3为cmwap，4为ctwap， -1为网络未连接
     public static final int NETWORK_STATE_IDLE = -1;

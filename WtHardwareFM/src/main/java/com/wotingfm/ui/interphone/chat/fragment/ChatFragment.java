@@ -112,7 +112,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
     private ImageView image_group_persontx;
     private ImageView image_voice;
 
-    private Button image_button;
+    private static Button image_button;
     private View rootView;
     private GridView gridView_person;
     private Dialog dialog;
@@ -125,26 +125,27 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
     public static LinearLayout lin_personhead;
     public static TipView tipView;
 
-    private AnimationDrawable draw;
-    private AnimationDrawable draw_group;
+    private static AnimationDrawable draw;
+    private static AnimationDrawable draw_group;
     private String UserName;
     private static String groupId;
     public static String interPhoneType;
     public static String interPhoneId;
     private static String phoneId;
     private String tag = "TALKOLDLIST_VOLLEY_REQUEST_CANCEL_TAG";
-    private long Vibrate = 100;
+    private static long Vibrate = 100;
     private static int enterGroupType;
     private static int dialogType;
     public static boolean isCalling = false;//是否是在通话状态;
     private boolean isCancelRequest;
-    private boolean isTalking = false;
+    private static boolean isTalking = false;
     private static List<UserInfo> groupPersonList = new ArrayList<>();//组成员
     private static ArrayList<UserInfo> groupPersonListS = new ArrayList<>();
     private static ArrayList<GroupInfo> allList = new ArrayList<>();//所有数据库数据
     private static List<DBTalkHistorary> historyDataBaseList;//list里边的数据
     private static List<ListInfo> listInfo;
     private RelativeLayout relative_view;
+    public static boolean isVisible;
 
     @Override
     public void onTipViewClick() {
@@ -217,7 +218,6 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         rootView = inflater.inflate(R.layout.fragment_interphone, container, false);
         setView();//设置界面
         setOnResumeView();
-
         return rootView;
     }
 
@@ -232,6 +232,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
     public void onResume() {
         super.onResume();
         setOnResumeView();
+        isVisible=true;
     }
 
     // 初始化数据库命令执行对象
@@ -1525,7 +1526,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         }
     }
 
-    protected void jack() {
+    public static void jack() {
         //抬手后的操作
         if (isTalking) {
             if (interPhoneType.equals("group")) {
@@ -1554,7 +1555,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         }
     }
 
-    protected void press() {
+    public static void press() {
         // 按下的动作
         if (interPhoneType.equals("group")) {
             InterPhoneControlHelper.Press(context, interPhoneId);

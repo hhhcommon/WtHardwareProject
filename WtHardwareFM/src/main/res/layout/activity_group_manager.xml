@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@color/dinglan_orange"
+    android:clipToPadding="true"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical" >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="48dp" >
+
+        <ImageView
+            android:id="@+id/head_left_btn"
+            style="@style/LeftImageStyle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="管理群组"
+            android:layout_centerInParent="true"
+            android:textColor="@color/WHITE"
+            android:textSize="@dimen/activity_head_center_s" />
+
+    </RelativeLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/fengexian"
+        android:orientation="vertical"
+        >
+        <RelativeLayout
+            android:id="@+id/rl_group_manager"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:visibility="visible"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:gravity="left|center"
+                android:text="群类型"
+                android:textColor="@color/beijing"
+                android:textSize="14sp"/>
+
+            <TextView
+                android:id="@+id/tv_group_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right|center"
+                android:layout_marginRight="15dp"
+                android:textColor="@color/black"
+                android:text="公开群"
+                />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_group_introduce"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="1dp"
+            android:visibility="visible"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:gravity="left|center"
+                android:text="编辑群组资料"
+                android:textColor="@color/beijing"
+                android:textSize="14sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right|center"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/live_more"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_set_manager"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="15dp"
+            android:visibility="visible"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:gravity="left|center"
+                android:text="设置管理员"
+                android:textColor="@color/beijing"
+                android:textSize="14sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right|center"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/live_more"/>
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_transfer_authority"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="1dp"
+            android:visibility="visible"
+            android:background="@color/white">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:gravity="left|center"
+                android:text="移交群主权限"
+                android:textColor="@color/beijing"
+                android:textSize="14sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right|center"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/live_more"/>
+        </RelativeLayout>
+
+
+        <RelativeLayout
+            android:id="@+id/rl_modify_password"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/white"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:gravity="left|center"
+                android:text="修改群密码"
+                android:textColor="@color/beijing"
+                android:textSize="14sp"/>
+
+            <ImageView
+                android:id="@+id/img_more"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right|center"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/live_more"/>
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_addGroup"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="15dp"
+            android:background="@color/white"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:paddingLeft="10dp"
+                android:gravity="left|center"
+                android:text="加群消息"
+                android:textColor="@color/beijing"
+                android:textSize="14sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right|center"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/live_more"/>
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/rl_verify_group"
+            android:layout_width="match_parent"
+            android:layout_height="44dp"
+            android:layout_marginTop="1dp"
+            android:background="@color/white"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingBottom="15dp"
+                android:paddingLeft="10dp"
+                android:paddingTop="15dp"
+                android:text="审核消息"
+                android:textColor="@color/beijing"
+                android:textSize="14sp"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_gravity="right|center"
+                android:layout_marginRight="10dp"
+                android:src="@mipmap/live_more"/>
+
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
