@@ -39,7 +39,7 @@ public class WtDeviceControl {
      */
     public void pushCenter() {
 //        try {
-//            PlayerFragment.enterCenter();
+//            PlayerActivity.enterCenter();
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //            VibratorUtils.Vibrate(context, Vibrate);
@@ -52,7 +52,7 @@ public class WtDeviceControl {
      */
     public void pushUpButton() {
 //        try {
-//            PlayerFragment.playLast();
+//            PlayerActivity.playLast();
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //            VibratorUtils.Vibrate(context, Vibrate);
@@ -64,7 +64,7 @@ public class WtDeviceControl {
      */
     public void pushDownButton() {
 //        try {
-//            PlayerFragment.playNext();
+//            PlayerActivity.playNext();
 //        } catch (Exception e) {
 //            e.printStackTrace();
 //            VibratorUtils.Vibrate(context, Vibrate);

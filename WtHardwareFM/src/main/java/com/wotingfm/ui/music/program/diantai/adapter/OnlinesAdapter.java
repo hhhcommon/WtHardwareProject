@@ -75,7 +75,7 @@ public class OnlinesAdapter extends BaseExpandableListAdapter {
      * 显示：group
      */
     @Override
-    public View getGroupView(int groupPosition, boolean isExpanded,View convertView, ViewGroup parent) {
+    public View getGroupView(int groupPosition, boolean isExpanded, View convertView, ViewGroup parent) {
         final ViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fragment_radio_list, null);
@@ -130,24 +130,23 @@ public class OnlinesAdapter extends BaseExpandableListAdapter {
         }
         RankInfo lists = group.get(groupPosition).getList().get(childPosition);
 
-        if(lists != null) {
+        if (lists != null) {
             String mediaType = lists.getMediaType();// 类型
 
-            if(mediaType != null && mediaType.equals("RADIO")) {
+            if (mediaType != null && mediaType.equals("RADIO")) {
                 // 播放内容标题
                 String contentName = lists.getContentName();
-                if (contentName == null|| contentName.equals("")) {
+                if (contentName == null || contentName.equals("")) {
                     contentName = "未知";
                 }
                 holder.textview_ranktitle.setText(contentName);
 
                 // 正在直播的节目
-                String contentPub = lists.getContentPub();
-                if (contentPub == null|| contentPub.equals("")) {
-                    contentPub = "未知";
+                String contentPlaying = lists.getIsPlaying();
+                if (contentPlaying == null || contentPlaying.equals("")) {
+                    contentPlaying = "暂无节目单";
                 }
-//            holder.textview_rankplaying.setText(contentPub);
-                holder.textview_rankplaying.setText("测试-无节目单数据");
+                holder.textview_rankplaying.setText(contentPlaying);
 
                 // 封面图片
                 String contentImg = lists.getContentImg();
@@ -155,8 +154,8 @@ public class OnlinesAdapter extends BaseExpandableListAdapter {
                     Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx_d);
                     holder.imageview_rankimage.setImageBitmap(bmp);
                 } else {
-                    if(!contentImg.startsWith("http")){
-                        contentImg =  GlobalConfig.imageurl + contentImg;
+                    if (!contentImg.startsWith("http")) {
+                        contentImg = GlobalConfig.imageurl + contentImg;
                     }
                     contentImg = AssembleImageUrlUtils.assembleImageUrl150(contentImg);
                     Picasso.with(context).load(contentImg.replace("\\/", "/")).into(holder.imageview_rankimage);

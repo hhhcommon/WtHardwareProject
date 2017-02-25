@@ -61,7 +61,7 @@
 	                android:layout_height="20dp"
 	                android:src="@mipmap/image_program_album"
 	                android:layout_marginRight="6dp"
-	                android:visibility="visible"/>
+	                android:visibility="gone"/>
 	
 	            <TextView
 	                android:id="@+id/RankContent"
