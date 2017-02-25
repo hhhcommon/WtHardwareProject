@@ -15,6 +15,7 @@ import com.wotingfm.ui.interphone.group.groupcontrol.handlegroupapply.HandleGrou
 import com.wotingfm.ui.interphone.group.groupcontrol.joingrouplist.JoinGroupListActivity;
 import com.wotingfm.ui.interphone.group.groupcontrol.modifygrouppassword.ModifyGroupPasswordActivity;
 import com.wotingfm.ui.interphone.group.groupcontrol.transferauthority.TransferAuthorityActivity;
+import com.wotingfm.util.ToastUtils;
 
 import java.util.ArrayList;
 
@@ -130,7 +131,7 @@ public class GroupManagerActivity extends AppBaseActivity implements View.OnClic
                 finish();
                 break;
             case R.id.rl_set_manager:
-                 startActivity(new Intent(context, GroupIntroduceActivity.class));
+                ToastUtils.show_always(context,"设置管理员");
                 break;
             case R.id.rl_transfer_authority:
                 startToActivity(TransferAuthorityActivity.class,1);
@@ -150,7 +151,8 @@ public class GroupManagerActivity extends AppBaseActivity implements View.OnClic
                 startToActivity(ModifyGroupPasswordActivity.class);
                 break;
             case R.id.rl_group_introduce:
-
+                ToastUtils.show_always(context,"群资料修改");
+                startActivity(new Intent(context, GroupIntroduceActivity.class));
                 break;
         }
     }
