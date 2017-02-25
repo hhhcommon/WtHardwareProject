@@ -1,5 +1,6 @@
-package com.wotingfm.ui.music.player.fragment;
+package com.wotingfm.ui.music.player.activity;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -7,11 +8,7 @@ import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -19,7 +16,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.baidu.cyberplayer.core.BVideoView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.squareup.picasso.Picasso;
@@ -50,21 +46,19 @@ import com.wotingfm.widget.xlistview.XListView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.JSONTokener;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
 /**
- * 播放主页
- * 2016年2月4日
- * @author 辛龙
+ * 单独的播放界面
+ * 2017/02/20
  */
-public class PlayerFragment extends Fragment implements View.OnClickListener,
+public class PlayerActivity extends Activity implements View.OnClickListener,
         XListView.IXListViewListener, TipView.WhiteViewClick, SeekBar.OnSeekBarChangeListener, AdapterView.OnItemClickListener {
 
-    public static FragmentActivity context;
+    private Context context;
     private MessageReceiver mReceiver;// 广播
     private IntegrationPlayer mPlayer;// 播放器
     private SearchPlayerHistoryDao mSearchHistoryDao;// 搜索历史数据库
@@ -74,7 +68,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     private List<LanguageSearchInside> playList = new ArrayList<>();// 播放列表
     private List<LanguageSearchInside> subList = new ArrayList<>();// 保存临时数据
 
-    private View rootView;
     private SeekBar mSeekBar;// 播放进度
 
     private ImageView imagePlay;// 播放 OR 暂停
@@ -88,12 +81,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     private TipView tipView;// 没有数据、没有网络提示
 
     /**
-     * 1.== "MAIN_PAGE"  ->  mainPageRequest;
-     * 2.== "SEARCH_TEXT"  ->  searchByTextRequest;
-     * 3.== "SEARCH_VOICE"  ->  searchByVoiceRequest;
-     * Default  == "MAIN_PAGE";
+     * 1.== "SEARCH_TEXT"  ->  searchByTextRequest;
+     * 2.== "SEARCH_VOICE"  ->  searchByVoiceRequest;
+     * Default  == "SEARCH_TEXT";
      */
-    private String requestType = StringConstant.PLAY_REQUEST_TYPE_MAIN_PAGE;
+    private String requestType = StringConstant.PLAY_REQUEST_TYPE_SEARCH_TEXT;
     private String sendTextContent;// 文字搜索内容
     private String sendVoiceContent;// 语音搜索内容
     private String mediaType;// 当前播放节目类型
@@ -130,6 +122,18 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         }
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.fragment_play);
+
+        context = this;
+
+        initData();
+        initView();
+        initEvent();
+    }
+
     // 初始化数据
     private void initData() {
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
@@ -138,52 +142,33 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         mSearchHistoryDao = new SearchPlayerHistoryDao(context);// 数据库对象
 
         mPlayer = IntegrationPlayer.getInstance();// 播放器对象
-    }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        context = getActivity();
-        initData();
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (rootView == null) {
-            rootView = inflater.inflate(R.layout.fragment_play, container, false);
-            initView();
-            initEvent();
-        }
-        return rootView;
+        Intent intent = getIntent();
+        if (intent == null) return ;
+        sendTextContent = intent.getStringExtra("NAME");
     }
 
     // 初始化视图
     private void initView() {
-        // 播放器
-        BVideoView.setAK("b53ba2453fa3451d8aa65a2b48ded30c");
-        BVideoView BDAudio = (BVideoView) rootView.findViewById(R.id.video_view);
-        mPlayer.bindService(context, BDAudio);// 绑定服务
-//        mPlayer.bindService(context, null);// 绑定服务
-
-        ImageView mPlayAudioImageCoverMask = (ImageView) rootView.findViewById(R.id.play_cover_mask);// 封面图片的六边形遮罩
+        ImageView mPlayAudioImageCoverMask = (ImageView) findViewById(R.id.play_cover_mask);// 封面图片的六边形遮罩
         mPlayAudioImageCoverMask.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_bd));
 
-        mPlayCurrentTime = (TextView) rootView.findViewById(R.id.play_current_time);// 当前播放时间
-        mPlayAudioTitle = (AutoScrollTextView) rootView.findViewById(R.id.play_audio_title);// 当前播放节目的标题
+        mPlayCurrentTime = (TextView) findViewById(R.id.play_current_time);// 当前播放时间
+        mPlayAudioTitle = (AutoScrollTextView) findViewById(R.id.play_audio_title);// 当前播放节目的标题
         mPlayAudioTitle.init(windowManager);
         mPlayAudioTitle.startScroll();
-        imagePlayCover = (ImageView) rootView.findViewById(R.id.play_cover);// 节目封面图片
+        imagePlayCover = (ImageView) findViewById(R.id.play_cover);// 节目封面图片
 
-        mSeekBar = (SeekBar) rootView.findViewById(R.id.seek_bar);// 播放进度
+        mSeekBar = (SeekBar) findViewById(R.id.seek_bar);// 播放进度
 
-        imagePlay = (ImageView) rootView.findViewById(R.id.image_play);// 播放 OR 暂停
+        imagePlay = (ImageView) findViewById(R.id.image_play);// 播放 OR 暂停
         imagePlay.setOnClickListener(this);
 
-        recommendView = rootView.findViewById(R.id.recommend_view);// 相关推荐部分
-        mListView = (XListView) rootView.findViewById(R.id.list_view);
+        recommendView = findViewById(R.id.recommend_view);// 相关推荐部分
+        mListView = (XListView) findViewById(R.id.list_view);
         mListView.setXListViewListener(this);
 
-        tipView = (TipView) rootView.findViewById(R.id.tip_view);
+        tipView = (TipView) findViewById(R.id.tip_view);
         tipView.setWhiteClick(this);
 
         queryData();
@@ -191,11 +176,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
 
     // 初始化点击事件
     private void initEvent() {
-        rootView.findViewById(R.id.text_recommend_visible).setOnClickListener(this);// 展示相关推荐列表
-        rootView.findViewById(R.id.text_recommend_gone).setOnClickListener(this);// 隐藏相关推荐列表
-        rootView.findViewById(R.id.play_more).setOnClickListener(this);// 更多
-        rootView.findViewById(R.id.image_right).setOnClickListener(this);// 下一首
-        rootView.findViewById(R.id.image_left).setOnClickListener(this);// 上一首
+        findViewById(R.id.text_recommend_visible).setOnClickListener(this);// 展示相关推荐列表
+        findViewById(R.id.text_recommend_gone).setOnClickListener(this);// 隐藏相关推荐列表
+        findViewById(R.id.play_more).setOnClickListener(this);// 更多
+        findViewById(R.id.image_right).setOnClickListener(this);// 下一首
+        findViewById(R.id.image_left).setOnClickListener(this);// 上一首
 
         mSeekBar.setOnSeekBarChangeListener(this);
         mListView.setOnItemClickListener(this);
@@ -207,14 +192,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         LanguageSearchInside languageSearchInside = getDaoList(context);
         if (languageSearchInside != null) {
             playList.add(languageSearchInside);// 将查询得到的第一条数据加入播放列表中
-            if (requestType.equals(StringConstant.PLAY_REQUEST_TYPE_SEARCH_TEXT)) {
-                ArrayList<LanguageSearchInside> playerList = new ArrayList<>();
-                playerList.add(languageSearchInside);
-                mPlayer.updatePlayList(playerList);
-                index = 0;
-                mPlayer.startPlay(index);
-                isResetData = true;
-            }
         }
         mainPageRequest();
     }
@@ -229,16 +206,13 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
             setPullAndLoad(false, false);
             return;
         }
-        final String requestUrl;
+        String requestUrl;
         switch (requestType) {
-            case StringConstant.PLAY_REQUEST_TYPE_SEARCH_TEXT:
-                requestUrl = GlobalConfig.getSearchByText;// 文字搜索
-                break;
             case StringConstant.PLAY_REQUEST_TYPE_SEARCH_VOICE:
                 requestUrl = GlobalConfig.searchvoiceUrl;// 语音搜索
                 break;
             default:
-                requestUrl = GlobalConfig.mainPageUrl;// 主网络请求
+                requestUrl = GlobalConfig.getSearchByText;// 文字搜索
                 break;
         }
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
@@ -261,15 +235,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                 try {
                     String ReturnType = result.getString("ReturnType");
                     if (ReturnType.equals("1001")) {
-                        List<LanguageSearchInside> list;
-                        if (requestType.equals(StringConstant.PLAY_REQUEST_TYPE_MAIN_PAGE)) {
-                            JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
-                            String listString = arg1.getString("List");
-                            list = new Gson().fromJson(listString, new TypeToken<List<LanguageSearchInside>>() {}.getType());
-                        } else {// "SEARCH_TEXT" OR "SEARCH_VOICE"
-                            LanguageSearch lists = new Gson().fromJson(result.getString("ResultList"), new TypeToken<LanguageSearch>() {}.getType());
-                            list = lists.getList();
-                        }
+                        LanguageSearch lists = new Gson().fromJson(result.getString("ResultList"), new TypeToken<LanguageSearch>() {}.getType());
+                        List<LanguageSearchInside> list = lists.getList();
                         subList = clearContentPlayNull(list);// 去空
                         if (subList != null && subList.size() > 0) {
                             mUIHandler.sendEmptyMessageDelayed(IntegerConstant.PLAY_UPDATE_LIST, 300);
@@ -284,6 +251,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                             setPullAndLoad(false, false);
                         } else {
                             setPullAndLoad(true, false);
+
                             mUIHandler.sendEmptyMessageDelayed(IntegerConstant.PLAY_UPDATE_LIST, 1000);
                         }
                     }
@@ -321,7 +289,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
             mReceiver = new MessageReceiver();
             IntentFilter filter = new IntentFilter();
             filter.addAction(BroadcastConstants.PLAYERVOICE);// searchByVoice
-            filter.addAction(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);// searchByText
 
             filter.addAction(BroadcastConstants.UPDATE_PLAY_CURRENT_TIME);// 更新当前播放时间
             filter.addAction(BroadcastConstants.UPDATE_PLAY_TOTAL_TIME);// 更新当前播放总时间
@@ -340,18 +307,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         @Override
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
-                case BroadcastConstants.PLAY_TEXT_VOICE_SEARCH:// 文字搜索
-                    sendTextContent = intent.getStringExtra(StringConstant.TEXT_CONTENT);
-                    mainPage = 1;
-                    refreshType = 0;
-                    requestType = StringConstant.PLAY_REQUEST_TYPE_SEARCH_TEXT;
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            queryData();
-                        }
-                    }, 500);
-                    break;
                 case BroadcastConstants.PLAYERVOICE:// 语音搜索
                     sendVoiceContent = intent.getStringExtra(StringConstant.VOICE_CONTENT);
                     if (sendVoiceContent == null || sendVoiceContent.trim().equals("")) return;
@@ -377,8 +332,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     addDb(GlobalConfig.playerObject);// 将播放对象加入数据库
                     break;
                 case BroadcastConstants.UPDATE_PLAY_CURRENT_TIME:// 更新当前播放时间
-                    if (!isVisible()) return ;// 不可见时不更新
-
                     // 缓存进度
                     if (mediaType != null && mediaType.equals(StringConstant.TYPE_AUDIO)) {
                         long secondProgress = intent.getLongExtra(StringConstant.PLAY_SECOND_PROGRESS, 0);
@@ -518,15 +471,15 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     subList.clear();
                     break;
                 case IntegerConstant.PLAY_UPDATE_LIST_VIEW:// 更新列表界面
-                    for (int i = 0, size = playList.size(); i < size; i++) {
-                        if (i == index) {
-                            if (isPlaying) playList.get(i).setType("2");
-                            else playList.get(i).setType("0");
-                        } else {
-                            playList.get(i).setType("1");
-                        }
-                    }
-                    adapter.setList(playList);
+//                    for (int i = 0, size = playList.size(); i < size; i++) {
+//                        if (i == index) {
+//                            if (isPlaying) playList.get(i).setType("2");
+//                            else playList.get(i).setType("0");
+//                        } else {
+//                            playList.get(i).setType("1");
+//                        }
+//                    }
+//                    adapter.setList(playList);
                     break;
             }
         }
@@ -551,18 +504,8 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        if (null != rootView) ((ViewGroup) rootView.getParent()).removeView(rootView);
-    }
-
-    @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mPlayer != null) {// 解绑服务
-            mPlayer.unbindService(context);
-            mPlayer = null;
-        }
         if (mReceiver != null) {// 注销广播
             context.unregisterReceiver(mReceiver);
             mReceiver = null;

@@ -70,7 +70,13 @@ public class RankInfoAdapter extends BaseAdapter   {
 		} else {
 			holder.textview_ranktitle.setText(lists.getContentName());
 		}
-		holder.textview_rankplaying.setText("测试-暂无节目单");
+
+        // 正在直播的节目
+        String contentPlaying = lists.getIsPlaying();
+        if (contentPlaying == null || contentPlaying.equals("")) {
+            contentPlaying = "暂无节目单";
+        }
+		holder.textview_rankplaying.setText(contentPlaying);
 
 		if (lists.getContentImg() == null || lists.getContentImg().equals("")
 				|| lists.getContentImg().equals("null") || lists.getContentImg().trim().equals("")) {

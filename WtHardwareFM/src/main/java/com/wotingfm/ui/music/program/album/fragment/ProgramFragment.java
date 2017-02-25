@@ -398,28 +398,28 @@ public class ProgramFragment extends Fragment implements OnClickListener, XListV
         listAlbum.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (contentList != null && contentList.get(position) != null && contentList.get(position).getMediaType() != null) {
-                    String MediaType = contentList.get(position).getMediaType();
+                if (contentList != null && contentList.get(position - 1) != null && contentList.get(position - 1).getMediaType() != null) {
+                    String MediaType = contentList.get(position - 1).getMediaType();
                     if (MediaType.equals(StringConstant.TYPE_RADIO) || MediaType.equals(StringConstant.TYPE_AUDIO)) {
-                        String playerName = contentList.get(position).getContentName();
-                        String playerImage = contentList.get(position).getContentImg();
-                        String playUrl = contentList.get(position).getContentPlay();
-                        String playUrI = contentList.get(position).getContentURI();
-                        String playMediaType = contentList.get(position).getMediaType();
-                        String playContentShareUrl = contentList.get(position).getContentShareURL();
-                        String ContentId = contentList.get(position).getContentId();
-                        String playAllTime = contentList.get(position).getContentTimes();
+                        String playerName = contentList.get(position - 1).getContentName();
+                        String playerImage = contentList.get(position - 1).getContentImg();
+                        String playUrl = contentList.get(position - 1).getContentPlay();
+                        String playUrI = contentList.get(position - 1).getContentURI();
+                        String playMediaType = contentList.get(position - 1).getMediaType();
+                        String playContentShareUrl = contentList.get(position - 1).getContentShareURL();
+                        String ContentId = contentList.get(position - 1).getContentId();
+                        String playAllTime = contentList.get(position - 1).getContentTimes();
                         String playInTime = "0";
-                        String playContentDesc = contentList.get(position).getContentDescn();
-                        String playNum = contentList.get(position).getPlayCount();
+                        String playContentDesc = contentList.get(position - 1).getContentDescn();
+                        String playNum = contentList.get(position - 1).getPlayCount();
                         String playZanType = "0";
-                        String playFrom = contentList.get(position).getContentPub();
+                        String playFrom = contentList.get(position - 1).getContentPub();
                         String playFromId = "";
                         String playFromUrl = "";
                         String playAddTime = Long.toString(System.currentTimeMillis());
                         String bjUserId = CommonUtils.getUserId(context);
-                        String ContentFavorite = contentList.get(position).getContentFavorite();
-                        String localUrl = contentList.get(position).getLocalurl();
+                        String ContentFavorite = contentList.get(position - 1).getContentFavorite();
+                        String localUrl = contentList.get(position - 1).getLocalurl();
                         // name id desc img
                         String sequName1 = contentName;
                         String sequId1 = contentId;
@@ -435,9 +435,14 @@ public class ProgramFragment extends Fragment implements OnClickListener, XListV
                         dbDao.addHistory(history);
                         MainActivity.changeToMusic();
                         HomeActivity.UpdateViewPager();
+
+//                        Intent intent = new Intent(context, PlayerActivity.class);
+//                        intent.putExtra("NAME", contentList.get(position - 1).getContentName());
+//                        context.startActivity(intent);
+
                         Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                         Bundle bundle1 = new Bundle();
-                        bundle1.putString(StringConstant.TEXT_CONTENT,contentList.get(position).getContentName());
+                        bundle1.putString(StringConstant.TEXT_CONTENT,contentList.get(position - 1).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
                         getActivity().setResult(1);

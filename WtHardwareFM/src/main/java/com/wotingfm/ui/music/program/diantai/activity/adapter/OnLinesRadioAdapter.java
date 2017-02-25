@@ -152,12 +152,14 @@ public class OnLinesRadioAdapter extends BaseExpandableListAdapter  {
 					} else {
 						holder.textview_ranktitle.setText(lists.getContentName());
 					}
-//					if (lists.getContentPub() == null|| lists.getContentPub().equals("")) {
-//						holder.textRankPlaying.setText("未知");
-//					} else {
-//						holder.textRankPlaying.setText(lists.getContentPub());
-//					}
-					holder.textview_rankplaying.setText("测试-无节目单数据");
+
+                    // 正在直播的节目
+                    String contentPlaying = lists.getIsPlaying();
+                    if (contentPlaying == null || contentPlaying.equals("")) {
+                        contentPlaying = "暂无节目单";
+                    }
+					holder.textview_rankplaying.setText(contentPlaying);
+
 					if (lists.getContentImg() == null
 							|| lists.getContentImg().equals("")
 							|| lists.getContentImg().equals("null")

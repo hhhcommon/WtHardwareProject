@@ -87,10 +87,11 @@ public class CityNewAdapter extends BaseAdapter {
             }
 
             if (mediaType.equals("RADIO")) {
-//				if (lists.getContentPub() != null && !lists.getContentPub().equals("")) {
-//                    holder.textRankPlaying.setText(lists.getContentPub());
-//				}
-                holder.textRankPlaying.setText("测试-无节目单数据");
+				if (lists.getIsPlaying() != null && !lists.getIsPlaying().equals("")) {
+                    holder.textRankPlaying.setText(lists.getIsPlaying());
+				} else {
+                    holder.textRankPlaying.setText("暂无节目单");
+                }
             } else {
                 if (lists.getContentPub() != null && !lists.getContentPub().equals("")) {
                     holder.textRankPlaying.setText(lists.getContentPub());

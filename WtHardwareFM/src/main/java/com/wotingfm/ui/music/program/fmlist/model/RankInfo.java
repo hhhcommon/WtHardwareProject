@@ -1,6 +1,9 @@
 package com.wotingfm.ui.music.program.fmlist.model;
 
+import com.wotingfm.ui.music.player.model.ContentPersons;
+
 import java.io.Serializable;
+import java.util.List;
 
 public class RankInfo implements Serializable {
 	private String MediaType;
@@ -23,7 +26,17 @@ public class RankInfo implements Serializable {
 	private String ContentSubCount;
 	private String ContentSeqId;
 
-	public String getContentSeqId() {
+    private List<ContentPersons> ContentPersons;// 主播信息
+
+    public List<ContentPersons> getContentPersons() {
+        return ContentPersons;
+    }
+
+    public void setContentPersons(List<ContentPersons> contentPersons) {
+        ContentPersons = contentPersons;
+    }
+
+    public String getContentSeqId() {
 		return ContentSeqId;
 	}
 
@@ -44,7 +57,17 @@ public class RankInfo implements Serializable {
 	private String playTag;         // 标签<预留>
 	private String ContentPlayType; // 内容后缀
 
-	public String getContentPlayType() {
+    private String IsPlaying;// 电台正在直播的节目
+
+    public String getIsPlaying() {
+        return IsPlaying;
+    }
+
+    public void setIsPlaying(String isPlaying) {
+        IsPlaying = isPlaying;
+    }
+
+    public String getContentPlayType() {
 		return ContentPlayType;
 	}
 
