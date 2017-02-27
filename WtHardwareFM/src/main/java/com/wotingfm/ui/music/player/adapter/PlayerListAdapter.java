@@ -14,6 +14,7 @@ import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.ui.music.player.model.ContentPersons;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
@@ -131,15 +132,20 @@ public class PlayerListAdapter extends BaseAdapter {
                     contentPub = "未知";
                 }
                 contentPub = "正在直播：" + contentPub;
-                holder.imagePub.setVisibility(View.GONE);
                 holder.textRankContent.setText(contentPub);
             } else {
-                String contentSequName = searchList.getSequName();
-                if(contentSequName == null || contentSequName.equals("")) {
-                    contentSequName = "未知";
+                List<ContentPersons> list = searchList.getSeqInfo().getContentPersons();
+                String contentPerName;
+                if (list != null && list.size() >= 0) {
+                    contentPerName = list.get(0).getPerName();
+                } else {
+                    contentPerName = searchList.getContentName();
                 }
-                holder.imagePub.setVisibility(View.VISIBLE);
-                holder.textRankContent.setText(contentSequName);
+                if(contentPerName == null || contentPerName.equals("")) {
+                    contentPerName = "未知";
+                }
+                contentPerName = "主播：" + contentPerName;
+                holder.textRankContent.setText(contentPerName);
             }
         }
         return convertView;

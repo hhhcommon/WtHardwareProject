@@ -707,4 +707,9 @@
     <!--UpdatePerson -->
     <color name="up_tv_default">#5e6471</color>
     <color name="up_bg_unselected">#888888</color>
+
+    <!--talk -->
+    <color name="wt_chat_red">#ff3000</color>
+    <color name="wt_chat_green">#36ba30</color>
+
 </resources>

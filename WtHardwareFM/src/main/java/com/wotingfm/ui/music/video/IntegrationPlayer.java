@@ -26,6 +26,10 @@ public class IntegrationPlayer {
 
     private boolean mBound;// 绑定服务
 
+    private IntegrationPlayer() {
+
+    }
+
     public static IntegrationPlayer getInstance() {
         if(mPlayer == null) {
             synchronized (IntegrationPlayer.class) {

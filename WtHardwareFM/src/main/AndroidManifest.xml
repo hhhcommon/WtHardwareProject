@@ -96,7 +96,6 @@
             android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
@@ -510,6 +509,13 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
+        <!-- 专辑界面 -->
+        <activity
+            android:name=".ui.interphone.group.groupcontrol.groupintroduce.GroupIntroduceActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
         <!-- 国家台界面 -->
         <activity
             android:name=".ui.music.program.diantai.activity.RadioNationalActivity"
@@ -527,6 +533,14 @@
         <!-- 验证手机号 -->
         <activity
             android:name=".ui.mine.person.phonecheck.PhoneCheckActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
+
+
+        <!-- 群管理 -->
+        <activity
+            android:name=".ui.interphone.group.groupcontrol.groupmanage.GroupManagerActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -560,6 +574,13 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
 
+        <!--播放节目详情-->
+        <activity
+            android:name=".ui.music.player.activity.PlayerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
+
         <!-- 友盟activity -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
@@ -583,6 +604,18 @@
 
         <activity
             android:name=".ui.music.player.fragment.more.PlayerMoreOperationActivity"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.NoTitleBar"/>
+
+        <!-- 群更多activity -->
+        <activity
+            android:name=".ui.interphone.group.groupcontrol.groupmore.activity.GroupMoreActivity"
+            android:excludeFromRecents="true"
+            android:theme="@android:style/Theme.NoTitleBar"/>
+
+        <!-- 个人更多activity -->
+        <activity
+            android:name=".ui.interphone.group.groupcontrol.personmore.PersonMoreActivity"
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.NoTitleBar"/>
 

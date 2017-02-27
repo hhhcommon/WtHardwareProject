@@ -2,7 +2,6 @@ package com.wotingfm.ui.interphone.group.groupcontrol.grouppersonnews;
 
 import android.app.Dialog;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,7 +16,6 @@ import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.common.helper.CreateQRImageHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.baseactivity.AppBaseActivity;
@@ -25,7 +23,6 @@ import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.common.model.UserInfo;
 import com.wotingfm.ui.interphone.model.UserInviteMeInside;
 import com.wotingfm.util.AssembleImageUrlUtils;
-import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
@@ -50,7 +47,7 @@ public class GroupPersonNewsActivity extends AppBaseActivity {
     private LinearLayout lin_delete;
     private ImageView image_xiugai;
     private ImageView image_touxiang;
-    private EditText et_groupSignature;
+    private TextView et_groupSignature;
     private EditText et_b_name;
     private EditText et_news;
     private Dialog dialogs;
@@ -61,8 +58,7 @@ public class GroupPersonNewsActivity extends AppBaseActivity {
     private SharedPreferences sharedPreferences = BSApplication.SharedPreferences;
     private boolean update;
     private boolean isCancelRequest;
-    private ImageView img_EWM;
-    private Bitmap bmp;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,11 +80,11 @@ public class GroupPersonNewsActivity extends AppBaseActivity {
         meInside.setUserName(name);
         meInside.setDescn(descN);
         meInside.setPortraitMini(imageUrl);
-        bmp = CreateQRImageHelper.getInstance().createQRImage(1, null, meInside, 220, 220);
+     /*   bmp = CreateQRImageHelper.getInstance().createQRImage(1, null, meInside, 220, 220);
         if (bmp == null) {
             bmp = BitmapUtils.readBitMap(context, R.mipmap.ewm);
         }
-        img_EWM.setImageBitmap(bmp);
+        img_EWM.setImageBitmap(bmp);*/
     }
     private void setView() {
         lin_delete = (LinearLayout) findViewById(R.id.lin_delete);    //验证信息清空
@@ -97,10 +93,10 @@ public class GroupPersonNewsActivity extends AppBaseActivity {
         image_touxiang = (ImageView) findViewById(R.id.image_portrait);
         tv_name = (TextView) findViewById(R.id.tv_name);
         et_b_name = (EditText) findViewById(R.id.et_b_name);
-        et_groupSignature = (EditText) findViewById(R.id.et_groupSignature);
+        et_groupSignature = (TextView) findViewById(R.id.et_groupSignature);
         tv_id = (TextView) findViewById(R.id.tv_id);
         image_xiugai = (ImageView) findViewById(R.id.imageView3);
-        img_EWM=(ImageView)findViewById(R.id.img_EWM);
+
     }
 
     private void handleIntent() {
@@ -193,12 +189,12 @@ public class GroupPersonNewsActivity extends AppBaseActivity {
                         } else {
                             biename = et_b_name.getText().toString();
                         }
-                        if (et_groupSignature.getText().toString().trim().equals("")
+                  /*      if (et_groupSignature.getText().toString().trim().equals("")
                                 || et_groupSignature.getText().toString().trim().equals("这家伙很懒，什么都没写")) {
                             groupSignature = " ";
                         } else {
-                            groupSignature = et_groupSignature.getText().toString();
-                        }
+                       *//*     groupSignature = et_groupSignature.getText().toString();*//*
+                        }*/
                     } else {
                         if (et_b_name.getText().toString().trim().equals("")
                                 || et_b_name.getText().toString().trim().equals("暂无备注名")) {
@@ -215,11 +211,8 @@ public class GroupPersonNewsActivity extends AppBaseActivity {
                         ToastUtils.show_always(context, "网络失败，请检查网络");
                     }
                     et_b_name.setEnabled(false);
-                    et_groupSignature.setEnabled(false);
                     et_b_name.setBackgroundColor(context.getResources().getColor(R.color.dinglan_orange));
                     et_b_name.setTextColor(context.getResources().getColor(R.color.white));
-                    et_groupSignature.setBackgroundColor(context.getResources().getColor(R.color.dinglan_orange));
-                    et_groupSignature.setTextColor(context.getResources().getColor(R.color.white));
                     image_xiugai.setImageResource(R.mipmap.xiugai);
                     update = false;
                 } else {
@@ -227,11 +220,9 @@ public class GroupPersonNewsActivity extends AppBaseActivity {
                     if (id.equals(CommonUtils.getUserId(context))) {
                         // 此时是我本人
                         et_b_name.setEnabled(true);
-                        et_groupSignature.setEnabled(true);
                         et_b_name.setBackgroundColor(context.getResources().getColor(R.color.white));
                         et_b_name.setTextColor(context.getResources().getColor(R.color.gray));
-                        et_groupSignature.setBackgroundColor(context.getResources().getColor(R.color.white));
-                        et_groupSignature.setTextColor(context.getResources().getColor(R.color.gray));
+
                     } else {
                         // 此时我不是我本人
                         et_b_name.setEnabled(true);

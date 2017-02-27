@@ -87,12 +87,24 @@ public class RecommendListAdapter extends BaseAdapter {
             Picasso.with(context).load(contentImg.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageCover);
         }
 
-        // 来源 -> 专辑
-        String contentSequ = lists.getSequName();
-        if (contentSequ == null || contentSequ.equals("") || contentSequ.equals("null")) {
-            contentSequ = "未知";
+        // 来源 -> 专辑、主播
+        String media = lists.getMediaType();
+        String name;
+        if (media != null && media.equals("SEQU")) {
+            name = lists.getContentName();
+            if (name == null || name.equals("")) {
+                name = "未知";
+            }
+            name = "专辑：" + name;
+            holder.textContent.setText(name);
+        } else {
+            name = lists.getContentPersons().get(0).getPerName();
+            if (name == null || name.equals("")) {
+                name = "未知";
+            }
+            name = "主播：" + name;
+            holder.textContent.setText(name);
         }
-        holder.textContent.setText(contentSequ);
 
         return convertView;
     }

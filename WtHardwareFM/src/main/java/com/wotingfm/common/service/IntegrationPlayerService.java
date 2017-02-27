@@ -228,7 +228,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
                 this.position = position;
             }
 
-            if(this.position == 0 && !isVlcPlaying && !isTtsPlaying) {// 第一次进入应用给 playerObject 赋值
+            if(this.position == 0 && !isVlcPlaying && !isTtsPlaying && !isBVVPlaying) {// 第一次进入应用给 playerObject 赋值
                 mFileInfoList = getDownList();
                 GlobalConfig.playerObject = playList.get(this.position);
                 updateLocalList();
@@ -277,7 +277,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     // 继续播放
     public void continuePlay() {
-        if(!isVlcPlaying && !isTtsPlaying) {
+        if(!isVlcPlaying && !isTtsPlaying && !isBVVPlaying) {
             startPlay(0);
         } else {
             if (isVlcPlaying) mVlc.play();
