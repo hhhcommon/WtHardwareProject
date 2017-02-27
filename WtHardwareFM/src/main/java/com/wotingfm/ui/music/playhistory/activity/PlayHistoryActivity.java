@@ -2,6 +2,7 @@ package com.wotingfm.ui.music.playhistory.activity;
 
 import android.annotation.TargetApi;
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +12,9 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.ui.baseactivity.AppBaseFragmentActivity;
+import com.wotingfm.ui.music.main.HomeActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.ui.music.playhistory.adapter.PlayHistoryAdapter;
@@ -23,7 +26,7 @@ import java.util.List;
  * 播放历史
  * @author woting11
  */
-public class PlayHistoryActivity extends AppBaseFragmentActivity implements View.OnClickListener, AdapterView.OnItemLongClickListener {
+public class PlayHistoryActivity extends AppBaseFragmentActivity implements View.OnClickListener, AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
     private SearchPlayerHistoryDao dbDao;	// 播放历史数据库
     private List<PlayerHistory> subList;
     private PlayHistoryAdapter adapter;
@@ -56,6 +59,7 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
         findViewById(R.id.head_left_btn).setOnClickListener(this);  // 左上返回键
 
         listView = (ListView) findViewById(R.id.list_view);
+        listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
 
         tipView = (TipView) findViewById(R.id.tip_view);
@@ -155,6 +159,52 @@ public class PlayHistoryActivity extends AppBaseFragmentActivity implements View
                 delDialog.dismiss();
             }
         });
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        if (subList != null && subList.get(position) != null) {
+//            String playername = subList.get(position).getPlayerName();
+//            String playerimage = subList.get(position).getPlayerImage();
+            String playerurl = subList.get(position).getPlayerUrl();
+//            String playerurI = subList.get(position).getPlayerUrI();
+//            String playermediatype = subList.get(position).getPlayerMediaType();
+//            String plaplayeralltime = "0";
+//            String playerintime = "0";
+//            String playercontentdesc = subList.get(position).getPlayerContentDescn();
+//            String playernum = subList.get(position).getPlayCount();
+//            String playerzantype = "0";
+//            String playerfrom = "";
+//            String playerfromid = "";
+//            String playerfromurl = subList.get(position).getPlayerFromUrl();
+//            String playeraddtime = Long.toString(System.currentTimeMillis());
+//            String bjuserid = CommonUtils.getUserId(context);
+//            String ContentFavorite = subList.get(position).getContentFavorite();
+//            String playshareurl = subList.get(position).getPlayContentShareUrl();
+//            String ContentId = subList.get(position).getContentID();
+//            String localurl = subList.get(position).getLocalurl();
+//            String sequname = subList.get(position).getSequName();
+//            String sequid = subList.get(position).getSequId();
+//            String sequdesc = subList.get(position).getSequDesc();
+//            String sequimg = subList.get(position).getSequImg();
+//
+//            // 删除原有数据  添加最新数据
+//            PlayerHistory history = new PlayerHistory(
+//                    playername, playerimage, playerurl, playerurI, playermediatype,
+//                    plaplayeralltime, playerintime, playercontentdesc, playernum,
+//                    playerzantype, playerfrom, playerfromid, playerfromurl,
+//                    playeraddtime, bjuserid, playshareurl, ContentFavorite, ContentId, localurl, sequname, sequid, sequdesc, sequimg);
+            dbDao.deleteHistory(playerurl);
+            dbDao.addHistory(subList.get(position));
+
+            HomeActivity.UpdateViewPager();
+            Intent pushIntent = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+            Bundle bundle = new Bundle();
+            bundle.putString("text", subList.get(position).getPlayerName());
+            pushIntent.putExtras(bundle);
+            sendBroadcast(pushIntent);
+            finish();
+        }
     }
 
     @Override

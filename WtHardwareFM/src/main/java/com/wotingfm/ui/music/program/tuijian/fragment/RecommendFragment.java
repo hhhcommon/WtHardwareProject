@@ -280,7 +280,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
                         bundle.putString("type", "recommend");
                         bundle.putSerializable("list", newList.get(position - 2));
                         intent.putExtras(bundle);
-                        startActivity(intent);
+                        context.startActivity(intent);
                     } else {
                         ToastUtils.show_short(context, "暂不支持的Type类型");
                     }

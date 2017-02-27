@@ -601,7 +601,10 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     // 上一首
     private void last() {
         index = index - 1;
-        if (index < 0) index = playList.size() - 1;
+        if (index < 0) {
+            ToastUtils.show_always(context, "已经是第一个节目了!");
+            return ;
+        }
         mPlayer.startPlay(index);
     }
 
