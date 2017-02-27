@@ -22,6 +22,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
@@ -109,6 +110,9 @@ public class MainActivity extends TabActivity {
     private String callId, callerId;
     public static DBTalkHistorary talkdb;
     private SearchTalkHistoryDao talkDao;
+    private WindowManager wm;
+    private WindowManager.LayoutParams lp;
+    private View tv;
 
     private void setType() {
         try {
@@ -161,7 +165,68 @@ public class MainActivity extends TabActivity {
         if (!BSApplication.SharedPreferences.getBoolean(StringConstant.FAVORITE_PROGRAM_TYPE, false)) {
             startActivity(new Intent(context, FavoriteProgramTypeActivity.class));
         }
+
+        createWindow();
     }
+
+
+    public void createWindow(){
+
+//        wm = (WindowManager) getApplicationContext().getSystemService(WINDOW_SERVICE);
+//        lp = new WindowManager.LayoutParams();
+//        // 悬浮所有页面之上
+//        lp.type = WindowManager.LayoutParams.TYPE_TOAST;
+//        lp.width = 80;
+//        lp.height =80;
+//        // 失去焦点
+//        lp.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+//                | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+//        tv= LayoutInflater.from(this).inflate(R.layout.dialog_float, null);
+//        tv.setBackgroundDrawable(getApplicationContext().getResources().getDrawable(R.mipmap.aa));
+//        wm.addView(tv, lp);
+//        tv.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                ToastUtils.show_always(context,"我是不是你最疼爱的人，你为什么不说话，握住是你冰冷的手动也不动让我好难过");
+//            }
+//        });
+//
+
+
+        //窗口也可以在service里创建
+        final WindowManager manager = (WindowManager) getSystemService(WINDOW_SERVICE);
+        final WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+        params.type = WindowManager.LayoutParams.TYPE_TOAST;
+        params.format = PixelFormat.RGBA_8888;
+        //设置成可获取焦点，否则其他位置无法点击
+        params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL |
+                WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        //设置窗口的位置,显示在屏幕右下角
+        params.x = manager.getDefaultDisplay().getWidth()-80;
+        params.y = manager.getDefaultDisplay().getHeight()-80;
+        params.width = 80;
+        params.height = 80;
+        params.gravity = Gravity.LEFT;
+
+        //创建窗口显示布局
+        final TextView tv = new TextView(this);
+        tv.setText("成功");
+        tv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this,"窗口被销毁",Toast.LENGTH_LONG).show();
+                manager.removeViewImmediate(tv);
+                params.gravity = Gravity.RIGHT;
+                manager.addView(tv,params);
+            }
+        });
+        //将窗口跟布局绑定
+        manager.addView(tv,params);
+        //销毁窗口
+//        manager.removeViewImmediate(tv);
+
+    }
+
 
     private void createService() {
         Socket = new Intent(this, SocketService.class);  //socket服务
@@ -728,6 +793,13 @@ public class MainActivity extends TabActivity {
         super.onPause();
         MobclickAgent.onPageEnd(mPageName);
         MobclickAgent.onPause(context);
+//        wm.removeView(tv);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+//        wm.addView(tv,lp);
     }
 
     @Override

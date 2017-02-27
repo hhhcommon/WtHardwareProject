@@ -389,7 +389,7 @@ public class CallAlertActivity extends Activity implements OnClickListener {
                                     String ACKType = datas.get("ACKType") + "";
                                     if (ACKType != null && !ACKType.equals("") && ACKType.equals("1")) {
                                         //此时对讲连接建立可以通话
-                                        if (musicPlayer != null) {
+                                               if (musicPlayer != null) {
                                             musicPlayer.stop();
                                             musicPlayer = null;
                                         }
