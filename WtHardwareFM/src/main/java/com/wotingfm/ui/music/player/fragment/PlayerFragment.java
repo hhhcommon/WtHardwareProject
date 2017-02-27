@@ -704,17 +704,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         String playerFromUrl = "";
         String playerAddTime = Long.toString(System.currentTimeMillis());
         String bjUserId = CommonUtils.getUserId(context);
-        String ContentFavorite = "";
-        if (languageSearchInside.getContentFavorite() != null) {
-            String contentFavorite = languageSearchInside.getContentFavorite();
-            if (contentFavorite != null) {
-                if (contentFavorite.equals("0") || contentFavorite.equals("1")) {
-                    ContentFavorite = contentFavorite;
-                }
-            }
-        } else {
-            ContentFavorite = languageSearchInside.getContentFavorite();
-        }
+        String ContentFavorite = languageSearchInside.getContentFavorite();
         String ContentID = languageSearchInside.getContentId();
         String localUrl = languageSearchInside.getLocalurl();
         String sequName = languageSearchInside.getSequName();

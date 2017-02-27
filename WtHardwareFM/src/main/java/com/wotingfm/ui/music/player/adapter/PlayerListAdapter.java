@@ -134,18 +134,23 @@ public class PlayerListAdapter extends BaseAdapter {
                 contentPub = "正在直播：" + contentPub;
                 holder.textRankContent.setText(contentPub);
             } else {
-                List<ContentPersons> list = searchList.getSeqInfo().getContentPersons();
-                String contentPerName;
-                if (list != null && list.size() >= 0) {
-                    contentPerName = list.get(0).getPerName();
-                } else {
-                    contentPerName = searchList.getContentName();
+                try {
+                    List<ContentPersons> list = searchList.getSeqInfo().getContentPersons();
+                    String contentPerName;
+                    if (list != null && list.size() >= 0) {
+                        contentPerName = list.get(0).getPerName();
+                    } else {
+                        contentPerName = searchList.getContentName();
+                    }
+                    if(contentPerName == null || contentPerName.equals("")) {
+                        contentPerName = "未知";
+                    }
+                    contentPerName = "主播：" + contentPerName;
+                    holder.textRankContent.setText(contentPerName);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                    holder.textRankContent.setText("主播：未知");
                 }
-                if(contentPerName == null || contentPerName.equals("")) {
-                    contentPerName = "未知";
-                }
-                contentPerName = "主播：" + contentPerName;
-                holder.textRankContent.setText(contentPerName);
             }
         }
         return convertView;
