@@ -35,6 +35,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -61,15 +62,13 @@ import com.wotingfm.ui.interphone.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.ui.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.adapter.GroupTalkAdapter;
 import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.util.FrequencyUtil;
+import com.wotingfm.ui.interphone.group.groupcontrol.groupmanage.GroupManagerActivity;
+import com.wotingfm.ui.interphone.group.groupcontrol.groupmore.activity.GroupMoreActivity;
 import com.wotingfm.ui.interphone.group.groupcontrol.groupnumdel.GroupMemberDelActivity;
 import com.wotingfm.ui.interphone.group.groupcontrol.grouppersonnews.GroupPersonNewsActivity;
-import com.wotingfm.ui.interphone.group.groupcontrol.handlegroupapply.HandleGroupApplyActivity;
-import com.wotingfm.ui.interphone.group.groupcontrol.joingrouplist.JoinGroupListActivity;
 import com.wotingfm.ui.interphone.group.groupcontrol.memberadd.GroupMemberAddActivity;
 import com.wotingfm.ui.interphone.group.groupcontrol.membershow.GroupMembersActivity;
-import com.wotingfm.ui.interphone.group.groupcontrol.modifygrouppassword.ModifyGroupPasswordActivity;
 import com.wotingfm.ui.interphone.group.groupcontrol.personnews.TalkPersonNewsActivity;
-import com.wotingfm.ui.interphone.group.groupcontrol.transferauthority.TransferAuthorityActivity;
 import com.wotingfm.ui.interphone.main.DuiJiangActivity;
 import com.wotingfm.ui.mine.model.UserPortaitInside;
 import com.wotingfm.util.AssembleImageUrlUtils;
@@ -105,12 +104,6 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
     private MessageReceivers receiver = new MessageReceivers();
     private Intent pushIntent = new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN);
 
-    private View linearModifyPassword;// 修改密码
-    private View linearGroupApply;// 群审核
-    private View linearAddMessage;// 加群消息
-    private View LinearTransferAuthority;// 移交权限
-
-    private Dialog confirmDialog;// 退出群组确认对话框
     private Dialog imageDialog;// 修改群组头像对话框
     private Dialog dialog;// 加载数据对话框
     private MyGridView gridView;// 展示群组成员
@@ -143,15 +136,19 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
 
     private boolean isCancelRequest;
     private boolean update;
-    private final int TO_GALLERY = 5;// 打开图库
-    private final int TO_CAMERA = 6;// 打开系统相机
-    private final int PHOTO_REQUEST_CUT = 7;// 图片裁剪
+    private final int TO_GALLERY = 5;                // 打开图库
+    private final int TO_CAMERA = 6;                 // 打开系统相机
+    private final int PHOTO_REQUEST_CUT = 7;         // 图片裁剪
+    private final int GROUP_MORE=20;
     private TextView textChannelOne;
     private TextView textChannelTwo;
     private int pRate=-1;
     private int pFrequency=-1;
     private Dialog frequencyDialog;
     private int screenWidth;
+    private TextView tv_pinlvxuanze;
+    private RelativeLayout rl_group_manager;
+    private boolean isManager;                      // 是否有本群的管理权限
 
     // 初始化数据库命令执行对象
     private void initDao() {
@@ -193,13 +190,6 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
         imageDialog.setCanceledOnTouchOutside(true);
         imageDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
 
-        View dialog1 = LayoutInflater.from(context).inflate(R.layout.dialog_exit_confirm, null);
-        dialog1.findViewById(R.id.tv_cancle).setOnClickListener(this);
-        dialog1.findViewById(R.id.tv_confirm).setOnClickListener(this);
-        confirmDialog = new Dialog(context, R.style.MyDialog);
-        confirmDialog.setContentView(dialog1);
-        confirmDialog.setCanceledOnTouchOutside(true);
-        confirmDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
     }
 
     // 获取上一个界面传递过来的数据
@@ -304,12 +294,17 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
         findViewById(R.id.lin_ewm).setOnClickListener(this);                    // 二维码
         findViewById(R.id.imageView4).setOnClickListener(this);                 // 群聊天
         findViewById(R.id.rl_allperson).setOnClickListener(this);               // 查看所有群成员
-       // findViewById(R.id.lin_changetype).setOnClickListener(this);           // 更改群类型
-        findViewById(R.id.text_exit).setOnClickListener(this);                  // 退出群
         findViewById(R.id.linear_channel).setOnClickListener(this);             // 频率选择
+        findViewById(R.id.lin_head_right).setOnClickListener(this);             // 顶栏更多
+
+
+        rl_group_manager=(RelativeLayout)findViewById(R.id.rl_group_manager);   // 群管理
+        rl_group_manager.setOnClickListener(this);
 
         textChannelOne = (TextView) findViewById(R.id.text_channel_one);        // 频道记录TextView1
         textChannelTwo = (TextView) findViewById(R.id.text_channel_two);        // 频道记录TextView2
+
+        tv_pinlvxuanze= (TextView) findViewById(R.id.tv_pinlvxuanze);           // 频率选择TextView
 
         tipView = (TipView) findViewById(R.id.tip_view);
         tipView.setWhiteClick(this);
@@ -320,17 +315,6 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
         imageModify = (ImageView) findViewById(R.id.imageView3); // 修改群组资料
         imageModify.setOnClickListener(this);
 
-        linearModifyPassword = findViewById(R.id.rl_modifygpassword);// 修改密码
-        linearModifyPassword.setOnClickListener(this);
-
-        linearGroupApply = findViewById(R.id.rl_vertiygroup);      // 审核消息
-        linearGroupApply.setOnClickListener(this);
-
-        linearAddMessage = findViewById(R.id.rl_addGroup);          // 加群消息
-        linearAddMessage.setOnClickListener(this);
-
-        LinearTransferAuthority = findViewById(R.id.rl_transferauthority);   // 移交管理员权限
-        LinearTransferAuthority.setOnClickListener(this);
 
         imageEwm = (ImageView) findViewById(R.id.img_ewm);   // 二维码
         textGroupNumber = (TextView) findViewById(R.id.tv_number); // 群成员数量
@@ -350,7 +334,7 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
 
     // 数据初始化
     private void setData() {
-      /*  if (groupIntroduce != null && !groupIntroduce.equals("")) {// 群介绍
+     /*   if (groupIntroduce != null && !groupIntroduce.equals("")) {// 群介绍
             textIntroduce.setText(groupIntroduce);
         }*/
         if (groupName == null || groupName.equals("")) {// 群名称
@@ -390,27 +374,18 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
         news.setGroupImg(headUrl);
         news.setGroupId(groupId);
         news.setGroupNum(groupNumber);
+        news.setGroupSignature(groupSignature);
         bmp = CreateQRImageHelper.getInstance().createQRImage(2, news, null, 300, 300);// 群二维码
         if (bmp == null) {
             bmp = BitmapUtils.readBitMap(context, R.mipmap.ewm);
         }
         imageEwm.setImageBitmap(bmp);
-
-        if (groupCreator != null && groupCreator.equals(CommonUtils.getUserId(context))) {// 群权限设置初始化
-            switch (groupType) {
-                case "0":// 审核群
-                    linearGroupApply.setVisibility(View.VISIBLE);// 审核消息
-                    linearAddMessage.setVisibility(View.VISIBLE);// 加群消息
-                    LinearTransferAuthority.setVisibility(View.VISIBLE);// 移交权限
-                    break;
-                case "1":// 公开群
-                    LinearTransferAuthority.setVisibility(View.VISIBLE);
-                    break;
-                case "2":// 密码群
-                    LinearTransferAuthority.setVisibility(View.VISIBLE);
-                    linearModifyPassword.setVisibility(View.VISIBLE);// 修改密码
-                    break;
-            }
+        if (groupCreator != null && groupCreator.equals(CommonUtils.getUserId(context))){
+            tv_pinlvxuanze.setVisibility(View.VISIBLE);
+            rl_group_manager.setVisibility(View.VISIBLE);
+        }else{
+            tv_pinlvxuanze.setVisibility(View.GONE);
+            rl_group_manager.setVisibility(View.GONE);
         }
         send();
     }
@@ -603,9 +578,6 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
             case R.id.rl_allperson:// 查看所有成员
                 startToActivity(GroupMembersActivity.class);
                 break;
-            case R.id.text_exit:// 退出群组
-                confirmDialog.show();
-                break;
             case R.id.imageView4:// 加入激活状态
                 addGroup();
                 break;
@@ -650,26 +622,6 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
                     update = true;
                 }
                 break;
-            case R.id.rl_transferauthority:// 移交管理员权限
-                startToActivity(TransferAuthorityActivity.class, 1);
-                break;
-            /*case R.id.lin_changetype:// 改变群类型
-                startToActivity(ChangeGroupTypeActivity.class);
-                break;*/
-            case R.id.rl_modifygpassword:// 修改群密码
-                startToActivity(ModifyGroupPasswordActivity.class);
-                break;
-            case R.id.rl_vertiygroup:// 审核消息
-                Intent intent2 = new Intent(context, JoinGroupListActivity.class);
-                Bundle bundle2 = new Bundle();
-                bundle2.putString("GroupId", groupId);
-                bundle2.putSerializable("userlist", lists);
-                intent2.putExtras(bundle2);
-                startActivity(intent2);
-                break;
-            case R.id.rl_addGroup:// 加群消息
-                startToActivity(HandleGroupApplyActivity.class, 2);
-                break;
             case R.id.image_portrait:// 修改群头像
                 if (groupCreator.equals(CommonUtils.getUserId(context))) {
                     imageDialog.show();
@@ -686,22 +638,34 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
                 doDialogClick(1);
                 imageDialog.dismiss();
                 break;
-            case R.id.tv_cancle:// 取消
-                confirmDialog.dismiss();
-                break;
-            case R.id.tv_confirm:// 确定
-                if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    confirmDialog.dismiss();
-                    SendExitRequest();
-                } else {
-                    ToastUtils.show_always(context, "网络失败，请检查网络");
-                }
-                break;
             case R.id.linear_channel:// 点击channel
                 if(groupCreator.equals(CommonUtils.getUserId(context))) {
                     frequencyDialog.show();
                 }else{
                     ToastUtils.show_always(context,"您不是本群的管理员，无法修改对讲频率");
+                }
+                break;
+            case R.id.lin_head_right:
+                if(!TextUtils.isEmpty(groupId)){
+                    Intent intent3 =new Intent(context, GroupMoreActivity.class);
+                    Bundle bundle3 =new Bundle();
+                    bundle3.putSerializable("group", news);
+                    intent3.putExtras(bundle3);
+                    startActivityForResult(intent3,GROUP_MORE);
+                }else{
+                    ToastUtils.show_always(context,"群信息获取失败，请检查网络，并返回上一级重试");
+                }
+                break;
+            case R.id.rl_group_manager:
+                if(!TextUtils.isEmpty(groupId)){
+                    Intent intent4 =new Intent(context,GroupManagerActivity.class);
+                    Bundle bundle4 =new Bundle();
+                    bundle4.putSerializable("group", news);
+                    bundle4.putSerializable("userlist", lists);
+                    intent4.putExtras(bundle4);
+                    startActivity(intent4);
+                }else{
+                    ToastUtils.show_always(context,"群信息获取失败，请检查网络，并返回上一级重试");
                 }
                 break;
         }
@@ -756,52 +720,6 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
         mam.finishAllActivity();
     }
 
-    // 退出群组
-    private void SendExitRequest() {
-        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
-        try {
-            jsonObject.put("GroupId", groupId);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        VolleyRequest.RequestPost(GlobalConfig.ExitGroupurl, tag, jsonObject, new VolleyCallback() {
-            @Override
-            protected void requestSuccess(JSONObject result) {
-                if (dialog != null) dialog.dismiss();
-                if (isCancelRequest) return;
-                try {
-                    String ReturnType = result.getString("ReturnType");
-                    Log.v("ReturnType", "ReturnType -- > > " + ReturnType);
-
-                    if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
-                        ToastUtils.show_always(context, "已经成功退出该组");
-                        sendBroadcast(pushIntent);
-                        if (ChatFragment.context != null && ChatFragment.interPhoneId != null &&
-                                ChatFragment.interPhoneId.equals(groupId)) {
-                            // 保存通讯录是否刷新的属性
-                            SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
-                            et.putString(StringConstant.PERSONREFRESHB, "true");
-                            if (!et.commit()) {
-                                Log.w("commit", "数据 commit 失败!");
-                            }
-                        }
-                        delete();
-                    } else {
-                        ToastUtils.show_always(context, "退出群组失败，请稍后重试!");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            protected void requestError(VolleyError error) {
-                if (dialog != null) dialog.dismiss();
-                ToastUtils.showVolleyError(context);
-            }
-        });
-    }
 
     protected void delete() {
         dbDao.deleteHistory(groupId);
@@ -865,7 +783,7 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
         switch (requestCode) {
             case 1:
                 if (resultCode == 1) {
-                    LinearTransferAuthority.setVisibility(View.GONE);
+
                     lists.remove(lists.size() - 1);
                     GroupTalkAdapter adapter = new GroupTalkAdapter(context, lists);
                     gridView.setAdapter(adapter);
@@ -914,6 +832,21 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
                     photoCutAfterImagePath = data.getStringExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH);
                     dialog = DialogUtils.Dialogph(context, "提交中");
                     dealt();
+                }
+                break;
+            case GROUP_MORE:
+                if( resultCode == 1) {
+                    sendBroadcast(pushIntent);
+                    if (ChatFragment.context != null && ChatFragment.interPhoneId != null &&
+                            ChatFragment.interPhoneId.equals(groupId)) {
+                        // 保存通讯录是否刷新的属性
+                        SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+                        et.putString(StringConstant.PERSONREFRESHB, "true");
+                        if (!et.commit()) {
+                            Log.w("commit", "数据 commit 失败!");
+                        }
+                    }
+                    delete();
                 }
                 break;
         }
@@ -1208,7 +1141,6 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
         adapter = null;
         dbDao = null;
         imageDialog = null;
-        confirmDialog = null;
         imageHead = null;
         textGroupNumber = null;
         editAliasName = null;
@@ -1216,9 +1148,6 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
         textGroupId = null;
         imageModify = null;
         gridView = null;
-        linearModifyPassword = null;
-        linearGroupApply = null;
-        linearAddMessage = null;
         textGroupName = null;
         //textIntroduce = null;
         setContentView(R.layout.activity_null);

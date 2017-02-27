@@ -29,172 +29,175 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:background="@color/white"
         android:orientation="vertical" >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+
             android:gravity="center" >
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="vertical" >
-            </LinearLayout>
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="170dp"
+                android:layout_height="110dp"
+                android:background="@color/dinglan_orange"
                 android:paddingTop="12dp"
-                android:visibility="visible"
-                android:background="@color/dinglan_orange">
-
-                <ImageView
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:src="@mipmap/xiugai"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:layout_marginLeft="10dp"
-                    android:id="@+id/imageView3" />
-
-                <ImageView
-                    android:layout_width="40dp"
-                    android:layout_height="38dp"
-                    android:src="@mipmap/addgroup_talk"
-                    android:layout_alignParentTop="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
-                    android:layout_marginRight="10dp"
-                    android:id="@+id/imageView4"
-                    android:visibility="gone"
-                    />
+                android:visibility="visible">
 
                 <RelativeLayout
                     android:id="@+id/rv_touxiang"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_toRightOf="@+id/imageView3"
-                    android:layout_toEndOf="@+id/imageView3"
-                    android:layout_alignParentBottom="true"
+                    android:layout_marginBottom="15dp"
+                    android:layout_marginRight="5dp"
                     android:layout_marginLeft="15dp"
-                    android:layout_marginBottom="25dp"
                     >
-
                     <ImageView
                         android:id="@+id/image_portrait"
                         android:layout_width="75dp"
                         android:layout_height="75dp"
-                        android:layout_centerInParent="true"
-                        android:scaleType="centerCrop" />
+                        android:scaleType="centerCrop"
+                        android:layout_centerInParent="true"/>
 
                     <ImageView
                         android:id="@+id/head_frame"
                         android:layout_width="75dp"
                         android:layout_height="75dp"
-                        android:layout_centerInParent="true"
-                        android:src="@mipmap/liubianxing_orange" />
-
+                        android:src="@mipmap/liubianxing_orange"
+                        android:layout_centerInParent="true"/>
                 </RelativeLayout>
-                <EditText
-                    android:id="@+id/tv_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:ellipsize="end"
-                    android:singleLine="true"
-                    android:ems="10"
-                    android:text="我听科技"
-                    android:textColor="@color/WHITE"
-                    android:enabled="false"
-                    android:background="@color/dinglan_orange"
-                    android:maxWidth="200dp"
-                    android:gravity="center"
-                    android:textSize="13sp"
-                    android:layout_alignTop="@id/rv_touxiang"
-                    android:layout_toRightOf="@id/rv_touxiang"
-                    android:layout_toEndOf="@id/rv_touxiang" />
-
-                <EditText
-                    android:id="@+id/et_b_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="群名称"
-                    android:enabled="false"
-                    android:background="@color/dinglan_orange"
-                    android:textColor="@color/WHITE"
-                    android:textSize="12sp"
-                    android:maxWidth="200dp"
-                    android:gravity="center"
+                <ImageView
+                    android:id="@+id/imageView3"
+                    android:layout_width="42dp"
+                    android:layout_height="42dp"
+                    android:src="@mipmap/xiugai"
                     android:layout_below="@+id/tv_name"
-                    android:layout_alignLeft="@id/tv_name"
-                    android:layout_alignRight="@id/tv_name" />
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="10dp"
+                    />
 
                 <TextView
                     android:id="@+id/tv_id"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:gravity="left"
+                    android:maxWidth="200dp"
+                    android:paddingRight="30dp"
                     android:text="群号:100001"
+                    android:layout_marginTop="5dp"
                     android:textColor="@color/WHITE"
                     android:textSize="12sp"
-                    android:maxWidth="200dp"
-                    android:gravity="center"
-                    android:layout_below="@id/et_b_name"
-                    android:layout_marginTop="3dp"
-                    android:layout_alignLeft="@id/tv_name"
-                    android:layout_alignRight="@id/tv_name" />
+                    android:layout_below="@+id/tv_name"
+                    android:layout_toRightOf="@+id/rv_touxiang"
+                    android:layout_toEndOf="@+id/rv_touxiang"
+                    android:visibility="visible"
+                    />
 
                 <EditText
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dinglan_orange"
+                    android:ellipsize="end"
+                    android:ems="10"
+                    android:enabled="false"
+                    android:gravity="left"
+                    android:maxWidth="200dp"
+                    android:singleLine="true"
+                    android:text="我听科技"
+                    android:textColor="@color/WHITE"
+                    android:textSize="14sp"
+                    android:layout_alignParentTop="true"
+                    android:layout_toRightOf="@+id/rv_touxiang"
+                    android:layout_toEndOf="@+id/rv_touxiang" />
+
+                <EditText
+                    android:id="@+id/et_b_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/dinglan_orange"
+                    android:enabled="false"
+                    android:gravity="left"
+                    android:maxWidth="200dp"
+                    android:paddingRight="30dp"
+                    android:text="群名称"
+                    android:textColor="@color/WHITE"
+                    android:textSize="12sp"
+                    android:layout_alignBottom="@+id/imageView3"
+                    android:layout_alignLeft="@+id/tv_name"
+                    android:layout_alignStart="@+id/tv_name" />
+
+               <!-- <EditText
                     android:id="@+id/et_groupSignature"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@color/dinglan_orange"
                     android:ellipsize="end"
-                    android:singleLine="true"
                     android:ems="10"
-                    android:gravity="center"
                     android:enabled="false"
-                    android:maxWidth="240dp"
+                    android:gravity="left"
+                    android:maxWidth="300dp"
+                    android:singleLine="true"
                     android:text="不忘初心，方得始终"
                     android:textColor="@color/WHITE"
+                    android:layout_marginTop="3dp"
                     android:textSize="12sp"
-                    android:layout_alignBottom="@id/rv_touxiang"
-                    android:layout_alignRight="@id/tv_name"
-                    android:layout_alignEnd="@+id/tv_name" />
-            </RelativeLayout>
+                    android:layout_below="@+id/et_b_name"
+                    android:layout_toRightOf="@+id/rv_touxiang"
+                    android:layout_toEndOf="@+id/rv_touxiang" />-->
 
-    </LinearLayout>
+
+            </RelativeLayout>
+        </LinearLayout>
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
+        android:layout_height="wrap_content"
         android:background="@color/WHITE"
-        android:gravity="bottom"
         android:orientation="vertical" >
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:orientation="vertical" >
+             <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="签名"
+                    android:textColor="@color/group_4b"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="10dp"
+                    android:textSize="12sp"
+                    android:layout_marginRight="15dp"
+                    android:visibility="visible" />
 
-            <LinearLayout
-	            android:id="@+id/lin_yzxx"
-	            android:layout_width="match_parent"
-	            android:layout_height="wrap_content"
-	            android:background="@color/WHITE"
-	            android:orientation="vertical" >
-	
+
+        <TextView
+            android:id="@+id/et_groupSignature"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="签名"
+            android:textColor="@color/gray"
+            android:layout_marginLeft="10dp"
+            android:layout_marginBottom="15dp"
+            android:layout_marginTop="15dp"
+
+            android:visibility="visible" />
+
+              <View
+                  android:layout_width="match_parent"
+                  android:layout_height="1dp"
+                  android:background="@color/fengexian"
+                  />
+
 	            <TextView
 	                android:layout_width="wrap_content"
 	                android:layout_height="wrap_content"
-	                android:padding="10dip"
-	                android:text="验证信息"
-	                android:textColor="@color/gray"
-	                android:visibility="gone" />
-            </LinearLayout>
+	                android:text="好友验证"
+	                android:textColor="@color/group_4b"
+                    android:layout_marginLeft="10dp"
+                    android:textSize="12sp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="5dp"
+	                android:visibility="visible" />
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
@@ -204,7 +207,10 @@
                 android:gravity="left|center"
                 android:orientation="horizontal"
                 android:padding="5dip"
-                android:layout_marginTop="15dp" >
+                android:layout_marginTop="5dp"
+                android:layout_marginBottom="5dp"
+                >
+
 
                 <EditText
                     android:id="@+id/et_news"
@@ -214,7 +220,7 @@
                     android:background="@color/WHITE"
                     android:ellipsize="end"
                     android:ems="10"
-                    android:hint="   请输入验证信息"
+                    android:hint="请输入验证信息"
                     android:maxLines="1"
                     android:paddingLeft="10dp"
                     android:layout_marginLeft="5dp"
@@ -237,15 +243,12 @@
                         android:padding="8dp"
                         android:src="@mipmap/wt_img_clearnew" />
                 </LinearLayout>
-            </LinearLayout>
-            <ImageView
-                android:id="@+id/img_EWM"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="15dp"
-                />
+
+
         </LinearLayout>
 
+
+    </LinearLayout>
         <TextView
             android:id="@+id/tv_add"
             android:layout_width="match_parent"
@@ -253,12 +256,13 @@
             android:layout_marginBottom="25dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
+            android:layout_marginTop="120dp"
             android:background="@drawable/zhuxiao_press"
             android:gravity="center"
             android:padding="8dp"
             android:text="添加对方为好友"
             android:textColor="@color/WHITE"
             android:textSize="15sp" />
-    </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>

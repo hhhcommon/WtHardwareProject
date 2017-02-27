@@ -137,7 +137,7 @@ public class EWMShowActivity extends AppBaseActivity implements OnClickListener 
 
         String contentDescn = GlobalConfig.playerObject.getContentDescn();
         if(contentDescn == null || contentDescn.equals("")) {
-            contentDescn = "暫無介紹";
+            contentDescn = "暂无介绍";
         }
         textNews.setText(contentDescn);
 

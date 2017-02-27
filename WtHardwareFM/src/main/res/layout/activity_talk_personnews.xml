@@ -25,6 +25,15 @@
             android:textColor="@color/WHITE"
             android:textSize="@dimen/activity_head_center_s" />
 
+        <TextView
+            android:id="@+id/lin_head_right"
+            style="@style/RightMoreStyle"
+            android:text="更多"
+            android:gravity="center"
+            android:layout_alignTop="@+id/textView"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
     </RelativeLayout>
 
     <com.wotingfm.widget.TipView
@@ -33,115 +42,97 @@
         android:layout_height="match_parent"
         android:visibility="gone"/>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:orientation="vertical">
+
 
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="170dp"
+            android:layout_height="110dp"
+            android:background="@color/dinglan_orange"
             android:paddingTop="12dp"
-            android:visibility="visible"
-            android:background="@color/dinglan_orange">
-
-            <ImageView
-                android:layout_width="42dp"
-                android:layout_height="42dp"
-                android:src="@mipmap/xiugai"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:layout_marginLeft="10dp"
-                android:id="@+id/imageView3" />
-
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="38dp"
-                android:src="@mipmap/addgroup_talk"
-                android:layout_alignParentTop="true"
-                android:layout_alignParentRight="true"
-                android:layout_alignParentEnd="true"
-                android:layout_marginRight="10dp"
-                android:id="@+id/imageView4" />
+            android:visibility="visible">
 
             <RelativeLayout
                 android:id="@+id/rv_touxiang"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/imageView3"
-                android:layout_toEndOf="@+id/imageView3"
-                android:layout_alignParentBottom="true"
+                android:layout_marginBottom="15dp"
+                android:layout_marginRight="5dp"
                 android:layout_marginLeft="15dp"
-                android:layout_marginBottom="25dp"
                 >
-
                 <ImageView
                     android:id="@+id/image_portrait"
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:layout_centerInParent="true"
-                    android:scaleType="centerCrop" />
+                    android:scaleType="centerCrop"
+                    android:layout_centerInParent="true"/>
 
                 <ImageView
                     android:id="@+id/head_frame"
                     android:layout_width="75dp"
                     android:layout_height="75dp"
-                    android:layout_centerInParent="true"
-                    android:src="@mipmap/liubianxing_orange" />
-
+                    android:src="@mipmap/liubianxing_orange"
+                    android:layout_centerInParent="true"/>
             </RelativeLayout>
-            <EditText
-                android:id="@+id/tv_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:singleLine="true"
-                android:ems="10"
-                android:text="我听科技"
-                android:textColor="@color/WHITE"
-                android:enabled="false"
-                android:background="@color/dinglan_orange"
-                android:maxWidth="200dp"
-                android:gravity="center"
-                android:textSize="13sp"
-                android:layout_alignTop="@id/rv_touxiang"
-                android:layout_toRightOf="@id/rv_touxiang"
-                android:layout_toEndOf="@id/rv_touxiang" />
-
-            <EditText
-                android:id="@+id/et_b_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="群名称"
-                android:enabled="false"
-                android:background="@color/dinglan_orange"
-                android:textColor="@color/WHITE"
-                android:textSize="12sp"
-                android:maxWidth="200dp"
-                android:gravity="center"
-
-                android:layout_below="@id/tv_name"
-
-                android:layout_marginTop="3dp"
-                android:layout_alignLeft="@id/tv_name"
-                android:layout_alignRight="@id/tv_name"
+            <ImageView
+                android:id="@+id/imageView3"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:src="@mipmap/xiugai"
+                android:layout_below="@+id/tv_name"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginRight="10dp"
                 />
 
             <TextView
                 android:id="@+id/tv_id"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:gravity="left"
+                android:maxWidth="200dp"
+                android:paddingRight="30dp"
                 android:text="群号:100001"
+                android:layout_marginTop="3dp"
                 android:textColor="@color/WHITE"
                 android:textSize="12sp"
+                android:layout_below="@+id/tv_name"
+                android:layout_toRightOf="@+id/rv_touxiang"
+                android:layout_toEndOf="@+id/rv_touxiang" />
+
+            <EditText
+                android:id="@+id/tv_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/dinglan_orange"
+                android:ellipsize="end"
+                android:ems="10"
+                android:enabled="false"
+                android:gravity="left"
                 android:maxWidth="200dp"
-                android:gravity="center"
-                android:layout_below="@id/et_b_name"
+                android:singleLine="true"
+                android:text="我听科技"
+                android:textColor="@color/WHITE"
+                android:textSize="14sp"
+                android:layout_alignParentTop="true"
+                android:layout_toRightOf="@+id/rv_touxiang"
+                android:layout_toEndOf="@+id/rv_touxiang" />
+
+            <EditText
+                android:id="@+id/et_b_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@color/dinglan_orange"
+                android:enabled="false"
+                android:gravity="left"
+                android:maxWidth="200dp"
+                android:paddingRight="30dp"
+                android:text="群名称"
+                android:textColor="@color/WHITE"
                 android:layout_marginTop="3dp"
-                android:layout_alignLeft="@id/tv_name"
-                android:layout_alignRight="@id/tv_name" />
+                android:textSize="12sp"
+                android:layout_below="@+id/tv_id"
+                android:layout_toRightOf="@+id/rv_touxiang"
+                android:layout_toEndOf="@+id/rv_touxiang" />
 
             <EditText
                 android:id="@+id/et_groupSignature"
@@ -149,103 +140,65 @@
                 android:layout_height="wrap_content"
                 android:background="@color/dinglan_orange"
                 android:ellipsize="end"
-                android:singleLine="true"
                 android:ems="10"
-                android:gravity="center"
                 android:enabled="false"
-                android:maxWidth="240dp"
+                android:gravity="left"
+                android:maxWidth="300dp"
+                android:singleLine="true"
                 android:text="不忘初心，方得始终"
                 android:textColor="@color/WHITE"
+                android:layout_marginTop="3dp"
                 android:textSize="12sp"
-                android:layout_alignBottom="@id/rv_touxiang"
-                android:layout_alignLeft="@id/tv_name"
-                android:layout_alignRight="@id/tv_name" />
+                android:layout_below="@+id/et_b_name"
+                android:layout_toRightOf="@+id/rv_touxiang"
+                android:layout_toEndOf="@+id/rv_touxiang" />
+
+
         </RelativeLayout>
 
-    <LinearLayout
+
+        <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/WHITE"
-            android:orientation="vertical">
-
-            <LinearLayout
-                android:id="@+id/lin_ewm"
+        android:orientation="vertical"
+        android:background="@color/white"
+            android:gravity="bottom"
+            >
+            <RelativeLayout
+                android:id="@+id/imageView4"
                 android:layout_width="match_parent"
-                android:layout_height="50dip"
-                android:background="@drawable/person_color"
-                android:gravity="left|center">
+                android:layout_height="48dp"
+                android:layout_marginBottom="25dp"
+                android:layout_marginLeft="25dp"
+                android:layout_marginRight="25dp"
+                android:background="@drawable/wt_commit_button_background">
 
-                <TextView
+                <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="15dip"
-                    android:text="二维码"
-                    android:textColor="@color/beijing"
-                    android:textSize="@dimen/wt_login_text_wjmm" />
+                    android:src="@mipmap/addgroup_talk"
+                    android:id="@+id/imageView2"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="100dp"
+                    android:layout_marginStart="119dp"
+                    android:padding="5dp"
+                    />
 
-                   <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"
+                <TextView
+                    android:id="@+id/text_exit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:orientation="vertical" android:visibility="gone"
-                       >
+                    android:text="开始聊天"
+                    android:textColor="@color/WHITE"
+                    android:layout_centerVertical="true"
+                    android:textSize="16sp"
+                    android:layout_toRightOf="@+id/imageView2"
+                    android:layout_toEndOf="@+id/imageView2" />
 
-                    <ImageView
-                        android:id="@+id/imageView_ewm"
-                        android:layout_width="35dp"
-                        android:layout_height="35dp" />
-                </LinearLayout>
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="15dip"
-                    android:text="二维码"
-                    android:textColor="@color/BLACK"
-                    android:visibility="invisible" />
-            </LinearLayout>
-
-            <ImageView
-                android:id="@+id/img_EWM"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="15dp"
-                />
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/app_bg" />
+            </RelativeLayout>
         </LinearLayout>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/WHITE"
-        android:orientation="vertical">
-
-        <TextView
-            android:id="@+id/tv_delete"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
-            android:layout_marginLeft="15dp"
-            android:layout_marginRight="15dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/zhuxiao_press"
-            android:gravity="center"
-            android:padding="10dp"
-            android:text="删除好友"
-            android:textColor="@color/WHITE"
-            android:textSize="15sp" />
-    </LinearLayout>
-    </LinearLayout>
 </LinearLayout>

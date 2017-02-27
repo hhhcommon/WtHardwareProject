@@ -9,7 +9,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.wotingfm.R;
+import com.wotingfm.ui.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.ui.music.video.VoiceRecognizer;
+import com.wotingfm.util.ToastUtils;
 
 /**
  * 控制接口的实现类
@@ -35,9 +37,10 @@ public class WtDeviceControl {
     }
 
     /**
-     * 点击中间按钮
+     * 暂停
      */
     public void pushCenter() {
+
 //        try {
 //            PlayerActivity.enterCenter();
 //        } catch (Exception e) {
@@ -81,47 +84,58 @@ public class WtDeviceControl {
      * 语音指令-开始
      */
     public void pushVoiceStart() {
-        if (draw_img.isRunning()) {
+   /*     if (draw_img.isRunning()) {
         } else {
             draw_img.start();
         }
         voiceDialog.show();
-        mVoiceRecognizer.startListen();
+        mVoiceRecognizer.startListen();*/
     }
 
     /**
      * 语音指令-结束
      */
     public void releaseVoiceStop() {
-        if (draw_img.isRunning()) {
+    /*    if (draw_img.isRunning()) {
             draw_img.stop();
         }
         voiceDialog.dismiss();
-        mVoiceRecognizer.stopListen();
+        mVoiceRecognizer.stopListen();*/
     }
 
     /**
      * 按下语音通话
      */
     public void pushPTT() {
-//        try {
-//            ChatFragment.press();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            VibratorUtils.Vibrate(context, Vibrate);
-//        }
+
+        ToastUtils.show_always(context,"按下了对讲按钮");
+        if(ChatFragment.isVisible!=true){
+
+        }else{
+        try {
+            ChatFragment.press();
+        } catch (Exception e) {
+            e.printStackTrace();
+           // VibratorUtils.Vibrate(context, Vibrate);
+        }
+        }
     }
 
     /**
      * 抬起语音通话
      */
     public void releasePTT() {
-//        try {
-//            ChatFragment.jack();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//            VibratorUtils.Vibrate(context, Vibrate);
-//        }
+        ToastUtils.show_always(context,"松开了对讲按钮");
+        if(ChatFragment.isVisible!=true){
+
+        }else{
+            try {
+                ChatFragment.jack();
+            } catch (Exception e) {
+                e.printStackTrace();
+                // VibratorUtils.Vibrate(context, Vibrate);
+            }
+        }
     }
 
     private void Dialog(Context context) {

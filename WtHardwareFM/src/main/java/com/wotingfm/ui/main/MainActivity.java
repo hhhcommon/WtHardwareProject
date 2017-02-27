@@ -41,9 +41,7 @@ import com.wotingfm.common.receiver.NetWorkChangeReceiver;
 import com.wotingfm.common.service.FloatingWindowService;
 import com.wotingfm.common.service.LocationService;
 import com.wotingfm.common.service.NotificationService;
-import com.wotingfm.common.service.SocketService;
 import com.wotingfm.common.service.SubclassService;
-import com.wotingfm.common.service.TestWindowService;
 import com.wotingfm.common.service.VoiceStreamPlayerService;
 import com.wotingfm.common.service.VoiceStreamRecordService;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -164,8 +162,8 @@ public class MainActivity extends TabActivity {
     }
 
     private void createService() {
-        Socket = new Intent(this, SocketService.class);  //socket服务
-        startService(Socket);
+ /*       Socket = new Intent(this, SocketService.class);  //socket服务
+        startService(Socket);*/
         VoiceStreamRecord = new Intent(this, VoiceStreamRecordService.class);  //录音服务
         startService(VoiceStreamRecord);
         VoiceStreamPlayer = new Intent(this, VoiceStreamPlayerService.class);//播放服务
@@ -178,10 +176,10 @@ public class MainActivity extends TabActivity {
         startService(Download);
         Notification = new Intent(this, NotificationService.class);
         startService(Notification);
-        FloatingWindow = new Intent(this, FloatingWindowService.class);//启动全局弹出框服务
+       FloatingWindow = new Intent(this, FloatingWindowService.class);//启动全局弹出框服务
         startService(FloatingWindow);
-        TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
-//        startService(TestFloatingWindow);
+      /*   TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
+        startService(TestFloatingWindow);*/
     }
 
     //注册广播  用于接收定时服务发送过来的广播
