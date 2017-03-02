@@ -1,6 +1,7 @@
 package com.wotingfm.ui.music.player.fragment.more;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -9,7 +10,7 @@ import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.widget.RoundImageView;
@@ -17,7 +18,7 @@ import com.wotingfm.widget.RoundImageView;
 /**
  * 播放节目详情
  */
-public class PlayDetailsActivity extends AppBaseActivity implements View.OnClickListener {
+public class PlayDetailsFragment extends Fragment implements View.OnClickListener {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

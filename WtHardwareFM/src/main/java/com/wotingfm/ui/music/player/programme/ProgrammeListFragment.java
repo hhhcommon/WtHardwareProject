@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * 节目单列表
  */
-public class ProgrammeFragment extends Fragment {
+public class ProgrammeListFragment extends Fragment {
 	private View rootView;
 	private ListView mListView;
 	private FragmentActivity context;
@@ -41,7 +41,7 @@ public class ProgrammeFragment extends Fragment {
 	 * 创建 Fragment 实例
 	 */
 	public static Fragment instance(long time, String id, boolean isT) {
-		Fragment fragment = new ProgrammeFragment();
+		Fragment fragment = new ProgrammeListFragment();
 		Bundle bundle = new Bundle();
 		bundle.putString("time", String.valueOf(time));   // 请求时间
 		bundle.putString("id", id);                       // 请求的电台的id

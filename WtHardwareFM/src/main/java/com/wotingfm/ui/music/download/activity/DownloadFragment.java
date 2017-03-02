@@ -10,7 +10,7 @@ import android.view.View.OnClickListener;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.baseactivity.AppBaseFragmentActivity;
+import com.wotingfm.ui.baseactivity.BaseFragmentActivity;
 import com.wotingfm.ui.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.ui.music.download.fragment.DownLoadCompleted;
 import com.wotingfm.ui.music.download.fragment.DownLoadUnCompleted;
@@ -20,7 +20,7 @@ import java.util.ArrayList;
 /**
  * 下载主页
  */
-public class DownloadActivity extends AppBaseFragmentActivity implements OnClickListener {
+public class DownloadFragment extends Fragment implements OnClickListener {
     private TextView textCompleted;
     private TextView textUncompleted;
     private ViewPager mViewPager;

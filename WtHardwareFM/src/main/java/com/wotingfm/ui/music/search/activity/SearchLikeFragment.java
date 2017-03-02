@@ -64,7 +64,7 @@ import java.util.List;
  * @author 辛龙
  * 2016年4月16日
  */
-public class SearchLikeActivity extends AppBaseFragmentActivity implements
+public class SearchLikeFragment extends Fragment implements
         View.OnClickListener, AdapterView.OnItemClickListener {
 
     private SearchHistoryDao shd;               // 搜索数据库

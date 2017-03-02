@@ -18,11 +18,11 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseFragmentActivity;
+import com.wotingfm.ui.baseactivity.BaseFragmentActivity;
 import com.wotingfm.ui.baseadapter.MyFragmentChildPagerAdapter;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
 import com.wotingfm.ui.music.program.album.fragment.DetailsFragment;
-import com.wotingfm.ui.music.program.album.fragment.ProgramFragment;
+import com.wotingfm.ui.music.program.album.fragment.ProgramListFragment;
 import com.wotingfm.ui.music.program.album.model.ResultInfo;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.util.DialogUtils;
@@ -40,9 +40,9 @@ import java.util.ArrayList;
  * @author 辛龙
  * 2016年4月1日
  */
-public class AlbumActivity extends AppBaseFragmentActivity implements OnClickListener, ViewPager.OnPageChangeListener, TipView.WhiteViewClick {
+public class AlbumFragment extends Fragment implements OnClickListener, ViewPager.OnPageChangeListener, TipView.WhiteViewClick {
     private DetailsFragment detailsFragment;// 专辑详情
-    private ProgramFragment programFragment;// 专辑列表
+    private ProgramListFragment programFragment;// 专辑列表
     private ResultInfo resultInfo;// 获取的专辑信息
     private ImageView[] imageViews;
 
@@ -126,7 +126,7 @@ public class AlbumActivity extends AppBaseFragmentActivity implements OnClickLis
         mPager.setOffscreenPageLimit(1);
         ArrayList<Fragment> fragmentList = new ArrayList<>();
         detailsFragment = new DetailsFragment();// 专辑详情页
-        programFragment = new ProgramFragment();// 专辑列表页
+        programFragment = new ProgramListFragment();// 专辑列表页
         fragmentList.add(detailsFragment);
         fragmentList.add(programFragment);
         mPager.setAdapter(new MyFragmentChildPagerAdapter(getSupportFragmentManager(), fragmentList));

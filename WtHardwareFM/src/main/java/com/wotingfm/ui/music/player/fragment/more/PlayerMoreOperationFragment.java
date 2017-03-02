@@ -6,8 +6,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
@@ -18,7 +22,6 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
 import com.wotingfm.ui.common.qrcode.EWMShowActivity;
 import com.wotingfm.ui.music.comment.CommentActivity;
 import com.wotingfm.ui.music.common.service.DownloadService;
@@ -45,7 +48,7 @@ import java.util.List;
 /**
  * 播放界面  ->  更多操作
  */
-public class PlayerMoreOperationActivity extends AppBaseActivity implements View.OnClickListener {
+public class PlayerMoreOperationFragment extends Fragment implements View.OnClickListener {
     private TextView textPlayName;// 當前正在播放的節目名
 
     private MessageReceiver mReceiver;// 廣播
@@ -69,46 +72,51 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
     private String SequImage;
     private String SequName;
     private boolean IsSequ;
+    private View rootView;
+    private FragmentActivity context;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_player_more_operation);
-        mFileDao = new FileInfoDao(context);
-        initView();
-        initEvent();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.activity_player_more_operation, container, false);
+            context = getActivity();
+            mFileDao = new FileInfoDao(context);
+            initView();
+            initEvent();
+        }
+        return rootView;
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         registeredBroad();// 注册广播
     }
 
     // 初始化视图
     private void initView() {
-        viewLinearOne = findViewById(R.id.view_linear_1);
-        viewLinearTwo = findViewById(R.id.view_linear_2);
+        viewLinearOne = rootView.findViewById(R.id.view_linear_1);
+        viewLinearTwo = rootView.findViewById(R.id.view_linear_2);
 
-        textPlayName = (TextView) findViewById(R.id.text_play_name);// 當前正在播放的節目名
-        textLike = (TextView) findViewById(R.id.text_like);// 喜歡
-        textShape = (TextView) findViewById(R.id.text_shape);// 分享
-        textComment = (TextView) findViewById(R.id.text_comment);// 評論
-        textDetails = (TextView) findViewById(R.id.text_details);// 詳情
-        textProgram = (TextView) findViewById(R.id.text_program);// 播單
-        textDown = (TextView) findViewById(R.id.text_down);// 下載
-        textSequ = (TextView) findViewById(R.id.text_sequ);// 專輯
+        textPlayName = (TextView) rootView.findViewById(R.id.text_play_name);// 當前正在播放的節目名
+        textLike = (TextView) rootView.findViewById(R.id.text_like);// 喜歡
+        textShape = (TextView) rootView.findViewById(R.id.text_shape);// 分享
+        textComment = (TextView) rootView.findViewById(R.id.text_comment);// 評論
+        textDetails = (TextView) rootView.findViewById(R.id.text_details);// 詳情
+        textProgram = (TextView) rootView.findViewById(R.id.text_program);// 播單
+        textDown = (TextView) rootView.findViewById(R.id.text_down);// 下載
+        textSequ = (TextView) rootView.findViewById(R.id.text_sequ);// 專輯
 
         resetDate();// 設置 View
     }
 
     // 初始化点击事件
     private void initEvent() {
-        findViewById(R.id.head_left_btn).setOnClickListener(this);// 返回
+        rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);// 返回
 
-        findViewById(R.id.text_history).setOnClickListener(this);// 播放歷史
-        findViewById(R.id.text_liked).setOnClickListener(this);// 我喜歡的
-        findViewById(R.id.text_local).setOnClickListener(this);// 本地節目
+        rootView.findViewById(R.id.text_history).setOnClickListener(this);// 播放歷史
+        rootView.findViewById(R.id.text_liked).setOnClickListener(this);// 我喜歡的
+        rootView.findViewById(R.id.text_local).setOnClickListener(this);// 本地節目
 
         textLike.setOnClickListener(this);// 喜歡
         textShape.setOnClickListener(this);// 分享
@@ -472,10 +480,10 @@ public class PlayerMoreOperationActivity extends AppBaseActivity implements View
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         if(mReceiver != null) {
-            unregisterReceiver(mReceiver);
+            context.unregisterReceiver(mReceiver);
             mReceiver = null;
         }
     }

@@ -6,6 +6,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.text.Editable;
 import android.text.Selection;
@@ -38,6 +39,7 @@ import com.wotingfm.ui.music.comment.model.opinion;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.MyEditText;
@@ -52,9 +54,8 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class CommentActivity extends BaseActivity implements View.OnClickListener {
+public class CommentFragment extends Fragment implements View.OnClickListener {
 
-    private CommentActivity context;
     private ImageView image_face;
     private LinearLayout chat_face_container;
     private ViewPager mViewPager;
@@ -77,17 +78,19 @@ public class CommentActivity extends BaseActivity implements View.OnClickListene
     private String mediaType;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comment);
-        context = this;
-        handleIntent();
-        handleFace();
-        setView();
-        setListener();
-        callInternet();// 发请求参数
-        InitViewPager();
-        delDialog();//初始化删除确认对话框
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.activity_comment, container, false);
+            context = getActivity();
+            handleIntent();
+            handleFace();
+            setView();
+            setListener();
+            callInternet();// 发请求参数
+            InitViewPager();
+            delDialog();//初始化删除确认对话框
+        }
+        return rootView;
     }
 
     private void handleIntent() {

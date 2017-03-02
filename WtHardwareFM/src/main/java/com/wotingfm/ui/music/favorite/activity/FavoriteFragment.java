@@ -28,7 +28,6 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.ui.baseactivity.AppBaseFragmentActivity;
 import com.wotingfm.ui.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.ui.music.favorite.fragment.RadioFragment;
 import com.wotingfm.ui.music.favorite.fragment.SequFragment;
@@ -43,8 +42,8 @@ import java.util.ArrayList;
 /**
  * 我喜欢的
  */
-public class FavoriteActivity extends AppBaseFragmentActivity implements OnClickListener {
-    private static FavoriteActivity context;
+public class FavoriteFragment extends Fragment implements OnClickListener {
+    private static FavoriteFragment context;
     private MyBroadcast mBroadcast;
     private TotalFragment totalFragment;
     private SequFragment sequFragment;

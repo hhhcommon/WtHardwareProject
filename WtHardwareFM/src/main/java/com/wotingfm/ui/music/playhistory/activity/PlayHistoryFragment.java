@@ -2,9 +2,9 @@ package com.wotingfm.ui.music.playhistory.activity;
 
 import android.annotation.TargetApi;
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.AdapterView;
@@ -12,9 +12,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.ui.baseactivity.AppBaseFragmentActivity;
-import com.wotingfm.ui.music.main.HomeActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.ui.music.playhistory.adapter.PlayHistoryAdapter;
@@ -26,7 +23,7 @@ import java.util.List;
  * 播放历史
  * @author woting11
  */
-public class PlayHistoryActivity extends AppBaseFragmentActivity implements View.OnClickListener, AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
+public class PlayHistoryFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemLongClickListener {
     private SearchPlayerHistoryDao dbDao;	// 播放历史数据库
     private List<PlayerHistory> subList;
     private PlayHistoryAdapter adapter;
