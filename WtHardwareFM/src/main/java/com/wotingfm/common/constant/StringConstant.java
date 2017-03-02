@@ -160,4 +160,7 @@ public class StringConstant {
 
     // 数据获取  文字请求内容
     public static final String TEXT_CONTENT = "text";
+
+
+
 }

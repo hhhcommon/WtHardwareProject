@@ -121,6 +121,7 @@ public class FMTestActivity extends Activity {
                 serialControl.sendTxt("AT+DMOSETGROUP=1,409.7500,409.7500,00,3,1\r\n");
             }
         });
+
         tv_kgtp.setText(STATE_OPEN);
         if (tv_kgtp.getText().toString().equals(STATE_OPEN)) {
             openDevice();
@@ -262,7 +263,7 @@ public class FMTestActivity extends Activity {
 
                 @Override
                 public void run() {
-                    ((TextView) findViewById(R.id.text_recv)).setText(new String(ComRecData.bRec));
+                /*    ((TextView) findViewById(R.id.text_recv)).setText(new String(ComRecData.bRec));*/
                     Log.e("0000===7889", "=======123============" + new String(ComRecData.bRec));
                 }
             });

@@ -656,6 +656,8 @@
         <service android:name=".common.service.TestWindowService"/>
         <service android:name=".common.service.LocationService"/>
         <service android:name="com.amap.api.location.APSService"/>
+        <!-- 模拟对讲服务 -->
+        <service android:name=".common.service.SimulationService"/>
         <!-- 集成播放器服务 -->
         <service android:name=".common.service.IntegrationPlayerService"/>
         <!-- 空服务 -->

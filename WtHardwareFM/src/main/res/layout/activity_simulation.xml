@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/BaseStyle"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -14,19 +16,10 @@
             android:layout_weight="1"
             android:orientation="vertical">
 
-            <LinearLayout
-                android:id="@+id/head_left_btn"
-                android:layout_width="48dp"
-                android:layout_height="match_parent"
-                android:gravity="left|center">
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="6dp"
-                    android:background="@mipmap/back_images" />
-            </LinearLayout>
         </LinearLayout>
+
+
 
         <LinearLayout
             android:layout_width="0dp"
@@ -57,13 +50,19 @@
                 android:layout_width="48dp"
                 android:layout_height="match_parent"
                 android:gravity="center"
-                android:text="退出"
+                style="@style/RightMoreStyle"
+                android:text="关闭"
+                android:textSize="15sp"
                 android:textColor="@color/white" />
 
         </LinearLayout>
 
     </LinearLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"
+        android:background="@color/BLACK"
+        />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -86,13 +85,13 @@
                 android:layout_marginRight="20dp"
                 android:padding="20dp"
                 android:layout_marginTop="40dp"
-                android:background="@mipmap/simulation_black">
+                >
 
                 <LinearLayout
                     android:id="@+id/lin_frequency_no"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/white"
+                    android:background="@drawable/bg_duijiang_moni"
                     android:paddingLeft="40dp"
                     android:orientation="vertical">
                     <TextView
@@ -118,7 +117,7 @@
                     android:id="@+id/lin_frequency"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/white"
+                    android:background="@drawable/bg_duijiang_moni"
                     android:visibility="gone"
                     android:gravity="center"
                     android:orientation="horizontal">
@@ -141,11 +140,16 @@
 
             <TextView
                 android:id="@+id/tv_set"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textSize="22sp"
-                android:background="@mipmap/simulation_ptt_on"
+                android:layout_width="120dp"
+                android:layout_height="50dp"
+                android:textSize="16sp"
+                android:background="@drawable/bg_duijiang_anniu"
                 android:gravity="center"
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingTop="15dp"
+                android:paddingBottom="15dp"
+                android:textColor="#c0c0c0"
                 android:text="频率设置" />
 
         </LinearLayout>
