@@ -178,7 +178,7 @@ public class MainActivity extends TabActivity {
         startService(Notification);
        FloatingWindow = new Intent(this, FloatingWindowService.class);//启动全局弹出框服务
         startService(FloatingWindow);
-      /*   TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
+        /*TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
         startService(TestFloatingWindow);*/
     }
 
