@@ -601,7 +601,10 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     // 上一首
     private void last() {
         index = index - 1;
-        if (index < 0) index = playList.size() - 1;
+        if (index < 0) {
+            ToastUtils.show_always(context, "已经是第一个节目了!");
+            return ;
+        }
         mPlayer.startPlay(index);
     }
 
@@ -704,17 +707,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         String playerFromUrl = "";
         String playerAddTime = Long.toString(System.currentTimeMillis());
         String bjUserId = CommonUtils.getUserId(context);
-        String ContentFavorite = "";
-        if (languageSearchInside.getContentFavorite() != null) {
-            String contentFavorite = languageSearchInside.getContentFavorite();
-            if (contentFavorite != null) {
-                if (contentFavorite.equals("0") || contentFavorite.equals("1")) {
-                    ContentFavorite = contentFavorite;
-                }
-            }
-        } else {
-            ContentFavorite = languageSearchInside.getContentFavorite();
-        }
+        String ContentFavorite = languageSearchInside.getContentFavorite();
         String ContentID = languageSearchInside.getContentId();
         String localUrl = languageSearchInside.getLocalurl();
         String sequName = languageSearchInside.getSequName();
