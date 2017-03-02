@@ -7,6 +7,7 @@ import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -189,6 +190,7 @@ public class FloatingWindowService extends Service {
 					int dy = (int) event.getRawY() - lastY;
 					params.x = paramX + dx;
 					params.y = paramY + dy;
+					Log.e("悬浮窗",params.y+"CCCCCCCC"+params.x);
 					// 更新悬浮窗位置
 			        wm.updateViewLayout(floatView, params);
 					break;
