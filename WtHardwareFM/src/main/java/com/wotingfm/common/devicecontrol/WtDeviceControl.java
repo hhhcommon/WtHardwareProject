@@ -9,7 +9,8 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.interphone.chat.fragment.ChatFragment;
+import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.service.SimulationService;
 import com.wotingfm.ui.music.video.VoiceRecognizer;
 import com.wotingfm.util.ToastUtils;
 
@@ -108,7 +109,7 @@ public class WtDeviceControl {
      */
     public void pushPTT() {
 
-        ToastUtils.show_always(context,"按下了对讲按钮");
+      /*  ToastUtils.show_always(context,"按下了对讲按钮");
         if(ChatFragment.isVisible!=true){
 
         }else{
@@ -118,14 +119,19 @@ public class WtDeviceControl {
             e.printStackTrace();
            // VibratorUtils.Vibrate(context, Vibrate);
         }
+        }*/
+        ToastUtils.show_always(context,"按下了对讲按钮");
+        if(GlobalConfig.isMONI==true){
+            SimulationService.talk();
         }
+
     }
 
     /**
      * 抬起语音通话
      */
     public void releasePTT() {
-        ToastUtils.show_always(context,"松开了对讲按钮");
+       /* ToastUtils.show_always(context,"松开了对讲按钮");
         if(ChatFragment.isVisible!=true){
 
         }else{
@@ -135,7 +141,12 @@ public class WtDeviceControl {
                 e.printStackTrace();
                 // VibratorUtils.Vibrate(context, Vibrate);
             }
+        }*/
+        ToastUtils.show_always(context,"松开了了对讲按钮");
+        if(GlobalConfig.isMONI==true){
+            SimulationService.openDevice();
         }
+
     }
 
     private void Dialog(Context context) {

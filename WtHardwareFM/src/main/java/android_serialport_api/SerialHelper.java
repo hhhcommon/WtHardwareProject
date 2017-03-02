@@ -39,12 +39,13 @@ public abstract class SerialHelper{
 		this(sPort,Integer.parseInt(sBaudRate));
 	}
 	//----------------------------------------------------
-	public void open() throws SecurityException, IOException,InvalidParameterException{	  
+	public void open() throws SecurityException, IOException,InvalidParameterException{
 		Log.i("7889", "----------------23---------");
 	    File k = new File(sPort);
 	    Log.i("7889", "-----------1-----23---------");
 		mSerialPort =  new SerialPort(k, iBaudRate, 0);
 		Log.i("7889", "-----------2-----23---------");
+		if(mSerialPort!=null){
 		mOutputStream = mSerialPort.getOutputStream();
 		Log.i("7889", "---------3-------23---------");
 		mInputStream = mSerialPort.getInputStream();
@@ -56,6 +57,7 @@ public abstract class SerialHelper{
 		mSendThread.start();
 		Log.i("7889", "--------5--------23---------");
 		_isOpen=true;
+		}
 	}
 	//----------------------------------------------------
 	public void close(){
@@ -71,7 +73,11 @@ public abstract class SerialHelper{
 	public void send(byte[] bOutArray){
 		try
 		{
-			mOutputStream.write(bOutArray);
+			if(mOutputStream!=null) {
+
+				mOutputStream.write(bOutArray);
+		   }
+
 		} catch (IOException e)
 		{
 			e.printStackTrace();

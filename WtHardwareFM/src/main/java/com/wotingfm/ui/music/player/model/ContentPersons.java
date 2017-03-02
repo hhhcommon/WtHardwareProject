@@ -1,10 +1,12 @@
 package com.wotingfm.ui.music.player.model;
 
+import java.io.Serializable;
+
 /**
  * 主播信息
  * Created by Administrator on 2017/1/11.
  */
-public class ContentPersons {
+public class ContentPersons implements Serializable {
 
     private String RefName;// 名字
 

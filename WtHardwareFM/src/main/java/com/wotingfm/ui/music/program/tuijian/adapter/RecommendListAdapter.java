@@ -98,12 +98,18 @@ public class RecommendListAdapter extends BaseAdapter {
             name = "专辑：" + name;
             holder.textContent.setText(name);
         } else {
-            name = lists.getContentPersons().get(0).getPerName();
-            if (name == null || name.equals("")) {
-                name = "未知";
+            try {
+                name = lists.getContentPersons().get(0).getPerName();
+                if (name == null || name.equals("")) {
+                    name = "未知";
+                }
+                name = "主播：" + name;
+                holder.textContent.setText(name);
+            } catch (Exception e) {
+                e.printStackTrace();
+                name = "主播：未知";
+                holder.textContent.setText(name);
             }
-            name = "主播：" + name;
-            holder.textContent.setText(name);
         }
 
         return convertView;

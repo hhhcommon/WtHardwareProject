@@ -1,5 +1,6 @@
 package com.wotingfm.ui.interphone.simulation;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -8,14 +9,16 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
+import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.FrequenceConstant;
+import com.wotingfm.common.service.SimulationService;
 import com.wotingfm.ui.baseactivity.BaseActivity;
+import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.util.FrequencyUtil;
 import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.pickview.LoopView;
 import com.wotingfm.widget.pickview.OnItemSelectedListener;
 
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,24 +34,28 @@ public class SimulationInterphoneActivity extends BaseActivity implements View.O
     private TextView tv_text, tv_number, tv_set;
     private List<String> list;
     private int list_number;
+    private String frequence;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simulation);
-        String[] arr = new String[]{"CH01-460.7000", "CH02-460.7100", "CH03-460.7200", "CH04-460.7300", "CH05-460.7400"
-                , "CH06-460.7500", "CH07-460.7600", "CH08-460.7700", "CH09-460.7800", "CH10-460.7900"
-                , "CH11-460.8000", "CH12-460.8100", "CH13-460.8200", "CH14-460.8300", "CH15-460.8400"
-                , "CH16-460.8500", "CH17-460.8600", "CH18-460.8700", "CH19-460.8800", "CH20-460.8900"};
-        list = Arrays.asList(arr);
-        setView();  // 设置界面
-        setData();  // 设置数据
+        list = FrequencyUtil.getFrequencyListNoView();
+        frequence = BSApplication.SharedPreferences.getString(FrequenceConstant.FREQUENCE, "");
+        setView();                                     // 设置界面
+        setData();                                     // 设置数据
+        initEmp();                                     // 初始化模拟对讲
+        GlobalConfig.isMONI=true;
+    }
+
+    // 初始化模拟对讲
+    private void initEmp() {
+        startService(new Intent(context, SimulationService.class));
     }
 
     // 初始化视图
     private void setView() {
-
-        findViewById(R.id.head_left_btn).setOnClickListener(this);                                  // 返回
         findViewById(R.id.tv_save).setOnClickListener(this);                                        // 退出
 
         tv_set = (TextView) findViewById(R.id.tv_set);
@@ -63,7 +70,8 @@ public class SimulationInterphoneActivity extends BaseActivity implements View.O
         pickfrequency = (LoopView) findViewById(R.id.pick_frequency);                               // 频率选择器
 
         pickfrequency.setInitPosition(0);
-        pickfrequency.setTextSize(15, 20);
+        pickfrequency.setTextSize(25, 40);
+
         pickfrequency.setItems(list);
 
         pickfrequency.setListener(new OnItemSelectedListener() {
@@ -74,20 +82,22 @@ public class SimulationInterphoneActivity extends BaseActivity implements View.O
         });
     }
 
+
+
     // 数据适配
     private void setData() {
 
         tv_set.setText("频率设置");
 
-        String _frequence = BSApplication.SharedPreferences.getString(FrequenceConstant.FREQUENCE, "");
-        if (_frequence != null && !_frequence.trim().equals("")) {
+        if (frequence != null && !frequence.trim().equals("")) {
             // 已经使用过模拟对讲
             tv_text.setText("当前频道");
-            tv_number.setText(_frequence + "");
+            tv_number.setText(frequence + "");
         } else {
             // 从来没有使用过模拟对讲
             tv_text.setText("当前频道为空，请设置频率");
             tv_number.setText("CH00-000.0000");
+            // 截取代码 s.substring(s.indexOf("-")+1,s.length())
         }
         lin_frequency.setVisibility(View.GONE);
         lin_frequency_no.setVisibility(View.VISIBLE);
@@ -97,9 +107,6 @@ public class SimulationInterphoneActivity extends BaseActivity implements View.O
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.head_left_btn:                                 // 返回
-                finish();
-                break;
             case R.id.tv_save:                                       // 退出
                 finish();
                 break;
@@ -121,6 +128,8 @@ public class SimulationInterphoneActivity extends BaseActivity implements View.O
                                 if(!et.commit()) L.e("数据 commit 失败!");
                                 tv_text.setText("当前频道");
                                 tv_number.setText(_frequence + "");
+                                //此处要要设置重新设置的频率
+                                SimulationService.setFrequence(_frequence);
                             }else {
                                 ToastUtils.show_always(this, "数据出错了，请您稍后再试");
                             }
@@ -136,9 +145,14 @@ public class SimulationInterphoneActivity extends BaseActivity implements View.O
         }
     }
 
+
+
+
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         setContentView(R.layout.activity_null);
+        SimulationService.closeDevice();
     }
 }
