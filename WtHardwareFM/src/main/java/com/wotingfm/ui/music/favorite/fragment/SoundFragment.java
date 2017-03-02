@@ -26,11 +26,11 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.music.favorite.activity.FavoriteActivity;
+import com.wotingfm.ui.main.MainActivity;
+import com.wotingfm.ui.music.favorite.main.FavoriteFragment;
 import com.wotingfm.ui.music.favorite.adapter.FavorListAdapter;
-import com.wotingfm.ui.music.main.HomeActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
-import com.wotingfm.ui.music.player.fragment.PlayerFragment;
+import com.wotingfm.ui.music.player.main.PlayerFragment;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.util.CommonUtils;
@@ -156,7 +156,7 @@ public class SoundFragment extends Fragment {
         mListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (FavoriteActivity.isEdit) {
+                if (FavoriteFragment.isEdit) {
                     if (newList.get(position - 1).getChecktype() == 0) {
                         newList.get(position - 1).setChecktype(1);
                     } else {
@@ -200,7 +200,8 @@ public class SoundFragment extends Fragment {
                             dbDao.addHistory(history);
 
                             if (PlayerFragment.context != null) {
-                                HomeActivity.UpdateViewPager();
+                                MainActivity.changeOne();
+
                                 Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                                 Bundle bundle1 = new Bundle();
                                 bundle1.putString("text", newList.get(position - 1).getContentName());
@@ -213,7 +214,8 @@ public class SoundFragment extends Fragment {
                                 et.putString(StringConstant.PLAYHISTORYENTER, "true");
                                 et.putString(StringConstant.PLAYHISTORYENTERNEWS, newList.get(position - 1).getContentName());
                                 if (!et.commit()) L.w("数据 commit 失败!");
-                                HomeActivity.UpdateViewPager();
+                                MainActivity.changeOne();
+
                                 getActivity().finish();
                             }
                         }

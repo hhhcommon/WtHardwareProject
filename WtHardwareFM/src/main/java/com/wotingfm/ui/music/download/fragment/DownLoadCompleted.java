@@ -22,13 +22,14 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.ui.music.download.activity.DownloadActivity;
 import com.wotingfm.ui.music.download.adapter.DownLoadSequAdapter;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
-import com.wotingfm.ui.music.download.downloadlist.activity.DownLoadListActivity;
+import com.wotingfm.ui.music.download.downloadlist.activity.DownLoadListFragment;
 import com.wotingfm.ui.music.download.model.FileInfo;
+import com.wotingfm.ui.music.main.PlayerActivity;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.L;
+import com.wotingfm.util.SequenceUUID;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,19 +66,20 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        context = getActivity();
-        if (receiver == null) {
-            receiver = new MessageReceiver();
-            IntentFilter filter = new IntentFilter();
-            filter.addAction(BroadcastConstants.PUSH_DOWN_COMPLETED);
-            filter.addAction(BroadcastConstants.PUSH_ALLURL_CHANGE);
-            context.registerReceiver(receiver, filter);
+        if(rootView==null) {
+            rootView = inflater.inflate(R.layout.fragment_download_completed, container, false);
+            context = getActivity();
+            if (receiver == null) {
+                receiver = new MessageReceiver();
+                IntentFilter filter = new IntentFilter();
+                filter.addAction(BroadcastConstants.PUSH_DOWN_COMPLETED);
+                filter.addAction(BroadcastConstants.PUSH_ALLURL_CHANGE);
+                context.registerReceiver(receiver, filter);
+            }
+            initDao();
+            initView();
+            setDownLoadSource();
         }
-        rootView = inflater.inflate(R.layout.fragment_download_completed, container, false);
-
-        initDao();
-        initView();
-        setDownLoadSource();
         return rootView;
     }
 
@@ -156,12 +158,17 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
         mListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(context, DownLoadListActivity.class);
+
+                DownLoadListFragment fg = new DownLoadListFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("sequname", fileSequList.get(position).getSequname());
                 bundle.putString("sequid", fileSequList.get(position).getSequid());
-                intent.putExtras(bundle);
-                ((DownloadActivity) context).toActivity(intent);
+                fg.setArguments(bundle);
+                PlayerActivity activity = (PlayerActivity) getActivity();
+                activity.fm.beginTransaction()
+                        .add(R.id.fragment_content, fg)
+                        .addToBackStack(SequenceUUID.getUUID())
+                        .commit();
             }
         });
     }
@@ -220,12 +227,17 @@ public class DownLoadCompleted extends Fragment implements OnClickListener {
                 adapter.notifyDataSetChanged();
                 break;
             case R.id.lin_download_single:
-                Intent intent = new Intent(context, DownLoadListActivity.class);
+
+                DownLoadListFragment fg = new DownLoadListFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("sequname", "单体节目");
                 bundle.putString("sequid", "woting");
-                intent.putExtras(bundle);
-                ((DownloadActivity) context).toActivity(intent);
+                fg.setArguments(bundle);
+                PlayerActivity activity = (PlayerActivity) getActivity();
+                activity.fm.beginTransaction()
+                        .add(R.id.fragment_content, fg)
+                        .addToBackStack(SequenceUUID.getUUID())
+                        .commit();
                 break;
             case R.id.tv_confirm:
                 for (int i = 0; i < fileDellList.size(); i++) {

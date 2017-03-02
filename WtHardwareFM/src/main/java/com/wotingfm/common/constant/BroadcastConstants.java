@@ -112,4 +112,5 @@ public class BroadcastConstants {
 
     // 更新 MoreOperationView
     public static final String UPDATE_MORE_OPERATION_VIEW = "UPDATE_MORE_OPERATION_VIEW";
+
 }

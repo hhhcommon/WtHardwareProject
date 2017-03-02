@@ -44,19 +44,19 @@ public class InterPhoneControlHelper{
 		//  命令类型：CmdType   0001{1=group;2=ptt};   0010{1=call;2=ptt};       0100{1=user;2=group};
 		msg.setCmdType(1);
 		msg.setCommand(2);
-		//消息源地址类型：FromType 最新数据：0000-设备；0001-服务器
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		//16进制编码：0000=0；0001=1；
-		msg.setFromType(0);
-		//消息源地址类型：ToType  最新数据：0000-设备；0001-服务器
+//		msg.setFromType(0);
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		// 16进制编码：0000=0；0001=1；
-		msg.setToType(1);
+		msg.setToType(0);
 		//消息源地址类型：PCDType  客户端型号  目前1=手机；2=设备；3=PC，默认1
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
 		if (CommonUtils.getSocketUserId(context) != null)
 			msg.setUserId(CommonUtils.getSocketUserId(context));
-		msg.setIMEI(PhoneMessage.imei);
+		msg.setDeviceId(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("GroupId", groupId);
 		MapContent map = new MapContent(DataMap);
@@ -84,19 +84,19 @@ public class InterPhoneControlHelper{
 		//  命令类型：CmdType   0001{1=group;2=ptt};   0010{1=call;2=ptt};       0100{1=user;2=group};
 		msg.setCmdType(1);
 		msg.setCommand(1);
-		//消息源地址类型：FromType 最新数据：0000-设备；0001-服务器
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		//16进制编码：0000=0；0001=1；
-		msg.setFromType(0);
-		//消息源地址类型：ToType  最新数据：0000-设备；0001-服务器
+//		msg.setFromType(0);
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		// 16进制编码：0000=0；0001=1；
-		msg.setToType(1);
+		msg.setToType(0);
 		//消息源地址类型：PCDType  客户端型号  目前1=手机；2=设备；3=PC，默认1
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
 		if (CommonUtils.getSocketUserId(context) != null)
 			msg.setUserId(CommonUtils.getSocketUserId(context));
-		msg.setIMEI(PhoneMessage.imei);
+		msg.setDeviceId(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("GroupId", groupId);
 		MapContent map = new MapContent(DataMap);
@@ -124,19 +124,19 @@ public class InterPhoneControlHelper{
 		//  命令类型：CmdType   0001{1=group;2=ptt};   0010{1=call;2=ptt};       0100{1=user;2=group};
 		msg.setCmdType(2);
 		msg.setCommand(2);
-		//消息源地址类型：FromType 最新数据：0000-设备；0001-服务器
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		//16进制编码：0000=0；0001=1；
-		msg.setFromType(0);
-		//消息源地址类型：ToType  最新数据：0000-设备；0001-服务器
+//		msg.setFromType(0);
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		// 16进制编码：0000=0；0001=1；
-		msg.setToType(1);
+		msg.setToType(0);
 		//消息源地址类型：PCDType  客户端型号  目前1=手机；2=设备；3=PC，默认1
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
 		if (CommonUtils.getSocketUserId(context) != null)
 			msg.setUserId(CommonUtils.getSocketUserId(context));
-		msg.setIMEI(PhoneMessage.imei);
+		msg.setDeviceId(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("GroupId", groupId);
 		MapContent map = new MapContent(DataMap);
@@ -164,19 +164,19 @@ public class InterPhoneControlHelper{
 		//  命令类型：CmdType   0001{1=group;2=ptt};   0010{1=call;2=ptt};       0100{1=user;2=group};
 		msg.setCmdType(2);
 		msg.setCommand(1);
-		//消息源地址类型：FromType 最新数据：0000-设备；0001-服务器
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		//16进制编码：0000=0；0001=1；
-		msg.setFromType(0);
-		//消息源地址类型：ToType  最新数据：0000-设备；0001-服务器
+//		msg.setFromType(0);
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		// 16进制编码：0000=0；0001=1；
-		msg.setToType(1);
+		msg.setToType(0);
 		//消息源地址类型：PCDType  客户端型号  目前1=手机；2=设备；3=PC，默认1
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
 		if (CommonUtils.getSocketUserId(context) != null)
 			msg.setUserId(CommonUtils.getSocketUserId(context));
-		msg.setIMEI(PhoneMessage.imei);
+		msg.setDeviceId(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("GroupId", groupId);
 		MapContent map = new MapContent(DataMap);
@@ -206,19 +206,19 @@ public class InterPhoneControlHelper{
 		//  命令类型：CmdType   0001{1=group;2=ptt};   0010{1=call;2=ptt};       0100{1=user;2=group};
 		msg.setCmdType(1);
 		msg.setCommand(1);
-		//消息源地址类型：FromType 最新数据：0000-设备；0001-服务器
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		//16进制编码：0000=0；0001=1；
-		msg.setFromType(0);
-		//消息源地址类型：ToType  最新数据：0000-设备；0001-服务器
+//		msg.setFromType(0);
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		// 16进制编码：0000=0；0001=1；
-		msg.setToType(1);
+		msg.setToType(0);
 		//消息源地址类型：PCDType  客户端型号  目前1=手机；2=设备；3=PC，默认1
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
 		if (CommonUtils.getSocketUserId(context) != null)
 			msg.setUserId(CommonUtils.getSocketUserId(context));
-		msg.setIMEI(PhoneMessage.imei);
+		msg.setDeviceId(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("CallederId", id);
 		DataMap.put("CallId", bdcallid);
@@ -251,19 +251,19 @@ public class InterPhoneControlHelper{
 		//  命令类型：CmdType   0001{1=group;2=ptt};   0010{1=call;2=ptt};       0100{1=user;2=group};
 		msg.setCmdType(1);
 		msg.setCommand(0x90);
-		//消息源地址类型：FromType 最新数据：0000-设备；0001-服务器
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		//16进制编码：0000=0；0001=1；
-		msg.setFromType(0);
-		//消息源地址类型：ToType  最新数据：0000-设备；0001-服务器
+//		msg.setFromType(0);
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		// 16进制编码：0000=0；0001=1；
-		msg.setToType(1);
+		msg.setToType(0);
 		//消息源地址类型：PCDType  客户端型号  目前1=手机；2=设备；3=PC，默认1
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
 		if (CommonUtils.getSocketUserId(context) != null)
 			msg.setUserId(CommonUtils.getSocketUserId(context));
-		msg.setIMEI(PhoneMessage.imei);
+		msg.setDeviceId(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("CallerId", callerId);
 		DataMap.put("CallId", callId);
@@ -309,19 +309,19 @@ public class InterPhoneControlHelper{
 		//  命令类型：CmdType   0001{1=group;2=ptt};   0010{1=call;2=ptt};       0100{1=user;2=group};
 		msg.setCmdType(2);
 		msg.setCommand(1);
-		//消息源地址类型：FromType 最新数据：0000-设备；0001-服务器
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		//16进制编码：0000=0；0001=1；
-		msg.setFromType(0);
-		//消息源地址类型：ToType  最新数据：0000-设备；0001-服务器
+//		msg.setFromType(0);
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		// 16进制编码：0000=0；0001=1；
-		msg.setToType(1);
+		msg.setToType(0);
 		//消息源地址类型：PCDType  客户端型号  目前1=手机；2=设备；3=PC，默认1
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
 		if (CommonUtils.getSocketUserId(context) != null)
 			msg.setUserId(CommonUtils.getSocketUserId(context));
-		msg.setIMEI(PhoneMessage.imei);
+		msg.setDeviceId(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("CallId", bdcallid);
 		MapContent map = new MapContent(DataMap);
@@ -348,19 +348,19 @@ public class InterPhoneControlHelper{
 		//  命令类型：CmdType   0001{1=group;2=ptt};   0010{1=call;2=ptt};       0100{1=user;2=group};
 		msg.setCmdType(2);
 		msg.setCommand(2);
-		//消息源地址类型：FromType 最新数据：0000-设备；0001-服务器
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		//16进制编码：0000=0；0001=1；
-		msg.setFromType(0);
-		//消息源地址类型：ToType  最新数据：0000-设备；0001-服务器
+//		msg.setFromType(0);
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		// 16进制编码：0000=0；0001=1；
-		msg.setToType(1);
+		msg.setToType(0);
 		//消息源地址类型：PCDType  客户端型号  目前1=手机；2=设备；3=PC，默认1
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
 		if (CommonUtils.getSocketUserId(context) != null)
 			msg.setUserId(CommonUtils.getSocketUserId(context));
-		msg.setIMEI(PhoneMessage.imei);
+		msg.setDeviceId(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("CallId", bdcallid);
 		MapContent map = new MapContent(DataMap);
@@ -389,19 +389,19 @@ public class InterPhoneControlHelper{
 		//  命令类型：CmdType   0001{1=group;2=ptt};   0010{1=call;2=ptt};       0100{1=user;2=group};
 		msg.setCmdType(1);
 		msg.setCommand(2);
-		//消息源地址类型：FromType 最新数据：0000-设备；0001-服务器
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		//16进制编码：0000=0；0001=1；
-		msg.setFromType(0);
-		//消息源地址类型：ToType  最新数据：0000-设备；0001-服务器
+//		msg.setFromType(0);
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		// 16进制编码：0000=0；0001=1；
-		msg.setToType(1);
+		msg.setToType(0);
 		//消息源地址类型：PCDType  客户端型号  目前1=手机；2=设备；3=PC，默认1
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
 		if (CommonUtils.getSocketUserId(context) != null)
 			msg.setUserId(CommonUtils.getSocketUserId(context));
-		msg.setIMEI(PhoneMessage.imei);
+		msg.setDeviceId(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("CallerId", callerId);
 		DataMap.put("ACKType", "1");
@@ -432,19 +432,19 @@ public class InterPhoneControlHelper{
 		//  命令类型：CmdType   0001{1=group;2=ptt};   0010{1=call;2=ptt};       0100{1=user;2=group};
 		msg.setCmdType(1);
 		msg.setCommand(2);
-		//消息源地址类型：FromType 最新数据：0000-设备；0001-服务器
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		//16进制编码：0000=0；0001=1；
-		msg.setFromType(0);
-		//消息源地址类型：ToType  最新数据：0000-设备；0001-服务器
+//		msg.setFromType(0);
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		// 16进制编码：0000=0；0001=1；
-		msg.setToType(1);
+		msg.setToType(0);
 		//消息源地址类型：PCDType  客户端型号  目前1=手机；2=设备；3=PC，默认1
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
 		if (CommonUtils.getSocketUserId(context) != null)
 			msg.setUserId(CommonUtils.getSocketUserId(context));
-		msg.setIMEI(PhoneMessage.imei);
+		msg.setDeviceId(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("CallerId", callerId);
 		DataMap.put("ACKType", "2");
@@ -475,19 +475,19 @@ public class InterPhoneControlHelper{
 		//  命令类型：CmdType   0001{1=group;2=ptt};   0010{1=call;2=ptt};       0100{1=user;2=group};
 		msg.setCmdType(1);
 		msg.setCommand(2);
-		//消息源地址类型：FromType 最新数据：0000-设备；0001-服务器
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		//16进制编码：0000=0；0001=1；
-		msg.setFromType(0);
-		//消息源地址类型：ToType  最新数据：0000-设备；0001-服务器
+//		msg.setFromType(0);
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		// 16进制编码：0000=0；0001=1；
-		msg.setToType(1);
+		msg.setToType(0);
 		//消息源地址类型：PCDType  客户端型号  目前1=手机；2=设备；3=PC，默认1
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
 		if (CommonUtils.getSocketUserId(context) != null)
 			msg.setUserId(CommonUtils.getSocketUserId(context));
-		msg.setIMEI(PhoneMessage.imei);
+		msg.setDeviceId(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("CallerId", callerId);
 		DataMap.put("ACKType", "31");
@@ -517,19 +517,19 @@ public class InterPhoneControlHelper{
 		//  命令类型：CmdType   0001{1=group;2=ptt};   0010{1=call;2=ptt};       0100{1=user;2=group};
 		msg.setCmdType(1);
 		msg.setCommand(3);
-		//消息源地址类型：FromType 最新数据：0000-设备；0001-服务器
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		//16进制编码：0000=0；0001=1；
-		msg.setFromType(0);
-		//消息源地址类型：ToType  最新数据：0000-设备；0001-服务器
+//		msg.setFromType(0);
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		// 16进制编码：0000=0；0001=1；
-		msg.setToType(1);
+		msg.setToType(0);
 		//消息源地址类型：PCDType  客户端型号  目前1=手机；2=设备；3=PC，默认1
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
 		if (CommonUtils.getSocketUserId(context) != null)
 			msg.setUserId(CommonUtils.getSocketUserId(context));
-		msg.setIMEI(PhoneMessage.imei);
+		msg.setDeviceId(PhoneMessage.imei);
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("CallId", callId);
 		MapContent map = new MapContent(DataMap);
@@ -555,19 +555,19 @@ public class InterPhoneControlHelper{
 		msg.setBizType(0x0f);
 		//  命令类型：CmdType   0001{1=group;2=ptt};   0010{1=call;2=ptt};       0100{1=user;2=group};
 		msg.setCmdType(0);
-		//消息源地址类型：FromType 最新数据：0000-设备；0001-服务器
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		//16进制编码：0000=0；0001=1；
-		msg.setFromType(0);
-		//消息源地址类型：ToType  最新数据：0000-设备；0001-服务器
+//		msg.setFromType(0);
+		//消息源地址类型：ToType  最新数据：0000-服务器
 		// 16进制编码：0000=0；0001=1；
-		msg.setToType(1);
+		msg.setToType(0);
 		//消息源地址类型：PCDType  客户端型号  目前1=手机；2=设备；3=PC，默认1
 		msg.setPCDType(GlobalConfig.PCDType);
 		msg.setSendTime(System.currentTimeMillis());
 		msg.setMsgId(SequenceUUID.getPureUUID());
 		if (CommonUtils.getSocketUserId(context) != null)
 			msg.setUserId(CommonUtils.getSocketUserId(context));
-		msg.setIMEI(PhoneMessage.imei);
+		msg.setDeviceId(PhoneMessage.imei);
 		pullToSocket(msg);
 	}
 
@@ -585,28 +585,28 @@ public class InterPhoneControlHelper{
 			MsgMedia msg = new MsgMedia();
 			msg.setMsgType(0);
 			msg.setAffirm(1);
-			msg.setFromType(0);
-			msg.setToType(1);
+//			msg.setFromType(0);
+			msg.setToType(0);
 			msg.setBizType(2);
 			msg.setMediaType(1);
 			msg.setSendTime(System.currentTimeMillis());
 			msg.setTalkId(talkId);
 			msg.setSeqNo(num);
-			msg.setObjId(bdcallid);
+			msg.setChannelId(bdcallid);
 			msg.setMediaData(audio);
 			pullToSocket(msg);
 		} else {
 			MsgMedia msg = new MsgMedia();
 			msg.setMsgType(0);
 			msg.setAffirm(1);
-			msg.setFromType(0);
-			msg.setToType(1);
+//			msg.setFromType(0);
+			msg.setToType(0);
 			msg.setBizType(1);
 			msg.setMediaType(1);
 			msg.setSendTime(System.currentTimeMillis());
 			msg.setTalkId(talkId);
 			msg.setSeqNo(num);
-			msg.setObjId(groupId);
+			msg.setChannelId(groupId);
 			msg.setMediaData(audio);
 			pullToSocket(msg);
 		}
@@ -625,27 +625,27 @@ public class InterPhoneControlHelper{
 			MsgMedia msg = new MsgMedia();
 			msg.setMsgType(0);
 			msg.setAffirm(1);
-			msg.setFromType(0);
-			msg.setToType(1);
+//			msg.setFromType(0);
+			msg.setToType(0);
 			msg.setBizType(2);
 			msg.setMediaType(1);
 			msg.setSendTime(System.currentTimeMillis());
 			msg.setTalkId(talkId);
 			msg.setSeqNo(num);
-			msg.setObjId(bdcallid);
+			msg.setChannelId(bdcallid);
 			pullToSocket(msg);
 		} else {
 			MsgMedia msg = new MsgMedia();
 			msg.setMsgType(0);
 			msg.setAffirm(1);
-			msg.setFromType(0);
-			msg.setToType(1);
+//			msg.setFromType(0);
+			msg.setToType(0);
 			msg.setBizType(1);
 			msg.setMediaType(1);
 			msg.setSendTime(System.currentTimeMillis());
 			msg.setTalkId(talkId);
 			msg.setSeqNo(num);
-			msg.setObjId(groupId);
+			msg.setChannelId(groupId);
 			pullToSocket(msg);
 		}
 	}
@@ -663,8 +663,8 @@ public class InterPhoneControlHelper{
 		msg.setReMsgId(ReMsgId);
 		// 16进制编码：0000=0；1000=8
 		msg.setAffirm(Affirm);
-		msg.setFromType(0);
-		msg.setToType(1);
+//		msg.setFromType(0);
+		msg.setToType(0);
 		msg.setBizType(0);
 		msg.setCmdType(0);
 		msg.setSendTime(System.currentTimeMillis());
@@ -686,8 +686,8 @@ public class InterPhoneControlHelper{
 		msg.setMsgType(0);
 		// 16进制编码：0000=0；1000=8
 		msg.setAffirm(0);
-		msg.setFromType(0);
-		msg.setToType(1);
+//		msg.setFromType(0);
+		msg.setToType(0);
 		msg.setBizType(4);
 		msg.setCmdType(cmdType);
 		msg.setCommand(command);
@@ -695,7 +695,7 @@ public class InterPhoneControlHelper{
 		msg.setPCDType(GlobalConfig.PCDType);
 		if (CommonUtils.getSocketUserId(context) != null)
 			msg.setUserId(CommonUtils.getSocketUserId(context));
-		msg.setIMEI(PhoneMessage.imei);
+		msg.setDeviceId(PhoneMessage.imei);
 		msg.setSendTime(System.currentTimeMillis());
 		Map<String, Object> DataMap = new HashMap<String, Object>();
 		DataMap.put("TaskID", taskID);

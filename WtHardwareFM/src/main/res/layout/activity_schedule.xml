@@ -15,7 +15,7 @@
             android:id="@+id/head_name_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="群组信息"
+            android:text="节目单"
             android:layout_centerInParent="true"
             android:textColor="@color/WHITE_1"
             android:textSize="@dimen/activity_head_center_s" />

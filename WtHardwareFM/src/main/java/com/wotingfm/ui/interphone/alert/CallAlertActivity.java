@@ -22,7 +22,6 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.helper.InterPhoneControlHelper;
-import com.wotingfm.common.manager.MyActivityManager;
 import com.wotingfm.ui.interphone.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.ui.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.ui.interphone.chat.model.DBTalkHistorary;
@@ -243,9 +242,7 @@ public class CallAlertActivity extends Activity implements OnClickListener {
         dbdao.addTalkHistory(history);
 //        DBTalkHistorary talkdb = dbdao.queryHistory().get(0);          // 得到数据库里边数据
         ChatFragment.zhiDingPerson();
-        DuiJiangActivity.update();                                     // 对讲主页界面更新
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.finishAllActivity();
+        DuiJiangActivity.update();
         finish();
     }
 
@@ -389,7 +386,7 @@ public class CallAlertActivity extends Activity implements OnClickListener {
                                     String ACKType = datas.get("ACKType") + "";
                                     if (ACKType != null && !ACKType.equals("") && ACKType.equals("1")) {
                                         //此时对讲连接建立可以通话
-                                        if (musicPlayer != null) {
+                                               if (musicPlayer != null) {
                                             musicPlayer.stop();
                                             musicPlayer = null;
                                         }

@@ -18,7 +18,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.interphone.model.UserInviteMeInside;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.DialogUtils;
@@ -33,7 +33,7 @@ import org.json.JSONObject;
  * @author 辛龙
  * 2016年1月20日
  */
-public class FriendAddActivity extends AppBaseActivity implements OnClickListener {
+public class FriendAddActivity extends BaseActivity implements OnClickListener {
 	private TextView tv_add;
 	private TextView tv_name;
 	private TextView tv_id;

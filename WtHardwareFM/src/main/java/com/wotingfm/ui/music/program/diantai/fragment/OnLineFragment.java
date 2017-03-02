@@ -35,20 +35,22 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.music.main.HomeActivity;
+import com.wotingfm.ui.main.MainActivity;
+import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
-import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
-import com.wotingfm.ui.music.program.citylist.activity.CityListActivity;
-import com.wotingfm.ui.music.program.diantai.activity.RadioNationalActivity;
+import com.wotingfm.ui.music.program.album.main.AlbumFragment;
+import com.wotingfm.ui.music.program.citylist.activity.CityListFragment;
+import com.wotingfm.ui.music.program.diantai.activity.RadioNationalFragment;
 import com.wotingfm.ui.music.program.diantai.adapter.CityNewAdapter;
 import com.wotingfm.ui.music.program.diantai.adapter.OnlinesAdapter;
 import com.wotingfm.ui.music.program.diantai.model.RadioPlay;
-import com.wotingfm.ui.music.program.fmlist.activity.FMListActivity;
+import com.wotingfm.ui.music.program.fmlist.activity.FMListFragment;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
+import com.wotingfm.util.SequenceUUID;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.HeightListView;
 import com.wotingfm.widget.TipView;
@@ -174,28 +176,9 @@ public class OnLineFragment extends Fragment implements TipView.WhiteViewClick {
                     tipView.setVisibility(View.VISIBLE);
                     tipView.setTipView(TipView.TipStatus.NO_NET);
                 }
-                SharedPreferences.Editor et = shared.edit();
-                et.putString(StringConstant.CITYTYPE, "false");
-                if (!et.commit()) L.w("TAG", "数据 commit 失败!");
             }
         }
 
-    }
-
-    @Override
-    public void onActivityCreated(Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            RefreshType = 1;
-            beginCatalogId = "";
-            String cityName = shared.getString(StringConstant.CITYNAME, "北京");
-            textName.setText(cityName);
-            getCity();
-            send();
-        } else {
-            tipView.setVisibility(View.VISIBLE);
-            tipView.setTipView(TipView.TipStatus.NO_NET);
-        }
     }
 
     @Override
@@ -218,44 +201,64 @@ public class OnLineFragment extends Fragment implements TipView.WhiteViewClick {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, CityListActivity.class);
-                Bundle bundle = new Bundle();
+                CityListFragment fg = new CityListFragment();
+                Bundle bundle=new Bundle();
                 bundle.putString("type", "address");
-                intent.putExtras(bundle);
-                startActivity(intent);
+                fg.setArguments(bundle);
+                ProgramActivity activity = (ProgramActivity) getActivity();
+                activity.fm.beginTransaction()
+                        .add(R.id.fragment_content, fg)
+                        .addToBackStack(SequenceUUID.getUUID())
+                        .commit();
             }
         });
         linLocal.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, CityListActivity.class);
-                Bundle bundle = new Bundle();
+
+                CityListFragment fg = new CityListFragment();
+                Bundle bundle=new Bundle();
                 bundle.putString("type", "local");
-                intent.putExtras(bundle);
-                startActivity(intent);
+                fg.setArguments(bundle);
+                ProgramActivity activity = (ProgramActivity) getActivity();
+                activity.fm.beginTransaction()
+                        .add(R.id.fragment_content, fg)
+                        .addToBackStack(SequenceUUID.getUUID())
+                        .commit();
             }
         });
         linCountry.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, RadioNationalActivity.class);
-                startActivity(intent);
+
+                RadioNationalFragment fg = new RadioNationalFragment();
+                ProgramActivity activity = (ProgramActivity) getActivity();
+                activity.fm.beginTransaction()
+                        .add(R.id.fragment_content, fg)
+                        .addToBackStack(SequenceUUID.getUUID())
+                        .commit();
             }
         });
         linNet.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, FMListActivity.class);
-                Bundle bundle = new Bundle();
+
+                FMListFragment fg = new FMListFragment();
+                Bundle bundle=new Bundle();
                 bundle.putString("fromtype", "net"); // 界面判断标签
                 bundle.putString("name", "网络台");
                 bundle.putString("type", "9");
                 bundle.putString("id", "dtfl2002");
-                intent.putExtras(bundle);
-                startActivity(intent);
+                fg.setArguments(bundle);
+                ProgramActivity activity = (ProgramActivity) getActivity();
+                activity.fm.beginTransaction()
+                        .add(R.id.fragment_content, fg)
+                        .addToBackStack(SequenceUUID.getUUID())
+                        .commit();
+
             }
         });
         viewHeadMore.setOnClickListener(new OnClickListener() {
@@ -265,14 +268,21 @@ public class OnLineFragment extends Fragment implements TipView.WhiteViewClick {
                 if (mainLists != null) {
                     String cityId = shared.getString(StringConstant.CITYID, "110000");
                     String cityName = shared.getString(StringConstant.CITYNAME, "北京");
-                    Intent intent = new Intent(context, FMListActivity.class);
-                    Bundle bundle = new Bundle();
+
+                    FMListFragment fg = new FMListFragment();
+                    Bundle bundle=new Bundle();
                     bundle.putString("fromtype", "online");
                     bundle.putString("name", cityName);
                     bundle.putString("type", "2");
                     bundle.putString("id", cityId);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
+                    fg.setArguments(bundle);
+                    ProgramActivity activity = (ProgramActivity) getActivity();
+                    activity.fm.beginTransaction()
+                            .add(R.id.fragment_content, fg)
+                            .addToBackStack(SequenceUUID.getUUID())
+                            .commit();
+
+
                 }
             }
         });
@@ -427,7 +437,8 @@ public class OnLineFragment extends Fragment implements TipView.WhiteViewClick {
                         bundle1.putString("text", mainLists.get(position).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
-                        HomeActivity.UpdateViewPager();
+                        MainActivity.changeOne();
+
                     }
                 }
             }
@@ -435,6 +446,7 @@ public class OnLineFragment extends Fragment implements TipView.WhiteViewClick {
     }
 
     private void send() {
+        cityId = shared.getString(StringConstant.CITYID, "110000");
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("MediaType", "RADIO");
@@ -545,14 +557,15 @@ public class OnLineFragment extends Fragment implements TipView.WhiteViewClick {
 
                         dbDao.deleteHistory(playUrl);
                         dbDao.addHistory(history);
-                        HomeActivity.UpdateViewPager();
+                        MainActivity.changeOne();
+
                         Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                         Bundle bundle1 = new Bundle();
                         bundle1.putString("text", newList.get(groupPosition).getList().get(childPosition).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
                     } else if (MediaType.equals("SEQU")) {
-                        Intent intent = new Intent(context, AlbumActivity.class);
+                        Intent intent = new Intent(context, AlbumFragment.class);
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "recommend");
                         bundle.putSerializable("list", (Serializable) newList.get(groupPosition).getList());
@@ -570,20 +583,25 @@ public class OnLineFragment extends Fragment implements TipView.WhiteViewClick {
     @Override
     public void onResume() {
         super.onResume();
-        String cityType = shared.getString(StringConstant.CITYTYPE, "false");
-        cityName = shared.getString(StringConstant.CITYNAME, "北京");
-        cityId = shared.getString(StringConstant.CITYID, "110000");
-        if (GlobalConfig.CityName != null) cityName = GlobalConfig.CityName;
-        if (cityType.equals("true")) {
-            textName.setText(cityName);
-            page = 1;
-            beginCatalogId = "";
-            RefreshType = 1;
-            getCity();
-            send();
-            SharedPreferences.Editor et = shared.edit();
-            et.putString(StringConstant.CITYTYPE, "false");
-            if (!et.commit()) L.w("TAG", "数据 commit 失败!");
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+            cityName = shared.getString(StringConstant.CITYNAME, "北京");
+            cityId = shared.getString(StringConstant.CITYID, "110000");
+            if (GlobalConfig.CityName != null) cityName = GlobalConfig.CityName;
+                textName.setText(cityName);
+                page = 1;
+                beginCatalogId = "";
+                RefreshType = 1;
+                getCity();
+                send();
+        }
+    }
+
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+            tipView.setVisibility(View.VISIBLE);
+            tipView.setTipView(TipView.TipStatus.NO_NET);
         }
     }
 

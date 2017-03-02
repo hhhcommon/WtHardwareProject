@@ -18,7 +18,7 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.interphone.find.friendadd.FriendAddActivity;
 import com.wotingfm.ui.interphone.find.groupadd.GroupAddActivity;
@@ -43,7 +43,7 @@ import java.util.List;
  * @author 辛龙
  * 2016年1月20日
  */
-public class FindNewsResultActivity extends AppBaseActivity implements OnClickListener, TipView.WhiteViewClick {
+public class FindNewsResultActivity extends BaseActivity implements OnClickListener, TipView.WhiteViewClick {
     private XListView mxlistview;
     private int RefreshType;// 1，下拉刷新 2，加载更多
     private Dialog dialog;

@@ -23,15 +23,17 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.music.main.HomeActivity;
+import com.wotingfm.ui.main.MainActivity;
+import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
-import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
+import com.wotingfm.ui.music.program.album.main.AlbumFragment;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
-import com.wotingfm.ui.music.program.radiolist.activity.RadioListActivity;
+import com.wotingfm.ui.music.program.radiolist.activity.RadioListFragment;
 import com.wotingfm.ui.music.program.radiolist.adapter.RadioListAdapter;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.SequenceUUID;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.TipView;
 import com.wotingfm.widget.rollviewpager.RollPagerView;
@@ -133,7 +135,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
 	public void sendRequest() {
         if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
             if(dialog != null) dialog.dismiss();
-            ((RadioListActivity)getActivity()).closeDialog();
+			RadioListFragment.closeDialog();
             if(refreshType == 1) {
                 tipView.setVisibility(View.VISIBLE);
                 tipView.setTipView(TipView.TipStatus.NO_NET);
@@ -143,14 +145,14 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
             }
             return ;
         }
-		VolleyRequest.RequestPost(GlobalConfig.getContentUrl, RadioListActivity.tag, setParam(), new VolleyCallback() {
+		VolleyRequest.RequestPost(GlobalConfig.getContentUrl, RadioListFragment.tag, setParam(), new VolleyCallback() {
 			private String ReturnType;
 
 			@Override
 			protected void requestSuccess(JSONObject result) {
-				((RadioListActivity)getActivity()).closeDialog();
+				RadioListFragment.closeDialog();
 				if (dialog != null) dialog.dismiss();
-				if(((RadioListActivity)getActivity()).isCancel()) return ;
+				if(RadioListFragment.isCancel()) return ;
 				try {
 					ReturnType = result.getString("ReturnType");
 					if (ReturnType != null && ReturnType.equals("1001")) {
@@ -216,7 +218,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
 			@Override
 			protected void requestError(VolleyError error) {
 				if (dialog != null) dialog.dismiss();
-				((RadioListActivity)getActivity()).closeDialog();
+				RadioListFragment.closeDialog();
 				ToastUtils.showVolleyError(context);
                 if (refreshType == 1) {
                     tipView.setVisibility(View.VISIBLE);
@@ -230,8 +232,8 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
 		JSONObject jsonObject = VolleyRequest.getJsonObject(context);
 		try {
 			jsonObject.put("MediaType", "");
-			jsonObject.put("CatalogType", RadioListActivity.catalogType);
-			jsonObject.put("CatalogId", RadioListActivity.id);
+			jsonObject.put("CatalogType", RadioListFragment.catalogType);
+			jsonObject.put("CatalogId", RadioListFragment.id);
 			jsonObject.put("Page", String.valueOf(page));
 			jsonObject.put("PerSize", "3");
 			jsonObject.put("ResultType", "2");
@@ -283,7 +285,8 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
 									ContentFavorite,ContentId,localUrl,sequName,sequId,sequDesc,sequImg);
 							dbDao.deleteHistory(playUrl);
 							dbDao.addHistory(history);
-							HomeActivity.UpdateViewPager();
+							MainActivity.changeOne();
+
 							Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
 							Bundle bundle1=new Bundle();
 							bundle1.putString("text",newList.get(position - 2).getContentName());
@@ -291,12 +294,18 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
 							context.sendBroadcast(push);
 							getActivity().finish();
 						} else if (MediaType.equals("SEQU")) {
-							Intent intent = new Intent(context, AlbumActivity.class);
+
+							ProgramActivity activity = (ProgramActivity) getActivity();
+							AlbumFragment fg_album= new AlbumFragment();
 							Bundle bundle = new Bundle();
 							bundle.putString("type", "radiolistactivity");
 							bundle.putSerializable("list", newList.get(position - 2));
-							intent.putExtras(bundle);
-							startActivityForResult(intent, 1);
+							fg_album.setArguments(bundle);
+
+							activity.fm.beginTransaction()
+									.add(R.id.fragment_content, fg_album)
+									.addToBackStack(SequenceUUID.getUUID())
+									.commit();
 						}
 					}
 				}

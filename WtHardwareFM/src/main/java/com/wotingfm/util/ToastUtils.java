@@ -22,6 +22,9 @@ public class ToastUtils {
 
 	/**一直提示*/
 	public static void show_always(Context context, String content){
+		/*Toast toast=new Toast(context);
+		toast.setGravity(Gravity.TOP|Gravity.LEFT,-320,-500);
+		toast.makeText(context, content, Toast.LENGTH_SHORT).show();*/
 		Toast.makeText(context, content, Toast.LENGTH_SHORT).show();
 	}
 

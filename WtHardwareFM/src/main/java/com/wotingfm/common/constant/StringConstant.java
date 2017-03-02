@@ -31,7 +31,6 @@ public class StringConstant {
     public static final String LONGITUDE = "longitude";
     public static final String CITYID = "cityid";//选中的城市id 对应导航返回的ADcode
     public static final String CITYNAME = "cityname";//选中的城市
-    public static final String CITYTYPE = "false";//是否刷新数据，更改过城市属性
     /*
      * 保存的刷新界面信息
      */
@@ -160,4 +159,7 @@ public class StringConstant {
 
     // 数据获取  文字请求内容
     public static final String TEXT_CONTENT = "text";
+
+
+
 }

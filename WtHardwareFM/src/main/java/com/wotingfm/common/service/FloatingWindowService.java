@@ -7,6 +7,7 @@ import android.graphics.PixelFormat;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -19,6 +20,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.util.PhoneMessage;
+
 /**
  * 悬浮窗服务----在BSApplication中启动
  * 作者：xinlong on 2016/9/5 11:37
@@ -107,9 +109,11 @@ public class FloatingWindowService extends Service {
                                | LayoutParams.FLAG_NOT_FOCUSABLE
                                | LayoutParams.FLAG_NOT_TOUCHABLE;
          */
+//		params.gravity= Gravity.BOTTOM|Gravity.RIGHT;
+//		floatView.setPadding(0,0,20,20);
         // 设置悬浮窗的长得宽
-        params.width = PhoneMessage.ScreenWidth/5;
-        params.height = PhoneMessage.ScreenWidth/5;
+        params.width = PhoneMessage.ScreenWidth/6;
+        params.height = PhoneMessage.ScreenWidth/6;
         // 设置悬浮窗的Touch监听
 		floatView.setOnClickListener(new OnClickListener() {
 			@Override
@@ -186,6 +190,7 @@ public class FloatingWindowService extends Service {
 					int dy = (int) event.getRawY() - lastY;
 					params.x = paramX + dx;
 					params.y = paramY + dy;
+					Log.e("悬浮窗",params.y+"CCCCCCCC"+params.x);
 					// 更新悬浮窗位置
 			        wm.updateViewLayout(floatView, params);
 					break;

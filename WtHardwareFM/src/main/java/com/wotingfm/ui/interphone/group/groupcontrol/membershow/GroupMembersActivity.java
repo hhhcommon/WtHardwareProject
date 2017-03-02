@@ -23,7 +23,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.common.model.UserInfo;
 import com.wotingfm.ui.interphone.group.groupcontrol.grouppersonnews.GroupPersonNewsActivity;
 import com.wotingfm.ui.interphone.group.groupcontrol.membershow.adapter.CreateGroupMembersAdapter;
@@ -48,7 +48,7 @@ import java.util.List;
  * @author 辛龙
  * 2016年4月13日
  */
-public class GroupMembersActivity extends AppBaseActivity implements OnClickListener, TextWatcher, OnItemClickListener, SideBar.OnTouchingLetterChangedListener, TipView.WhiteViewClick {
+public class GroupMembersActivity extends BaseActivity implements OnClickListener, TextWatcher, OnItemClickListener, SideBar.OnTouchingLetterChangedListener, TipView.WhiteViewClick {
 
     private CharacterParser characterParser = CharacterParser.getInstance();// 实例化汉字转拼音类
     private PinyinComparator pinyinComparator = new PinyinComparator();

@@ -8,7 +8,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.interphone.group.groupcontrol.groupintroduce.GroupIntroduceActivity;
 import com.wotingfm.ui.interphone.group.groupcontrol.handlegroupapply.HandleGroupApplyActivity;
@@ -20,7 +20,7 @@ import com.wotingfm.util.ToastUtils;
 import java.util.ArrayList;
 
 
-public class GroupManagerActivity extends AppBaseActivity implements View.OnClickListener{
+public class GroupManagerActivity extends BaseActivity implements View.OnClickListener{
 
     private String groupId;
 

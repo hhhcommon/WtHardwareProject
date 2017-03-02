@@ -22,7 +22,7 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.common.model.UserInfo;
 import com.wotingfm.ui.interphone.alert.CallAlertActivity;
@@ -43,7 +43,7 @@ import org.json.JSONObject;
  * 作者：xinlong on 2016/1/19 21:18
  * 邮箱：645700751@qq.com
  */
-public class TalkPersonNewsActivity extends AppBaseActivity {
+public class TalkPersonNewsActivity extends BaseActivity {
     private String name;
     private String imageUrl;
     private String id;

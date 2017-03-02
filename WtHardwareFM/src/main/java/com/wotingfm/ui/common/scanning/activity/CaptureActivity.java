@@ -25,7 +25,6 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.zxing.Result;
 import com.wotingfm.R;
-import com.wotingfm.common.manager.MyActivityManager;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.common.scanning.DecodeThread;
 import com.wotingfm.ui.common.scanning.InactivityTimer;
@@ -80,8 +79,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_capture);
         context=this;
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.pushOneActivity(context);
         gson=new Gson();
         findViewById(R.id.head_left_btn).setOnClickListener(new OnClickListener() {
             @Override
@@ -330,8 +327,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     protected void onDestroy() {
         super.onDestroy();
         inactivityTimer.shutdown();
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.popOneActivity(context);
         gson = null;
         scanPreview = null;
         scanContainer = null;

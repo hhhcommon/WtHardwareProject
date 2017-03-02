@@ -24,21 +24,21 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.ui.music.favorite.activity.FavoriteActivity;
-import com.wotingfm.ui.music.main.HomeActivity;
-import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
-import com.wotingfm.ui.music.player.fragment.PlayerFragment;
-import com.wotingfm.ui.music.player.model.PlayerHistory;
-import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
-import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
-import com.wotingfm.ui.music.search.adapter.SearchContentAdapter;
-import com.wotingfm.ui.music.search.model.SuperRankInfo;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.ui.main.MainActivity;
+import com.wotingfm.ui.music.favorite.main.FavoriteFragment;
+import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
+import com.wotingfm.ui.music.player.main.PlayerFragment;
+import com.wotingfm.ui.music.player.model.PlayerHistory;
+import com.wotingfm.ui.music.program.album.main.AlbumFragment;
+import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
+import com.wotingfm.ui.music.search.adapter.SearchContentAdapter;
+import com.wotingfm.ui.music.search.model.SuperRankInfo;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
@@ -115,7 +115,7 @@ public class TotalFragment extends Fragment {
         expandListView.setOnGroupClickListener(new OnGroupClickListener() {
             @Override
             public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-                FavoriteActivity.updateViewPager(list.get(groupPosition).getKey());
+                FavoriteFragment.updateViewPager(list.get(groupPosition).getKey());
                 return true;
             }
         });
@@ -335,15 +335,15 @@ public class TotalFragment extends Fragment {
                             }
                             setItemListener();
                             isData = true;
-                            ((FavoriteActivity) context).setQkVisibleOrHide(true);
+                            FavoriteFragment.setQkVisibleOrHide(true);
                         } else {
                             isData = false;
-                            ((FavoriteActivity) context).setQkVisibleOrHide(false);
+                            FavoriteFragment.setQkVisibleOrHide(false);
                         }
                     }
                 } else {
                     isData = false;
-                    ((FavoriteActivity) context).setQkVisibleOrHide(false);
+                    FavoriteFragment.setQkVisibleOrHide(false);
                     if (Message != null && !Message.trim().equals("")) {
                         ToastUtils.show_always(context, Message);
                     }
@@ -355,7 +355,7 @@ public class TotalFragment extends Fragment {
                 if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
                 isData = false;
-                ((FavoriteActivity) context).setQkVisibleOrHide(false);
+                FavoriteFragment.setQkVisibleOrHide(false);
             }
         });
     }
@@ -404,7 +404,8 @@ public class TotalFragment extends Fragment {
                     dbDao.deleteHistory(playerurl);
                     dbDao.addHistory(history);
                     if (PlayerFragment.context != null) {
-                        HomeActivity.UpdateViewPager();
+                        MainActivity.changeOne();
+
                         Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                         Bundle bundle1 = new Bundle();
                         bundle1.putString("text", list.get(groupPosition).getList().get(childPosition).getContentName());
@@ -416,11 +417,12 @@ public class TotalFragment extends Fragment {
                         et.putString(StringConstant.PLAYHISTORYENTER, "true");
                         et.putString(StringConstant.PLAYHISTORYENTERNEWS, list.get(groupPosition).getList().get(childPosition).getContentName());
                         if (!et.commit()) L.w("数据 commit 失败!");
-                        HomeActivity.UpdateViewPager();
+                        MainActivity.changeOne();
+
                         getActivity().finish();
                     }
                 } else if (MediaType != null && MediaType.equals("SEQU")) {
-                    Intent intent = new Intent(context, AlbumActivity.class);
+                    Intent intent = new Intent(context, AlbumFragment.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "search");
                     bundle.putSerializable("list", list.get(groupPosition).getList().get(childPosition));

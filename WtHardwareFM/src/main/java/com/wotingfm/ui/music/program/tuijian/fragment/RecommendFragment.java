@@ -23,15 +23,17 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.music.main.HomeActivity;
+import com.wotingfm.ui.main.MainActivity;
+import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
-import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
+import com.wotingfm.ui.music.program.album.main.AlbumFragment;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.ui.music.program.tuijian.adapter.RecommendListAdapter;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
+import com.wotingfm.util.SequenceUUID;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.TipView;
 import com.wotingfm.widget.rollviewpager.RollPagerView;
@@ -268,19 +270,25 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
                                 playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid, playercontentshareurl, ContentFavorite, ContentId, localurl,sequname,sequid,sequdesc,sequimg);
                         dbDao.deleteHistory(playerurl);
                         dbDao.addHistory(history);
-                        HomeActivity.UpdateViewPager();
+                        MainActivity.changeOne();
+
                         Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                         Bundle bundle1=new Bundle();
                         bundle1.putString("text",newList.get(position - 2).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
                     } else if (MediaType.equals("SEQU")) {
-                        Intent intent = new Intent(context, AlbumActivity.class);
+                        ProgramActivity activity = (ProgramActivity) getActivity();
+                        AlbumFragment fg= new AlbumFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "recommend");
                         bundle.putSerializable("list", newList.get(position - 2));
-                        intent.putExtras(bundle);
-                        context.startActivity(intent);
+                        fg.setArguments(bundle);
+
+                        activity.fm.beginTransaction()
+                                .add(R.id.fragment_content, fg)
+                                .addToBackStack(SequenceUUID.getUUID())
+                                .commit();
                     } else {
                         ToastUtils.show_short(context, "暂不支持的Type类型");
                     }

@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.PagerAdapter;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class MyPagerAdapter extends FragmentStatePagerAdapter{
@@ -24,7 +25,7 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter{
 
 	@Override
 	public int getCount() {
-		return title.size();
+		return fragments.size();
 	}
 	
 	@Override

@@ -19,7 +19,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.interphone.message.adapter.NewsAdapter;
 import com.wotingfm.ui.interphone.message.model.MessageInFo;
@@ -40,7 +40,7 @@ import java.util.List;
  * 邮箱：645700751@qq.com
  */
 
-public class NewsActivity extends AppBaseActivity implements OnClickListener {
+public class NewsActivity extends BaseActivity implements OnClickListener {
     private NewsAdapter adapter;
 
     private ListView mListView;

@@ -35,13 +35,14 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.devicecontrol.WtDeviceControl;
 import com.wotingfm.common.helper.InterPhoneControlHelper;
-import com.wotingfm.common.manager.MyActivityManager;
 import com.wotingfm.common.manager.UpdateManager;
 import com.wotingfm.common.receiver.NetWorkChangeReceiver;
 import com.wotingfm.common.service.FloatingWindowService;
 import com.wotingfm.common.service.LocationService;
 import com.wotingfm.common.service.NotificationService;
+import com.wotingfm.common.service.SocketService;
 import com.wotingfm.common.service.SubclassService;
+import com.wotingfm.common.service.TestWindowService;
 import com.wotingfm.common.service.VoiceStreamPlayerService;
 import com.wotingfm.common.service.VoiceStreamRecordService;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -59,11 +60,13 @@ import com.wotingfm.ui.interphone.common.model.MessageForMainGroup;
 import com.wotingfm.ui.interphone.main.DuiJiangActivity;
 import com.wotingfm.ui.mine.MineActivity;
 import com.wotingfm.ui.mine.person.login.LoginActivity;
-import com.wotingfm.ui.music.common.service.DownloadService;
-import com.wotingfm.ui.music.main.HomeActivity;
+import com.wotingfm.ui.music.download.service.DownloadService;
+import com.wotingfm.ui.music.main.PlayerActivity;
+import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.program.citylist.dao.CityInfoDao;
 import com.wotingfm.ui.music.program.fenlei.model.Catalog;
 import com.wotingfm.ui.music.program.fenlei.model.CatalogName;
+import com.wotingfm.ui.music.search.main.SearchLikeActivity;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.JsonEncloseUtils;
@@ -86,7 +89,7 @@ import java.util.Map;
  * 邮箱：645700751@qq.com
  */
 public class MainActivity extends TabActivity {
-    private MainActivity context;
+    private static MainActivity context;
     public static TabHost tabHost;
     private Dialog upDataDialog;     // 版本更新弹出框
 
@@ -162,8 +165,8 @@ public class MainActivity extends TabActivity {
     }
 
     private void createService() {
- /*       Socket = new Intent(this, SocketService.class);  //socket服务
-        startService(Socket);*/
+        Socket = new Intent(this, SocketService.class);  //socket服务
+        startService(Socket);
         VoiceStreamRecord = new Intent(this, VoiceStreamRecordService.class);  //录音服务
         startService(VoiceStreamRecord);
         VoiceStreamPlayer = new Intent(this, VoiceStreamPlayerService.class);//播放服务
@@ -176,10 +179,10 @@ public class MainActivity extends TabActivity {
         startService(Download);
         Notification = new Intent(this, NotificationService.class);
         startService(Notification);
-       FloatingWindow = new Intent(this, FloatingWindowService.class);//启动全局弹出框服务
+        FloatingWindow = new Intent(this, FloatingWindowService.class);//启动全局弹出框服务
         startService(FloatingWindow);
-        /*TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
-        startService(TestFloatingWindow);*/
+        TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
+        startService(TestFloatingWindow);
     }
 
     //注册广播  用于接收定时服务发送过来的广播
@@ -206,16 +209,14 @@ public class MainActivity extends TabActivity {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.ACTIVITY_CHANGE)) {
                 if (GlobalConfig.activityType == 1) {
-                    MyActivityManager mam = MyActivityManager.getInstance();
-                    mam.finishAllActivity();
-                    tabHost.setCurrentTabByTag("one");
+                    if (ProgramActivity.context != null) {
+                        tabHost.setCurrentTabByTag("four");
+                    } else {
+                        tabHost.setCurrentTabByTag("one");
+                    }
                 } else if (GlobalConfig.activityType == 2) {
-                    MyActivityManager mam = MyActivityManager.getInstance();
-                    mam.finishAllActivity();
                     tabHost.setCurrentTabByTag("two");
                 } else {
-                    MyActivityManager mam = MyActivityManager.getInstance();
-                    mam.finishAllActivity();
                     tabHost.setCurrentTabByTag("three");
                 }
             } else if (intent.getAction().equals(BroadcastConstants.PUSH)) {
@@ -418,13 +419,6 @@ public class MainActivity extends TabActivity {
         });                                                  // 点击图层之后，将图层移除
     }
 
-    /**
-     * 切换到音乐播放界面
-     */
-    public static void changeToMusic() {
-        tabHost.setCurrentTabByTag("one");
-    }
-
     //加载数据库
     private void InitDao() {
         CID = new CityInfoDao(context);
@@ -437,7 +431,7 @@ public class MainActivity extends TabActivity {
         }
     }
 
-    public static void change() {
+    public static void changeOne() {
         tabHost.setCurrentTabByTag("one");
     }
 
@@ -445,15 +439,30 @@ public class MainActivity extends TabActivity {
         tabHost.setCurrentTabByTag("two");
     }
 
+    public static void changeThree() {
+        tabHost.setCurrentTabByTag("three");
+    }
+
+    public static void changeFour() {
+        tabHost.setCurrentTabByTag("four");
+    }
+
+    public static void changeFive() {
+        tabHost.setCurrentTabByTag("five");
+    }
+
     // 初始化视图,主页跳转的3个界面
     private void InitTextView() {
         tabHost.addTab(tabHost.newTabSpec("one").setIndicator("one")
-                .setContent(new Intent(this, HomeActivity.class)));
+                .setContent(new Intent(this, PlayerActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("two").setIndicator("two")
                 .setContent(new Intent(this, DuiJiangActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("three").setIndicator("three")
                 .setContent(new Intent(this, MineActivity.class)));
-
+        tabHost.addTab(tabHost.newTabSpec("four").setIndicator("four")
+                .setContent(new Intent(this, ProgramActivity.class)));
+        tabHost.addTab(tabHost.newTabSpec("five").setIndicator("five")
+                .setContent(new Intent(this, SearchLikeActivity.class)));
     }
 
     //获取版本数据---检查是否需要更新
@@ -726,6 +735,13 @@ public class MainActivity extends TabActivity {
         super.onPause();
         MobclickAgent.onPageEnd(mPageName);
         MobclickAgent.onPause(context);
+//        wm.removeView(tv);
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+//        wm.addView(tv,lp);
     }
 
     @Override

@@ -14,7 +14,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.interphone.group.creategroup.CreateGroupContentActivity;
 import com.wotingfm.ui.interphone.group.creategroup.model.Freq;
 import com.wotingfm.util.ToastUtils;
@@ -29,7 +29,7 @@ import java.util.List;
  * @author 辛龙
  * 2016年5月16日
  */
-public class CreateGroupActivity extends AppBaseActivity implements OnClickListener {
+public class CreateGroupActivity extends BaseActivity implements OnClickListener {
 	private LinearLayout lin_groupmain_first;
 	private LinearLayout lin_groupmain_second;
 	private LinearLayout lin_groupmain_third;

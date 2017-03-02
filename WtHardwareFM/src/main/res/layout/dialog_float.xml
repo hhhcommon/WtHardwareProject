@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="150dp"
-    android:layout_height="150dp">
+    android:layout_width="80dp"
+    android:layout_height="80dp">
     <LinearLayout
         android:id="@+id/lin_d"
         android:layout_width="match_parent"

@@ -29,7 +29,7 @@ public class DialogUtils {
         dialog.setContentView(dialogView);
         dialog.setCanceledOnTouchOutside(false);
         dialog.getWindow().setGravity(Gravity.CENTER);
-        dialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.transparent);
         dialog.show();
         return dialog;
     }

@@ -1,7 +1,6 @@
 package com.wotingfm.ui.music.program.diantai.activity.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -15,12 +14,14 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
-import com.wotingfm.ui.music.program.diantai.model.RadioPlay;
-import com.wotingfm.ui.music.program.fmlist.activity.FMListActivity;
-import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.ui.music.main.ProgramActivity;
+import com.wotingfm.ui.music.program.diantai.model.RadioPlay;
+import com.wotingfm.ui.music.program.fmlist.activity.FMListFragment;
+import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
+import com.wotingfm.util.SequenceUUID;
 import com.wotingfm.util.ToastUtils;
 
 import java.util.List;
@@ -30,12 +31,14 @@ import java.util.List;
  * expandableListView适配器
  */
 public class OnLinesRadioAdapter extends BaseExpandableListAdapter  {
+	private final ProgramActivity activity;
 	private Context context;
 	private List<RadioPlay> group;
 
-	public OnLinesRadioAdapter(Context context, List<RadioPlay> group) {
+	public OnLinesRadioAdapter(Context context, List<RadioPlay> group, ProgramActivity activity) {
 		this.context = context;
 		this.group = group;
+		this.activity = activity;
  	}
 
 	@Override
@@ -99,15 +102,18 @@ public class OnLinesRadioAdapter extends BaseExpandableListAdapter  {
 		holder.lin_more.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(context, FMListActivity.class);
-				Bundle bundle = new Bundle();
+				FMListFragment fg = new FMListFragment();
+				Bundle bundle=new Bundle();
 				bundle.putString("fromtype", "cityRadio");
 				bundle.putSerializable("list", lists);
 				bundle.putString("name", lists.getCatalogName());
 				bundle.putString("type", "2");
 				bundle.putString("id", lists.getCatalogId());
-				intent.putExtras(bundle);
-				context.startActivity(intent);
+				fg.setArguments(bundle);
+				activity.fm.beginTransaction()
+						.add(R.id.fragment_content, fg)
+						.addToBackStack(SequenceUUID.getUUID())
+						.commit();
 			}
 		});
 		return convertView;
@@ -129,12 +135,12 @@ public class OnLinesRadioAdapter extends BaseExpandableListAdapter  {
 			holder.mTv_number = (TextView) convertView.findViewById(R.id.tv_num);
 			holder.lin_CurrentPlay = (LinearLayout) convertView.findViewById(R.id.lin_currentplay);
 
-			holder.image_last = (ImageView) convertView.findViewById(R.id.image_last);//
-			holder.image_num = (ImageView) convertView.findViewById(R.id.image_num);//
-			holder.tv_last = (TextView) convertView.findViewById(R.id.tv_last);
-			holder.image_last.setVisibility(View.GONE);
-			holder.image_num.setVisibility(View.GONE);
-			holder.tv_last.setVisibility(View.GONE);
+//			holder.image_last = (ImageView) convertView.findViewById(R.id.image_last);//
+//			holder.image_num = (ImageView) convertView.findViewById(R.id.image_num);//
+//			holder.tv_last = (TextView) convertView.findViewById(R.id.tv_last);
+//			holder.image_last.setVisibility(View.GONE);
+//			holder.image_num.setVisibility(View.GONE);
+//			holder.tv_last.setVisibility(View.GONE);
 
 			holder.img_zhezhao = (ImageView) convertView.findViewById(R.id.img_zhezhao);
 			Bitmap bmp_zhezhao = BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_b);
@@ -227,9 +233,9 @@ public class OnLinesRadioAdapter extends BaseExpandableListAdapter  {
 		public TextView mTv_number;
 		public LinearLayout lin_CurrentPlay;
 		public ImageView img_zhezhao;
-		public ImageView image_num;
-		public ImageView image_last;
-		public TextView tv_last;
+//		public ImageView image_num;
+//		public ImageView image_last;
+//		public TextView tv_last;
 	}
 
 	@Override
