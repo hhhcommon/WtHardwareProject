@@ -13,6 +13,9 @@ import com.wotingfm.R;
 import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.util.ToastUtils;
 
+/**
+ * 预定节目单
+ */
 public class ScheduleActivity extends BaseActivity implements OnClickListener {
     public static final String tag = "MUSIC_SCHEDULE_TAG";
     public static boolean isCancelRequest;

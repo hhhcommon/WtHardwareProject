@@ -19,6 +19,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.util.PhoneMessage;
+
 /**
  * 悬浮窗服务----在BSApplication中启动
  * 作者：xinlong on 2016/9/5 11:37
@@ -107,9 +108,11 @@ public class FloatingWindowService extends Service {
                                | LayoutParams.FLAG_NOT_FOCUSABLE
                                | LayoutParams.FLAG_NOT_TOUCHABLE;
          */
+//		params.gravity= Gravity.BOTTOM|Gravity.RIGHT;
+//		floatView.setPadding(0,0,20,20);
         // 设置悬浮窗的长得宽
-        params.width = PhoneMessage.ScreenWidth/5;
-        params.height = PhoneMessage.ScreenWidth/5;
+        params.width = PhoneMessage.ScreenWidth/6;
+        params.height = PhoneMessage.ScreenWidth/6;
         // 设置悬浮窗的Touch监听
 		floatView.setOnClickListener(new OnClickListener() {
 			@Override

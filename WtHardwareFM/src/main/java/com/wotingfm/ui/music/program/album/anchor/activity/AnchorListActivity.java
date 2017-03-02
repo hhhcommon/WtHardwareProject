@@ -18,8 +18,8 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
-import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
+import com.wotingfm.ui.music.program.album.main.AlbumFragment;
 import com.wotingfm.ui.music.program.album.anchor.adapter.AnchorSequAdapter;
 import com.wotingfm.ui.music.program.album.anchor.model.PersonInfo;
 import com.wotingfm.util.DialogUtils;
@@ -32,7 +32,7 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class AnchorListActivity extends AppBaseActivity implements View.OnClickListener {
+public class AnchorListActivity extends BaseActivity implements View.OnClickListener {
 
     private String tag = "ANCHOR_List_VOLLEY_REQUEST_CANCEL_TAG";
     private String PersonId;
@@ -226,7 +226,7 @@ public class AnchorListActivity extends AppBaseActivity implements View.OnClickL
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
              //   ToastUtils.show_always(context,MediaInfoList.get(position-1).getContentName());
-                Intent intent1 = new Intent(context, AlbumActivity.class);
+                Intent intent1 = new Intent(context, AlbumFragment.class);
                 intent1.putExtra("type", "main");
                 intent1.putExtra("id",MediaInfoList.get(position-1).getContentId());
                 startActivity(intent1);

@@ -4,9 +4,12 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
@@ -16,14 +19,13 @@ import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.ui.music.download.downloadlist.adapter.DownLoadListAdapter;
 import com.wotingfm.ui.music.download.model.FileInfo;
-import com.wotingfm.ui.music.main.HomeActivity;
+import com.wotingfm.ui.music.main.PlayerActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
-import com.wotingfm.ui.music.player.fragment.PlayerFragment;
+import com.wotingfm.ui.music.player.main.PlayerFragment;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.L;
@@ -39,7 +41,7 @@ import java.util.List;
  * @author 辛龙
  * 2016年8月8日
  */
-public class DownLoadListActivity extends BaseActivity implements OnClickListener {
+public class DownLoadListFragment extends Fragment implements OnClickListener {
     private SearchPlayerHistoryDao dbDao;
     private FileInfoDao FID;
     private List<FileInfo> fileInfoList = new ArrayList<>();
@@ -56,50 +58,52 @@ public class DownLoadListActivity extends BaseActivity implements OnClickListene
     private String sequName;// 专辑名 从上一个界面传递过来的
     private String sequId;// 专辑 ID
     private int positionNow = -1;// 标记当前选中的位置
+    private FragmentActivity context;
+    private View rootView;
 
     // 初始化数据库对象
     private void initDao() {
-        FID = new FileInfoDao(DownLoadListActivity.this);
-        dbDao = new SearchPlayerHistoryDao(DownLoadListActivity.this);
+        FID = new FileInfoDao(context);
+        dbDao = new SearchPlayerHistoryDao(context);
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_downloadlist);
-
-        initDao();
-        handleIntent();
-        initView();
-        confirmDialog();
-        df = new DecimalFormat("0.00");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.activity_downloadlist, container, false);
+            context = getActivity();
+            initDao();
+            handleIntent();
+            initView();
+            confirmDialog();
+            df = new DecimalFormat("0.00");
+        }
+        return rootView;
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         setListValue();// 给 list 赋初值
     }
 
     // 处理数据传递
     private void handleIntent() {
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        sequName = bundle.getString("sequname");
-        sequId = bundle.getString("sequid");
+        sequName = getArguments().getString("sequname");
+        sequId = getArguments().getString("sequid");
     }
 
     // 初始化视图
     private void initView() {
-        findViewById(R.id.head_left_btn).setOnClickListener(this);// 返回按钮
-        TextView textHeadName = (TextView) findViewById(R.id.head_name_tv);// 专辑名
+        rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);// 返回按钮
+        TextView textHeadName = (TextView) rootView.findViewById(R.id.head_name_tv);// 专辑名
         textHeadName.setText(sequName);
 
-        mListView = (ListView) findViewById(R.id.lv_downloadlist);// 数据列表
+        mListView = (ListView) rootView.findViewById(R.id.lv_downloadlist);// 数据列表
 
-        textSum = (TextView) findViewById(R.id.tv_sum);
-        textTotalCache = (TextView) findViewById(R.id.tv_totalcache);
-        viewTop = findViewById(R.id.lin_dinglan);
+        textSum = (TextView) rootView.findViewById(R.id.tv_sum);
+        textTotalCache = (TextView) rootView.findViewById(R.id.tv_totalcache);
+        viewTop = rootView.findViewById(R.id.lin_dinglan);
     }
 
     // 文件不存在删除记录对话框
@@ -251,8 +255,7 @@ public class DownLoadListActivity extends BaseActivity implements OnClickListene
                             dbDao.deleteHistory(playerurl);
                             dbDao.addHistory(history);
                             if (PlayerFragment.context != null) {
-                                MainActivity.changeToMusic();
-                                HomeActivity.UpdateViewPager();
+                                MainActivity.changeOne();
                                 Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                                 Bundle bundle1 = new Bundle();
                                 bundle1.putString("text", mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4));
@@ -263,11 +266,11 @@ public class DownLoadListActivity extends BaseActivity implements OnClickListene
                                 et.putString(StringConstant.PLAYHISTORYENTER, "true");
                                 et.putString(StringConstant.PLAYHISTORYENTERNEWS, mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4));
                                 if (!et.commit()) L.v("commit", "数据 commit 失败!");
-                                MainActivity.changeToMusic();
-                                HomeActivity.UpdateViewPager();
+                                MainActivity.changeOne();
+
                             }
-                            setResult(1);
-                            finish();
+                            PlayerActivity activity = (PlayerActivity) getActivity();
+                            activity.fm.popBackStack();
                             dbDao.closedb();
                         } else {// 此处要调对话框，点击同意删除对应的文件信息
                             ToastUtils.show_always(context, "文件已经被删除，是否删除本条记录");
@@ -284,13 +287,14 @@ public class DownLoadListActivity extends BaseActivity implements OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                finish();
+                PlayerActivity activity = (PlayerActivity) getActivity();
+                activity.fm.popBackStack();
                 break;
         }
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         mListView = null;
         textSum = null;
@@ -304,6 +308,5 @@ public class DownLoadListActivity extends BaseActivity implements OnClickListene
         df = null;
         dbDao = null;
         FID = null;
-        setContentView(R.layout.activity_null);
     }
 }

@@ -16,7 +16,6 @@ import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.helper.InterPhoneControlHelper;
-import com.wotingfm.common.manager.MyActivityManager;
 import com.wotingfm.common.service.SubclassService;
 import com.wotingfm.ui.interphone.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.ui.interphone.chat.fragment.ChatFragment;
@@ -158,8 +157,6 @@ public class ReceiveAlertActivity extends Activity implements OnClickListener {
         MainActivity.changeTwo();
         DuiJiangActivity.update();
         ChatFragment.zhiDingPerson();
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.finishAllActivity();
         finish();
     }
 

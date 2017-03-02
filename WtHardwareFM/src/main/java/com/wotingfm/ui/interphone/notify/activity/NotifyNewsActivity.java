@@ -11,7 +11,7 @@ import android.widget.ListView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.interphone.linkman.model.DBNotifyHistory;
 import com.wotingfm.ui.interphone.notify.adapter.NotifyNewsAdapter;
 import com.wotingfm.ui.interphone.notify.dao.NotifyHistoryDao;
@@ -25,7 +25,7 @@ import java.util.List;
  * 作者：xinlong on 2016/5/5 21:18
  * 邮箱：645700751@qq.com
  */
-public class NotifyNewsActivity extends AppBaseActivity implements OnClickListener {
+public class NotifyNewsActivity extends BaseActivity implements OnClickListener {
     private NotifyHistoryDao dbDao;
 	private MessageReceiver Receiver;
 

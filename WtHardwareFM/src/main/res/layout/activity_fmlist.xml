@@ -9,8 +9,8 @@
         android:layout_height="48dp" >
 
         <ImageView
-            android:id="@+id/head_left_btn"
-            style="@style/LeftImageStyle" />
+        android:id="@+id/head_left_btn"
+        style="@style/LeftImageStyle" />
 
         <TextView
             android:id="@+id/head_name_tv"

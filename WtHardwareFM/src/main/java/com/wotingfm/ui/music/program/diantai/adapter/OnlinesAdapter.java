@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.ui.music.program.diantai.model.RadioPlay;
-import com.wotingfm.ui.music.program.fmlist.activity.FMListActivity;
+import com.wotingfm.ui.music.program.fmlist.activity.FMListFragment;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
@@ -97,7 +97,7 @@ public class OnlinesAdapter extends BaseExpandableListAdapter {
         holder.lin_more.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, FMListActivity.class);
+                Intent intent = new Intent(context, FMListFragment.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("Position", "GROUP");
                 bundle.putSerializable("list", lists);

@@ -18,6 +18,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.program.fenlei.adapter.CatalogListAdapter;
 import com.wotingfm.ui.music.program.fenlei.model.FenLei;
 import com.wotingfm.util.DialogUtils;
@@ -62,6 +63,8 @@ public class FenLeiFragment extends Fragment implements TipView.WhiteViewClick {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
+
+
     }
 
     @Override
@@ -133,7 +136,8 @@ public class FenLeiFragment extends Fragment implements TipView.WhiteViewClick {
                             return ;
                         }
                         if (adapter == null) {
-                            EBL_Catalog.setAdapter(adapter = new CatalogListAdapter(context, c));
+                            ProgramActivity activity = (ProgramActivity) getActivity();
+                            EBL_Catalog.setAdapter(adapter = new CatalogListAdapter(context, c,activity));
                         } else {
                             adapter.notifyDataSetChanged();
                         }

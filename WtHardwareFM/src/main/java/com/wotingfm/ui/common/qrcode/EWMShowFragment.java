@@ -2,8 +2,12 @@ package com.wotingfm.ui.common.qrcode;
 
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -11,9 +15,9 @@ import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.helper.CreateQRImageHelper;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.interphone.model.UserInviteMeInside;
+import com.wotingfm.ui.music.main.PlayerActivity;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
@@ -22,54 +26,60 @@ import com.wotingfm.util.BitmapUtils;
  * 作者：xinlong on 2016/4/28 21:18
  * 邮箱：645700751@qq.com
  */
-public class EWMShowActivity extends AppBaseActivity implements OnClickListener {
+public class EWMShowFragment extends Fragment implements OnClickListener {
     private ImageView imageEwm;
     private ImageView imageHead;
     private TextView textName;
     private TextView textNews;
     private TextView textTip;
     private Bitmap bmp;
+    private FragmentActivity context;
+    private View rootView;
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                finish();
+                PlayerActivity activity = (PlayerActivity) getActivity();
+                activity.fm.popBackStack();
                 break;
         }
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_ewmshow);
-        initView();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.activity_ewmshow, container, false);
+            context = getActivity();
+            initView();
+        }
+        return rootView;
     }
 
     // 初始化视图
     private void initView() {
-        findViewById(R.id.head_left_btn).setOnClickListener(this);// 返回
+        rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);// 返回
 
-        ImageView imageBackground = (ImageView) findViewById(R.id.id_image_background);
+        ImageView imageBackground = (ImageView) rootView.findViewById(R.id.id_image_background);
         imageBackground.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_qrcode_background));
 
-        textTip = (TextView) findViewById(R.id.id_text_tip);
+        textTip = (TextView) rootView.findViewById(R.id.id_text_tip);
 
-        imageEwm = (ImageView) findViewById(R.id.imageView_ewm);
-        imageHead = (ImageView) findViewById(R.id.image);
-        textName = (TextView) findViewById(R.id.name);
-        textNews = (TextView) findViewById(R.id.news);
+        imageEwm = (ImageView) rootView.findViewById(R.id.imageView_ewm);
+        imageHead = (ImageView) rootView.findViewById(R.id.image);
+        textName = (TextView) rootView.findViewById(R.id.name);
+        textNews = (TextView) rootView.findViewById(R.id.news);
 
-        if (getIntent() != null) {
-            int type = getIntent().getIntExtra("type", 1);// 0：单体节目分享  1：个人   2：组  3：专辑分享
+        if (getArguments() != null) {
+            int type = getArguments().getInt("type", 1);// 0：单体节目分享  1：个人   2：组  3：专辑分享
             if(type == 0) {
                 shapeContent();
             } else if(type == 3) {
 
             } else {
-                String image = getIntent().getStringExtra("image");
-                String news = getIntent().getStringExtra("news");
-                String name = getIntent().getStringExtra("name");
+                String image = getArguments().getString("image");
+                String news = getArguments().getString("news");
+                String name = getArguments().getString("name");
                 setData(type, image, news, name);
             }
         }
@@ -86,10 +96,10 @@ public class EWMShowActivity extends AppBaseActivity implements OnClickListener 
          * MineActivity -> UserInfo     --> "person"
          */
         if (type == 1) {
-            UserInviteMeInside meInside = (UserInviteMeInside) getIntent().getSerializableExtra("person");
+            UserInviteMeInside meInside = (UserInviteMeInside) getArguments().getSerializable("person");
             bmp = CreateQRImageHelper.getInstance().createQRImage(type, null, meInside, 220, 220);
         } else if (type == 2) {
-            GroupInfo groupNews = (GroupInfo) getIntent().getSerializableExtra("group");
+            GroupInfo groupNews = (GroupInfo) getArguments().getSerializable("group");
             bmp = CreateQRImageHelper.getInstance().createQRImage(type, groupNews, null, 220, 220);
 
             textTip.setText("扫面上面的二维码图案，加入群组");
@@ -150,7 +160,7 @@ public class EWMShowActivity extends AppBaseActivity implements OnClickListener 
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         imageEwm = null;
         imageHead = null;
@@ -160,6 +170,5 @@ public class EWMShowActivity extends AppBaseActivity implements OnClickListener 
             bmp.recycle();
             bmp = null;
         }
-        setContentView(R.layout.activity_null);
     }
 }

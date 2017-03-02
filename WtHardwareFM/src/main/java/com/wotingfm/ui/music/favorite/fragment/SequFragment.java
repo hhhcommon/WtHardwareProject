@@ -20,9 +20,9 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.ui.music.favorite.activity.FavoriteActivity;
+import com.wotingfm.ui.music.favorite.main.FavoriteFragment;
 import com.wotingfm.ui.music.favorite.adapter.FavorListAdapter;
-import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
+import com.wotingfm.ui.music.program.album.main.AlbumFragment;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
@@ -143,7 +143,7 @@ public class SequFragment extends Fragment {
         mListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (FavoriteActivity.isEdit) {
+                if (FavoriteFragment.isEdit) {
                     if (newList.get(position - 1).getChecktype() == 0) {
                         newList.get(position - 1).setChecktype(1);
                     } else {
@@ -153,7 +153,7 @@ public class SequFragment extends Fragment {
                     adapter.notifyDataSetChanged();
                 } else {
                     if (newList != null && newList.get(position - 1) != null && newList.get(position - 1).getMediaType() != null) {
-                        Intent intent = new Intent(context, AlbumActivity.class);
+                        Intent intent = new Intent(context, AlbumFragment.class);
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "radiolistactivity");
                         bundle.putSerializable("list", newList.get(position - 1));

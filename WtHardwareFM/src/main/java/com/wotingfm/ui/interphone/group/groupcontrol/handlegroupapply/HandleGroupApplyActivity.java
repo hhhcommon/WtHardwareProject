@@ -17,7 +17,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.common.model.UserInfo;
 import com.wotingfm.ui.interphone.group.groupcontrol.handlegroupapply.adapter.HandleGroupApplyAdapter;
 import com.wotingfm.util.DialogUtils;
@@ -35,7 +35,7 @@ import java.util.List;
  * @author 辛龙
  * 2016年4月13日
  */
-public class HandleGroupApplyActivity extends AppBaseActivity implements OnClickListener, HandleGroupApplyAdapter.Callback, OnItemLongClickListener, TipView.WhiteViewClick {
+public class HandleGroupApplyActivity extends BaseActivity implements OnClickListener, HandleGroupApplyAdapter.Callback, OnItemLongClickListener, TipView.WhiteViewClick {
     private HandleGroupApplyAdapter adapter;
     private List<UserInfo> userList = new ArrayList<>();// 存储服务器返回值的 list
 

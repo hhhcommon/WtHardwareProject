@@ -23,15 +23,17 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.music.main.HomeActivity;
+import com.wotingfm.ui.main.MainActivity;
+import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
-import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
-import com.wotingfm.ui.music.program.radiolist.activity.RadioListActivity;
+import com.wotingfm.ui.music.program.album.main.AlbumFragment;
+import com.wotingfm.ui.music.program.radiolist.activity.RadioListFragment;
 import com.wotingfm.ui.music.program.radiolist.adapter.ListInfoAdapter;
 import com.wotingfm.ui.music.program.radiolist.model.ListInfo;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.SequenceUUID;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.TipView;
 import com.wotingfm.widget.rollviewpager.RollPagerView;
@@ -149,13 +151,13 @@ public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick
             return ;
         }
 
-        VolleyRequest.RequestPost(GlobalConfig.getContentUrl, RadioListActivity.tag, setParam(), new VolleyCallback() {
+        VolleyRequest.RequestPost(GlobalConfig.getContentUrl, RadioListFragment.tag, setParam(), new VolleyCallback() {
             private String ReturnType;
 
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) dialog.dismiss();
-                if (((RadioListActivity) getActivity()).isCancel()) return;
+                if (RadioListFragment.isCancel()) return;
                 try {
                     ReturnType = result.getString("ReturnType");
                 } catch (JSONException e) {
@@ -288,7 +290,8 @@ public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick
                                 ContentFavorite, ContentId, localUrl, sequName, sequId, sequDesc, sequImg);
                         dbDao.deleteHistory(playUrl);
                         dbDao.addHistory(history);
-                        HomeActivity.UpdateViewPager();
+                        MainActivity.changeOne();
+
                         Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                         Bundle bundle1=new Bundle();
                         bundle1.putString("text",newList.get(position - 2).getContentName());
@@ -296,12 +299,17 @@ public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick
                         context.sendBroadcast(push);
                         getActivity().finish();
                     } else if (MediaType.equals("SEQU")) {
-                        Intent intent = new Intent(context, AlbumActivity.class);
+                        ProgramActivity activity = (ProgramActivity) getActivity();
+                        AlbumFragment fg_album= new AlbumFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "radiolistactivity");
                         bundle.putSerializable("list", newList.get(position - 2));
-                        intent.putExtras(bundle);
-                        startActivityForResult(intent, 1);
+                        fg_album.setArguments(bundle);
+
+                        activity.fm.beginTransaction()
+                                .add(R.id.fragment_content, fg_album)
+                                .addToBackStack(SequenceUUID.getUUID())
+                                .commit();
                     }
                 }
             }

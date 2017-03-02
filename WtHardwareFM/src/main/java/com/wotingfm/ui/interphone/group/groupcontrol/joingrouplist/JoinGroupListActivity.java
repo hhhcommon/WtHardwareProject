@@ -17,7 +17,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.interphone.group.groupcontrol.joingrouplist.adapter.JoinGroupAdapter;
 import com.wotingfm.ui.interphone.group.groupcontrol.joingrouplist.model.CheckInfo;
@@ -36,7 +36,7 @@ import java.util.List;
  * @author 辛龙
  * 2016年4月13日
  */
-public class JoinGroupListActivity extends AppBaseActivity implements OnClickListener, JoinGroupAdapter.Callback, TipView.WhiteViewClick {
+public class JoinGroupListActivity extends BaseActivity implements OnClickListener, JoinGroupAdapter.Callback, TipView.WhiteViewClick {
     protected JoinGroupAdapter adapter;
     private List<CheckInfo> userList;
     private List<GroupInfo> list;

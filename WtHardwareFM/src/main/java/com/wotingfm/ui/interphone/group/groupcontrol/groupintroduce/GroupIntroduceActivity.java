@@ -11,7 +11,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -21,7 +21,7 @@ import org.json.JSONObject;
  * 群组详情页面
  * 辛龙 2016年1月21日
  */
-public class GroupIntroduceActivity extends AppBaseActivity implements View.OnClickListener{
+public class GroupIntroduceActivity extends BaseActivity implements View.OnClickListener{
 
     private String groupId;
     private String tag = "TALK_GROUP_INTRODUCE_VOLLEY_REQUEST_CANCEL_TAG";

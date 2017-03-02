@@ -104,7 +104,7 @@
         <activity
             android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:theme="@style/Theme.AppCompat.NoActionBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 创建群组主界面 -->
@@ -113,7 +113,11 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-
+        <activity
+            android:name="com.wotingfm.ui.music.search.main.SearchLikeActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan"/>
         <!-- 创建群组主界面 -->
         <activity
             android:name="com.wotingfm.ui.interphone.group.creategroup.CreateGroupContentActivity"
@@ -244,13 +248,6 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <!-- 我喜欢的界面 -->
-        <activity
-            android:name=".ui.music.favorite.activity.FavoriteActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
         <!-- 我的订阅列表界面 -->
         <activity
             android:name=".ui.mine.subscribe.SubscriberListActivity"
@@ -259,7 +256,7 @@
             android:windowSoftInputMode="adjustPan"/>
 
         <activity
-            android:name=".ui.music.main.HomeActivity"
+            android:name=".ui.music.main.ProgramActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -308,19 +305,6 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <!-- 播放历史界面 -->
-        <activity
-            android:name=".ui.music.playhistory.activity.PlayHistoryActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 搜索界面 -->
-        <activity
-            android:name=".ui.music.search.activity.SearchLikeActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name=".ui.interphone.alert.ReceiveAlertActivity"
             android:screenOrientation="portrait"
@@ -393,17 +377,11 @@
 
         <!-- 城市列表 -->
         <activity
-            android:name=".ui.music.program.citylist.activity.CityListActivity"
+            android:name=".ui.music.program.citylist.activity.CityListFragment"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <!-- 下载主页 -->
-        <activity
-            android:name=".ui.music.download.activity.DownloadActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 节目单页 -->
         <activity
@@ -412,14 +390,9 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <!-- 下载列表 -->
+
         <activity
-            android:name=".ui.music.download.downloadlist.activity.DownLoadListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity
-            android:name=".ui.music.program.fmlist.activity.FMListActivity"
+            android:name=".ui.music.program.fmlist.activity.FMListFragment"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -441,7 +414,7 @@
 
         <!-- 分类界面 -->
         <activity
-            android:name=".ui.music.program.radiolist.activity.RadioListActivity"
+            android:name=".ui.music.program.radiolist.activity.RadioListFragment"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -460,12 +433,6 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <!-- 二维码界面 -->
-        <activity
-            android:name=".ui.common.qrcode.EWMShowActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 蓝牙 -->
         <activity
@@ -502,12 +469,6 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <!-- 专辑界面 -->
-        <activity
-            android:name=".ui.music.program.album.activity.AlbumActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 专辑界面 -->
         <activity
@@ -518,14 +479,14 @@
 
         <!-- 国家台界面 -->
         <activity
-            android:name=".ui.music.program.diantai.activity.RadioNationalActivity"
+            android:name=".ui.music.program.diantai.activity.RadioNationalFragment"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 地方台界面 -->
         <activity
-            android:name=".ui.music.program.diantai.activity.CityRadioActivity"
+            android:name=".ui.music.program.diantai.activity.CityRadioFragment"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -559,24 +520,10 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
 
-        <!-- 评论 -->
-        <activity
-            android:name=".ui.music.comment.CommentActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
 
         <!--播放节目详情-->
         <activity
-            android:name=".ui.music.player.fragment.more.PlayDetailsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
-
-        <!--播放节目详情-->
-        <activity
-            android:name=".ui.music.player.activity.PlayerActivity"
+            android:name="com.wotingfm.ui.music.main.PlayerActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
@@ -586,24 +533,8 @@
             android:name="com.umeng.socialize.editorpage.ShareActivity"
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.NoTitleBar"/>
-
-        <!-- 节目单 -->
         <activity
-            android:name=".ui.music.player.programme.ProgrammeActivity"
-            android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-
-        <activity
-            android:name="com.wotingfm.ui.music.program.album.anchor.AnchorDetailsActivity"
-            android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name="com.wotingfm.ui.music.program.album.anchor.activity.AnchorListActivity"
-            android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-
-        <activity
-            android:name=".ui.music.player.fragment.more.PlayerMoreOperationActivity"
+            android:name=".ui.music.program.album.anchor.activity.AnchorListActivity"
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.NoTitleBar"/>
 
@@ -651,7 +582,7 @@
         <service android:name=".common.service.SocketService"/>
         <service android:name=".common.service.VoiceStreamRecordService"/>
         <service android:name=".common.service.VoiceStreamPlayerService"/>
-        <service android:name=".ui.music.common.service.DownloadService"/>
+        <service android:name=".ui.music.download.service.DownloadService"/>
         <service android:name=".common.service.FloatingWindowService"/>
         <service android:name=".common.service.TestWindowService"/>
         <service android:name=".common.service.LocationService"/>

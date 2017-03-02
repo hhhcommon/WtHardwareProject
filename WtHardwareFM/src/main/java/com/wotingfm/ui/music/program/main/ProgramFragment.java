@@ -19,6 +19,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.ui.baseadapter.MyFragmentChildPagerAdapter;
+import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.program.diantai.fragment.OnLineFragment;
 import com.wotingfm.ui.music.program.fenlei.fragment.FenLeiFragment;
 import com.wotingfm.ui.music.program.tuijian.fragment.RecommendFragment;
@@ -61,6 +62,13 @@ public class ProgramFragment extends Fragment {
         view1.setOnClickListener(new txListener(0));
         view2.setOnClickListener(new txListener(1));
         view3.setOnClickListener(new txListener(2));
+
+        rootView.findViewById(R.id.head_left_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.changeOne();
+            }
+        });
     }
 
     public class txListener implements View.OnClickListener {
@@ -139,18 +147,30 @@ public class ProgramFragment extends Fragment {
     private void initViews(int index) {
         if (index == 0) {
             view1.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-            view2.setTextColor(context.getResources().getColor(R.color.group_item_text2));
-            view3.setTextColor(context.getResources().getColor(R.color.group_item_text2));
+            view2.setTextColor(context.getResources().getColor(R.color.white));
+            view3.setTextColor(context.getResources().getColor(R.color.white));
+            view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
+            view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
+            view3.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
         } else if (index == 1) {
-            view1.setTextColor(context.getResources().getColor(R.color.group_item_text2));
+            view1.setTextColor(context.getResources().getColor(R.color.white));
             view2.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-            view3.setTextColor(context.getResources().getColor(R.color.group_item_text2));
+            view3.setTextColor(context.getResources().getColor(R.color.white));
+            view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
+            view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
+            view3.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
         } else if (index == 2) {
-            view1.setTextColor(context.getResources().getColor(R.color.group_item_text2));
-            view2.setTextColor(context.getResources().getColor(R.color.group_item_text2));
+            view1.setTextColor(context.getResources().getColor(R.color.white));
+            view2.setTextColor(context.getResources().getColor(R.color.white));
             view3.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
+            view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
+            view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
+            view3.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
         }
     }
+
+
+
 
     @Override
     public void onDestroyView() {

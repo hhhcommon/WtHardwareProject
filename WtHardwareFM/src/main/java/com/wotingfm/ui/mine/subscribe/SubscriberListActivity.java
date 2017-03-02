@@ -16,7 +16,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.mine.subscribe.adapter.SubscriberAdapter;
 import com.wotingfm.ui.mine.subscribe.model.SubscriberInfo;
 import com.wotingfm.util.DialogUtils;
@@ -34,7 +34,7 @@ import java.util.List;
  * 用户订阅内容的列表
  * Created by Administrator on 2017/2/13.
  */
-public class SubscriberListActivity extends AppBaseActivity implements View.OnClickListener, TipView.WhiteViewClick {
+public class SubscriberListActivity extends BaseActivity implements View.OnClickListener, TipView.WhiteViewClick {
     private XListView mListView;
     private Dialog dialog;
     protected SubscriberAdapter adapter;

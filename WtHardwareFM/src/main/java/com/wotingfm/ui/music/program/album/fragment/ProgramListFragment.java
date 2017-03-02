@@ -24,15 +24,14 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.main.MainActivity;
-import com.wotingfm.ui.music.common.service.DownloadService;
-import com.wotingfm.ui.music.download.activity.DownloadActivity;
+import com.wotingfm.ui.music.download.service.DownloadService;
+import com.wotingfm.ui.music.download.main.DownloadFragment;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.ui.music.download.fragment.DownLoadUnCompleted;
 import com.wotingfm.ui.music.download.model.FileInfo;
-import com.wotingfm.ui.music.main.HomeActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
-import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
+import com.wotingfm.ui.music.program.album.main.AlbumFragment;
 import com.wotingfm.ui.music.program.album.adapter.AlbumAdapter;
 import com.wotingfm.ui.music.program.album.adapter.AlbumMainAdapter;
 import com.wotingfm.ui.music.program.album.model.ContentInfo;
@@ -54,7 +53,7 @@ import java.util.List;
  * 专辑列表页
  * @author woting11
  */
-public class ProgramFragment extends Fragment implements OnClickListener, XListView.IXListViewListener {
+public class ProgramListFragment extends Fragment implements OnClickListener, XListView.IXListViewListener {
     private Context context;
     private List<ContentInfo> contentList = new ArrayList<>();// 列表
     private List<ContentInfo> downLoadList = new ArrayList<>();// 下载列表
@@ -139,7 +138,7 @@ public class ProgramFragment extends Fragment implements OnClickListener, XListV
 
         setListener();
 
-        albumId = ((AlbumActivity) context).getAlbumId();
+        albumId = AlbumFragment.getAlbumId();
         sendSubMediaList();
     }
 
@@ -380,7 +379,7 @@ public class ProgramFragment extends Fragment implements OnClickListener, XListV
             tempList.get(0).setDownloadtype(1);
             FID.updataDownloadStatus(tempList.get(0).getUrl(), "1");
             DownloadService.workStart(tempList.get(0));
-            if(DownloadActivity.isVisible){
+            if(DownloadFragment.isVisible){
                 DownLoadUnCompleted.dwType=true;
             }
 
@@ -433,8 +432,8 @@ public class ProgramFragment extends Fragment implements OnClickListener, XListV
                                 ContentFavorite,ContentId,localUrl,sequName1,sequId1,sequDesc1,sequImg1);
                         dbDao.deleteHistory(playUrl);
                         dbDao.addHistory(history);
-                        MainActivity.changeToMusic();
-                        HomeActivity.UpdateViewPager();
+                        MainActivity.changeOne();
+
 
 //                        Intent intent = new Intent(context, PlayerActivity.class);
 //                        intent.putExtra("NAME", contentList.get(position - 1).getContentName());
@@ -446,7 +445,6 @@ public class ProgramFragment extends Fragment implements OnClickListener, XListV
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
                         getActivity().setResult(1);
-                        getActivity().finish();
                     } else {
                         ToastUtils.show_always(context, "暂不支持播放");
                     }

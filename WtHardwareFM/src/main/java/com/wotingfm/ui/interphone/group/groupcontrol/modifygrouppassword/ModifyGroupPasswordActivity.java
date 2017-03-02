@@ -12,7 +12,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
 
@@ -24,7 +24,7 @@ import org.json.JSONObject;
  * @author 辛龙
  * 2016年7月19日
  */
-public class ModifyGroupPasswordActivity extends AppBaseActivity implements OnClickListener {
+public class ModifyGroupPasswordActivity extends BaseActivity implements OnClickListener {
     private Dialog dialog;
 	private EditText et_oldpassword;
 	private EditText et_newpassword;

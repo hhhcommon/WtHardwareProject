@@ -30,7 +30,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.helper.CommonHelper;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.common.scanning.activity.CaptureActivity;
 import com.wotingfm.ui.interphone.find.result.FindNewsResultActivity;
 import com.wotingfm.ui.music.video.VoiceRecognizer;
@@ -44,7 +44,7 @@ import com.wotingfm.widget.MyLinearLayout;
  * @author 辛龙
  *2016年1月20日
  */
-public class FindActivity extends AppBaseActivity implements OnClickListener {
+public class FindActivity extends BaseActivity implements OnClickListener {
     private EditText et_news;
     private LinearLayout lin_saoyisao;
     private String type;

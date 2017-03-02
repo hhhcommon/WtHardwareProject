@@ -50,14 +50,13 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.helper.CreateQRImageHelper;
 import com.wotingfm.common.helper.InterPhoneControlHelper;
 import com.wotingfm.common.manager.FileManager;
-import com.wotingfm.common.manager.MyActivityManager;
 import com.wotingfm.common.manager.MyHttp;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.common.photocut.PhotoCutActivity;
-import com.wotingfm.ui.common.qrcode.EWMShowActivity;
+import com.wotingfm.ui.common.qrcode.EWMShowFragment;
 import com.wotingfm.ui.interphone.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.ui.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.adapter.GroupTalkAdapter;
@@ -94,7 +93,7 @@ import java.util.List;
  * 群组详情页面
  * 辛龙 2016年1月21日
  */
-public class GroupDetailActivity extends AppBaseActivity implements OnClickListener, OnItemClickListener, TipView.WhiteViewClick {
+public class GroupDetailActivity extends BaseActivity implements OnClickListener, OnItemClickListener, TipView.WhiteViewClick {
     private Bitmap bmp;
     private GroupInfo news;
     private GroupTalkAdapter adapter;
@@ -562,7 +561,7 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.lin_ewm:// 二维码
-                Intent intent = new Intent(context, EWMShowActivity.class);
+                Intent intent = new Intent(context, EWMShowFragment.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt("type", 2);
                 bundle.putString("image", headUrl);
@@ -716,8 +715,6 @@ public class GroupDetailActivity extends AppBaseActivity implements OnClickListe
         }
         ChatFragment.zhiDingGroupSS(groupId);
         DuiJiangActivity.update();
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.finishAllActivity();
     }
 
 

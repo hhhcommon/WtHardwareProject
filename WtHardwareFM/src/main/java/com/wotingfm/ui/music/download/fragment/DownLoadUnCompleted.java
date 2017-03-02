@@ -21,8 +21,8 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.ui.music.common.service.DownloadService;
-import com.wotingfm.ui.music.common.service.DownloadTask;
+import com.wotingfm.ui.music.download.service.DownloadService;
+import com.wotingfm.ui.music.download.service.DownloadTask;
 import com.wotingfm.ui.music.download.adapter.DownloadAdapter;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.ui.music.download.model.FileInfo;
@@ -79,10 +79,12 @@ public class DownLoadUnCompleted extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_download_uncompleted, container, false);
-        setView();
-        initDao();// 初始化数据库对象
-        setListener();// 给控件设置监听
+        if(rootView==null) {
+            rootView = inflater.inflate(R.layout.fragment_download_uncompleted, container, false);
+            setView();
+            initDao();// 初始化数据库对象
+            setListener();// 给控件设置监听
+        }
         return rootView;
     }
 

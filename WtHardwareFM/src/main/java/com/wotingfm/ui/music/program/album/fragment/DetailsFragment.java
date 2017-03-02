@@ -2,7 +2,6 @@ package com.wotingfm.ui.music.program.album.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.Html;
@@ -23,10 +22,11 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.common.qrcode.EWMShowActivity;
-import com.wotingfm.ui.music.comment.CommentActivity;
-import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
-import com.wotingfm.ui.music.program.album.anchor.AnchorDetailsActivity;
+import com.wotingfm.ui.common.qrcode.EWMShowFragment;
+import com.wotingfm.ui.music.comment.main.CommentFragment;
+import com.wotingfm.ui.music.main.PlayerActivity;
+import com.wotingfm.ui.music.program.album.main.AlbumFragment;
+import com.wotingfm.ui.music.program.album.anchor.AnchorDetailsFragment;
 import com.wotingfm.ui.music.program.album.model.ContentCatalogs;
 import com.wotingfm.ui.music.program.album.model.ResultInfo;
 import com.wotingfm.util.AssembleImageUrlUtils;
@@ -34,6 +34,7 @@ import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
+import com.wotingfm.util.SequenceUUID;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.RoundImageView;
 
@@ -115,7 +116,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
         textLabel = (TextView) view.findViewById(R.id.text_label);// 标签
 
         isInitView = true;
-        ResultInfo resultInfo = ((AlbumActivity) context).getResultInfo();// 获取主播信息
+        ResultInfo resultInfo = AlbumFragment.getResultInfo();// 获取主播信息
         if(resultInfo == null) return ;
 
         initData(resultInfo);
@@ -193,6 +194,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
 
     @Override
     public void onClick(View v) {
+        PlayerActivity activity = (PlayerActivity) getActivity();
         switch (v.getId()) {
             case R.id.tv_favorite:// 喜欢
                 if(CommonHelper.checkNetwork(context)) {
@@ -211,18 +213,30 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                 }
                 break;
             case R.id.text_shape:// 分享
-                Intent shapeIntent = new Intent(context, EWMShowActivity.class);
-                shapeIntent.putExtra("type", 3);
-                startActivity(shapeIntent);
+                EWMShowFragment fg_evm = new EWMShowFragment();
+                Bundle bundle_evm=new Bundle();
+                bundle_evm.putInt("type", 3);
+                fg_evm.setArguments(bundle_evm);
+
+                activity.fm.beginTransaction()
+                        .add(R.id.fragment_content, fg_evm)
+                        .addToBackStack(SequenceUUID.getUUID())
+                        .commit();
+
                 break;
             case R.id.lin_pinglun:// 评论
                 if(!CommonHelper.checkNetwork(context)) return ;
                 if (!TextUtils.isEmpty(contentId)) {
                     if (CommonUtils.getUserIdNoImei(context) != null && !CommonUtils.getUserIdNoImei(context).equals("")) {
-                        Intent intent = new Intent(context, CommentActivity.class);
-                        intent.putExtra("contentId", contentId);
-                        intent.putExtra("MediaType", StringConstant.TYPE_SEQU);
-                        startActivity(intent);
+                        CommentFragment fg = new CommentFragment();
+                        Bundle bundle=new Bundle();
+                        bundle.putString("contentId", contentId);
+                        bundle.putString("MediaType", StringConstant.TYPE_SEQU);
+                        fg.setArguments(bundle);
+                        activity.fm.beginTransaction()
+                                .add(R.id.fragment_content, fg)
+                                .addToBackStack(SequenceUUID.getUUID())
+                                .commit();
                     } else {
                         ToastUtils.show_always(context, "请先登录~~");
                     }
@@ -244,10 +258,15 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                 break;
             case R.id.text_anchor_name:// 到主播详情界面
                 if (!TextUtils.isEmpty(personId)) {
-                    Intent intent = new Intent(context, AnchorDetailsActivity.class);
-                    intent.putExtra("PersonId", personId);
-                    intent.putExtra("ContentPub", contentPub);
-                    startActivity(intent);
+                    AnchorDetailsFragment fg = new AnchorDetailsFragment();
+                    Bundle bundle=new Bundle();
+                    bundle.putString("PersonId", personId);
+                    bundle.putString("ContentPub", contentPub);
+                    fg.setArguments(bundle);
+                    activity.fm.beginTransaction()
+                            .add(R.id.fragment_content, fg)
+                            .addToBackStack(SequenceUUID.getUUID())
+                            .commit();
                 } else {
                     ToastUtils.show_always(context, "此专辑还没有主播哦");
                 }

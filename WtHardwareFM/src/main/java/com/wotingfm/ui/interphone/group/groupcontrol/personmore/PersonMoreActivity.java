@@ -15,7 +15,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.helper.CreateQRImageHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.interphone.model.UserInviteMeInside;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.DialogUtils;
@@ -28,7 +28,7 @@ import org.json.JSONObject;
  * 群组详情页面
  * 辛龙 2016年1月21日
  */
-public class PersonMoreActivity extends AppBaseActivity implements View.OnClickListener{
+public class PersonMoreActivity extends BaseActivity implements View.OnClickListener{
 
     private Dialog confirmDialog;// 退出群组确认对话框
     private String groupId;

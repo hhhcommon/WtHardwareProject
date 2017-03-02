@@ -18,7 +18,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.common.model.UserInfo;
 import com.wotingfm.ui.interphone.model.UserInviteMeInside;
@@ -34,7 +34,7 @@ import org.json.JSONObject;
  * 组内联系人详情页(非好友)
  * @author 辛龙 2016年1月19日
  */
-public class GroupPersonNewsActivity extends AppBaseActivity {
+public class GroupPersonNewsActivity extends BaseActivity {
     private String name;
     private String imageUrl;
     private String id;

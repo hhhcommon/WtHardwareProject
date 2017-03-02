@@ -41,7 +41,7 @@ import com.wotingfm.common.manager.FileManager;
 import com.wotingfm.common.manager.MyHttp;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
+import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.common.photocut.PhotoCutActivity;
 import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.activity.GroupDetailActivity;
@@ -65,7 +65,7 @@ import java.util.List;
  * 创建组的实现界面 1：edittext已经做出限制，只可以设置英文和数字输入
  * 2：创建组接口对接完成，对返回失败的值做出了处理
  * */
-public class CreateGroupContentActivity extends AppBaseActivity implements OnClickListener {
+public class CreateGroupContentActivity extends BaseActivity implements OnClickListener {
 	private CreateGroupContentActivity context;
 	private Dialog dialog;
 	private Dialog imageDialog;

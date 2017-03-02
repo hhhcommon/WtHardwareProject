@@ -15,7 +15,6 @@ import android.webkit.WebViewClient;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.common.manager.MyActivityManager;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
 
@@ -35,8 +34,6 @@ public class ResultActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_result);
         context = this;
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.pushOneActivity(context);
         Bundle extras = getIntent().getExtras();
         findViewById(R.id.left_image).setOnClickListener(new OnClickListener() {
             @Override
@@ -110,8 +107,6 @@ public class ResultActivity extends Activity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        MyActivityManager mam = MyActivityManager.getInstance();
-        mam.popOneActivity(context);
         mResultText = null;
         webview = null;
         dialog = null;

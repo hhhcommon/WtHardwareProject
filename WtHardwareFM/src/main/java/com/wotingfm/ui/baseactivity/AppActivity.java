@@ -14,7 +14,7 @@ import com.wotingfm.R;
  * 继承此类需注意 xml中必须include  base_activity_title.xml
  * Created by Administrator on 2016/8/27 0027.
  */
-public abstract class AppActivity extends AppBaseActivity {
+public abstract class AppActivity extends BaseActivity {
     private TextView leftBack;          // 左上角  返回
     private TextView rightMore;         // 右上角  更多
     private TextView textTitle;         // 标题

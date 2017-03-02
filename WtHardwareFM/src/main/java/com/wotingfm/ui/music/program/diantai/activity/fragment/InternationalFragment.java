@@ -20,7 +20,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.music.main.HomeActivity;
+import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.ui.music.program.fmlist.adapter.RankInfoAdapter;
@@ -278,7 +278,8 @@ public class InternationalFragment extends Fragment {
                                 ContentFavorite, ContentId, localurl, sequName, sequId, sequDesc, sequImg);
                         dbDao.deleteHistory(playerurl);
                         dbDao.addHistory(history);
-                        HomeActivity.UpdateViewPager();
+                        MainActivity.changeOne();
+
                         Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                         Bundle bundle1=new Bundle();
                         bundle1.putString("text",newList.get(position - 1).getContentName());

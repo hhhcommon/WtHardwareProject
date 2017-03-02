@@ -1,7 +1,6 @@
 package com.wotingfm.ui.music.program.fenlei.adapter;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -13,8 +12,10 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.program.fenlei.model.FenLei;
-import com.wotingfm.ui.music.program.radiolist.activity.RadioListActivity;
+import com.wotingfm.ui.music.program.radiolist.activity.RadioListFragment;
+import com.wotingfm.util.SequenceUUID;
 import com.wotingfm.widget.MyGridView;
 
 import java.util.List;
@@ -23,17 +24,20 @@ import java.util.List;
  * 分类数据展示
  */
 public class CatalogListAdapter extends BaseAdapter {
+    private final ProgramActivity activity;
     private List<FenLei> list;
     private Context context;
     private ViewHolder holder;
     private CatalogGridAdapter adapters;
 
 
-    public CatalogListAdapter(Context context, List<FenLei> list) {
+    public CatalogListAdapter(Context context, List<FenLei> list,ProgramActivity activity) {
         super();
         this.list = list;
         this.context = context;
+        this.activity = activity;
     }
+
 
     @Override
     public int getCount() {
@@ -75,12 +79,16 @@ public class CatalogListAdapter extends BaseAdapter {
         holder.gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int positions, long id) {
-                Intent intent = new Intent(context, RadioListActivity.class);
+                RadioListFragment fg= new RadioListFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("type","fenLeiAdapter");
                 bundle.putSerializable("Catalog", list.get(position).getChildren().get(positions));
-                intent.putExtras(bundle);
-                context.startActivity(intent);
+                fg.setArguments(bundle);
+
+                activity.fm.beginTransaction()
+                        .add(R.id.fragment_content, fg)
+                        .addToBackStack(SequenceUUID.getUUID())
+                        .commit();
             }
         });
         return convertView;

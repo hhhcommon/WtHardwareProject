@@ -5,9 +5,12 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,8 +24,8 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.AppBaseActivity;
-import com.wotingfm.ui.music.program.album.activity.AlbumActivity;
+import com.wotingfm.ui.music.main.PlayerActivity;
+import com.wotingfm.ui.music.program.album.main.AlbumFragment;
 import com.wotingfm.ui.music.program.album.anchor.activity.AnchorListActivity;
 import com.wotingfm.ui.music.program.album.anchor.adapter.AnchorMainAdapter;
 import com.wotingfm.ui.music.program.album.anchor.adapter.AnchorSequAdapter;
@@ -44,7 +47,7 @@ import java.util.List;
 /**
  * 主播详情界面
  */
-public class AnchorDetailsActivity extends AppBaseActivity implements View.OnClickListener, TipView.WhiteViewClick {
+public class AnchorDetailsFragment extends Fragment implements View.OnClickListener, TipView.WhiteViewClick {
     private List<PersonInfo> MediaInfoList;
     private List<PersonInfo> personInfoList;
     private AnchorSequAdapter adapterSequ;
@@ -70,6 +73,8 @@ public class AnchorDetailsActivity extends AppBaseActivity implements View.OnCli
     private String PersonImg;
     private String tag = "ANCHOR_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
+    private FragmentActivity context;
+    private View rootView;
 
     @Override
     public void onWhiteViewClick() {
@@ -88,16 +93,19 @@ public class AnchorDetailsActivity extends AppBaseActivity implements View.OnCli
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_anchor_details);
-        initView();
-        handleIntent();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.activity_anchor_details, container, false);
+            context = getActivity();
+            initView();
+            handleIntent();
+        }
+        return rootView;
     }
 
     // 初始化视图
     private void initView() {
-        tipView = (TipView) findViewById(R.id.tip_view);
+        tipView = (TipView) rootView.findViewById(R.id.tip_view);
 
         View headView = LayoutInflater.from(context).inflate(R.layout.headview_activity_anchor_details, null);
         img_head = (RoundImageView) headView.findViewById(R.id.round_image_head);   //  头像
@@ -107,12 +115,12 @@ public class AnchorDetailsActivity extends AppBaseActivity implements View.OnCli
         tv_visible_all = (TextView) headView.findViewById(R.id.text_visible_all);
         tv_more = (TextView) headView.findViewById(R.id.tv_more);                   //  更多
 
-        listAnchor = (XListView) findViewById(R.id.list_anchor);                    // 主播的节目列表
+        listAnchor = (XListView) rootView.findViewById(R.id.list_anchor);                    // 主播的节目列表
         listAnchor.setSelector(new ColorDrawable(Color.TRANSPARENT));
         listAnchor.setHeaderDividersEnabled(false);
         listAnchor.addHeaderView(headView);
 
-        textAnchorName = (TextView) findViewById(R.id.text_anchor_name);// 标题  即主播 Name
+        textAnchorName = (TextView) rootView.findViewById(R.id.text_anchor_name);// 标题  即主播 Name
   /*      textAnchorName.setOnClickListener(this);*/
         initEvent();
     }
@@ -120,7 +128,7 @@ public class AnchorDetailsActivity extends AppBaseActivity implements View.OnCli
     // 初始化点击事件
     private void initEvent() {
         tipView.setWhiteClick(this);
-        findViewById(R.id.head_left_btn).setOnClickListener(this);// 返回
+        rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);// 返回
         tv_more.setOnClickListener(this);
 
         listAnchor.setXListViewListener(new XListView.IXListViewListener() {
@@ -151,8 +159,8 @@ public class AnchorDetailsActivity extends AppBaseActivity implements View.OnCli
     }
 
     private void handleIntent() {
-        PersonId = getIntent().getStringExtra("PersonId");
-        ContentPub = getIntent().getStringExtra("ContentPub");
+        PersonId = getArguments().getString("PersonId");
+        ContentPub = getArguments().getString("ContentPub");
         if (!TextUtils.isEmpty(PersonId)) {
             if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 dialog = DialogUtils.Dialogph(context, "正在获取数据");
@@ -282,7 +290,7 @@ public class AnchorDetailsActivity extends AppBaseActivity implements View.OnCli
         lv_sequ.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent1 = new Intent(context, AlbumActivity.class);
+                Intent intent1 = new Intent(context, AlbumFragment.class);
                 intent1.putExtra("type", "main");
                 intent1.putExtra("id", personInfoList.get(position).getContentId());
                 startActivity(intent1);
@@ -404,7 +412,8 @@ public class AnchorDetailsActivity extends AppBaseActivity implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                finish();
+                PlayerActivity activity = (PlayerActivity) getActivity();
+                activity.fm.popBackStack();
                 break;
             case R.id.tv_more:
                 if (!TextUtils.isEmpty(PersonId)) {
@@ -422,7 +431,7 @@ public class AnchorDetailsActivity extends AppBaseActivity implements View.OnCli
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
     }

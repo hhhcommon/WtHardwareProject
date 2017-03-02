@@ -46,7 +46,7 @@ import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.common.model.UserInfo;
 import com.wotingfm.ui.common.photocut.PhotoCutActivity;
-import com.wotingfm.ui.common.qrcode.EWMShowActivity;
+import com.wotingfm.ui.common.qrcode.EWMShowFragment;
 import com.wotingfm.ui.mine.bluetooth.BluetoothActivity;
 import com.wotingfm.ui.mine.flowmanage.FlowManageActivity;
 import com.wotingfm.ui.mine.fm.FMConnectActivity;
@@ -190,7 +190,7 @@ public class MineActivity extends BaseActivity implements OnClickListener {
                 news.setPortraitMini(url);
                 news.setUserId(userId);
                 news.setUserName(userName);
-                Intent intentEwm = new Intent(context, EWMShowActivity.class);
+                Intent intentEwm = new Intent(context, EWMShowFragment.class);
                 Bundle bundle = new Bundle();
                 bundle.putString("type", "1");
                 bundle.putString("news", userSign);// 签名
