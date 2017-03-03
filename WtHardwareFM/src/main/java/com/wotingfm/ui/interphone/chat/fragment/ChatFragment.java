@@ -16,14 +16,11 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -42,6 +39,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.helper.InterPhoneControlHelper;
+import com.wotingfm.common.service.SimulationService;
 import com.wotingfm.common.service.VoiceStreamRecordService;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -69,7 +67,6 @@ import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.JsonEncloseUtils;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.util.VibratorUtils;
-import com.wotingfm.widget.MyLinearLayout;
 import com.wotingfm.widget.TipView;
 
 import org.json.JSONException;
@@ -100,26 +97,24 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
     private static ListView mListView;
     private static ImageView image_persontx;
     private static ImageView image_grouptx;
-    public static ImageView imageView_answer;
+    public static   LinearLayout imageView_answer;
     private static TextView tv_groupname;
     private static TextView tv_num;
     private static TextView tv_grouptype;
     private static TextView tv_allnum;
     private static TextView tv_personname;
-    private TextView talkingName;
-    private TextView talking_news;
+    private static TextView talkingName;
+   // private TextView talking_news;
     private ImageView image_personvoice;
-    private ImageView image_group_persontx;
-    private ImageView image_voice;
-
-    private static Button image_button;
+    private static ImageView image_group_persontx;
+    private static ImageView image_voice;
     private View rootView;
-    private GridView gridView_person;
+    private static GridView gridView_person;
     private Dialog dialog;
     private static Dialog confirmDialog;
 
     private RelativeLayout Relative_listview;
-    public static MyLinearLayout lin_foot;
+    public static LinearLayout lin_foot;
     public static LinearLayout lin_head;
     public static LinearLayout lin_notalk;
     public static LinearLayout lin_personhead;
@@ -127,7 +122,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
 
     private static AnimationDrawable draw;
     private static AnimationDrawable draw_group;
-    private String UserName;
+    private static String UserName;
     private static String groupId;
     public static String interPhoneType;
     public static String interPhoneId;
@@ -146,6 +141,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
     private static List<ListInfo> listInfo;
     private RelativeLayout relative_view;
     public static boolean isVisible;
+
 
     @Override
     public void onTipViewClick() {
@@ -254,22 +250,18 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         tv_allnum = (TextView) rootView.findViewById(R.id.tv_allnum);                           // 群组对讲时候的群所有成员人数
         talkingName = (TextView) rootView.findViewById(R.id.talkingname);                       // 群组对讲时候对讲人姓名
         image_group_persontx = (ImageView) rootView.findViewById(R.id.image_group_persontx);    // 群组对讲时候对讲人头像
-        gridView_person = (GridView) rootView.findViewById(R.id.gridView_person);             // 群组对讲时候对讲成员展示
+        gridView_person = (GridView) rootView.findViewById(R.id.gridView_person);               // 群组对讲时候对讲成员展示
         gridView_person.setSelector(new ColorDrawable(Color.TRANSPARENT));                      // 取消GridView的默认背景色
         image_voice = (ImageView) rootView.findViewById(R.id.image_voice);                      // 群组对讲声音波
-        talking_news = (TextView) rootView.findViewById(R.id.talking_news);                     // 群组对讲时候通话解释
 
-
-
-        rootView.findViewById(R.id.lin_tv_show).setOnClickListener(this);                     //
-        rootView.findViewById(R.id.lin_tv_close).setOnClickListener(this);                     //
-        relative_view = (RelativeLayout) rootView.findViewById(R.id.relative_view);                       //
+        rootView.findViewById(R.id.lin_tv_show).setOnClickListener(this);                       //
+        rootView.findViewById(R.id.lin_tv_close).setOnClickListener(this);                      //
+        relative_view = (RelativeLayout) rootView.findViewById(R.id.relative_view);             //
 
 
         mListView = (ListView) rootView.findViewById(R.id.listView);                            //
-        lin_foot = (MyLinearLayout) rootView.findViewById(R.id.lin_foot);                       // 对讲按钮
-        imageView_answer = (ImageView) rootView.findViewById(R.id.imageView_answer);            //
-        image_button = (Button) rootView.findViewById(R.id.image_button);                       //
+        lin_foot = (LinearLayout) rootView.findViewById(R.id.lin_foot);                         // 对讲按钮
+        imageView_answer = (LinearLayout) rootView.findViewById(R.id.imageView_answer);         //
         Relative_listview = (RelativeLayout) rootView.findViewById(R.id.Relative_listview);     //
         tipView = (TipView) rootView.findViewById(R.id.tip_view);
         tipView.setTipClick(this);
@@ -288,7 +280,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
     private void listener() {
         image_grouptx.setOnClickListener(this);
         imageView_answer.setOnClickListener(this);
-        image_button.setOnTouchListener(new OnTouchListener() {
+     /*   image_button.setOnTouchListener(new OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch (event.getAction()) {
@@ -301,7 +293,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                 }
                 return false;
             }
-        });
+        });*/
     }
 
     @Override
@@ -324,11 +316,13 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         }
     }
 
-    private void hangUp() {
+    public static void hangUp() {
         //挂断
+        GlobalConfig.isIM=false;
         if (interPhoneType.equals("user")) {
             //挂断电话
             isCalling = false;
+
             InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
             historyDataBaseList = dbDao.queryHistory();//得到数据库里边数据
             getList();
@@ -465,7 +459,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         }
     }
 
-    public void setImageView(int i, String userName, String url) {
+    public static void setImageView(int i, String userName, String url) {
         //设置有人说话时候界面友好交互
         //发送消息线程
         if (i == 1) {
@@ -476,7 +470,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
             } else {
                 talkingName.setText(userName);
             }
-            talking_news.setText("正在通话");
+           // talking_news.setText("正在通话");
             image_voice.setVisibility(View.VISIBLE);
             if (url == null || url.equals("") || url.equals("null") || url.trim().equals("")) {
                 image_group_persontx.setImageResource(R.mipmap.wt_image_tx_hy);
@@ -496,7 +490,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
             }
         } else {
             talkingName.setVisibility(View.INVISIBLE);
-            talking_news.setText("无人通话");
+            //talking_news.setText("无人通话");
             if (draw_group.isRunning()) {
                 draw_group.stop();
             }
@@ -765,6 +759,12 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         lin_personhead.setVisibility(View.GONE);
         lin_head.setVisibility(View.VISIBLE);
         lin_foot.setVisibility(View.VISIBLE);
+        //对讲控制
+        if(GlobalConfig.isMONI==true){
+            context.stopService(new Intent(context, SimulationService.class));
+            GlobalConfig.isMONI=false;
+        }
+        GlobalConfig.isIM=true;
         GlobalConfig.isActive = true;
         tipView.setVisibility(View.GONE);
         GroupInfo firstdate = allList.remove(0);
@@ -819,6 +819,11 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         lin_personhead.setVisibility(View.VISIBLE);
         lin_head.setVisibility(View.GONE);
         lin_foot.setVisibility(View.VISIBLE);
+        if(GlobalConfig.isMONI==true){
+            context.stopService(new Intent(context, SimulationService.class));
+            GlobalConfig.isMONI=false;
+        }
+        GlobalConfig.isIM=true;
         GlobalConfig.isActive = true;
         tipView.setVisibility(View.GONE);
         tv_personname.setText(firstdate.getName());
@@ -1042,7 +1047,6 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                                             //用户可以通话了
                                             isTalking = true;
                                             ToastUtils.show_short(context, "可以说话");
-                                            image_button.setBackgroundDrawable(context.getResources().getDrawable(R.mipmap.wt_duijiang_button_pressed));
                                             // headview中展示自己的头像
                                             String url = BSApplication.SharedPreferences.getString(StringConstant.IMAGEURL, "");
                                             setImageView(1, UserName, url);
@@ -1296,7 +1300,6 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                                             } else {
                                                 draw.start();
                                             }
-                                            image_button.setBackgroundDrawable(context.getResources().getDrawable(R.mipmap.wt_duijiang_button_pressed));
                                             VoiceStreamRecordService.send();
                                             break;
                                         case 0x04:
@@ -1534,7 +1537,6 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                     @Override
                     public void run() {
                         VoiceStreamRecordService.stop();
-                        image_button.setBackgroundDrawable(context.getResources().getDrawable(R.mipmap.talknormal));
                         InterPhoneControlHelper.Loosen(context, interPhoneId);//发送取消说话控制
                         if (draw_group.isRunning()) {
                             draw_group.stop();
@@ -1545,7 +1547,6 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
             } else {//此处处理个人对讲的逻辑
                 VoiceStreamRecordService.stop();
                 InterPhoneControlHelper.PersonTalkPressStop(context);//发送取消说话控制
-                image_button.setBackgroundDrawable(context.getResources().getDrawable(R.mipmap.talknormal));
                 if (draw.isRunning()) {
                     draw.stop();
                 }
@@ -1577,5 +1578,6 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
             context.unregisterReceiver(Receiver);
             Receiver = null;
         }
+        isVisible=false;
     }
 }

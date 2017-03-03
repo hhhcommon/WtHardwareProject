@@ -13,6 +13,7 @@ import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.text.Html;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -57,6 +58,7 @@ import com.wotingfm.ui.interphone.common.message.content.MapContent;
 import com.wotingfm.ui.interphone.common.model.CallerInfo;
 import com.wotingfm.ui.interphone.common.model.Data;
 import com.wotingfm.ui.interphone.common.model.MessageForMainGroup;
+import com.wotingfm.ui.interphone.group.creategroup.model.Freq;
 import com.wotingfm.ui.interphone.main.DuiJiangActivity;
 import com.wotingfm.ui.mine.MineActivity;
 import com.wotingfm.ui.mine.person.login.LoginActivity;
@@ -99,6 +101,7 @@ public class MainActivity extends TabActivity {
     private int upDataType = 1;      // 1,不需要强制升级2，需要强制升级
     private boolean isCancelRequest;
     private List<CatalogName> list;
+    private List<Freq> freqList;
 
     private static Intent Socket, VoiceStreamRecord, VoiceStreamPlayer, Location, Subclass, Download, Notification, TestFloatingWindow, FloatingWindow;
 
@@ -426,6 +429,7 @@ public class MainActivity extends TabActivity {
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             // 发送获取城市列表的网络请求
             sendRequest();
+            sendFreq();
         } else {
             ToastUtils.show_always(context, "网络失败，请检查网络");
         }
@@ -663,6 +667,53 @@ public class MainActivity extends TabActivity {
             Log.e("版本处理异常", e.toString() + "");
         }
     }
+
+    // 获取对讲的频率，存储在Manifest当中
+    private void sendFreq() {
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
+        try {
+            jsonObject.put("CatalogType", "11");
+            jsonObject.put("ResultType", "2");
+            jsonObject.put("RelLevel", "0");
+            jsonObject.put("Page", "1");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        VolleyRequest.RequestPost(GlobalConfig.getCatalogUrl, tag, jsonObject, new VolleyCallback() {
+            @Override
+            protected void requestSuccess(JSONObject result) {
+                if (isCancelRequest) return;
+                try {
+                    String ReturnType = result.getString("ReturnType");
+                    //Log.v("ReturnType", "ReturnType -- > > " + ReturnType);
+                    if(!TextUtils.isEmpty(ReturnType)){
+                        if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
+                            String ResultList = result.getString("CatalogData");
+                            freqList = new Gson().fromJson(ResultList, new TypeToken<List<Freq>>() {}.getType());
+                            GlobalConfig.FreqList=freqList;
+                            GlobalConfig.getFreq=true;
+                        } else {
+                            ToastUtils.show_always(context, "获取对讲频率失败");
+                        }
+                    }else{
+                        ToastUtils.show_always(context, "获取对讲频率失败");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected void requestError(VolleyError error) {
+                ToastUtils.showVolleyError(context);
+            }
+        });
+
+    }
+
+
+
 
     //版本更新对话框
     private void UpdateDialog() {

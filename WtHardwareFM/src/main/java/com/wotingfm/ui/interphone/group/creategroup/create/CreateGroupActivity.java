@@ -36,20 +36,39 @@ public class CreateGroupActivity extends BaseActivity implements OnClickListener
 	private String tag = "CREATE_MAIN_GET_VOLLEY_REQUEST_CANCEL_TAG";
 	private boolean isCancelRequest;
 	private List<Freq> freqList;
-	private boolean getFreq;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_create_group_main);
+		if(GlobalConfig.getFreq==false){
 		if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
 			sendFreq();
 		} else {
 			ToastUtils.show_always(context, "网络失败，请检查网络");
 		}
+		}
 		setView();
 		setListener();
 	}
+
+
+
+
+	private void setListener() {
+        findViewById(R.id.head_left_btn).setOnClickListener(this);
+		lin_groupmain_first.setOnClickListener(this);
+		lin_groupmain_second.setOnClickListener(this);
+		lin_groupmain_third.setOnClickListener(this);
+	}
+
+	private void setView() {
+		lin_groupmain_first = (LinearLayout) findViewById(R.id.lin_groupmain_first);
+		lin_groupmain_second = (LinearLayout) findViewById(R.id.lin_groupmain_second);
+		lin_groupmain_third = (LinearLayout) findViewById(R.id.lin_groupmain_third);
+	}
+
 
 	// 获取对讲的频率，存储在Manifest当中
 	private void sendFreq() {
@@ -75,7 +94,7 @@ public class CreateGroupActivity extends BaseActivity implements OnClickListener
 							String ResultList = result.getString("CatalogData");
 							freqList = new Gson().fromJson(ResultList, new TypeToken<List<Freq>>() {}.getType());
 							GlobalConfig.FreqList=freqList;
-							getFreq=true;
+							GlobalConfig.getFreq=true;
 						} else {
 							ToastUtils.show_always(context, "获取对讲频率失败");
 						}
@@ -95,20 +114,6 @@ public class CreateGroupActivity extends BaseActivity implements OnClickListener
 
 	}
 
-
-	private void setListener() {
-        findViewById(R.id.head_left_btn).setOnClickListener(this);
-		lin_groupmain_first.setOnClickListener(this);
-		lin_groupmain_second.setOnClickListener(this);
-		lin_groupmain_third.setOnClickListener(this);
-	}
-
-	private void setView() {
-		lin_groupmain_first = (LinearLayout) findViewById(R.id.lin_groupmain_first);
-		lin_groupmain_second = (LinearLayout) findViewById(R.id.lin_groupmain_second);
-		lin_groupmain_third = (LinearLayout) findViewById(R.id.lin_groupmain_third);
-	}
-
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
@@ -116,7 +121,7 @@ public class CreateGroupActivity extends BaseActivity implements OnClickListener
 			finish();
 			break;
 		case R.id.lin_groupmain_first:
-			if(getFreq){
+			if(GlobalConfig.getFreq){
 			Bundle bundle = new Bundle();
 			bundle.putString("Type", "Open");
 			Intent intent = new Intent(CreateGroupActivity.this,CreateGroupContentActivity.class);
@@ -128,7 +133,7 @@ public class CreateGroupActivity extends BaseActivity implements OnClickListener
 			break;
 		case R.id.lin_groupmain_second:
 //			ToastUtil.show_short(context, "密码群");
-			if(getFreq){
+			if(GlobalConfig.getFreq){
 			Bundle bundle1 = new Bundle();
 			bundle1.putString("Type", "PassWord");
 			Intent intent1 = new Intent(CreateGroupActivity.this,CreateGroupContentActivity.class);
@@ -140,7 +145,7 @@ public class CreateGroupActivity extends BaseActivity implements OnClickListener
 			break;
 		case R.id.lin_groupmain_third:
 //			ToastUtil.show_short(context, "验证群");
-			if(getFreq){
+			if(GlobalConfig.getFreq){
 			Bundle bundle2 = new Bundle();
 			bundle2.putString("Type", "Validate");
 			Intent intent2 = new Intent(CreateGroupActivity.this,CreateGroupContentActivity.class);

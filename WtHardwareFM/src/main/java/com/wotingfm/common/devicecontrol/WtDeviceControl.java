@@ -11,6 +11,7 @@ import android.widget.ImageView;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.service.SimulationService;
+import com.wotingfm.ui.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.ui.music.video.VoiceRecognizer;
 import com.wotingfm.util.ToastUtils;
 
@@ -121,9 +122,19 @@ public class WtDeviceControl {
         }
         }*/
         ToastUtils.show_always(context,"按下了对讲按钮");
+     try {
         if(GlobalConfig.isMONI==true){
             SimulationService.talk();
+        }else if(GlobalConfig.isIM==true){
+            if(ChatFragment.isVisible) {
+                ChatFragment.press();
+            }
+        }else{
+            ToastUtils.show_always(context,"您现在并没有处于对讲模式当中");
         }
+    }catch(Exception e){
+        e.printStackTrace();
+    }
 
     }
 
@@ -143,10 +154,19 @@ public class WtDeviceControl {
             }
         }*/
         ToastUtils.show_always(context,"松开了了对讲按钮");
-        if(GlobalConfig.isMONI==true){
-            SimulationService.openDevice();
+        try {
+            if(GlobalConfig.isMONI==true){
+                SimulationService.openDevice();
+            }else if(GlobalConfig.isIM==true){
+                if(ChatFragment.isVisible){
+                ChatFragment.jack();
+                }
+            }else{
+                ToastUtils.show_always(context,"您现在并没有处于对讲模式当中");
+            }
+        }catch(Exception e){
+            e.printStackTrace();
         }
-
     }
 
     private void Dialog(Context context) {
