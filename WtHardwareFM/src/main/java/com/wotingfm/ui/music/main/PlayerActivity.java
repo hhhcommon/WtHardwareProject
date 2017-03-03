@@ -2,7 +2,6 @@ package com.wotingfm.ui.music.main;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -15,13 +14,12 @@ import com.wotingfm.util.SequenceUUID;
 
 
 public class PlayerActivity extends AppCompatActivity {
-    public FragmentManager fm;
     private static PlayerActivity context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_player);
+        setContentView(R.layout.activity_view_main);
         context=this;
         BVideoView videoView = (BVideoView) findViewById(R.id.video_view);
         videoView.setVideoPath(null);

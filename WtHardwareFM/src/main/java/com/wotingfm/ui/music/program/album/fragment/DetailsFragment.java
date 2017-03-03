@@ -24,9 +24,9 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.qrcode.EWMShowFragment;
 import com.wotingfm.ui.music.comment.main.CommentFragment;
-import com.wotingfm.ui.music.main.PlayerActivity;
-import com.wotingfm.ui.music.program.album.main.AlbumFragment;
+import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.program.album.anchor.AnchorDetailsFragment;
+import com.wotingfm.ui.music.program.album.main.AlbumFragment;
 import com.wotingfm.ui.music.program.album.model.ContentCatalogs;
 import com.wotingfm.ui.music.program.album.model.ResultInfo;
 import com.wotingfm.util.AssembleImageUrlUtils;
@@ -34,7 +34,6 @@ import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
-import com.wotingfm.util.SequenceUUID;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.RoundImageView;
 
@@ -85,6 +84,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_album_details, container, false);
+            rootView.setOnClickListener(this);
             initView(rootView);
         }
         return rootView;
@@ -194,7 +194,6 @@ public class DetailsFragment extends Fragment implements OnClickListener {
 
     @Override
     public void onClick(View v) {
-        PlayerActivity activity = (PlayerActivity) getActivity();
         switch (v.getId()) {
             case R.id.tv_favorite:// 喜欢
                 if(CommonHelper.checkNetwork(context)) {
@@ -218,10 +217,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                 bundle_evm.putInt("type", 3);
                 fg_evm.setArguments(bundle_evm);
 
-                activity.fm.beginTransaction()
-                        .add(R.id.fragment_content, fg_evm)
-                        .addToBackStack(SequenceUUID.getUUID())
-                        .commit();
+                ProgramActivity.open(fg_evm);
 
                 break;
             case R.id.lin_pinglun:// 评论
@@ -233,10 +229,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                         bundle.putString("contentId", contentId);
                         bundle.putString("MediaType", StringConstant.TYPE_SEQU);
                         fg.setArguments(bundle);
-                        activity.fm.beginTransaction()
-                                .add(R.id.fragment_content, fg)
-                                .addToBackStack(SequenceUUID.getUUID())
-                                .commit();
+                     ProgramActivity.open(fg);
                     } else {
                         ToastUtils.show_always(context, "请先登录~~");
                     }
@@ -263,10 +256,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                     bundle.putString("PersonId", personId);
                     bundle.putString("ContentPub", contentPub);
                     fg.setArguments(bundle);
-                    activity.fm.beginTransaction()
-                            .add(R.id.fragment_content, fg)
-                            .addToBackStack(SequenceUUID.getUUID())
-                            .commit();
+                    ProgramActivity.open(fg);
                 } else {
                     ToastUtils.show_always(context, "此专辑还没有主播哦");
                 }

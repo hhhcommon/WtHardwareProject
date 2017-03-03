@@ -1,9 +1,8 @@
 package com.wotingfm.ui.music.main;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -18,23 +17,32 @@ import com.wotingfm.util.SequenceUUID;
  * 2016年2月2日
  */
 public class ProgramActivity extends FragmentActivity {
-	public FragmentManager fm;
-	public FragmentTransaction ft;
 	public static ProgramActivity context;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_player);
+		setContentView(R.layout.activity_view_main);
 		context=this;
 		setType();
 
-		fm = this.getSupportFragmentManager();
-		fm.beginTransaction()
-				.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-				.add(R.id.fragment_content, new ProgramFragment())
+		ProgramActivity.open(new ProgramFragment());
+	}
+
+	public static void open(Fragment frg) {
+		context.getSupportFragmentManager().beginTransaction()
+				.add(R.id.fragment_content, frg)
 				.addToBackStack(SequenceUUID.getUUID())
 				.commit();
+	}
+
+	public static void close() {
+		context.getSupportFragmentManager().popBackStack();
+	}
+
+	public static void hideShow(Fragment from,Fragment to) {
+		context.getSupportFragmentManager().beginTransaction().
+				hide(from).show(to).commit();
 	}
 	// 适配顶栏样式
 	private void setType() {

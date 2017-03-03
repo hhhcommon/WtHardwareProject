@@ -14,8 +14,7 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.program.fenlei.model.FenLei;
-import com.wotingfm.ui.music.program.radiolist.activity.RadioListFragment;
-import com.wotingfm.util.SequenceUUID;
+import com.wotingfm.ui.music.program.radiolist.main.RadioListFragment;
 import com.wotingfm.widget.MyGridView;
 
 import java.util.List;
@@ -24,18 +23,16 @@ import java.util.List;
  * 分类数据展示
  */
 public class CatalogListAdapter extends BaseAdapter {
-    private final ProgramActivity activity;
     private List<FenLei> list;
     private Context context;
     private ViewHolder holder;
     private CatalogGridAdapter adapters;
 
 
-    public CatalogListAdapter(Context context, List<FenLei> list,ProgramActivity activity) {
+    public CatalogListAdapter(Context context, List<FenLei> list) {
         super();
         this.list = list;
         this.context = context;
-        this.activity = activity;
     }
 
 
@@ -68,27 +65,23 @@ public class CatalogListAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        if(position == 0) {
+        if (position == 0) {
             holder.topView.setVisibility(View.GONE);
         } else {
             holder.topView.setVisibility(View.VISIBLE);
         }
         holder.tv_name.setText(list.get(position).getName());
-        adapters = new CatalogGridAdapter(context,list.get(position).getChildren());
+        adapters = new CatalogGridAdapter(context, list.get(position).getChildren());
         holder.gv.setAdapter(adapters);
         holder.gv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int positions, long id) {
-                RadioListFragment fg= new RadioListFragment();
+                RadioListFragment fg = new RadioListFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("type","fenLeiAdapter");
+                bundle.putString("type", "fenLeiAdapter");
                 bundle.putSerializable("Catalog", list.get(position).getChildren().get(positions));
                 fg.setArguments(bundle);
-
-                activity.fm.beginTransaction()
-                        .add(R.id.fragment_content, fg)
-                        .addToBackStack(SequenceUUID.getUUID())
-                        .commit();
+                ProgramActivity.open(fg);
             }
         });
         return convertView;

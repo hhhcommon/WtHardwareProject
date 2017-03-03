@@ -40,8 +40,7 @@ public class EWMShowFragment extends Fragment implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                PlayerActivity activity = (PlayerActivity) getActivity();
-                activity.fm.popBackStack();
+                PlayerActivity.close();
                 break;
         }
     }

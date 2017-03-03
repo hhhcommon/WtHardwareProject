@@ -193,35 +193,35 @@
 
         <!-- 我的界面 -->
         <activity
-            android:name=".ui.mine.MineActivity"
+            android:name="com.wotingfm.ui.mine.MineActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 关于我们 -->
         <activity
-            android:name=".ui.mine.set.about.AboutActivity"
+            android:name=".ui.mine.set.about.AboutFragment"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 下载位置 -->
         <activity
-            android:name=".ui.mine.set.downloadposition.DownloadPositionActivity"
+            android:name=".ui.mine.set.downloadposition.DownloadPositionFragment"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 意见反馈 -->
         <activity
-            android:name=".ui.mine.set.feedback.activity.FeedbackActivity"
+            android:name=".ui.mine.set.feedback.main.FeedbackFragment"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 帮助 -->
         <activity
-            android:name=".ui.mine.set.help.HelpActivity"
+            android:name=".ui.mine.set.help.HelpFragment"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -233,24 +233,9 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <!-- 修改个人资料 -->
-        <activity
-            android:name=".ui.mine.person.updatepersonnews.UpdatePersonActivity"
-            android:configChanges="keyboardHidden|orientation"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
-
         <!-- 修改用户号 -->
         <activity
-            android:name=".ui.mine.set.updateusernum.UpdateUserNumberActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 我的订阅列表界面 -->
-        <activity
-            android:name=".ui.mine.subscribe.SubscriberListActivity"
+            android:name=".ui.mine.set.updateusernum.UpdateUserNumberFragment"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -286,14 +271,14 @@
 
         <!-- 修改密码 -->
         <activity
-            android:name=".ui.mine.person.modifypassword.ModifyPasswordActivity"
+            android:name=".ui.mine.person.modifypassword.ModifyPasswordFragment"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
         <!-- 反馈建议历史 -->
         <activity
-            android:name=".ui.mine.set.feedback.feedbacklist.activity.FeedbackListActivity"
+            android:name=".ui.mine.set.feedback.feedbacklist.main.FeedbackListFragment"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -370,29 +355,14 @@
 
         <!-- 偏好设置界面 -->
         <activity
-            android:name=".ui.mine.set.preference.activity.PreferenceActivity"
+            android:name=".ui.mine.set.preference.main.PreferenceFragment"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 城市列表 -->
-        <activity
-            android:name=".ui.music.program.citylist.activity.CityListFragment"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
 
         <!-- 节目单页 -->
         <activity
             android:name=".ui.music.program.schedule.activity.ScheduleActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-
-        <activity
-            android:name=".ui.music.program.fmlist.activity.FMListFragment"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -412,31 +382,9 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <!-- 分类界面 -->
-        <activity
-            android:name=".ui.music.program.radiolist.activity.RadioListFragment"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
         <!-- 注册协议 -->
         <activity
             android:name=".ui.mine.person.agreement.AgreementActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 流量管理界面 -->
-        <activity
-            android:name=".ui.mine.flowmanage.FlowManageActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-
-        <!-- 蓝牙 -->
-        <activity
-            android:name=".ui.mine.bluetooth.BluetoothActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -448,52 +396,15 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <!-- WiFi界面 -->
-        <activity
-            android:name=".ui.mine.wifi.WIFIActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- WiFi密码配置 -->
-        <activity
-            android:name=".ui.mine.wifi.ConfigWiFiActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- FM调频界面 -->
-        <activity
-            android:name=".ui.mine.fm.FMConnectActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-
         <!-- 专辑界面 -->
         <activity
             android:name=".ui.interphone.group.groupcontrol.groupintroduce.GroupIntroduceActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 国家台界面 -->
-        <activity
-            android:name=".ui.music.program.diantai.activity.RadioNationalFragment"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 地方台界面 -->
-        <activity
-            android:name=".ui.music.program.diantai.activity.CityRadioFragment"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
         <!-- 验证手机号 -->
         <activity
-            android:name=".ui.mine.person.phonecheck.PhoneCheckActivity"
+            android:name=".ui.mine.person.phonecheck.PhoneCheckFragment"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -506,16 +417,9 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <!-- 验证手机号 -->
-        <activity
-            android:name=".ui.mine.set.SetActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
         <!-- 通知设置 -->
         <activity
-            android:name=".ui.mine.set.notifyset.NotifySetActivity"
+            android:name=".ui.mine.set.notifyset.NotifySetFragment"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
@@ -534,7 +438,7 @@
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.NoTitleBar"/>
         <activity
-            android:name=".ui.music.program.album.anchor.activity.AnchorListActivity"
+            android:name=".ui.music.program.album.anchor.main.AnchorListFragment"
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.NoTitleBar"/>
 

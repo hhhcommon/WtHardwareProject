@@ -44,6 +44,7 @@ public class PlayHistoryFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.activity_playhistory, container, false);
+            rootView.setOnClickListener(this);
             context = getActivity();
             dbDao = new SearchPlayerHistoryDao(context);    // 初始化数据库
 
@@ -87,8 +88,7 @@ public class PlayHistoryFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:	// 左上角返回键
-                PlayerActivity activity = (PlayerActivity) getActivity();
-                activity.fm.popBackStack();
+                PlayerActivity.close();
                 break;
             case R.id.clear_empty:		// 清空数据
                 confirmDialog.show();

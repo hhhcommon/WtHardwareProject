@@ -23,12 +23,12 @@ import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.qrcode.EWMShowFragment;
+import com.wotingfm.ui.music.player.more.subscribe.SubscriberListFragment;
 import com.wotingfm.ui.music.comment.main.CommentFragment;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.ui.music.download.main.DownloadFragment;
 import com.wotingfm.ui.music.download.model.FileInfo;
 import com.wotingfm.ui.music.download.service.DownloadService;
-import com.wotingfm.ui.music.favorite.main.FavoriteFragment;
 import com.wotingfm.ui.music.main.PlayerActivity;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
 import com.wotingfm.ui.music.player.more.album.main.AlbumFragment;
@@ -38,7 +38,6 @@ import com.wotingfm.ui.music.program.album.model.ContentInfo;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
-import com.wotingfm.util.SequenceUUID;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -81,6 +80,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.activity_player_more_operation, container, false);
+            rootView.setOnClickListener(this);
             context = getActivity();
             mFileDao = new FileInfoDao(context);
             initView();
@@ -131,57 +131,42 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
 
     @Override
     public void onClick(View v) {
-        PlayerActivity activity = (PlayerActivity) getActivity();
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                activity.fm.popBackStack();
+                PlayerActivity.close();
                 break;
             case R.id.text_history:// 播放歷史
-                activity.fm.beginTransaction()
-                        .add(R.id.fragment_content, new PlayHistoryFragment())
-                        .addToBackStack(SequenceUUID.getUUID())
-                        .commit();
+                PlayerActivity.open(new PlayHistoryFragment());
                 break;
             case R.id.text_liked:// 我喜歡的
-                activity.fm.beginTransaction()
-                        .add(R.id.fragment_content, new FavoriteFragment())
-                        .addToBackStack(SequenceUUID.getUUID())
-                        .commit();
+                ToastUtils.show_always(context, "更换订阅图标");
+//                PlayerActivity.open(new FavoriteFragment());
+                PlayerActivity.open(new SubscriberListFragment());
                 break;
             case R.id.text_local:// 本地節目
-                activity.fm.beginTransaction()
-                        .add(R.id.fragment_content, new DownloadFragment())
-                        .addToBackStack(SequenceUUID.getUUID())
-                        .commit();
+                PlayerActivity.open(new DownloadFragment());
                 break;
             case R.id.text_like:// 喜歡
                 sendFavorite();
                 break;
             case R.id.text_shape:// 分享
-                if(GlobalConfig.playerObject == null) return ;
+                if (GlobalConfig.playerObject == null) return;
                 EWMShowFragment fg_evm = new EWMShowFragment();
-                Bundle bundle_evm=new Bundle();
+                Bundle bundle_evm = new Bundle();
                 bundle_evm.putInt("type", 0);
                 fg_evm.setArguments(bundle_evm);
-                activity.fm.beginTransaction()
-                        .add(R.id.fragment_content, fg_evm)
-                        .addToBackStack(SequenceUUID.getUUID())
-                        .commit();
+                PlayerActivity.open(fg_evm);
                 break;
             case R.id.text_comment:// 評論
-                if(!CommonHelper.checkNetwork(context)) return ;
+                if (!CommonHelper.checkNetwork(context)) return;
                 if (!TextUtils.isEmpty(GlobalConfig.playerObject.getContentId()) && !TextUtils.isEmpty(GlobalConfig.playerObject.getMediaType())) {
                     if (CommonUtils.getUserIdNoImei(context) != null && !CommonUtils.getUserIdNoImei(context).equals("")) {
                         CommentFragment fg = new CommentFragment();
-                        Bundle bundle=new Bundle();
+                        Bundle bundle = new Bundle();
                         bundle.putString("contentId", GlobalConfig.playerObject.getContentId());
                         bundle.putString("MediaType", GlobalConfig.playerObject.getMediaType());
                         fg.setArguments(bundle);
-
-                        activity.fm.beginTransaction()
-                                .add(R.id.fragment_content, fg)
-                                .addToBackStack(SequenceUUID.getUUID())
-                                .commit();
+                        PlayerActivity.open(fg);
                     } else {
                         ToastUtils.show_always(context, "请先登录~~");
                     }
@@ -190,37 +175,30 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                 }
                 break;
             case R.id.text_details:// 詳情
-                activity.fm.beginTransaction()
-                        .add(R.id.fragment_content, new PlayDetailsFragment())
-                        .addToBackStack(SequenceUUID.getUUID())
-                        .commit();
+                PlayerActivity.open(new PlayDetailsFragment());
                 break;
             case R.id.text_program:// 播單
-                if(!CommonHelper.checkNetwork(context)) return ;
+                if (!CommonHelper.checkNetwork(context)) return;
 
-                ProgrammeFragment fg_programme =new ProgrammeFragment();
+                ProgrammeFragment fg_programme = new ProgrammeFragment();
                 Bundle b = new Bundle();
                 b.putString("BcId", GlobalConfig.playerObject.getContentId());
                 fg_programme.setArguments(b);
-
-                activity.fm.beginTransaction()
-                        .add(R.id.fragment_content, fg_programme)
-                        .addToBackStack(SequenceUUID.getUUID())
-                        .commit();
+                PlayerActivity.open(fg_programme);
                 break;
             case R.id.text_down:// 下載
                 download();
                 break;
             case R.id.text_sequ:// 專輯
-                if(GlobalConfig.playerObject != null) {
+                if (GlobalConfig.playerObject != null) {
                     try {
-                        if(GlobalConfig.playerObject.getSequId() != null) {
+                        if (GlobalConfig.playerObject.getSequId() != null) {
                             SequId = GlobalConfig.playerObject.getSequId();
                             SequDesc = GlobalConfig.playerObject.getSequDesc();
                             SequImage = GlobalConfig.playerObject.getSequImg();
                             SequName = GlobalConfig.playerObject.getSequName();
                             IsSequ = true;
-                        } else if(GlobalConfig.playerObject.getSeqInfo() != null && GlobalConfig.playerObject.getSeqInfo().getContentId() != null) {
+                        } else if (GlobalConfig.playerObject.getSeqInfo() != null && GlobalConfig.playerObject.getSeqInfo().getContentId() != null) {
                             SequId = GlobalConfig.playerObject.getSeqInfo().getContentId();
                             SequDesc = GlobalConfig.playerObject.getSeqInfo().getContentDesc();
                             SequImage = GlobalConfig.playerObject.getSeqInfo().getContentImg();
@@ -234,20 +212,16 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                         IsSequ = false;
                     }
                 }
-                if(IsSequ) {
-                    AlbumFragment fg_album= new AlbumFragment();
+                if (IsSequ) {
+                    AlbumFragment fg_album = new AlbumFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "player");
-                    bundle.putString("contentName",SequName);
-                    bundle.putString("contentDesc",SequDesc);
-                    bundle.putString("contentId",SequId);
-                    bundle.putString("contentImg",SequImage);
+                    bundle.putString("contentName", SequName);
+                    bundle.putString("contentDesc", SequDesc);
+                    bundle.putString("contentId", SequId);
+                    bundle.putString("contentImg", SequImage);
                     fg_album.setArguments(bundle);
-
-                    activity.fm.beginTransaction()
-                            .add(R.id.fragment_content, fg_album)
-                            .addToBackStack(SequenceUUID.getUUID())
-                            .commit();
+                    PlayerActivity.open(fg_album);
                 } else {
                     ToastUtils.show_always(context, "此节目目前没有所属专辑");
                 }
@@ -257,11 +231,11 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
 
     // 重置數據
     private void resetDate() {
-        if(GlobalConfig.playerObject == null || GlobalConfig.playerObject.getMediaType() == null) {
+        if (GlobalConfig.playerObject == null || GlobalConfig.playerObject.getMediaType() == null) {
             textPlayName.setVisibility(View.GONE);
             viewLinearOne.setVisibility(View.GONE);
             viewLinearTwo.setVisibility(View.GONE);
-            return ;
+            return;
         }
 
         textPlayName.setVisibility(View.VISIBLE);
@@ -270,7 +244,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
 
         // 標題
         String contentName;
-        if(GlobalConfig.playerObject.getContentName() != null) {
+        if (GlobalConfig.playerObject.getContentName() != null) {
             contentName = GlobalConfig.playerObject.getContentName();
         } else {
             contentName = "未知";
@@ -279,7 +253,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
 
         // 播放類型
         String mediaType = GlobalConfig.playerObject.getMediaType();
-        if(mediaType.equals(StringConstant.TYPE_RADIO)) {
+        if (mediaType.equals(StringConstant.TYPE_RADIO)) {
             textDetails.setVisibility(View.GONE);// 詳情
             textProgram.setVisibility(View.VISIBLE);// 播单
             textSequ.setVisibility(View.INVISIBLE);// 專輯
@@ -290,7 +264,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
             textSequ.setVisibility(View.VISIBLE);// 專輯
             textDown.setVisibility(View.VISIBLE);// 下载
 
-            if(mediaType.equals(StringConstant.TYPE_TTS)) {
+            if (mediaType.equals(StringConstant.TYPE_TTS)) {
                 textComment.setClickable(false);
                 textComment.setEnabled(false);
                 textComment.setTextColor(context.getResources().getColor(R.color.gray));
@@ -305,7 +279,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
 
         // 喜欢状态
         contentFavorite = GlobalConfig.playerObject.getContentFavorite();
-        if(mediaType.equals(StringConstant.TYPE_TTS)) {// TTS 不支持喜欢
+        if (mediaType.equals(StringConstant.TYPE_TTS)) {// TTS 不支持喜欢
             textLike.setClickable(false);
             textLike.setEnabled(false);
             textLike.setText("喜欢");
@@ -315,7 +289,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
             textLike.setClickable(true);
             textLike.setEnabled(true);
             textLike.setTextColor(getResources().getColor(R.color.wt_login_third));
-            if(contentFavorite == null || contentFavorite.equals("0")) {
+            if (contentFavorite == null || contentFavorite.equals("0")) {
                 contentFavorite = "0";
                 textLike.setText("喜欢");
                 textLike.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.mipmap.wt_image_play_more_like), null, null);
@@ -328,7 +302,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
 
         // 下載狀態
         if (mediaType.equals(StringConstant.TYPE_AUDIO)) {// 可以下载
-            if(!TextUtils.isEmpty(GlobalConfig.playerObject.getLocalurl())) {// 已下载
+            if (!TextUtils.isEmpty(GlobalConfig.playerObject.getLocalurl())) {// 已下载
                 textDown.setClickable(false);
                 textDown.setEnabled(false);
                 textDown.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.mipmap.wt_image_play_more_down_gray), null, null);
@@ -341,7 +315,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                 textDown.setTextColor(getResources().getColor(R.color.wt_login_third));
                 textDown.setText("下载");
             }
-        } else if(mediaType.equals(StringConstant.TYPE_TTS)) {// 不可以下载
+        } else if (mediaType.equals(StringConstant.TYPE_TTS)) {// 不可以下载
             textDown.setClickable(false);
             textDown.setEnabled(false);
             textDown.setCompoundDrawablesWithIntrinsicBounds(null, getResources().getDrawable(R.mipmap.wt_image_play_more_down_gray), null, null);
@@ -443,7 +417,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
             boolean isDownload = false;
             for (int j = 0; j < fileDataList.size(); j++) {
                 if (fileDataList.get(j).getUrl().equals(m.getContentPlay())) {
-                    if(fileDataList.get(j).getLocalurl() != null){
+                    if (fileDataList.get(j).getLocalurl() != null) {
                         isDownload = true;
                         break;
                     }
@@ -517,7 +491,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if(mReceiver != null) {
+        if (mReceiver != null) {
             context.unregisterReceiver(mReceiver);
             mReceiver = null;
         }

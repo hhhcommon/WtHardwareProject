@@ -76,6 +76,7 @@ public class FavoriteFragment extends Fragment implements OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.activity_favorite, container, false);
+            rootView.setOnClickListener(this);
             context = getActivity();
             // 注册广播
             mBroadcast = new MyBroadcast();
@@ -254,8 +255,7 @@ public class FavoriteFragment extends Fragment implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                PlayerActivity activity = (PlayerActivity) getActivity();
-                activity.fm.popBackStack();
+                PlayerActivity.close();
                 break;
             case R.id.lin_favorite_shanchu:// 删除
                 handleData(5);
