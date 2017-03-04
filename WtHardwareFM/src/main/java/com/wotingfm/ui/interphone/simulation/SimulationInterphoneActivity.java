@@ -13,6 +13,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.FrequenceConstant;
 import com.wotingfm.common.service.SimulationService;
 import com.wotingfm.ui.baseactivity.BaseActivity;
+import com.wotingfm.ui.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.util.FrequencyUtil;
 import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
@@ -51,13 +52,18 @@ public class SimulationInterphoneActivity extends BaseActivity implements View.O
 
     // 初始化模拟对讲
     private void initEmp() {
+        if(GlobalConfig.isIM==true){
+            GlobalConfig.isIM=false;
+            if(ChatFragment.isVisible){
+                ChatFragment.hangUp();
+            }
+        }
         startService(new Intent(context, SimulationService.class));
     }
 
     // 初始化视图
     private void setView() {
         findViewById(R.id.tv_save).setOnClickListener(this);                                        // 退出
-
         tv_set = (TextView) findViewById(R.id.tv_set);
         tv_set.setOnClickListener(this);                                                            // 频率设置
 

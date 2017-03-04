@@ -83,6 +83,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.activity_comment, container, false);
+            rootView.setOnClickListener(this);
             context = getActivity();
             handleIntent();
             handleFace();
@@ -127,8 +128,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
         lin_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PlayerActivity activity = (PlayerActivity) getActivity();
-                activity.fm.popBackStack();
+                PlayerActivity.close();
             }
         });
     }

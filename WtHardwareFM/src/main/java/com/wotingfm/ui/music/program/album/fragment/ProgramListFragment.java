@@ -27,7 +27,7 @@ import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.download.service.DownloadService;
 import com.wotingfm.ui.music.download.main.DownloadFragment;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
-import com.wotingfm.ui.music.download.fragment.DownLoadUnCompleted;
+import com.wotingfm.ui.music.download.fragment.DownLoadUnCompletedFragment;
 import com.wotingfm.ui.music.download.model.FileInfo;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
@@ -105,6 +105,7 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_album_program, container, false);
+            rootView.setOnClickListener(this);
             initView();
         }
         return rootView;
@@ -380,7 +381,7 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
             FID.updataDownloadStatus(tempList.get(0).getUrl(), "1");
             DownloadService.workStart(tempList.get(0));
             if(DownloadFragment.isVisible){
-                DownLoadUnCompleted.dwType=true;
+                DownLoadUnCompletedFragment.dwType=true;
             }
 
             // 发送更新界面数据广播
@@ -432,19 +433,14 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
                                 ContentFavorite,ContentId,localUrl,sequName1,sequId1,sequDesc1,sequImg1);
                         dbDao.deleteHistory(playUrl);
                         dbDao.addHistory(history);
-                        MainActivity.changeOne();
-
-
-//                        Intent intent = new Intent(context, PlayerActivity.class);
-//                        intent.putExtra("NAME", contentList.get(position - 1).getContentName());
-//                        context.startActivity(intent);
 
                         Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                         Bundle bundle1 = new Bundle();
                         bundle1.putString(StringConstant.TEXT_CONTENT,contentList.get(position - 1).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
-                        getActivity().setResult(1);
+
+                        MainActivity.changeOne();
                     } else {
                         ToastUtils.show_always(context, "暂不支持播放");
                     }

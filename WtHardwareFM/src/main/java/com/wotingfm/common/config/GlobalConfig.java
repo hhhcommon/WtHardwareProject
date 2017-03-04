@@ -52,9 +52,13 @@ public class GlobalConfig {
     public static WtDeviceControl device;         // 硬件设备控制器
     public static String voiceRecognizer;         // 此时的语音搜索界面
     public static boolean isActive;               // 是否活跃状态，有活跃状态才能播放声音，否则即使收到音频包也不播放
+
     public static boolean isMONI;                 // 标记实体按键是否要按照模拟对讲处理 暂定
-    public static String apkUrl = "http://182.92.175.134/download/WoTing.apk";    // apk下载默认路径
-    /**
+    public static boolean isIM;                   // 标记实体按键是否要按照网络对讲处理 暂定
+    public static boolean getFreq;                // 标记是否获取到频率的flag
+
+    public static String apkUrl = "http://www.wotingfm.com/download/WoTing.apk"; // apk下载默认路径
+     /**
      * 是否吐司
      */
     public static boolean isToast;

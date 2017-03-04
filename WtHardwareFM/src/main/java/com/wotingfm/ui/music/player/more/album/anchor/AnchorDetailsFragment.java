@@ -25,7 +25,7 @@ import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.music.main.PlayerActivity;
-import com.wotingfm.ui.music.player.more.album.anchor.activity.AnchorListFragment;
+import com.wotingfm.ui.music.player.more.album.anchor.main.AnchorListFragment;
 import com.wotingfm.ui.music.player.more.album.main.AlbumFragment;
 import com.wotingfm.ui.music.program.album.anchor.adapter.AnchorMainAdapter;
 import com.wotingfm.ui.music.program.album.anchor.adapter.AnchorSequAdapter;
@@ -33,7 +33,6 @@ import com.wotingfm.ui.music.program.album.anchor.model.PersonInfo;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.SequenceUUID;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.HeightListView;
 import com.wotingfm.widget.RoundImageView;
@@ -97,6 +96,7 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.activity_anchor_details, container, false);
+            rootView.setOnClickListener(this);
             context = getActivity();
             initView();
             handleIntent();
@@ -411,10 +411,9 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
-        PlayerActivity activity = (PlayerActivity) getActivity();
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                activity.fm.popBackStack();
+                PlayerActivity.close();
                 break;
             case R.id.tv_more:
                 if (!TextUtils.isEmpty(PersonId)) {
@@ -425,11 +424,7 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
                         bundle.putString("PersonName", PersonName);
                     }
                     fg_album.setArguments(bundle);
-
-                    activity.fm.beginTransaction()
-                            .add(R.id.fragment_content, fg_album)
-                            .addToBackStack(SequenceUUID.getUUID())
-                            .commit();
+                    PlayerActivity.open(fg_album);
                 } else {
                     ToastUtils.show_always(context, "该主播还没有详细的个人信息~");
                 }

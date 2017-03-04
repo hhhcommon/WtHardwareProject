@@ -2,8 +2,9 @@ package com.wotingfm.ui.mine.person.updatepersonnews;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -21,16 +22,17 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.ui.baseactivity.BaseActivity;
-import com.wotingfm.ui.music.program.fenlei.model.Catalog;
-import com.wotingfm.ui.music.program.fenlei.model.CatalogName;
-import com.wotingfm.ui.mine.person.updatepersonnews.model.UpdatePerson;
-import com.wotingfm.ui.mine.person.updatepersonnews.util.DateUtil;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.mine.MineFragment;
+import com.wotingfm.ui.mine.person.updatepersonnews.model.UpdatePerson;
+import com.wotingfm.ui.mine.person.updatepersonnews.util.DateUtil;
+import com.wotingfm.ui.music.program.fenlei.model.Catalog;
+import com.wotingfm.ui.music.program.fenlei.model.CatalogName;
 import com.wotingfm.util.L;
 import com.wotingfm.util.TimeUtils;
 import com.wotingfm.util.ToastUtils;
@@ -53,7 +55,7 @@ import java.util.Map;
  * 作者：xinlong on 2016/7/19 21:18
  * 邮箱：645700751@qq.com
  */
-public class UpdatePersonActivity extends BaseActivity implements
+public class UpdatePersonActivity extends Fragment implements
         OnClickListener, DatePicker.OnDateChangedListener, DatePickerDialog.OnDateSetListener {
 
     private List<String> yearList;
@@ -104,18 +106,23 @@ public class UpdatePersonActivity extends BaseActivity implements
     private int wheelTypeDay = -1;
     private int provinceIndex;        // 选中的省级角标
     private int cityIndex;            // 选中的市级角标
+    private FragmentActivity context;
+    private View rootView;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_updateperson);
-        initView();
-        setValueByPrefer();
-        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            send();
-        } else {
-            ToastUtils.show_always(context, "网络失败，请检查网络");
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.activity_updateperson, container, false);
+            context = getActivity();
+            initView();
+            setValueByPrefer();
+            if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                send();
+            } else {
+                ToastUtils.show_always(context, "网络失败，请检查网络");
+            }
         }
+        return rootView;
     }
 
     private void setValueByPrefer() {
@@ -160,23 +167,23 @@ public class UpdatePersonActivity extends BaseActivity implements
 
     // 设置界面
     private void initView() {
-        findViewById(R.id.head_left_btn).setOnClickListener(this);
-        findViewById(R.id.lin_age).setOnClickListener(this);
-        findViewById(R.id.lin_area).setOnClickListener(this);
+        rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
+        rootView.findViewById(R.id.lin_age).setOnClickListener(this);
+        rootView.findViewById(R.id.lin_area).setOnClickListener(this);
 
-        genderMan = findViewById(R.id.lin_gender_man);
+        genderMan = rootView.findViewById(R.id.lin_gender_man);
         genderMan.setOnClickListener(this);
 
-        genderWoman = findViewById(R.id.lin_gender_woman);
+        genderWoman = rootView.findViewById(R.id.lin_gender_woman);
         genderWoman.setOnClickListener(this);
 
-        textAccount = (TextView) findViewById(R.id.tv_zhanghu);
-        textName = (EditText) findViewById(R.id.tv_name);
-        textAge = (TextView) findViewById(R.id.tv_age);
-        textStarSign = (TextView) findViewById(R.id.tv_xingzuo);
-        textRegion = (TextView) findViewById(R.id.tv_region);
-        textEmail = (EditText) findViewById(R.id.tv_mail);
-        textSignature = (EditText) findViewById(R.id.tv_signature);
+        textAccount = (TextView) rootView.findViewById(R.id.tv_zhanghu);
+        textName = (EditText) rootView.findViewById(R.id.tv_name);
+        textAge = (TextView) rootView.findViewById(R.id.tv_age);
+        textStarSign = (TextView) rootView.findViewById(R.id.tv_xingzuo);
+        textRegion = (TextView) rootView.findViewById(R.id.tv_region);
+        textEmail = (EditText) rootView.findViewById(R.id.tv_mail);
+        textSignature = (EditText) rootView.findViewById(R.id.tv_signature);
 
         datePickerDialog();
     }
@@ -280,7 +287,7 @@ public class UpdatePersonActivity extends BaseActivity implements
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
                 saveData();
-                finish();
+                MineActivity.close();
                 break;
             case R.id.lin_age:// 年龄
                 dateDialog.show();
@@ -311,13 +318,10 @@ public class UpdatePersonActivity extends BaseActivity implements
         email = textEmail.getText().toString().trim();// 邮箱
         userSign = textSignature.getText().toString().trim();// 签名
 
-        Intent intent = new Intent();
         UpdatePerson pM = new UpdatePerson(nickName, birthday, starSign, region, userSign, gender, email);
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("data", pM);
-        bundle.putString("regionId", regionId);
-        intent.putExtras(bundle);
-        setResult(1, intent);
+
+        Fragment targetFragment = getTargetFragment();
+        ((MineFragment) targetFragment).setAddCardResult(1,pM,regionId);
     }
 
     // 日期选择框
@@ -414,7 +418,7 @@ public class UpdatePersonActivity extends BaseActivity implements
         dateDialog.setContentView(dialog);
         Window window = dateDialog.getWindow();
         DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        context.getWindowManager().getDefaultDisplay().getMetrics(dm);
         screenWidth = dm.widthPixels;
         ViewGroup.LayoutParams params = dialog.getLayoutParams();
         params.width = screenWidth;
@@ -497,7 +501,7 @@ public class UpdatePersonActivity extends BaseActivity implements
         cityDialog.setContentView(dialog);
         Window window = cityDialog.getWindow();
         DisplayMetrics dm = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        context.getWindowManager().getDefaultDisplay().getMetrics(dm);
         screenWidth = dm.widthPixels;
         ViewGroup.LayoutParams params = dialog.getLayoutParams();
         params.width = screenWidth;
@@ -539,15 +543,9 @@ public class UpdatePersonActivity extends BaseActivity implements
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
-    }
-
-    @Override
-    public void onBackPressed() {
-        saveData();
-        super.onBackPressed();
     }
 
     @Override

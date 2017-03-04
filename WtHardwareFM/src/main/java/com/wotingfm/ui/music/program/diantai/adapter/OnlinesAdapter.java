@@ -17,7 +17,7 @@ import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.ui.music.program.diantai.model.RadioPlay;
-import com.wotingfm.ui.music.program.fmlist.activity.FMListFragment;
+import com.wotingfm.ui.music.program.fmlist.main.FMListFragment;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;

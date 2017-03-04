@@ -64,8 +64,6 @@ public class SimulationService extends Service  {
         // 音量命令
         // 1-8：等级越高输出音量越大（最大320mv）
         serialControl.sendTxt("AT+DMOSETVOLUME=5\r\n");
-
-
     }
 
     public static void setFrequence(String Frequ){
@@ -128,7 +126,7 @@ public class SimulationService extends Service  {
     }
 
     //----------------------------------------------------关闭串口
-    private void CloseComPort(SerialHelper ComPort) {
+    private static void CloseComPort(SerialHelper ComPort) {
         if (ComPort != null) {
             ComPort.stopSend();
             ComPort.close();
@@ -160,6 +158,7 @@ public class SimulationService extends Service  {
     public void onDestroy() {
         super.onDestroy();
         closeDevice();
+        CloseComPort(serialControl);
     }
 
     private class SerialControl extends SerialHelper {

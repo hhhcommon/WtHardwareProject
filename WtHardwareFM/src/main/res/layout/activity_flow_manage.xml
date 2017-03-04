@@ -1,93 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     style="@style/BaseStyle"
+    android:background="@color/dinglan_orange"
     android:orientation="vertical">
 
-    <include android:id="@+id/include_title" layout="@layout/base_activity_title"/>
+    <include
+        android:id="@+id/include_title"
+        layout="@layout/base_activity_title" />
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/app_bg">
+        android:background="@color/app_bg"
+        >
 
         <TextView
             android:id="@+id/text_view_flow_info"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:background="@color/setting_bg_color"
+            android:gravity="center_vertical"
             android:paddingLeft="8dp"
             android:text="流量信息"
             android:textColor="@color/s_green"
-            android:gravity="center_vertical"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/text_view_2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="已使用流量2.0G"
+            android:layout_below="@id/text_view_flow_info"
             android:paddingLeft="8dp"
-            android:layout_below="@id/text_view_flow_info"/>
+            android:text="已使用流量2.0G"
+
+            android:textColor="@color/gray" />
 
         <TextView
             android:id="@+id/text_surplus_flow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="剩余流量1.0G"
-            android:layout_marginRight="8dp"
+            android:layout_alignParentRight="true"
             android:layout_below="@id/text_view_flow_info"
-            android:layout_alignParentRight="true"/>
+            android:layout_marginRight="8dp"
+            android:text="剩余流量1.0G" />
 
         <ProgressBar
             android:id="@+id/pb_flow"
+            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_width="match_parent"
             android:layout_height="10dp"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
             android:layout_below="@+id/text_view_2"
-            android:progressDrawable="@drawable/bg_seekbar"
-            android:layout_margin="8dp"/>
+            android:layout_margin="8dp"
+            android:progressDrawable="@drawable/bg_seekbar" />
 
         <TextView
             android:id="@+id/text_network_speed"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="当前网速300kb/s"
+            android:layout_below="@+id/pb_flow"
             android:layout_marginLeft="8dp"
-            android:layout_below="@+id/pb_flow"/>
+            android:text="当前网速300kb/s" />
 
         <RelativeLayout
             android:id="@+id/view_relative"
             android:layout_width="match_parent"
             android:layout_height="48dp"
-            android:orientation="horizontal"
             android:layout_below="@+id/text_network_speed"
-            android:background="@color/setting_bg_color">
+            android:background="@color/setting_bg_color"
+            android:orientation="horizontal">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="8dp"
                 android:text="定期自动校准"
                 android:textColor="@color/s_green"
-                android:layout_centerVertical="true"
-                android:textSize="16sp"
-                android:layout_marginLeft="8dp"/>
+                android:textSize="16sp" />
 
             <Spinner
                 android:id="@+id/sp_liuliang"
                 android:layout_width="60dp"
                 android:layout_height="40dp"
-                android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="8dp"/>
+                android:layout_centerVertical="true"
+                android:layout_marginRight="8dp" />
 
             <TextView
                 android:id="@+id/tv_showchoice"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="每天"
+                android:layout_centerVertical="true"
                 android:layout_toLeftOf="@id/sp_liuliang"
-                android:layout_centerVertical="true"/>
+                android:text="每天" />
 
         </RelativeLayout>
 
@@ -95,45 +100,45 @@
             android:id="@+id/text_notify"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="流量通知"
             android:layout_below="@+id/view_relative"
-            android:textColor="@color/s_green"
-            android:textSize="16sp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="5dp"/>
+            android:layout_marginTop="5dp"
+            android:text="流量通知"
+            android:textColor="@color/s_green"
+            android:textSize="16sp" />
 
         <TextView
             android:id="@+id/text_view_3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="当使用流量超过90%时通知我"
-            android:layout_below="@+id/text_notify"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
+            android:layout_below="@+id/text_notify"
+            android:layout_marginBottom="10dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginBottom="10dp"/>
+            android:layout_marginTop="5dp"
+            android:text="当使用流量超过90%时通知我" />
 
         <ImageView
             android:id="@+id/image_flow_set"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/wt_person_close"
-            android:layout_alignTop="@id/text_notify"
             android:layout_alignBottom="@id/text_view_3"
-            android:layout_alignRight="@+id/pb_flow" />
+            android:layout_alignRight="@+id/pb_flow"
+            android:layout_alignTop="@id/text_notify"
+            android:src="@mipmap/wt_person_close" />
 
         <TextView
             android:id="@+id/text_recharge"
             android:layout_width="match_parent"
             android:layout_height="48dp"
+            android:layout_below="@+id/text_view_3"
+            android:background="@color/setting_bg_color"
+            android:gravity="center_vertical"
+            android:paddingLeft="8dp"
             android:text="流量充值"
             android:textColor="@color/s_green"
-            android:gravity="center_vertical"
-            android:layout_below="@+id/text_view_3"
-            android:textSize="16sp"
-            android:background="@color/setting_bg_color"
-            android:paddingLeft="8dp"/>
+            android:textSize="16sp" />
 
     </RelativeLayout>
 

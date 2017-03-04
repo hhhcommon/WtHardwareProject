@@ -108,6 +108,7 @@ public class CreateGroupContentActivity extends BaseActivity implements OnClickL
 	private int pFrequency=-1;
 	private Dialog frequencyDialog;
 	private int screenWidth;
+	private String Frequence;
 
 
 	@Override
@@ -251,6 +252,19 @@ public class CreateGroupContentActivity extends BaseActivity implements OnClickL
 			jsonObject.put("GroupType", groupType);
 			jsonObject.put("GroupSignature", SIGN);
 			jsonObject.put("GroupName", NICK);
+			if(!TextUtils.isEmpty(tv_channel1.getText().toString().trim().substring(0,tv_channel1.getText().toString().trim().length()-3))){
+				Frequence=tv_channel1.getText().toString().trim();
+			}
+			if(!TextUtils.isEmpty(tv_channel2.getText().toString().trim().substring(0,tv_channel2.getText().toString().trim().length()-3))){
+				if(!TextUtils.isEmpty(Frequence)){
+				Frequence=Frequence+","+tv_channel2.getText().toString().trim();
+				}else{
+				Frequence=tv_channel2.getText().toString().trim();
+				}
+			}
+
+			jsonObject.put("GroupFreq",Frequence);
+
 			/*
 			 * //NeedMember参数 0为不需要 1为需要 jsonObject.put("NeedMember", 0);
 			 */

@@ -2,17 +2,14 @@ package com.wotingfm.ui.music.player.more.programme.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.view.PagerAdapter;
+import android.support.v4.app.FragmentPagerAdapter;
 
 import java.util.List;
 
-public class MyPagerAdapter extends FragmentStatePagerAdapter {
+public class MyPagerAdapter extends FragmentPagerAdapter {
 	private List<Fragment> fragments;
-	private List<String> title;
-	public MyPagerAdapter(FragmentManager fm, List<String>  arr, List<Fragment> fragments) {
+	public MyPagerAdapter(FragmentManager fm, List<Fragment> fragments) {
 		super(fm);
-		this.title = arr;
 		this.fragments = fragments;
 	}
 
@@ -23,16 +20,7 @@ public class MyPagerAdapter extends FragmentStatePagerAdapter {
 
 	@Override
 	public int getCount() {
-		return title.size();
+		return fragments.size();
 	}
 
-	@Override
-	public CharSequence getPageTitle(int position) {
-		return title.get(position);
-	}
-
-	@Override
-	public int getItemPosition(Object object) {
-		return PagerAdapter.POSITION_NONE;
-	}
 }
