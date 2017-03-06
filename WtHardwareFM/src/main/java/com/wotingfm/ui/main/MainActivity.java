@@ -714,53 +714,6 @@ public class MainActivity extends TabActivity {
         }
     }
 
-    // 获取对讲的频率，存储在Manifest当中
-    private void sendFreq() {
-        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
-        try {
-            jsonObject.put("CatalogType", "11");
-            jsonObject.put("ResultType", "2");
-            jsonObject.put("RelLevel", "0");
-            jsonObject.put("Page", "1");
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-        VolleyRequest.RequestPost(GlobalConfig.getCatalogUrl, tag, jsonObject, new VolleyCallback() {
-            @Override
-            protected void requestSuccess(JSONObject result) {
-                if (isCancelRequest) return;
-                try {
-                    String ReturnType = result.getString("ReturnType");
-                    //Log.v("ReturnType", "ReturnType -- > > " + ReturnType);
-                    if(!TextUtils.isEmpty(ReturnType)){
-                        if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
-                            String ResultList = result.getString("CatalogData");
-                            freqList = new Gson().fromJson(ResultList, new TypeToken<List<Freq>>() {}.getType());
-                            GlobalConfig.FreqList=freqList;
-                            GlobalConfig.getFreq=true;
-                        } else {
-                            ToastUtils.show_always(context, "获取对讲频率失败");
-                        }
-                    }else{
-                        ToastUtils.show_always(context, "获取对讲频率失败");
-                    }
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-
-            @Override
-            protected void requestError(VolleyError error) {
-                ToastUtils.showVolleyError(context);
-            }
-        });
-
-    }
-
-
-
-
     //版本更新对话框
     private void UpdateDialog() {
         View dialog = LayoutInflater.from(this).inflate(R.layout.dialog_update, null);
