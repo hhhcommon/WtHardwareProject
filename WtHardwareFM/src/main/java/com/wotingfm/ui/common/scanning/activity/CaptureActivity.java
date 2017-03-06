@@ -32,9 +32,10 @@ import com.wotingfm.ui.common.scanning.handle.CaptureActivityHandler;
 import com.wotingfm.ui.common.scanning.manager.BeepManager;
 import com.wotingfm.ui.common.scanning.manager.CameraManager;
 import com.wotingfm.ui.common.scanning.model.MessageInfo;
-import com.wotingfm.ui.interphone.find.friendadd.FriendAddActivity;
-import com.wotingfm.ui.interphone.find.groupadd.GroupAddActivity;
-import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.activity.GroupDetailActivity;
+import com.wotingfm.ui.interphone.find.friendadd.FriendAddFragment;
+import com.wotingfm.ui.interphone.find.groupadd.GroupAddFragment;
+import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.main.GroupDetailFragment;
+import com.wotingfm.ui.interphone.main.DuiJiangActivity;
 import com.wotingfm.ui.interphone.model.UserInviteMeInside;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.PhoneMessage;
@@ -60,9 +61,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     private ImageView scanLine;
     private Rect mCropRect = null;
     private boolean isHasSurface = false;
-    private CaptureActivity context;
     private Gson gson;
     private TranslateAnimation animation;
+    private CaptureActivity context;
 
     public Handler getHandler() {
         return handler;
@@ -71,7 +72,6 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     public CameraManager getCameraManager() {
         return cameraManager;
     }
-
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -108,8 +108,9 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         scanLine.startAnimation(animation);
     }
 
+
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         // CameraManager must be initialized here, not in onCreate(). This is
         // necessary because we don't
@@ -118,7 +119,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         // first launch. That led to bugs where the scanning rectangle was the
         // wrong size and partially
         // off screen.
-        cameraManager = new CameraManager(getApplication());
+        cameraManager = new CameraManager(context);
         handler = null;
         if (isHasSurface) {
             // The activity was paused but not stopped, so the surface still
@@ -134,7 +135,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         if (handler != null) {
             handler.quitSynchronously();
             handler = null;
@@ -179,7 +180,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         if(news!=null&&!news.equals("")){
             if(!news.contains("Type")){
                 bundle.putString("result", news);
-                startActivity(new Intent(CaptureActivity.this, ResultActivity.class).putExtras(bundle));
+                startActivity(new Intent(context, ResultActivity.class).putExtras(bundle));
             }else{
                 MessageInfo message=gson.fromJson(news, new TypeToken<MessageInfo>(){}.getType());
                 if(message!=null&&!message.equals("")){
@@ -188,11 +189,11 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                             //添加好友
                             UserInviteMeInside personnews = message.getUserInviteMeInside();
                             if(personnews!=null){
-                                Intent intent = new Intent(context,FriendAddActivity.class);
-                                Bundle bundle1 = new Bundle();
-                                bundle1.putSerializable("contact",personnews);
-                                intent.putExtras(bundle1);
-                                startActivity(intent);
+                                FriendAddFragment fg = new FriendAddFragment();
+                                Bundle bundles = new Bundle();
+                                bundles.putSerializable("contact",personnews);
+                                fg.setArguments(bundles);
+                                DuiJiangActivity.open(fg);
                             }
                         }else if(message.getType().equals("2")){
                             //添加群组
@@ -200,18 +201,22 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                             if(groupnews!=null){
                                 if(groupnews.getGroupCreator()!=null&&!groupnews.getGroupCreator().equals("")){
                                     if(groupnews.getGroupCreator().equals(CommonUtils.getUserId(context))){
-                                        Intent intent = new Intent(context,GroupDetailActivity.class);
+
+                                        GroupDetailFragment fg = new GroupDetailFragment();
                                         Bundle bundle1 = new Bundle();
                                         bundle1.putSerializable("contact",groupnews);
                                         bundle1.putString("type", "FindNewsResultActivity");
-                                        intent.putExtras(bundle1);
-                                        startActivity(intent);
+                                        fg.setArguments(bundle1);
+                                        DuiJiangActivity.open(fg);
+
                                     }else{
-                                        Intent intent = new Intent(context,GroupAddActivity.class);
-                                        Bundle bundle2 = new Bundle();
-                                        bundle2.putSerializable("contact",groupnews);
-                                        intent.putExtras(bundle2);
-                                        startActivity(intent);
+
+                                        GroupAddFragment fg = new GroupAddFragment();
+                                        Bundle bundles = new Bundle();
+                                        bundles.putSerializable("contact",groupnews);
+                                        fg.setArguments(bundles);
+                                        DuiJiangActivity.open(fg);
+
                                     }
                                 }
                             }
@@ -219,7 +224,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
                     }
                 }
             }
-            finish();
+            DuiJiangActivity.close();
         }
     }
 
@@ -252,20 +257,20 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
 
     private void displayFrameworkBugMessageAndExit() {
         // camera error
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(getString(R.string.app_name));
         builder.setMessage("相机打开出错，请稍后重试");
         builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
-                finish();
+                DuiJiangActivity.close();
             }
         });
 
         builder.setOnCancelListener(new DialogInterface.OnCancelListener() {
             @Override
             public void onCancel(DialogInterface dialog) {
-                finish();
+                DuiJiangActivity.close();
             }
         });
 
@@ -324,7 +329,7 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         inactivityTimer.shutdown();
         gson = null;
@@ -337,6 +342,5 @@ public final class CaptureActivity extends Activity implements SurfaceHolder.Cal
         animation = null;
         cameraManager = null;
         context = null;
-        setContentView(R.layout.activity_null);
     }
 }

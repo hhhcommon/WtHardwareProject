@@ -40,10 +40,10 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.common.model.UserInfo;
-import com.wotingfm.ui.interphone.alert.CallAlertActivity;
+import com.wotingfm.ui.interphone.alert.CallAlertFragment;
 import com.wotingfm.ui.interphone.chat.fragment.ChatFragment;
-import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.activity.GroupDetailActivity;
-import com.wotingfm.ui.interphone.group.groupcontrol.personnews.TalkPersonNewsActivity;
+import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.main.GroupDetailFragment;
+import com.wotingfm.ui.interphone.group.groupcontrol.personnews.TalkPersonNewsFragment;
 import com.wotingfm.ui.interphone.linkman.adapter.SortGroupMemberAdapter;
 import com.wotingfm.ui.interphone.linkman.adapter.TalkGroupAdapter;
 import com.wotingfm.ui.interphone.linkman.adapter.TalkPersonNoAdapter;
@@ -52,7 +52,8 @@ import com.wotingfm.ui.interphone.linkman.view.CharacterParser;
 import com.wotingfm.ui.interphone.linkman.view.PinyinComparator;
 import com.wotingfm.ui.interphone.linkman.view.SideBar;
 import com.wotingfm.ui.interphone.main.DuiJiangActivity;
-import com.wotingfm.ui.interphone.message.activity.NewsActivity;
+import com.wotingfm.ui.interphone.main.DuiJiangFragment;
+import com.wotingfm.ui.interphone.message.main.NewsFragment;
 import com.wotingfm.ui.mine.person.login.LoginActivity;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.widget.HeightListView;
@@ -185,8 +186,8 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
         lin_news_message.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(context, NewsActivity.class);
-                startActivity(intent);
+                NewsFragment fg = new NewsFragment();
+                DuiJiangActivity.open(fg);
             }
         });
 
@@ -316,7 +317,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
                     ChatFragment.lin_foot.setVisibility(View.GONE);
                     ChatFragment.zhiDingGroup(group);
                     // 对讲主页界面更新
-                    DuiJiangActivity.update();
+                    DuiJiangFragment.update();
                     confirmDialog.dismiss();
                 }
             }
@@ -325,11 +326,13 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
 
     // 对讲呼叫
     protected void call(String id) {
-        Intent it = new Intent(context, CallAlertActivity.class);
+
+        CallAlertFragment fg = new CallAlertFragment();
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
-        it.putExtras(bundle);
-        startActivity(it);
+        fg.setArguments(bundle);
+        DuiJiangActivity.open(fg);
+
     }
 
     public void send() {
@@ -638,12 +641,12 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 跳转到详细信息界面
-                Intent intent = new Intent(context, TalkPersonNewsActivity.class);
+                TalkPersonNewsFragment fg4 = new TalkPersonNewsFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("type", "talkpersonfragment");
                 bundle.putSerializable("data", srclist_p.get(position - 1));
-                intent.putExtras(bundle);
-                startActivity(intent);
+                fg4.setArguments(bundle);
+                DuiJiangActivity.open(fg4);
             }
         });
 
@@ -675,12 +678,12 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
                         // 这是 zhidinggroups，不是 zhidinggroup；
                         ChatFragment.zhiDingGroupS(group);
                         // 对讲主页界面更新
-                        DuiJiangActivity.update();
+                        DuiJiangFragment.update();
                     }
                 } else {
                     ChatFragment.zhiDingGroup(group);
                     // 对讲主页界面更新
-                    DuiJiangActivity.update();
+                    DuiJiangFragment.update();
                 }
             }
         });
@@ -689,15 +692,12 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 // 跳转到群组详情页面
-                Intent intent = new Intent(context, GroupDetailActivity.class);
-                Bundle bundle = new Bundle();
-                bundle.putString("type", "talkpersonfragment");
-                bundle.putSerializable("data", groupList.get(position));
-
-                String s=groupList.get(position).getGroupName();
-                String s1=groupList.get(position).getGroupMyAlias();
-                intent.putExtras(bundle);
-                startActivity(intent);
+                GroupDetailFragment fg = new GroupDetailFragment();
+                Bundle bundle1 = new Bundle();
+                bundle1.putString("type", "talkpersonfragment");
+                bundle1.putSerializable("data", groupList.get(position));
+                fg.setArguments(bundle1);
+                DuiJiangActivity.open(fg);
             }
         });
     }

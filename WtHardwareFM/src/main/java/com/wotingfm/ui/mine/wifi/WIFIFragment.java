@@ -26,7 +26,7 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.wifi.adapter.WiFiListAdapter;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;

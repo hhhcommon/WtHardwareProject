@@ -1,5 +1,7 @@
 package com.wotingfm.ui.music.search.main;
 
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -8,7 +10,6 @@ import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 
-import com.baidu.cyberplayer.core.BVideoView;
 import com.wotingfm.R;
 import com.wotingfm.util.SequenceUUID;
 
@@ -20,13 +21,8 @@ public class SearchLikeActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_view_main);
+        setContentView(R.layout.activity_view_other);
         context=this;
-        BVideoView videoView = (BVideoView) findViewById(R.id.video_view);
-        videoView.setVideoPath(null);
-        videoView.start();
-        videoView.stopPlayback();
-        videoView.setVisibility(View.GONE);
 
         setType();
         SearchLikeActivity.open(new SearchLikeFragment());
@@ -78,4 +74,14 @@ public class SearchLikeActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+    // 设置android app 的字体大小不受系统字体大小改变的影响
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        return res;
+    }
+
 }

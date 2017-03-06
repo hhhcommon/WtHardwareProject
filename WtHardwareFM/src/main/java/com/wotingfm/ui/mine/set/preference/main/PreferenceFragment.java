@@ -21,7 +21,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.set.preference.adapter.PianHaoAdapter;
 import com.wotingfm.ui.music.program.fenlei.model.FenLei;
 import com.wotingfm.util.CommonUtils;

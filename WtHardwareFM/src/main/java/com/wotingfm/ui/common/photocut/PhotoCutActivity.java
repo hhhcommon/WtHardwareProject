@@ -1,18 +1,20 @@
 package com.wotingfm.ui.common.photocut;
 
-import android.annotation.TargetApi;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.ui.interphone.group.creategroup.CreateGroupContentFragment;
+import com.wotingfm.ui.interphone.main.DuiJiangActivity;
 import com.wotingfm.widget.photocut.ClipImageLayout;
 
 import java.io.ByteArrayOutputStream;
@@ -22,30 +24,37 @@ import java.io.FileOutputStream;
 /**
  * 图片剪裁页面
  */
-public class PhotoCutActivity extends BaseActivity {
+public class PhotoCutActivity extends Fragment {
     private Bitmap bitmap;
     private ClipImageLayout mClipImageLayout;
     private TextView textSave;
     private int type;
+    private View rootView;
 
-    @TargetApi(Build.VERSION_CODES.KITKAT)
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photo_cut);
-        initView();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.activity_photo_cut, container, false);
+            rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+            initView();
+        }
+        return rootView;
     }
 
     /**
      * 处理上一个页面传递过来的数据
      */
     private void handleIntent() {
-        Intent intent = getIntent();
-        if (intent == null) {
+        if (getArguments() == null) {
             return ;
         }
-        String imageUrl = intent.getStringExtra(StringConstant.START_PHOTO_ZOOM_URI);
-        type = intent.getIntExtra(StringConstant.START_PHOTO_ZOOM_TYPE, -1);
+        String imageUrl = getArguments().getString(StringConstant.START_PHOTO_ZOOM_URI);
+        type = getArguments().getInt(StringConstant.START_PHOTO_ZOOM_TYPE, -1);
         if (imageUrl == null || imageUrl.equals("")) {
             return ;
         }
@@ -67,15 +76,17 @@ public class PhotoCutActivity extends BaseActivity {
                         out.close();
                         Intent intent = new Intent();
                         intent.putExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH, Environment.getExternalStorageDirectory() + "/woting/" + s + ".png");
-                        setResult(1, intent);
-                        finish();
+                        Fragment targetFragment = getTargetFragment();
+                        ((CreateGroupContentFragment) targetFragment).setResult(1, intent);
+                        DuiJiangActivity.close();
                     } else {
                         FileOutputStream out = new FileOutputStream(new File(Environment.getExternalStorageDirectory() + "/woting/portaitUser.png"));
                         out.write(byteArrayOutputStream.toByteArray());
                         out.flush();
                         out.close();
-                        setResult(1);
-                        finish();
+                        Fragment targetFragment = getTargetFragment();
+                        ((CreateGroupContentFragment) targetFragment).setResult(1,null);
+                        DuiJiangActivity.close();
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -88,13 +99,13 @@ public class PhotoCutActivity extends BaseActivity {
      * 初始化界面
      */
     private void initView() {
-        mClipImageLayout = (ClipImageLayout) findViewById(R.id.id_clipImageLayout);
-        textSave = (TextView) findViewById(R.id.text_save);
+        mClipImageLayout = (ClipImageLayout) rootView.findViewById(R.id.id_clipImageLayout);
+        textSave = (TextView) rootView.findViewById(R.id.text_save);
         handleIntent();
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         if (bitmap != null && !bitmap.isRecycled()) {
             bitmap.recycle();
@@ -105,6 +116,5 @@ public class PhotoCutActivity extends BaseActivity {
             mClipImageLayout = null;
         }
         textSave = null;
-        setContentView(R.layout.activity_null);
     }
 }

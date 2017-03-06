@@ -15,7 +15,7 @@ import android.webkit.WebViewClient;
 
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.util.DialogUtils;
 
 /**

@@ -1,10 +1,13 @@
 package com.wotingfm.ui.interphone.group.groupcontrol.changegrouptype;
 
-import android.app.Activity;
 import android.app.Dialog;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -15,6 +18,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.ui.interphone.main.DuiJiangActivity;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
 
@@ -26,8 +30,7 @@ import org.json.JSONObject;
  * @author 辛龙
  * 2016年7月19日
  */
-public class ChangeGroupTypeActivity extends Activity implements OnClickListener {
-	private ChangeGroupTypeActivity context;
+public class ChangeGroupTypeActivity extends Fragment implements OnClickListener {
 	private LinearLayout head_left_btn;
 	private ImageView img1;
 	private ImageView img2;
@@ -43,15 +46,20 @@ public class ChangeGroupTypeActivity extends Activity implements OnClickListener
 	private Dialog dialog;
 	private String tag = "CHANGE_GROUP_TYPE_VOLLEY_REQUEST_CANCEL_TAG";
 	private boolean isCancelRequest;
+	private FragmentActivity context;
+	private View rootView;
+
 
 	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_changegrouptype);
-		context = this;
-		setView();
-		setListener();
-
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+		if (rootView == null) {
+			rootView = inflater.inflate(R.layout.activity_changegrouptype, container, false);
+			rootView.setOnClickListener(this);
+			context = getActivity();
+			setView();
+			setListener();
+		}
+		return rootView;
 	}
 
 	private void setListener() {
@@ -63,23 +71,23 @@ public class ChangeGroupTypeActivity extends Activity implements OnClickListener
 	}
 
 	private void setView() {
-		head_left_btn = (LinearLayout) findViewById(R.id.head_left_btn);
-		head_right_btn = (LinearLayout) findViewById(R.id.head_right_btn);
-		img1 = (ImageView) findViewById(R.id.img1);
-		img2 = (ImageView) findViewById(R.id.img2);
-		img3 = (ImageView) findViewById(R.id.img3);
-		lin_open = (LinearLayout) findViewById(R.id.lin_open);			// 公开
-		lin_password = (LinearLayout) findViewById(R.id.lin_password);	// 密码
-		lin_vertify = (LinearLayout) findViewById(R.id.lin_vertify);	// 验证
-		lin_mima = (LinearLayout) findViewById(R.id.lin_mima);			// 当点击lin_password后展开的控件
-		et_group_password = (EditText) findViewById(R.id.edittext_password);
+		head_left_btn = (LinearLayout) rootView.findViewById(R.id.head_left_btn);
+		head_right_btn = (LinearLayout) rootView.findViewById(R.id.head_right_btn);
+		img1 = (ImageView)rootView. findViewById(R.id.img1);
+		img2 = (ImageView) rootView.findViewById(R.id.img2);
+		img3 = (ImageView) rootView.findViewById(R.id.img3);
+		lin_open = (LinearLayout) rootView.findViewById(R.id.lin_open);			// 公开
+		lin_password = (LinearLayout)rootView. findViewById(R.id.lin_password);	// 密码
+		lin_vertify = (LinearLayout) rootView.findViewById(R.id.lin_vertify);	// 验证
+		lin_mima = (LinearLayout) rootView.findViewById(R.id.lin_mima);			// 当点击lin_password后展开的控件
+		et_group_password = (EditText)rootView. findViewById(R.id.edittext_password);
 	}
 
 	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 		case R.id.head_left_btn:// 注销登录
-			finish();
+			DuiJiangActivity.close();
 			break;
 		case R.id.head_right_btn:// 我是确定
 			if (judegeflag == -1) {
@@ -123,11 +131,11 @@ public class ChangeGroupTypeActivity extends Activity implements OnClickListener
 	private void checkEdit() {
 		password = et_group_password.getText().toString().trim();
 		if (password.trim().equals("")) {
-			Toast.makeText(this, "密码不能为空", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "密码不能为空", Toast.LENGTH_SHORT).show();
 			return;
 		}
 		if (password.length() < 6) {
-			Toast.makeText(this, "请输入六位以上密码", Toast.LENGTH_SHORT).show();
+			Toast.makeText(context, "请输入六位以上密码", Toast.LENGTH_SHORT).show();
 			return;
 		}
 
@@ -176,7 +184,7 @@ public class ChangeGroupTypeActivity extends Activity implements OnClickListener
 	}
 	
 	@Override
-	protected void onDestroy() {
+	public void onDestroy() {
 		super.onDestroy();
 		isCancelRequest = VolleyRequest.cancelRequest(tag);
 		context = null;
@@ -193,6 +201,5 @@ public class ChangeGroupTypeActivity extends Activity implements OnClickListener
 		password = null;
 		dialog = null;
 		tag = null;
-		setContentView(R.layout.activity_null);
 	}
 }

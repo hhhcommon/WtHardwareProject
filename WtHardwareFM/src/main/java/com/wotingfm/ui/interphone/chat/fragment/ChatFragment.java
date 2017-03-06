@@ -45,7 +45,7 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.common.model.UserInfo;
-import com.wotingfm.ui.interphone.alert.CallAlertActivity;
+import com.wotingfm.ui.interphone.alert.CallAlertFragment;
 import com.wotingfm.ui.interphone.chat.adapter.ChatListAdapter;
 import com.wotingfm.ui.interphone.chat.adapter.GroupPersonAdapter;
 import com.wotingfm.ui.interphone.chat.dao.SearchTalkHistoryDao;
@@ -54,11 +54,12 @@ import com.wotingfm.ui.interphone.common.message.MessageUtils;
 import com.wotingfm.ui.interphone.common.message.MsgNormal;
 import com.wotingfm.ui.interphone.common.message.content.MapContent;
 import com.wotingfm.ui.interphone.common.model.ListInfo;
-import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.activity.GroupDetailActivity;
-import com.wotingfm.ui.interphone.group.groupcontrol.grouppersonnews.GroupPersonNewsActivity;
-import com.wotingfm.ui.interphone.group.groupcontrol.personnews.TalkPersonNewsActivity;
+import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.main.GroupDetailFragment;
+import com.wotingfm.ui.interphone.group.groupcontrol.grouppersonnews.GroupPersonNewsFragment;
+import com.wotingfm.ui.interphone.group.groupcontrol.personnews.TalkPersonNewsFragment;
 import com.wotingfm.ui.interphone.linkman.model.LinkMan;
 import com.wotingfm.ui.interphone.main.DuiJiangActivity;
+import com.wotingfm.ui.interphone.main.DuiJiangFragment;
 import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.mine.person.login.LoginActivity;
 import com.wotingfm.util.AssembleImageUrlUtils;
@@ -141,6 +142,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
     private static List<ListInfo> listInfo;
     private RelativeLayout relative_view;
     public static boolean isVisible;
+    private ChatFragment ct;
 
 
     @Override
@@ -153,6 +155,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this.getActivity();
+        ct=this;
         initDao();      // 初始化数据库
         setReceiver();  // 注册广播接收socketService的数据
     }
@@ -433,20 +436,23 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                         isFriend = false;
                     }
                     if (isFriend) {
-                        Intent intent = new Intent(context, TalkPersonNewsActivity.class);
+                        TalkPersonNewsFragment fg = new TalkPersonNewsFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "talkoldlistfragment_p");
                         bundle.putSerializable("data", groupPersonListS.get(position));
-                        intent.putExtras(bundle);
-                        startActivity(intent);
+                        fg.setArguments(bundle);
+                        DuiJiangActivity.open(fg);
                     } else {
-                        Intent intent = new Intent(context, GroupPersonNewsActivity.class);
+
+                        GroupPersonNewsFragment fg = new GroupPersonNewsFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "talkoldlistfragment_p");
                         bundle.putString("id", interPhoneId);
                         bundle.putSerializable("data", groupPersonListS.get(position));
-                        intent.putExtras(bundle);
-                        startActivityForResult(intent, 1);
+                        fg.setArguments(bundle);
+                        fg.setTargetFragment(ct,1);
+                        DuiJiangActivity.open(fg);
+
                     }
                 }
             });
@@ -605,32 +611,37 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                 String type = allList.get(position).getTyPe();
                 if (type != null && type.equals("group")) {
                     //跳转到群组详情页面
-                    Intent intent = new Intent(context, GroupDetailActivity.class);
-                    Bundle bundle = new Bundle();
-                    bundle.putString("type", "talkoldlistfragment");
-                    bundle.putString("activationid", interPhoneId);
-                    bundle.putSerializable("data", allList.get(position));
-                    intent.putExtras(bundle);
-                    context.startActivity(intent);
+
+                    GroupDetailFragment fg = new GroupDetailFragment();
+                    Bundle bundle1 = new Bundle();
+                    bundle1.putString("type", "talkoldlistfragment");
+                    bundle1.putString("activationid", interPhoneId);
+                    bundle1.putSerializable("data", allList.get(position));
+                    fg.setArguments(bundle1);
+                    DuiJiangActivity.open(fg);
                 } else {
                     // 跳转到详细信息界面
-                    Intent intent = new Intent(context, TalkPersonNewsActivity.class);
+
+                    TalkPersonNewsFragment fg = new TalkPersonNewsFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "talkoldlistfragment");
                     bundle.putSerializable("data", allList.get(position));
-                    intent.putExtras(bundle);
-                    context.startActivity(intent);
+                    fg.setArguments(bundle);
+                    DuiJiangActivity.open(fg);
+
                 }
             }
         });
     }
 
     protected static void call(String id) {
-        Intent it = new Intent(context, CallAlertActivity.class);
+
+        CallAlertFragment fg = new CallAlertFragment();
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
-        it.putExtras(bundle);
-        context.startActivity(it);
+        fg.setArguments(bundle);
+        DuiJiangActivity.open(fg);
+
     }
 
     public void getTXL() {
@@ -998,7 +1009,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                     GlobalConfig.isActive = false;
                     zhiDingGroupSS(groupId);
                     //对讲主页界面更新
-                    DuiJiangActivity.update();
+                    DuiJiangFragment.update();
                     confirmDialog.dismiss();
                 }
             }

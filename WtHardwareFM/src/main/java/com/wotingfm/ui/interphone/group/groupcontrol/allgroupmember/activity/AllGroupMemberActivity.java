@@ -1,12 +1,15 @@
 package com.wotingfm.ui.interphone.group.groupcontrol.allgroupmember.activity;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -20,12 +23,12 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.common.model.UserInfo;
-import com.wotingfm.ui.interphone.find.friendadd.FriendAddActivity;
+import com.wotingfm.ui.interphone.find.friendadd.FriendAddFragment;
 import com.wotingfm.ui.interphone.group.groupcontrol.allgroupmember.adapter.CreateGroupMembersAdapter;
-import com.wotingfm.ui.interphone.group.groupcontrol.personnews.TalkPersonNewsActivity;
+import com.wotingfm.ui.interphone.group.groupcontrol.personnews.TalkPersonNewsFragment;
 import com.wotingfm.ui.interphone.linkman.view.SideBar;
+import com.wotingfm.ui.interphone.main.DuiJiangActivity;
 import com.wotingfm.util.CharacterParser;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
@@ -45,7 +48,7 @@ import java.util.List;
  * 作者：xinlong on 2016/3/9
  * 邮箱：645700751@qq.com
  */
-public class AllGroupMemberActivity extends BaseActivity implements View.OnClickListener, TextWatcher {
+public class AllGroupMemberActivity extends Fragment implements View.OnClickListener, TextWatcher {
     private CharacterParser characterParser;
     private PinyinComparator_a pinyinComparator;
     private CreateGroupMembersAdapter adapter;
@@ -64,6 +67,8 @@ public class AllGroupMemberActivity extends BaseActivity implements View.OnClick
 
     private List<UserInfo> userList;    // 获取的 userList
     private List<UserInfo> userList2 = new ArrayList<>();
+    private FragmentActivity context;
+    private View rootView;
 
     // 实例化汉字转拼音类
     private void initCharacterParser() {
@@ -75,7 +80,7 @@ public class AllGroupMemberActivity extends BaseActivity implements View.OnClick
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.wt_back:          // 返回
-                finish();
+                DuiJiangActivity.close();
                 break;
             case R.id.image_clear:      // 清空搜索框中的内容
                 editSearchContent.setText("");
@@ -86,38 +91,40 @@ public class AllGroupMemberActivity extends BaseActivity implements View.OnClick
     }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_transfer_authority);
-
-        initCharacterParser();
-        initViews();
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.activity_transfer_authority, container, false);
+            rootView.setOnClickListener(this);
+            context = getActivity();
+            initCharacterParser();
+            initViews();
+        }
+        return rootView;
     }
+
 
     // 初始化控件
     private void initViews() {
-        if(getIntent() != null) {
-            groupId = getIntent().getStringExtra("GroupId");                // 上一个界面传递过来的数据
-        }
+        groupId = getArguments().getString("GroupId");                // 上一个界面传递过来的数据
 
-        findViewById(R.id.tv_head_right).setVisibility(View.INVISIBLE);     // 右上角的"确定"
-        findViewById(R.id.wt_back).setOnClickListener(this);                // 返回
+        rootView.findViewById(R.id.tv_head_right).setVisibility(View.INVISIBLE);     // 右上角的"确定"
+        rootView.findViewById(R.id.wt_back).setOnClickListener(this);                // 返回
 
-        imageClear = (ImageView) findViewById(R.id.image_clear);            // 清除
+        imageClear = (ImageView) rootView.findViewById(R.id.image_clear);            // 清除
         imageClear.setOnClickListener(this);
 
-        editSearchContent = (EditText) findViewById(R.id.et_search);        // 搜索内容
+        editSearchContent = (EditText) rootView.findViewById(R.id.et_search);        // 搜索内容
         editSearchContent.addTextChangedListener(this);
 
-        textHeadName = (TextView) findViewById(R.id.tv_head_name);          // 标题
-        tvNoFriends = (TextView) findViewById(R.id.title_layout_no_friends);// 没有找到联系人
+        textHeadName = (TextView) rootView.findViewById(R.id.tv_head_name);          // 标题
+        tvNoFriends = (TextView) rootView.findViewById(R.id.title_layout_no_friends);// 没有找到联系人
 
-        TextView dialogs = (TextView) findViewById(R.id.dialog);
-        sideBar = (SideBar) findViewById(R.id.sidebar);
+        TextView dialogs = (TextView) rootView.findViewById(R.id.dialog);
+        sideBar = (SideBar) rootView.findViewById(R.id.sidebar);
         sideBar.setTextView(dialogs);
         sideBar.setOnTouchingLetterChangedListener(new MySideBarLis());     // 设置右侧触摸监听
 
-        listView = (ListView) findViewById(R.id.country_lvcountry);         // 好友列表
+        listView = (ListView) rootView.findViewById(R.id.country_lvcountry);         // 好友列表
         listView.setOnItemClickListener(new MyListItemLis());
 
         if (groupId != null) {
@@ -146,13 +153,14 @@ public class AllGroupMemberActivity extends BaseActivity implements View.OnClick
                     String ReturnType = result.getString("ReturnType");
                     L.v("ReturnType -- > > " + ReturnType);
 
-                    if(ReturnType == null) {
+                    if (ReturnType == null) {
                         ToastUtils.show_always(context, "获取成员失败，请稍后再试");
-                        return ;
+                        return;
                     }
-                    if(ReturnType.equals("1001") || ReturnType.equals("1002")) {
+                    if (ReturnType.equals("1001") || ReturnType.equals("1002")) {
                         try {
-                            userList = new Gson().fromJson(result.getString("UserList"), new TypeToken<List<UserInfo>>() {}.getType());
+                            userList = new Gson().fromJson(result.getString("UserList"), new TypeToken<List<UserInfo>>() {
+                            }.getType());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -277,21 +285,25 @@ public class AllGroupMemberActivity extends BaseActivity implements View.OnClick
                     mUserInfo.setUserName(userList2.get(position).getUserName());
                     mUserInfo.setUserId(userList2.get(position).getUserId());
                     mUserInfo.setUserAliasName(userList2.get(position).getUserAliasName());
-                    Intent intent = new Intent(AllGroupMemberActivity.this, TalkPersonNewsActivity.class);
+
+                    TalkPersonNewsFragment fg = new TalkPersonNewsFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "TalkGroupNewsActivity_p");
                     bundle.putString("id", groupId);
                     bundle.putSerializable("data", mUserInfo);
-                    intent.putExtras(bundle);
-                    startActivity(intent);
+                    fg.setArguments(bundle);
+                    DuiJiangActivity.open(fg);
+
                 } else {// 不是好友 跳转到非好友界面
-                    Intent intent = new Intent(AllGroupMemberActivity.this, FriendAddActivity.class);
+
+                    FriendAddFragment fg = new FriendAddFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "FriendAddActivity");
                     bundle.putString("id", groupId);
                     bundle.putSerializable("data", userList2.get(position));
-                    intent.putExtras(bundle);
-                    startActivity(intent);
+                    fg.setArguments(bundle);
+                    DuiJiangActivity.open(fg);
+
                 }
             }
         }
@@ -310,7 +322,7 @@ public class AllGroupMemberActivity extends BaseActivity implements View.OnClick
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         isCancelRequest = VolleyRequest.cancelRequest(tag);
         pinyinComparator = null;
