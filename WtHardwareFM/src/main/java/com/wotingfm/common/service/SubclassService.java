@@ -13,14 +13,15 @@ import android.util.Log;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
-import com.wotingfm.ui.interphone.alert.CallAlertActivity;
-import com.wotingfm.ui.interphone.alert.ReceiveAlertActivity;
+import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.helper.InterPhoneControlHelper;
+import com.wotingfm.ui.interphone.alert.CallAlertFragment;
+import com.wotingfm.ui.interphone.alert.ReceiveAlertFragment;
 import com.wotingfm.ui.interphone.common.message.MessageUtils;
 import com.wotingfm.ui.interphone.common.message.MsgNormal;
 import com.wotingfm.ui.interphone.common.message.content.MapContent;
 import com.wotingfm.ui.interphone.common.model.CallerInfo;
-import com.wotingfm.common.constant.BroadcastConstants;
-import com.wotingfm.common.helper.InterPhoneControlHelper;
+import com.wotingfm.ui.interphone.main.DuiJiangActivity;
 
 import org.json.JSONObject;
 import org.json.JSONTokener;
@@ -71,7 +72,7 @@ public class SubclassService extends Service {
 		public void onReceive(Context context, Intent intent) {
 			String action=intent.getAction();
 			if(action.equals(BroadcastConstants.PUSH_BACK)){////////////////////////////////////////////////////////////////////////////////
-				if(ReceiveAlertActivity.instance==null){
+				if(ReceiveAlertFragment.context==null){
 				}else{
 					abortBroadcast();
 					//					MsgNormal message = (MsgNormal) intent.getSerializableExtra("outmessage");
@@ -91,8 +92,8 @@ public class SubclassService extends Service {
 										musicPlayer.stop();
 										musicPlayer=null;
 									}
-									if(ReceiveAlertActivity.instance!=null){
-										ReceiveAlertActivity.instance.finish();
+									if(ReceiveAlertFragment.context!=null){
+										ReceiveAlertFragment.close();
 									}
 								}
 								break;
@@ -143,13 +144,12 @@ public class SubclassService extends Service {
 											handler.removeCallbacks(run);
 										}
 										InterPhoneControlHelper.PersonTalkHJCDYD(context,callid ,message.getMsgId().trim(),callerId);//呼叫传递应答
-										if(CallAlertActivity.instance!=null){
-											CallAlertActivity.instance.finish();
+										if(CallAlertFragment.context!=null){
+											CallAlertFragment.close();
 										}
-										if(ReceiveAlertActivity.instance==null){
-											Intent it =new Intent(context,ReceiveAlertActivity.class); 
-											it.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-											startActivity(it);
+										if(ReceiveAlertFragment.context==null){
+											ReceiveAlertFragment fg = new ReceiveAlertFragment();
+											DuiJiangActivity.open(fg);
 										}
 										run = new Runnable() {
 											@Override
@@ -161,8 +161,8 @@ public class SubclassService extends Service {
 														musicPlayer.stop();
 														musicPlayer=null;
 													}
-													if(ReceiveAlertActivity.instance!=null){
-														ReceiveAlertActivity.instance.finish();
+													if(ReceiveAlertFragment.context!=null){
+														ReceiveAlertFragment.close();
 													}
 													handler.removeCallbacks(run);
 												}

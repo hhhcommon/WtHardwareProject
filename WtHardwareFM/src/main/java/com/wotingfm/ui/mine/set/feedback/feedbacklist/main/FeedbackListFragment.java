@@ -17,7 +17,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.set.feedback.feedbacklist.adapter.FeedBackExpandAdapter;
 import com.wotingfm.ui.mine.set.feedback.feedbacklist.model.OpinionMessage;
 import com.wotingfm.util.DialogUtils;

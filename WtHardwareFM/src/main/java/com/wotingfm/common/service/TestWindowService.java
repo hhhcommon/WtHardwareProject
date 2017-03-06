@@ -92,8 +92,8 @@ public class TestWindowService extends Service {
         params.type = WindowManager.LayoutParams.TYPE_SYSTEM_ALERT;
         params.format = PixelFormat.RGBA_8888; // 设置图片格式，效果为背景透明
         // 设置Window flag
-//        params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
-        params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+       // params.flags = WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL | WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
+        params.flags =WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         params.width = PhoneMessage.ScreenWidth;
         params.height = 90;
         params.y = 720;

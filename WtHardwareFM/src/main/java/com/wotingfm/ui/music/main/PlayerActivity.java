@@ -1,5 +1,7 @@
 package com.wotingfm.ui.music.main;
 
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
@@ -76,5 +78,15 @@ public class PlayerActivity extends AppCompatActivity {
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    // 设置android app 的字体大小不受系统字体大小改变的影响
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        return res;
     }
 }

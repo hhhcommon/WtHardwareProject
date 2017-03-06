@@ -17,7 +17,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 
 /**
  * 配置WiFi密码

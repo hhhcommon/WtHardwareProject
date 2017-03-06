@@ -8,6 +8,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
@@ -59,7 +61,8 @@ import com.wotingfm.ui.interphone.common.model.Data;
 import com.wotingfm.ui.interphone.common.model.MessageForMainGroup;
 import com.wotingfm.ui.interphone.group.creategroup.model.Freq;
 import com.wotingfm.ui.interphone.main.DuiJiangActivity;
-import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.interphone.main.DuiJiangFragment;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.person.login.LoginActivity;
 import com.wotingfm.ui.music.download.service.DownloadService;
 import com.wotingfm.ui.music.main.PlayerActivity;
@@ -100,6 +103,7 @@ public class MainActivity extends TabActivity {
     private int upDataType = 1;      // 1,不需要强制升级2，需要强制升级
     private boolean isCancelRequest;
     private List<CatalogName> list;
+    private List<Freq> freqList;
 
     private static Intent Socket, VoiceStreamRecord, VoiceStreamPlayer, Location, Subclass, Download, Notification, TestFloatingWindow, FloatingWindow;
 
@@ -927,7 +931,7 @@ public class MainActivity extends TabActivity {
     public void addGroup() {
         //对讲主页界面更新
         changeTwo();
-        DuiJiangActivity.update();
+        DuiJiangFragment.update();
     }
 
     /*
@@ -946,6 +950,16 @@ public class MainActivity extends TabActivity {
         talkdb = talkDao.queryHistory().get(0);//得到数据库里边数据
         //对讲主页界面更新
         MainActivity.changeTwo();
-        DuiJiangActivity.update();
+        DuiJiangFragment.update();
+    }
+
+    // 设置android app 的字体大小不受系统字体大小改变的影响
+    @Override
+    public Resources getResources() {
+        Resources res = super.getResources();
+        Configuration config = new Configuration();
+        config.setToDefaults();
+        res.updateConfiguration(config, res.getDisplayMetrics());
+        return res;
     }
 }

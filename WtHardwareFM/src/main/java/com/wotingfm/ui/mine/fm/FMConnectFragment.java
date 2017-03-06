@@ -16,7 +16,7 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.fm.adapter.FMListAdapter;
 import com.wotingfm.ui.mine.fm.model.FMInfo;
 import com.wotingfm.util.L;

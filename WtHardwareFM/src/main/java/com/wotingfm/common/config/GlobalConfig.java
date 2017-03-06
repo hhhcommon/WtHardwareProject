@@ -57,8 +57,9 @@ public class GlobalConfig {
     public static boolean isIM;                   // 标记实体按键是否要按照网络对讲处理 暂定
     public static boolean getFreq;                // 标记是否获取到频率的flag
 
-    public static String apkUrl = "http://www.wotingfm.com/download/WoTing.apk"; // apk下载默认路径
-     /**
+
+    public static String apkUrl = "http://182.92.175.134/download/WoTing.apk";    // apk下载默认路径
+    /**
      * 是否吐司
      */
     public static boolean isToast;

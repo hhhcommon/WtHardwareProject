@@ -8,7 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.mine.MineActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.music.download.service.DownloadService;
 
 /**

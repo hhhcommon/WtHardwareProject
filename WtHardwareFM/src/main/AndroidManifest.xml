@@ -107,56 +107,12 @@
             android:theme="@style/Theme.AppCompat.NoActionBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <!-- 创建群组主界面 -->
-        <activity
-            android:name=".ui.interphone.group.creategroup.create.CreateGroupActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
         <activity
             android:name="com.wotingfm.ui.music.search.main.SearchLikeActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-        <!-- 创建群组主界面 -->
-        <activity
-            android:name="com.wotingfm.ui.interphone.group.creategroup.CreateGroupContentActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity
-            android:name="com.wotingfm.ui.interphone.group.groupcontrol.grouppersonnews.GroupPersonNewsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
 
-        <!-- 头像剪裁界面 -->
-        <activity
-            android:name=".ui.common.photocut.PhotoCutActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 查找好友、群组界面 -->
-        <activity
-            android:name=".ui.interphone.find.main.FindActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 查找好友、群组显示结果界面 -->
-        <activity
-            android:name=".ui.interphone.find.result.FindNewsResultActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 扫描二维码界面 -->
-        <activity
-            android:name=".ui.common.scanning.activity.CaptureActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 扫描二维码显示结果界面 -->
         <activity
@@ -165,77 +121,14 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <!-- 添加好友界面 -->
-        <activity
-            android:name=".ui.interphone.find.friendadd.FriendAddActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 全部群成员 -->
-        <activity
-            android:name="com.wotingfm.ui.interphone.group.groupcontrol.membershow.GroupMembersActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 添加群组界面 -->
-        <activity
-            android:name=".ui.interphone.find.groupadd.GroupAddActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity
-            android:name=".ui.interphone.alert.CallAlertActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
         <!-- 我的界面 -->
         <activity
-            android:name="com.wotingfm.ui.mine.MineActivity"
+            android:name=".ui.mine.main.MineActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 关于我们 -->
         <activity
-            android:name=".ui.mine.set.about.AboutFragment"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 下载位置 -->
-        <activity
-            android:name=".ui.mine.set.downloadposition.DownloadPositionFragment"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 意见反馈 -->
-        <activity
-            android:name=".ui.mine.set.feedback.main.FeedbackFragment"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 帮助 -->
-        <activity
-            android:name=".ui.mine.set.help.HelpFragment"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 模拟对讲 -->
-        <activity
-            android:name=".ui.interphone.simulation.SimulationInterphoneActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 修改用户号 -->
-        <activity
-            android:name=".ui.mine.set.updateusernum.UpdateUserNumberFragment"
+            android:name="com.wotingfm.ui.common.scanning.activity.CaptureActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -268,94 +161,16 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
-
-        <!-- 修改密码 -->
-        <activity
-            android:name=".ui.mine.person.modifypassword.ModifyPasswordFragment"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 反馈建议历史 -->
-        <activity
-            android:name=".ui.mine.set.feedback.feedbacklist.main.FeedbackListFragment"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 反馈建议历史 -->
         <activity
             android:name=".ui.common.favoritetype.FavoriteProgramTypeActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <activity
-            android:name=".ui.interphone.alert.ReceiveAlertActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity
-            android:name=".ui.interphone.group.groupcontrol.groupdetail.activity.GroupDetailActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity
-            android:name=".ui.interphone.group.groupcontrol.transferauthority.TransferAuthorityActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!--添加群成员-->
-        <activity
-            android:name=".ui.interphone.group.groupcontrol.memberadd.GroupMemberAddActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!--剔除群成员-->
-        <activity
-            android:name=".ui.interphone.group.groupcontrol.groupnumdel.GroupMemberDelActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 全部群成员 -->
-        <activity
-            android:name="com.wotingfm.ui.interphone.group.groupcontrol.allgroupmember.activity.AllGroupMemberActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 修改群密码 -->
-        <activity
-            android:name=".ui.interphone.group.groupcontrol.modifygrouppassword.ModifyGroupPasswordActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
 
         <!-- 对讲主页 -->
         <activity
-            android:name=".ui.interphone.main.DuiJiangActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 审核消息 -->
-        <activity
-            android:name=".ui.interphone.group.groupcontrol.joingrouplist.JoinGroupListActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity
-            android:name=".ui.interphone.group.groupcontrol.handlegroupapply.HandleGroupApplyActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 偏好设置界面 -->
-        <activity
-            android:name=".ui.mine.set.preference.main.PreferenceFragment"
+            android:name="com.wotingfm.ui.interphone.main.DuiJiangActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
@@ -366,16 +181,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-        <activity
-            android:name=".ui.interphone.group.groupcontrol.personnews.TalkPersonNewsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-        <activity
-            android:name=".ui.interphone.message.activity.NewsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
+
         <activity
             android:name=".ui.common.welcome.activity.WelcomeActivity"
             android:screenOrientation="portrait"
@@ -396,35 +202,6 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
 
-        <!-- 专辑界面 -->
-        <activity
-            android:name=".ui.interphone.group.groupcontrol.groupintroduce.GroupIntroduceActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-        <!-- 验证手机号 -->
-        <activity
-            android:name=".ui.mine.person.phonecheck.PhoneCheckFragment"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-
-        <!-- 群管理 -->
-        <activity
-            android:name=".ui.interphone.group.groupcontrol.groupmanage.GroupManagerActivity"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan"/>
-
-        <!-- 通知设置 -->
-        <activity
-            android:name=".ui.mine.set.notifyset.NotifySetFragment"
-            android:screenOrientation="portrait"
-            android:theme="@android:style/Theme.Light.NoTitleBar"
-            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
-
-
         <!--播放节目详情-->
         <activity
             android:name="com.wotingfm.ui.music.main.PlayerActivity"
@@ -435,28 +212,6 @@
         <!-- 友盟activity -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
-            android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-        <activity
-            android:name=".ui.music.program.album.anchor.main.AnchorListFragment"
-            android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-
-        <!-- 群更多activity -->
-        <activity
-            android:name=".ui.interphone.group.groupcontrol.groupmore.activity.GroupMoreActivity"
-            android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-
-        <!-- 个人更多activity -->
-        <activity
-            android:name=".ui.interphone.group.groupcontrol.personmore.PersonMoreActivity"
-            android:excludeFromRecents="true"
-            android:theme="@android:style/Theme.NoTitleBar"/>
-
-        <!-- 友盟activity -->
-        <activity
-            android:name=".ui.interphone.notify.activity.NotifyNewsActivity"
             android:excludeFromRecents="true"
             android:theme="@android:style/Theme.NoTitleBar"/>
 
