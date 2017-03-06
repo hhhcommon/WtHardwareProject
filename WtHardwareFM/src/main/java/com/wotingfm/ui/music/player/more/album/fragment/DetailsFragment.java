@@ -85,6 +85,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_album_details, container, false);
+            rootView.setOnClickListener(this);
             initView(rootView);
         }
         return rootView;

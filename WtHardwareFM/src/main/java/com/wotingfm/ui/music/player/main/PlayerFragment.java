@@ -40,7 +40,7 @@ import com.wotingfm.ui.music.player.model.LanguageSearch;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.ui.music.player.more.PlayerMoreOperationFragment;
-import com.wotingfm.ui.music.search.main.SearchLikeActivity;
+import com.wotingfm.ui.music.search.main.SearchLikeFragment;
 import com.wotingfm.ui.music.video.IntegrationPlayer;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
@@ -110,7 +110,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     private boolean isPlaying;// 是否正在播放
     private boolean isInitData;// 第一次进入应用加载数据
     private boolean isResetData;// 重新获取了数据  searchByText
-    private static SearchLikeActivity fg_search;
+    private static SearchLikeFragment fg_search;
     public static PlayerFragment ct;
 
     @Override
@@ -173,6 +173,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_play, container, false);
+            rootView.setOnClickListener(this);
             initView();
             initEvent();
         }

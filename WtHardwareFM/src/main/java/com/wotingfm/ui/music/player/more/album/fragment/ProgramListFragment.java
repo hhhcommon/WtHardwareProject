@@ -25,7 +25,7 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
-import com.wotingfm.ui.music.download.fragment.DownLoadUnCompleted;
+import com.wotingfm.ui.music.download.fragment.DownLoadUnCompletedFragment;
 import com.wotingfm.ui.music.download.main.DownloadFragment;
 import com.wotingfm.ui.music.download.model.FileInfo;
 import com.wotingfm.ui.music.download.service.DownloadService;
@@ -105,6 +105,7 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_album_program, container, false);
+            rootView.setOnClickListener(this);
             initView();
         }
         return rootView;
@@ -380,7 +381,7 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
             FID.updataDownloadStatus(tempList.get(0).getUrl(), "1");
             DownloadService.workStart(tempList.get(0));
             if(DownloadFragment.isVisible){
-                DownLoadUnCompleted.dwType=true;
+                DownLoadUnCompletedFragment.dwType=true;
             }
 
             // 发送更新界面数据广播

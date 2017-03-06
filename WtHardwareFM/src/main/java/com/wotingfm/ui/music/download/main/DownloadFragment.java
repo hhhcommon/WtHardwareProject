@@ -13,8 +13,8 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.ui.baseadapter.MyFragmentPagerAdapter;
-import com.wotingfm.ui.music.download.fragment.DownLoadCompleted;
-import com.wotingfm.ui.music.download.fragment.DownLoadUnCompleted;
+import com.wotingfm.ui.music.download.fragment.DownLoadCompletedFragment;
+import com.wotingfm.ui.music.download.fragment.DownLoadUnCompletedFragment;
 import com.wotingfm.ui.music.main.PlayerActivity;
 
 import java.util.ArrayList;
@@ -34,8 +34,7 @@ public class DownloadFragment extends Fragment implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.lin_news:// 返回
-                PlayerActivity activity = (PlayerActivity) getActivity();
-                activity.fm.popBackStack();
+                PlayerActivity.close();
                 break;
         }
     }
@@ -44,6 +43,7 @@ public class DownloadFragment extends Fragment implements OnClickListener {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if(rootView==null) {
             rootView = inflater.inflate(R.layout.fragment_download, container, false);
+            rootView.setOnClickListener(this);
             context = getActivity();
             initView();
             initViewPager();
@@ -69,8 +69,8 @@ public class DownloadFragment extends Fragment implements OnClickListener {
     // 初始化 ViewPager
     private void initViewPager() {
         ArrayList<Fragment> fragmentList = new ArrayList<>();
-        fragmentList.add(new DownLoadCompleted());
-        fragmentList.add(new DownLoadUnCompleted());
+        fragmentList.add(new DownLoadCompletedFragment());
+        fragmentList.add(new DownLoadUnCompletedFragment());
         mViewPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), fragmentList));
         mViewPager.setOnPageChangeListener(new MyOnPageChangeListener());
         mViewPager.setCurrentItem(0);

@@ -81,6 +81,7 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.activity_album, container, false);
+            rootView.setOnClickListener(this);
             context = getActivity();
             ct=this;
             initView();

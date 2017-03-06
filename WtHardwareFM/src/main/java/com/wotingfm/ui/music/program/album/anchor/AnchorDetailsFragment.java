@@ -1,7 +1,6 @@
 package com.wotingfm.ui.music.program.album.anchor;
 
 import android.app.Dialog;
-import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -24,12 +23,12 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.music.main.PlayerActivity;
-import com.wotingfm.ui.music.program.album.main.AlbumFragment;
-import com.wotingfm.ui.music.program.album.anchor.activity.AnchorListActivity;
+import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.program.album.anchor.adapter.AnchorMainAdapter;
 import com.wotingfm.ui.music.program.album.anchor.adapter.AnchorSequAdapter;
+import com.wotingfm.ui.music.program.album.anchor.main.AnchorListFragment;
 import com.wotingfm.ui.music.program.album.anchor.model.PersonInfo;
+import com.wotingfm.ui.music.program.album.main.AlbumFragment;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 import com.wotingfm.util.DialogUtils;
@@ -96,6 +95,7 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.activity_anchor_details, container, false);
+            rootView.setOnClickListener(this);
             context = getActivity();
             initView();
             handleIntent();
@@ -290,10 +290,13 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
         lv_sequ.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent1 = new Intent(context, AlbumFragment.class);
-                intent1.putExtra("type", "main");
-                intent1.putExtra("id", personInfoList.get(position).getContentId());
-                startActivity(intent1);
+
+                AlbumFragment fg = new AlbumFragment();
+                Bundle bundle=new Bundle();
+                bundle.putString("type", "main");
+                bundle.putString("id", personInfoList.get(position).getContentId());
+                fg.setArguments(bundle);
+                ProgramActivity.open(fg);
             }
         });
         // 跳到单体
@@ -412,17 +415,18 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                PlayerActivity activity = (PlayerActivity) getActivity();
-                activity.fm.popBackStack();
+                ProgramActivity.close();
                 break;
             case R.id.tv_more:
                 if (!TextUtils.isEmpty(PersonId)) {
-                    Intent intent = new Intent(context, AnchorListActivity.class);
-                    intent.putExtra("PersonId", PersonId);
+                    AnchorListFragment fg = new AnchorListFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("PersonId", PersonId);
                     if (!TextUtils.isEmpty(PersonName)) {
-                        intent.putExtra("PersonName", PersonName);
+                        bundle.putString("PersonName", PersonName);
                     }
-                    startActivity(intent);
+                    fg.setArguments(bundle);
+                    ProgramActivity.open(fg);
                 } else {
                     ToastUtils.show_always(context, "该主播还没有详细的个人信息~");
                 }

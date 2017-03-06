@@ -39,18 +39,15 @@ import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
-import com.wotingfm.ui.music.program.album.main.AlbumFragment;
-import com.wotingfm.ui.music.program.citylist.activity.CityListFragment;
-import com.wotingfm.ui.music.program.diantai.activity.RadioNationalFragment;
+import com.wotingfm.ui.music.program.citylist.main.CityListFragment;
+import com.wotingfm.ui.music.program.diantai.main.RadioNationalFragment;
 import com.wotingfm.ui.music.program.diantai.adapter.CityNewAdapter;
 import com.wotingfm.ui.music.program.diantai.adapter.OnlinesAdapter;
 import com.wotingfm.ui.music.program.diantai.model.RadioPlay;
-import com.wotingfm.ui.music.program.fmlist.activity.FMListFragment;
+import com.wotingfm.ui.music.program.fmlist.main.FMListFragment;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.L;
-import com.wotingfm.util.SequenceUUID;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.HeightListView;
 import com.wotingfm.widget.TipView;
@@ -60,7 +57,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -127,6 +123,12 @@ public class OnLineFragment extends Fragment implements TipView.WhiteViewClick {
         if (rootView == null) {
             relativeLayout = new RelativeLayout(context);
             rootView = inflater.inflate(R.layout.fragment_radio, container, false);
+            rootView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
             tipView = new TipView(context);
             tipView.setWhiteClick(this);
             tipView.setVisibility(View.GONE);
@@ -205,40 +207,26 @@ public class OnLineFragment extends Fragment implements TipView.WhiteViewClick {
                 Bundle bundle=new Bundle();
                 bundle.putString("type", "address");
                 fg.setArguments(bundle);
-                ProgramActivity activity = (ProgramActivity) getActivity();
-                activity.fm.beginTransaction()
-                        .add(R.id.fragment_content, fg)
-                        .addToBackStack(SequenceUUID.getUUID())
-                        .commit();
+                ProgramActivity.open(fg);
             }
         });
         linLocal.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
                 CityListFragment fg = new CityListFragment();
                 Bundle bundle=new Bundle();
                 bundle.putString("type", "local");
                 fg.setArguments(bundle);
-                ProgramActivity activity = (ProgramActivity) getActivity();
-                activity.fm.beginTransaction()
-                        .add(R.id.fragment_content, fg)
-                        .addToBackStack(SequenceUUID.getUUID())
-                        .commit();
+                ProgramActivity.open(fg);
             }
         });
         linCountry.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-
                 RadioNationalFragment fg = new RadioNationalFragment();
-                ProgramActivity activity = (ProgramActivity) getActivity();
-                activity.fm.beginTransaction()
-                        .add(R.id.fragment_content, fg)
-                        .addToBackStack(SequenceUUID.getUUID())
-                        .commit();
+                ProgramActivity.open(fg);
             }
         });
         linNet.setOnClickListener(new OnClickListener() {
@@ -253,11 +241,7 @@ public class OnLineFragment extends Fragment implements TipView.WhiteViewClick {
                 bundle.putString("type", "9");
                 bundle.putString("id", "dtfl2002");
                 fg.setArguments(bundle);
-                ProgramActivity activity = (ProgramActivity) getActivity();
-                activity.fm.beginTransaction()
-                        .add(R.id.fragment_content, fg)
-                        .addToBackStack(SequenceUUID.getUUID())
-                        .commit();
+                ProgramActivity.open(fg);
 
             }
         });
@@ -276,13 +260,7 @@ public class OnLineFragment extends Fragment implements TipView.WhiteViewClick {
                     bundle.putString("type", "2");
                     bundle.putString("id", cityId);
                     fg.setArguments(bundle);
-                    ProgramActivity activity = (ProgramActivity) getActivity();
-                    activity.fm.beginTransaction()
-                            .add(R.id.fragment_content, fg)
-                            .addToBackStack(SequenceUUID.getUUID())
-                            .commit();
-
-
+                    ProgramActivity.open(fg);
                 }
             }
         });
@@ -432,11 +410,13 @@ public class OnLineFragment extends Fragment implements TipView.WhiteViewClick {
                                 ContentFavorite, ContentId, localUrl, sequName, sequId, sequDesc, sequImg);
                         dbDao.deleteHistory(playUrl);
                         dbDao.addHistory(history);
+
                         Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                         Bundle bundle1 = new Bundle();
                         bundle1.putString("text", mainLists.get(position).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
+
                         MainActivity.changeOne();
 
                     }
@@ -557,20 +537,23 @@ public class OnLineFragment extends Fragment implements TipView.WhiteViewClick {
 
                         dbDao.deleteHistory(playUrl);
                         dbDao.addHistory(history);
-                        MainActivity.changeOne();
+
 
                         Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                         Bundle bundle1 = new Bundle();
                         bundle1.putString("text", newList.get(groupPosition).getList().get(childPosition).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
+
+                        MainActivity.changeOne();
                     } else if (MediaType.equals("SEQU")) {
-                        Intent intent = new Intent(context, AlbumFragment.class);
-                        Bundle bundle = new Bundle();
-                        bundle.putString("type", "recommend");
-                        bundle.putSerializable("list", (Serializable) newList.get(groupPosition).getList());
-                        intent.putExtras(bundle);
-                        startActivity(intent);
+                        ToastUtils.show_short(context, "暂不支持的Type类型");
+//                        Intent intent = new Intent(context, AlbumFragment.class);
+//                        Bundle bundle = new Bundle();
+//                        bundle.putString("type", "recommend");
+//                        bundle.putSerializable("list", (Serializable) newList.get(groupPosition).getList());
+//                        intent.putExtras(bundle);
+//                        startActivity(intent);
                     } else {
                         ToastUtils.show_short(context, "暂不支持的Type类型");
                     }

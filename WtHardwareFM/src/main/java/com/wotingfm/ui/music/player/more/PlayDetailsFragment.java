@@ -31,6 +31,7 @@ public class PlayDetailsFragment extends Fragment implements View.OnClickListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.activity_play_details, container, false);
+            rootView.setOnClickListener(this);
             context = getActivity();
             initView();
             initEvent();
@@ -145,8 +146,7 @@ public class PlayDetailsFragment extends Fragment implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                PlayerActivity activity = (PlayerActivity) getActivity();
-                activity.fm.popBackStack();
+                PlayerActivity.close();
                 break;
             case R.id.linear_concern:// 关注主播
 

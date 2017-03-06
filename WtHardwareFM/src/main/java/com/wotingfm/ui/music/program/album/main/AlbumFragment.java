@@ -21,7 +21,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.baseadapter.MyFragmentChildPagerAdapter;
-import com.wotingfm.ui.music.main.PlayerActivity;
+import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
 import com.wotingfm.ui.music.program.album.fragment.DetailsFragment;
 import com.wotingfm.ui.music.program.album.fragment.ProgramListFragment;
@@ -62,8 +62,7 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn: // 返回
-                PlayerActivity activity = (PlayerActivity) getActivity();
-                activity.fm.popBackStack();
+                ProgramActivity.close();
                 break;
             case R.id.head_right_btn:// 播放专辑
                 // 专辑列表中的数据一集一集往下播
@@ -81,6 +80,7 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.activity_album, container, false);
+            rootView.setOnClickListener(this);
             context = getActivity();
             initView();
             initEvent();

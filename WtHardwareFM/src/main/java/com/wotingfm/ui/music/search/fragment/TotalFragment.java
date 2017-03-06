@@ -24,14 +24,13 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.main.MainActivity;
-import com.wotingfm.ui.music.main.PlayerActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
-import com.wotingfm.ui.music.player.main.PlayerFragment;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
-import com.wotingfm.ui.music.player.more.album.main.AlbumFragment;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.ui.music.search.adapter.SearchContentAdapter;
+import com.wotingfm.ui.music.search.album.main.AlbumFragment;
 import com.wotingfm.ui.music.search.main.SearchLikeActivity;
+import com.wotingfm.ui.music.search.main.SearchLikeFragment;
 import com.wotingfm.ui.music.search.model.SuperRankInfo;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
@@ -74,7 +73,7 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
 
     @Override
     public boolean onGroupClick(ExpandableListView parent, View v, int groupPosition, long id) {
-        SearchLikeActivity.updateViewPager(list.get(groupPosition).getKey());
+        SearchLikeFragment.updateViewPager(list.get(groupPosition).getKey());
         return true;
     }
 
@@ -121,12 +120,14 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                         playcontentshareurl, ContentFavorite, ContentId, localurl, sequname, sequid, sequdesc, sequimg);
                 dbDao.deleteHistory(playerurl);
                 dbDao.addHistory(history);
-                MainActivity.changeOne();
+
                 Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                 Bundle bundle1=new Bundle();
                 bundle1.putString("text",playername);
                 push.putExtras(bundle1);
                 context.sendBroadcast(push);
+
+                MainActivity.changeOne();
                 break;
             case "SEQU":
                 AlbumFragment fg= new AlbumFragment();
@@ -134,7 +135,7 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                 bundle.putString("type", "search");
                 bundle.putSerializable("list", list.get(groupPosition).getList().get(childPosition));
                 fg.setArguments(bundle);
-                PlayerActivity.open(fg);
+                SearchLikeActivity.open(fg);
                 break;
         }
         return true;

@@ -28,12 +28,11 @@ import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.ui.music.program.album.main.AlbumFragment;
-import com.wotingfm.ui.music.program.radiolist.activity.RadioListFragment;
+import com.wotingfm.ui.music.program.radiolist.main.RadioListFragment;
 import com.wotingfm.ui.music.program.radiolist.adapter.ListInfoAdapter;
 import com.wotingfm.ui.music.program.radiolist.model.ListInfo;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.SequenceUUID;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.TipView;
 import com.wotingfm.widget.rollviewpager.RollPagerView;
@@ -104,7 +103,12 @@ public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.fragment_radio_list_layout, container, false);
+            rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
+                }
+            });
             tipView = (TipView) rootView.findViewById(R.id.tip_view);
             tipView.setWhiteClick(this);
 
@@ -290,26 +294,23 @@ public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick
                                 ContentFavorite, ContentId, localUrl, sequName, sequId, sequDesc, sequImg);
                         dbDao.deleteHistory(playUrl);
                         dbDao.addHistory(history);
-                        MainActivity.changeOne();
 
                         Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                         Bundle bundle1=new Bundle();
                         bundle1.putString("text",newList.get(position - 2).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
-                        getActivity().finish();
+
+                        MainActivity.changeOne();
                     } else if (MediaType.equals("SEQU")) {
-                        ProgramActivity activity = (ProgramActivity) getActivity();
+
                         AlbumFragment fg_album= new AlbumFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "radiolistactivity");
                         bundle.putSerializable("list", newList.get(position - 2));
                         fg_album.setArguments(bundle);
 
-                        activity.fm.beginTransaction()
-                                .add(R.id.fragment_content, fg_album)
-                                .addToBackStack(SequenceUUID.getUUID())
-                                .commit();
+                        ProgramActivity.open(fg_album);
                     }
                 }
             }

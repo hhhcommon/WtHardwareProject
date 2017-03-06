@@ -43,7 +43,6 @@ import com.wotingfm.common.service.LocationService;
 import com.wotingfm.common.service.NotificationService;
 import com.wotingfm.common.service.SocketService;
 import com.wotingfm.common.service.SubclassService;
-import com.wotingfm.common.service.TestWindowService;
 import com.wotingfm.common.service.VoiceStreamPlayerService;
 import com.wotingfm.common.service.VoiceStreamRecordService;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -184,8 +183,8 @@ public class MainActivity extends TabActivity {
         startService(Notification);
         FloatingWindow = new Intent(this, FloatingWindowService.class);//启动全局弹出框服务
         startService(FloatingWindow);
-        TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
-        startService(TestFloatingWindow);
+//        TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
+//        startService(TestFloatingWindow);
     }
 
     //注册广播  用于接收定时服务发送过来的广播
@@ -607,6 +606,50 @@ public class MainActivity extends TabActivity {
                 Log.e("MainActivity获取城市列表异常", error.toString() + "");
             }
         });
+    }
+
+    // 获取对讲的频率，存储在Manifest当中
+    private void sendFreq() {
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
+        try {
+            jsonObject.put("CatalogType", "11");
+            jsonObject.put("ResultType", "2");
+            jsonObject.put("RelLevel", "0");
+            jsonObject.put("Page", "1");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        VolleyRequest.RequestPost(GlobalConfig.getCatalogUrl, tag, jsonObject, new VolleyCallback() {
+            @Override
+            protected void requestSuccess(JSONObject result) {
+                if (isCancelRequest) return;
+                try {
+                    String ReturnType = result.getString("ReturnType");
+                    //Log.v("ReturnType", "ReturnType -- > > " + ReturnType);
+                    if(!TextUtils.isEmpty(ReturnType)){
+                        if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
+                            String ResultList = result.getString("CatalogData");
+                            List<Freq> freqList = new Gson().fromJson(ResultList, new TypeToken<List<Freq>>() {}.getType());
+                            GlobalConfig.FreqList=freqList;
+                            GlobalConfig.getFreq=true;
+                        } else {
+                            ToastUtils.show_always(context, "获取对讲频率失败");
+                        }
+                    }else{
+                        ToastUtils.show_always(context, "获取对讲频率失败");
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected void requestError(VolleyError error) {
+                ToastUtils.showVolleyError(context);
+            }
+        });
+
     }
 
     //检查版本更新

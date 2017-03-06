@@ -16,13 +16,12 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.ui.baseadapter.MyFragmentPagerAdapter;
 import com.wotingfm.ui.music.main.PlayerActivity;
-import com.wotingfm.ui.music.player.more.programme.adapter.MyPagerAdapter;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.TimeUtils;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class ProgrammeFragment extends Fragment {
 
@@ -38,7 +37,14 @@ public class ProgrammeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
+
             rootView = inflater.inflate(R.layout.activity_programme, container, false);
+            rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
             context = getActivity();
             String bcid = getArguments().getString("BcId");
             long nowT = System.currentTimeMillis();
@@ -50,6 +56,7 @@ public class ProgrammeFragment extends Fragment {
 
             setFragment(bcid, st);
         }
+
         return rootView;
     }
 
@@ -59,16 +66,15 @@ public class ProgrammeFragment extends Fragment {
 
     private void setFragment(String bcid, ArrayList<Long> st) {
 
-        List arr = new ArrayList();// 保存表头日期
-        arr.add("周一");
-        arr.add("周二");
-        arr.add("周三");
-        arr.add("周四");
-        arr.add("周五");
-        arr.add("周六");
-        arr.add("周日");
-
-        List<Fragment> fragmentList = new ArrayList<>();// 存放 Fragment
+//        List arr = new ArrayList();// 保存表头日期
+//        arr.add("周一");
+//        arr.add("周二");
+//        arr.add("周三");
+//        arr.add("周四");
+//        arr.add("周五");
+//        arr.add("周六");
+//        arr.add("周日");
+        ArrayList<Fragment> fragmentList = new ArrayList<>();// 存放 Fragment
         for (int i = 0; i < 7; i++) {
             Log.e("ProgrammeActivity", i + "");
             int d = TimeUtils.getWeek(System.currentTimeMillis()) - 2;
@@ -88,7 +94,7 @@ public class ProgrammeFragment extends Fragment {
             }
             fragmentList.add(ProgrammeListFragment.instance(st.get(i), bcid, isT));
         }
-        viewPager.setAdapter(new MyPagerAdapter(context.getSupportFragmentManager(), arr, fragmentList));
+        viewPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), fragmentList));
         viewPager.setOnPageChangeListener(new MyOnPageChangeListener());// 页面变化时的监听器
         viewPager.setCurrentItem(0);// 设置当前显示标签页为第一页mPager
     }
@@ -98,8 +104,7 @@ public class ProgrammeFragment extends Fragment {
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PlayerActivity activity = (PlayerActivity) getActivity();
-                activity.fm.popBackStack();
+                PlayerActivity.close();
             }
         });
         viewPager = (ViewPager) rootView.findViewById(R.id.viewpager);

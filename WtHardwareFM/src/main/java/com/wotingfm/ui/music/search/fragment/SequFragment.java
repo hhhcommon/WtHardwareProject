@@ -26,11 +26,11 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.favorite.adapter.FavorListAdapter;
-import com.wotingfm.ui.music.main.PlayerActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
-import com.wotingfm.ui.music.player.more.album.main.AlbumFragment;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
+import com.wotingfm.ui.music.search.album.main.AlbumFragment;
+import com.wotingfm.ui.music.search.main.SearchLikeActivity;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
@@ -160,20 +160,22 @@ public class SequFragment extends Fragment implements TipView.WhiteViewClick {
                                 ContentFavorite, ContentId, localurl, sequName, sequId, sequDesc, sequImg);
                         dbDao.deleteHistory(playerurl);
                         dbDao.addHistory(history);
-                        MainActivity.changeOne();
+
 
                         Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                         Bundle bundle1=new Bundle();
                         bundle1.putString("text",newList.get(position - 1).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
+
+                        MainActivity.changeOne();
                     } else if(MediaType.equals("SEQU")) {
                         AlbumFragment fg = new AlbumFragment();
                         Bundle bundle=new Bundle();
                         bundle.putString("type", "search");
                         bundle.putSerializable("list", newList.get(position - 1));
                         fg.setArguments(bundle);
-                        PlayerActivity.open(fg);
+                        SearchLikeActivity.open(fg);
 
                     }
                 }

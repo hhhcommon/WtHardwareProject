@@ -17,6 +17,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="开启蓝牙"
+            android:textColor="@color/s_green"
             android:layout_marginLeft="14dp"
             android:textSize="16sp"
             android:layout_centerVertical="true"/>
@@ -50,6 +51,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="开放检测"
+            android:textColor="@color/s_green"
+
             android:layout_marginLeft="14dp"
             android:textSize="16sp"
             android:layout_marginTop="8dp"/>
@@ -105,6 +108,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="设备名称"
+            android:textColor="@color/s_green"
+
             android:layout_marginLeft="14dp"
             android:textSize="16sp"
             android:layout_centerVertical="true"/>
@@ -124,6 +129,8 @@
             android:layout_height="wrap_content"
             android:text="本设备的名称"
             android:maxLines="1"
+            android:textColor="@color/s_green"
+
             android:layout_toLeftOf="@id/image_wifi_set"
             android:layout_centerVertical="true"
             android:layout_marginRight="5dp"/>

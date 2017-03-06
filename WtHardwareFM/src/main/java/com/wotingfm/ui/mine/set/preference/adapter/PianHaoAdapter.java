@@ -11,7 +11,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.ui.mine.set.preference.activity.PreferenceActivity;
+import com.wotingfm.ui.mine.set.preference.main.PreferenceFragment;
 import com.wotingfm.ui.music.program.fenlei.model.FenLei;
 import com.wotingfm.widget.MyGridView;
 
@@ -101,7 +101,7 @@ public class PianHaoAdapter extends BaseAdapter {
                             }
                         }
                     }
-                    PreferenceActivity.RefreshView(list);
+                    PreferenceFragment.RefreshView(list);
                 /*ToastUtils.show_always( context,list.get(position).getChildren().get(positions).getName());*/
                 }
             });
