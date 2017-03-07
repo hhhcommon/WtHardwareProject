@@ -44,9 +44,9 @@ import com.wotingfm.common.manager.FileManager;
 import com.wotingfm.common.manager.MyHttp;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.common.model.UserInfo;
 import com.wotingfm.ui.common.photocut.PhotoCutActivity;
 import com.wotingfm.ui.common.qrcode.EWMShowFragment;
+import com.wotingfm.ui.interphone.model.UserInviteMeInside;
 import com.wotingfm.ui.mine.bluetooth.BluetoothFragment;
 import com.wotingfm.ui.mine.flowmanage.FlowManageFragment;
 import com.wotingfm.ui.mine.fm.FMConnectFragment;
@@ -63,7 +63,6 @@ import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ImageUploadReturnUtil;
 import com.wotingfm.util.L;
 import com.wotingfm.util.PhoneMessage;
-import com.wotingfm.util.SequenceUUID;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -188,14 +187,15 @@ public class MineFragment extends Fragment implements OnClickListener {
                 imageDialog.dismiss();
                 break;
             case R.id.imageView_ewm:// 二维码
-                UserInfo news = new UserInfo();
+                UserInviteMeInside news = new UserInviteMeInside();
                 news.setPortraitMini(url);
                 news.setUserId(userId);
                 news.setUserName(userName);
 
                 EWMShowFragment fg_evm = new EWMShowFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("type", "1");
+                bundle.putString("TZ_type", "mine");
+                bundle.putString("type", "3");
                 bundle.putString("news", userSign);// 签名
                 bundle.putSerializable("person", news);
                 fg_evm.setArguments(bundle);
@@ -220,10 +220,7 @@ public class MineFragment extends Fragment implements OnClickListener {
             case R.id.lin_xiugai:// 修改个人资料
                 UpdatePersonActivity fg = new UpdatePersonActivity();
                 fg.setTargetFragment(ct, 0);
-                context.getSupportFragmentManager().beginTransaction()
-                        .add(R.id.fragment_content, fg)
-                        .addToBackStack(SequenceUUID.getUUID())
-                        .commit();
+                MineActivity.open(fg);
                 break;
             case R.id.image_nodenglu:// 登录
                 startActivity(new Intent(context, LoginActivity.class));
@@ -237,10 +234,7 @@ public class MineFragment extends Fragment implements OnClickListener {
                 bundle1.putString("LOGIN_STATE", isLogin);
                 fg1.setArguments(bundle1);
                 fg1.setTargetFragment(ct, 0);
-                context.getSupportFragmentManager().beginTransaction()
-                        .add(R.id.fragment_content, fg1)
-                        .addToBackStack(SequenceUUID.getUUID())
-                        .commit();
+                MineActivity.open(fg1);
                 break;
 
         }
@@ -267,7 +261,7 @@ public class MineFragment extends Fragment implements OnClickListener {
     }
 
     // 获取用户的登陆状态   登陆 OR 未登录
-    private void getLoginStatus() {
+    public void getLoginStatus() {
         if (isFirst) {
             isFirst = false;
         } else if (isLogin.equals(sharedPreferences.getString(StringConstant.ISLOGIN, "false"))) {
@@ -411,6 +405,11 @@ public class MineFragment extends Fragment implements OnClickListener {
                 ToastUtils.show_always(context, "发生未知异常");
                 break;
         }
+    }
+
+
+    public void setResult() {
+        getLoginStatus();
     }
 
     public void setAddCardResult(int i, UpdatePerson pM, String regionIds) {
