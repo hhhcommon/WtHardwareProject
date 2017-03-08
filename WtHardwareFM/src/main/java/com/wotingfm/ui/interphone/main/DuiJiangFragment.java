@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.support.v4.view.ViewPager.OnPageChangeListener;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -63,27 +62,11 @@ public class DuiJiangFragment extends Fragment {
             InitTextView();        // 初始化视图
             InitViewPager();       // 初始化ViewPager
             dialog();              // 初始化功能弹出框
-            setType();
         }
         return rootView;
     }
 
-    // 适配顶栏样式
-    private void setType() {
-        String a = android.os.Build.VERSION.RELEASE;
-        Log.e("系统版本号", a + "");
-        Log.e("系统版本号截取", a.substring(0, a.indexOf(".")) + "");
-        boolean v = false;
-        if (Integer.parseInt(a.substring(0, a.indexOf("."))) >= 5) {
-            v = true;
-        }
-        View tv_main = rootView.findViewById(R.id.tv_main);
-        if (v) {
-            tv_main.setVisibility(View.VISIBLE);
-        } else {
-            tv_main.setVisibility(View.GONE);
-        }
-    }
+
 
     /*
      * "更多" 对话框

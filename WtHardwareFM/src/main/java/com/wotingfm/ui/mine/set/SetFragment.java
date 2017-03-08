@@ -1,5 +1,6 @@
 package com.wotingfm.ui.mine.set;
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences.Editor;
@@ -282,6 +283,8 @@ public class SetFragment extends Fragment implements OnClickListener {
                 lin_IsLogin.setVisibility(View.GONE);
                 context.sendBroadcast(new Intent(BroadcastConstants.PUSH_DOWN_COMPLETED));// 发送广播 更新已下载和未下载界面
                 Toast.makeText(context, "注销成功", Toast.LENGTH_SHORT).show();
+                Fragment targetFragment = getTargetFragment();
+                ((MineFragment) targetFragment).setResult();
             }
 
             @Override
@@ -441,8 +444,7 @@ public class SetFragment extends Fragment implements OnClickListener {
             if(resultCode == 1) {
                 Intent intent = new Intent();
                 intent.putExtra("SET_USER_NUM_SUCCESS", true);
-//                setResult(RESULT_OK);
-//                finish();
+                context.setResult(Activity.RESULT_OK);
             }
         }
     }
