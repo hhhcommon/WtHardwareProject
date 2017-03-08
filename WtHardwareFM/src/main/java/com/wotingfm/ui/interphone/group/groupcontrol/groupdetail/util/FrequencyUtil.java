@@ -11,8 +11,7 @@ import java.util.List;
  * Created by Administrator on 2016/12/17 0017.
  */
 public class FrequencyUtil {
-
-    private static ArrayList<String> frequencyList;
+    public static String DefaultFrequnce="CH01-409.7500MHz";
 
     public static List<String> getFrequency(){
         List<String> frequencyList =new ArrayList<>();
@@ -26,14 +25,15 @@ public class FrequencyUtil {
 
     public static List<String> getFrequencyList(){
         if(GlobalConfig.FreqList!=null&&GlobalConfig.FreqList.size()>0) {
-            frequencyList = new ArrayList<>();
+            List<String> frequencyList = new ArrayList<>();
             for(int i=0;i<GlobalConfig.FreqList.size();i++){
              if(GlobalConfig.FreqList.get(i)!=null&&!TextUtils.isEmpty(GlobalConfig.FreqList.get(i).getCatalogAliasName())){
                  frequencyList.add(GlobalConfig.FreqList.get(i).getCatalogAliasName()+"MHZ    ");
              }
             }
+            return frequencyList;
         }else {
-            frequencyList = new ArrayList<>();
+            List<String> frequencyList = new ArrayList<>();
             frequencyList.add("CH01-409.7500MHz    ");
             frequencyList.add("CH02-409.7625MHz    ");
             frequencyList.add("CH03-409.7750MHz    ");
@@ -54,20 +54,22 @@ public class FrequencyUtil {
             frequencyList.add("CH18-409.9625MHz    ");
             frequencyList.add("CH19-409.9750MHz    ");
             frequencyList.add("CH20-409.9875MHz    ");
+            return frequencyList;
         }
-        return frequencyList;
+
     }
 
     public static List<String> getFrequencyListNoView(){
         if(GlobalConfig.FreqList!=null&&GlobalConfig.FreqList.size()>0) {
-            frequencyList = new ArrayList<>();
+            List<String> frequencyList = new ArrayList<>();
             for(int i=0;i<GlobalConfig.FreqList.size();i++){
                 if(GlobalConfig.FreqList.get(i)!=null&&!TextUtils.isEmpty(GlobalConfig.FreqList.get(i).getCatalogAliasName())){
                     frequencyList.add(GlobalConfig.FreqList.get(i).getCatalogAliasName()+"    ");
                 }
             }
+            return frequencyList;
         }else {
-            frequencyList = new ArrayList<>();
+            List<String> frequencyList = new ArrayList<>();
             frequencyList.add("CH01-409.7500");
             frequencyList.add("CH02-409.7625");
             frequencyList.add("CH03-409.7750");
@@ -88,7 +90,37 @@ public class FrequencyUtil {
             frequencyList.add("CH18-409.9625");
             frequencyList.add("CH19-409.9750");
             frequencyList.add("CH20-409.9875");
+            return frequencyList;
         }
-        return frequencyList;
+
     }
+
+    public static List<String> getFrequence(String freq){
+        if(!TextUtils.isEmpty(freq)){
+            String a[]=freq.split(",");
+            List<String>  frequencyList=getFrequencyList();
+
+            if(frequencyList!=null||frequencyList.size()>0){
+                frequencyList= getFrequencyList();
+            }
+             List<String> freqList=new ArrayList<>();
+            for(int i=0;i<a.length;i++){
+                for(int j=0;j<frequencyList.size();j++){
+                    if(frequencyList.get(j).contains(a[i])){
+                        freqList.add(frequencyList.get(j));
+                    }
+                }
+
+            }
+            if(freqList.size()>0){
+                return  freqList;
+            }else{
+                return  null;
+            }
+        }else{
+            return  null;
+        }
+
+    }
+
 }

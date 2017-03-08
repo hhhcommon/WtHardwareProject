@@ -216,21 +216,31 @@ public class UpdatePersonActivity extends Fragment implements
                             provinceList = new ArrayList<>();
                             for (int i = 0; i < catalogNameList.size(); i++) {
                                 if (!TextUtils.isEmpty(catalogNameList.get(i).getCatalogId()) && !TextUtils.isEmpty(catalogNameList.get(i).getCatalogName())) {
-                                    if (catalogNameList.get(i).getSubCata() != null && catalogNameList.get(i).getSubCata().size() > 0) {
+                                    if (catalogNameList.get(i)!=null&&catalogNameList.get(i).getSubCata() != null && catalogNameList.get(i).getSubCata().size() > 0) {
                                         // 所返回的 list 有下一级的且不为 0
-                                        if (!catalogNameList.get(i).getSubCata().get(0).getCatalogName().equals("市辖区")) {
-                                            // 不是直辖市
-                                            provinceList.add(catalogNameList.get(i).getCatalogName());
-                                            myList = catalogNameList.get(i).getSubCata();
-                                            tempMap.put(catalogNameList.get(i).getCatalogName(), myList);
-                                        } else {
-                                            // 直辖市
-                                            List<CatalogName> myList1 = new ArrayList<>();
-                                            provinceList.add(catalogNameList.get(i).getCatalogName());
-                                            myList1.addAll(catalogNameList.get(i).getSubCata().get(0).getSubCata());
-                                            myList1.addAll(catalogNameList.get(i).getSubCata().get(1).getSubCata());
-                                            tempMap.put(catalogNameList.get(i).getCatalogName(), myList1);
+                                        if(catalogNameList.get(i).getSubCata().get(0)!=null&&catalogNameList.get(i).getSubCata().get(0)!=null&&catalogNameList.get(i).getSubCata().get(0).getCatalogName()!=null) {
+
+                                            if (!catalogNameList.get(i).getSubCata().get(0).getCatalogName().equals("市辖区")&&catalogNameList.get(i).getSubCata()!=null) {
+                                                // 不是直辖市
+                                                if(!TextUtils.isEmpty(catalogNameList.get(i).getCatalogName())){
+                                                provinceList.add(catalogNameList.get(i).getCatalogName());
+                                                myList = catalogNameList.get(i).getSubCata();
+                                                tempMap.put(catalogNameList.get(i).getCatalogName(), myList);
+                                                }
+                                            } else {
+                                                // 直辖市
+                                                if(catalogNameList.get(i)!=null&&catalogNameList.get(i).getSubCata()!=null&&catalogNameList.get(i).getSubCata().get(0)!=null
+                                                        &&catalogNameList.get(i).getSubCata().get(1)!=null&&catalogNameList.get(i).getSubCata().get(0).getSubCata()!=null
+                                                        &&catalogNameList.get(i).getSubCata().get(1).getSubCata()!=null){
+                                                List<CatalogName> myList1 = new ArrayList<>();
+                                                provinceList.add(catalogNameList.get(i).getCatalogName());
+                                                myList1.addAll(catalogNameList.get(i).getSubCata().get(0).getSubCata());
+                                                myList1.addAll(catalogNameList.get(i).getSubCata().get(1).getSubCata());
+                                                tempMap.put(catalogNameList.get(i).getCatalogName(), myList1);
+                                                }
+                                            }
                                         }
+
                                     } else {
                                         // 港澳台
                                         List<CatalogName> myList1 = new ArrayList<>();
@@ -240,6 +250,7 @@ public class UpdatePersonActivity extends Fragment implements
                                             mCatalog.setCatalogName(" ");
                                             myList1.add(mCatalog);
                                         }
+
                                         if (catalogNameList.get(i).getCatalogId().equals("710000")) {
                                             provinceList.add("台湾");
                                             tempMap.put("台湾", myList1);
@@ -305,7 +316,9 @@ public class UpdatePersonActivity extends Fragment implements
                 }
                 break;
             case R.id.lin_area:
-                cityDialog.show();
+                if(cityDialog!=null&&!cityDialog.isShowing()) {
+                    cityDialog.show();
+                }
                 break;
         }
     }
@@ -490,11 +503,12 @@ public class UpdatePersonActivity extends Fragment implements
             }
         });
         pickProvince.setItems(provinceList);
-        List<String> tempList = positionMap.get(provinceList.get(4));
+        List<String> tempList = positionMap.get(provinceList.get(0));
 
         pickCity.setItems(tempList);
 
-        pickProvince.setInitPosition(4);
+        pickProvince.setInitPosition(0);
+        pickCity.setInitPosition(0);
         pickProvince.setTextSize(15);
         pickCity.setTextSize(15);
         cityDialog = new Dialog(context, R.style.MyDialog);

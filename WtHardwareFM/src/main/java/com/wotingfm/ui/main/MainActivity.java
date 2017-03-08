@@ -186,8 +186,8 @@ public class MainActivity extends TabActivity {
         startService(Notification);
         FloatingWindow = new Intent(this, FloatingWindowService.class);//启动全局弹出框服务
         startService(FloatingWindow);
-//        TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
-//        startService(TestFloatingWindow);
+      //  TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
+        // startService(TestFloatingWindow);
     }
 
     //注册广播  用于接收定时服务发送过来的广播

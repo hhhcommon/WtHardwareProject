@@ -205,6 +205,7 @@
                 android:enabled="false"
                 android:gravity="left|center"
                 android:hint="加群时需输入验证信息"
+                android:textColorHint="@color/beijing"
                 android:maxLines="1"
                 android:singleLine="true"
                 android:textColor="@color/gray"
@@ -230,6 +231,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="12dp"
                 android:gravity="center"
+                android:textColor="@color/group_4b"
                 android:text="频道一" />
 
             <TextView
@@ -268,6 +270,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="12dp"
                 android:gravity="center"
+                android:textColor="@color/group_4b"
                 android:text="频道二" />
 
             <TextView

@@ -151,6 +151,13 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
     private FragmentActivity context;
     private View rootView;
     private GroupDetailFragment ct;
+    private String tempFreq;
+    private List<String> tempList;
+    private String tempFreqFirst;
+    private String tempFreqSecond;
+    private boolean IsChange;
+    private String Frequence;
+    private String groupFreq;
 
     // 初始化数据库命令执行对象
     private void initDao() {
@@ -173,7 +180,6 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
             IntentFilter filters = new IntentFilter();
             filters.addAction(BroadcastConstants.GROUP_DETAIL_CHANGE);
             context.registerReceiver(receiver, filters);
-
             initDao();
             initDialog();
             initFrequencyDialog();
@@ -241,7 +247,11 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
                 groupAlias = talkGroupInside.getGroupMyAlias();
                 groupNumber = talkGroupInside.getGroupNum();
                 groupType = talkGroupInside.getGroupType();
-                break;
+                groupFreq =talkGroupInside.getGroupFreq();
+                if(!TextUtils.isEmpty(groupFreq)){
+                    tempList=FrequencyUtil.getFrequence(groupFreq);
+                }
+            break;
             case "groupaddactivity":// 添加群组搜索结果或申请加入组成功后进入
                 GroupInfo findGroupNews = (GroupInfo) getArguments().getSerializable("data");
                 groupName = findGroupNews.getGroupName();
@@ -280,6 +290,11 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
                 groupNumber = groupInformation.getGroupNum();
                 groupType = groupInformation.getGroupType();
                 groupCreator = CommonUtils.getUserId(context);
+                tempFreq= getArguments().getString("Frequence");
+                if(!TextUtils.isEmpty(tempFreq)){
+                tempList=FrequencyUtil.getFrequence(tempFreq);
+                }
+                //ToastUtils.show_always(context,"tempFreq====="+tempFreq);
                 groupSignature = groupInformation.getGroupSignature();
                 break;
         }
@@ -370,6 +385,19 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
             Picasso.with(context).load(headUrl.replace("\\/", "/")).into(imageHead);
         }
 
+        if(tempList!=null&&tempList.size()>0){
+         if(tempList.size()==1){
+             tempFreqFirst=tempList.get(0);
+             textChannelOne.setText(tempList.get(0));
+         }else if(tempList.size()>1){
+             textChannelOne.setText(tempList.get(0));
+             tempFreqFirst=tempList.get(0);
+             textChannelTwo.setText(tempList.get(1));
+             tempFreqSecond=tempList.get(1);
+         }
+        }
+
+
         news = new GroupInfo();
         news.setGroupName(groupName);
         news.setGroupType(groupType);
@@ -412,7 +440,6 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
         LoopView pickProvince = (LoopView) dialog.findViewById(R.id.pick_province);
         LoopView pickCity = (LoopView) dialog.findViewById(R.id.pick_city);
 
-
         pickProvince.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
@@ -420,6 +447,7 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
 
             }
         });
+
         pickCity.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
@@ -430,10 +458,9 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
         final List<String> frequencyList = FrequencyUtil.getFrequencyList();
 
         pickProvince.setItems(rateList);
-
         pickCity.setItems(frequencyList);
-
         pickProvince.setInitPosition(3);
+        pickCity.setInitPosition(1);
         pickProvince.setTextSize(15);
         pickCity.setTextSize(15);
 
@@ -454,20 +481,28 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
         dialog.findViewById(R.id.tv_confirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                int a = pRate;
-                if (pFrequency == -1) {
-                    textChannelOne.setText(frequencyList.get(1).trim());
-                } else {
-                    String rate = rateList.get(pRate);
-                    if (!TextUtils.isEmpty(rate.trim())) {
-                        if (rate.equals("频道一")) {
-                            textChannelOne.setText(frequencyList.get(pFrequency).trim());
-                        } else if (rate.equals("频道二")) {
-                            textChannelTwo.setText(frequencyList.get(pFrequency).trim());
+                //ToastUtils.show_always(context,"Pate="+pRate);             //初始-1
+                //ToastUtils.show_always(context,"pFrequency="+pFrequency);//初始-1
+                try {
+                        if (pFrequency == -1) {
+                            pFrequency=0;
                         }
-                    }
+                        if(pRate==-1){
+                            pRate=3;
+                        }
+                        String rate = rateList.get(pRate);
+                        if (!TextUtils.isEmpty(rate.trim())) {
+                            if (rate.equals("频道一")) {
+                                textChannelOne.setText(frequencyList.get(pFrequency).trim());
+                            } else if (rate.equals("频道二")) {
+                                textChannelTwo.setText(frequencyList.get(pFrequency).trim());
+                            }
+                        }
+                    frequencyDialog.dismiss();
+                }catch (Exception e){
+                    e.printStackTrace();
+                    frequencyDialog.dismiss();
                 }
-                frequencyDialog.dismiss();
             }
         });
 
@@ -577,7 +612,46 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
                 DuiJiangActivity.open(fg);
                 break;
             case R.id.wt_back:// 返回
-                DuiJiangActivity.close();
+                if (groupCreator != null && groupCreator.equals(CommonUtils.getUserId(context))){
+                    if(textChannelOne.getText().toString().trim()!=null&&tempFreqFirst!=null){
+                       if(!tempFreqFirst.trim().equals(textChannelOne.getText().toString().trim())){
+                           IsChange=true;
+                       }
+                    }
+                    if(tempFreqFirst==null){
+                        if(textChannelOne.getText().toString().trim()!=null) {
+                            IsChange = true;
+                        }
+                    }
+                    if(textChannelTwo.getText().toString().trim()!=null&&tempFreqSecond!=null){
+                        if(!tempFreqSecond.trim().equals(textChannelTwo.getText().toString().trim())){
+                            IsChange=true;
+                        }
+                    }
+                    if(tempFreqSecond==null) {
+                        if (textChannelTwo.getText().toString().trim() != null) {
+                            IsChange = true;
+                        }
+                    }
+                 //  asdasda
+                    if(IsChange){
+                        //ToastUtils.show_always(context,"是管理员，修改了频率，调修改方法");
+                        //调修改方法
+                        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                            dialog = DialogUtils.Dialogph(context, "正在提交本次修改");
+                            updateFrequence();
+                        } else {
+                            ToastUtils.show_always(context, "网络失败，请检查网络");
+                        }
+                    }else{
+                        //ToastUtils.show_always(context,"是管理员,没改频率");
+                        DuiJiangActivity.close();
+                    }
+            }else{
+                    ToastUtils.show_always(context,"不是管理员，不用修改");
+                    DuiJiangActivity.close();
+                }
+
                 break;
             case R.id.rl_allperson:// 查看所有成员
                 GroupMembersFragment fg1 = new GroupMembersFragment();
@@ -701,7 +775,7 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
                     Log.v("ReturnType", "ReturnType -- > > " + ReturnType);
 
                     if (ReturnType.equals("1001")) {
-                        ToastUtils.show_always(context, "已经成功修改该组信息");
+                        //ToastUtils.show_always(context, "已经成功修改该组信息");
                         context.sendBroadcast(pushIntent);
                     } else {
                         ToastUtils.show_always(context, "修改群组信息失败，请稍后重试!");
@@ -719,12 +793,71 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
         });
     }
 
+
+    // 更改群备注及信息
+    private void updateFrequence() {
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
+        try {
+            jsonObject.put("GroupId", groupId);
+            String tv1=textChannelOne.getText().toString().trim();
+            String tv2=textChannelTwo.getText().toString().trim();
+            if(!TextUtils.isEmpty(tv1)){
+                Frequence=tv1.substring(5,tv1.length()-3);
+            }
+            if(!TextUtils.isEmpty(tv2)){
+                if(!TextUtils.isEmpty(Frequence)){
+                    Frequence=Frequence+","+tv2.substring(5,tv2.length()-3);
+                }else{
+                    Frequence=tv2.substring(5,tv2.length()-3);
+                }
+            }
+            if(!TextUtils.isEmpty(Frequence)){
+                jsonObject.put("GroupFreq", Frequence);
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        VolleyRequest.RequestPost(GlobalConfig.UpdateGroupInfoUrl, tag, jsonObject, new VolleyCallback() {
+            @Override
+            protected void requestSuccess(JSONObject result) {
+                if (dialog != null) dialog.dismiss();
+                if (isCancelRequest) return;
+                try {
+                    String ReturnType = result.getString("ReturnType");
+                    Log.v("ReturnType", "ReturnType -- > > " + ReturnType);
+
+                    if (ReturnType.equals("1001")) {
+                        //ToastUtils.show_always(context, "已经成功修改群组频率");
+                        context.sendBroadcast(pushIntent);
+                        DuiJiangActivity.close();
+                    } else {
+                        //ToastUtils.show_always(context, "修改群组信息失败，请稍后重试!");
+                        DuiJiangActivity.close();
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            protected void requestError(VolleyError error) {
+                if (dialog != null) dialog.dismiss();
+                ToastUtils.showVolleyError(context);
+            }
+        });
+    }
+
+
+
     public void addGroup() {
         if (ChatFragment.isCalling && ChatFragment.interPhoneType.equals("user")) {// 此时有对讲状态 对讲状态为个人时弹出框展示
             InterPhoneControlHelper.PersonTalkHangUp(context, InterPhoneControlHelper.bdcallid);
         }
-        ChatFragment.zhiDingGroupSS(groupId);
+       // ChatFragment.zhiDingGroupSS(groupId);
+        ChatFragment.zhiDingGroupString(groupId,groupName,groupFreq,headUrl);
         DuiJiangFragment.update();
+        DuiJiangActivity.close();
     }
 
 

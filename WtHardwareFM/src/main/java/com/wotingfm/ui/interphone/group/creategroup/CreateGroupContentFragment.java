@@ -114,6 +114,8 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
     private FragmentActivity context;
     private View rootView;
     private CreateGroupContentFragment ct;
+    private String tv1;
+    private String tv2;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -160,6 +162,7 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
         pickProvince.setItems(rateList);
         pickCity.setItems(frequencyList);
         pickProvince.setInitPosition(3);
+        pickCity.setInitPosition(1);
         pickProvince.setTextSize(15);
         pickCity.setTextSize(15);
 
@@ -181,10 +184,12 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
             @Override
             public void onClick(View v) {
                 try {
-                    int a = pRate;
                     if (pFrequency == -1) {
-                        tv_channel1.setText(frequencyList.get(1).trim());
-                    } else {
+                        pFrequency=0;
+                    }
+                    if(pRate==-1){
+                        pRate=3;
+                    }
                         String rate = rateList.get(pRate);
                         if (!TextUtils.isEmpty(rate.trim())) {
                             if (rate.equals("频道一")) {
@@ -193,8 +198,8 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
                                 tv_channel2.setText(frequencyList.get(pFrequency).trim());
                             }
                         }
-                    }
                     frequencyDialog.dismiss();
+
                 } catch (Exception e) {
                     e.printStackTrace();
                     frequencyDialog.dismiss();
@@ -259,19 +264,20 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
             jsonObject.put("GroupType", groupType);
             jsonObject.put("GroupSignature", SIGN);
             jsonObject.put("GroupName", NICK);
-            if (!TextUtils.isEmpty(tv_channel1.getText().toString().trim().substring(0, tv_channel1.getText().toString().trim().length() - 3))) {
-                Frequence = tv_channel1.getText().toString().trim();
+            if(!TextUtils.isEmpty(tv1)){
+                Frequence=tv1.substring(5,tv1.length()-3);
             }
-            if (!TextUtils.isEmpty(tv_channel2.getText().toString().trim().substring(0, tv_channel2.getText().toString().trim().length() - 3))) {
-                if (!TextUtils.isEmpty(Frequence)) {
-                    Frequence = Frequence + "," + tv_channel2.getText().toString().trim();
-                } else {
-                    Frequence = tv_channel2.getText().toString().trim();
+            if(!TextUtils.isEmpty(tv2)){
+                if(!TextUtils.isEmpty(Frequence)){
+                    Frequence=Frequence+","+tv2.substring(5,tv2.length()-3);
+                }else{
+                    Frequence=tv2.substring(5,tv2.length()-3);
                 }
             }
 
-            jsonObject.put("GroupFreq", Frequence);
-
+            if(!TextUtils.isEmpty(Frequence)) {
+                jsonObject.put("GroupFreq", Frequence);
+            }
 			/*
              * //NeedMember参数 0为不需要 1为需要 jsonObject.put("NeedMember", 0);
 			 */
@@ -319,16 +325,18 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
                         }
                         Intent p = new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN);
                         context.sendBroadcast(p);
-
                         GroupDetailFragment fg = new GroupDetailFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "CreateGroupContentActivity");
                         bundle.putSerializable("news", groupinfo);
                         bundle.putString("imageurl", MiniUri);
+                        if(!TextUtils.isEmpty(Frequence)){
+                            bundle.putString("Frequence",Frequence);
+                            
+                        }
                         fg.setArguments(bundle);
                         DuiJiangActivity.open(fg);
-
-                        DuiJiangActivity.close();
+                       // DuiJiangActivity.close();
                     }
                 } else {
                     if (dialog != null) {
@@ -385,7 +393,7 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
 
     // 负责处理从上一个页面的来的事件 并处理对应的布局文件
     private void handleIntent() {
-        GroupType = context.getIntent().getStringExtra("Type");
+        GroupType = getArguments().getString("Type");
         if (GroupType == null || GroupType.equals("")) {
             ToastUtils.show_always(context, "获取组类型异常，请返回上一界面重新选择");
         } else if (GroupType.equals("Open")) {
@@ -451,7 +459,14 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
                     if (RequestStatus == 2) {
                         checkEdit();
                     } else if (RequestStatus == 1 || RequestStatus == 3) {
+                        tv1=tv_channel1.getText().toString().trim();
+                        tv2=tv_channel2.getText().toString().trim();
+                        if(TextUtils.isEmpty(tv1)&&TextUtils.isEmpty(tv2)){
+                            ToastUtils.show_always(context,"请至少选择一个频率作为您群组的默认对讲频率");
+                            return;
+                        }
                         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+
                             dialog = DialogUtils.Dialogph(context, "正在为您创建群组");
                             send();
                         } else {
@@ -483,6 +498,13 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
             // mEditTextPassWord.setError(Html.fromHtml("<font color=#ff0000>密码请输入六位以上</font>"));
             return;
         }
+        tv1=tv_channel1.getText().toString().trim();
+        tv2=tv_channel2.getText().toString().trim();
+        if(TextUtils.isEmpty(tv1)&&TextUtils.isEmpty(tv2)){
+            ToastUtils.show_always(context,"请至少选择一个频率作为您群组的默认对讲频率");
+            return;
+        }
+
         // 提交数据
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             dialog = DialogUtils.Dialogph(context, "正在为您创建群组");
