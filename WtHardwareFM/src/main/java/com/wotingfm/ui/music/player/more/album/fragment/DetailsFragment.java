@@ -216,6 +216,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                 EWMShowFragment fg_evm = new EWMShowFragment();
                 Bundle bundle_evm = new Bundle();
                 bundle_evm.putInt("type", 3);
+                bundle_evm.putString("TZ_type", "player");
                 fg_evm.setArguments(bundle_evm);
                 PlayerActivity.open(fg_evm);
                 break;

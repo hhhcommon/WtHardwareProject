@@ -17,7 +17,9 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.helper.CreateQRImageHelper;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.interphone.model.UserInviteMeInside;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.music.main.PlayerActivity;
+import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
@@ -35,12 +37,21 @@ public class EWMShowFragment extends Fragment implements OnClickListener {
     private Bitmap bmp;
     private FragmentActivity context;
     private View rootView;
+    private String TZ_type;
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                PlayerActivity.close();
+                if (TZ_type != null) {
+                    if (TZ_type.equals("mine")) {
+                        MineActivity.close();
+                    }else if(TZ_type.equals("program")){
+                        ProgramActivity.close();
+                    }else if(TZ_type.equals("player")){
+                        PlayerActivity.close();
+                    }
+                }
                 break;
         }
     }
@@ -50,6 +61,7 @@ public class EWMShowFragment extends Fragment implements OnClickListener {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.activity_ewmshow, container, false);
             context = getActivity();
+
             initView();
         }
         return rootView;
@@ -70,10 +82,11 @@ public class EWMShowFragment extends Fragment implements OnClickListener {
         textNews = (TextView) rootView.findViewById(R.id.news);
 
         if (getArguments() != null) {
+            TZ_type = getArguments().getString("TZ_type");
             int type = getArguments().getInt("type", 1);// 0：单体节目分享  1：个人   2：组  3：专辑分享
-            if(type == 0) {
+            if (type == 0) {
                 shapeContent();
-            } else if(type == 3) {
+            } else if (type == 3) {
 
             } else {
                 String image = getArguments().getString("image");
@@ -112,7 +125,7 @@ public class EWMShowFragment extends Fragment implements OnClickListener {
         if (imageUrl != null && !imageUrl.equals("null") && !imageUrl.trim().equals("")) {
             if (!imageUrl.startsWith("http:")) {
                 imageUrl = AssembleImageUrlUtils.assembleImageUrl150(GlobalConfig.imageurl + imageUrl);
-            }else{
+            } else {
                 imageUrl = AssembleImageUrlUtils.assembleImageUrl150(imageUrl);
             }
             Picasso.with(context).load(imageUrl.replace("\\/", "/")).resize(100, 100).centerCrop().into(imageHead);
@@ -127,11 +140,11 @@ public class EWMShowFragment extends Fragment implements OnClickListener {
 
     // 单体节目分享
     private void shapeContent() {
-        if(GlobalConfig.playerObject.getContentImg() == null) {
+        if (GlobalConfig.playerObject.getContentImg() == null) {
             imageHead.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx));
         } else {
             String contentImage = GlobalConfig.playerObject.getContentImg();
-            if(!contentImage.startsWith("http")) {
+            if (!contentImage.startsWith("http")) {
                 contentImage = GlobalConfig.imageurl + contentImage;
             }
             contentImage = AssembleImageUrlUtils.assembleImageUrl180(contentImage);
@@ -145,7 +158,7 @@ public class EWMShowFragment extends Fragment implements OnClickListener {
         textName.setText(contentTile);
 
         String contentDescn = GlobalConfig.playerObject.getContentDescn();
-        if(contentDescn == null || contentDescn.equals("")) {
+        if (contentDescn == null || contentDescn.equals("")) {
             contentDescn = "暂无介绍";
         }
         textNews.setText(contentDescn);

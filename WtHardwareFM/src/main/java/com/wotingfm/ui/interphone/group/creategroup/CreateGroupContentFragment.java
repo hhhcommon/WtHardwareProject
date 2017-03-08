@@ -385,7 +385,7 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
 
     // 负责处理从上一个页面的来的事件 并处理对应的布局文件
     private void handleIntent() {
-        GroupType = context.getIntent().getStringExtra("Type");
+        GroupType = getArguments().getString("Type");
         if (GroupType == null || GroupType.equals("")) {
             ToastUtils.show_always(context, "获取组类型异常，请返回上一界面重新选择");
         } else if (GroupType.equals("Open")) {

@@ -305,7 +305,8 @@ public class UpdatePersonActivity extends Fragment implements
                 }
                 break;
             case R.id.lin_area:
-                cityDialog.show();
+                if(cityDialog!=null) cityDialog.show();
+                ToastUtils.show_always(context,"数据出错了，请您稍后再试");
                 break;
         }
     }
