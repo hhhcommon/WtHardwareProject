@@ -208,7 +208,7 @@
 
                 <TextView
                     style="@style/PersonAndSetTextStyle"
-                    android:text="调频设置"
+                    android:text="FM调频"
                     android:layout_toRightOf="@id/image_listener" />
 
                 <ImageView
