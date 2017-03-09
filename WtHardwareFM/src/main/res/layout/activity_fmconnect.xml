@@ -1,37 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/BaseStyle">
+    style="@style/BaseStyle"
+    android:id="@+id/view_root"
+    android:orientation="vertical">
 
-    <include android:id="@+id/include_title" layout="@layout/base_activity_title"/>
-
-    <LinearLayout
-        android:id="@+id/linear_scan"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:layout_alignParentBottom="true"
-        android:gravity="center"
-        android:background="@color/WHITE">
-
-        <Button
-            android:id="@+id/btn_scan_fm"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:text="扫描"
-            android:background="@drawable/wt_commit_button_background"
-            android:textColor="@color/WHITE"
-            android:layout_marginLeft="14dp"
-            android:layout_marginRight="14dp"/>
-
-    </LinearLayout>
+    <include layout="@layout/base_activity_title"/>
 
     <ListView
         android:id="@+id/fm_list_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_below="@+id/include_title"
         android:scrollbars="none"
-        android:layout_above="@id/linear_scan"
         android:background="@color/WHITE"/>
 
-</RelativeLayout>
+</LinearLayout>

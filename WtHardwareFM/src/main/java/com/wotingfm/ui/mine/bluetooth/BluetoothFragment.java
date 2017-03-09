@@ -19,10 +19,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -31,10 +29,10 @@ import android.widget.Toast;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.ui.mine.main.MineActivity;
-import com.wotingfm.ui.mine.main.MineFragment;
 import com.wotingfm.ui.mine.bluetooth.adapter.UserBluetoothAdapter;
 import com.wotingfm.ui.mine.bluetooth.model.BluetoothInfo;
+import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.mine.main.MineFragment;
 import com.wotingfm.util.L;
 
 import java.io.IOException;
@@ -59,7 +57,7 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
     private List<BluetoothInfo> list = new ArrayList<>();   // 蓝牙列表 包含已配对和可以配对的设备
     private Set<BluetoothDevice> device;                    // 搜索到新的蓝牙设备列表
 
-    private LinearLayout linearBluetoothSearch;             // 搜索蓝牙设备
+//    private LinearLayout linearBluetoothSearch;             // 搜索蓝牙设备
     private RelativeLayout openDetection;                   // 开放检测设置  打开 OR 关闭
     private ImageView imageBluetoothSet;                    // 蓝牙设置开关
     private ImageView imageOpenDetection;                   // 蓝牙开放检测开关
@@ -67,7 +65,7 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
     private TextView textOpenDetectionTime;                 // 蓝牙开放检测倒计时时间
     private TextView textBluetoothName;                     // 蓝牙名字
     private TextView textOpenDetection;                     // "开放检测"
-    private Button btnSearchDevice;                         // 扫描蓝牙设备
+//    private Button btnSearchDevice;                         // 扫描蓝牙设备
     private Dialog setBluetoothNameDialog;                  // 用户重命名蓝牙名字
 
     //    private String newName;                                 // 保存用户对设备设置的心名字
@@ -101,11 +99,11 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
             }
         });
 
-        btnSearchDevice = (Button) rootView.findViewById(R.id.bluetooth_search);// 搜索蓝牙设备
-        btnSearchDevice.setOnClickListener(this);
-        btnSearchDevice.setClickable(false);
+//        btnSearchDevice = (Button) rootView.findViewById(R.id.bluetooth_search);// 搜索蓝牙设备
+//        btnSearchDevice.setOnClickListener(this);
+//        btnSearchDevice.setClickable(false);
 
-        linearBluetoothSearch = (LinearLayout) rootView.findViewById(R.id.linear_bluetooth_search);
+//        linearBluetoothSearch = (LinearLayout) rootView.findViewById(R.id.linear_bluetooth_search);
         userBluetoothList = (ListView) rootView.findViewById(R.id.list_user_bluetooth);
         userBluetoothList.setSelector(new ColorDrawable(Color.TRANSPARENT));
         View headView = LayoutInflater.from(context).inflate(R.layout.head_view_bluetooth, null);
@@ -141,7 +139,7 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
             }
             textOpenDetection.setTextColor(getResources().getColor(R.color.wt_login_third));
             openDetection.setBackgroundDrawable(getResources().getDrawable(R.drawable.person_color));
-            linearBluetoothSearch.setVisibility(View.VISIBLE);
+//            linearBluetoothSearch.setVisibility(View.VISIBLE);
             userBluetoothList.setDividerHeight(1);
             MineFragment.blueAdapter.startDiscovery();
             list.addAll(pairList = findAvalibleDevice());
@@ -152,7 +150,7 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
             openDetection.setClickable(false);
             textOpenDetection.setTextColor(getResources().getColor(R.color.textshang2));
             openDetection.setBackgroundDrawable(null);
-            linearBluetoothSearch.setVisibility(View.GONE);
+//            linearBluetoothSearch.setVisibility(View.GONE);
             textOpenDetectionTime.setVisibility(View.GONE);
             textOpenDetectionInfo.setText("仅让已配对的蓝牙设备可见");
             userBluetoothList.setDividerHeight(0);
@@ -181,15 +179,15 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.bluetooth_search:// 搜索蓝牙设备
-                isScan = true;
-                MineFragment.blueAdapter.startDiscovery();
-                if (userList != null) {
-                    userList.clear();
-                }
-                btnSearchDevice.setText("正在扫描附近蓝牙设备...");
-                btnSearchDevice.setClickable(false);
-                break;
+//            case R.id.bluetooth_search:// 搜索蓝牙设备
+//                isScan = true;
+//                MineFragment.blueAdapter.startDiscovery();
+//                if (userList != null) {
+//                    userList.clear();
+//                }
+//                btnSearchDevice.setText("正在扫描附近蓝牙设备...");
+//                btnSearchDevice.setClickable(false);
+//                break;
             case R.id.bluetooth_set:// 蓝牙开关
                 if (MineFragment.blueAdapter.isEnabled()) {
                     MineFragment.blueAdapter.cancelDiscovery();// 停止蓝牙搜索
@@ -299,7 +297,7 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
                     openDetection.setClickable(false);
                     textOpenDetection.setTextColor(getResources().getColor(R.color.textshang2));
                     openDetection.setBackgroundDrawable(null);
-                    linearBluetoothSearch.setVisibility(View.GONE);
+//                    linearBluetoothSearch.setVisibility(View.GONE);
                     textOpenDetectionTime.setVisibility(View.GONE);
                     textOpenDetectionInfo.setText("仅让已配对的蓝牙设备可见");
                     userBluetoothList.setDividerHeight(0);
@@ -325,7 +323,7 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
                     }
                     textOpenDetection.setTextColor(getResources().getColor(R.color.wt_login_third));
                     openDetection.setBackgroundDrawable(getResources().getDrawable(R.drawable.person_color));
-                    linearBluetoothSearch.setVisibility(View.VISIBLE);
+//                    linearBluetoothSearch.setVisibility(View.VISIBLE);
                     userBluetoothList.setDividerHeight(1);
                     list.addAll(pairList = findAvalibleDevice());
                     userAdapter.notifyDataSetChanged();
@@ -346,8 +344,8 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
                     list.addAll(pairList = findAvalibleDevice());
 
                     isScan = false;
-                    btnSearchDevice.setClickable(true);
-                    btnSearchDevice.setText("搜索设备");
+//                    btnSearchDevice.setClickable(true);
+//                    btnSearchDevice.setText("搜索设备");
                     if (device != null && device.size() > 0) { // 存在已经配对过的蓝牙设备
                         Iterator<BluetoothDevice> it = device.iterator();
                         while (it.hasNext()) {

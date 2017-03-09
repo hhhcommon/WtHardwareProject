@@ -26,7 +26,7 @@ import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
-import com.wotingfm.ui.music.program.album.main.AlbumFragment;
+import com.wotingfm.ui.music.album.main.AlbumFragment;
 import com.wotingfm.ui.music.program.diantai.main.adapter.RadioNationAdapter;
 import com.wotingfm.ui.music.program.diantai.model.RadioPlay;
 import com.wotingfm.util.CommonUtils;
@@ -121,8 +121,6 @@ public class RadioNationalFragment extends Fragment implements View.OnClickListe
                         try {
                             SubList = new Gson().fromJson(StringSubList, new TypeToken<List<RadioPlay>>() {
                             }.getType());
-                            String s = SubList.get(0).getCatalogName();
-                            String s1 = SubList.get(0).getList().get(0).getContentName();
                             if (adapter == null) {
                                 adapter = new RadioNationAdapter(context, SubList);
                                 mListView.setAdapter(adapter);

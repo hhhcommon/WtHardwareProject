@@ -247,6 +247,7 @@ public class SearchPlayerHistoryDao {
 				new Object[] { date,url });
 		db.close();
 	}
+
 	/**
 	 * 修改数据库当中某个单体节目的喜欢类型
 	 */

@@ -236,7 +236,6 @@ public class MineFragment extends Fragment implements OnClickListener {
                 fg1.setTargetFragment(ct, 0);
                 MineActivity.open(fg1);
                 break;
-
         }
     }
 
@@ -349,7 +348,6 @@ public class MineFragment extends Fragment implements OnClickListener {
         }
     }
 
-
     // 设备状态广播监听
     private class DeviceReceiver extends BroadcastReceiver {
         @Override
@@ -422,7 +420,7 @@ public class MineFragment extends Fragment implements OnClickListener {
             }
             sendUpdate(pM);
         } else if (i == 2) {
-            //处理接收结果的逻辑
+            // 处理接收结果的逻辑
             userNum = sharedPreferences.getString(StringConstant.USER_NUM, "");// 用户号
             if (!userNum.equals("")) {
                 circleView.setVisibility(View.VISIBLE);
@@ -458,23 +456,38 @@ public class MineFragment extends Fragment implements OnClickListener {
                 break;
             case IntegerConstant.PHOTO_REQUEST_CUT:
                 if (resultCode == 1) {
-                    imageNum = 1;
-                    PhotoCutAfterImagePath = data.getStringExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH);
-                    dialog = DialogUtils.Dialogph(context, "头像上传中");
-                    dealt();
+
                 }
                 break;
-
         }
     }
 
     // 图片裁剪
     private void startPhotoZoom(Uri uri) {
-        Intent intent = new Intent(context, PhotoCutActivity.class);
-        intent.putExtra(StringConstant.START_PHOTO_ZOOM_URI, uri.toString());
-        intent.putExtra(StringConstant.START_PHOTO_ZOOM_TYPE, 1);
-        startActivityForResult(intent, IntegerConstant.PHOTO_REQUEST_CUT);
+
+        PhotoCutActivity fg = new PhotoCutActivity();
+        Bundle bundle = new Bundle();
+        bundle.putString(StringConstant.START_PHOTO_ZOOM_URI, uri.toString());
+        bundle.putString(StringConstant.JUMP_TYPE, "mine");
+        bundle.putString(StringConstant.FRAGMENT_TYPE, "MineFragment");
+        bundle.putInt(StringConstant.START_PHOTO_ZOOM_TYPE, 1);
+        fg.setArguments(bundle);
+        fg.setTargetFragment(ct, IntegerConstant.PHOTO_REQUEST_CUT);
+        MineActivity.open(fg);
+
     }
+
+    public void setResultForPhotoZoom(int resultCode, Intent data) {
+        if (resultCode == 1&&data!=null) {
+            imageNum = 1;
+            PhotoCutAfterImagePath = data.getStringExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH);
+            dialog = DialogUtils.Dialogph(context, "头像上传中");
+            dealt();
+        } else {
+            ToastUtils.show_always(context, "用户退出上传图片");
+        }
+    }
+
 
     // 图片处理
     private void dealt() {
@@ -729,9 +742,7 @@ public class MineFragment extends Fragment implements OnClickListener {
         }
 
         // 个人资料没有修改过则不需要将数据提交服务器
-        if (!isUpdate) {
-            return;
-        }
+        if (!isUpdate) return ;
         isUpdate = false;
         L.v("数据改动", "数据有改动，将数据提交到服务器!");
         VolleyRequest.RequestPost(GlobalConfig.updateUserUrl, tag, jsonObject, new VolleyCallback() {

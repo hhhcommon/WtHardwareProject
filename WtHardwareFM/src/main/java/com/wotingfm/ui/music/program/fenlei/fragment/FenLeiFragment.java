@@ -32,8 +32,9 @@ import java.util.List;
 
 /**
  * 分类页面
- * @author 辛龙
- * 2016年3月31日
+ * author：辛龙 (xinLong)
+ * 2017/3/8 13:49
+ * 邮箱：645700751@qq.com
  */
 public class FenLeiFragment extends Fragment implements TipView.WhiteViewClick {
     private FragmentActivity context;
@@ -48,22 +49,9 @@ public class FenLeiFragment extends Fragment implements TipView.WhiteViewClick {
     private TipView tipView;// 没有网络、没有数据、数据加载出错提示
 
     @Override
-    public void onWhiteViewClick() {
-        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-            dialog = DialogUtils.Dialogph(context, "加载数据中...");
-            sendRequest();
-        } else {
-            tipView.setVisibility(View.VISIBLE);
-            tipView.setTipView(TipView.TipStatus.NO_NET);
-        }
-    }
-
-    @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
-
-
     }
 
     @Override
@@ -81,16 +69,16 @@ public class FenLeiFragment extends Fragment implements TipView.WhiteViewClick {
 
             EBL_Catalog = (ListView) rootView.findViewById(R.id.ebl_fenlei);
 
-//            View headView = LayoutInflater.from(context).inflate(R.layout.headview_fragment_fenlei, null);
+            // View headView = LayoutInflater.from(context).inflate(R.layout.headview_fragment_fenlei, null);
             View footView = LayoutInflater.from(context).inflate(R.layout.footview_fragment_fenlei, null);
-//            EBL_Catalog.addHeaderView(headView);
+            // EBL_Catalog.addHeaderView(headView);
             EBL_Catalog.setSelector(new ColorDrawable(Color.TRANSPARENT));
             EBL_Catalog.addFooterView(footView);
 
             // 轮播图
-//            RollPagerView mLoopViewPager = (RollPagerView) headView.findViewById(R.id.slideshowView);
-//            mLoopViewPager.setAdapter(new LoopAdapter(mLoopViewPager));
-//            mLoopViewPager.setHintView(new IconHintView(context, R.mipmap.indicators_now, R.mipmap.indicators_default));
+            // RollPagerView mLoopViewPager = (RollPagerView) headView.findViewById(R.id.slideshowView);
+            // mLoopViewPager.setAdapter(new LoopAdapter(mLoopViewPager));
+            // mLoopViewPager.setHintView(new IconHintView(context, R.mipmap.indicators_now, R.mipmap.indicators_default));
 
             if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 sendRequest();
@@ -100,6 +88,17 @@ public class FenLeiFragment extends Fragment implements TipView.WhiteViewClick {
             }
         }
         return rootView;
+    }
+
+    @Override
+    public void onWhiteViewClick() {
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+            dialog = DialogUtils.Dialogph(context, "加载数据中...");
+            sendRequest();
+        } else {
+            tipView.setVisibility(View.VISIBLE);
+            tipView.setTipView(TipView.TipStatus.NO_NET);
+        }
     }
 
     // 发送网络请求
@@ -116,7 +115,6 @@ public class FenLeiFragment extends Fragment implements TipView.WhiteViewClick {
         } catch (JSONException e) {
             e.printStackTrace();
         }
-
         VolleyRequest.RequestPost(GlobalConfig.getPreferenceUrl, tag, jsonObject, new VolleyCallback() {
             private String ReturnType;
 
@@ -133,11 +131,12 @@ public class FenLeiFragment extends Fragment implements TipView.WhiteViewClick {
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("PrefTree")).nextValue();
-                        List<FenLei> c = new Gson().fromJson(arg1.getString("children"), new TypeToken<List<FenLei>>() {}.getType());
+                        List<FenLei> c = new Gson().fromJson(arg1.getString("children"), new TypeToken<List<FenLei>>() {
+                        }.getType());
                         if (c == null || c.size() == 0) {
                             tipView.setVisibility(View.VISIBLE);
                             tipView.setTipView(TipView.TipStatus.NO_DATA, "数据君不翼而飞了\n点击界面会重新获取数据哟");
-                            return ;
+                            return;
                         }
                         if (adapter == null) {
                             EBL_Catalog.setAdapter(adapter = new CatalogListAdapter(context, c));
@@ -155,6 +154,7 @@ public class FenLeiFragment extends Fragment implements TipView.WhiteViewClick {
                     tipView.setTipView(TipView.TipStatus.IS_ERROR, "数据君不翼而飞了\n点击界面会重新获取数据哟");
                 }
             }
+
             @Override
             protected void requestError(VolleyError error) {
                 if (dialog != null) dialog.dismiss();
@@ -163,35 +163,6 @@ public class FenLeiFragment extends Fragment implements TipView.WhiteViewClick {
             }
         });
     }
-
-//    private class LoopAdapter extends LoopPagerAdapter {
-//        public LoopAdapter(RollPagerView viewPager) {
-//            super(viewPager);
-//        }
-//
-//        private int count = imgs.length;
-//
-//        @Override
-//        public View getView(ViewGroup container, int position) {
-//            ImageView view = new ImageView(container.getContext());
-//            view.setScaleType(ImageView.ScaleType.FIT_XY);
-//            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-//            Picasso.with(context).load(imgs[position % count]).resize(1080, 450).centerCrop().into(view);
-//            return view;
-//        }
-//
-//        @Override
-//        public int getRealCount() {
-//            return count;
-//        }
-//    }
-
-//    public String[] imgs = {
-//            "http://pic.500px.me/picurl/vcg5da48ce9497b91f9c81c17958d4f882e?code=e165fb4d228d4402",
-//            "http://pic.500px.me/picurl/49431365352e4e94936d4562a7fbc74a---jpg?code=647e8e97cd219143",
-//            "http://pic.500px.me/picurl/vcgd5d3cfc7257da293f5d2686eec1068d1?code=2597028fc68bd766",
-//            "http://pic.500px.me/picurl/vcg1aa807a1b8bd1369e4f983e555d5b23b?code=c0c4bb78458e5503",
-//    };
 
     @Override
     public void onDestroyView() {

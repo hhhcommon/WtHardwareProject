@@ -23,7 +23,8 @@ import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.qrcode.EWMShowFragment;
-import com.wotingfm.ui.music.player.more.subscribe.SubscriberListFragment;
+import com.wotingfm.ui.music.album.main.AlbumFragment;
+import com.wotingfm.ui.music.album.model.ContentInfo;
 import com.wotingfm.ui.music.comment.main.CommentFragment;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.ui.music.download.main.DownloadFragment;
@@ -31,10 +32,9 @@ import com.wotingfm.ui.music.download.model.FileInfo;
 import com.wotingfm.ui.music.download.service.DownloadService;
 import com.wotingfm.ui.music.main.PlayerActivity;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
-import com.wotingfm.ui.music.player.more.album.main.AlbumFragment;
 import com.wotingfm.ui.music.player.more.playhistory.activity.PlayHistoryFragment;
 import com.wotingfm.ui.music.player.more.programme.ProgrammeFragment;
-import com.wotingfm.ui.music.program.album.model.ContentInfo;
+import com.wotingfm.ui.music.player.more.subscribe.SubscriberListFragment;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
@@ -154,6 +154,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                 EWMShowFragment fg_evm = new EWMShowFragment();
                 Bundle bundle_evm = new Bundle();
                 bundle_evm.putInt("type", 0);
+                bundle_evm.putString(StringConstant.JUMP_TYPE,"player");
                 fg_evm.setArguments(bundle_evm);
                 PlayerActivity.open(fg_evm);
                 break;
@@ -165,6 +166,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                         Bundle bundle = new Bundle();
                         bundle.putString("contentId", GlobalConfig.playerObject.getContentId());
                         bundle.putString("MediaType", GlobalConfig.playerObject.getMediaType());
+                        bundle.putString(StringConstant.JUMP_TYPE, "play");
                         fg.setArguments(bundle);
                         PlayerActivity.open(fg);
                     } else {
@@ -219,6 +221,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                     bundle.putString("contentName", SequName);
                     bundle.putString("contentDesc", SequDesc);
                     bundle.putString("contentId", SequId);
+                    bundle.putString(StringConstant.JUMP_TYPE, "play");
                     bundle.putString("contentImg", SequImage);
                     fg_album.setArguments(bundle);
                     PlayerActivity.open(fg_album);

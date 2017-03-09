@@ -159,7 +159,27 @@ public class StringConstant {
 
     // 数据获取  文字请求内容
     public static final String TEXT_CONTENT = "text";
+    // 跳转类型
+    public static final String JUMP_TYPE = "JUMP_TYPE";
+    // Fragment类型
+    public static final String FRAGMENT_TYPE = "FRAGMENT_TYPE";
 
+    // 保存数据 FM 历史记录 _1
+    public static final String FM_HISTORY_RECORD_1 = "FM_HISTORY_RECORD_1";
 
+    // 保存数据 FM 历史记录 _2
+    public static final String FM_HISTORY_RECORD_2 = "FM_HISTORY_RECORD_2";
+
+    // 保存数据 FM 历史记录 _3
+    public static final String FM_HISTORY_RECORD_3 = "FM_HISTORY_RECORD_3";
+
+    // 保存数据 FM 历史记录 _4
+    public static final String FM_HISTORY_RECORD_4 = "FM_HISTORY_RECORD_4";
+
+    // 保存数据 FM 历史记录 _5
+    public static final String FM_HISTORY_RECORD_5 = "FM_HISTORY_RECORD_5";
+
+    // 保存数据 记录当前保存 FM 历史第几个数据了 0 < count < 6
+    public static final String FM_HISTORY_RECORD_INDEX = "FM_HISTORY_RECORD_INDEX";
 
 }

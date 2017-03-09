@@ -10,6 +10,15 @@ public class Attributes implements Serializable{
     private String nodeName;
     private String mId;
     private String id;
+    private String channelImg;
+
+    public String getChannelImg() {
+        return channelImg;
+    }
+
+    public void setChannelImg(String channelImg) {
+        this.channelImg = channelImg;
+    }
 
     public String getNodeName() {
         return nodeName;

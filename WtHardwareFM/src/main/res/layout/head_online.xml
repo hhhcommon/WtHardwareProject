@@ -30,6 +30,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:textSize="@dimen/audio_type_size"
+                android:textColor="@color/wt_login_third"
+
                 android:text="国家台" />
 
         </LinearLayout>
@@ -51,6 +53,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:textColor="@color/wt_login_third"
+
                 android:textSize="@dimen/audio_type_size"
                 android:text="地方台" />
 
@@ -74,6 +78,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:textSize="@dimen/audio_type_size"
+                android:textColor="@color/wt_login_third"
+
                 android:text="网络台" />
 
         </LinearLayout>
@@ -140,17 +146,12 @@
 
     </LinearLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:background="@color/text_line_1"
-        android:layout_height="0.5dp" />
-
     <ListView
         android:id="@+id/gridView"
         android:layout_width="match_parent"
-        android:layout_height="244dp"
-        android:divider="@color/text_line_1"
-        android:dividerHeight="0.5dp"
+        android:layout_height="wrap_content"
+        android:divider="@color/transparent"
+        android:dividerHeight="0dp"
         android:background="@color/WHITE"
         android:scrollbars="none"/>
 
