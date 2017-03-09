@@ -20,7 +20,10 @@ import com.wotingfm.widget.MyGridView;
 import java.util.List;
 
 /**
- * 分类数据展示
+ * 分类页面适配器1
+ * author：辛龙 (xinLong)
+ * 2017/3/8 13:49
+ * 邮箱：645700751@qq.com
  */
 public class CatalogListAdapter extends BaseAdapter {
     private List<FenLei> list;
@@ -34,7 +37,6 @@ public class CatalogListAdapter extends BaseAdapter {
         this.list = list;
         this.context = context;
     }
-
 
     @Override
     public int getCount() {
@@ -70,6 +72,7 @@ public class CatalogListAdapter extends BaseAdapter {
         } else {
             holder.topView.setVisibility(View.VISIBLE);
         }
+
         holder.tv_name.setText(list.get(position).getName());
         adapters = new CatalogGridAdapter(context, list.get(position).getChildren());
         holder.gv.setAdapter(adapters);

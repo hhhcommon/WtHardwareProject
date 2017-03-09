@@ -6,6 +6,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +15,10 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.interphone.group.creategroup.CreateGroupContentFragment;
+import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.main.GroupDetailFragment;
 import com.wotingfm.ui.interphone.main.DuiJiangActivity;
+import com.wotingfm.ui.mine.main.MineActivity;
+import com.wotingfm.ui.mine.main.MineFragment;
 import com.wotingfm.widget.photocut.ClipImageLayout;
 
 import java.io.ByteArrayOutputStream;
@@ -30,6 +34,9 @@ public class PhotoCutActivity extends Fragment {
     private TextView textSave;
     private int type;
     private View rootView;
+    private FragmentActivity context;
+    private String jump_type;
+    private String fragment_type;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -41,6 +48,7 @@ public class PhotoCutActivity extends Fragment {
 
                 }
             });
+            context = getActivity();
             initView();
         }
         return rootView;
@@ -51,12 +59,15 @@ public class PhotoCutActivity extends Fragment {
      */
     private void handleIntent() {
         if (getArguments() == null) {
-            return ;
+            return;
         }
+
+        jump_type = getArguments().getString(StringConstant.JUMP_TYPE);
+        fragment_type = getArguments().getString(StringConstant.FRAGMENT_TYPE);
         String imageUrl = getArguments().getString(StringConstant.START_PHOTO_ZOOM_URI);
         type = getArguments().getInt(StringConstant.START_PHOTO_ZOOM_TYPE, -1);
         if (imageUrl == null || imageUrl.equals("")) {
-            return ;
+            return;
         }
         mClipImageLayout.setImage(Uri.parse(imageUrl));
         textSave.setOnClickListener(new View.OnClickListener() {
@@ -76,20 +87,47 @@ public class PhotoCutActivity extends Fragment {
                         out.close();
                         Intent intent = new Intent();
                         intent.putExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH, Environment.getExternalStorageDirectory() + "/woting/" + s + ".png");
-                        Fragment targetFragment = getTargetFragment();
-                        ((CreateGroupContentFragment) targetFragment).setResult(1, intent);
-                        DuiJiangActivity.close();
+                        if (fragment_type != null) {
+                            if (fragment_type.equals("MineFragment")) {
+                                Fragment targetFragment = getTargetFragment();
+                                ((MineFragment) targetFragment).setResultForPhotoZoom(1, intent);
+                            }else if(fragment_type.equals("CreateGroupContentFragment")){
+                                Fragment targetFragment = getTargetFragment();
+                                ((CreateGroupContentFragment) targetFragment).setResultForPhotoZoom(1, intent);
+                            }else if(fragment_type.equals("GroupDetailFragment")){
+                                Fragment targetFragment = getTargetFragment();
+                                ((GroupDetailFragment) targetFragment).setResultForPhotoZoom(1, intent);
+                            }
+                        }
+
                     } else {
                         FileOutputStream out = new FileOutputStream(new File(Environment.getExternalStorageDirectory() + "/woting/portaitUser.png"));
                         out.write(byteArrayOutputStream.toByteArray());
                         out.flush();
                         out.close();
-                        Fragment targetFragment = getTargetFragment();
-                        ((CreateGroupContentFragment) targetFragment).setResult(1,null);
-                        DuiJiangActivity.close();
+                        if (fragment_type != null) {
+                            if (fragment_type.equals("MineFragment")) {
+                                Fragment targetFragment = getTargetFragment();
+                                ((MineFragment) targetFragment).setResultForPhotoZoom(1, null);
+                            }else if(fragment_type.equals("CreateGroupContentFragment")){
+                                Fragment targetFragment = getTargetFragment();
+                                ((CreateGroupContentFragment) targetFragment).setResultForPhotoZoom(1, null);
+                            }else if(fragment_type.equals("GroupDetailFragment")){
+                                Fragment targetFragment = getTargetFragment();
+                                ((GroupDetailFragment) targetFragment).setResultForPhotoZoom(1, null);
+                            }
+                        }
                     }
+
                 } catch (Exception e) {
                     e.printStackTrace();
+                }
+                if (jump_type != null) {
+                    if (jump_type.equals("duijiang")) {
+                        DuiJiangActivity.close();
+                    } else if (jump_type.equals("mine")) {
+                        MineActivity.close();
+                    }
                 }
             }
         });

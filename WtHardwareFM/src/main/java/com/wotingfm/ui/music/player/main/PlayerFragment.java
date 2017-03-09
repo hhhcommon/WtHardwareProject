@@ -40,7 +40,6 @@ import com.wotingfm.ui.music.player.model.LanguageSearch;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.ui.music.player.more.PlayerMoreOperationFragment;
-import com.wotingfm.ui.music.search.main.SearchLikeFragment;
 import com.wotingfm.ui.music.video.IntegrationPlayer;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
@@ -70,27 +69,27 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         XListView.IXListViewListener, TipView.WhiteViewClick, SeekBar.OnSeekBarChangeListener, AdapterView.OnItemClickListener {
 
     public static FragmentActivity context;
-    private MessageReceiver mReceiver;// 广播
-    private IntegrationPlayer mPlayer;// 播放器
-    private SearchPlayerHistoryDao mSearchHistoryDao;// 搜索历史数据库
+    private MessageReceiver mReceiver;                                                              // 广播
+    private IntegrationPlayer mPlayer;                                                              // 播放器
+    private SearchPlayerHistoryDao mSearchHistoryDao;                                               // 搜索历史数据库
     private PlayerListAdapter adapter;
     private WindowManager windowManager;
 
-    private List<LanguageSearchInside> playList = new ArrayList<>();// 播放列表
-    private List<LanguageSearchInside> subList = new ArrayList<>();// 保存临时数据
+    private List<LanguageSearchInside> playList = new ArrayList<>();                                // 播放列表
+    private List<LanguageSearchInside> subList = new ArrayList<>();                                 // 保存临时数据
 
     private View rootView;
-    private SeekBar mSeekBar;// 播放进度
+    private SeekBar mSeekBar;                                                                       // 播放进度
 
-    private ImageView imagePlay;// 播放 OR 暂停
+    private ImageView imagePlay;                                                                    // 播放 OR 暂停
 
-    private TextView mPlayCurrentTime;// 当前播放时间
-    private AutoScrollTextView mPlayAudioTitle;// 当前播放节目的标题
-    private ImageView imagePlayCover;// 节目封面图片
+    private TextView mPlayCurrentTime;                                                              // 当前播放时间
+    private AutoScrollTextView mPlayAudioTitle;                                                     // 当前播放节目的标题
+    private ImageView imagePlayCover;                                                               // 节目封面图片
 
-    private View recommendView;// 相关推荐部分
-    private XListView mListView;// 数据列表
-    private TipView tipView;// 没有数据、没有网络提示
+    private View recommendView;                                                                     // 相关推荐部分
+    private XListView mListView;                                                                    // 数据列表
+    private TipView tipView;                                                                        // 没有数据、没有网络提示
 
     /**
      * 1.== "MAIN_PAGE"  ->  mainPageRequest;
@@ -99,78 +98,25 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
      * Default  == "MAIN_PAGE";
      */
     private String requestType = StringConstant.PLAY_REQUEST_TYPE_MAIN_PAGE;
-    private String sendTextContent;// 文字搜索内容
-    private String sendVoiceContent;// 语音搜索内容
-    private String mediaType;// 当前播放节目类型
+    private String sendTextContent;                                                                 // 文字搜索内容
+    private String sendVoiceContent;                                                                // 语音搜索内容
+    private String mediaType;                                                                       // 当前播放节目类型
 
-    private long totalTime;// 播放总长度
-    private int index = -1;// 当前播放在列表中的位置
-    private int mainPage = 1;// mainPage
-    private int refreshType = 0;// == -1 刷新  == 1 加载更多  == 0 第一次加载
-    private boolean isPlaying;// 是否正在播放
-    private boolean isInitData;// 第一次进入应用加载数据
-    private boolean isResetData;// 重新获取了数据  searchByText
-    private static SearchLikeFragment fg_search;
+    private long totalTime;                                                                         // 播放总长度
+    private int index = -1;                                                                         // 当前播放在列表中的位置
+    private int mainPage = 1;                                                                       // mainPage
+    private int refreshType = 0;                                                                    // == -1 刷新  == 1 加载更多  == 0 第一次加载
+    private boolean isPlaying;                                                                      // 是否正在播放
+    private boolean isInitData;                                                                     // 第一次进入应用加载数据
+    private boolean isResetData;                                                                    // 重新获取了数据  searchByText
     public static PlayerFragment ct;
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.text_recommend_visible:// 展示相关推荐列表
-                recommendView.setVisibility(View.VISIBLE);
-                break;
-            case R.id.text_recommend_gone:// 隐藏相关推荐列表
-                recommendView.setVisibility(View.GONE);
-                break;
-            case R.id.play_more:// 更多
-                // 跳转到搜索界面  原来的代码 要加在这里
-                PlayerActivity.open(new PlayerMoreOperationFragment());
-                break;
-            case R.id.image_play:// 播放 OR 暂停
-                play();
-                break;
-            case R.id.image_right:// 下一首
-                next();
-                break;
-            case R.id.image_left:// 上一首
-                last();
-                break;
-            case R.id.lin_find://
-                // 跳转到搜索界面  原来的代码 要加在这里
-            MainActivity.changeFive();
-                break;
-            case R.id.lin_news://
-                // 跳转到通知界面
-                NotifyNewsFragment fg = new NotifyNewsFragment();
-                Bundle bundle = new Bundle();
-                bundle.putString("type", "music");
-                fg.setArguments(bundle);
-                PlayerActivity.open(fg);
-
-                break;
-            case R.id.tv_program://
-                MainActivity.changeFour();
-                break;
-
-
-        }
-    }
-
-    // 初始化数据
-    private void initData() {
-        windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
-        registeredBroad();
-
-        mSearchHistoryDao = new SearchPlayerHistoryDao(context);// 数据库对象
-
-        mPlayer = IntegrationPlayer.getInstance();// 播放器对象
-    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = getActivity();
-        ct=this;
+        ct = this;
         initData();
     }
 
@@ -190,24 +136,24 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         // 播放器
         BVideoView.setAK("b53ba2453fa3451d8aa65a2b48ded30c");
         BVideoView BDAudio = (BVideoView) rootView.findViewById(R.id.video_view);
-        mPlayer.bindService(context, BDAudio);// 绑定服务
+        mPlayer.bindService(context, BDAudio);                                                      // 绑定服务
         // mPlayer.bindService(context, null);// 绑定服务
 
         ImageView mPlayAudioImageCoverMask = (ImageView) rootView.findViewById(R.id.play_cover_mask);// 封面图片的六边形遮罩
         mPlayAudioImageCoverMask.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_6_b_y_bd));
 
-        mPlayCurrentTime = (TextView) rootView.findViewById(R.id.play_current_time);// 当前播放时间
-        mPlayAudioTitle = (AutoScrollTextView) rootView.findViewById(R.id.play_audio_title);// 当前播放节目的标题
+        mPlayCurrentTime = (TextView) rootView.findViewById(R.id.play_current_time);                // 当前播放时间
+        mPlayAudioTitle = (AutoScrollTextView) rootView.findViewById(R.id.play_audio_title);        // 当前播放节目的标题
         mPlayAudioTitle.init(windowManager);
         mPlayAudioTitle.startScroll();
-        imagePlayCover = (ImageView) rootView.findViewById(R.id.play_cover);// 节目封面图片
+        imagePlayCover = (ImageView) rootView.findViewById(R.id.play_cover);                        // 节目封面图片
 
-        mSeekBar = (SeekBar) rootView.findViewById(R.id.seek_bar);// 播放进度
+        mSeekBar = (SeekBar) rootView.findViewById(R.id.seek_bar);                                  // 播放进度
 
-        imagePlay = (ImageView) rootView.findViewById(R.id.image_play);// 播放 OR 暂停
+        imagePlay = (ImageView) rootView.findViewById(R.id.image_play);                             // 播放 OR 暂停
         imagePlay.setOnClickListener(this);
 
-        recommendView = rootView.findViewById(R.id.recommend_view);// 相关推荐部分
+        recommendView = rootView.findViewById(R.id.recommend_view);                                 // 相关推荐部分
         mListView = (XListView) rootView.findViewById(R.id.list_view);
         mListView.setXListViewListener(this);
 
@@ -223,15 +169,63 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         rootView.findViewById(R.id.lin_find).setOnClickListener(this);
         rootView.findViewById(R.id.lin_news).setOnClickListener(this);
 
-        rootView.findViewById(R.id.text_recommend_visible).setOnClickListener(this);// 展示相关推荐列表
-        rootView.findViewById(R.id.text_recommend_gone).setOnClickListener(this);// 隐藏相关推荐列表
-        rootView.findViewById(R.id.play_more).setOnClickListener(this);// 更多
-        rootView.findViewById(R.id.image_right).setOnClickListener(this);// 下一首
-        rootView.findViewById(R.id.image_left).setOnClickListener(this);// 上一首
+        rootView.findViewById(R.id.text_recommend_visible).setOnClickListener(this);                // 展示相关推荐列表
+        rootView.findViewById(R.id.text_recommend_gone).setOnClickListener(this);                   // 隐藏相关推荐列表
+        rootView.findViewById(R.id.play_more).setOnClickListener(this);                             // 更多
+        rootView.findViewById(R.id.image_right).setOnClickListener(this);                           // 下一首
+        rootView.findViewById(R.id.image_left).setOnClickListener(this);                            // 上一首
 
         mSeekBar.setOnSeekBarChangeListener(this);
         mListView.setOnItemClickListener(this);
     }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.text_recommend_visible:                                                       // 展示相关推荐列表
+                recommendView.setVisibility(View.VISIBLE);
+                break;
+            case R.id.text_recommend_gone:                                                          // 隐藏相关推荐列表
+                recommendView.setVisibility(View.GONE);
+                break;
+            case R.id.play_more:                                                                    // 更多
+                PlayerActivity.open(new PlayerMoreOperationFragment());
+                break;
+            case R.id.image_play:                                                                   // 播放 OR 暂停
+                play();
+                break;
+            case R.id.image_right:                                                                  // 下一首
+                next();
+                break;
+            case R.id.image_left:                                                                   // 上一首
+                last();
+                break;
+            case R.id.lin_find:
+                MainActivity.changeFive();
+                break;
+            case R.id.lin_news:                                                                     // 跳转到通知界面
+                NotifyNewsFragment fg = new NotifyNewsFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("type", "music");
+                fg.setArguments(bundle);
+                PlayerActivity.open(fg);
+                break;
+            case R.id.tv_program://
+                MainActivity.changeFour();
+                break;
+        }
+    }
+
+    // 初始化数据
+    private void initData() {
+        windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        registeredBroad();
+
+        mSearchHistoryDao = new SearchPlayerHistoryDao(context);                                    // 数据库对象
+
+        mPlayer = IntegrationPlayer.getInstance();                                                  // 播放器对象
+    }
+
 
     // 获取数据库第一条数据并加入播放列表
     private void queryData() {

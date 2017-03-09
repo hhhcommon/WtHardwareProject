@@ -37,7 +37,6 @@ public class ProgrammeFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
-
             rootView = inflater.inflate(R.layout.activity_programme, container, false);
             rootView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -45,18 +44,16 @@ public class ProgrammeFragment extends Fragment {
 
                 }
             });
+            isCancelRequest = false;
             context = getActivity();
             String bcid = getArguments().getString("BcId");
             long nowT = System.currentTimeMillis();
             int d = TimeUtils.getWeek(nowT);                 // 获取当天是属于周几
             ArrayList<Long> st = getTimeForString(d, nowT); // 获取组装后的请求时间
-
             setView();
             InitImage();
-
             setFragment(bcid, st);
         }
-
         return rootView;
     }
 

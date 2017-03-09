@@ -12,6 +12,7 @@ public class FenLei implements Serializable{
 	private int tag; //存全选tag的位置
 	private int tagType ; //存全选的类型
 	private String id;
+	private Attributes attributes;
 
 	public String getId() {
 		return id;
@@ -47,6 +48,14 @@ public class FenLei implements Serializable{
 
 	public List<FenLeiName> getChildren() {
 		return children;
+	}
+
+	public Attributes getAttributes() {
+		return attributes;
+	}
+
+	public void setAttributes(Attributes attributes) {
+		this.attributes = attributes;
 	}
 
 	public void setChildren(List<FenLeiName> children) {

@@ -5,18 +5,16 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 
 import com.wotingfm.R;
+import com.wotingfm.ui.baseactivity.BaseFragmentActivity;
 import com.wotingfm.util.SequenceUUID;
 
-/**
- * 我的
- */
-public class MineActivity extends AppCompatActivity {
+
+public class MineActivity extends BaseFragmentActivity {
     private static MineActivity context;
     private static View textMain;
 
@@ -24,8 +22,7 @@ public class MineActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_other);
-        context = this;
-
+        context=this;
         textMain = findViewById(R.id.tv_main);
         MineActivity.open(new MineFragment());
     }
@@ -79,4 +76,5 @@ public class MineActivity extends AppCompatActivity {
         res.updateConfiguration(config, res.getDisplayMetrics());
         return res;
     }
+
 }

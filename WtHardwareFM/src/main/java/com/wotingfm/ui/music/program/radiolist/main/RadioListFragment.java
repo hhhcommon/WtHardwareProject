@@ -129,7 +129,12 @@ public class RadioListFragment extends Fragment implements OnClickListener, TipV
                 try {
                     FenLeiName list = (FenLeiName) bundlea.getSerializable("Catalog");
                     catalogName = list.getName();
-                    catalogType = list.getAttributes().getmId();
+                    try {
+                        catalogType = list.getAttributes().getmId();
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        catalogType="-1";
+                    }
                     id = list.getAttributes().getId();
                     mTextTitle.setText(catalogName);
                 } catch (Exception e) {

@@ -32,6 +32,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.music.comment.adapter.ChatLVAdapter;
@@ -40,6 +41,8 @@ import com.wotingfm.ui.music.comment.adapter.FaceGVAdapter;
 import com.wotingfm.ui.music.comment.adapter.FaceVPAdapter;
 import com.wotingfm.ui.music.comment.model.opinion;
 import com.wotingfm.ui.music.main.PlayerActivity;
+import com.wotingfm.ui.music.main.ProgramActivity;
+import com.wotingfm.ui.music.search.main.SearchLikeActivity;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.MyEditText;
@@ -78,6 +81,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
     private String mediaType;
     private View rootView;
     private FragmentActivity context;
+    private String jump_type;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -97,6 +101,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
     }
 
     private void handleIntent() {
+        jump_type=getArguments().getString(StringConstant.JUMP_TYPE);//search
         contentId = getArguments().getString("contentId");
         mediaType=getArguments().getString("MediaType");
     }
@@ -128,7 +133,15 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
         lin_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                PlayerActivity.close();
+                if(jump_type!=null){
+                    if(jump_type.equals("search")){
+                        SearchLikeActivity.close();
+                    }else if(jump_type.equals("program")){
+                        ProgramActivity.close();
+                    }else if(jump_type.equals("play")){
+                        PlayerActivity.close();
+                    }
+                }
             }
         });
     }

@@ -456,10 +456,7 @@ public class MineFragment extends Fragment implements OnClickListener {
                 break;
             case IntegerConstant.PHOTO_REQUEST_CUT:
                 if (resultCode == 1) {
-                    imageNum = 1;
-                    PhotoCutAfterImagePath = data.getStringExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH);
-                    dialog = DialogUtils.Dialogph(context, "头像上传中");
-                    dealt();
+
                 }
                 break;
         }
@@ -467,11 +464,30 @@ public class MineFragment extends Fragment implements OnClickListener {
 
     // 图片裁剪
     private void startPhotoZoom(Uri uri) {
-        Intent intent = new Intent(context, PhotoCutActivity.class);
-        intent.putExtra(StringConstant.START_PHOTO_ZOOM_URI, uri.toString());
-        intent.putExtra(StringConstant.START_PHOTO_ZOOM_TYPE, 1);
-        startActivityForResult(intent, IntegerConstant.PHOTO_REQUEST_CUT);
+
+        PhotoCutActivity fg = new PhotoCutActivity();
+        Bundle bundle = new Bundle();
+        bundle.putString(StringConstant.START_PHOTO_ZOOM_URI, uri.toString());
+        bundle.putString(StringConstant.JUMP_TYPE, "mine");
+        bundle.putString(StringConstant.FRAGMENT_TYPE, "MineFragment");
+        bundle.putInt(StringConstant.START_PHOTO_ZOOM_TYPE, 1);
+        fg.setArguments(bundle);
+        fg.setTargetFragment(ct, IntegerConstant.PHOTO_REQUEST_CUT);
+        MineActivity.open(fg);
+
     }
+
+    public void setResultForPhotoZoom(int resultCode, Intent data) {
+        if (resultCode == 1&&data!=null) {
+            imageNum = 1;
+            PhotoCutAfterImagePath = data.getStringExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH);
+            dialog = DialogUtils.Dialogph(context, "头像上传中");
+            dealt();
+        } else {
+            ToastUtils.show_always(context, "用户退出上传图片");
+        }
+    }
+
 
     // 图片处理
     private void dealt() {

@@ -12,31 +12,31 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
-import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.main.MainActivity;
+import com.wotingfm.ui.music.album.main.AlbumFragment;
 import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
-import com.wotingfm.ui.music.program.album.main.AlbumFragment;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
-import com.wotingfm.ui.music.program.radiolist.main.RadioListFragment;
+import com.wotingfm.ui.music.program.radiolist.adapter.ForNullAdapter;
+import com.wotingfm.ui.music.program.radiolist.adapter.LoopAdapter;
 import com.wotingfm.ui.music.program.radiolist.adapter.RadioListAdapter;
+import com.wotingfm.ui.music.program.radiolist.main.RadioListFragment;
+import com.wotingfm.ui.music.program.radiolist.model.Image;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.TipView;
 import com.wotingfm.widget.rollviewpager.RollPagerView;
-import com.wotingfm.widget.rollviewpager.adapter.LoopPagerAdapter;
 import com.wotingfm.widget.rollviewpager.hintview.IconHintView;
 import com.wotingfm.widget.xlistview.XListView;
 
@@ -68,6 +68,8 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
     //	private int pageSizeNum;
     private int refreshType = 1;            // refreshType 1 为下拉加载  2 为上拉加载更多
     private boolean isFirst = true;
+    private RollPagerView mLoopViewPager;
+    private List<Image> imageList;
 
     @Override
     public void onWhiteViewClick() {
@@ -99,12 +101,10 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
             });
             tipView = (TipView) rootView.findViewById(R.id.tip_view);
             tipView.setWhiteClick(this);
-
+            getImage();
             View headView = LayoutInflater.from(context).inflate(R.layout.headview_acitivity_radiolist, null);
             // 轮播图
-            RollPagerView mLoopViewPager = (RollPagerView) headView.findViewById(R.id.slideshowView);
-            mLoopViewPager.setAdapter(new LoopAdapter(mLoopViewPager));
-            mLoopViewPager.setHintView(new IconHintView(context, R.mipmap.indicators_now, R.mipmap.indicators_default));
+            mLoopViewPager = (RollPagerView) headView.findViewById(R.id.slideshowView);
             mListView = (XListView) rootView.findViewById(R.id.listview_fm);
             mListView.addHeaderView(headView);
             setListener();
@@ -201,16 +201,22 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
                         setOnItem();
                         tipView.setVisibility(View.GONE);
                     } else {
-                        if (refreshType == 1) {
-                            tipView.setVisibility(View.VISIBLE);
-                            tipView.setTipView(TipView.TipStatus.NO_DATA, "数据君不翼而飞了\n点击界面会重新获取数据哟");
+                        mListView.setAdapter(new ForNullAdapter(context));
+                        if (imageList == null) {
+                            if (refreshType == 1) {
+                                tipView.setVisibility(View.VISIBLE);
+                                tipView.setTipView(TipView.TipStatus.NO_DATA, "数据君不翼而飞了\n点击界面会重新获取数据哟");
+                            }
                         }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    if (refreshType == 1) {
-                        tipView.setVisibility(View.VISIBLE);
-                        tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                    mListView.setAdapter( new ForNullAdapter(context));
+                    if (imageList == null) {
+                        if (refreshType == 1) {
+                            tipView.setVisibility(View.VISIBLE);
+                            tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                        }
                     }
                 }
 
@@ -350,32 +356,44 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
         }
     }
 
-    private class LoopAdapter extends LoopPagerAdapter {
-        private int count = images.length;
-
-        public LoopAdapter(RollPagerView viewPager) {
-            super(viewPager);
+    // 请求网络获取分类信息
+    private void getImage() {
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
+        try {
+            jsonObject.put("CatalogType", RadioListFragment.catalogType);
+            jsonObject.put("CatalogId", RadioListFragment.id);
+            jsonObject.put("Size", "10");// 此处需要改成-1
+        } catch (JSONException e) {
+            e.printStackTrace();
         }
+        VolleyRequest.RequestPost(GlobalConfig.getImage, RadioListFragment.tag, jsonObject, new VolleyCallback() {
+            private String ReturnType;
 
-        @Override
-        public View getView(ViewGroup container, int position) {
-            ImageView view = new ImageView(container.getContext());
-            view.setScaleType(ImageView.ScaleType.FIT_XY);
-            view.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-            Picasso.with(context).load(images[position % count]).into(view);
-            return view;
-        }
+            @Override
+            protected void requestSuccess(JSONObject result) {
+                if (dialog != null) dialog.dismiss();
+                if (RadioListFragment.isCancel()) return;
+                try {
+                    ReturnType = result.getString("ReturnType");
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                if (ReturnType != null && ReturnType.equals("1001")) {
+                    try {
+                        imageList = new Gson().fromJson(result.getString("LoopImgs"), new TypeToken<List<Image>>() {
+                        }.getType());
+                        mLoopViewPager.setAdapter(new LoopAdapter(mLoopViewPager, context, imageList));
+                        mLoopViewPager.setHintView(new IconHintView(context, R.mipmap.indicators_now, R.mipmap.indicators_default));
+                        tipView.setVisibility(View.GONE);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
 
-        @Override
-        public int getRealCount() {
-            return count;
-        }
+            @Override
+            protected void requestError(VolleyError error) {
+            }
+        });
     }
-
-    public String[] images = {
-            "http://pic.500px.me/picurl/vcg5da48ce9497b91f9c81c17958d4f882e?code=e165fb4d228d4402",
-            "http://pic.500px.me/picurl/49431365352e4e94936d4562a7fbc74a---jpg?code=647e8e97cd219143",
-            "http://pic.500px.me/picurl/vcgd5d3cfc7257da293f5d2686eec1068d1?code=2597028fc68bd766",
-            "http://pic.500px.me/picurl/vcg1aa807a1b8bd1369e4f983e555d5b23b?code=c0c4bb78458e5503",
-    };
 }

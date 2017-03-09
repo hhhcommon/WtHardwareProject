@@ -22,7 +22,7 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.ui.music.favorite.main.FavoriteFragment;
 import com.wotingfm.ui.music.favorite.adapter.FavorListAdapter;
-import com.wotingfm.ui.music.program.album.main.AlbumFragment;
+import com.wotingfm.ui.music.album.main.AlbumFragment;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
