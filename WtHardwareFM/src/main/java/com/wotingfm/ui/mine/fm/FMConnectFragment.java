@@ -193,9 +193,8 @@ public class FMConnectFragment extends Fragment implements View.OnClickListener,
             // 隐藏键盘
             imm.hideSoftInputFromWindow(viewFmList.getWindowToken(), 0);
 
-            if (fmFrequency == null || fmFrequency.equals(temp)) {
-                return true;
-            }
+            if (fmFrequency == null) fmFrequency = temp;
+            else if (fmFrequency.equals(temp)) return true;
 
             // 然后再执行保存操作
             ToastUtils.show_always(context, "保存成功");
@@ -219,9 +218,9 @@ public class FMConnectFragment extends Fragment implements View.OnClickListener,
             // 隐藏键盘
             imm.hideSoftInputFromWindow(viewFmList.getWindowToken(), 0);
 
-            if (fmFrequency == null || fmFrequency.equals(temp)) {
-                return ;
-            }
+            if (temp.equals("")) return ;
+            if (fmFrequency == null) fmFrequency = temp;
+            else if (fmFrequency.equals(temp)) return ;
 
             // 然后再执行保存操作
             ToastUtils.show_always(context, "保存成功");
