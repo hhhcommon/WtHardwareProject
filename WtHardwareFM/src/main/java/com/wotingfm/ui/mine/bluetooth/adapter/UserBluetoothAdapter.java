@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
@@ -21,7 +21,6 @@ import java.util.List;
 public class UserBluetoothAdapter extends BaseAdapter {
     private Context context;
     private List<BluetoothInfo> list;
-    private CancelListener cancelListener;
 
     public UserBluetoothAdapter(Context context, List<BluetoothInfo> list){
         this.context = context;
@@ -31,10 +30,6 @@ public class UserBluetoothAdapter extends BaseAdapter {
     public void setList(List<BluetoothInfo> list){
         this.list = list;
         notifyDataSetChanged();
-    }
-
-    public void setListener(CancelListener cancelListener){
-        this.cancelListener = cancelListener;
     }
 
     @Override
@@ -58,23 +53,26 @@ public class UserBluetoothAdapter extends BaseAdapter {
         if(convertView == null){
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_user_bluebooth, parent, false);
-            holder.textBluetoothName = (TextView) convertView.findViewById(R.id.text_bluebooth_name);
+            holder.textBluetoothName = (TextView) convertView.findViewById(R.id.text_bluetooth_name);
             holder.textPairDevice = (TextView) convertView.findViewById(R.id.text_pair_device);
-            holder.btnCancelPair = (Button) convertView.findViewById(R.id.btn_cancel_pair);
+            holder.imageConnInfo = (ImageView) convertView.findViewById(R.id.image_conn_info);
+            holder.textConnTip = (TextView) convertView.findViewById(R.id.text_conn_tip);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         BluetoothInfo bName = list.get(position);
-        int type = bName.getBluetoothType();// 0为可以配对设备  1为已经配对过的设备
-        if(type == 0) {
+        int type = bName.getBluetoothType();// == 0 为可以配对设备  == 1 为已经配对过的设备
+        if(type == 0) {// 可用
             holder.textPairDevice.setVisibility(View.VISIBLE);
             holder.textPairDevice.setText("可用配对设备");
-            holder.btnCancelPair.setVisibility(View.GONE);
-        } else if(type == 1) {
+            holder.imageConnInfo.setVisibility(View.GONE);
+            holder.textConnTip.setVisibility(View.GONE);
+        } else if(type == 1) {// 已经配对
             holder.textPairDevice.setVisibility(View.VISIBLE);
             holder.textPairDevice.setText("已配对的设备");
-            holder.btnCancelPair.setVisibility(View.VISIBLE);
+            holder.imageConnInfo.setVisibility(View.VISIBLE);
+            holder.textConnTip.setVisibility(View.VISIBLE);
         }
         if(position > 0) {
             if(list.get(position).getBluetoothType() == (list.get(position - 1).getBluetoothType())) {
@@ -88,22 +86,13 @@ public class UserBluetoothAdapter extends BaseAdapter {
         }
         L.w("bName" + bName.getBluetoothName() + "\t" + bName.getBluetoothAddress());
 
-        holder.btnCancelPair.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                cancelListener.cancelPair(position);
-            }
-        });
         return convertView;
     }
 
     class ViewHolder {
         TextView textBluetoothName;// 设备名称
         TextView textPairDevice;
-        Button btnCancelPair;// 取消配对
-    }
-
-    public interface CancelListener {
-        void cancelPair(int p);
+        ImageView imageConnInfo;// 已经连接的设备标识
+        TextView textConnTip;
     }
 }
