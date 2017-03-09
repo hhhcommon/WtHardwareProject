@@ -35,7 +35,7 @@ import com.wotingfm.ui.music.favorite.main.FavoriteFragment;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.main.PlayerFragment;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
-import com.wotingfm.ui.music.program.album.main.AlbumFragment;
+import com.wotingfm.ui.music.album.main.AlbumFragment;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.ui.music.search.adapter.SearchContentAdapter;
 import com.wotingfm.ui.music.search.model.SuperRankInfo;

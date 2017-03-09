@@ -7,7 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.wotingfm.common.database.SQLiteHelper;
 import com.wotingfm.ui.music.download.service.DownloadService;
 import com.wotingfm.ui.music.download.model.FileInfo;
-import com.wotingfm.ui.music.program.album.model.ContentInfo;
+import com.wotingfm.ui.music.album.model.ContentInfo;
 import com.wotingfm.util.SequenceUUID;
 
 import java.util.ArrayList;

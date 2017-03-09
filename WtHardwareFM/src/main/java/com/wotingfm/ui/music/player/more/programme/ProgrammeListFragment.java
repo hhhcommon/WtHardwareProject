@@ -63,26 +63,22 @@ public class ProgrammeListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (rootView != null) {
-            ViewGroup parent = (ViewGroup) rootView.getParent();
-            if (parent != null) {
-                parent.removeView(rootView);
-            }
-        }
-        rootView = inflater.inflate(R.layout.fragment_programme, container, false);
-        rootView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        if (rootView == null) {
+            rootView = inflater.inflate(R.layout.fragment_programme, container, false);
+            rootView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
-            }
-        });
-        mListView = (ListView) rootView.findViewById(R.id.listView);
+                }
+            });
+            mListView = (ListView) rootView.findViewById(R.id.listView);
 
-        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+            if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
 //				dialog = DialogUtils.Dialogph(context, "正在获取数据");
-            send(id, time);                     // 获取网络数据
-        } else {
-            ToastUtils.show_always(context, "网络连接失败，请稍后重试");
+                send(id, time);                     // 获取网络数据
+            } else {
+                ToastUtils.show_always(context, "网络连接失败，请稍后重试");
+            }
         }
         return rootView;
     }

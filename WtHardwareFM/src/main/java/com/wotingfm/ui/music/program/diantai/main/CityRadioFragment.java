@@ -29,7 +29,7 @@ import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
-import com.wotingfm.ui.music.program.album.main.AlbumFragment;
+import com.wotingfm.ui.music.album.main.AlbumFragment;
 import com.wotingfm.ui.music.program.diantai.main.adapter.OnLinesRadioAdapter;
 import com.wotingfm.ui.music.program.diantai.model.RadioPlay;
 import com.wotingfm.ui.music.program.fmlist.adapter.RankInfoAdapter;

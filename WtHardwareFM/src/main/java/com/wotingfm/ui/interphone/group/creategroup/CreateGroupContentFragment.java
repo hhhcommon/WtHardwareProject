@@ -121,7 +121,7 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
             rootView = inflater.inflate(R.layout.activity_create_group_item, container, false);
             rootView.setOnClickListener(this);
             context = getActivity();
-            ct=this;
+            ct = this;
             imageNum = 0;
             setView();
             handleIntent();
@@ -276,7 +276,7 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
              * //NeedMember参数 0为不需要 1为需要 jsonObject.put("NeedMember", 0);
 			 */
             // 测试数据
-			/* jsonObject.put("NeedMember", 1); */
+            /* jsonObject.put("NeedMember", 1); */
             // 当NeedMember=1时 也就是需要传送一个members的list时需处理
 			/* jsonObject.put("Members", "a5d27255a5dd,956439fe9cbc"); */
             if (groupType == 2) {
@@ -537,8 +537,8 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
         }
     }
 
-    public void setResult(int resultCode, Intent data) {
-        if (resultCode == 1&&data!=null) {
+    public void setResultForPhotoZoom(int resultCode, Intent data) {
+        if (resultCode == 1 && data != null) {
             imageNum = 1;
             PhotoCutAfterImagePath = data.getStringExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH);
             ImageUrl.setImageURI(Uri.parse(PhotoCutAfterImagePath));
@@ -546,8 +546,8 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
         } else {
             ToastUtils.show_always(context, "用户退出上传图片");
         }
-        }
-    
+    }
+
     /**
      * 图片裁剪
      */
@@ -555,6 +555,8 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
         PhotoCutActivity fg = new PhotoCutActivity();
         Bundle bundle = new Bundle();
         bundle.putString(StringConstant.START_PHOTO_ZOOM_URI, uri.toString());
+        bundle.putString(StringConstant.JUMP_TYPE, "duijiang");
+        bundle.putString(StringConstant.FRAGMENT_TYPE, "CreateGroupContentFragment");
         bundle.putInt(StringConstant.START_PHOTO_ZOOM_TYPE, 1);
         fg.setArguments(bundle);
         fg.setTargetFragment(ct, PHOTO_REQUEST_CUT);
@@ -579,7 +581,7 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
                         ToastUtils.show_always(context, "创建成功");
                     } else {
                         ToastUtils.show_always(context, "创建成功");
-                        
+
                         GroupDetailFragment fg = new GroupDetailFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "CreateGroupContentActivity");

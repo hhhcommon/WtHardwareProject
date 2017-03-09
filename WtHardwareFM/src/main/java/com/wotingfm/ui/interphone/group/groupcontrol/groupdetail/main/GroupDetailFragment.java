@@ -837,13 +837,6 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
                     startPhotoZoom(Uri.parse(outputFilePath));
                 }
                 break;
-            case PHOTO_REQUEST_CUT:
-                if (resultCode == 1) {
-                    photoCutAfterImagePath = data.getStringExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH);
-                    dialog = DialogUtils.Dialogph(context, "提交中");
-                    dealt();
-                }
-                break;
             case GROUP_MORE:
                 if (resultCode == 1) {
                     context.sendBroadcast(pushIntent);
@@ -867,12 +860,25 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
         PhotoCutActivity fg = new PhotoCutActivity();
         Bundle bundle = new Bundle();
         bundle.putString(StringConstant.START_PHOTO_ZOOM_URI, uri.toString());
+        bundle.putString(StringConstant.JUMP_TYPE, "duijiang");
+        bundle.putString(StringConstant.FRAGMENT_TYPE, "GroupDetailFragment");
         bundle.putInt(StringConstant.START_PHOTO_ZOOM_TYPE, 1);
         fg.setArguments(bundle);
         fg.setTargetFragment(ct, PHOTO_REQUEST_CUT);
         DuiJiangActivity.open(fg);
 
     }
+
+    public void setResultForPhotoZoom(int resultCode, Intent data) {
+        if (resultCode == 1 && data != null) {
+            photoCutAfterImagePath = data.getStringExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH);
+            dialog = DialogUtils.Dialogph(context, "提交中");
+            dealt();
+        } else {
+            ToastUtils.show_always(context, "用户退出上传图片");
+        }
+    }
+
 
     // 拍照调用逻辑  从相册选择 which == 0  拍照 which == 1
     private void doDialogClick(int which) {

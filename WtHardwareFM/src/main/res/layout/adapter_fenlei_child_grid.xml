@@ -14,9 +14,10 @@
         android:orientation="vertical">
 
         <ImageView
+            android:id="@+id/image_url"
             android:layout_width="60dp"
             android:layout_height="60dp"
-            android:src="@mipmap/wt_icon_music_fenlei_child" />
+            android:src="@mipmap/image_fenlei_icon" />
 
         <TextView
             android:id="@+id/tv_name"

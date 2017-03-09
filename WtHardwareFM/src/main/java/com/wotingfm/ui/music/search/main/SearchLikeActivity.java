@@ -49,10 +49,14 @@ public class SearchLikeActivity extends AppCompatActivity {
                 .add(R.id.fragment_content, frg)
                 .addToBackStack(SequenceUUID.getUUID())
                 .commit();
+        int num=context.getSupportFragmentManager().getBackStackEntryCount();
+        Log.e("此时返回栈中个数====open====", num + "");
     }
 
     public static void close() {
-        context.getSupportFragmentManager().popBackStack();
+        context.getSupportFragmentManager().popBackStackImmediate();
+        int num=context.getSupportFragmentManager().getBackStackEntryCount();
+        Log.e("此时返回栈中个数====close====", num + "");
     }
 
     public static void hideShow(Fragment from,Fragment to) {

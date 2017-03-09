@@ -4,16 +4,16 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 
 import com.wotingfm.R;
+import com.wotingfm.ui.baseactivity.BaseFragmentActivity;
 import com.wotingfm.util.SequenceUUID;
 
 
-public class MineActivity extends AppCompatActivity {
+public class MineActivity extends BaseFragmentActivity {
     private static MineActivity context;
 
     @Override

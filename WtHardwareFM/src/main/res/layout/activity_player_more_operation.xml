@@ -38,8 +38,9 @@
             android:drawablePadding="5dp"
             android:paddingLeft="10dp"
             android:singleLine="true"
+            android:paddingTop="5dp"
             android:ellipsize="end"
-            android:textSize="14sp"
+            android:textSize="17sp"
             android:background="@color/WHITE"
             android:textColor="@color/wt_login_third"/>
 
@@ -119,7 +120,7 @@
                 android:textSize="18sp"
                 android:visibility="gone"
                 android:textColor="@color/wt_login_third"
-                android:drawableTop="@mipmap/wt_image_play_more_details"
+                android:drawableTop="@mipmap/wt_image_playing_list"
                 android:gravity="center"
                 android:drawablePadding="10dp"/>
 
@@ -162,30 +163,40 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="历史"
+                android:text="播放历史"
                 android:textSize="18sp"
                 android:textColor="@color/wt_login_third"
                 android:drawableTop="@mipmap/wt_image_play_history"
                 android:drawablePadding="10dp"/>
 
+            <!--<TextView-->
+                <!--android:id="@+id/text_liked"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_weight="1"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:text="喜欢"-->
+                <!--android:textSize="18sp"-->
+                <!--android:textColor="@color/wt_login_third"-->
+                <!--android:drawablePadding="10dp"-->
+                <!--android:drawableTop="@mipmap/wt_image_my_liked"-->
+                <!--android:gravity="center"/>-->
             <TextView
                 android:id="@+id/text_liked"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="喜欢"
+                android:text="我的订阅"
                 android:textSize="18sp"
                 android:textColor="@color/wt_login_third"
                 android:drawablePadding="10dp"
-                android:drawableTop="@mipmap/wt_image_my_liked"
+                android:drawableTop="@mipmap/wt_image_my_order"
                 android:gravity="center"/>
-
             <TextView
                 android:id="@+id/text_local"
                 android:layout_width="0dp"
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
-                android:text="本地"
+                android:text="本地音频"
                 android:textSize="18sp"
                 android:textColor="@color/wt_login_third"
                 android:drawablePadding="10dp"

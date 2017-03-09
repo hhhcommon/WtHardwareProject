@@ -159,7 +159,9 @@ public class StringConstant {
 
     // 数据获取  文字请求内容
     public static final String TEXT_CONTENT = "text";
-
-
+    // 跳转类型
+    public static final String JUMP_TYPE = "JUMP_TYPE";
+    // Fragment类型
+    public static final String FRAGMENT_TYPE = "FRAGMENT_TYPE";
 
 }

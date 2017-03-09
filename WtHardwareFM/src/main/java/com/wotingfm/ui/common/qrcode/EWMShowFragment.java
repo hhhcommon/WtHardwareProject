@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.helper.CreateQRImageHelper;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.interphone.model.UserInviteMeInside;
@@ -82,7 +83,7 @@ public class EWMShowFragment extends Fragment implements OnClickListener {
         textNews = (TextView) rootView.findViewById(R.id.news);
 
         if (getArguments() != null) {
-            TZ_type = getArguments().getString("TZ_type");
+            TZ_type = getArguments().getString(StringConstant.JUMP_TYPE);
             int type = getArguments().getInt("type", 1);// 0：单体节目分享  1：个人   2：组  3：专辑分享
             if (type == 0) {
                 shapeContent();
