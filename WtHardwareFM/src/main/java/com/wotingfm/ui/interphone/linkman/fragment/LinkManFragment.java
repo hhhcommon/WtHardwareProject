@@ -13,7 +13,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -669,7 +668,8 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
             @Override
             public void add(int position) {
                 group = groupList.get(position);
-                Log.e("组名称", group.getGroupName());
+                //Log.e("组名称", group.getGroupName());
+
                 if (ChatFragment.isCalling) {
                     if (ChatFragment.interPhoneType.equals("user")) {
                         type = 2;

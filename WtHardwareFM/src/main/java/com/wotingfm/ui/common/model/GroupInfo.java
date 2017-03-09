@@ -39,7 +39,16 @@ public class GroupInfo implements Serializable {
     private String UserNum;			// 用户码
     private String Descn;			//
     private String PortraitBig;
+    private String GroupFreq;       // 频率
 
+
+    public String getGroupFreq() {
+        return GroupFreq;
+    }
+
+    public void setGroupFreq(String groupFreq) {
+        GroupFreq = groupFreq;
+    }
 
     public String getPortraitBig() {
         return PortraitBig;

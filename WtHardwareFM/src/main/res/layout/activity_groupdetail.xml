@@ -211,6 +211,8 @@
                     android:layout_marginTop="30dp"
                     android:layout_toRightOf="@id/text_channel1"
                     android:hint="尚未选择对讲频道"
+                    android:textColor="@color/group_4b"
+                    android:textColorHint="@color/beijing"
                     android:visibility="visible"/>
 
                 <TextView
@@ -219,6 +221,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="12dp"
                     android:layout_marginTop="7dp"
+                    android:textColor="@color/group_4b"
+
                     android:layout_toRightOf="@id/text_channel1"
                     android:visibility="visible"
                     />
@@ -243,6 +247,8 @@
                     android:layout_toEndOf="@+id/text_channel2"
                     android:layout_toRightOf="@+id/text_channel2"
                     android:hint="尚未选择对讲频道"
+                    android:textColorHint="@color/beijing"
+                    android:textColor="@color/group_4b"
                     android:visibility="visible"/>
 
 

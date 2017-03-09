@@ -11,12 +11,141 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:visibility="gone" />
+     <RelativeLayout
+         android:id="@+id/relative_mo_ni"
+         android:layout_width="match_parent"
+         android:layout_height="match_parent"
+         android:background="@mipmap/simulation_bg"
+         android:visibility="gone"
+         >
+
+         <LinearLayout
+         android:id="@+id/lin_frequency_no"
+         android:layout_width="match_parent"
+         android:layout_marginLeft="35dp"
+         android:layout_marginRight="35dp"
+         android:layout_marginTop="25dp"
+         android:layout_marginBottom="25dp"
+         android:layout_height="200dp"
+         android:background="@drawable/bg_duijiang_moni"
+         android:orientation="vertical">
+             <RelativeLayout
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 android:layout_marginTop="40dp"
+                 >
+
+                 <ImageView
+                     android:id="@+id/image_moni"
+                     android:layout_width="60dp"
+                     android:layout_height="60dp"
+                     android:scaleType="centerCrop"
+                     android:layout_marginLeft="35dp"
+                     android:src="@mipmap/wt_image_tx_hy" />
+
+                 <ImageView
+                     android:layout_width="60dp"
+                     android:layout_height="60dp"
+                     android:layout_marginLeft="35dp"
+                     android:src="@mipmap/wt_6_b_y_b" />
+                 <TextView
+                     android:id="@+id/tv_group_moni_name"
+                     android:layout_width="match_parent"
+                     android:layout_height="wrap_content"
+                     android:textSize="16sp"
+                     android:textColor="@color/group_4b"
+                     android:text="显示的群名"
+                     android:layout_marginLeft="5dp"
+                     android:layout_marginRight="15dp"
+                     android:layout_centerVertical="true"
+                     android:layout_toRightOf="@+id/image_moni"
+                     android:layout_toEndOf="@+id/image_moni" />
+             </RelativeLayout>
+
+
+         <TextView
+             android:id="@+id/tv_group_moni_number"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textSize="20sp"
+             android:gravity="center"
+             android:layout_marginTop="30dp"
+             android:textColor="@color/group_4b"
+             android:layout_marginLeft="35dp"
+             android:textStyle="bold"
+             android:text="CH00-000.0000" />
+
+     </LinearLayout>
+
+         <LinearLayout
+             android:id="@+id/lin_switch_im"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:background="@drawable/bg_duijiang_anniu"
+
+             android:layout_marginTop="33dp"
+             android:layout_below="@+id/lin_frequency_no"
+             android:layout_alignLeft="@+id/lin_frequency_no"
+             android:layout_alignStart="@+id/lin_frequency_no">
+             <ImageView
+                 android:layout_width="25dp"
+                 android:layout_height="25dp"
+                 android:layout_marginTop="5dp"
+                 android:layout_marginLeft="10dp"
+                 android:layout_marginBottom="5dp"
+                 android:src="@mipmap/wt_img_switch_im"
+                 />
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textColor="#c0c0c0"
+                 android:text="语音聊天"
+                 android:textSize="16sp"
+                 android:layout_marginRight="10dp"
+                 android:layout_gravity="center"
+                 />
+
+         </LinearLayout>
+         <LinearLayout
+             android:id="@+id/lin_cut_moni"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:background="@drawable/bg_duijiang_cut"
+             android:layout_alignTop="@+id/lin_switch_im"
+             android:layout_alignRight="@+id/lin_frequency_no"
+             android:layout_alignEnd="@+id/lin_frequency_no">
+             <ImageView
+                 android:layout_width="25dp"
+                 android:layout_height="25dp"
+                 android:layout_marginTop="5dp"
+                 android:layout_marginLeft="15dp"
+                 android:layout_marginBottom="5dp"
+
+                 android:src="@mipmap/wt_cut_moni"
+                 />
+             <TextView
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:textColor="@color/white"
+                 android:text="挂断     "
+                 android:textSize="16sp"
+                 android:layout_marginLeft="5dp"
+                 android:layout_marginRight="12dp"
+                 android:layout_gravity="center"
+                 />
+
+         </LinearLayout>
+
+
+     </RelativeLayout>
+
 
     <RelativeLayout
         android:id="@+id/Relative_listview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:visibility="visible">
+        android:visibility="visible"
+        >
 
         <LinearLayout
             android:id="@+id/linear_view"
@@ -342,13 +471,13 @@
                     android:visibility="gone"
                     >
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:id="@+id/lin_switch_moni"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_weight="1"
+                        android:layout_marginLeft="40dp"
+                        android:layout_marginRight="35dp"
                         android:visibility="visible"
-                        android:background="@color/wt_chat_green"
+                        android:background="@drawable/bg_duijiang_moni_switch"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -356,16 +485,16 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_gravity="center"
-                            android:layout_marginRight="10dp"
-                            android:src="@mipmap/wt_play_recommend_visible" />
+                            android:src="@mipmap/wt_img_switch_moni" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="40dp"
                             android:gravity="center_vertical"
-                            android:paddingLeft="10dp"
+                            android:paddingLeft="5dp"
+
                             android:text="模拟对讲"
-                            android:textColor="@color/white"
+                            android:textColor="#ffa93d"
                             android:textSize="18sp" />
 
                     </LinearLayout>
@@ -401,12 +530,12 @@
 
                     <LinearLayout
                         android:id="@+id/imageView_answer"
-                        android:layout_width="0dp"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="20dp"
-                        android:layout_weight="1"
-                        android:background="@color/wt_chat_red"
+                        android:layout_marginLeft="35dp"
+                        android:layout_marginRight="40dp"
+
+                        android:background="@drawable/bg_duijiang_moni_cut"
                         android:gravity="center"
                         android:orientation="horizontal">
 
@@ -414,8 +543,7 @@
                             android:layout_width="20dp"
                             android:layout_height="20dp"
                             android:layout_gravity="center"
-                            android:layout_marginRight="10dp"
-                            android:src="@mipmap/wt_play_recommend_visible" />
+                            android:src="@mipmap/wt_cut_im" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -423,7 +551,7 @@
                             android:gravity="center_vertical"
                             android:paddingLeft="10dp"
                             android:text="挂断"
-                            android:textColor="@color/white"
+                            android:textColor="@color/red"
                             android:textSize="18sp" />
 
                     </LinearLayout>
@@ -565,65 +693,6 @@
 
         </RelativeLayout>
 
-        <com.wotingfm.widget.MyLinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="136dp"
-            android:layout_alignParentBottom="true"
-            android:background="@color/transparentt"
-            android:orientation="vertical"
-            android:visibility="gone">
 
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="1dp"
-                android:background="@color/view_color" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="16dp"
-                    android:orientation="vertical">
-
-                    <Button
-                        android:id="@+id/image_button"
-                        android:layout_width="99dp"
-                        android:layout_height="99dp"
-                        android:background="@drawable/d_duijiang_button_background" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="13dp"
-                        android:layout_marginTop="10dp"
-                        android:gravity="center"
-                        android:orientation="vertical">
-
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/d_duijiang_callback_background" />
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="5dp"
-                            android:text="挂断"
-                            android:textColor="@color/red" />
-                    </LinearLayout>
-                </LinearLayout>
-            </RelativeLayout>
-        </com.wotingfm.widget.MyLinearLayout>
     </RelativeLayout>
 </LinearLayout>
