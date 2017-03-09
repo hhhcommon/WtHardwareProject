@@ -87,6 +87,24 @@ public class FMConnectFragment extends Fragment implements View.OnClickListener,
         viewFmList = headView.findViewById(R.id.view_fm_list);
         viewFmList.setOnClickListener(new ViewRequestFocusLis());
 
+        // 使用过的频率历史
+        View viewFmHistory = headView.findViewById(R.id.view_fm_history);
+        ListView fmHistoryList = (ListView) headView.findViewById(R.id.fm_history_list);
+        String fmHistory = BSApplication.SharedPreferences.getString(StringConstant.FM_HISTORY_RECORD, "");
+        if (!fmHistory.equals("")) {
+            viewFmHistory.setVisibility(View.VISIBLE);
+            String[] history = fmHistory.split("\\,");
+            List<FMInfo> list = new ArrayList<>();
+            FMInfo fmInfo;
+            for (int i = 0; i < history.length; i++) {
+                fmInfo = new FMInfo();
+                fmInfo.setFmName(history[i]);
+                fmInfo.setType(0);
+                list.add(fmInfo);
+            }
+            fmHistoryList.setAdapter(new FMListAdapter(context, list));
+        }
+
         headView.findViewById(R.id.fm_set).setOnClickListener(this);// FM开关
         imageFmSet = (ImageView) headView.findViewById(R.id.image_fm_set);
 
@@ -125,6 +143,7 @@ public class FMConnectFragment extends Fragment implements View.OnClickListener,
                     }
                     list.get(position - 1).setType(1);
                     adapter.notifyDataSetChanged();
+                    saveFmFrequency(list.get(position - 1).getFmName());
                 }
             }
         });
@@ -193,12 +212,11 @@ public class FMConnectFragment extends Fragment implements View.OnClickListener,
             // 隐藏键盘
             imm.hideSoftInputFromWindow(viewFmList.getWindowToken(), 0);
 
-            if (fmFrequency == null) fmFrequency = temp;
+            if (fmFrequency == null || !fmFrequency.equals(temp)) fmFrequency = temp;
             else if (fmFrequency.equals(temp)) return true;
 
             // 然后再执行保存操作
-            ToastUtils.show_always(context, "保存成功");
-            fmFrequency = temp;
+            saveFmFrequency(fmFrequency);
             return true;
         }
         return false;
@@ -218,13 +236,56 @@ public class FMConnectFragment extends Fragment implements View.OnClickListener,
             // 隐藏键盘
             imm.hideSoftInputFromWindow(viewFmList.getWindowToken(), 0);
 
-            if (temp.equals("")) return ;
-            if (fmFrequency == null) fmFrequency = temp;
+            if (fmFrequency == null || !fmFrequency.equals(temp)) fmFrequency = temp;
             else if (fmFrequency.equals(temp)) return ;
 
             // 然后再执行保存操作
-            ToastUtils.show_always(context, "保存成功");
-            fmFrequency = temp;
+            saveFmFrequency(fmFrequency);
         }
+    }
+
+    // 保存用户使用过的频率
+    private void saveFmFrequency(String frequency) {
+        String temp = BSApplication.SharedPreferences.getString(StringConstant.FM_HISTORY_RECORD, "");
+        String[] data = temp.split("\\,");
+        if (data.length == 5) {// 只保存 5 条数据
+            List<String> list = new ArrayList<>();
+            for (int i = 1; i < 5; i++) {
+                list.add(data[i]);
+            }
+            list.add(frequency);
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < list.size(); i++) {
+                if (i != 0) {
+                    builder.append(",");
+                }
+                if (frequency.startsWith("FM")) {
+                    builder.append(data[i]);
+                } else {
+                    builder.append("FM ");
+                    builder.append(data[i]);
+                    builder.append("MHz");
+                }
+            }
+            temp = builder.toString();
+        } else {
+            data[data.length - 1] = frequency;
+            StringBuilder builder = new StringBuilder();
+            for (int i = 0; i < data.length; i++) {
+                if (i != 0) {
+                    builder.append(",");
+                }
+                if (frequency.startsWith("FM")) {
+                    builder.append(data[i]);
+                } else {
+                    builder.append("FM ");
+                    builder.append(data[i]);
+                    builder.append("MHz");
+                }
+            }
+            temp = builder.toString();
+        }
+        BSApplication.SharedPreferences.edit().putString(StringConstant.FM_HISTORY_RECORD, temp).commit();
+        ToastUtils.show_always(context, "保存成功");
     }
 }
