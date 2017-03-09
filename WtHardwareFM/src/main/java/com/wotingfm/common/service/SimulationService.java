@@ -68,9 +68,21 @@ public class SimulationService extends Service  {
 
     public static void setFrequence(String Frequ){
         if(!TextUtils.isEmpty(Frequ)){
-            ToastUtils.show_always(context,"对讲频率已经变更到"+Frequ);
-            String deviceNeedFreq=frequence.substring(frequence.indexOf("-")+1,frequence.length());
+      /*      ToastUtils.show_always(context,"对讲频率已经变更到"+Frequ);*/
+            String deviceNeedFreq=Frequ.substring(5,Frequ.length());
+      /*      ToastUtils.show_always(context,deviceNeedFreq);*/
+              Log.e("要设置的Freq","a"+deviceNeedFreq+"b");
             serialControl.sendTxt("AT+DMOSETGROUP=1,"+deviceNeedFreq+","+deviceNeedFreq+",4,1\n");
+        }
+    }
+
+    public static void setFrequenceFromOut(String Frequ){
+        if(!TextUtils.isEmpty(Frequ)){
+        /*    ToastUtils.show_always(context,"对讲频率已经变更到"+Frequ);
+            String deviceNeedFreq=frequence.substring(frequence.indexOf("-")+1,frequence.length());*/
+            serialControl.sendTxt("AT+DMOSETGROUP=1,"+Frequ+","+Frequ+",4,1\n");
+        }else{
+            ToastUtils.show_always(context,"传入的频率值不合法");
         }
     }
    /* //

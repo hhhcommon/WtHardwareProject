@@ -101,6 +101,7 @@
                         android:textSize="16sp"
                         android:gravity="center"
                         android:layout_marginTop="30dp"
+                        android:textColor="@color/group_4b"
                         android:text="当前频道为空，请设置频率" />
                     <TextView
                         android:id="@+id/tv_number"
@@ -110,6 +111,7 @@
                         android:gravity="center"
                         android:layout_marginTop="10dp"
                         android:textStyle="bold"
+                        android:textColor="@color/group_4b"
                         android:text="CH00-000.0000" />
 
                 </LinearLayout>
