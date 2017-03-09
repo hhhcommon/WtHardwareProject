@@ -35,6 +35,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.ArrayBlockingQueue;
 
 /**
@@ -55,9 +57,9 @@ public class SocketService extends Service {
     private volatile long lastReceiveTime;                            // 最后收到服务器消息时间
     private volatile Object socketSendLock = new Object();            // 发送锁
     private volatile Object socketRecvLock = new Object();            // 接收锁
-    private static HealthWatch healthWatch;                           // 健康检查线程
+    private static Timer healthWatch;                                 // 健康检查线程
     private static ReConn reConn;                                     // 重新连接线程
-    private static SendBeat sendBeat;                                 // 发送心跳线程
+    private static Timer sendBeat;                                    // 发送心跳线程
     private static SendMsg sendMsg;                                   // 发送消息线程
     private static ReceiveMsg receiveMsg;                             // 结束消息线程
     private static ArrayBlockingQueue<Message> audioMsgQueue = new ArrayBlockingQueue<Message>(128);                // 接收到的音频消息队列
@@ -211,8 +213,9 @@ public class SocketService extends Service {
             this.toBeStop = false;
             this.lastReceiveTime = System.currentTimeMillis(); //最后收到服务器消息时间
             //连接
-            this.healthWatch = new HealthWatch("Socket客户端长连接监控");
-            this.healthWatch.start();
+            healthWatch = new Timer("Socket客户端长连接监控");
+            System.out.println("<" + (new Date()).toString() + ">" + "Socket客户端长连接监控线程启动");
+            healthWatch.scheduleAtFixedRate(new HealthWatchTimer(), 0, scc.getIntervalCheckSocket());
         } else {
             this.workStop(false);
             this.workStart();//循环了，可能死掉
@@ -229,9 +232,9 @@ public class SocketService extends Service {
         toBeStop = true;
         if (b) {
             int i = 0, limitCount = 6000;//一分钟后退出
-            while ((healthWatch != null && healthWatch.isAlive()) ||
+            while ((healthWatch != null) ||
                     (reConn != null && reConn.isAlive()) ||
-                    (sendBeat != null && sendBeat.isAlive()) ||
+                    (sendBeat != null) ||
                     (sendMsg != null && sendMsg.isAlive()) ||
                     (receiveMsg != null && receiveMsg.isAlive())) {
                 try {
@@ -242,17 +245,12 @@ public class SocketService extends Service {
                 if (i++ > limitCount) break;
             }
         }
-
-        if (healthWatch != null && healthWatch.isAlive()) {
-            healthWatch.interrupt();
-            healthWatch = null;
-        }
         if (reConn != null && reConn.isAlive()) {
             reConn.interrupt();
             reConn = null;
         }
-        if (sendBeat != null && sendBeat.isAlive()) {
-            sendBeat.interrupt();
+        if (sendBeat != null) {
+            sendBeat.cancel();
             sendBeat = null;
         }
         if (sendMsg != null && sendMsg.isAlive()) {
@@ -300,17 +298,11 @@ public class SocketService extends Service {
         isRunning = false;
     }
 
-    //健康监控线程
-    private class HealthWatch extends Thread {
-        protected HealthWatch(String name) {
-            super.setName(name);
-            this.setDaemon(true);
-        }
 
-        public void run() { //主线程监控连接
-            System.out.println("<" + (new Date()).toString() + ">" + this.getName() + "线程启动");
+    //健康监控线程
+    class HealthWatchTimer extends TimerTask {
+        public void run() {
             try {
-                while (true) {//检查线程的健康状况
                     Log.e("toBeStop", "toBeStop状态===" + toBeStop);
                     if (reConn != null) {
                         Log.e("!reConn.isAlive", "!reConn.isAlive状态" + !reConn.isAlive());
@@ -319,7 +311,12 @@ public class SocketService extends Service {
                     }
                     Log.e("!socketOk()", "!socketOk()状态" + !socketOk());
                     Log.e("时间", "时间状态" + (System.currentTimeMillis() - lastReceiveTime > scc.getExpireTime()));
-                    if (toBeStop) break;
+                    if (toBeStop) {
+                        if (healthWatch != null) {
+                            healthWatch.cancel();
+                            healthWatch = null;
+                        }
+                    }
                     if (reConn == null || !reConn.isAlive()) {
                         Log.e("toBeStop", "toBeStop状态===" + toBeStop);
                         if (!socketOk() || (System.currentTimeMillis() - lastReceiveTime > scc.getExpireTime())) {//连接失败了
@@ -361,11 +358,6 @@ public class SocketService extends Service {
                             reConn.start();
                         }
                     }
-                    try {
-                        sleep(scc.getIntervalCheckSocket());
-                    } catch (InterruptedException e) {
-                    }
-                }
             } catch (Exception e) {
                 e.printStackTrace();
                 Log.e("健康监控线程异常信息", e.toString());
@@ -389,9 +381,9 @@ public class SocketService extends Service {
 
         public void run() {
             System.out.println("<" + (new Date()).toString() + ">" + this.getName() + "线程启动");
-            try {
-                sendBeat.interrupt();
-            } catch (Exception e) {
+            if (sendBeat != null) {
+                sendBeat.cancel();
+                sendBeat = null;
             }
             try {
                 sendMsg.interrupt();
@@ -429,8 +421,11 @@ public class SocketService extends Service {
                             if (out == null)
                                 out = new BufferedOutputStream(socket.getOutputStream());
                             lastReceiveTime = System.currentTimeMillis();
-                            sendBeat = new SendBeat("发送心跳");
-                            sendBeat.start();
+                            //启动监控线程
+                            sendBeat = new Timer("发送心跳");
+                            System.out.println("<" + (new Date()).toString() + ">" + "发送心跳线程启动");
+                            sendBeat.scheduleAtFixedRate(new sendBeatTimer(), 0, scc.getIntervalBeat());
+
                             sendMsg = new SendMsg("发消息");
                             sendMsg.start();
                             receiveMsg = new ReceiveMsg("接收消息");
@@ -460,43 +455,34 @@ public class SocketService extends Service {
     }
 
     //发送心跳
-    private class SendBeat extends Thread {
-        protected SendBeat(String name) {
-            super.setName(name);
-        }
-
+    class sendBeatTimer extends TimerTask {
         public void run() {
-            System.out.println("<" + (new Date()).toString() + ">" + this.getName() + "线程启动");
             try {
-                while (true) {
-                    try {
-                        Log.e("心跳线程toBeStop", toBeStop + "");
-                        if (toBeStop) break;
-                        if (socketOk()) {
-                            synchronized (socketSendLock) {
-                                byte[] rb = new byte[3];
-                                rb[0] = 'b';
-                                rb[1] = '^';
-                                rb[2] = '^';
-                                out.write(rb);
-                                out.flush();
-                                Log.i("心跳包", "Socket[" + socket.hashCode() + "]【发送】:【B】");
-                            }
-                        } else {
-                            break;
-                        }
-                        try {
-                            sleep(scc.getIntervalBeat());
-                        } catch (InterruptedException e) {
-                        }
-
-                    } catch (Exception e) {
-                        Log.e("心跳内线程异常", e.toString() + "");
+                Log.e("心跳线程toBeStop", toBeStop + "");
+                if (toBeStop) {
+                    if (sendBeat != null) {
+                        sendBeat.cancel();
+                        sendBeat = null;
+                    }
+                }
+                if (socketOk()) {
+                    synchronized (socketSendLock) {
+                        byte[] rb = new byte[3];
+                        rb[0] = 'b';
+                        rb[1] = '^';
+                        rb[2] = '^';
+                        out.write(rb);
+                        out.flush();
+                        Log.i("心跳包", "Socket[" + socket.hashCode() + "]【发送】:【B】");
+                    }
+                } else {
+                    if (sendBeat != null) {
+                        sendBeat.cancel();
+                        sendBeat = null;
                     }
                 }
             } catch (Exception e) {
-                e.printStackTrace();
-                Log.e("心跳线程异常", e.toString() + "");
+                Log.e("心跳内线程异常", e.toString() + "");
             }
         }
     }
@@ -859,7 +845,7 @@ public class SocketService extends Service {
                                             //context. sendBroadcast(pushintent);
                                             context.sendOrderedBroadcast(push_back, null);
                                         } else if (command == 0x10) {
-									/*
+                                    /*
 									 * 接收该广播的地方
 									 */
                                             Intent push_service = new Intent(BroadcastConstants.PUSH_SERVICE);
@@ -953,11 +939,9 @@ public class SocketService extends Service {
     public void onDestroy() {
         super.onDestroy();
         stopForeground(true);// 停止前台服务--参数：表示是否移除之前的通知
-        this.healthWatch.destroy();
         this.healthWatch = null;
         this.reConn.destroy();
         this.reConn = null;
-        sendBeat.destroy();
         sendBeat = null;
         this.sendMsg.destroy();
         this.sendMsg = null;
@@ -968,17 +952,16 @@ public class SocketService extends Service {
                 socket.shutdownInput();
             } catch (Exception e) {
             }
-            ;
             try {
                 socket.shutdownOutput();
             } catch (Exception e) {
             }
-            ;
+
             try {
                 socket.close();
             } catch (Exception e) {
             }
-            ;
+
             socket = null;
         }
         if (out != null) {
@@ -989,7 +972,7 @@ public class SocketService extends Service {
                 out = null;
             }
         }
-        ;
+
         if (in != null) {
             try {
                 in.close();
@@ -998,7 +981,7 @@ public class SocketService extends Service {
                 in = null;
             }
         }
-        ;
+
         Log.e("socket销毁", "已经全部销毁");
     }
 
