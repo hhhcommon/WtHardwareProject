@@ -5,8 +5,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -25,8 +23,7 @@ public class MineActivity extends BaseFragmentActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_other);
         context=this;
-
-        setType();
+        textMain = findViewById(R.id.tv_main);
         MineActivity.open(new MineFragment());
     }
 
