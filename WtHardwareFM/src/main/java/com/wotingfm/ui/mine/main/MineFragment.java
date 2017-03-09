@@ -236,7 +236,6 @@ public class MineFragment extends Fragment implements OnClickListener {
                 fg1.setTargetFragment(ct, 0);
                 MineActivity.open(fg1);
                 break;
-
         }
     }
 
@@ -349,7 +348,6 @@ public class MineFragment extends Fragment implements OnClickListener {
         }
     }
 
-
     // 设备状态广播监听
     private class DeviceReceiver extends BroadcastReceiver {
         @Override
@@ -422,7 +420,7 @@ public class MineFragment extends Fragment implements OnClickListener {
             }
             sendUpdate(pM);
         } else if (i == 2) {
-            //处理接收结果的逻辑
+            // 处理接收结果的逻辑
             userNum = sharedPreferences.getString(StringConstant.USER_NUM, "");// 用户号
             if (!userNum.equals("")) {
                 circleView.setVisibility(View.VISIBLE);
@@ -461,7 +459,6 @@ public class MineFragment extends Fragment implements OnClickListener {
 
                 }
                 break;
-
         }
     }
 
@@ -745,9 +742,7 @@ public class MineFragment extends Fragment implements OnClickListener {
         }
 
         // 个人资料没有修改过则不需要将数据提交服务器
-        if (!isUpdate) {
-            return;
-        }
+        if (!isUpdate) return ;
         isUpdate = false;
         L.v("数据改动", "数据有改动，将数据提交到服务器!");
         VolleyRequest.RequestPost(GlobalConfig.updateUserUrl, tag, jsonObject, new VolleyCallback() {

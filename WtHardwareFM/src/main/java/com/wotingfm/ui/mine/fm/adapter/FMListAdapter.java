@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
@@ -48,30 +48,25 @@ public class FMListAdapter extends BaseAdapter {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fm_list, parent, false);
             holder.textFmFrequency = (TextView) convertView.findViewById(R.id.text_fm_frequency);
-            holder.textFmInfo = (TextView) convertView.findViewById(R.id.text_fm_info);
-            holder.linearView = (LinearLayout) convertView.findViewById(R.id.linear_view);
+            holder.imageCheck = (ImageView) convertView.findViewById(R.id.image_check);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         FMInfo fmInfo = list.get(position);
         holder.textFmFrequency.setText(fmInfo.getFmName());// 频率
-        holder.textFmInfo.setText(fmInfo.getFmIntroduce());
         if(fmInfo.getType() == 0) {
-            holder.textFmInfo.setVisibility(View.GONE);
             holder.textFmFrequency.setTextColor(context.getResources().getColor(R.color.wt_login_third));
-            holder.linearView.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.person_color));
+            holder.imageCheck.setVisibility(View.GONE);
         } else {
-            holder.textFmInfo.setVisibility(View.VISIBLE);
-            holder.textFmFrequency.setTextColor(context.getResources().getColor(R.color.green));
-            holder.linearView.setBackgroundDrawable(context.getResources().getDrawable(R.color.linkman_bt));
+            holder.textFmFrequency.setTextColor(context.getResources().getColor(R.color.dinglan_orange_z));
+            holder.imageCheck.setVisibility(View.VISIBLE);
         }
         return convertView;
     }
 
     class ViewHolder {
-        LinearLayout linearView;
         TextView textFmFrequency;
-        TextView textFmInfo;
+        ImageView imageCheck;
     }
 }

@@ -48,7 +48,7 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
     private ListView wifiListView;
     private ImageView imageWiFiSet;
     private TextView textUserWiFi;
-    private View linearScan;
+//    private View linearScan;
 
     private List<WifiConfiguration> wifiConfigList;     // 已经配置好的 WiFi 信息
     private List<ScanResult> scanResultList;            // 扫描得到的附近的 WiFi 列表
@@ -94,23 +94,23 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
         wifiListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
 
         textUserWiFi = (TextView) headView.findViewById(R.id.user_wifi_list);   // 提示文字  可用 WiFi
-        linearScan = rootView.findViewById(R.id.linear_scan);                                // 扫描
+//        linearScan = rootView.findViewById(R.id.linear_scan);                                // 扫描
 
-        rootView.findViewById(R.id.btn_scan_wifi).setOnClickListener(this);                  // 扫描 WiFi
+//        rootView.findViewById(R.id.btn_scan_wifi).setOnClickListener(this);                  // 扫描 WiFi
         headView.findViewById(R.id.wifi_set).setOnClickListener(this);          // WiFi设置
 
         imageWiFiSet = (ImageView) headView.findViewById(R.id.image_wifi_set);
         if (wifiManager.isWifiEnabled()) {// WiFi 打开
             textUserWiFi.setVisibility(View.VISIBLE);
             imageWiFiSet.setImageResource(R.mipmap.wt_person_on);
-            linearScan.setVisibility(View.VISIBLE);
+//            linearScan.setVisibility(View.VISIBLE);
             getConfiguration();
             mWifiInfo = wifiManager.getConnectionInfo();
             L.v(mWifiInfo.toString());
         } else {    // WiFi 关闭
             textUserWiFi.setVisibility(View.GONE);
             imageWiFiSet.setImageResource(R.mipmap.wt_person_close);
-            linearScan.setVisibility(View.GONE);
+//            linearScan.setVisibility(View.GONE);
         }
         scanResultList = wifiManager.getScanResults();
         if (scanResultList != null && scanResultList.size() > 0) {// 判断附近是否有可用 WiFi
@@ -133,10 +133,10 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
                     scanResultList = wifiManager.getScanResults();
                 }
                 break;
-            case R.id.btn_scan_wifi:    // 扫描附近 WiFi
-                wifiManager.startScan();
-                context.sendBroadcast(new Intent(BroadcastConstants.UPDATE_WIFI_LIST));
-                break;
+//            case R.id.btn_scan_wifi:    // 扫描附近 WiFi
+//                wifiManager.startScan();
+//                context.sendBroadcast(new Intent(BroadcastConstants.UPDATE_WIFI_LIST));
+//                break;
             case R.id.btn_cancel:       // 取消
                 wiFiInfoDialog.dismiss();
                 break;
@@ -331,14 +331,14 @@ public class WIFIFragment extends Fragment implements View.OnClickListener {
                     case WifiManager.WIFI_STATE_DISABLED:// WiFi 关闭
                         imageWiFiSet.setImageResource(R.mipmap.wt_person_close);
                         textUserWiFi.setVisibility(View.GONE);
-                        linearScan.setVisibility(View.GONE);
+//                        linearScan.setVisibility(View.GONE);
                         scanResultList.clear();
                         adapter.notifyDataSetChanged();
                         break;
                     case WifiManager.WIFI_STATE_ENABLED:// WiFi 打开
                         imageWiFiSet.setImageResource(R.mipmap.wt_person_on);
                         textUserWiFi.setVisibility(View.VISIBLE);
-                        linearScan.setVisibility(View.VISIBLE);
+//                        linearScan.setVisibility(View.VISIBLE);
                         context.sendBroadcast(new Intent(BroadcastConstants.UPDATE_WIFI_LIST));
                         break;
                 }

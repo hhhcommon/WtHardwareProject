@@ -1,14 +1,18 @@
 package com.wotingfm.ui.mine.fm;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,10 +20,12 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.fm.adapter.FMListAdapter;
 import com.wotingfm.ui.mine.fm.model.FMInfo;
+import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.util.L;
+import com.wotingfm.util.ToastUtils;
+import com.wotingfm.widget.LineEditText;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,36 +33,45 @@ import java.util.List;
 /**
  * FM 连接界面
  */
-public class FMConnectFragment extends Fragment implements View.OnClickListener {
+public class FMConnectFragment extends Fragment implements View.OnClickListener, TextView.OnEditorActionListener {
     private ListView fmListView;// 频率列表
-//    private LinearLayout linearScan;// 底部扫描
     private List<FMInfo> list = new ArrayList<>();
     private FMListAdapter adapter;
+    private InputMethodManager imm;
 
+    private LineEditText editFm;
     private ImageView imageFmSet;// FM 开关
-    private TextView userFmList;// 提示文字  可用FM列表
-    private Button btnScan;
+    private View viewFmList;// 可用FM列表
 
     private boolean isOpenFm;// 是否打开 FM
     private FragmentActivity context;
     private View rootView;
+
+    private String fmFrequency;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context = getActivity();
+        imm = (InputMethodManager) context.getSystemService(Context.INPUT_METHOD_SERVICE);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.activity_fmconnect, container, false);
             rootView.setOnClickListener(this);
-            context = getActivity();
-            init();
+            rootView.findViewById(R.id.view_root).setOnClickListener(new ViewRequestFocusLis());
+            initView();
         }
         return rootView;
     }
 
-    private void init() {
+    private void initView() {
         TextView textTitle = (TextView) rootView.findViewById(R.id.text_title);
-        textTitle.setText("我听调频设置");// 设置标题
+        textTitle.setText("FM调频");// 设置标题
 
-        ImageView leftImage = (ImageView)rootView.findViewById(R.id.left_image);
+        ImageView leftImage = (ImageView) rootView.findViewById(R.id.left_image);
         leftImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -65,24 +80,25 @@ public class FMConnectFragment extends Fragment implements View.OnClickListener 
         });
 
         fmListView = (ListView) rootView.findViewById(R.id.fm_list_view);
-//        linearScan = findView(R.id.linear_scan);
-        btnScan = (Button) rootView.findViewById(R.id.btn_scan_fm);// 扫描
-        btnScan.setOnClickListener(this);
 
         View headView = LayoutInflater.from(context).inflate(R.layout.head_view_fm, null);
         fmListView.addHeaderView(headView);
-//        fmListView.set
+
+        viewFmList = headView.findViewById(R.id.view_fm_list);
+        viewFmList.setOnClickListener(new ViewRequestFocusLis());
 
         headView.findViewById(R.id.fm_set).setOnClickListener(this);// FM开关
         imageFmSet = (ImageView) headView.findViewById(R.id.image_fm_set);
-        userFmList = (TextView) headView.findViewById(R.id.user_fm_list);
 
-        isOpenFm = BSApplication.SharedPreferences.getBoolean(StringConstant.FM_IS_OPEN, true);// 开放蓝牙检测开关
-        if(isOpenFm){
+        editFm = (LineEditText) headView.findViewById(R.id.edit_fm);
+        editFm.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        editFm.setOnEditorActionListener(this);
+
+        isOpenFm = BSApplication.SharedPreferences.getBoolean(StringConstant.FM_IS_OPEN, true);
+        if (isOpenFm) {
             imageFmSet.setImageResource(R.mipmap.wt_person_on);
             getData();
-            userFmList.setVisibility(View.VISIBLE);
-            btnScan.setVisibility(View.VISIBLE);
+            viewFmList.setVisibility(View.VISIBLE);
             fmListView.setDividerHeight(1);
         } else {
             imageFmSet.setImageResource(R.mipmap.wt_person_close);
@@ -92,20 +108,19 @@ public class FMConnectFragment extends Fragment implements View.OnClickListener 
             list.add(fmInfo);
             fmListView.setAdapter(adapter = new FMListAdapter(context, list));
             fmListView.setDividerHeight(0);
-            userFmList.setVisibility(View.GONE);
-            btnScan.setVisibility(View.GONE);
+            viewFmList.setVisibility(View.GONE);
         }
         setListItemLis();
     }
 
     // ListView 点击事件监听
-    private void setListItemLis(){
+    private void setListItemLis() {
         fmListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if(list.size() == 1) return ;
-                if(position - 1 >= 0) {
-                    for(int i=0; i<list.size(); i++){
+                if (list.size() == 1) return;
+                if (position - 1 >= 0) {
+                    for (int i = 0; i < list.size(); i++) {
                         list.get(i).setType(0);
                     }
                     list.get(position - 1).setType(1);
@@ -118,11 +133,8 @@ public class FMConnectFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_scan_fm:// 扫描
-
-                break;
             case R.id.fm_set:
-                if(isOpenFm){
+                if (isOpenFm) {
                     list.clear();
                     imageFmSet.setImageResource(R.mipmap.wt_person_close);
                     FMInfo fmInfo = new FMInfo();
@@ -130,44 +142,90 @@ public class FMConnectFragment extends Fragment implements View.OnClickListener 
                     fmInfo.setFmIntroduce("");
                     list.add(fmInfo);
                     adapter.notifyDataSetChanged();
-                    userFmList.setVisibility(View.GONE);
-                    btnScan.setVisibility(View.GONE);
+                    viewFmList.setVisibility(View.GONE);
                     fmListView.setDividerHeight(0);
+
+                    // 隐藏键盘
+                    imm.hideSoftInputFromWindow(viewFmList.getWindowToken(), 0);
                 } else {
                     imageFmSet.setImageResource(R.mipmap.wt_person_on);
                     getData();
-                    userFmList.setVisibility(View.VISIBLE);
-                    btnScan.setVisibility(View.VISIBLE);
+                    viewFmList.setVisibility(View.VISIBLE);
                     fmListView.setDividerHeight(1);
                 }
                 SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
                 isOpenFm = !isOpenFm;
                 et.putBoolean(StringConstant.FM_IS_OPEN, isOpenFm);
-                if(et.commit()) L.w("数据 commit 失败!");
+                if (et.commit()) L.w("数据 commit 失败!");
                 break;
         }
     }
 
-    // 获取数据
-    private void getData(){
-        if(list != null) list.clear();
+    // 获取数据 -- > 测试数据
+    private void getData() {
+        if (list != null) list.clear();
         FMInfo fmInfo = new FMInfo();
-        fmInfo.setFmName("87.5MHz");
-        fmInfo.setFmIntroduce("将车载调频调到87.5MHz");
+        fmInfo.setFmName("FM 87.5MHz");
         fmInfo.setType(1);
         list.add(fmInfo);
 
         fmInfo = new FMInfo();
-        fmInfo.setFmName("97.3MHz");
-        fmInfo.setFmIntroduce("将车载调频调到97.3MHz");
+        fmInfo.setFmName("FM 97.3MHz");
         fmInfo.setType(0);
         list.add(fmInfo);
 
         fmInfo = new FMInfo();
-        fmInfo.setFmName("106.4MHz");
-        fmInfo.setFmIntroduce("将车载调频调到106.4MHz");
+        fmInfo.setFmName("FM 106.4MHz");
         fmInfo.setType(0);
         list.add(fmInfo);
         fmListView.setAdapter(adapter = new FMListAdapter(context, list));
+    }
+
+    @Override
+    public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+        if (actionId == EditorInfo.IME_ACTION_SEND || (event != null && event.getKeyCode() == KeyEvent.KEYCODE_ENTER)) {
+            String temp = editFm.getText().toString();
+
+            viewFmList.setFocusable(true);
+            viewFmList.setFocusableInTouchMode(true);
+            viewFmList.requestFocus();
+
+            // 隐藏键盘
+            imm.hideSoftInputFromWindow(viewFmList.getWindowToken(), 0);
+
+            if (fmFrequency == null || fmFrequency.equals(temp)) {
+                return true;
+            }
+
+            // 然后再执行保存操作
+            ToastUtils.show_always(context, "保存成功");
+            fmFrequency = temp;
+            return true;
+        }
+        return false;
+    }
+
+    // 点击空白处 EditText 失去焦点  然后执行保存操作
+    private class ViewRequestFocusLis implements View.OnClickListener {
+
+        @Override
+        public void onClick(View v) {
+            String temp = editFm.getText().toString();
+
+            viewFmList.setFocusable(true);
+            viewFmList.setFocusableInTouchMode(true);
+            viewFmList.requestFocus();
+
+            // 隐藏键盘
+            imm.hideSoftInputFromWindow(viewFmList.getWindowToken(), 0);
+
+            if (fmFrequency == null || fmFrequency.equals(temp)) {
+                return ;
+            }
+
+            // 然后再执行保存操作
+            ToastUtils.show_always(context, "保存成功");
+            fmFrequency = temp;
+        }
     }
 }
