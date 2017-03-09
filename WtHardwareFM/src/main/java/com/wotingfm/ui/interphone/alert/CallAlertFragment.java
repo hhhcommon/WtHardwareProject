@@ -152,8 +152,12 @@ public class CallAlertFragment extends Fragment implements OnClickListener {
         if (image == null || image.equals("") || image.equals("null") || image.trim().equals("")) {
             imageview.setImageResource(R.mipmap.wt_image_tx_hy);
         } else {
-            String url = GlobalConfig.imageurl + image;
-            url = AssembleImageUrlUtils.assembleImageUrl300(url);
+
+            if (!image.startsWith("http:")) {
+                image = GlobalConfig.imageurl + image;
+            }
+
+            String url = AssembleImageUrlUtils.assembleImageUrl300(image);
             Picasso.with(instance).load(url.replace("\\/", "/")).into(imageview);
         }
     }

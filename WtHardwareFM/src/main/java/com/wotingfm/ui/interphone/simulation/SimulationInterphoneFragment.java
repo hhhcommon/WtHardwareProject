@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -54,7 +55,7 @@ public class SimulationInterphoneFragment extends Fragment implements View.OnCli
             setView();                                     // 设置界面
             setData();                                     // 设置数据
             initEmp();                                     // 初始化模拟对讲
-            GlobalConfig.isMONI = true;
+
         }
         return rootView;
     }
@@ -67,14 +68,16 @@ public class SimulationInterphoneFragment extends Fragment implements View.OnCli
                 ChatFragment.hangUp();
             }
         }
-        context.startService(new Intent(context, SimulationService.class));
-    }
+        GlobalConfig.isMONI = true;
+        SimulationService.openDevice();
+         // context.startService(new Intent(context, SimulationService.class));
+        }
 
     // 初始化视图
     private void setView() {
         rootView.findViewById(R.id.tv_save).setOnClickListener(this);                                        // 退出
         tv_set = (TextView) rootView.findViewById(R.id.tv_set);
-        tv_set.setOnClickListener(this);                                                            // 频率设置
+        tv_set.setOnClickListener(this);                                                                     // 频率设置
 
         tv_text = (TextView) rootView.findViewById(R.id.tv_text);                                            // 文字说明
         tv_number = (TextView) rootView.findViewById(R.id.tv_number);                                        // 频率号
@@ -143,6 +146,7 @@ public class SimulationInterphoneFragment extends Fragment implements View.OnCli
                                 tv_text.setText("当前频道");
                                 tv_number.setText(_frequence + "");
                                 //此处要要设置重新设置的频率
+                                Log.e("传入的FRQ","a"+_frequence+"b");
                                 SimulationService.setFrequence(_frequence);
                             } else {
                                 ToastUtils.show_always(context, "数据出错了，请您稍后再试");
@@ -163,6 +167,9 @@ public class SimulationInterphoneFragment extends Fragment implements View.OnCli
     @Override
     public void onDestroy() {
         super.onDestroy();
+        context.stopService(new Intent(context, SimulationService.class));
         SimulationService.closeDevice();
+        GlobalConfig.isMONI=false;
     }
+
 }
