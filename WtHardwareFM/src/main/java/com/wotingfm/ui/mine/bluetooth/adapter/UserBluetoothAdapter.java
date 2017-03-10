@@ -22,12 +22,12 @@ public class UserBluetoothAdapter extends BaseAdapter {
     private Context context;
     private List<BluetoothInfo> list;
 
-    public UserBluetoothAdapter(Context context, List<BluetoothInfo> list){
+    public UserBluetoothAdapter(Context context, List<BluetoothInfo> list) {
         this.context = context;
         this.list = list;
     }
 
-    public void setList(List<BluetoothInfo> list){
+    public void setList(List<BluetoothInfo> list) {
         this.list = list;
         notifyDataSetChanged();
     }
@@ -50,7 +50,7 @@ public class UserBluetoothAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if(convertView == null){
+        if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_user_bluebooth, parent, false);
             holder.textBluetoothName = (TextView) convertView.findViewById(R.id.text_bluetooth_name);
@@ -63,23 +63,23 @@ public class UserBluetoothAdapter extends BaseAdapter {
         }
         BluetoothInfo bName = list.get(position);
         int type = bName.getBluetoothType();// == 0 为可以配对设备  == 1 为已经配对过的设备
-        if(type == 0) {// 可用
+        if (type == 0) {// 可用
             holder.textPairDevice.setVisibility(View.VISIBLE);
             holder.textPairDevice.setText("可用配对设备");
             holder.imageConnInfo.setVisibility(View.GONE);
             holder.textConnTip.setVisibility(View.GONE);
-        } else if(type == 1) {// 已经配对
+        } else if (type == 1) {// 已经配对
             holder.textPairDevice.setVisibility(View.VISIBLE);
             holder.textPairDevice.setText("已配对的设备");
             holder.imageConnInfo.setVisibility(View.VISIBLE);
             holder.textConnTip.setVisibility(View.VISIBLE);
         }
-        if(position > 0) {
-            if(list.get(position).getBluetoothType() == (list.get(position - 1).getBluetoothType())) {
+        if (position > 0) {
+            if (list.get(position).getBluetoothType() == (list.get(position - 1).getBluetoothType())) {
                 holder.textPairDevice.setVisibility(View.GONE);
             }
         }
-        if(bName.getBluetoothName() == null){
+        if (bName.getBluetoothName() == null) {
             holder.textBluetoothName.setText(bName.getBluetoothAddress());
         } else {
             holder.textBluetoothName.setText(bName.getBluetoothName());

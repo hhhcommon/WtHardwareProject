@@ -241,7 +241,7 @@
             </LinearLayout>
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
+                android:layout_height="1dp"
                 android:layout_above="@+id/text_recommend_visible"
                 android:background="@color/text_line_1" />
 

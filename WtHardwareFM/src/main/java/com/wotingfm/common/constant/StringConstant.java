@@ -168,4 +168,7 @@ public class StringConstant {
 
     // 保存数据 FM 历史记录
     public static final String FM_HISTORY_RECORD = "FM_HISTORY_RECORD";
+
+    // 保存流量提醒是否打开
+    public static final String FLOW_REMIND_SWITCH = "FLOW_REMIND_SWITCH";
 }
