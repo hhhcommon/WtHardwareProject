@@ -71,12 +71,12 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
             rootView = inflater.inflate(R.layout.activity_bluetooth, container, false);
             rootView.setOnClickListener(this);
             context = getActivity();
-            init();
+            initView();
         }
         return rootView;
     }
 
-    private void init() {
+    private void initView() {
         TextView textTitle = (TextView) rootView.findViewById(R.id.text_title);
         textTitle.setText("蓝牙");// 设置标题
 
