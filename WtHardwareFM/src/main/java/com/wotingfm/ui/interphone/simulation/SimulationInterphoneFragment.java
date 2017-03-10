@@ -1,11 +1,9 @@
 package com.wotingfm.ui.interphone.simulation;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -146,7 +144,8 @@ public class SimulationInterphoneFragment extends Fragment implements View.OnCli
                                 tv_text.setText("当前频道");
                                 tv_number.setText(_frequence + "");
                                 //此处要要设置重新设置的频率
-                                Log.e("传入的FRQ","a"+_frequence+"b");
+                                //Log.e("传入的FRQ","a"+_frequence+"b");
+                                String s=_frequence;
                                 SimulationService.setFrequence(_frequence);
                             } else {
                                 ToastUtils.show_always(context, "数据出错了，请您稍后再试");
@@ -156,7 +155,6 @@ public class SimulationInterphoneFragment extends Fragment implements View.OnCli
                         }
                         lin_frequency.setVisibility(View.GONE);
                         lin_frequency_no.setVisibility(View.VISIBLE);
-
                     }
                 }
                 break;
@@ -167,7 +165,7 @@ public class SimulationInterphoneFragment extends Fragment implements View.OnCli
     @Override
     public void onDestroy() {
         super.onDestroy();
-        context.stopService(new Intent(context, SimulationService.class));
+       // context.stopService(new Intent(context, SimulationService.class));
         SimulationService.closeDevice();
         GlobalConfig.isMONI=false;
     }

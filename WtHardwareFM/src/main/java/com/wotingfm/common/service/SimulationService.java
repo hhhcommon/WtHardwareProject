@@ -46,16 +46,26 @@ public class SimulationService extends Service  {
         EmGpio.setGpioOutput(GPIO_AUDIO_EN);
         EmGpio.setGpioOutput(GPIO_DEVICE_OPEN);
         EmGpio.setGpioOutput(GPIO_PTT);
+
         serialControl = new SerialControl();
         serialControl.setPort("/dev/ttyMT2");
         serialControl.setBaudRate("9600");
+     /*   if(serialControl.isOpen()){
+            CloseComPort(serialControl);//如果端口已开需要关闭
+        };*/
+        CloseComPort(serialControl);
         OpenComPort(serialControl);// 打开串口
+
         if(frequence!=null){
-            String deviceNeedFreq=frequence.substring(frequence.indexOf("-")+1,frequence.length());
-            String s="AT+DMOSETGROUP=1,"+deviceNeedFreq+","+deviceNeedFreq+",4,1\n";
+            String deviceNeedFreq=frequence.substring(frequence.indexOf("-")+1,frequence.length()).trim();
+             String s1=deviceNeedFreq;
+            String s="AT+DMOSETGROUP=1,"+deviceNeedFreq+","+deviceNeedFreq+",00,4,1\r\n";
             Log.e("串口数据",s);
-            //serialControl.sendTxt(s);
+            serialControl.sendTxt(s);
+        }else{
+            serialControl.sendTxt("AT+DMOSETGROUP=1,409.7500,409.7500,00,4,1\r\n");
         }
+
         // 声控命令
         // 1-8：声控等级参数，等级越小越灵敏
         // 0：关闭声控功能（不为零则表示开启）
@@ -68,53 +78,23 @@ public class SimulationService extends Service  {
 
     public static void setFrequence(String Frequ){
         if(!TextUtils.isEmpty(Frequ)){
-      /*      ToastUtils.show_always(context,"对讲频率已经变更到"+Frequ);*/
-            String deviceNeedFreq=Frequ.substring(5,Frequ.length());
-      /*      ToastUtils.show_always(context,deviceNeedFreq);*/
-              Log.e("要设置的Freq","a"+deviceNeedFreq+"b");
-            serialControl.sendTxt("AT+DMOSETGROUP=1,"+deviceNeedFreq+","+deviceNeedFreq+",4,1\n");
+            String s=Frequ.substring(5,Frequ.length());
+            String deviceNeedFreq=Frequ.substring(5,Frequ.length()).trim();
+              //Log.e("要设置的Freq","a"+deviceNeedFreq+"b");
+            serialControl.sendTxt("AT+DMOSETGROUP=1,"+deviceNeedFreq+","+deviceNeedFreq+",00,4,1\r\n");
         }
     }
 
     public static void setFrequenceFromOut(String Frequ){
         if(!TextUtils.isEmpty(Frequ)){
-        /*    ToastUtils.show_always(context,"对讲频率已经变更到"+Frequ);
-            String deviceNeedFreq=frequence.substring(frequence.indexOf("-")+1,frequence.length());*/
-            serialControl.sendTxt("AT+DMOSETGROUP=1,"+Frequ+","+Frequ+",4,1\n");
+            String s="a"+Frequ+"b";
+            Log.e("setFrequenceFromOut","a"+Frequ+"b");
+            serialControl.sendTxt("AT+DMOSETGROUP=1,"+Frequ+","+Frequ+",00,4,1\r\n");
         }else{
             ToastUtils.show_always(context,"传入的频率值不合法");
         }
     }
-   /* //
-    public static boolean initDuijiang(String Frequ){
-        if(IsComPort){
-            if(!TextUtils.isEmpty(Frequ)){
-            // 声控命令
-            // 1-8：声控等级参数，等级越小越灵敏
-            // 0：关闭声控功能（不为零则表示开启）
-            serialControl.sendTxt("AT+DMOSETVOX=0\r\n");
 
-            // 音量命令
-            // 1-8：等级越高输出音量越大（最大320mv）
-            serialControl.sendTxt("AT+DMOSETVOLUME=5\r\n");
-
-            // 设置频率 // 此处要对数据库进行拼接
-
-                String deviceNeedFreq=Frequ.substring(Frequ.indexOf("-")+1,Frequ.length());
-                serialControl.sendTxt("AT+DMOSETGROUP=1,"+deviceNeedFreq+","+deviceNeedFreq+",4,1\n");
-                CanMONI=true;
-
-            }else{
-                // 频率列表为空
-                CanMONI=false;
-
-            }
-        }else{
-            // ToastUtils.show_always(context,"串口通信失败");
-            CanMONI=false;
-        }
-          return  CanMONI;
-    }*/
 
     //----------------------------------------------------打开串口
     private void OpenComPort(SerialHelper ComPort) {

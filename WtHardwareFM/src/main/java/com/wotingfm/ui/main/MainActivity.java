@@ -46,6 +46,7 @@ import com.wotingfm.common.service.NotificationService;
 import com.wotingfm.common.service.SimulationService;
 import com.wotingfm.common.service.SocketService;
 import com.wotingfm.common.service.SubclassService;
+import com.wotingfm.common.service.TestWindowService;
 import com.wotingfm.common.service.VoiceStreamPlayerService;
 import com.wotingfm.common.service.VoiceStreamRecordService;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -190,8 +191,8 @@ public class MainActivity extends TabActivity {
         startService(FloatingWindow);
         Simulation=new Intent(this,SimulationService.class);
         startService(Simulation);
-      /*  TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
-        startService(TestFloatingWindow);*/
+        TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
+        startService(TestFloatingWindow);
     }
 
     //注册广播  用于接收定时服务发送过来的广播
@@ -780,11 +781,12 @@ public class MainActivity extends TabActivity {
         context.stopService(Subclass);
         context.stopService(Download);
         context.stopService(Notification);
+        context.stopService(Simulation);
         context.stopService(FloatingWindow);
         context.stopService(TestFloatingWindow);
-        context.stopService(Simulation);
         Log.e("app退出", "app退出");
     }
+
 
     public void onPause() {
         super.onPause();
@@ -805,6 +807,7 @@ public class MainActivity extends TabActivity {
         isCancelRequest = VolleyRequest.cancelRequest(tag);
         unregisterReceiver(netWorkChangeReceiver);
         unregisterReceiver(endApplicationBroadcast);    // 取消注册广播
+        stop();
 //        BSApplication.onStop();
         Log.v("--- Main ---", "--- 杀死进程 ---");
         //		ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);

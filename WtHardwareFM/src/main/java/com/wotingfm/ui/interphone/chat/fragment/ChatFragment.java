@@ -270,6 +270,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         gridView_person.setSelector(new ColorDrawable(Color.TRANSPARENT));                      // 取消GridView的默认背景色
         image_voice = (ImageView) rootView.findViewById(R.id.image_voice);                      // 群组对讲声音波
 
+
         rootView.findViewById(R.id.lin_tv_show).setOnClickListener(this);                       //
         rootView.findViewById(R.id.lin_tv_close).setOnClickListener(this);                      //
         relative_view = (RelativeLayout) rootView.findViewById(R.id.relative_view);             //
@@ -280,7 +281,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         lin_switch_im=(LinearLayout)rootView.findViewById(R.id.lin_switch_im);                  // 切换到网络对讲
 
 
-        mListView = (ListView) rootView.findViewById(R.id.listView);                            //
+        mListView = (ListView) rootView.findViewById(R.id.listView);                            // 最近通话列表
         lin_foot = (LinearLayout) rootView.findViewById(R.id.lin_foot);                         // 对讲按钮
         imageView_answer = (LinearLayout) rootView.findViewById(R.id.imageView_answer);         //
         Relative_listview = (RelativeLayout) rootView.findViewById(R.id.Relative_listview);     //
@@ -355,8 +356,9 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                 }
 
                 SimulationService.openDevice();
-
                 if(!TextUtils.isEmpty(groupFreq)){
+                    groupFreq=groupFreq.trim();
+                    String s=groupFreq;
                     SimulationService.setFrequenceFromOut(groupFreq.substring(5,groupFreq.length()-3));
                 }else{
                     SimulationService.setFrequenceFromOut(FrequencyUtil.DefaultFrequnce.substring(5,FrequencyUtil.DefaultFrequnce.length()-3));
@@ -369,6 +371,10 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
             case R.id.lin_switch_im:
                 relative_mo_ni.setVisibility(View.GONE);             //  切换到网络对讲布局
                 Relative_listview.setVisibility(View.VISIBLE);
+                if(GlobalConfig.isMONI==true){
+                    GlobalConfig.isMONI=false;
+                    SimulationService.closeDevice();
+                }
                 break;
             case R.id.lin_cut_moni:                                  //  关闭模拟对讲
                 //对接关闭模拟对讲事件
@@ -760,13 +766,11 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
     }
 
     protected static void call(String id) {
-
         CallAlertFragment fg = new CallAlertFragment();
         Bundle bundle = new Bundle();
         bundle.putString("id", id);
         fg.setArguments(bundle);
         DuiJiangActivity.open(fg);
-
     }
 
     public void getTXL() {

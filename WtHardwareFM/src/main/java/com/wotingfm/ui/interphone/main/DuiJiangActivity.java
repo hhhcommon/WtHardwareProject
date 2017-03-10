@@ -85,7 +85,7 @@ public class DuiJiangActivity extends AppCompatActivity {
                     ToastUtils.show_always(this, "再按一次退出");
                     touchTime = currentTime;
                 } else {
-//                MainActivity.onStop();
+                  //  MainActivity.onStop();
                     MobclickAgent.onKillProcess(this);
                     finish();
                     android.os.Process.killProcess(android.os.Process.myPid());
