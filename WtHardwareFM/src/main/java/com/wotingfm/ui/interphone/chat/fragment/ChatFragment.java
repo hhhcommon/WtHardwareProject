@@ -359,7 +359,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                 if(!TextUtils.isEmpty(groupFreq)){
                     groupFreq=groupFreq.trim();
                     String s=groupFreq;
-                    SimulationService.setFrequenceFromOut(groupFreq.substring(5,groupFreq.length()-3));
+                    SimulationService.setFrequenceFromOut(groupFreq.substring(5,groupFreq.length()-3).trim());
                 }else{
                     SimulationService.setFrequenceFromOut(FrequencyUtil.DefaultFrequnce.substring(5,FrequencyUtil.DefaultFrequnce.length()-3));
                 }

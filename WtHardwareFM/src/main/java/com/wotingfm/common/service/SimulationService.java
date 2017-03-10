@@ -89,7 +89,7 @@ public class SimulationService extends Service  {
         if(!TextUtils.isEmpty(Frequ)){
             String s="a"+Frequ+"b";
             Log.e("setFrequenceFromOut","a"+Frequ+"b");
-            serialControl.sendTxt("AT+DMOSETGROUP=1,"+Frequ+","+Frequ+",00,4,1\r\n");
+            serialControl.sendTxt("AT+DMOSETGROUP=1,"+Frequ.trim()+","+Frequ.trim()+",00,4,1\r\n");
         }else{
             ToastUtils.show_always(context,"传入的频率值不合法");
         }
