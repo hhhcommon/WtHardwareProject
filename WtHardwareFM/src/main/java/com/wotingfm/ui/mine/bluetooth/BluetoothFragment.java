@@ -8,7 +8,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -22,18 +21,17 @@ import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.mine.bluetooth.adapter.UserBluetoothAdapter;
 import com.wotingfm.ui.mine.bluetooth.model.BluetoothInfo;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.main.MineFragment;
 import com.wotingfm.util.L;
+import com.wotingfm.util.ToastUtils;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -57,20 +55,11 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
     private List<BluetoothInfo> list = new ArrayList<>();   // 蓝牙列表 包含已配对和可以配对的设备
     private Set<BluetoothDevice> device;                    // 搜索到新的蓝牙设备列表
 
-//    private LinearLayout linearBluetoothSearch;             // 搜索蓝牙设备
-    private RelativeLayout openDetection;                   // 开放检测设置  打开 OR 关闭
     private ImageView imageBluetoothSet;                    // 蓝牙设置开关
-    private ImageView imageOpenDetection;                   // 蓝牙开放检测开关
-    private TextView textOpenDetectionInfo;                 // 蓝牙开放检测提示信息
-    private TextView textOpenDetectionTime;                 // 蓝牙开放检测倒计时时间
     private TextView textBluetoothName;                     // 蓝牙名字
-    private TextView textOpenDetection;                     // "开放检测"
-//    private Button btnSearchDevice;                         // 扫描蓝牙设备
     private Dialog setBluetoothNameDialog;                  // 用户重命名蓝牙名字
 
-    //    private String newName;                                 // 保存用户对设备设置的心名字
     private boolean hasRegister = false;                    // 标识 是否已注册蓝牙监听广播
-    private boolean openDetectionState;                     // 标识 是否为开放检测
     private boolean isScan = true;                          // 是否正在扫描蓝牙
     private int index;                                      // 配对的蓝牙在列表中的位置
     private FragmentActivity context;
@@ -82,12 +71,12 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
             rootView = inflater.inflate(R.layout.activity_bluetooth, container, false);
             rootView.setOnClickListener(this);
             context = getActivity();
-            init();
+            initView();
         }
         return rootView;
     }
 
-    private void init() {
+    private void initView() {
         TextView textTitle = (TextView) rootView.findViewById(R.id.text_title);
         textTitle.setText("蓝牙");// 设置标题
 
@@ -99,23 +88,10 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
             }
         });
 
-//        btnSearchDevice = (Button) rootView.findViewById(R.id.bluetooth_search);// 搜索蓝牙设备
-//        btnSearchDevice.setOnClickListener(this);
-//        btnSearchDevice.setClickable(false);
-
-//        linearBluetoothSearch = (LinearLayout) rootView.findViewById(R.id.linear_bluetooth_search);
         userBluetoothList = (ListView) rootView.findViewById(R.id.list_user_bluetooth);
         userBluetoothList.setSelector(new ColorDrawable(Color.TRANSPARENT));
         View headView = LayoutInflater.from(context).inflate(R.layout.head_view_bluetooth, null);
         userBluetoothList.addHeaderView(headView);
-
-        openDetection = (RelativeLayout) headView.findViewById(R.id.open_detection);// 开放检测
-        openDetection.setOnClickListener(this);
-
-        imageOpenDetection = (ImageView) headView.findViewById(R.id.image_open_detection);// 开放检测开关
-        textOpenDetection = (TextView) headView.findViewById(R.id.text_open_detection);
-        textOpenDetectionInfo = (TextView) headView.findViewById(R.id.text_open_detection_info);
-        textOpenDetectionTime = (TextView) headView.findViewById(R.id.text_open_detection_time);// 开放检测时间
 
         textBluetoothName = (TextView) rootView.findViewById(R.id.text_device_name);
         textBluetoothName.setText(MineFragment.blueAdapter.getName());
@@ -126,33 +102,12 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
         imageBluetoothSet = (ImageView) rootView.findViewById(R.id.image_bluetooth_set);
         if (MineFragment.blueAdapter.isEnabled()) {
             imageBluetoothSet.setImageResource(R.mipmap.wt_person_on);
-            openDetection.setClickable(true);
-            openDetectionState = BSApplication.SharedPreferences.getBoolean(StringConstant.BLUETOOTH_OPEN_DETECTION_SET, true);// 开放蓝牙检测开关
-            if (openDetectionState) {
-                imageOpenDetection.setImageResource(R.mipmap.wt_person_on);
-                textOpenDetectionInfo.setText("对附近所有的蓝牙设备可见");
-                textOpenDetectionTime.setVisibility(View.VISIBLE);
-            } else {
-                imageOpenDetection.setImageResource(R.mipmap.wt_person_close);
-                textOpenDetectionInfo.setText("仅让已配对的蓝牙设备可见");
-                textOpenDetectionTime.setVisibility(View.GONE);
-            }
-            textOpenDetection.setTextColor(getResources().getColor(R.color.wt_login_third));
-            openDetection.setBackgroundDrawable(getResources().getDrawable(R.drawable.person_color));
-//            linearBluetoothSearch.setVisibility(View.VISIBLE);
             userBluetoothList.setDividerHeight(1);
             MineFragment.blueAdapter.startDiscovery();
-            list.addAll(pairList = findAvalibleDevice());
+            list.addAll(pairList = findAvailableDevice());
             userBluetoothList.setAdapter(userAdapter = new UserBluetoothAdapter(context, list));
         } else {
             imageBluetoothSet.setImageResource(R.mipmap.wt_person_close);
-            imageOpenDetection.setImageResource(R.mipmap.wt_person_close);
-            openDetection.setClickable(false);
-            textOpenDetection.setTextColor(getResources().getColor(R.color.textshang2));
-            openDetection.setBackgroundDrawable(null);
-//            linearBluetoothSearch.setVisibility(View.GONE);
-            textOpenDetectionTime.setVisibility(View.GONE);
-            textOpenDetectionInfo.setText("仅让已配对的蓝牙设备可见");
             userBluetoothList.setDividerHeight(0);
             userBluetoothList.setAdapter(userAdapter = new UserBluetoothAdapter(context, list));
         }
@@ -179,54 +134,13 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-//            case R.id.bluetooth_search:// 搜索蓝牙设备
-//                isScan = true;
-//                MineFragment.blueAdapter.startDiscovery();
-//                if (userList != null) {
-//                    userList.clear();
-//                }
-//                btnSearchDevice.setText("正在扫描附近蓝牙设备...");
-//                btnSearchDevice.setClickable(false);
-//                break;
             case R.id.bluetooth_set:// 蓝牙开关
                 if (MineFragment.blueAdapter.isEnabled()) {
                     MineFragment.blueAdapter.cancelDiscovery();// 停止蓝牙搜索
                     MineFragment.blueAdapter.disable();// 关闭蓝牙
-//                    SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
-//                    imageBluetoothSet.setImageResource(R.mipmap.wt_person_close);
-//                    et.putBoolean(StringConstant.BLUETOOTH_SET, false);
-//                    if(!et.commit()) {
-//                        L.w("数据 commit 失败!");
-//                    }
-//                    openDetection.setClickable(false);
-//                    imageOpenDetection.setImageResource(R.mipmap.wt_person_close);
                 } else {
                     setBluetooth();// 打开蓝牙
                 }
-                break;
-            case R.id.open_detection:// 开放检测
-                SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
-                if (openDetectionState) {
-                    imageOpenDetection.setImageResource(R.mipmap.wt_person_close);
-                    et.putBoolean(StringConstant.BLUETOOTH_OPEN_DETECTION_SET, false);
-                    if (!et.commit()) {
-                        L.w("数据 commit 失败!");
-                    }
-                    textOpenDetectionInfo.setText("仅让已配对的蓝牙设备可见");
-                    textOpenDetectionTime.setVisibility(View.GONE);
-                } else {
-                    Intent intentOpen = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);// 使蓝牙设备可见，方便配对
-                    intentOpen.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120);
-                    startActivity(intentOpen);
-                    imageOpenDetection.setImageResource(R.mipmap.wt_person_on);
-                    et.putBoolean(StringConstant.BLUETOOTH_OPEN_DETECTION_SET, true);
-                    if (!et.commit()) {
-                        L.w("数据 commit 失败!");
-                    }
-                    textOpenDetectionInfo.setText("对附近所有的蓝牙设备可见");
-                    textOpenDetectionTime.setVisibility(View.VISIBLE);
-                }
-                openDetectionState = !openDetectionState;
                 break;
             case R.id.device_name_set:
                 setBluetoothNameDialog();
@@ -252,7 +166,7 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
                     textBluetoothName.setText(newName);
                     setBluetoothNameDialog.dismiss();
                 } else {
-                    Toast.makeText(context, "设备名字不能为空，请重新输入!", Toast.LENGTH_SHORT).show();
+                    ToastUtils.show_always(context, "设备名字不能为空，请重新输入!");
                 }
             }
         });
@@ -269,18 +183,8 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
         if (MineFragment.blueAdapter != null) {  // 设备支持蓝牙
             MineFragment.blueAdapter.enable(); // 直接开启，不经过提示
             imageBluetoothSet.setImageResource(R.mipmap.wt_person_on);
-            openDetection.setClickable(true);
-            openDetectionState = BSApplication.SharedPreferences.getBoolean(StringConstant.BLUETOOTH_OPEN_DETECTION_SET, true);
-            if (openDetectionState) {
-                imageOpenDetection.setImageResource(R.mipmap.wt_person_on);
-                Intent intentOpen = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);// 使蓝牙设备可见，方便配对
-                intentOpen.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 120);// 默认两分钟
-                startActivity(intentOpen);
-            } else {
-                imageOpenDetection.setImageResource(R.mipmap.wt_person_close);
-            }
         } else {   // 设备不支持蓝牙
-            Toast.makeText(context, "设备不支持蓝牙!", Toast.LENGTH_SHORT).show();
+            ToastUtils.show_always(context, "设备不支持蓝牙!");
         }
     }
 
@@ -293,13 +197,6 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
             if (BluetoothAdapter.ACTION_STATE_CHANGED.equals(action)) {
                 if (MineFragment.blueAdapter.getState() == BluetoothAdapter.STATE_OFF) {
                     imageBluetoothSet.setImageResource(R.mipmap.wt_person_close);
-                    imageOpenDetection.setImageResource(R.mipmap.wt_person_close);
-                    openDetection.setClickable(false);
-                    textOpenDetection.setTextColor(getResources().getColor(R.color.textshang2));
-                    openDetection.setBackgroundDrawable(null);
-//                    linearBluetoothSearch.setVisibility(View.GONE);
-                    textOpenDetectionTime.setVisibility(View.GONE);
-                    textOpenDetectionInfo.setText("仅让已配对的蓝牙设备可见");
                     userBluetoothList.setDividerHeight(0);
                     if (userList != null) {
                         userList.clear();
@@ -309,23 +206,8 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
                 } else if (MineFragment.blueAdapter.getState() == BluetoothAdapter.STATE_ON) {
                     MineFragment.blueAdapter.startDiscovery();
                     imageBluetoothSet.setImageResource(R.mipmap.wt_person_on);
-                    openDetection.setClickable(true);
-                    // 开放蓝牙检测开关
-                    openDetectionState = BSApplication.SharedPreferences.getBoolean(StringConstant.BLUETOOTH_OPEN_DETECTION_SET, true);
-                    if (openDetectionState) {
-                        imageOpenDetection.setImageResource(R.mipmap.wt_person_on);
-                        textOpenDetectionInfo.setText("对附近所有的蓝牙设备可见");
-                        textOpenDetectionTime.setVisibility(View.VISIBLE);
-                    } else {
-                        imageOpenDetection.setImageResource(R.mipmap.wt_person_close);
-                        textOpenDetectionInfo.setText("仅让已配对的蓝牙设备可见");
-                        textOpenDetectionTime.setVisibility(View.GONE);
-                    }
-                    textOpenDetection.setTextColor(getResources().getColor(R.color.wt_login_third));
-                    openDetection.setBackgroundDrawable(getResources().getDrawable(R.drawable.person_color));
-//                    linearBluetoothSearch.setVisibility(View.VISIBLE);
                     userBluetoothList.setDividerHeight(1);
-                    list.addAll(pairList = findAvalibleDevice());
+                    list.addAll(pairList = findAvailableDevice());
                     userAdapter.notifyDataSetChanged();
                 }
             } else if (BluetoothDevice.ACTION_FOUND.equals(action)) {// 搜索到新设备
@@ -341,11 +223,9 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
                 if (MineFragment.blueAdapter.isEnabled()) {
                     L.w("搜索结束" + list.size());
                     list.clear();
-                    list.addAll(pairList = findAvalibleDevice());
+                    list.addAll(pairList = findAvailableDevice());
 
                     isScan = false;
-//                    btnSearchDevice.setClickable(true);
-//                    btnSearchDevice.setText("搜索设备");
                     if (device != null && device.size() > 0) { // 存在已经配对过的蓝牙设备
                         Iterator<BluetoothDevice> it = device.iterator();
                         while (it.hasNext()) {
@@ -389,7 +269,7 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
     }
 
     // 获取已经配对的蓝牙设备
-    private List<BluetoothInfo> findAvalibleDevice() {
+    private List<BluetoothInfo> findAvailableDevice() {
         List<BluetoothInfo> pairList = new ArrayList<>();
         // 获取可配对蓝牙设备
         Set<BluetoothDevice> device = MineFragment.blueAdapter.getBondedDevices();
@@ -442,26 +322,26 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
         });
 
         // 点击取消已配对的蓝牙设备
-        userAdapter.setListener(new UserBluetoothAdapter.CancelListener() {
-            @Override
-            public void cancelPair(int p) {
-                if (!MineFragment.blueAdapter.isEnabled() || isScan) {
-                    return;
-                }
-                try {
-                    BluetoothDevice btDevice = MineFragment.blueAdapter.getRemoteDevice(list.get(p).getBluetoothAddress());
-                    Method removeBondMethod = BluetoothDevice.class.getMethod("removeBond");
-                    Boolean returnValue = (Boolean) removeBondMethod.invoke(btDevice);
-                    if (returnValue) {
-                        Toast.makeText(context, p + "--- > 取消配对", Toast.LENGTH_SHORT).show();
-                        list.remove(p);
-                        userAdapter.setList(list);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+//        userAdapter.setListener(new UserBluetoothAdapter.CancelListener() {
+//            @Override
+//            public void cancelPair(int p) {
+//                if (!MineFragment.blueAdapter.isEnabled() || isScan) {
+//                    return;
+//                }
+//                try {
+//                    BluetoothDevice btDevice = MineFragment.blueAdapter.getRemoteDevice(list.get(p).getBluetoothAddress());
+//                    Method removeBondMethod = BluetoothDevice.class.getMethod("removeBond");
+//                    Boolean returnValue = (Boolean) removeBondMethod.invoke(btDevice);
+//                    if (returnValue) {
+//                        Toast.makeText(context, p + "--- > 取消配对", Toast.LENGTH_SHORT).show();
+//                        list.remove(p);
+//                        userAdapter.setList(list);
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        });
     }
 
     // 蓝牙连接
