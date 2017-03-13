@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/BaseStyle"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
     android:orientation="vertical">
 
     <include android:id="@+id/include_title" layout="@layout/base_activity_title"/>
@@ -28,16 +29,6 @@
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="14dp"/>
 
-            <ImageView
-                android:id="@+id/image_visibility"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:src="@mipmap/ic_launcher"
-                android:visibility="gone"
-                android:layout_marginRight="14dp"
-                android:layout_marginTop="20dp"/>
-
             <EditText
                 android:id="@+id/edit_psw"
                 android:layout_width="match_parent"
@@ -46,10 +37,10 @@
                 android:layout_toRightOf="@id/text_psw"
                 android:layout_marginTop="2dp"
                 android:layout_marginBottom="2dp"
-                android:layout_toLeftOf="@id/image_visibility"
                 android:maxLines="1"
                 android:paddingLeft="10dp"
                 android:hint="WIFI密码"
+                android:textColorHint="@color/gray"
                 android:maxLength="18"
                 android:inputType="textPassword"
                 android:textSize="14sp"
@@ -72,6 +63,7 @@
                 android:layout_height="40dp"
                 android:text="取消"
                 android:layout_marginRight="10dp"
+                android:textColor="@color/wt_login_third"
                 android:background="@drawable/background_button_gray"/>
 
             <Button
