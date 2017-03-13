@@ -194,10 +194,18 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="连接汽车音响系统"
+                android:gravity="center_vertical"
+                android:textColor="@color/wt_login_third"
+                android:textSize="14sp"
+                android:paddingLeft="13dp"/>
+
             <RelativeLayout
                 android:id="@+id/listener_set"
-                style="@style/PersonAndSetRelativeStyle"
-                android:layout_marginTop="20dp">
+                style="@style/PersonAndSetRelativeStyle">
 
                 <View style="@style/ViewStyle" />
 
@@ -224,40 +232,6 @@
                     android:textColor="@color/beijing"
                     android:layout_toLeftOf="@id/image_listener_frequency"
                     android:text="87.5MHz" />
-
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:id="@+id/wifi_set"
-                style="@style/PersonAndSetRelativeStyle">
-
-                <View style="@style/LineStyle"/>
-
-                <ImageView
-                    android:id="@+id/image_wifi"
-                    style="@style/PersonAndSetLeftStyle"
-                    android:src="@mipmap/wt_person_liuliang" />
-
-                <TextView
-                    android:id="@+id/text_wifi_set"
-                    style="@style/PersonAndSetTextStyle"
-                    android:text="WIFI设置"
-                    android:layout_toRightOf="@id/image_wifi"/>
-
-                <ImageView
-                    android:id="@+id/image_wifi_set"
-                    style="@style/PersonAndSetRightStyle" />
-
-                <TextView
-                    android:id="@+id/text_wifi_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="5dp"
-                    android:textColor="@color/beijing"
-                    android:layout_toLeftOf="@id/image_wifi_set"
-                    android:maxLines="1"
-                    android:text="已连接" />
 
             </RelativeLayout>
 
@@ -295,9 +269,53 @@
 
             </RelativeLayout>
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:text="连接手机或其他职能设备"
+                android:gravity="center_vertical"
+                android:textColor="@color/wt_login_third"
+                android:textSize="14sp"
+                android:paddingLeft="13dp"/>
+
+            <RelativeLayout
+                android:id="@+id/wifi_set"
+                style="@style/PersonAndSetRelativeStyle">
+
+                <View style="@style/LineStyle"/>
+
+                <ImageView
+                    android:id="@+id/image_wifi"
+                    style="@style/PersonAndSetLeftStyle"
+                    android:src="@mipmap/wt_person_liuliang" />
+
+                <TextView
+                    android:id="@+id/text_wifi_set"
+                    style="@style/PersonAndSetTextStyle"
+                    android:text="WIFI设置"
+                    android:layout_toRightOf="@id/image_wifi"/>
+
+                <ImageView
+                    android:id="@+id/image_wifi_set"
+                    style="@style/PersonAndSetRightStyle" />
+
+                <TextView
+                    android:id="@+id/text_wifi_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="5dp"
+                    android:textColor="@color/beijing"
+                    android:layout_toLeftOf="@id/image_wifi_set"
+                    android:maxLines="1"
+                    android:text="已连接" />
+
+            </RelativeLayout>
+
             <RelativeLayout
                 android:id="@+id/flow_set"
-                style="@style/PersonAndSetRelativeStyle">
+                style="@style/PersonAndSetRelativeStyle"
+                android:layout_marginTop="20dp">
 
                 <View style="@style/LineStyle"/>
 
