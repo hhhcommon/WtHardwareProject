@@ -23,12 +23,12 @@ public class PairBluetoothAdapter extends BaseAdapter {
     private List<BluetoothInfo> list;
     private CancelListener cancelListener;
 
-    public PairBluetoothAdapter(Context context, List<BluetoothInfo> list){
+    public PairBluetoothAdapter(Context context, List<BluetoothInfo> list) {
         this.context = context;
         this.list = list;
     }
 
-    public void setListener(CancelListener cancelListener){
+    public void setListener(CancelListener cancelListener) {
         this.cancelListener = cancelListener;
     }
 
@@ -50,7 +50,7 @@ public class PairBluetoothAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if(convertView == null){
+        if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_user_bluebooth_pair, null);
             holder.textBluetoothName = (TextView) convertView.findViewById(R.id.text_bluebooth_name);
@@ -60,7 +60,7 @@ public class PairBluetoothAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         BluetoothInfo bName = list.get(position);
-        if(bName.getBluetoothName() == null){
+        if (bName.getBluetoothName() == null) {
             holder.textBluetoothName.setText(bName.getBluetoothAddress());
         } else {
             holder.textBluetoothName.setText(bName.getBluetoothName());

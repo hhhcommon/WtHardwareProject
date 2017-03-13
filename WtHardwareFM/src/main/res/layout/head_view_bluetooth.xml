@@ -36,6 +36,23 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/text_pair_device"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/app_bg"
+        android:textSize="14sp"
+        android:text="已配对的设备"
+        android:textColor="@color/wt_login_third"
+        android:gravity="center_vertical"
+        android:paddingLeft="14dp"/>
+
+    <ListView
+        android:id="@+id/list_pair_bluetooth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"/>
+
     <RelativeLayout
         android:id="@+id/device_name_set"
         android:layout_width="match_parent"
@@ -87,37 +104,5 @@
             android:layout_alignParentBottom="true"/>
 
     </RelativeLayout>
-
-    <!--<TextView-->
-        <!--android:id="@+id/text_pair_device"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="30dp"-->
-        <!--android:background="@color/linkman_bt"-->
-        <!--android:textSize="14sp"-->
-        <!--android:text="已配对的设备"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:paddingLeft="14dp"/>-->
-
-    <!--<View-->
-        <!--android:id="@+id/liner_view_4"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0.5dp"/>-->
-
-    <!--<ListView-->
-        <!--android:id="@+id/list_pair_bluetooth"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:scrollbars="none"/>-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/text_user_device"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="30dp"-->
-        <!--android:background="@color/linkman_bt"-->
-        <!--android:layout_marginTop="20dp"-->
-        <!--android:textSize="14sp"-->
-        <!--android:text="可用设备"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:paddingLeft="14dp"/>-->
 
 </LinearLayout>

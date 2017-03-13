@@ -49,12 +49,14 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
     private UserBluetoothAdapter userAdapter;
     private DeviceReceiver mDevice = new DeviceReceiver();  // 蓝牙广播
 
+    private ListView pairBluetoothList;                     // 已经配对过的
     private ListView userBluetoothList;                     // 可用蓝牙设备列表
     private List<BluetoothInfo> pairList;                   // 已经配对的蓝牙列表
     private List<BluetoothInfo> userList;                   // 附近可以配对的蓝牙列表
     private List<BluetoothInfo> list = new ArrayList<>();   // 蓝牙列表 包含已配对和可以配对的设备
     private Set<BluetoothDevice> device;                    // 搜索到新的蓝牙设备列表
 
+    private TextView textPairDevice;                        // "已经配对过的设备"
     private ImageView imageBluetoothSet;                    // 蓝牙设置开关
     private TextView textBluetoothName;                     // 蓝牙名字
     private Dialog setBluetoothNameDialog;                  // 用户重命名蓝牙名字
@@ -76,30 +78,32 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
         return rootView;
     }
 
+    // 初始化视图
     private void initView() {
+        // 设置标题
         TextView textTitle = (TextView) rootView.findViewById(R.id.text_title);
-        textTitle.setText("蓝牙");// 设置标题
+        textTitle.setText("蓝牙");
 
+        // 返回
         ImageView leftImage = (ImageView) rootView.findViewById(R.id.left_image);
-        leftImage.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                MineActivity.close();
-            }
-        });
+        leftImage.setOnClickListener(this);
 
-        userBluetoothList = (ListView) rootView.findViewById(R.id.list_user_bluetooth);
+        userBluetoothList = (ListView) rootView.findViewById(R.id.list_user_bluetooth);// 搜索到的可用可配对设备列表
         userBluetoothList.setSelector(new ColorDrawable(Color.TRANSPARENT));
         View headView = LayoutInflater.from(context).inflate(R.layout.head_view_bluetooth, null);
         userBluetoothList.addHeaderView(headView);
 
-        textBluetoothName = (TextView) rootView.findViewById(R.id.text_device_name);
+        textBluetoothName = (TextView) rootView.findViewById(R.id.text_device_name);// 设备名字
         textBluetoothName.setText(MineFragment.blueAdapter.getName());
 
-        headView.findViewById(R.id.device_name_set).setOnClickListener(this);
+        headView.findViewById(R.id.device_name_set).setOnClickListener(this);// 设置设备名字
         headView.findViewById(R.id.bluetooth_set).setOnClickListener(this);// 开启蓝牙
 
+        pairBluetoothList = (ListView) headView.findViewById(R.id.list_pair_bluetooth);// 已经配对过的列表
+        textPairDevice = (TextView) headView.findViewById(R.id.text_pair_device);// "已经配对过的设备"
+
         imageBluetoothSet = (ImageView) rootView.findViewById(R.id.image_bluetooth_set);
+        // 检查蓝牙是否打开
         if (MineFragment.blueAdapter.isEnabled()) {
             imageBluetoothSet.setImageResource(R.mipmap.wt_person_on);
             userBluetoothList.setDividerHeight(1);
@@ -142,9 +146,12 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
                     setBluetooth();// 打开蓝牙
                 }
                 break;
-            case R.id.device_name_set:
+            case R.id.device_name_set:// 设置设备名字
                 setBluetoothNameDialog();
                 setBluetoothNameDialog.show();
+                break;
+            case R.id.left_image:// 返回
+                MineActivity.close();
                 break;
         }
     }
@@ -157,6 +164,7 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
         setBluetoothNameDialog.setContentView(dialog);
         setBluetoothNameDialog.setCanceledOnTouchOutside(false);
         setBluetoothNameDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+        // 确定设置设备名字
         dialog.findViewById(R.id.btn_confirm).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -170,6 +178,7 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
                 }
             }
         });
+        // 取消修改
         dialog.findViewById(R.id.btn_cancel).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -190,7 +199,6 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
 
     // 蓝牙搜索状态广播监听
     private class DeviceReceiver extends BroadcastReceiver {
-
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
