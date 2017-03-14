@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.wotingfm.R;
@@ -21,15 +20,15 @@ import java.util.List;
 public class PairBluetoothAdapter extends BaseAdapter {
     private Context context;
     private List<BluetoothInfo> list;
-    private CancelListener cancelListener;
+    private PairInfoListener pairInfoListener;
 
     public PairBluetoothAdapter(Context context, List<BluetoothInfo> list) {
         this.context = context;
         this.list = list;
     }
 
-    public void setListener(CancelListener cancelListener) {
-        this.cancelListener = cancelListener;
+    public void setListener(PairInfoListener pairInfoListener) {
+        this.pairInfoListener = pairInfoListener;
     }
 
     @Override
@@ -52,9 +51,10 @@ public class PairBluetoothAdapter extends BaseAdapter {
         ViewHolder holder;
         if (convertView == null) {
             holder = new ViewHolder();
-            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_user_bluebooth_pair, null);
-            holder.textBluetoothName = (TextView) convertView.findViewById(R.id.text_bluebooth_name);
-            holder.btnCancel = (Button) convertView.findViewById(R.id.btn_cancel);
+            convertView = LayoutInflater.from(context).inflate(R.layout.adapter_user_bluebooth_pair, parent, false);
+            holder.textBluetoothName = (TextView) convertView.findViewById(R.id.text_bluebooth_name);// 设备名字
+//            holder.imageConnInfo = (ImageView) convertView.findViewById(R.id.image_conn_info);// 查看已经配对过的设备信息
+            holder.viewConn = convertView.findViewById(R.id.view_conn);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
@@ -66,22 +66,23 @@ public class PairBluetoothAdapter extends BaseAdapter {
             holder.textBluetoothName.setText(bName.getBluetoothName());
         }
         L.w("bName" + bName + "position == " + position);
-        holder.btnCancel.setOnClickListener(new View.OnClickListener() {
+        holder.viewConn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                cancelListener.cancelPair(position);
+                pairInfoListener.pairInfo(position);
             }
         });
 
         return convertView;
     }
 
-    public interface CancelListener {
-        void cancelPair(int p);
+    public interface PairInfoListener {
+        void pairInfo(int p);
     }
 
     class ViewHolder {
         TextView textBluetoothName;
-        Button btnCancel;
+        View viewConn;
+//        ImageView imageConnInfo;// 配对过的设备信息
     }
 }

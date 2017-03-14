@@ -1,28 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="60dp"
+    android:layout_height="62dp"
     android:background="@drawable/person_color">
 
-    <TextView
-        android:id="@+id/text_bluebooth_name"
+    <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:gravity="center"
-        android:layout_centerVertical="true"
+        android:gravity="center_vertical"
         android:layout_marginLeft="14dp"
-        android:textSize="16sp"
-        android:text="蓝牙名称"/>
+        android:orientation="vertical">
 
-    <Button
-        android:id="@+id/btn_cancel"
-        android:layout_width="70dp"
-        android:layout_height="36dp"
-        android:text="取消配对"
-        android:background="@drawable/wt_login_button_background"
-        android:textColor="@color/WHITE"
+        <TextView
+            android:id="@+id/text_bluebooth_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:textColor="@color/wt_login_third"
+            android:text="蓝牙名称"/>
+
+        <TextView
+            android:id="@+id/text_status_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="14sp"
+            android:textColor="@color/gray"
+            android:text="已配对未连接"
+            android:layout_marginTop="4dp"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/view_conn"
+        android:layout_width="60dp"
+        android:layout_height="match_parent"
         android:layout_alignParentRight="true"
-        android:layout_marginRight="12dp"
-        android:layout_centerVertical="true"/>
+        android:layout_marginRight="14dp"
+        android:gravity="center">
+
+        <ImageView
+            android:id="@+id/image_conn_info"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/wt_image_bluetooth_info"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

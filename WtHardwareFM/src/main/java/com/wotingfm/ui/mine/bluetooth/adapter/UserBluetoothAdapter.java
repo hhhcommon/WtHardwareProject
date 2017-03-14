@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
@@ -53,27 +52,13 @@ public class UserBluetoothAdapter extends BaseAdapter {
         if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_user_bluebooth, parent, false);
-            holder.textBluetoothName = (TextView) convertView.findViewById(R.id.text_bluetooth_name);
-            holder.textPairDevice = (TextView) convertView.findViewById(R.id.text_pair_device);
-            holder.imageConnInfo = (ImageView) convertView.findViewById(R.id.image_conn_info);
-            holder.textConnTip = (TextView) convertView.findViewById(R.id.text_conn_tip);
+            holder.textBluetoothName = (TextView) convertView.findViewById(R.id.text_bluetooth_name);// 设备名称
+            holder.textPairDevice = (TextView) convertView.findViewById(R.id.text_pair_device);// "选取可用设备"
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
         BluetoothInfo bName = list.get(position);
-        int type = bName.getBluetoothType();// == 0 为可以配对设备  == 1 为已经配对过的设备
-        if (type == 0) {// 可用
-            holder.textPairDevice.setVisibility(View.VISIBLE);
-            holder.textPairDevice.setText("可用配对设备");
-            holder.imageConnInfo.setVisibility(View.GONE);
-            holder.textConnTip.setVisibility(View.GONE);
-        } else if (type == 1) {// 已经配对
-            holder.textPairDevice.setVisibility(View.VISIBLE);
-            holder.textPairDevice.setText("已配对的设备");
-            holder.imageConnInfo.setVisibility(View.VISIBLE);
-            holder.textConnTip.setVisibility(View.VISIBLE);
-        }
         if (position > 0) {
             if (list.get(position).getBluetoothType() == (list.get(position - 1).getBluetoothType())) {
                 holder.textPairDevice.setVisibility(View.GONE);
@@ -91,8 +76,6 @@ public class UserBluetoothAdapter extends BaseAdapter {
 
     class ViewHolder {
         TextView textBluetoothName;// 设备名称
-        TextView textPairDevice;
-        ImageView imageConnInfo;// 已经连接的设备标识
-        TextView textConnTip;
+        TextView textPairDevice;// "选取可用设备"
     }
 }
