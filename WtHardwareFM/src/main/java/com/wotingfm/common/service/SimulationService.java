@@ -52,7 +52,8 @@ public class SimulationService extends Service  {
         OpenComPort(serialControl);// 打开串口
         if(frequence!=null){
             String deviceNeedFreq=frequence.substring(frequence.indexOf("-")+1,frequence.length());
-            String s="AT+DMOSETGROUP=1,"+deviceNeedFreq+","+deviceNeedFreq+",4,1\n";
+            String s="AT+DMOSETGROUP=1,"+deviceNeedFreq+","+deviceNeedFreq+",00,3,1\r\n";
+            serialControl.sendTxt("AT+DMOSETGROUP=1,"+deviceNeedFreq+","+deviceNeedFreq+",00,3,1\r\n");
             Log.e("串口数据",s);
             //serialControl.sendTxt(s);
         }
@@ -69,10 +70,10 @@ public class SimulationService extends Service  {
     public static void setFrequence(String Frequ){
         if(!TextUtils.isEmpty(Frequ)){
       /*      ToastUtils.show_always(context,"对讲频率已经变更到"+Frequ);*/
-            String deviceNeedFreq=Frequ.substring(5,Frequ.length());
+            String deviceNeedFreq=Frequ.substring(5,Frequ.length()).trim();
       /*      ToastUtils.show_always(context,deviceNeedFreq);*/
               Log.e("要设置的Freq","a"+deviceNeedFreq+"b");
-            serialControl.sendTxt("AT+DMOSETGROUP=1,"+deviceNeedFreq+","+deviceNeedFreq+",4,1\n");
+            serialControl.sendTxt("AT+DMOSETGROUP=1,"+deviceNeedFreq+","+deviceNeedFreq+",00,3,1\n");
         }
     }
 
@@ -80,7 +81,7 @@ public class SimulationService extends Service  {
         if(!TextUtils.isEmpty(Frequ)){
         /*    ToastUtils.show_always(context,"对讲频率已经变更到"+Frequ);
             String deviceNeedFreq=frequence.substring(frequence.indexOf("-")+1,frequence.length());*/
-            serialControl.sendTxt("AT+DMOSETGROUP=1,"+Frequ+","+Frequ+",4,1\n");
+            serialControl.sendTxt("AT+DMOSETGROUP=1,"+Frequ+","+Frequ+",00,3,1\r\n");
         }else{
             ToastUtils.show_always(context,"传入的频率值不合法");
         }

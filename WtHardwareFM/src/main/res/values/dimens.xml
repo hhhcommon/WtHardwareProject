@@ -37,7 +37,7 @@
     <dimen name="audio_program_source_size">18sp</dimen>
 
     <!--"更多"字体大小-->
-    <dimen name="audio_more_size">17sp</dimen>
+    <dimen name="audio_more_size">16sp</dimen>
 
     <!--节目类型字体大小-->
     <dimen name="audio_type_size">18sp</dimen>
@@ -106,7 +106,7 @@
 
 
     <dimen name="wt_dinglan_high">48dp</dimen>
-    <dimen name="wt_dinglan_text_center">17sp</dimen>
+    <dimen name="wt_dinglan_text_center">22sp</dimen>
     <dimen name="wt_dinglan_text_right">14sp</dimen>
     <dimen name="wt_edittext_default_text">14sp</dimen>
     <dimen name="wt_edittext_default_high">40dp</dimen>

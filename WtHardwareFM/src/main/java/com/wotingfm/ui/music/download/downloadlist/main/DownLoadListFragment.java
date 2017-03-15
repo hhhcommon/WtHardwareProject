@@ -152,12 +152,12 @@ public class DownLoadListFragment extends Fragment implements OnClickListener {
             mListView.setAdapter(adapter);
             setItemListener();
             setInterface();
-            textSum.setText("共" + fileInfoList.size() + "个节目");
+            textSum.setText(fileInfoList.size() + "");
             for (int i = 0; i < fileInfoList.size(); i++) {
                 sum += fileInfoList.get(i).getEnd();
             }
             if (sum != 0) {
-                textTotalCache.setText("共" + df.format(sum / 1000.0 / 1000.0) + "MB");
+                textTotalCache.setText( df.format(sum / 1000.0 / 1000.0) + "MB");
             }
         } else {
             viewTop.setVisibility(View.GONE);
@@ -256,7 +256,6 @@ public class DownLoadListFragment extends Fragment implements OnClickListener {
                             dbDao.deleteHistory(playerurl);
                             dbDao.addHistory(history);
                             if (PlayerFragment.context != null) {
-                                MainActivity.changeOne();
                                 Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                                 Bundle bundle1 = new Bundle();
                                 bundle1.putString("text", mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4));
@@ -267,10 +266,10 @@ public class DownLoadListFragment extends Fragment implements OnClickListener {
                                 et.putString(StringConstant.PLAYHISTORYENTER, "true");
                                 et.putString(StringConstant.PLAYHISTORYENTERNEWS, mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4));
                                 if (!et.commit()) L.v("commit", "数据 commit 失败!");
-                                MainActivity.changeOne();
 
                             }
                             PlayerActivity.close();
+
                             dbDao.closedb();
                         } else {// 此处要调对话框，点击同意删除对应的文件信息
                             ToastUtils.show_always(context, "文件已经被删除，是否删除本条记录");

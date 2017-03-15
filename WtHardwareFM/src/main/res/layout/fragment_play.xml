@@ -18,44 +18,14 @@
             android:src="@mipmap/news" />
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="28dp"
-            android:layout_marginLeft="10dp"
-            android:gravity="center"
-            android:text="节 目"
-            android:textColor="@color/WHITE"
-            android:textSize="15sp"
-            android:visibility="invisible" />
-
-        <LinearLayout
+            android:id="@+id/tv_guid1"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
             android:layout_weight="1"
-            android:gravity="center">
-
-            <TextView
-                android:id="@+id/tv_guid1"
-                android:layout_width="81dp"
-                android:layout_height="28dp"
-                android:layout_marginRight="8dp"
-                android:background="@drawable/color_wt_circle_home_white"
-                android:gravity="center"
-                android:text="播 放"
-                android:textColor="@color/dinglan_orange"
-                android:textSize="15sp" />
-
-
-        </LinearLayout>
-
-        <TextView
-            android:id="@+id/tv_program"
-            android:layout_width="wrap_content"
-            android:layout_height="28dp"
-            android:layout_marginRight="10dp"
+            android:layout_height="match_parent"
             android:gravity="center"
-            android:text="节 目"
-            android:textColor="@color/WHITE"
-            android:textSize="15sp" />
+            android:text="播 放"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
 
         <ImageView
             android:id="@+id/lin_find"
@@ -116,29 +86,26 @@
         android:orientation="vertical"
         android:paddingTop="20dp">
 
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="bottom">
+            android:layout_height="wrap_content">
 
-            <TextView
-                android:id="@+id/play_current_time"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp"
-                android:layout_weight="1"
-                android:text="00:00:00"
-                android:textColor="@color/dinglan_orange"
-                android:textSize="20sp" />
+            <ImageView
+                android:id="@+id/tv_program"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_marginLeft="10dp"
+                android:src="@mipmap/wt_play_left_program" />
 
             <ImageView
                 android:id="@+id/play_more"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+                android:layout_alignParentRight="true"
                 android:layout_marginRight="10dp"
                 android:src="@mipmap/wt_play_right_more" />
 
-        </LinearLayout>
+        </RelativeLayout>
 
 
         <com.wotingfm.widget.AutoScrollTextView
@@ -148,12 +115,19 @@
             android:layout_centerHorizontal="true"
             android:layout_marginLeft="30dp"
             android:layout_marginRight="30dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="20dp"
             android:singleLine="true"
             android:text="未知"
             android:textColor="@color/wt_login_third"
             android:textSize="26sp" />
-
+        <TextView
+            android:id="@+id/play_current_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="00:00:00"
+            android:gravity="center"
+            android:textColor="@color/dinglan_orange"
+            android:textSize="20sp" />
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -241,23 +215,22 @@
             </LinearLayout>
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0.5dp"
+                android:layout_height="1dp"
                 android:layout_above="@+id/text_recommend_visible"
                 android:background="@color/text_line_1" />
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:background="@color/setting_bg_color"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/text_recommend_visible"
-                    android:layout_width="0dp"
-                    android:layout_height="48dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_alignParentBottom="true"
-                    android:layout_weight="1"
                     android:gravity="center_vertical"
                     android:paddingLeft="10dp"
                     android:text="相关推荐"
@@ -268,9 +241,11 @@
                 <ImageView
                     android:layout_width="30dp"
                     android:layout_height="30dp"
+                    android:layout_alignParentRight="true"
                     android:layout_marginRight="10dp"
+                    android:layout_centerVertical="true"
                     android:src="@mipmap/wt_play_recommend_visible" />
-            </LinearLayout>
+            </RelativeLayout>
         </LinearLayout>
     </LinearLayout>
 

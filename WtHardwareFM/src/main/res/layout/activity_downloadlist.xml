@@ -35,21 +35,45 @@
         android:background="#f7f7f7" >
 
         <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="18dp"
+            android:gravity="center_vertical"
+            android:textColor="@color/black"
+            android:text="已下载" />
+        <TextView
             android:id="@+id/tv_sum"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="2dp"
+            android:layout_marginRight="2dp"
+            android:textColor="@color/dinglan_orange"
+            android:text="0" />
+        <TextView
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="match_parent"
-            android:layout_marginLeft="15dp"
             android:gravity="center_vertical"
-            android:text="共0个节目" />
+            android:textColor="@color/black"
+            android:text="集" />
 
         <TextView
-            android:id="@+id/tv_totalcache"
             android:layout_width="0dp"
-            android:layout_weight="1"
+            android:layout_weight="1.5"
             android:layout_height="match_parent"
-            android:gravity="right|center_vertical"
-            android:layout_marginRight="10dp" />
+            android:textColor="@color/black"
+            android:text="大小"
+            android:gravity="right|center_vertical"/>
+        <TextView
+            android:id="@+id/tv_totalcache"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="0M"
+            android:layout_marginLeft="2dp"
+            android:textColor="@color/dinglan_orange"
+            android:gravity="center_vertical"
+            android:layout_marginRight="18dp" />
 
     </LinearLayout>
 

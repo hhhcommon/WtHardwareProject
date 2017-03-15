@@ -213,7 +213,11 @@ public class SearchLikeFragment extends Fragment implements
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:    // 返回
-                MainActivity.changeOne();
+                if(MainActivity.SearchLikeActivityJumpType==1){
+                    MainActivity.changeOne();
+                }else{
+                    MainActivity.changeFour();
+                }
                 break;
             case R.id.lin_head_right:   // 搜索
                 String searchString = mEtSearchContent.getText().toString().trim();

@@ -345,6 +345,7 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
                 L.v("TAG", "contentPlay -- > > " + contentPlay);
             }
+              contentPlay = "http://182.92.175.134:8000/xinlong.ogg";
             final String url = contentPlay;
             mHandler.postDelayed(new Runnable() {
                 @Override

@@ -19,24 +19,30 @@
             <TextView
                 android:id="@+id/tv_completed"
                 android:layout_width="81dp"
-                android:layout_height="28dp"
+                android:layout_height="match_parent"
                 android:layout_marginRight="8dp"
-                android:background="@drawable/color_wt_circle_home_white"
                 android:gravity="center"
-                android:text="已下载"
-                android:textColor="@color/dinglan_orange"
-                android:textSize="15sp"/>
-
+                android:text="专辑"
+                android:textColor="@color/white"
+                android:textSize="22sp"/>
+            <TextView
+                android:id="@+id/tv_voice"
+                android:layout_width="81dp"
+                android:layout_height="match_parent"
+                android:layout_marginLeft="8dp"
+                android:gravity="center"
+                android:text="声音"
+                android:textColor="@color/text_light_gray"
+                android:textSize="22sp"/>
             <TextView
                 android:id="@+id/tv_uncompleted"
                 android:layout_width="81dp"
-                android:layout_height="28dp"
+                android:layout_height="match_parent"
                 android:layout_marginLeft="8dp"
-                android:background="@drawable/color_wt_circle_orange"
                 android:gravity="center"
                 android:text="下载中"
-                android:textColor="@color/WHITE"
-                android:textSize="15sp"/>
+                android:textColor="@color/text_light_gray"
+                android:textSize="22sp"/>
 
         </LinearLayout>
 
