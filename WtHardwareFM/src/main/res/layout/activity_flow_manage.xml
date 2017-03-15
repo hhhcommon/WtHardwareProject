@@ -11,133 +11,179 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/app_bg">
+        android:background="@color/WHITE">
 
         <TextView
             android:id="@+id/text_view_flow_info"
             android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:background="@color/setting_bg_color"
+            android:layout_height="60dp"
+            android:background="@color/WHITE"
             android:gravity="center_vertical"
-            android:paddingLeft="8dp"
-            android:text="流量信息"
+            android:drawableLeft="@mipmap/wt_image_flow"
+            android:drawablePadding="6dp"
+            android:paddingLeft="14dp"
+            android:text="移动数据"
             android:textColor="@color/s_green"
             android:textSize="16sp"/>
-
-        <TextView
-            android:id="@+id/text_view_2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/text_view_flow_info"
-            android:paddingLeft="8dp"
-            android:text="已使用流量2.0G"
-
-            android:textColor="@color/gray"/>
-
-        <TextView
-            android:id="@+id/text_surplus_flow"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_below="@id/text_view_flow_info"
-            android:layout_marginRight="8dp"
-            android:text="剩余流量1.0G"/>
-
-        <ProgressBar
-            android:id="@+id/pb_flow"
-            style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="10dp"
-            android:layout_below="@+id/text_view_2"
-            android:layout_margin="8dp"
-            android:progressDrawable="@drawable/bg_seekbar"/>
-
-        <TextView
-            android:id="@+id/text_network_speed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/pb_flow"
-            android:layout_marginLeft="8dp"
-            android:text="当前网速300kb/s"/>
-
-        <RelativeLayout
-            android:id="@+id/view_relative"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_below="@+id/text_network_speed"
-            android:background="@color/setting_bg_color"
-            android:orientation="horizontal">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_marginLeft="8dp"
-                android:text="定期自动校准"
-                android:textColor="@color/s_green"
-                android:textSize="16sp"/>
-
-            <Spinner
-                android:id="@+id/sp_liuliang"
-                android:layout_width="60dp"
-                android:layout_height="40dp"
-                android:layout_alignParentRight="true"
-                android:layout_centerVertical="true"
-                android:layout_marginRight="8dp"/>
-
-            <TextView
-                android:id="@+id/tv_showchoice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerVertical="true"
-                android:layout_toLeftOf="@id/sp_liuliang"
-                android:text="每天"/>
-
-        </RelativeLayout>
-
-        <TextView
-            android:id="@+id/text_notify"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/view_relative"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="5dp"
-            android:text="流量通知"
-            android:textColor="@color/s_green"
-            android:textSize="16sp"/>
-
-        <TextView
-            android:id="@+id/text_view_3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/text_notify"
-            android:layout_marginBottom="10dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="5dp"
-            android:text="当使用流量超过90%时通知我"/>
 
         <ImageView
-            android:id="@+id/image_flow_set"
+            android:id="@+id/image_flow_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@id/text_view_3"
-            android:layout_alignRight="@+id/pb_flow"
-            android:layout_alignTop="@id/text_notify"
-            android:src="@mipmap/wt_person_close"/>
+            android:src="@mipmap/wt_person_close"
+            android:layout_alignTop="@id/text_view_flow_info"
+            android:layout_alignBottom="@id/text_view_flow_info"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="14dp"/>
+
+        <TextView
+            android:id="@+id/view_flow_info"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="流量信息"
+            android:background="@color/app_bg"
+            android:layout_below="@id/text_view_flow_info"
+            android:gravity="center_vertical"
+            android:textColor="@color/wt_login_third"
+            android:paddingLeft="14dp"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/view_flow"
+            android:layout_width="match_parent"
+            android:layout_height="40dp"
+            android:text="我听FM畅听流量包(套餐流量：6.0G)"
+            android:layout_below="@id/view_flow_info"
+            android:gravity="center_vertical"
+            android:textColor="@color/gray"
+            android:paddingLeft="14dp"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/view_flow_use"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已使用3.45G"
+            android:layout_below="@id/view_flow"
+            android:gravity="center_vertical"
+            android:textColor="@color/wt_login_third"
+            android:paddingLeft="14dp"
+            android:layout_marginTop="10dp"
+            android:textSize="14sp"/>
+
+        <TextView
+            android:id="@+id/view_flow_surplus_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="剩余"
+            android:layout_below="@id/view_flow"
+            android:gravity="center_vertical"
+            android:textColor="@color/wt_login_third"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="14dp"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"/>
+
+        <TextView
+            android:id="@+id/view_flow_surplus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2.55G"
+            android:layout_below="@id/view_flow"
+            android:gravity="center_vertical"
+            android:textColor="@color/dinglan_orange"
+            android:layout_toLeftOf="@id/view_flow_surplus_1"
+            android:layout_marginRight="2dp"
+            android:layout_marginTop="10dp"
+            android:textSize="16sp"/>
+
+        <SeekBar
+            android:id="@+id/seek_bar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:maxHeight="3dp"
+            android:minHeight="3dp"
+            android:layout_margin="10dp"
+            android:progressDrawable="@drawable/bg_seekbar"
+            android:layout_below="@id/view_flow_surplus"/>
+
+        <View
+            android:id="@+id/view_1"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@color/app_bg"
+            android:layout_below="@id/seek_bar"/>
+
+        <TextView
+            android:id="@+id/text_flow_remind"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:layout_below="@id/view_1"
+            android:text="流量提醒"
+            android:textSize="16sp"
+            android:paddingLeft="14dp"
+            android:paddingTop="5dp"
+            android:textColor="@color/wt_login_third"/>
+
+        <TextView
+            android:id="@+id/text_flow_tip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/view_1"
+            android:text="当使用的流量超过总流量的90%时提醒我"
+            android:textSize="14sp"
+            android:layout_marginLeft="14dp"
+            android:layout_marginTop="28dp"
+            android:textColor="@color/gray"/>
+
+        <ImageView
+            android:id="@+id/image_flow_remind_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/wt_person_close"
+            android:layout_alignTop="@id/text_flow_remind"
+            android:layout_alignBottom="@id/text_flow_remind"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="14dp"/>
+
+        <View
+            android:id="@+id/view_2"
+            android:layout_width="match_parent"
+            android:layout_height="20dp"
+            android:background="@color/app_bg"
+            android:layout_below="@id/text_flow_remind"/>
 
         <TextView
             android:id="@+id/text_recharge"
-            android:layout_width="match_parent"
-            android:layout_height="48dp"
-            android:layout_below="@+id/text_view_3"
-            android:background="@color/setting_bg_color"
-            android:gravity="center_vertical"
-            android:paddingLeft="8dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="流量充值"
-            android:textColor="@color/s_green"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:textColor="@color/wt_login_third"
+            android:layout_below="@id/view_2"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="14dp"/>
+
+        <TextView
+            android:id="@+id/text_scan_code_recharge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_recharge"
+            android:layout_marginTop="10dp"
+            android:layout_centerHorizontal="true"
+            android:text="请用手机扫描二维码进行充值。"
+            android:textSize="16sp"
+            android:textColor="@color/wt_login_third"/>
+
+        <ImageView
+            android:id="@+id/image_code"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/text_scan_code_recharge"
+            android:layout_marginTop="10dp"
+            android:src="@mipmap/app_logo"
+            android:layout_centerHorizontal="true"/>
 
     </RelativeLayout>
 

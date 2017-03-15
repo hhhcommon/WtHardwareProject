@@ -56,81 +56,85 @@
             android:layout_weight="1" />
     </LinearLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="110dp"
         android:background="@color/dinglan_orange"
         android:gravity="center"
-        android:orientation="vertical" >
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:layout_width="match_parent"
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:paddingTop="12dp" >
+            android:id="@+id/relativeLayout3"
+            android:layout_marginLeft="15dp"
+            >
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" >
+            <ImageView
+                android:id="@+id/image_touxiang"
+                android:layout_width="75dip"
+                android:layout_height="75dip"
+                android:scaleType="centerCrop" />
 
-                <ImageView
-                    android:id="@+id/image_touxiang"
-                    android:layout_width="85dip"
-                    android:layout_height="85dip"
-                    android:scaleType="centerCrop" />
+            <ImageView
+                android:layout_width="75dip"
+                android:layout_height="75dip"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/liubianxing_orange" />
+        </RelativeLayout>
 
-                <ImageView
-                    android:layout_width="85dip"
-                    android:layout_height="85dip"
-                    android:layout_centerInParent="true"
-                    android:src="@mipmap/liubianxing_orange" />
-            </RelativeLayout>
-        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" >
+            android:orientation="vertical"
+            android:gravity="left"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/relativeLayout3"
+            android:layout_alignTop="@+id/relativeLayout3"
+            android:layout_toRightOf="@+id/relativeLayout3"
+            android:layout_toEndOf="@+id/relativeLayout3">
 
             <TextView
                 android:id="@+id/tv_name"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+
                 android:ellipsize="end"
-                android:gravity="center"
+                android:gravity="left"
                 android:paddingLeft="15dp"
                 android:paddingRight="15dp"
                 android:singleLine="true"
                 android:text="我听科技"
                 android:textColor="@color/WHITE"
                 android:textSize="@dimen/wt_group_detail_16" />
+            <TextView
+                android:id="@+id/tv_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="100001"
+                android:paddingLeft="15dp"
+                android:textColor="@color/WHITE"
+                android:textSize="@dimen/wt_login_text_wjmm"
+                android:visibility="visible" />
+
+            <TextView
+                android:id="@+id/tv_sign"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:ellipsize="end"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:singleLine="true"
+                android:text="不忘初心，方得始终"
+                android:textColor="@color/WHITE"
+                android:textSize="@dimen/wt_login_text_wjmm" />
         </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_id"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:text="100001"
-            android:textColor="@color/WHITE"
-            android:textSize="@dimen/wt_login_text_wjmm" />
 
-        <TextView
-            android:id="@+id/tv_sign"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="11dp"
-            android:layout_marginTop="6dp"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:paddingLeft="15dp"
-            android:paddingRight="15dp"
-            android:singleLine="true"
-            android:text="不忘初心，方得始终"
-            android:textColor="@color/WHITE"
-            android:textSize="@dimen/wt_login_text_wjmm" />
-    </LinearLayout>
-
+    </RelativeLayout>
     <LinearLayout
         android:id="@+id/lin_ewm"
         android:layout_width="match_parent"

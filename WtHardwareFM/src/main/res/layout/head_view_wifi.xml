@@ -28,7 +28,8 @@
             android:layout_centerVertical="true"
             android:layout_marginLeft="14dp"
             android:layout_toRightOf="@id/image_wifi"
-            android:text="WiFi设置"
+            android:text="WIFI"
+            android:textColor="@color/wt_login_third"
             android:textSize="16sp"/>
 
         <ImageView
@@ -52,10 +53,9 @@
         android:id="@+id/user_wifi_list"
         android:layout_width="match_parent"
         android:layout_height="40dp"
-        android:layout_marginTop="20dp"
         android:gravity="center_vertical"
-        android:background="@color/WHITE"
         android:paddingLeft="14dp"
-        android:text="可用WiFi列表"/>
+        android:textColor="@color/wt_login_third"
+        android:text="选取可用WIFI"/>
 
 </LinearLayout>

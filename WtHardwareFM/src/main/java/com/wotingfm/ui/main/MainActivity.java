@@ -28,7 +28,6 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
-import com.google.gson.JsonSyntaxException;
 import com.google.gson.reflect.TypeToken;
 import com.iflytek.cloud.SpeechUtility;
 import com.umeng.analytics.MobclickAgent;
@@ -46,6 +45,7 @@ import com.wotingfm.common.service.LocationService;
 import com.wotingfm.common.service.NotificationService;
 import com.wotingfm.common.service.SocketService;
 import com.wotingfm.common.service.SubclassService;
+import com.wotingfm.common.service.TestWindowService;
 import com.wotingfm.common.service.VoiceStreamPlayerService;
 import com.wotingfm.common.service.VoiceStreamRecordService;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -784,9 +784,9 @@ public class MainActivity extends TabActivity {
         context.stopService(Subclass);
         context.stopService(Download);
         context.stopService(Notification);
+        context.stopService(Simulation);
         context.stopService(FloatingWindow);
         context.stopService(TestFloatingWindow);
-        context.stopService(Simulation);
         Log.e("app退出", "app退出");
     }
 
@@ -794,11 +794,13 @@ public class MainActivity extends TabActivity {
         super.onPause();
         MobclickAgent.onPageEnd(mPageName);
         MobclickAgent.onPause(context);
+//        wm.removeView(tv);
     }
 
     @Override
     protected void onRestart() {
         super.onRestart();
+//        wm.addView(tv,lp);
     }
 
     @Override

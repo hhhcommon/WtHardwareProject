@@ -8,9 +8,9 @@
 
     <RelativeLayout
         android:layout_width="300dp"
-        android:layout_height="240dp"
+        android:layout_height="210dp"
         android:orientation="vertical"
-        android:background="@color/shen_hui">
+        android:background="@drawable/background_button_white">
 
         <TextView
             android:id="@+id/text_title"
@@ -20,7 +20,7 @@
             android:layout_centerHorizontal="true"
             android:layout_marginTop="15dp"
             android:text="重命名设备"
-            android:textColor="@color/WHITE" />
+            android:textColor="@color/wt_login_third" />
 
         <EditText
             android:id="@+id/edit_new_name"
@@ -30,7 +30,8 @@
             android:layout_marginRight="18dp"
             android:layout_below="@id/text_title"
             android:layout_marginTop="20dp"
-            android:background="@drawable/bg_dinglan_edittext"
+            android:textColor="@color/wt_login_third"
+            android:background="@drawable/background_button_gray"
             android:padding="5dp"/>
 
         <Button
@@ -41,7 +42,7 @@
             android:layout_below="@id/edit_new_name"
             android:layout_marginTop="30dp"
             android:layout_marginLeft="30dp"
-            android:background="@drawable/background_button_white"
+            android:background="@drawable/background_button_gray"
             android:textColor="@color/BLACK" />
 
         <Button
@@ -51,7 +52,8 @@
             android:layout_below="@id/edit_new_name"
             android:layout_marginTop="30dp"
             android:layout_alignParentRight="true"
-            android:background="@drawable/background_button_white"
+            android:background="@drawable/zhuxiao_press"
+            android:textColor="@color/WHITE"
             android:layout_marginRight="30dp"
             android:text="确定" />
     </RelativeLayout>

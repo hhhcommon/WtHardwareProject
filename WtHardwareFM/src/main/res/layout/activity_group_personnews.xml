@@ -86,14 +86,12 @@
                     android:maxWidth="200dp"
                     android:paddingRight="30dp"
                     android:text="群号:100001"
-                    android:layout_marginTop="5dp"
                     android:textColor="@color/WHITE"
-                    android:textSize="12sp"
-                    android:layout_below="@+id/tv_name"
-                    android:layout_toRightOf="@+id/rv_touxiang"
-                    android:layout_toEndOf="@+id/rv_touxiang"
+                    android:textSize="14sp"
                     android:visibility="visible"
-                    />
+                    android:layout_marginTop="30dp"
+                    android:layout_alignLeft="@+id/et_b_name"
+                    android:layout_alignStart="@+id/et_b_name" />
 
                 <EditText
                     android:id="@+id/tv_name"
@@ -124,10 +122,10 @@
                     android:paddingRight="30dp"
                     android:text="群名称"
                     android:textColor="@color/WHITE"
-                    android:textSize="12sp"
-                    android:layout_alignBottom="@+id/imageView3"
-                    android:layout_alignLeft="@+id/tv_name"
-                    android:layout_alignStart="@+id/tv_name" />
+                    android:textSize="14sp"
+                    android:layout_alignBottom="@+id/rv_touxiang"
+                    android:layout_toRightOf="@+id/rv_touxiang"
+                    android:layout_toEndOf="@+id/rv_touxiang" />
 
                <!-- <EditText
                     android:id="@+id/et_groupSignature"
@@ -152,9 +150,10 @@
             </RelativeLayout>
         </LinearLayout>
 
-    <LinearLayout
+    .
+        .............<LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:background="@color/WHITE"
         android:orientation="vertical" >
 
@@ -163,24 +162,24 @@
                     android:layout_height="wrap_content"
                     android:text="签名"
                     android:textColor="@color/group_4b"
-                    android:layout_marginLeft="10dp"
+                    android:layout_marginLeft="15dp"
                     android:layout_marginTop="10dp"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:layout_marginRight="15dp"
                     android:visibility="visible" />
-
-
         <TextView
             android:id="@+id/et_groupSignature"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="签名"
-            android:textColor="@color/gray"
-            android:layout_marginLeft="10dp"
+            android:textColor="@color/group_4b"
+            android:layout_marginLeft="15dp"
             android:layout_marginBottom="15dp"
             android:layout_marginTop="15dp"
+            android:visibility="visible"
+            android:textSize="16sp"
 
-            android:visibility="visible" />
+            />
 
               <View
                   android:layout_width="match_parent"
@@ -193,8 +192,8 @@
 	                android:layout_height="wrap_content"
 	                android:text="好友验证"
 	                android:textColor="@color/group_4b"
-                    android:layout_marginLeft="10dp"
-                    android:textSize="12sp"
+                    android:layout_marginLeft="15dp"
+                    android:textSize="14sp"
                     android:layout_marginTop="10dp"
                     android:layout_marginBottom="5dp"
 	                android:visibility="visible" />
@@ -247,22 +246,26 @@
 
         </LinearLayout>
 
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <TextView
+                android:id="@+id/tv_add"
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginBottom="15dp"
+                android:layout_marginLeft="12dp"
+                android:layout_marginRight="12dp"
+                android:background="@drawable/zhuxiao_press"
+                android:gravity="center|bottom"
+                android:layout_gravity="bottom"
+                android:padding="8dp"
+                android:text="添加对方为好友"
+                android:textColor="@color/WHITE"
+                android:textSize="15sp" />
+    </LinearLayout>
 
     </LinearLayout>
-        <TextView
-            android:id="@+id/tv_add"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginBottom="25dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginTop="120dp"
-            android:background="@drawable/zhuxiao_press"
-            android:gravity="center"
-            android:padding="8dp"
-            android:text="添加对方为好友"
-            android:textColor="@color/WHITE"
-            android:textSize="15sp" />
-
     </LinearLayout>
+
 </LinearLayout>

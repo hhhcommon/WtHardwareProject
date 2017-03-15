@@ -113,4 +113,7 @@ public class BroadcastConstants {
     // 更新 MoreOperationView
     public static final String UPDATE_MORE_OPERATION_VIEW = "UPDATE_MORE_OPERATION_VIEW";
 
+    // 蓝牙取消配对
+    public static final String ACTION_BLUETOOTH_CANCEL_PAIR = "ACTION_BLUETOOTH_CANCEL_PAIR";
+
 }

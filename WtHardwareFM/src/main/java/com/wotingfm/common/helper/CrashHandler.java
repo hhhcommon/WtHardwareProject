@@ -41,6 +41,7 @@ public class CrashHandler implements Thread.UncaughtExceptionHandler {
                 + " name: " + thread.getName() + " id: " + thread.getId() + "exception: "
                 + ex+"时间："+System.currentTimeMillis();
         send(s);
+
         Log.d("woTing",s );
         Looper.loop();
     }

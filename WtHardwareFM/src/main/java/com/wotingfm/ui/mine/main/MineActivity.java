@@ -13,7 +13,6 @@ import com.wotingfm.R;
 import com.wotingfm.ui.baseactivity.BaseFragmentActivity;
 import com.wotingfm.util.SequenceUUID;
 
-
 public class MineActivity extends BaseFragmentActivity {
     private static MineActivity context;
     private static View textMain;
@@ -22,7 +21,7 @@ public class MineActivity extends BaseFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_other);
-        context=this;
+        context = this;
         textMain = findViewById(R.id.tv_main);
         MineActivity.open(new MineFragment());
     }
@@ -35,8 +34,16 @@ public class MineActivity extends BaseFragmentActivity {
                 .add(R.id.fragment_content, frg)
                 .addToBackStack(SequenceUUID.getUUID())
                 .commit();
-        if (context.getSupportFragmentManager().getBackStackEntryCount() > 0) {
-            textMain.setVisibility(View.VISIBLE);
+
+        try {
+            String a = android.os.Build.VERSION.RELEASE;
+            if (Integer.parseInt(a.substring(0, a.indexOf("."))) >= 5) {
+                if (context.getSupportFragmentManager().getBackStackEntryCount() > 0) {
+                    textMain.setVisibility(View.VISIBLE);
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
 
         // 隐藏键盘
