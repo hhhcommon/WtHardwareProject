@@ -645,7 +645,7 @@ public class MainActivity extends TabActivity {
                                 GlobalConfig.getFreq = true;
                             } catch (JSONException e) {
                                 e.printStackTrace();
-                            } catch (JsonSyntaxException e) {
+                            } catch (Exception e) {
                                 e.printStackTrace();
                             }
                         }
