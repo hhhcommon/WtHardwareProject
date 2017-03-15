@@ -36,6 +36,29 @@
 
     </RelativeLayout>
 
+    <TextView
+        android:id="@+id/text_pair_device"
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:background="@color/app_bg"
+        android:textSize="14sp"
+        android:text="已配对的设备"
+        android:textColor="@color/wt_login_third"
+        android:gravity="center_vertical"
+        android:paddingLeft="14dp"/>
+
+    <ListView
+        android:id="@+id/list_pair_bluetooth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"/>
+
+    <View
+        android:id="@+id/view_back"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        android:background="@color/app_bg"/>
+
     <RelativeLayout
         android:id="@+id/device_name_set"
         android:layout_width="match_parent"
@@ -53,7 +76,7 @@
             android:id="@+id/text_device"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="设备名称"
+            android:text="我的设备"
             android:textColor="@color/s_green"
             android:layout_marginLeft="14dp"
             android:textSize="16sp"
@@ -88,36 +111,15 @@
 
     </RelativeLayout>
 
-    <!--<TextView-->
-        <!--android:id="@+id/text_pair_device"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="30dp"-->
-        <!--android:background="@color/linkman_bt"-->
-        <!--android:textSize="14sp"-->
-        <!--android:text="已配对的设备"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:paddingLeft="14dp"/>-->
-
-    <!--<View-->
-        <!--android:id="@+id/liner_view_4"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="0.5dp"/>-->
-
-    <!--<ListView-->
-        <!--android:id="@+id/list_pair_bluetooth"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:scrollbars="none"/>-->
-
-    <!--<TextView-->
-        <!--android:id="@+id/text_user_device"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="30dp"-->
-        <!--android:background="@color/linkman_bt"-->
-        <!--android:layout_marginTop="20dp"-->
-        <!--android:textSize="14sp"-->
-        <!--android:text="可用设备"-->
-        <!--android:gravity="center_vertical"-->
-        <!--android:paddingLeft="14dp"/>-->
+    <TextView
+        android:id="@+id/text_search"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="搜索附近蓝牙设备"
+        android:textSize="16sp"
+        android:textColor="@color/wt_login_third"
+        android:paddingLeft="14dp"
+        android:background="@drawable/person_color"
+        android:gravity="center_vertical"/>
 
 </LinearLayout>

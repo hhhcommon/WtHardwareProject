@@ -3,9 +3,7 @@ package com.wotingfm.ui.mine.wifi;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
-import android.text.InputType;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,23 +24,19 @@ public class ConfigWiFiFragment extends Fragment implements View.OnClickListener
     private Button btnConfirm;
     private EditText editPsw;
 
-    private boolean isVisible;
-    private FragmentActivity context;
     private View rootView;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.activity_config_wi_fi, container, false);
             rootView.setOnClickListener(this);
-            context = getActivity();
-            init();
+            initView();
         }
         return rootView;
     }
 
-    private void init() {
+    private void initView() {
         String wiFiName = getArguments().getString(StringConstant.WIFI_NAME);
 
         TextView textTitle = (TextView) rootView.findViewById(R.id.text_title);
@@ -59,39 +53,28 @@ public class ConfigWiFiFragment extends Fragment implements View.OnClickListener
                 MineActivity.close();
             }
         });
-        editPsw = (EditText) rootView.findViewById(R.id.edit_psw);                          // 输入 密码
+        editPsw = (EditText) rootView.findViewById(R.id.edit_psw);// 输入 密码
         editPsw.addTextChangedListener(new MyEditTextListener());
 
-        rootView.findViewById(R.id.btn_cancel).setOnClickListener(this);         // 取消
+        rootView.findViewById(R.id.btn_cancel).setOnClickListener(this);// 取消
 
-        btnConfirm = (Button) rootView.findViewById(R.id.btn_confirm);                    // 连接
+        btnConfirm = (Button) rootView.findViewById(R.id.btn_confirm);// 连接
         btnConfirm.setOnClickListener(this);
-
-        rootView.findViewById(R.id.image_visibility).setOnClickListener(this);   // 密码可见
     }
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.btn_cancel:                                   // 取消
+            case R.id.btn_cancel:// 取消
                 MineActivity.close();
                 break;
-            case R.id.btn_confirm:
+            case R.id.btn_confirm:// 确定
                 String res = editPsw.getText().toString().trim();
 
                 Fragment targetFragment = getTargetFragment();
                 ((WIFIFragment) targetFragment).setAddCardResult(res);
 
                 MineActivity.close();
-                break;
-            case R.id.image_visibility:                             // 密码可见
-                if (isVisible) {// 判断密码是否可见
-                    editPsw.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                } else {
-                    editPsw.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                }
-                editPsw.setSelection(editPsw.getText().toString().length());
-                isVisible = !isVisible;
                 break;
         }
     }
