@@ -43,18 +43,53 @@
 
             <ImageView
                 android:id="@+id/ImageUrl"
-                android:layout_width="55dp"
-                android:layout_height="55dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:layout_centerInParent="true"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/group_touxiang" />
 
             <ImageView
-                android:layout_width="55dp"
-                android:layout_height="55dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
                 android:layout_centerInParent="true"
                 android:src="@mipmap/liubianxing_gray"/>
         </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/lin_groupcreate_status_second"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="12dp"
+            android:layout_marginRight="12dp"
+            android:gravity="left|center"
+            android:orientation="horizontal"
+            android:padding="5dip"
+            android:visibility="gone" >
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="2dp"
+                android:src="@mipmap/wt_group_tishi" />
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:ems="10"
+                android:enabled="false"
+                android:gravity="left|center"
+                android:text="加群时需要管理人员审核"
+                android:textColorHint="@color/beijing"
+                android:maxLines="1"
+                android:singleLine="true"
+                android:textColor="@color/black"
+                android:textCursorDrawable="@color/dinglan_orange"
+                android:textSize="12sp" >
+            </EditText>
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -95,7 +130,7 @@
             android:layout_height="40dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="1dp"
             android:background="@drawable/bg_edittext_normal"
             android:gravity="left|center"
             android:orientation="horizontal"
@@ -129,7 +164,6 @@
             android:id="@+id/lin_groupcreate_status_first"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
             android:orientation="vertical"
             android:visibility="gone" >
 
@@ -138,6 +172,7 @@
                 android:layout_height="40dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
+                android:layout_marginTop="1dp"
                 android:background="@drawable/bg_edittext_normal"
                 android:gravity="left|center"
                 android:orientation="horizontal"
@@ -170,68 +205,24 @@
         </LinearLayout>
 
         <LinearLayout
-            android:id="@+id/lin_groupcreate_status_second"
+            android:id="@+id/lin_channel1"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="1dp"
             android:background="@drawable/bg_edittext_normal"
             android:gravity="left|center"
             android:orientation="horizontal"
-            android:padding="5dip"
-            android:visibility="gone" >
+            android:padding="5dip" >
+
 
             <ImageView
                 android:layout_width="25dp"
                 android:layout_height="25dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="12dp"
-                android:src="@mipmap/wt_group_vertify" />
-
-            <ImageView
-                android:layout_width="18dp"
-                android:layout_height="18dp"
-                android:layout_marginRight="2dp"
-                android:src="@mipmap/image_all_check" />
-
-            <EditText
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:background="@color/WHITE"
-                android:ems="10"
-                android:enabled="false"
-                android:gravity="left|center"
-                android:hint="加群时需输入验证信息"
-                android:textColorHint="@color/beijing"
-                android:maxLines="1"
-                android:singleLine="true"
-                android:textColor="@color/gray"
-                android:textCursorDrawable="@color/dinglan_orange"
-                android:textSize="12sp" >
-            </EditText>
-        </LinearLayout>
-        <LinearLayout
-            android:id="@+id/lin_channel1"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:layout_marginLeft="12dp"
-            android:layout_marginRight="12dp"
-            android:layout_marginTop="15dp"
-            android:background="@drawable/bg_edittext_normal"
-            android:gravity="left|center"
-            android:orientation="horizontal"
-            android:padding="5dip" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="12dp"
-                android:gravity="center"
-                android:textColor="@color/group_4b"
-                android:text="频道一" />
+                android:src="@mipmap/wt_group_talk" />
 
             <TextView
                 android:id="@+id/tv_channel1"
@@ -257,20 +248,19 @@
             android:layout_height="40dp"
             android:layout_marginLeft="12dp"
             android:layout_marginRight="12dp"
-            android:layout_marginTop="15dp"
             android:background="@drawable/bg_edittext_normal"
             android:gravity="left|center"
             android:orientation="horizontal"
+            android:layout_marginTop="1dp"
             android:padding="5dip" >
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
+
+            <ImageView
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="12dp"
-                android:gravity="center"
-                android:textColor="@color/group_4b"
-                android:text="频道二" />
+                android:src="@mipmap/wt_group_talk" />
 
             <TextView
                 android:id="@+id/tv_channel2"
@@ -304,7 +294,7 @@
                 android:layout_height="40dp"
                 android:layout_marginLeft="12dp"
                 android:layout_marginRight="12dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="55dp"
                 android:background="@drawable/zhuxiao_press"
                 android:gravity="center"
                 android:text="确定"

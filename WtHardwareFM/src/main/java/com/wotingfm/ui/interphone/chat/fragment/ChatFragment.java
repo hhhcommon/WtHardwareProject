@@ -7,19 +7,20 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.graphics.Color;
 import android.graphics.drawable.AnimationDrawable;
-import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.GridView;
@@ -156,6 +157,8 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
     private static TextView tv_group_moni_number;
     private LinearLayout lin_cut_moni;
     private static ImageView image_moni;
+    private static Dialog onlineDialog;
+    private static TextView tv_gridview_groupnum;
 
 
     @Override
@@ -229,6 +232,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
 //        rootView = inflater.inflate(R.layout.fragment_talkoldlist, container, false);
         rootView = inflater.inflate(R.layout.fragment_interphone, container, false);
         setView();//设置界面
+        onlineDialog();
         setOnResumeView();
         return rootView;
     }
@@ -266,8 +270,8 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         tv_allnum = (TextView) rootView.findViewById(R.id.tv_allnum);                           // 群组对讲时候的群所有成员人数
         talkingName = (TextView) rootView.findViewById(R.id.talkingname);                       // 群组对讲时候对讲人姓名
         image_group_persontx = (ImageView) rootView.findViewById(R.id.image_group_persontx);    // 群组对讲时候对讲人头像
-        gridView_person = (GridView) rootView.findViewById(R.id.gridView_person);               // 群组对讲时候对讲成员展示
-        gridView_person.setSelector(new ColorDrawable(Color.TRANSPARENT));                      // 取消GridView的默认背景色
+        // gridView_person = (GridView) rootView.findViewById(R.id.gridView_person);               // 群组对讲时候对讲成员展示
+       // gridView_person.setSelector(new ColorDrawable(Color.TRANSPARENT));                      // 取消GridView的默认背景色
         image_voice = (ImageView) rootView.findViewById(R.id.image_voice);                      // 群组对讲声音波
 
 
@@ -420,7 +424,10 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
             lin_head.setVisibility(View.GONE);
             lin_foot.setVisibility(View.GONE);
             GlobalConfig.isActive = false;
-            gridView_person.setVisibility(View.GONE);
+           // gridView_person.setVisibility(View.GONE);
+            if(onlineDialog!=null&&onlineDialog.isShowing()){
+                onlineDialog.dismiss();
+            }
         } else {
             InterPhoneControlHelper.Quit(context, interPhoneId);//退出小组
             historyDataBaseList = dbDao.queryHistory();//得到数据库里边数据
@@ -447,7 +454,10 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
             lin_head.setVisibility(View.GONE);
             lin_foot.setVisibility(View.GONE);
             GlobalConfig.isActive = false;
-            gridView_person.setVisibility(View.GONE);
+           // gridView_person.setVisibility(View.GONE);
+            if(onlineDialog!=null&&onlineDialog.isShowing()){
+                onlineDialog.dismiss();
+            }
         }
     }
 
@@ -492,6 +502,15 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
             gridView_person.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+                    //响应点击事件 如果跳转了 就要关闭dialog
+                    if(onlineDialog!=null){
+                        if(onlineDialog.isShowing()){
+                            onlineDialog.dismiss();
+                        }else{
+                            onlineDialog.show();
+                        }
+                    }
                     boolean isFriend = false;
                     if (GlobalConfig.list_person != null && GlobalConfig.list_person.size() != 0) {
                         for (int i = 0; i < GlobalConfig.list_person.size(); i++) {
@@ -526,11 +545,19 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                 }
             });
 
-            if (gridView_person.getVisibility() == View.VISIBLE) {
+          /*  if (gridView_person.getVisibility() == View.VISIBLE) {
                 gridView_person.setVisibility(View.GONE);
             } else {
                 gridView_person.setVisibility(View.VISIBLE);
             }
+*/
+             if(onlineDialog!=null){
+                 if(onlineDialog.isShowing()){
+                     onlineDialog.dismiss();
+                 }else{
+                     onlineDialog.show();
+                 }
+             }
         }
     }
 
@@ -584,6 +611,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         enterGroupType = 1;
         groupId = groupIdS;
         tv_num.setText("1");
+        tv_gridview_groupnum.setText("在线1人");
         listInfo = null;
         InterPhoneControlHelper.Enter(context, groupId);//发送进入组的数据，socket
         getGridViewPerson(groupId);//获取群成员
@@ -603,6 +631,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         groupImage=talkGroupInside.getGroupImg();
         setMoniView(groupName,groupFreq,groupImage);
         tv_num.setText("1");
+        tv_gridview_groupnum.setText("在线1人");
         listInfo = null;
         InterPhoneControlHelper.Enter(context, talkGroupInside.getGroupId());//发送进入组的数据，socket
         getGridViewPerson(talkGroupInside.getGroupId());//获取群成员
@@ -619,6 +648,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         enterGroupType = 1;
         setMoniView(groupName,groupFreq,groupImage);    //设置界面的方法
         tv_num.setText("1");
+        tv_gridview_groupnum.setText("在线1人");
         listInfo = null;
         InterPhoneControlHelper.Enter(context, groupId);//发送进入组的数据，socket
         getGridViewPerson(groupId);//获取群成员
@@ -639,6 +669,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         groupImage=talkGroupInside.getGroupImg();
         setMoniView(groupName,groupFreq,groupImage);
         tv_num.setText("1");
+        tv_gridview_groupnum.setText("在线1人");
         listInfo = null;
         InterPhoneControlHelper.Enter(context, talkGroupInside.getGroupId());//发送进入组的数据，socket
         getGridViewPerson(talkGroupInside.getGroupId());//获取群成员
@@ -1155,6 +1186,26 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         });
     }
 
+    // 弹出框
+    private void onlineDialog(){
+        View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_chat_online, null);
+        // 初始化 dialog 出现配置
+        onlineDialog = new Dialog(context, R.style.MyDialog);
+        onlineDialog.setContentView(dialog);
+        gridView_person = (GridView) dialog.findViewById(R.id.gridView_person);            // 在线头像
+        tv_gridview_groupnum=(TextView)dialog.findViewById(R.id.tv_gridview_groupnum);     // 在线人数
+        Window window = onlineDialog.getWindow();
+        DisplayMetrics dm = new DisplayMetrics();
+        context.getWindowManager().getDefaultDisplay().getMetrics(dm);
+        int screenw = dm.widthPixels;
+        ViewGroup.LayoutParams params = dialog.getLayoutParams();
+        params.width = screenw;
+        dialog.setLayoutParams(params);
+        window.setGravity(Gravity.BOTTOM);
+        window.setWindowAnimations(R.style.sharestyle);
+    }
+
+
     // 接收socket的数据进行处理
     class MessageReceiver extends BroadcastReceiver {
         @Override
@@ -1415,8 +1466,11 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                                         }.getType());
                                         //组内所有在线成员
                                         //组内有人说话时，根据这个list数据，得到该成员信息啊：头像，昵称等
+                                        if(listInfo!=null){
                                         Log.i("组内成员人数", listInfo.size() + "");
                                         tv_num.setText(listInfo.size() + "");
+                                        tv_gridview_groupnum.setText("在线"+listInfo.size()+"人");
+                                        }
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }
@@ -1526,8 +1580,11 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                     e1.printStackTrace();
                 }
             } else if (action.equals(BroadcastConstants.UP_DATA_GROUP)) {
-                if (gridView_person != null) {
+              /*  if (gridView_person != null) {
                     gridView_person.setVisibility(View.GONE);
+                }*/
+                if(onlineDialog!=null&&onlineDialog.isShowing()){
+                    onlineDialog.dismiss();
                 }
             } else if (action.equals(BroadcastConstants.PUSH_ALLURL_CHANGE)) {
                 setOnResumeView();
@@ -1571,7 +1628,10 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                                 lin_personhead.setVisibility(View.GONE);
                                 lin_head.setVisibility(View.GONE);
                                 lin_foot.setVisibility(View.GONE);
-                                gridView_person.setVisibility(View.GONE);
+                                //gridView_person.setVisibility(View.GONE);
+                                if(onlineDialog!=null&&onlineDialog.isShowing()){
+                                    onlineDialog.dismiss();
+                                }
                                 GlobalConfig.isActive = false;
                             }
                         }
@@ -1630,9 +1690,12 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                                         ListInfo userinfo = new Gson().fromJson(userinfos, new TypeToken<ListInfo>() {
                                         }.getType());
                                         String groupids = data.get("GroupId") + "";
+                                        if(listInfo!=null){
                                         listInfo.add(userinfo);
                                         Log.i("组内成员人数", listInfo.size() + "");
                                         tv_num.setText(listInfo.size() + "");
+                                        tv_gridview_groupnum.setText("在线"+listInfo.size()+"人");
+                                        }
                                         getGridViewPerson(groupids);
                                         //有人加入组
                                         ToastUtils.show_short(context, "有人加入组");
@@ -1655,6 +1718,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
 
                                         String userinfoid = userinfo.getUserId();
                                         String groupids = data.get("GroupId") + "";
+                                        if(listInfo!=null){
                                         for (int i = 0; i < listInfo.size(); i++) {
                                             if (listInfo.get(i).getUserId().equals(userinfoid)) {
                                                 listInfo.remove(i);
@@ -1662,8 +1726,10 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                                         }
                                         Log.i("组内成员人数", listInfo.size() + "");
                                         tv_num.setText(listInfo.size() + "");
+                                        tv_gridview_groupnum.setText("在线"+listInfo.size()+"人");
                                         getGridViewPerson(groupids);
                                         ToastUtils.show_short(context, "有人退出组");
+                                        }
                                     } catch (Exception e) {
                                         e.printStackTrace();
                                     }

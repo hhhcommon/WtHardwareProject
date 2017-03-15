@@ -53,7 +53,7 @@ public class SimulationService extends Service  {
      /*   if(serialControl.isOpen()){
             CloseComPort(serialControl);//如果端口已开需要关闭
         };*/
-        CloseComPort(serialControl);
+        //CloseComPort(serialControl);
         OpenComPort(serialControl);// 打开串口
 
         if(frequence!=null){
@@ -82,6 +82,8 @@ public class SimulationService extends Service  {
             String deviceNeedFreq=Frequ.substring(5,Frequ.length()).trim();
               //Log.e("要设置的Freq","a"+deviceNeedFreq+"b");
             serialControl.sendTxt("AT+DMOSETGROUP=1,"+deviceNeedFreq+","+deviceNeedFreq+",00,4,1\r\n");
+        }else{
+            ToastUtils.show_always(context,"传入的频率值不合法");
         }
     }
 
