@@ -29,8 +29,9 @@
             android:layout_width="60dip"
             android:layout_height="match_parent"
             android:layout_alignParentRight="true"
-            android:layout_margin="10dp"
-            android:gravity="center">
+            android:layout_margin="13dp"
+
+            android:gravity="right|center">
 
             <TextView
                 android:id="@+id/tv_head"

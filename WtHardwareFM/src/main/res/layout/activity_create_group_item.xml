@@ -74,7 +74,7 @@
                 android:layout_marginRight="2dp"
                 android:src="@mipmap/wt_group_tishi" />
 
-            <EditText
+            <TextView
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -88,7 +88,7 @@
                 android:textColor="@color/black"
                 android:textCursorDrawable="@color/dinglan_orange"
                 android:textSize="12sp" >
-            </EditText>
+            </TextView>
         </LinearLayout>
 
         <LinearLayout

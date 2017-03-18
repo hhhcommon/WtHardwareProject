@@ -47,6 +47,7 @@ public class DuiJiangFragment extends Fragment {
     private View rootView;
     public static DuiJiangFragment ct;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
@@ -217,7 +218,6 @@ public class DuiJiangFragment extends Fragment {
     private void InitTextView() {
         lin_more = rootView.findViewById(R.id.lin_more);
         View lin_news = rootView.findViewById(R.id.lin_news);
-
 		/*
 		 * 跳转到新消息界面
 		 */
@@ -266,25 +266,37 @@ public class DuiJiangFragment extends Fragment {
         public void onClick(View v) {
             mPager.setCurrentItem(index);
             if (index == 0) {
-                view1.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
+             /*   view1.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
                 view2.setTextColor(context.getResources().getColor(R.color.white));
                 view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
-                view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
-            } else if (index == 1) {
+                view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));*/
                 view1.setTextColor(context.getResources().getColor(R.color.white));
+                view2.setTextColor(context.getResources().getColor(R.color.gray));
+                view1.setTextSize(25);
+                view2.setTextSize(17);
+            } else if (index == 1) {
+               /* view1.setTextColor(context.getResources().getColor(R.color.white));
                 view2.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
                 view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
-                view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
+                view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));*/
+                view1.setTextColor(context.getResources().getColor(R.color.gray));
+                view2.setTextColor(context.getResources().getColor(R.color.white));
+                view1.setTextSize(17);
+                view2.setTextSize(25);
             }
         }
     }
 
     public static void update() {
         mPager.setCurrentItem(0);
-        view1.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
+      /*  view1.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
         view2.setTextColor(context.getResources().getColor(R.color.white));
         view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
-        view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
+        view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));*/
+        view1.setTextColor(context.getResources().getColor(R.color.white));
+        view1.setTextSize(25);
+        view2.setTextColor(context.getResources().getColor(R.color.gray));
+        view2.setTextSize(17);
     }
 
     /*
@@ -319,15 +331,23 @@ public class DuiJiangFragment extends Fragment {
         @Override
         public void onPageSelected(int arg0) {
             if (arg0 == 0) {
-                view1.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
+             /*   view1.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
                 view2.setTextColor(context.getResources().getColor(R.color.white));
                 view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
-                view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
-            } else if (arg0 == 1) {
+                view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));*/
                 view1.setTextColor(context.getResources().getColor(R.color.white));
+                view2.setTextColor(context.getResources().getColor(R.color.gray));
+                view1.setTextSize(25);
+                view2.setTextSize(17);
+            } else if (arg0 == 1) {
+          /*      view1.setTextColor(context.getResources().getColor(R.color.white));
                 view2.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
                 view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
-                view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
+                view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));*/
+                view1.setTextColor(context.getResources().getColor(R.color.gray));
+                view2.setTextColor(context.getResources().getColor(R.color.white));
+                view1.setTextSize(17);
+                view2.setTextSize(25);
             }
         }
     }

@@ -158,16 +158,16 @@ public class AccuseFragment extends Fragment implements OnClickListener {
                                 e.printStackTrace();
                             }
                         } else if (ReturnType.equals("1002")) {
-                            ToastUtils.show_short(context, "无此分类信息");
+                            ToastUtils.show_always(context, "无此分类信息");
                         } else if (ReturnType.equals("1003")) {
-                            ToastUtils.show_short(context, "分类不存在");
+                            ToastUtils.show_always(context, "分类不存在");
                         } else if (ReturnType.equals("1011")) {
-                            ToastUtils.show_short(context, "当前暂无分类");
+                            ToastUtils.show_always(context, "当前暂无分类");
                         } else if (ReturnType.equals("T")) {
-                            ToastUtils.show_short(context, "获取列表异常");
+                            ToastUtils.show_always(context, "获取列表异常");
                         }
                     } else {
-                        ToastUtils.show_short(context, "数据获取异常，请稍候重试");
+                        ToastUtils.show_always(context, "数据获取异常，请稍候重试");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -298,16 +298,16 @@ public class AccuseFragment extends Fragment implements OnClickListener {
                                 e.printStackTrace();
                             }
                         } else if (ReturnType.equals("1002")) {
-                            ToastUtils.show_short(context, "无此分类信息");
+                            ToastUtils.show_always(context, "无此分类信息");
                         } else if (ReturnType.equals("1003")) {
-                            ToastUtils.show_short(context, "分类不存在");
+                            ToastUtils.show_always(context, "分类不存在");
                         } else if (ReturnType.equals("1011")) {
-                            ToastUtils.show_short(context, "当前暂无分类");
+                            ToastUtils.show_always(context, "当前暂无分类");
                         } else if (ReturnType.equals("T")) {
-                            ToastUtils.show_short(context, "获取列表异常");
+                            ToastUtils.show_always(context, "获取列表异常");
                         }
                     } else {
-                        ToastUtils.show_short(context, "数据获取异常，请稍候重试");
+                        ToastUtils.show_always(context, "数据获取异常，请稍候重试");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

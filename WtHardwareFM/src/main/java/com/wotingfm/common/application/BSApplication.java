@@ -10,7 +10,6 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.config.SocketClientConfig;
 import com.wotingfm.common.helper.CollocationHelper;
 import com.wotingfm.common.helper.CommonHelper;
-import com.wotingfm.common.helper.CrashHandler;
 import com.wotingfm.util.PhoneMessage;
 
 import java.util.ArrayList;
@@ -31,9 +30,8 @@ public class BSApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-//        CrashHandler handler = CrashHandler.getInstance();
-//        handler.init(getApplicationContext());
-
+       /* CrashHandler handler = CrashHandler.getInstance();
+        handler.init(getApplicationContext());*/
         SharedPreferences = this.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
         CollocationHelper.setCollocation();  //设置配置文件
 

@@ -30,11 +30,14 @@
             android:textSize="@dimen/audio_title_size" />
 
 
-        <ImageView
+        <TextView
             android:id="@+id/head_right_btn"
-            style="@style/LeftImageStyle"
-            android:src="@mipmap/wt_image_album_music"
-            android:layout_alignParentRight="true"/>
+            style="@style/RightMoreStyle"
+            android:text="举报"
+            android:gravity="right|center"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 

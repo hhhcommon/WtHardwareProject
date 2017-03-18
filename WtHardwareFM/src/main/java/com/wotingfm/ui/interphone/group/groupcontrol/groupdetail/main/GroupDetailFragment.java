@@ -56,7 +56,6 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.common.photocut.PhotoCutActivity;
-import com.wotingfm.ui.common.qrcode.EWMShowFragment;
 import com.wotingfm.ui.interphone.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.ui.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.adapter.GroupTalkAdapter;
@@ -112,7 +111,6 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
     //private TextView textIntroduce;// 群介绍
     private ImageView imageHead;// 群头像
     private ImageView imageModify;// 修改
-    private ImageView imageEwm;// 二维码
     private TextView textGroupName;// 群名称
     private TextView textGroupId;// 群 ID
     private TextView textGroupNumber;// 群成员人数
@@ -310,7 +308,6 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
     // 初始化视图
     private void setView() {
         rootView.findViewById(R.id.wt_back).setOnClickListener(this);                    // 返回
-        rootView.findViewById(R.id.lin_ewm).setOnClickListener(this);                    // 二维码
         rootView.findViewById(R.id.imageView4).setOnClickListener(this);                 // 群聊天
         rootView.findViewById(R.id.rl_allperson).setOnClickListener(this);               // 查看所有群成员
         rootView.findViewById(R.id.linear_channel).setOnClickListener(this);             // 频率选择
@@ -334,8 +331,6 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
         imageModify = (ImageView) rootView.findViewById(R.id.imageView3); // 修改群组资料
         imageModify.setOnClickListener(this);
 
-
-        imageEwm = (ImageView) rootView.findViewById(R.id.img_ewm);   // 二维码
         textGroupNumber = (TextView) rootView.findViewById(R.id.tv_number); // 群成员数量
         editAliasName = (EditText) rootView.findViewById(R.id.et_b_name);   // 别名
         editSignature = (EditText) rootView.findViewById(R.id.et_groupSignature);// 描述
@@ -410,7 +405,7 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
         if (bmp == null) {
             bmp = BitmapUtils.readBitMap(context, R.mipmap.ewm);
         }
-        imageEwm.setImageBitmap(bmp);
+
         if (groupCreator != null && groupCreator.equals(CommonUtils.getUserId(context))) {
             tv_pinlvxuanze.setVisibility(View.VISIBLE);
             rl_group_manager.setVisibility(View.VISIBLE);
@@ -548,7 +543,7 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
                         lists.clear();
                         String numString = "(" + list.size() + ")";
                         textGroupNumber.setText(numString);
-                        if (groupCreator.equals(CommonUtils.getUserId(context)) && list.size() > 6) {// 群主
+                     /*   if (groupCreator.equals(CommonUtils.getUserId(context)) && list.size() > 6) {// 群主
                             for (int i = 0; i < 6; i++) {
                                 lists.add(list.get(i));
                             }
@@ -558,16 +553,23 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
                             }
                         } else {
                             lists.addAll(list);
+                        }*/
+                        if(list!=null&&list.size()>3){
+                            for (int i = 0; i < 3; i++) {
+                                lists.add(list.get(i));
+                            }
+                        }else{
+                            lists.addAll(list);
                         }
                         GroupInfo groupTalkInsideType2 = new GroupInfo();// 添加
                         groupTalkInsideType2.setType(2);
                         lists.add(groupTalkInsideType2);
 
-                        if (groupCreator.equals(CommonUtils.getUserId(context)) && list.size() >= 2) {
+                      /*  if (groupCreator.equals(CommonUtils.getUserId(context)) && list.size() >= 2) {
                             GroupInfo groupTalkInsideType3 = new GroupInfo();// 删除
                             groupTalkInsideType3.setType(3);
                             lists.add(groupTalkInsideType3);
-                        }
+                        }*/
                         if (adapter == null) {
                             gridView.setAdapter(adapter = new GroupTalkAdapter(context, lists));
                         } else {
@@ -600,7 +602,7 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.lin_ewm:// 二维码
+          /*  case R.id.lin_ewm:// 二维码
                 EWMShowFragment fg = new EWMShowFragment();
                 Bundle bundle = new Bundle();
                 bundle.putInt("type", 2);
@@ -610,7 +612,7 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
                 bundle.putSerializable("group", news);
                 fg.setArguments(bundle);
                 DuiJiangActivity.open(fg);
-                break;
+                break;*/
             case R.id.wt_back:// 返回
                 if (groupCreator != null && groupCreator.equals(CommonUtils.getUserId(context))){
                     if(textChannelOne.getText().toString().trim()!=null&&tempFreqFirst!=null){
