@@ -106,7 +106,7 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
     private TextView tv_channel1;
     private LinearLayout lin_channel2;
     private TextView tv_channel2;
-    private int pRate = -1;
+
     private int pFrequency = -1;
     private Dialog frequencyDialog;
     private int screenWidth;
@@ -116,6 +116,7 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
     private CreateGroupContentFragment ct;
     private String tv1;
     private String tv2;
+    private int clickPosition=-1;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -138,33 +139,19 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
      * 频率对话框
      */
     private void initFrequencyDialog() {
-        final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_frequency, null);
-        LoopView pickProvince = (LoopView) dialog.findViewById(R.id.pick_province);
+        final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_frequency_update, null);
+
         LoopView pickCity = (LoopView) dialog.findViewById(R.id.pick_city);
-
-        pickProvince.setListener(new OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(int index) {
-                pRate = index;
-
-            }
-        });
-
         pickCity.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
                 pFrequency = index;
             }
         });
-        final List<String> rateList = FrequencyUtil.getFrequency();
         final List<String> frequencyList = FrequencyUtil.getFrequencyList();
-
-        pickProvince.setItems(rateList);
         pickCity.setItems(frequencyList);
-        pickProvince.setInitPosition(3);
-        pickCity.setInitPosition(1);
-        pickProvince.setTextSize(15);
-        pickCity.setTextSize(15);
+        pickCity.setInitPosition(0);
+        pickCity.setTextSize(20);
 
         frequencyDialog = new Dialog(context, R.style.MyDialog);
         frequencyDialog.setContentView(dialog);
@@ -187,14 +174,10 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
                     if (pFrequency == -1) {
                         pFrequency=0;
                     }
-                    if(pRate==-1){
-                        pRate=3;
-                    }
-                        String rate = rateList.get(pRate);
-                        if (!TextUtils.isEmpty(rate.trim())) {
-                            if (rate.equals("频道一")) {
+                        if (clickPosition!=-1) {
+                            if (clickPosition==1) {
                                 tv_channel1.setText(frequencyList.get(pFrequency).trim());
-                            } else if (rate.equals("频道二")) {
+                            } else if (clickPosition==2) {
                                 tv_channel2.setText(frequencyList.get(pFrequency).trim());
                             }
                         }
@@ -476,10 +459,16 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
                 }
                 break;
             case R.id.lin_channel1:
+                if(frequencyDialog!=null&&!frequencyDialog.isShowing()){
+                    clickPosition=1;
                 frequencyDialog.show();
+                }
                 break;
             case R.id.lin_channel2:
-                frequencyDialog.show();
+                if(frequencyDialog!=null&&!frequencyDialog.isShowing()){
+                    clickPosition=2;
+                    frequencyDialog.show();
+                }
                 break;
         }
     }

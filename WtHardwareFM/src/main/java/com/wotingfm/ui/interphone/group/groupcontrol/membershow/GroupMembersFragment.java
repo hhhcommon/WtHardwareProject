@@ -27,7 +27,9 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.model.UserInfo;
+import com.wotingfm.ui.interphone.group.groupcontrol.groupnumdel.GroupMemberDelFragment;
 import com.wotingfm.ui.interphone.group.groupcontrol.grouppersonnews.GroupPersonNewsFragment;
+import com.wotingfm.ui.interphone.group.groupcontrol.memberadd.GroupMemberAddFragment;
 import com.wotingfm.ui.interphone.group.groupcontrol.membershow.adapter.CreateGroupMembersAdapter;
 import com.wotingfm.ui.interphone.group.groupcontrol.personnews.TalkPersonNewsFragment;
 import com.wotingfm.ui.interphone.linkman.view.CharacterParser;
@@ -76,6 +78,7 @@ public class GroupMembersFragment extends Fragment implements OnClickListener, T
     private FragmentActivity context;
     private View rootView;
     private GroupMembersFragment ct;
+    private Dialog choiceDialog;
 
     @Override
     public void onWhiteViewClick() {
@@ -96,8 +99,20 @@ public class GroupMembersFragment extends Fragment implements OnClickListener, T
             context = getActivity();
             ct=this;
             initView();
+            initDialog();
         }
         return rootView;
+    }
+
+    private void initDialog() {
+        View dialog1 = LayoutInflater.from(context).inflate(R.layout.dialog_group_choice, null);
+        dialog1.findViewById(R.id.tv_cancel).setOnClickListener(this);
+        dialog1.findViewById(R.id.tv_add).setOnClickListener(this);
+        dialog1.findViewById(R.id.tv_del).setOnClickListener(this);
+        choiceDialog = new Dialog(context, R.style.MyDialog);
+        choiceDialog.setContentView(dialog1);
+        choiceDialog.setCanceledOnTouchOutside(true);
+        choiceDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
     }
 
     private void initView() {
@@ -108,8 +123,11 @@ public class GroupMembersFragment extends Fragment implements OnClickListener, T
         groupId = getArguments().getString("GroupId");
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
 
-        editSearchContent = (EditText) rootView.findViewById(R.id.et_search);// 搜索控件
+        editSearchContent = (EditText) rootView.findViewById(R.id.et_search);      // 搜索控件
         editSearchContent.addTextChangedListener(this);
+
+        //lin_head_right
+        rootView.findViewById(R.id.lin_head_right).setOnClickListener(this);       // 管理
 
         imageClear = (ImageView) rootView.findViewById(R.id.image_clear);
         imageClear.setOnClickListener(this);
@@ -143,6 +161,37 @@ public class GroupMembersFragment extends Fragment implements OnClickListener, T
                 imageClear.setVisibility(View.INVISIBLE);
                 editSearchContent.setText("");
                 tipSearchNull.setVisibility(View.GONE);
+                break;
+            case R.id.lin_head_right:
+                if(choiceDialog!=null&&!choiceDialog.isShowing()){
+                    choiceDialog.show();
+                }
+                break;
+            case R.id.tv_cancel:
+                if(choiceDialog!=null&&choiceDialog.isShowing()){
+                    choiceDialog.dismiss();
+                }
+                break;
+            case R.id.tv_add:
+                GroupMemberAddFragment fg = new GroupMemberAddFragment();
+                Bundle bundle = new Bundle();
+                bundle.putString("GroupId", groupId);
+                fg.setArguments(bundle);
+                DuiJiangActivity.open(fg);
+                if(choiceDialog!=null&&choiceDialog.isShowing()){
+                    choiceDialog.dismiss();
+                }
+                break;
+            case R.id.tv_del:
+                GroupMemberDelFragment fg1 = new GroupMemberDelFragment();
+                Bundle bundle1 = new Bundle();
+                bundle1.putString("GroupId", groupId);
+                fg1.setArguments(bundle1);
+                fg1.setTargetFragment(ct, 2);
+                DuiJiangActivity.open(fg1);
+                if(choiceDialog!=null&&choiceDialog.isShowing()){
+                    choiceDialog.dismiss();
+                }
                 break;
         }
     }

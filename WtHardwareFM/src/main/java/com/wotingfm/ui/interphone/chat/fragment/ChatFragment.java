@@ -360,13 +360,20 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                 }
 
                 SimulationService.openDevice();
-                if(!TextUtils.isEmpty(groupFreq)){
-                    groupFreq=groupFreq.trim();
-                    String s=groupFreq;
-                    SimulationService.setFrequenceFromOut(groupFreq.substring(5,groupFreq.length()-3).trim());
-                }else{
-                    SimulationService.setFrequenceFromOut(FrequencyUtil.DefaultFrequnce.substring(5,FrequencyUtil.DefaultFrequnce.length()-3));
-                }
+                Handler h =new Handler();
+                h.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        if(!TextUtils.isEmpty(groupFreq)){
+                            groupFreq=groupFreq.trim();
+                            String s=groupFreq;
+                            SimulationService.setFrequenceFromOut(groupFreq.substring(5,groupFreq.length()-3).trim());
+                        }else{
+                            SimulationService.setFrequenceFromOut(FrequencyUtil.DefaultFrequnce.substring(5,FrequencyUtil.DefaultFrequnce.length()-3));
+                        }
+                    }
+                },5000);
+
                     GlobalConfig.isMONI=true;                            // 切换到模拟对讲自动匹配事件
 
                 //ToastUtils.show_always(context,groupFreq);

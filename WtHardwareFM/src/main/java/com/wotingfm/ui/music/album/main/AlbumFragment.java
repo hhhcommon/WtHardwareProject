@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,6 +29,7 @@ import com.wotingfm.ui.music.album.model.ResultInfo;
 import com.wotingfm.ui.music.main.PlayerActivity;
 import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
+import com.wotingfm.ui.music.program.accuse.activity.AccuseFragment;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.ui.music.search.main.SearchLikeActivity;
 import com.wotingfm.util.DialogUtils;
@@ -80,6 +82,28 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
                 break;
             case R.id.head_right_btn:// 播放专辑
                 // 专辑列表中的数据一集一集往下播
+                if(GlobalConfig.playerObject!=null&&!TextUtils.isEmpty(GlobalConfig.playerObject.getContentId())){
+                    AccuseFragment fragment = new AccuseFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("ContentId", GlobalConfig.playerObject.getContentId());
+                    if(!TextUtils.isEmpty(GlobalConfig.playerObject.getMediaType())) {
+                        bundle.putString("MediaType", "SEQU");
+                    }
+                    bundle.putString(StringConstant.JUMP_TYPE,jump_type);
+                    fragment.setArguments(bundle);
+                    if(jump_type!=null){
+                        if(jump_type.equals("search")){
+                            SearchLikeActivity.open(fragment);
+                        }else if(jump_type.equals("program")){
+                            ProgramActivity.open(fragment);
+                        }else if(jump_type.equals("play")){
+                            PlayerActivity.open(fragment);
+                        }
+                    }
+                }else{
+                    ToastUtils.show_always(context,"获取本专辑信息有误，请回退回上一级界面重试");
+                }
+
                 break;
         }
     }

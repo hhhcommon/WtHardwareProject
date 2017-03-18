@@ -43,6 +43,7 @@ import com.wotingfm.common.receiver.NetWorkChangeReceiver;
 import com.wotingfm.common.service.FloatingWindowService;
 import com.wotingfm.common.service.LocationService;
 import com.wotingfm.common.service.NotificationService;
+import com.wotingfm.common.service.SimulationService;
 import com.wotingfm.common.service.SocketService;
 import com.wotingfm.common.service.SubclassService;
 import com.wotingfm.common.service.TestWindowService;
@@ -169,10 +170,10 @@ public class MainActivity extends TabActivity {
         startService(Notification);
         FloatingWindow = new Intent(this, FloatingWindowService.class);//启动全局弹出框服务
         startService(FloatingWindow);
-//        Simulation=new Intent(this,SimulationService.class);
-//        startService(Simulation);
-//        TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
-//        startService(TestFloatingWindow);
+        Simulation=new Intent(this,SimulationService.class);
+        startService(Simulation);
+        TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
+        startService(TestFloatingWindow);
     }
 
     //注册广播  用于接收定时服务发送过来的广播

@@ -24,25 +24,14 @@
             android:textColor="@color/WHITE_1"
             android:textSize="@dimen/activity_head_center_s" />
 
-        <LinearLayout
-            android:id="@+id/head_right_btn"
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:background="@color/WHITE_1"
-            android:layout_alignParentRight="true"
+        <TextView
+            android:id="@+id/lin_head_right"
+            style="@style/RightMoreStyle"
+            android:text="管理"
             android:gravity="center"
-            android:visibility="gone" >
-
-            <TextView
-                android:id="@+id/tv_head"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="添加"
-                android:textColor="@color/dinglan_orange"
-                android:textSize="@dimen/activity_head_right" />
-
-        </LinearLayout>
+            android:layout_alignTop="@+id/textView"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
 
     </RelativeLayout>
 
