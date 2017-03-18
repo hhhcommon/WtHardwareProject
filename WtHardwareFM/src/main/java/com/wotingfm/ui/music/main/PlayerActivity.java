@@ -11,13 +11,14 @@ import android.view.View;
 
 import com.baidu.cyberplayer.core.BVideoView;
 import com.wotingfm.R;
+import com.wotingfm.ui.baseactivity.BaseFragmentActivity;
 import com.wotingfm.ui.music.player.main.PlayerFragment;
 import com.wotingfm.util.SequenceUUID;
 
 /**
  *  播放主Activity
  */
-public class PlayerActivity extends AppCompatActivity {
+public class PlayerActivity extends BaseFragmentActivity {
     private static PlayerActivity context;
 
     @Override

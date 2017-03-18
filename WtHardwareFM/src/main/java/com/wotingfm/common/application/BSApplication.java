@@ -31,8 +31,8 @@ public class BSApplication extends Application {
     public void onCreate() {
         super.onCreate();
         instance = this;
-        CrashHandler handler = CrashHandler.getInstance();
-        handler.init(getApplicationContext());
+//        CrashHandler handler = CrashHandler.getInstance();
+//        handler.init(getApplicationContext());
 
         SharedPreferences = this.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
         CollocationHelper.setCollocation();  //设置配置文件

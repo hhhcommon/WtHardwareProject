@@ -583,7 +583,7 @@ public class SocketService extends Service {
                             endMsgFlag[1] = endMsgFlag[2];
                             endMsgFlag[2] = (byte) r;
                             if (!hasBeginMsg) {
-                                if (endMsgFlag[0]=='b'&&endMsgFlag[1]=='^'&&endMsgFlag[2]=='^') {
+                                if (endMsgFlag[0]=='B'&&endMsgFlag[1]=='^'&&endMsgFlag[2]=='^') {
                                     break;//是心跳消息
                                 } else if ((endMsgFlag[0]=='|'&&endMsgFlag[1]=='^')||(endMsgFlag[0]=='^'&&endMsgFlag[1]=='|')) {
                                     hasBeginMsg=true;
