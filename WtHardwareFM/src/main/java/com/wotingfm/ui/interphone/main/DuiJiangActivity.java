@@ -66,36 +66,6 @@ public class DuiJiangActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    /*
-     * 手机实体返回按键的处理,硬件不加入
-	 */
-
-    // 手机实体返回按键的处理 与 onBackPress 同理
-    long waitTime = 2000;
-    long touchTime = 0;
-
-    @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
-//           int num=context.getSupportFragmentManager().getBackStackEntryCount();
-//            Log.e("此时返回栈中个数====",num+"");
-            if (context.getSupportFragmentManager().getBackStackEntryCount() <= 1) {
-                long currentTime = System.currentTimeMillis();
-                if ((currentTime - touchTime) >= waitTime) {
-                    ToastUtils.show_always(this, "再按一次退出");
-                    touchTime = currentTime;
-                } else {
-                  //  MainActivity.onStop();
-                    MobclickAgent.onKillProcess(this);
-                    finish();
-                    android.os.Process.killProcess(android.os.Process.myPid());
-                }
-            }
-            return true;
-        }
-        return super.onKeyDown(keyCode, event);
-    }
-
     // 设置android app 的字体大小不受系统字体大小改变的影响
     @Override
     public Resources getResources() {

@@ -47,6 +47,8 @@ import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.photocut.PhotoCutActivity;
 import com.wotingfm.ui.common.qrcode.EWMShowFragment;
 import com.wotingfm.ui.interphone.model.UserInviteMeInside;
+import com.wotingfm.ui.interphone.simulation.SimulationInterphoneFragment;
+import com.wotingfm.ui.mine.FMTestActivity;
 import com.wotingfm.ui.mine.bluetooth.BluetoothFragment;
 import com.wotingfm.ui.mine.flowmanage.FlowManageFragment;
 import com.wotingfm.ui.mine.fm.FMConnectFragment;
@@ -173,6 +175,14 @@ public class MineFragment extends Fragment implements OnClickListener {
         textWifiName = (TextView) rootView.findViewById(R.id.text_wifi_name);// 连接的 WIFI 的名字
 //        TextView textChannel = (TextView) findViewById(R.id.text_listener_frequency);// 频率
         getBluetoothState();// 获取蓝牙的打开关闭状态
+        rootView.findViewById(R.id.fm_set).setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(context, FMTestActivity.class));
+            }
+        });
+
+
     }
 
     @Override
