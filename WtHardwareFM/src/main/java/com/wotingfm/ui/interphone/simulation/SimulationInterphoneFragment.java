@@ -2,6 +2,7 @@ package com.wotingfm.ui.interphone.simulation;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
@@ -48,7 +49,7 @@ public class SimulationInterphoneFragment extends Fragment implements View.OnCli
             rootView = inflater.inflate(R.layout.activity_simulation, container, false);
             rootView.setOnClickListener(this);
             context = getActivity();
-            list = FrequencyUtil.getFrequencyListNoView();
+            list = FrequencyUtil.getFrequencyList();
             frequence = BSApplication.SharedPreferences.getString(FrequenceConstant.FREQUENCE, "");
             setView();                                     // 设置界面
             setData();                                     // 设置数据
@@ -67,7 +68,13 @@ public class SimulationInterphoneFragment extends Fragment implements View.OnCli
             }
         }
         GlobalConfig.isMONI = true;
-        SimulationService.openDevice();
+        SimulationService.onOpenDevice(true);
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                SimulationService.setFrequence(frequence);
+            }
+        },100);
          // context.startService(new Intent(context, SimulationService.class));
         }
 
@@ -166,7 +173,7 @@ public class SimulationInterphoneFragment extends Fragment implements View.OnCli
     public void onDestroy() {
         super.onDestroy();
        // context.stopService(new Intent(context, SimulationService.class));
-        SimulationService.closeDevice();
+        SimulationService.onOpenDevice(false);
         GlobalConfig.isMONI=false;
     }
 
