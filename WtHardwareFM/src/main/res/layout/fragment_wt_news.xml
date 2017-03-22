@@ -3,98 +3,113 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/app_bg"
-    android:orientation="vertical" >
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="46dp"
+        android:background="@color/dinglan_orange">
+
+        <ImageView
+            android:id="@+id/head_left_btn"
+
+            style="@style/LeftImageStyle" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="节目"
+            android:textColor="@color/white"
+            android:textSize="25sp" />
+        <ImageView
+            android:id="@+id/lin_find"
+            android:layout_alignParentRight="true"
+            style="@style/LeftImageStyle"
+            android:src="@mipmap/wt_find" />
+    </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/dinglan_orange"
-        android:orientation="horizontal" >
-        <ImageView
-            android:id="@+id/head_left_btn"
-            style="@style/LeftImageStyle"/>
+        android:background="@color/WHITE"
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="46dp"
-            android:gravity="center_vertical" >
+            android:background="@color/WHITE"
+            android:gravity="center_vertical">
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center" >
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/tv_guid1"
                     android:layout_width="match_parent"
-                    android:layout_height="28dp"
+                    android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="推荐"
-                    android:background="@drawable/color_wt_circle_home_white"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/dinglan_orange" />
+                    android:textColor="@color/dinglan_orange"
+                    android:textSize="@dimen/audio_type_size" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:layout_marginLeft="25dp"
-                android:layout_marginRight="25dp"
-                android:gravity="center" >
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/tv_guid2"
                     android:layout_width="match_parent"
-                    android:layout_height="28dp"
+                    android:layout_height="match_parent"
                     android:gravity="center"
                     android:text="电台"
-                    android:background="@drawable/color_wt_circle_orange"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/group_item_text2"
+                    android:textSize="@dimen/audio_type_size" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center" >
+                android:gravity="center">
 
                 <TextView
                     android:id="@+id/tv_guid3"
                     android:layout_width="match_parent"
-                    android:layout_height="28dp"
+                    android:layout_height="match_parent"
                     android:gravity="center"
-                    android:background="@drawable/color_wt_circle_orange"
-
                     android:text="分类"
-                    android:textSize="@dimen/text_size_medium"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/group_item_text2"
+                    android:textSize="@dimen/audio_type_size" />
             </LinearLayout>
-            <ImageView
-                android:visibility="invisible"
-                style="@style/LeftImageStyle"/>
         </LinearLayout>
 
         <ImageView
             android:id="@+id/cursor"
-            android:layout_width="38dp"
+            android:layout_width="54dp"
             android:layout_height="2dp"
             android:scaleType="matrix"
             android:src="@mipmap/left_personal_bg" />
 
         <TextView
             android:layout_width="match_parent"
-            android:layout_height="0.1dip"
+            android:layout_height="1dip"
             android:background="@color/text_line_1" />
 
     </LinearLayout>
-    <android.support.v4.view.ViewPager  
-        android:id="@+id/viewpager"  
-          android:layout_width="fill_parent"
+
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager"
+        android:layout_width="fill_parent"
         android:layout_height="0dip"
         android:layout_weight="1"
         android:background="@color/WHITE"
-        android:persistentDrawingCache="animation"/>
+        android:persistentDrawingCache="animation" />
 
 </LinearLayout>

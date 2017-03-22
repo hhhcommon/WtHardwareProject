@@ -11,27 +11,32 @@ import android.view.View;
 
 import com.baidu.cyberplayer.core.BVideoView;
 import com.wotingfm.R;
+import com.wotingfm.ui.baseactivity.BaseFragmentActivity;
 import com.wotingfm.ui.music.player.main.PlayerFragment;
 import com.wotingfm.util.SequenceUUID;
 
-
-public class PlayerActivity extends AppCompatActivity {
+/**
+ *  播放主Activity
+ */
+public class PlayerActivity extends BaseFragmentActivity {
     private static PlayerActivity context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_main);
-        context=this;
+        context = this;
+        // 处理播放器闪屏
         BVideoView videoView = (BVideoView) findViewById(R.id.video_view);
         videoView.setVideoPath(null);
         videoView.start();
         videoView.stopPlayback();
         videoView.setVisibility(View.GONE);
-
+        // 适配顶栏样式
         setType();
         PlayerActivity.open(new PlayerFragment());
     }
+
     // 适配顶栏样式
     private void setType() {
         String a = android.os.Build.VERSION.RELEASE;
@@ -49,6 +54,10 @@ public class PlayerActivity extends AppCompatActivity {
         }
     }
 
+    /**
+     * 打开一个新的fragment
+     * @param frg
+     */
     public static void open(Fragment frg) {
         context.getSupportFragmentManager().beginTransaction()
                 .add(R.id.fragment_content, frg)
@@ -56,21 +65,25 @@ public class PlayerActivity extends AppCompatActivity {
                 .commit();
     }
 
+    /**
+     * 关闭当前fragment
+     */
     public static void close() {
         context.getSupportFragmentManager().popBackStack();
     }
 
-    public static void hideShow(Fragment from,Fragment to) {
+    public static void hideShow(Fragment from, Fragment to) {
         context.getSupportFragmentManager().beginTransaction().
                 hide(from).show(to).commit();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
 
     /*
-	 * 手机实体返回按键的处理,硬件不加入
+     * 手机实体返回按键的处理,硬件不加入
 	 */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

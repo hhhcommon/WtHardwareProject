@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical" >
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+
+            <TextView
+                android:id="@+id/tv_add"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:gravity="center"
+                android:text="添加新成员"
+                android:background="@color/white"
+                android:textColor="@color/dinglan_orange" />
+       <View
+           android:layout_width="match_parent"
+           android:layout_height="1dp"
+           android:background="@color/fengexian"
+           />
+        <TextView
+            android:id="@+id/tv_del"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:gravity="center"
+            android:text="删除群成员"
+            android:background="@color/white"
+            android:textColor="@color/BLACK" />
+
+        <TextView
+           android:id="@+id/tv_cancel"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="取消"
+            android:background="@color/white"
+            android:textColor="@color/BLACK" />
+
+
+
+    </LinearLayout>
+
+</LinearLayout>

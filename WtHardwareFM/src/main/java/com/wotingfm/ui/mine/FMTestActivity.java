@@ -15,6 +15,7 @@ import com.mediatek.engineermode.io.EmGpio;
 import com.wotingfm.R;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidParameterException;
 
 import android_serialport_api.ComBean;
@@ -24,9 +25,9 @@ import android_serialport_api.SerialHelper;
  * FM 测试界面
  */
 public class FMTestActivity extends Activity {
-    final int GPIO_DEVICE_OPEN = 12;
-    final int GPIO_AUDIO_EN = 58;
-    final int GPIO_PTT = 59;
+    final static int GPIO_DEVICE_OPEN = 12;
+    final static int GPIO_AUDIO_EN = 58;
+    final static int GPIO_PTT = 59;
     //	final int DEVICE_OPEN = 1;
 //	final int DEVICE_CLOSE = 0;
 //	final int AUDIO_OPEN = 1;
@@ -206,7 +207,7 @@ public class FMTestActivity extends Activity {
 //				EmGpio.getCurrent(GPIO_PTT)));
     }
 
-    public void openDevice() {
+    public static void openDevice() {
         EmGpio.setGpioDataHigh(GPIO_DEVICE_OPEN);//开机
         EmGpio.setGpioDataHigh(GPIO_AUDIO_EN);
         EmGpio.setGpioDataHigh(GPIO_PTT);
@@ -264,7 +265,15 @@ public class FMTestActivity extends Activity {
                 @Override
                 public void run() {
                 /*    ((TextView) findViewById(R.id.text_recv)).setText(new String(ComRecData.bRec));*/
-                    Log.e("0000===7889", "=======123============" + new String(ComRecData.bRec));
+                    try {
+                        Log.e("0000===7889", "=======123============" + new String(ComRecData.bRec).getBytes("utf-8"));
+                        byte[] b = ComRecData.bRec;
+                        for (int i = 0; i < b.length; i++) {
+                            Log.e("硬件反馈消息===","["+i+"]==="+ b[i]);
+                        }
+                    } catch (UnsupportedEncodingException e) {
+                        e.printStackTrace();
+                    }
                 }
             });
 //            String string = new String(ComRecData.bRec);

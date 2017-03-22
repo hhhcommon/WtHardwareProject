@@ -88,7 +88,10 @@
                         android:layout_marginTop="2dp"
                         android:text="ID:000000"
                         android:textColor="@color/beijing"
-                        android:textSize="11sp" />
+                        android:textSize="11sp"
+                        android:visibility="gone"
+
+                        />
 
                     <TextView
                         android:id="@+id/tv_b_name"
@@ -98,6 +101,7 @@
                         android:ellipsize="end"
                         android:singleLine="true"
                         android:text="朋友"
+                        android:visibility="gone"
                         android:textColor="@color/beijing"
                         android:textSize="13sp" />
                 </LinearLayout>

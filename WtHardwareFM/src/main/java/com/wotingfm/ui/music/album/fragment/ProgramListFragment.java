@@ -129,13 +129,16 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
         listAlbum.setPullRefreshEnable(false);
         listAlbum.setXListViewListener(this);
 
-        viewStatus = rootView.findViewById(R.id.lin_status2);// 下载状态
-        textSum = (TextView) rootView.findViewById(R.id.tv_sum);// 选择下载的数量
-        rootView.findViewById(R.id.tv_quxiao).setOnClickListener(this);// 取消下载
-        listDownload = (ListView) rootView.findViewById(R.id.lv_download);// 下载列表
-        imageAllCheck = (ImageView) rootView.findViewById(R.id.img_quanxuan);// 全选图标
-        rootView.findViewById(R.id.lin_quanxuan).setOnClickListener(this);// 全选
-        rootView.findViewById(R.id.tv_download).setOnClickListener(this);// 开始下载
+        viewStatus = rootView.findViewById(R.id.lin_status2);                     // 下载状态
+        textSum = (TextView) rootView.findViewById(R.id.tv_sum);                  // 选择下载的数量
+        rootView.findViewById(R.id.tv_quxiao).setOnClickListener(this);           // 取消下载
+        listDownload = (ListView) rootView.findViewById(R.id.lv_download);        // 下载列表
+        imageAllCheck = (ImageView) rootView.findViewById(R.id.img_quanxuan);     // 全选图标
+        rootView.findViewById(R.id.lin_quanxuan).setOnClickListener(this);        // 全选
+        rootView.findViewById(R.id.tv_download).setOnClickListener(this);         // 开始下载
+
+
+        rootView.findViewById(R.id.imageView5).setOnClickListener(this);          //播放全部专辑内容
 
         setListener();
 
@@ -299,6 +302,9 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
                     imageSortDown.setVisibility(View.GONE);
                     imageSort.setVisibility(View.VISIBLE);
                 }
+                break;
+            case R.id.imageView5: //专辑播放
+                ToastUtils.show_always(context,"播放本专辑内容");
                 break;
         }
     }

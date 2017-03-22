@@ -27,32 +27,48 @@
             android:textSize="@dimen/text_size_15"/>
 
         <ImageView
-            android:id="@+id/img_download"
+            android:id="@+id/imageView5"
             android:layout_width="42dp"
             android:layout_height="match_parent"
             android:padding="6dp"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="15dp"
-            android:src="@mipmap/image_down_load"/>
+            android:layout_marginRight="10dp"
+            android:src="@mipmap/img_album_playall"/>
+
+        <ImageView
+            android:id="@+id/img_download"
+            android:layout_width="42dp"
+            android:layout_height="match_parent"
+            android:padding="6dp"
+            android:src="@mipmap/image_down_load"
+            android:layout_marginRight="5dp"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/imageView5"
+            android:layout_toStartOf="@+id/imageView5" />
 
         <ImageView
             android:id="@+id/img_sort"
             android:layout_width="42dp"
             android:layout_height="match_parent"
-            android:layout_toLeftOf="@id/img_download"
             android:padding="6dp"
-            android:layout_marginRight="6dp"
             android:src="@mipmap/image_sort"
-            android:visibility="visible"/>
+            android:visibility="visible"
+            android:layout_alignParentTop="true"
+            android:layout_marginRight="5dp"
+            android:layout_toLeftOf="@+id/img_download"
+            android:layout_toStartOf="@+id/img_download"
+           />
 
         <ImageView
             android:id="@+id/img_sort_down"
             android:layout_width="42dp"
             android:layout_height="match_parent"
-            android:layout_toLeftOf="@id/img_download"
             android:padding="6dp"
             android:src="@mipmap/img_sort_down"
-            android:visibility="gone"/>
+            android:visibility="gone"
+            android:layout_alignParentTop="true"
+            android:layout_toLeftOf="@+id/img_download"
+            android:layout_toStartOf="@+id/img_download" />
 
         <View
             android:id="@+id/text_view"

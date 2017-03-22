@@ -19,6 +19,7 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.main.MainActivity;
@@ -76,6 +77,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             dialog = DialogUtils.Dialogph(context, "正在获取数据");
             sendRequest();
+            getImage();
         } else {
             tipView.setVisibility(View.VISIBLE);
             tipView.setTipView(TipView.TipStatus.NO_NET);
@@ -101,7 +103,6 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
             });
             tipView = (TipView) rootView.findViewById(R.id.tip_view);
             tipView.setWhiteClick(this);
-            getImage();
             View headView = LayoutInflater.from(context).inflate(R.layout.headview_acitivity_radiolist, null);
             // 轮播图
             mLoopViewPager = (RollPagerView) headView.findViewById(R.id.slideshowView);
@@ -121,6 +122,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
                     dialog = DialogUtils.Dialogph(context, "正在获取数据");
                 }
                 sendRequest();
+                getImage();
                 isFirst = false;
             } else {
                 tipView.setVisibility(View.VISIBLE);
@@ -311,6 +313,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
                             Bundle bundle = new Bundle();
                             bundle.putString("type", "radiolistactivity");
                             bundle.putSerializable("list", newList.get(position - 2));
+                            bundle.putString(StringConstant.JUMP_TYPE, "program");
                             fg_album.setArguments(bundle);
                             ProgramActivity.open(fg_album);
 

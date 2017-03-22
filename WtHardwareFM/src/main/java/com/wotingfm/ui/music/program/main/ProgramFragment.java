@@ -1,3 +1,4 @@
+
 package com.wotingfm.ui.music.program.main;
 
 import android.graphics.BitmapFactory;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 
 /**
  * 节目页
+ *
  * @author 辛龙
  *         2016年2月26日
  */
@@ -62,19 +64,26 @@ public class ProgramFragment extends Fragment {
     }
 
     private void initTextView() {
-        view1 = (TextView) rootView.findViewById(R.id.tv_guid1);
-        view2 = (TextView) rootView.findViewById(R.id.tv_guid2);
-        view3 = (TextView) rootView.findViewById(R.id.tv_guid3);
-        view1.setOnClickListener(new txListener(0));
-        view2.setOnClickListener(new txListener(1));
-        view3.setOnClickListener(new txListener(2));
-
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 MainActivity.changeOne();
             }
         });
+        rootView.findViewById(R.id.lin_find).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                MainActivity.SearchLikeActivityJumpType=2;
+                MainActivity.changeFive();
+            }
+        });
+
+        view1 = (TextView) rootView.findViewById(R.id.tv_guid1);
+        view2 = (TextView) rootView.findViewById(R.id.tv_guid2);
+        view3 = (TextView) rootView.findViewById(R.id.tv_guid3);
+        view1.setOnClickListener(new txListener(0));
+        view2.setOnClickListener(new txListener(1));
+        view3.setOnClickListener(new txListener(2));
     }
 
     public class txListener implements View.OnClickListener {
@@ -153,30 +162,18 @@ public class ProgramFragment extends Fragment {
     private void initViews(int index) {
         if (index == 0) {
             view1.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-            view2.setTextColor(context.getResources().getColor(R.color.white));
-            view3.setTextColor(context.getResources().getColor(R.color.white));
-            view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
-            view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
-            view3.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
+            view2.setTextColor(context.getResources().getColor(R.color.group_item_text2));
+            view3.setTextColor(context.getResources().getColor(R.color.group_item_text2));
         } else if (index == 1) {
-            view1.setTextColor(context.getResources().getColor(R.color.white));
+            view1.setTextColor(context.getResources().getColor(R.color.group_item_text2));
             view2.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-            view3.setTextColor(context.getResources().getColor(R.color.white));
-            view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
-            view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
-            view3.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
+            view3.setTextColor(context.getResources().getColor(R.color.group_item_text2));
         } else if (index == 2) {
-            view1.setTextColor(context.getResources().getColor(R.color.white));
-            view2.setTextColor(context.getResources().getColor(R.color.white));
+            view1.setTextColor(context.getResources().getColor(R.color.group_item_text2));
+            view2.setTextColor(context.getResources().getColor(R.color.group_item_text2));
             view3.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-            view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
-            view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
-            view3.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
         }
     }
-
-
-
 
     @Override
     public void onDestroyView() {

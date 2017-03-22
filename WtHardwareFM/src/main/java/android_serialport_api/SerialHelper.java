@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.security.InvalidParameterException;
 
 
@@ -254,5 +255,5 @@ public abstract class SerialHelper{
 		}
 	}
 	//----------------------------------------------------
-	protected abstract void onDataReceived(ComBean ComRecData);
+	protected abstract void onDataReceived(ComBean ComRecData) throws UnsupportedEncodingException;
 }

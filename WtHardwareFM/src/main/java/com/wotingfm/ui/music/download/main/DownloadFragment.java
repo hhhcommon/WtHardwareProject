@@ -29,6 +29,7 @@ public class DownloadFragment extends Fragment implements OnClickListener {
     public static Boolean isVisible = false;
     private FragmentActivity context;
     private View rootView;
+    private TextView textVoice;
 
     @Override
     public void onClick(View v) {
@@ -62,6 +63,7 @@ public class DownloadFragment extends Fragment implements OnClickListener {
         rootView.findViewById(R.id.lin_news).setOnClickListener(this);// 返回
 
         textCompleted = (TextView) rootView.findViewById(R.id.tv_completed);
+        textVoice = (TextView) rootView.findViewById(R.id.tv_voice);
         textUncompleted = (TextView) rootView.findViewById(R.id.tv_uncompleted);
         mViewPager = (ViewPager) rootView.findViewById(R.id.viewpager);
     }
@@ -70,35 +72,39 @@ public class DownloadFragment extends Fragment implements OnClickListener {
     private void initViewPager() {
         ArrayList<Fragment> fragmentList = new ArrayList<>();
         fragmentList.add(new DownLoadCompletedFragment());
+        fragmentList.add(new DownLoadCompletedFragment());
         fragmentList.add(new DownLoadUnCompletedFragment());
         mViewPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), fragmentList));
         mViewPager.setOnPageChangeListener(new MyOnPageChangeListener());
         mViewPager.setCurrentItem(0);
         mViewPager.setOffscreenPageLimit(1);
         textCompleted.setOnClickListener(new DownloadClickListener(0));
-        textUncompleted.setOnClickListener(new DownloadClickListener(1));
+        textVoice.setOnClickListener(new DownloadClickListener(1));
+        textUncompleted.setOnClickListener(new DownloadClickListener(2));
     }
 
     // 更新界面
-    private void updateView(int index) {
-        if (index == 0) {
-            handleView(index);
-        } else if (index == 1) {
-            handleView(index);
-        }
-    }
+//    private void updateView(int index) {
+//        if (index == 0) {
+//            handleView(index);
+//        } else if (index == 1) {
+//            handleView(index);
+//        }
+//    }
 
     private void handleView(int index) {
         if (index == 0) {
-            textCompleted.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-            textCompleted.setBackgroundResource(R.drawable.color_wt_circle_home_white);
-            textUncompleted.setTextColor(context.getResources().getColor(R.color.white));
-            textUncompleted.setBackgroundResource(R.drawable.color_wt_circle_orange);
-        } else {
-            textUncompleted.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-            textUncompleted.setBackgroundResource(R.drawable.color_wt_circle_home_white);
             textCompleted.setTextColor(context.getResources().getColor(R.color.white));
-            textCompleted.setBackgroundResource(R.drawable.color_wt_circle_orange);
+            textVoice.setTextColor(context.getResources().getColor(R.color.text_light_gray));
+            textUncompleted.setTextColor(context.getResources().getColor(R.color.text_light_gray));
+        } else if (index ==1) {
+            textCompleted.setTextColor(context.getResources().getColor(R.color.text_light_gray));
+            textVoice.setTextColor(context.getResources().getColor(R.color.white));
+            textUncompleted.setTextColor(context.getResources().getColor(R.color.text_light_gray));
+        }  else {
+            textCompleted.setTextColor(context.getResources().getColor(R.color.text_light_gray));
+            textVoice.setTextColor(context.getResources().getColor(R.color.text_light_gray));
+            textUncompleted.setTextColor(context.getResources().getColor(R.color.white));
         }
     }
 
@@ -113,7 +119,7 @@ public class DownloadFragment extends Fragment implements OnClickListener {
         @Override
         public void onClick(View v) {
             mViewPager.setCurrentItem(index);        // 界面切换字体的改变
-            updateView(index);
+            handleView(index);
         }
     }
 
@@ -129,7 +135,7 @@ public class DownloadFragment extends Fragment implements OnClickListener {
 
         @Override
         public void onPageSelected(int arg0) {
-            updateView(arg0);
+            handleView(arg0);
         }
     }
 

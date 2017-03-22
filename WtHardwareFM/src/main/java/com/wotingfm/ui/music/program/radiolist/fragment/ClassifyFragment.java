@@ -19,6 +19,7 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.main.MainActivity;
@@ -26,6 +27,7 @@ import com.wotingfm.ui.music.album.main.AlbumFragment;
 import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
+import com.wotingfm.ui.music.program.radiolist.adapter.ForNullAdapter;
 import com.wotingfm.ui.music.program.radiolist.adapter.ListInfoAdapter;
 import com.wotingfm.ui.music.program.radiolist.adapter.LoopAdapter;
 import com.wotingfm.ui.music.program.radiolist.main.RadioListFragment;
@@ -71,11 +73,13 @@ public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick
     private String CatalogId;
     private String CatalogType;
     private RollPagerView mLoopViewPager;
+    private List<Image> imageList;
 
     @Override
     public void onWhiteViewClick() {
         dialog = DialogUtils.Dialogph(context, "正在获取数据");
         sendRequest();
+        getImage();
     }
 
     /**
@@ -112,7 +116,7 @@ public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick
             });
             tipView = (TipView) rootView.findViewById(R.id.tip_view);
             tipView.setWhiteClick(this);
-            getImage();
+            
             View headView = LayoutInflater.from(context).inflate(R.layout.headview_acitivity_radiolist, null);
             // 轮播图
             mLoopViewPager = (RollPagerView) headView.findViewById(R.id.slideshowView);
@@ -131,6 +135,7 @@ public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick
         if (isVisibleToUser && adapter == null && getActivity() != null) {
             dialog = DialogUtils.Dialogph(context, "正在获取数据");
             sendRequest();
+            getImage();
         }
         super.setUserVisibleHint(isVisibleToUser);
     }
@@ -209,22 +214,29 @@ public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick
                         tipView.setVisibility(View.GONE);
                     } catch (Exception e) {
                         e.printStackTrace();
-                        if (refreshType == 1) {
-                            tipView.setVisibility(View.VISIBLE);
-                            tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                        mListView.setAdapter( new ForNullAdapter(context));
+                        if (imageList == null) {
+                            if (refreshType == 1) {
+                                tipView.setVisibility(View.VISIBLE);
+                                tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                            }
                         }
                     }
 
-                    if (refreshType == 1) {
-                        mListView.stopRefresh();
-                    } else {
-                        mListView.stopLoadMore();
-                    }
+                 
                 } else {
-                    if (refreshType == 1) {
-                        tipView.setVisibility(View.VISIBLE);
-                        tipView.setTipView(TipView.TipStatus.NO_DATA, "数据君不翼而飞了\n点击界面会重新获取数据哟");
+                    mListView.setAdapter(new ForNullAdapter(context));
+                    if (imageList == null) {
+                        if (refreshType == 1) {
+                            tipView.setVisibility(View.VISIBLE);
+                            tipView.setTipView(TipView.TipStatus.NO_DATA, "数据君不翼而飞了\n点击界面会重新获取数据哟");
+                        }
                     }
+                }
+                if (refreshType == 1) {
+                    mListView.stopRefresh();
+                } else {
+                    mListView.stopLoadMore();
                 }
             }
 
@@ -309,6 +321,7 @@ public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "radiolistactivity");
                         bundle.putSerializable("list", newList.get(position - 2));
+                        bundle.putString(StringConstant.JUMP_TYPE, "program");
                         fg_album.setArguments(bundle);
 
                         ProgramActivity.open(fg_album);
@@ -377,7 +390,7 @@ public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
-                        List<Image> imageList = new Gson().fromJson(result.getString("LoopImgs"), new TypeToken<List<Image>>() {
+                         imageList = new Gson().fromJson(result.getString("LoopImgs"), new TypeToken<List<Image>>() {
                         }.getType());
                         mLoopViewPager.setAdapter(new LoopAdapter(mLoopViewPager, context, imageList));
                         mLoopViewPager.setHintView(new IconHintView(context, R.mipmap.indicators_now, R.mipmap.indicators_default));

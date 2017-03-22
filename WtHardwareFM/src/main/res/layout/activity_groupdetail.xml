@@ -37,7 +37,7 @@
 
     </RelativeLayout>
 
-    <ScrollView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/WHITE"
@@ -46,7 +46,7 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -83,11 +83,10 @@
                     android:layout_width="42dp"
                     android:layout_height="42dp"
                     android:src="@mipmap/xiugai"
-                    android:layout_below="@+id/tv_name"
-                    android:layout_alignParentRight="true"
-                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
                     android:layout_marginRight="10dp"
-                    />
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentEnd="true" />
 
                 <TextView
                     android:id="@+id/tv_id"
@@ -97,10 +96,10 @@
                     android:maxWidth="200dp"
                     android:paddingRight="30dp"
                     android:text="群号:100001"
-                    android:layout_marginTop="3dp"
                     android:textColor="@color/WHITE"
-                    android:textSize="12sp"
-                    android:layout_below="@+id/tv_name"
+                    android:textSize="14sp"
+                    android:layout_marginBottom="5dp"
+                    android:layout_centerVertical="true"
                     android:layout_toRightOf="@+id/rv_touxiang"
                     android:layout_toEndOf="@+id/rv_touxiang" />
 
@@ -116,9 +115,10 @@
                     android:maxWidth="200dp"
                     android:singleLine="true"
                     android:text="我听科技"
+                    android:layout_marginBottom="5dp"
                     android:textColor="@color/WHITE"
                     android:textSize="14sp"
-                    android:layout_alignParentTop="true"
+                    android:layout_above="@+id/tv_id"
                     android:layout_toRightOf="@+id/rv_touxiang"
                     android:layout_toEndOf="@+id/rv_touxiang" />
 
@@ -133,8 +133,7 @@
                     android:paddingRight="30dp"
                     android:text="群名称"
                     android:textColor="@color/WHITE"
-                    android:layout_marginTop="3dp"
-                    android:textSize="12sp"
+                    android:textSize="14sp"
                     android:layout_below="@+id/tv_id"
                     android:layout_toRightOf="@+id/rv_touxiang"
                     android:layout_toEndOf="@+id/rv_touxiang" />
@@ -154,6 +153,7 @@
                     android:textColor="@color/WHITE"
                     android:layout_marginTop="3dp"
                     android:textSize="12sp"
+                    android:visibility="gone"
                     android:layout_below="@+id/et_b_name"
                     android:layout_toRightOf="@+id/rv_touxiang"
                     android:layout_toEndOf="@+id/rv_touxiang" />
@@ -168,6 +168,7 @@
 
             <RelativeLayout
                 android:id="@+id/linear_channel"
+                android:layout_marginTop="5dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/WHITE">
@@ -179,6 +180,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginTop="5dp"
                     android:text="备用频道"
+                    android:layout_marginBottom="5dp"
                     android:textColor="@color/beijing"
                     android:textSize="15sp"/>
 
@@ -198,19 +200,22 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="30dp"
-                    android:text="设备备用频道1: "
-                    android:textColor="@color/beijing"
-                    android:textSize="15sp"/>
+                    android:layout_marginRight="5dp"
+                    android:layout_marginTop="28dp"
+                    android:text=" 1 "
+                    android:background="@color/dinglan_orange"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"/>
 
                 <TextView
                     android:id="@+id/text_channel_one"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginRight="12dp"
-                    android:layout_marginTop="30dp"
+                    android:layout_marginTop="28dp"
                     android:layout_toRightOf="@id/text_channel1"
                     android:hint="尚未选择对讲频道"
+                    android:textSize="16sp"
                     android:textColor="@color/group_4b"
                     android:textColorHint="@color/beijing"
                     android:visibility="visible"/>
@@ -221,9 +226,8 @@
                     android:layout_height="wrap_content"
                     android:layout_marginRight="12dp"
                     android:layout_marginTop="7dp"
+                    android:layout_marginBottom="10dp"
                     android:textColor="@color/group_4b"
-
-                    android:layout_toRightOf="@id/text_channel1"
                     android:visibility="visible"
                     />
 
@@ -232,12 +236,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/text_channel1"
-                    android:layout_marginBottom="17dp"
+                    android:layout_marginBottom="7dp"
                     android:layout_marginLeft="10dp"
-                    android:layout_marginTop="5dp"
-                    android:text="设备备用频道2: "
-                    android:textColor="@color/beijing"
-                    android:textSize="15sp"/>
+                    android:layout_marginTop="10dp"
+                    android:layout_marginRight="5dp"
+                    android:text=" 2 "
+                    android:background="@color/dinglan_orange"
+                    android:textColor="@color/white"
+                    android:textSize="13sp"/>
 
                 <TextView
                     android:id="@+id/text_channel_two"
@@ -247,6 +253,7 @@
                     android:layout_toEndOf="@+id/text_channel2"
                     android:layout_toRightOf="@+id/text_channel2"
                     android:hint="尚未选择对讲频道"
+                    android:textSize="16sp"
                     android:textColorHint="@color/beijing"
                     android:textColor="@color/group_4b"
                     android:visibility="visible"/>
@@ -256,8 +263,10 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@color/gray_z"/>
+                android:layout_height="1dp"
+                android:background="@color/fengexian"
+
+                android:layout_marginTop="10dp"/>
 
             <RelativeLayout
                 android:id="@+id/rl_allperson"
@@ -342,12 +351,12 @@
 
             <TextView
                 android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@color/gray_z"/>
+                android:layout_height="1dp"
+                android:background="@color/fengexian"/>
             <RelativeLayout
                 android:id="@+id/rl_group_manager"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="48dp"
                 android:background="@color/white"
                 android:visibility="visible">
 
@@ -361,63 +370,32 @@
                     android:textColor="@color/beijing"
                     android:textSize="14sp"/>
 
-                <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_gravity="right|center"
-                    android:layout_marginRight="10dp"
-                    android:src="@mipmap/live_more"/>
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="0.1dp"
+                    android:layout_height="1dp"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
-                    android:background="@color/gray_z"/>
-
-            </RelativeLayout>
-            <RelativeLayout
-                android:id="@+id/lin_ewm"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:visibility="gone">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="48dp"
-                    android:layout_marginLeft="10dp"
-                    android:gravity="center"
-                    android:text="二维码"
-                    android:textColor="@color/beijing"
-                    android:textSize="14sp"/>
-
-                <ImageView
-                    android:id="@+id/img_ewm"
-                    android:layout_width="30dp"
-                    android:layout_height="30dp"
-                    android:layout_centerInParent="true"
-                    android:scaleType="centerCrop"
-                    android:src="@mipmap/ewm"/>
+                    android:background="@color/fengexian"/>
 
             </RelativeLayout>
 
-            <TextView
+
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0.1dp"
-                android:background="@color/gray_z"/>
+                android:layout_height="match_parent"
+                android:layout_gravity="bottom"
+                >
             <RelativeLayout
                 android:id="@+id/imageView4"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
-                android:layout_marginBottom="5dp"
                 android:layout_marginLeft="15dp"
                 android:layout_marginRight="15dp"
-                android:layout_marginTop="30dp"
+                android:layout_gravity="bottom"
+                android:layout_marginBottom="15dp"
                 android:background="@drawable/wt_commit_button_background">
 
                 <ImageView
@@ -446,11 +424,9 @@
                     android:layout_toEndOf="@+id/imageView2" />
 
             </RelativeLayout>
-
-
-
+        </LinearLayout>>
         </LinearLayout>
 
-    </ScrollView>
+    </LinearLayout>
 
 </LinearLayout>

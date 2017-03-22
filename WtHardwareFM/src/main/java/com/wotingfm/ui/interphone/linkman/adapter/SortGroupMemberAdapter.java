@@ -90,24 +90,24 @@ public class SortGroupMemberAdapter extends BaseAdapter implements SectionIndexe
 			holder.indexLayut.setVisibility(View.GONE);
 		}
 
-		if (lists.getUserNum()== null || lists.getUserNum().equals("")) {
+	/*	if (lists.getUserNum()== null || lists.getUserNum().equals("")) {
 			holder.tv_b_id.setVisibility(View.GONE);
 		} else {
 		holder.tv_b_id.setVisibility(View.VISIBLE);
 			holder.tv_b_id.setText("ID: "+lists.getUserNum());//id
-		}
+		}*/
 
 		if (lists.getUserName() == null || lists.getUserName().equals("")) {
 			holder.tv_name.setText("未知");//名
 		} else {
 			holder.tv_name.setText(lists.getUserName());//名
 		}
-		if (lists.getUserAliasName() == null || lists.getUserAliasName().equals("")) {
+		/*if (lists.getUserAliasName() == null || lists.getUserAliasName().equals("")) {
 			holder.tv_b_name.setVisibility(View.GONE);
 		} else {
 			holder.tv_b_name.setVisibility(View.VISIBLE);
 			holder.tv_b_name.setText(lists.getUserAliasName());//名
-		}
+		}*/
 
 		if (lists.getPortraitMini() == null || lists.getPortraitMini().equals("") || lists.getPortraitMini().equals("null") || lists.getPortraitMini().trim().equals("")) {
 			Bitmap bmp = BitmapUtils.readBitMap(mContext, R.mipmap.wt_image_tx_hy);

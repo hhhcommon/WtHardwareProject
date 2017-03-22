@@ -549,6 +549,7 @@
     <color name="sunday_saturday_color">#80BFFF</color>
     <color name="sunday_saturday_prev_next_month_day_color">#990000</color>
     <color name="white">#ffffff</color>
+    <color name="text_light_gray">#ffb583</color>
     <color name="white_hui">#ADADAD</color>
     <color name="black">#000000</color>
     <color name="bgcolor">#ffffff</color>

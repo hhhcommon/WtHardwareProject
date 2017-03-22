@@ -19,6 +19,7 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.main.MainActivity;
@@ -28,7 +29,6 @@ import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.ui.music.program.radiolist.adapter.LoopAdapter;
-import com.wotingfm.ui.music.program.radiolist.main.RadioListFragment;
 import com.wotingfm.ui.music.program.radiolist.model.Image;
 import com.wotingfm.ui.music.program.tuijian.adapter.RecommendListAdapter;
 import com.wotingfm.util.CommonUtils;
@@ -78,6 +78,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
     public void onWhiteViewClick() {
         dialog = DialogUtils.Dialogph(context, "数据加载中...");
         sendRequest();
+        getImage();
     }
 
     // 初始化数据库命令执行对象
@@ -104,7 +105,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
             });
             tipView = (TipView) rootView.findViewById(R.id.tip_view);
             tipView.setWhiteClick(this);
-            getImage();
+
             mListView = (XListView) rootView.findViewById(R.id.listView);
             headView = LayoutInflater.from(context).inflate(R.layout.headview_fragment_recommend, null);
             // 轮播图
@@ -114,6 +115,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
 
             initListView();
             sendRequest();
+            getImage();
         }
         return rootView;
     }
@@ -286,6 +288,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "recommend");
                         bundle.putSerializable("list", newList.get(position - 2));
+                        bundle.putString(StringConstant.JUMP_TYPE, "program");
                         fg.setArguments(bundle);
 
                         ProgramActivity.open(fg);
@@ -315,13 +318,13 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        VolleyRequest.RequestPost(GlobalConfig.getImage, RadioListFragment.tag, jsonObject, new VolleyCallback() {
+        VolleyRequest.RequestPost(GlobalConfig.getImage, tag, jsonObject, new VolleyCallback() {
             private String ReturnType;
 
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) dialog.dismiss();
-                if (RadioListFragment.isCancel()) return;
+                if (isCancelRequest) return;
                 try {
                     ReturnType = result.getString("ReturnType");
                 } catch (JSONException e) {

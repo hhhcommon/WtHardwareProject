@@ -96,7 +96,6 @@
             android:layout_height="0dp"
             android:layout_weight="1"
             android:background="@color/WHITE"
-            android:layout_marginBottom="20dp"
             android:gravity="center">
 
             <TextView
@@ -149,7 +148,54 @@
                 android:drawablePadding="10dp"/>
 
         </LinearLayout>
+        <LinearLayout
+            android:id="@+id/view_linear_4"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:background="@color/WHITE"
+            android:gravity="center">
 
+            <TextView
+                android:id="@+id/tv_accuse"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="举报"
+                android:textSize="18sp"
+                android:textColor="@color/wt_login_third"
+                android:drawableTop="@mipmap/wt_image_play_more_down"
+                android:gravity="center"
+                android:drawablePadding="10dp"/>
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+            <TextView
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text_line_1"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="18dp"
+                android:background="@color/app_bg"/>
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/text_line_1"/>
+        </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"

@@ -104,8 +104,6 @@ public class MainActivity extends TabActivity {
     private String mPageName = "MainActivity";
     private int upDataType = 1;      // 1,不需要强制升级2，需要强制升级
     private boolean isCancelRequest;
-    private List<CatalogName> list;
-    private List<Freq> freqList;
 
     private static Intent Socket, VoiceStreamRecord, VoiceStreamPlayer, Location, Subclass, Download, Notification, TestFloatingWindow, FloatingWindow;
 
@@ -118,25 +116,7 @@ public class MainActivity extends TabActivity {
     public static DBTalkHistorary talkdb;
     private SearchTalkHistoryDao talkDao;
     private Intent Simulation;
-
-    private void setType() {
-        try {
-            String a = android.os.Build.VERSION.RELEASE;
-            Log.e("系统版本号", a + "");
-            Log.e("系统版本号截取", a.substring(0, a.indexOf(".")) + "");
-            boolean v = false;
-            if (Integer.parseInt(a.substring(0, a.indexOf("."))) >= 5) {
-                v = true;
-            }
-            if (v) {
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        //透明状态栏
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    //透明导航栏
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-    }
+    public static int SearchLikeActivityJumpType=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,14 +130,14 @@ public class MainActivity extends TabActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
-                createService();
+                createService();    // 启动服务
                 registerReceiver(); // 注册广播
             }
         }, 0);
 
         update();           // 获取版本数据
         InitTextView();     // 设置界面
-        InitDao();          // 加载数据库
+        InitData();         // 加载数据
         setType();
         // mask();          // 蒙版
 
@@ -167,6 +147,7 @@ public class MainActivity extends TabActivity {
         WtDeviceControl mControl = new WtDeviceControl(context);
         GlobalConfig.device = mControl;
 
+        // 是否是第一次打开该应用----打开偏好设置
         if (!BSApplication.SharedPreferences.getBoolean(StringConstant.FAVORITE_PROGRAM_TYPE, false)) {
             startActivity(new Intent(context, FavoriteProgramTypeActivity.class));
         }
@@ -212,12 +193,34 @@ public class MainActivity extends TabActivity {
 
     }
 
+
+    private void setType() {
+        try {
+            String a = android.os.Build.VERSION.RELEASE;
+            Log.e("系统版本号", a + "");
+            Log.e("系统版本号截取", a.substring(0, a.indexOf(".")) + "");
+            boolean v = false;
+            if (Integer.parseInt(a.substring(0, a.indexOf("."))) >= 5) {
+                v = true;
+            }
+            if (v) {
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        //透明状态栏
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    //透明导航栏
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
     //接收定时服务发送过来的广播  用于结束应用
     private BroadcastReceiver endApplicationBroadcast = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (action.equals(BroadcastConstants.ACTIVITY_CHANGE)) {
+                // 按钮切换-----档位切换广播
                 if (GlobalConfig.activityType == 1) {
                     if (ProgramActivity.context != null) {
                         tabHost.setCurrentTabByTag("four");
@@ -256,8 +259,7 @@ public class MainActivity extends TabActivity {
                                             String groupList = arg1.getString("GroupList");
 
                                             try {
-                                                List<MessageForMainGroup> gList = null;
-                                                gList = new Gson().fromJson(groupList, new TypeToken<List<MessageForMainGroup>>() {
+                                                List<MessageForMainGroup> gList = new Gson().fromJson(groupList, new TypeToken<List<MessageForMainGroup>>() {
                                                 }.getType());
                                                 if (gList != null && gList.size() > 0) {
                                                     try {
@@ -429,8 +431,8 @@ public class MainActivity extends TabActivity {
         });                                                  // 点击图层之后，将图层移除
     }
 
-    //加载数据库
-    private void InitDao() {
+    //加载数据库以及请求数据
+    private void InitData() {
         CID = new CityInfoDao(context);
         talkDao = new SearchTalkHistoryDao(context);
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
@@ -576,7 +578,7 @@ public class MainActivity extends TabActivity {
                                             mList.add(mFenLeiName);
                                         }
                                         //获取数据库中的地理位置数据
-                                        list = CID.queryCityInfo();
+                                        List<CatalogName> list = CID.queryCityInfo();
                                         if (list.size() == 0) {
                                             if (mList.size() != 0)
                                                 CID.InsertCityInfo(mList);  //将数据写入数据库
@@ -634,18 +636,20 @@ public class MainActivity extends TabActivity {
                 if (isCancelRequest) return;
                 try {
                     String ReturnType = result.getString("ReturnType");
-                    //Log.v("ReturnType", "ReturnType -- > > " + ReturnType);
-                    if(!TextUtils.isEmpty(ReturnType)){
+                    if (!TextUtils.isEmpty(ReturnType)) {
                         if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
-                            String ResultList = result.getString("CatalogData");
-                            List<Freq> freqList = new Gson().fromJson(ResultList, new TypeToken<List<Freq>>() {}.getType());
-                            GlobalConfig.FreqList=freqList;
-                            GlobalConfig.getFreq=true;
-                        } else {
-                            ToastUtils.show_always(context, "获取对讲频率失败");
+                            try {
+                                String ResultList = result.getString("CatalogData");
+                                List<Freq> freqList = new Gson().fromJson(ResultList, new TypeToken<List<Freq>>() {
+                                }.getType());
+                                GlobalConfig.FreqList = freqList;
+                                GlobalConfig.getFreq = true;
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
                         }
-                    }else{
-                        ToastUtils.show_always(context, "获取对讲频率失败");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -787,7 +791,6 @@ public class MainActivity extends TabActivity {
         Log.e("app退出", "app退出");
     }
 
-
     public void onPause() {
         super.onPause();
         MobclickAgent.onPageEnd(mPageName);
@@ -808,7 +811,6 @@ public class MainActivity extends TabActivity {
         unregisterReceiver(netWorkChangeReceiver);
         unregisterReceiver(endApplicationBroadcast);    // 取消注册广播
         stop();
-//        BSApplication.onStop();
         Log.v("--- Main ---", "--- 杀死进程 ---");
         //		ActivityManager manager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
         //		manager.killBackgroundProcesses("com.woting");
@@ -948,12 +950,12 @@ public class MainActivity extends TabActivity {
     private void addUser() {
         InterPhoneControlHelper.bdcallid = callId;
         //获取最新激活状态的数据
-        String addtime = Long.toString(System.currentTimeMillis());
+        String addTime = Long.toString(System.currentTimeMillis());
         String bjuserid = CommonUtils.getUserId(context);
         //如果该数据已经存在数据库则删除原有数据，然后添加最新数据
         talkDao.deleteHistory(callerId);
         Log.e("=====callerid======", callerId + "");
-        DBTalkHistorary history = new DBTalkHistorary(bjuserid, "user", callerId, addtime);
+        DBTalkHistorary history = new DBTalkHistorary(bjuserid, "user", callerId, addTime);
         talkDao.addTalkHistory(history);
         talkdb = talkDao.queryHistory().get(0);//得到数据库里边数据
         //对讲主页界面更新

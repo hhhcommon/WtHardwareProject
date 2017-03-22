@@ -13,7 +13,7 @@ import com.wotingfm.common.constant.CollocationConstant;
  */
 public class CollocationHelper {
 
-    private static String _PCDType = "1";
+    private static String _PCDType = "2";
     private static String _socketPort = "16789";
     private static String _uploadBaseUrl = "http://123.56.254.75:908/CM/";
     //	private static String socketUrl = "182.92.175.134";//生产服务器地址

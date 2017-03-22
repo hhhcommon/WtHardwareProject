@@ -35,6 +35,7 @@ import com.wotingfm.ui.music.player.model.LanguageSearchInside;
 import com.wotingfm.ui.music.player.more.playhistory.activity.PlayHistoryFragment;
 import com.wotingfm.ui.music.player.more.programme.ProgrammeFragment;
 import com.wotingfm.ui.music.player.more.subscribe.SubscriberListFragment;
+import com.wotingfm.ui.music.program.accuse.activity.AccuseFragment;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
@@ -100,14 +101,16 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
         viewLinearOne = rootView.findViewById(R.id.view_linear_1);
         viewLinearTwo = rootView.findViewById(R.id.view_linear_2);
 
-        textPlayName = (TextView) rootView.findViewById(R.id.text_play_name);// 當前正在播放的節目名
-        textLike = (TextView) rootView.findViewById(R.id.text_like);// 喜歡
-        textShape = (TextView) rootView.findViewById(R.id.text_shape);// 分享
-        textComment = (TextView) rootView.findViewById(R.id.text_comment);// 評論
-        textDetails = (TextView) rootView.findViewById(R.id.text_details);// 詳情
-        textProgram = (TextView) rootView.findViewById(R.id.text_program);// 播單
-        textDown = (TextView) rootView.findViewById(R.id.text_down);// 下載
-        textSequ = (TextView) rootView.findViewById(R.id.text_sequ);// 專輯
+        textPlayName = (TextView) rootView.findViewById(R.id.text_play_name);       // 當前正在播放的節目名
+        textLike = (TextView) rootView.findViewById(R.id.text_like);                // 喜歡
+        textShape = (TextView) rootView.findViewById(R.id.text_shape);              // 分享
+        textComment = (TextView) rootView.findViewById(R.id.text_comment);          // 評論
+        textDetails = (TextView) rootView.findViewById(R.id.text_details);          // 詳情
+        textProgram = (TextView) rootView.findViewById(R.id.text_program);          // 播單
+        textDown = (TextView) rootView.findViewById(R.id.text_down);                // 下載
+        textSequ = (TextView) rootView.findViewById(R.id.text_sequ);                // 專輯
+        rootView.findViewById(R.id.tv_accuse).setOnClickListener(this);             // 举报
+
 
         resetDate();// 設置 View
     }
@@ -227,6 +230,21 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                     PlayerActivity.open(fg_album);
                 } else {
                     ToastUtils.show_always(context, "此节目目前没有所属专辑");
+                }
+                break;
+            case R.id.tv_accuse:
+                if(GlobalConfig.playerObject!=null&&!TextUtils.isEmpty(GlobalConfig.playerObject.getContentId())){
+                    AccuseFragment fragment = new AccuseFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString("ContentId", GlobalConfig.playerObject.getContentId());
+                    if(!TextUtils.isEmpty(GlobalConfig.playerObject.getMediaType())) {
+                        bundle.putString("MediaType", "SEQU");
+                    }
+                    bundle.putString(StringConstant.JUMP_TYPE, "play");
+                    fragment.setArguments(bundle);
+                    PlayerActivity.open(fragment);
+                }else{
+                    ToastUtils.show_always(context,"获取本专辑信息有误，请回退回上一级界面重试");
                 }
                 break;
         }

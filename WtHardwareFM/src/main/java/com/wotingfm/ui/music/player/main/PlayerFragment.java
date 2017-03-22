@@ -62,7 +62,6 @@ import java.util.Locale;
 /**
  * 播放主页
  * 2016年2月4日
- *
  * @author 辛龙
  */
 public class PlayerFragment extends Fragment implements View.OnClickListener,
@@ -146,6 +145,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
         mPlayAudioTitle = (AutoScrollTextView) rootView.findViewById(R.id.play_audio_title);        // 当前播放节目的标题
         mPlayAudioTitle.init(windowManager);
         mPlayAudioTitle.startScroll();
+
         imagePlayCover = (ImageView) rootView.findViewById(R.id.play_cover);                        // 节目封面图片
 
         mSeekBar = (SeekBar) rootView.findViewById(R.id.seek_bar);                                  // 播放进度
@@ -201,6 +201,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                 last();
                 break;
             case R.id.lin_find:
+                MainActivity.SearchLikeActivityJumpType=1;
                 MainActivity.changeFive();
                 break;
             case R.id.lin_news:                                                                     // 跳转到通知界面
@@ -442,8 +443,12 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     if (title == null || title.trim().equals("")) title = "未知";
                     mPlayAudioTitle.setText(title);
                     mPlayAudioTitle.init(windowManager);
-                    mPlayAudioTitle.startScroll();
-
+                    if(title.length()>8){
+                        mPlayAudioTitle.startScroll();
+                    }else{
+                        mPlayAudioTitle.startScroll();
+//                        mPlayAudioTitle.stopScroll();
+                    }
                     // 封面图片
                     String coverUrl = GlobalConfig.playerObject.getContentImg();// imagePlayCover
                     if (coverUrl != null) {// 有封面图片

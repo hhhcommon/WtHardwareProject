@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/WtHardwareFM/WtHardwareFM.iml" filepath="$PROJECT_DIR$/WtHardwareFM/WtHardwareFM.iml" />
       <module fileurl="file://$PROJECT_DIR$/WtHardwareProject.iml" filepath="$PROJECT_DIR$/WtHardwareProject.iml" />
+      <module fileurl="file://$PROJECT_DIR$/wtproject.iml" filepath="$PROJECT_DIR$/wtproject.iml" />
     </modules>
   </component>
 </project>
