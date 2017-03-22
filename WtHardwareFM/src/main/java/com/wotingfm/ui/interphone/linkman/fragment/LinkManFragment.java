@@ -323,7 +323,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
         });
     }
 
-    // 对讲呼叫
+    // 对讲呼叫 //单对单
     protected void call(String id) {
 
         CallAlertFragment fg = new CallAlertFragment();

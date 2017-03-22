@@ -121,7 +121,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
     private Dialog dialog;
     private static Dialog confirmDialog;
 
-    private RelativeLayout Relative_listview;
+    private static RelativeLayout Relative_listview;
     public static LinearLayout lin_foot;
     public static LinearLayout lin_head;
     public static LinearLayout lin_notalk;
@@ -147,11 +147,11 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
     private static ArrayList<GroupInfo> allList = new ArrayList<>();                // 所有数据库数据
     private static List<DBTalkHistorary> historyDataBaseList;                       // list里边的数据
     private static List<ListInfo> listInfo;
-    private RelativeLayout relative_view;
+    private static RelativeLayout relative_view;
     public static boolean isVisible;
     private static ChatFragment ct;
-    private LinearLayout lin_switch_moni;
-    private RelativeLayout relative_mo_ni;
+    private static LinearLayout lin_switch_moni;
+    private static RelativeLayout relative_mo_ni;
     private LinearLayout lin_switch_im;
     private static TextView tv_group_moni_name;
     private static TextView tv_group_moni_number;
@@ -159,6 +159,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
     private static ImageView image_moni;
     private static Dialog onlineDialog;
     private static TextView tv_gridview_groupnum;
+    private String _groupFreq;
 
 
     @Override
@@ -359,7 +360,13 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                     GlobalConfig.isIM = false;
                     hangUp();
                 }
-                final String _groupFreq = groupFreq.trim();
+
+                if(TextUtils.isEmpty(groupFreq)){
+                    _groupFreq=FrequencyUtil.DEFAULT_FREQUENCE_NOSHOW;
+                }else{
+                    _groupFreq = groupFreq.trim();
+                }
+
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -508,6 +515,11 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                             onlineDialog.show();
                         }
                     }
+                    //屏蔽自己
+                    if(groupPersonListS.get(position).getUserId()!=null&&CommonUtils.getUserId(context)!=null&&groupPersonListS.get(position).getUserId().equals(CommonUtils.getUserId(context))){
+                        //ToastUtils.show_always(context,"点击的本人");
+                        return;
+                    }
                     boolean isFriend = false;
                     if (GlobalConfig.list_person != null && GlobalConfig.list_person.size() != 0) {
                         for (int i = 0; i < GlobalConfig.list_person.size(); i++) {
@@ -608,7 +620,20 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         enterGroupType = 1;
         groupId = groupIdS;
         tv_num.setText("1");
+
+        if (GlobalConfig.isMONI == true) {
+            GlobalConfig.isMONI = false;
+            SimulationService.onOpenDevice(false);
+            relative_mo_ni.setVisibility(View.GONE);             //  切换到网络对讲布局
+            Relative_listview.setVisibility(View.VISIBLE);
+        }
+
+        if(relative_view.getVisibility()==View.VISIBLE){
+            relative_view.setVisibility(View.GONE);              //  隐藏弹出的ListView
+        }
+
         tv_gridview_groupnum.setText("在线1人");
+        lin_switch_moni.setVisibility(View.VISIBLE);
         listInfo = null;
         InterPhoneControlHelper.Enter(context, groupId);//发送进入组的数据，socket
         getGridViewPerson(groupId);//获取群成员
@@ -626,9 +651,22 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         String _groupFreq = talkGroupInside.getGroupFreq();
         groupName = talkGroupInside.getGroupName();
         groupImage = talkGroupInside.getGroupImg();
+
+        if (GlobalConfig.isMONI == true) {
+            GlobalConfig.isMONI = false;
+            SimulationService.onOpenDevice(false);
+            relative_mo_ni.setVisibility(View.GONE);
+            Relative_listview.setVisibility(View.VISIBLE);
+        }
+
+        if(relative_view.getVisibility()==View.VISIBLE){
+            relative_view.setVisibility(View.GONE);              //  隐藏弹出的ListView
+        }
+
         ct.setMoniView(groupName, _groupFreq, groupImage);
         tv_num.setText("1");
         tv_gridview_groupnum.setText("在线1人");
+        lin_switch_moni.setVisibility(View.VISIBLE);
         listInfo = null;
         InterPhoneControlHelper.Enter(context, talkGroupInside.getGroupId());//发送进入组的数据，socket
         getGridViewPerson(talkGroupInside.getGroupId());//获取群成员
@@ -644,6 +682,17 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         context.sendBroadcast(intent);
         enterGroupType = 1;
         ct.setMoniView(groupName, groupFreq, groupImage);    //设置界面的方法
+        if (GlobalConfig.isMONI == true) {
+            GlobalConfig.isMONI = false;
+            SimulationService.onOpenDevice(false);
+            relative_mo_ni.setVisibility(View.GONE);             //  切换到网络对讲布局
+            Relative_listview.setVisibility(View.VISIBLE);
+        }
+
+        if(relative_view.getVisibility()==View.VISIBLE){
+            relative_view.setVisibility(View.GONE);              //  隐藏弹出的ListView
+        }
+        lin_switch_moni.setVisibility(View.VISIBLE);
         tv_num.setText("1");
         tv_gridview_groupnum.setText("在线1人");
         listInfo = null;
@@ -667,6 +716,17 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         ct.setMoniView(groupName, _groupFreq, groupImage);
         tv_num.setText("1");
         tv_gridview_groupnum.setText("在线1人");
+        if (GlobalConfig.isMONI == true) {
+            GlobalConfig.isMONI = false;
+            SimulationService.onOpenDevice(false);
+            relative_mo_ni.setVisibility(View.GONE);             //  切换到网络对讲布局
+            Relative_listview.setVisibility(View.VISIBLE);
+        }
+
+        if(relative_view.getVisibility()==View.VISIBLE){
+            relative_view.setVisibility(View.GONE);              //  隐藏弹出的ListView
+        }
+        lin_switch_moni.setVisibility(View.VISIBLE);
         listInfo = null;
         InterPhoneControlHelper.Enter(context, talkGroupInside.getGroupId());//发送进入组的数据，socket
         getGridViewPerson(talkGroupInside.getGroupId());//获取群成员
@@ -675,6 +735,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
     /*
    *\  设置模拟对讲界面的方法
    */
+
     private void setMoniView(String groupName, String groupFrequ, String groupImage) {
         //tv_group_moni_name
         if (!TextUtils.isEmpty(groupName)) {
@@ -712,10 +773,26 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
 
     /**
      * 设置个人为激活状态/设置第一条为激活状态
+     * 单对单通话正常的 会直接调用这个zhiDingperson界面
      */
+
     public static void zhiDingPerson() {
         try {
             historyDataBaseList = dbDao.queryHistory();//得到数据库里边数据
+            if (GlobalConfig.isMONI == true) {
+                GlobalConfig.isMONI = false;
+                SimulationService.onOpenDevice(false);
+                relative_mo_ni.setVisibility(View.GONE);             //  切换到网络对讲布局
+                Relative_listview.setVisibility(View.VISIBLE);
+            }
+            GlobalConfig.isIM=true;
+
+            lin_switch_moni.setVisibility(View.GONE);
+
+            if(relative_view.getVisibility()==View.VISIBLE){
+                relative_view.setVisibility(View.GONE);              //  隐藏弹出的ListView
+            }
+
             getList();
             setDatePerson();
         } catch (Exception e) {
@@ -724,7 +801,10 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         }
     }
 
+
+    //　最近通话列表的监听事件
     private static void setListener() {
+
         adapter.setOnListener(new ChatListAdapter.OnListener() {
             @Override
             public void zhiding(int position) {
@@ -771,7 +851,6 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                 String type = allList.get(position).getTyPe();
                 if (type != null && type.equals("group")) {
                     //跳转到群组详情页面
-
                     GroupDetailFragment fg = new GroupDetailFragment();
                     Bundle bundle1 = new Bundle();
                     bundle1.putString("type", "talkoldlistfragment");
@@ -928,11 +1007,16 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         lin_personhead.setVisibility(View.GONE);
         lin_head.setVisibility(View.VISIBLE);
         lin_foot.setVisibility(View.VISIBLE);
-        //对讲控制
+
         if (GlobalConfig.isMONI == true) {
-            context.stopService(new Intent(context, SimulationService.class));
             GlobalConfig.isMONI = false;
+            SimulationService.onOpenDevice(false);
+            relative_mo_ni.setVisibility(View.GONE);             //  切换到网络对讲布局
+            Relative_listview.setVisibility(View.VISIBLE);
         }
+
+        tv_gridview_groupnum.setText("在线1人");
+        lin_switch_moni.setVisibility(View.VISIBLE);
         GlobalConfig.isIM = true;
         GlobalConfig.isActive = true;
         tipView.setVisibility(View.GONE);
@@ -1190,7 +1274,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         // 初始化 dialog 出现配置
         onlineDialog = new Dialog(context, R.style.MyDialog);
         onlineDialog.setContentView(dialog);
-        gridView_person = (GridView) dialog.findViewById(R.id.gridView_person);            // 在线头像
+        gridView_person = (GridView) dialog.findViewById(R.id.gridView_person);               // 在线gridview
         tv_gridview_groupnum = (TextView) dialog.findViewById(R.id.tv_gridview_groupnum);     // 在线人数
         Window window = onlineDialog.getWindow();
         DisplayMetrics dm = new DisplayMetrics();

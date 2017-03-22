@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class FrequencyUtil {
     public static String DefaultFrequnce = "CH01-409.7500";
+    public static String DEFAULT_FREQUENCE_NOSHOW="409.75000";
 
     /**
      * @return

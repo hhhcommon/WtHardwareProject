@@ -65,12 +65,13 @@
             </LinearLayout>
 
             <TextView
-                android:id="@+id/tv_content"
+                android:id="@+id/tv_time"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ellipsize="end"
                 android:singleLine="true"
                 android:text="这是群的介绍"
+                android:layout_marginTop="3dp"
                 android:textColor="@color/beijing"
                 android:textSize="13sp"/>
         </LinearLayout>
@@ -90,13 +91,15 @@
                 android:src="@mipmap/wtzd" />
 
             <TextView
-                android:id="@+id/tv_time"
+                android:id="@+id/tv_content"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="7dp"
                 android:text="15:15"
                 android:textColor="@color/beijing"
-                android:textSize="9sp" />
+                android:textSize="9sp"
+                android:visibility="gone"
+                />
         </LinearLayout>
     </LinearLayout>
     

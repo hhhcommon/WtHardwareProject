@@ -261,7 +261,6 @@ public class CallAlertFragment extends Fragment implements OnClickListener {
 //        DBTalkHistorary talkdb = dbdao.queryHistory().get(0);          // 得到数据库里边数据
         ChatFragment.zhiDingPerson();
         DuiJiangFragment.update();
-
         DuiJiangActivity.close();
     }
 

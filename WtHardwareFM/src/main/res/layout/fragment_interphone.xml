@@ -37,16 +37,16 @@
 
                  <ImageView
                      android:id="@+id/image_moni"
-                     android:layout_width="60dp"
-                     android:layout_height="60dp"
+                     android:layout_width="50dp"
+                     android:layout_height="50dp"
                      android:scaleType="centerCrop"
-                     android:layout_marginLeft="35dp"
+                     android:layout_marginLeft="30dp"
                      android:src="@mipmap/wt_image_tx_hy" />
 
                  <ImageView
-                     android:layout_width="60dp"
-                     android:layout_height="60dp"
-                     android:layout_marginLeft="35dp"
+                     android:layout_width="50dp"
+                     android:layout_height="50dp"
+                     android:layout_marginLeft="30dp"
                      android:src="@mipmap/wt_6_b_y_b" />
                  <TextView
                      android:id="@+id/tv_group_moni_name"
@@ -62,19 +62,20 @@
                      android:layout_toEndOf="@+id/image_moni" />
              </RelativeLayout>
 
-
          <TextView
              android:id="@+id/tv_group_moni_number"
              android:layout_width="wrap_content"
-             android:layout_height="wrap_content"
+             android:layout_height="56dp"
              android:textSize="20sp"
              android:gravity="center"
-             android:layout_marginTop="30dp"
+             android:layout_marginTop="25dp"
              android:textColor="@color/group_4b"
-             android:layout_marginLeft="35dp"
+             android:layout_marginLeft="30dp"
              android:textStyle="bold"
-             android:text="CH00-000.0000" />
-
+             android:text="CH00-000.0000"
+             android:paddingLeft="17dp"
+             android:background="@mipmap/bg_frequ_with_thumb"
+             />
      </LinearLayout>
 
          <LinearLayout
@@ -111,6 +112,7 @@
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:background="@drawable/bg_duijiang_cut"
+             android:gravity="center"
              android:layout_alignTop="@+id/lin_switch_im"
              android:layout_alignRight="@+id/lin_frequency_no"
              android:layout_alignEnd="@+id/lin_frequency_no">
@@ -118,16 +120,15 @@
                  android:layout_width="25dp"
                  android:layout_height="25dp"
                  android:layout_marginTop="5dp"
-                 android:layout_marginLeft="15dp"
+                 android:layout_marginLeft="20dp"
                  android:layout_marginBottom="5dp"
-
                  android:src="@mipmap/wt_cut_moni"
                  />
              <TextView
                  android:layout_width="wrap_content"
                  android:layout_height="wrap_content"
                  android:textColor="@color/white"
-                 android:text="挂断     "
+                 android:text=" 挂断   "
                  android:textSize="16sp"
                  android:layout_marginLeft="5dp"
                  android:layout_marginRight="12dp"
@@ -195,8 +196,9 @@
                 android:id="@+id/lin_personhead"
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
+                android:layout_marginTop="25dp"
                 android:layout_weight="4"
-                android:gravity="center"
+                android:gravity="top"
                 android:orientation="vertical"
                 android:visibility="gone">
 
@@ -221,34 +223,44 @@
                     <RelativeLayout
                         android:layout_width="160dp"
                         android:layout_height="170dp"
-                        android:orientation="vertical">
+                        android:orientation="vertical"
+
+                        >
 
                         <RelativeLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_alignParentBottom="true">
 
-                            <ImageView
-                                android:id="@+id/image_persontx"
-                                android:layout_width="150dp"
-                                android:layout_height="150dp"
-                                android:layout_centerInParent="true"
-                                android:scaleType="centerCrop"
-                                android:src="@mipmap/wt_image_tx_hy" />
-
-                            <ImageView
-                                android:layout_width="150dp"
-                                android:layout_height="150dp"
-                                android:layout_centerInParent="true"
-                                android:src="@mipmap/wt_6_b_y_b" />
                         </RelativeLayout>
 
                         <ImageView
                             android:id="@+id/image_personvoice"
-                            android:layout_width="45dp"
-                            android:layout_height="45dp"
+
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
                             android:background="@mipmap/wt_image_voice_c"
                             android:layout_alignParentRight="true" />
+
+
+
+                        <ImageView
+                            android:id="@+id/image_persontx"
+                            android:layout_width="115dp"
+                            android:layout_height="115dp"
+                            android:scaleType="centerCrop"
+                            android:src="@mipmap/wt_image_tx_hy"
+                            android:layout_alignTop="@+id/imageView6"
+                            android:layout_alignLeft="@+id/imageView6"
+                            android:layout_alignStart="@+id/imageView6" />
+
+                        <ImageView
+                            android:layout_width="115dp"
+                            android:layout_height="115dp"
+                            android:src="@mipmap/wt_6_b_y_b"
+                            android:layout_centerVertical="true"
+                            android:layout_centerHorizontal="true"
+                            android:id="@+id/imageView6" />
                     </RelativeLayout>
 
 
@@ -295,16 +307,16 @@
 
                                     <ImageView
                                         android:id="@+id/image_grouptx"
-                                        android:layout_width="115dp"
-                                        android:layout_height="115dp"
+                                        android:layout_width="95dp"
+                                        android:layout_height="95dp"
                                         android:layout_centerInParent="true"
                                         android:clickable="true"
                                         android:scaleType="centerCrop"
                                         android:src="@mipmap/wt_image_tx_qz" />
 
                                     <ImageView
-                                        android:layout_width="115dp"
-                                        android:layout_height="115dp"
+                                        android:layout_width="95dp"
+                                        android:layout_height="95dp"
                                         android:layout_centerInParent="true"
                                         android:src="@mipmap/wt_6_b_y_b" />
                                 </RelativeLayout>
@@ -381,12 +393,15 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:gravity="center|top"
+                        android:orientation="vertical"
+                        android:visibility="visible"
+                        >
 
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="50dp"
                             android:gravity="center"
                             android:orientation="vertical"
                             android:paddingLeft="30dp">
@@ -403,23 +418,24 @@
 
                                     <ImageView
                                         android:id="@+id/image_group_persontx"
-                                        android:layout_width="100dp"
-                                        android:layout_height="100dp"
+                                        android:layout_width="90dp"
+                                        android:layout_height="90dp"
                                         android:layout_centerInParent="true"
                                         android:scaleType="centerCrop"
                                         android:src="@mipmap/wt_image_tx_hy" />
 
                                     <ImageView
-                                        android:layout_width="100dp"
-                                        android:layout_height="100dp"
+                                        android:layout_width="90dp"
+                                        android:layout_height="90dp"
                                         android:layout_centerInParent="true"
                                         android:src="@mipmap/wt_6_b_y_b" />
                                 </RelativeLayout>
 
                                 <ImageView
                                     android:id="@+id/image_voice"
-                                    android:layout_width="40dp"
-                                    android:layout_height="40dp"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_marginTop="16dp"
                                     android:background="@mipmap/wt_image_voice_c"
                                     android:layout_alignParentRight="true" />
                             </RelativeLayout>
@@ -469,6 +485,7 @@
                     android:gravity="center"
                     android:orientation="horizontal"
                     android:visibility="visible"
+                    android:layout_marginBottom="35dp"
                     >
                     <LinearLayout
                         android:id="@+id/lin_switch_moni"
@@ -479,7 +496,8 @@
                         android:visibility="visible"
                         android:background="@drawable/bg_duijiang_moni_switch"
                         android:gravity="center"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        >
 
                         <ImageView
                             android:layout_width="20dp"
@@ -533,7 +551,6 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="35dp"
                         android:layout_marginRight="40dp"
-
                         android:background="@drawable/bg_duijiang_moni_cut"
                         android:gravity="center"
                         android:orientation="horizontal">
@@ -597,8 +614,9 @@
                         android:layout_height="40dp"
                         android:layout_weight="1"
                         android:gravity="center_vertical"
-                        android:paddingLeft="10dp"
+                        android:paddingLeft="15dp"
                         android:text="最近通话"
+                        android:textColor="@color/group_4b"
                         android:textSize="18sp" />
 
                     <ImageView
@@ -670,8 +688,9 @@
                     android:layout_height="48dp"
                     android:layout_weight="1"
                     android:gravity="center_vertical"
-                    android:paddingLeft="10dp"
+                    android:paddingLeft="15dp"
                     android:text="最近通话"
+                    android:textColor="@color/group_4b"
                     android:textSize="18sp" />
 
                 <ImageView

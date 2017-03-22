@@ -25,6 +25,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="left|center"
                 android:text="在线12人"
+                android:paddingLeft="10dp"
                 android:layout_margin="3dp"
                 android:textColor="@color/white" />
         </LinearLayout>

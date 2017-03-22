@@ -21,6 +21,11 @@ import com.wotingfm.util.TimeUtils;
 import java.util.List;
 
 
+/**
+ *
+ */
+
+
 public class ChatListAdapter extends BaseAdapter {
 	private Context context;
 	private OnListener onListener;
@@ -65,7 +70,7 @@ public class ChatListAdapter extends BaseAdapter {
 		ViewHolder holder ;
 		if (convertView == null) {
 			holder = new ViewHolder();
-			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_talk_oldlist, null);
+			convertView = LayoutInflater.from(context).inflate(R.layout.adapter_talk_oldlist,parent,false);
 			holder.tv_content = (TextView) convertView.findViewById(R.id.tv_content);
 			holder.tv_name = (TextView) convertView.findViewById(R.id.tv_name);
 			holder.textView_bg = (TextView) convertView.findViewById(R.id.textView_bg);
@@ -87,12 +92,12 @@ public class ChatListAdapter extends BaseAdapter {
 		} else {
 			holder.textView_bg.setVisibility(View.GONE);
 		}
-		if (lists.getGroupSignature() == null || lists.getGroupSignature().trim().equals("")) {
+	/*	if (lists.getGroupSignature() == null || lists.getGroupSignature().trim().equals("")) {
 			holder.tv_content.setVisibility(View.GONE);
 		} else {
 			holder.tv_content.setVisibility(View.VISIBLE);
 			holder.tv_content.setText(lists.getGroupSignature());
-		}
+		}*/
 //		if (lists.getTyPe().equals("user")) {
 //			if (lists.getUserNum()== null || lists.getUserNum().equals("")) {
 //				holder.tv_b_id.setVisibility(View.GONE);

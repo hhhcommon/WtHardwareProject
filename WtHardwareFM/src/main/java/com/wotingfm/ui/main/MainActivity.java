@@ -46,7 +46,6 @@ import com.wotingfm.common.service.NotificationService;
 import com.wotingfm.common.service.SimulationService;
 import com.wotingfm.common.service.SocketService;
 import com.wotingfm.common.service.SubclassService;
-import com.wotingfm.common.service.TestWindowService;
 import com.wotingfm.common.service.VoiceStreamPlayerService;
 import com.wotingfm.common.service.VoiceStreamRecordService;
 import com.wotingfm.common.volley.VolleyCallback;
@@ -172,8 +171,8 @@ public class MainActivity extends TabActivity {
         startService(FloatingWindow);
         Simulation=new Intent(this,SimulationService.class);
         startService(Simulation);
-        TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
-        startService(TestFloatingWindow);
+ /*       TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
+        startService(TestFloatingWindow);*/
     }
 
     //注册广播  用于接收定时服务发送过来的广播
