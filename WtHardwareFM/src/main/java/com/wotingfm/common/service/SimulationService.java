@@ -5,11 +5,8 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
 
 import com.mediatek.engineermode.io.EmGpio;
-import com.wotingfm.common.application.BSApplication;
-import com.wotingfm.common.constant.FrequenceConstant;
 import com.wotingfm.util.ToastUtils;
 
 import java.io.IOException;
@@ -67,9 +64,8 @@ public class SimulationService extends Service {
             String deviceNeedFreq = _deviceNeedFreq.replaceAll(" ", "");
             //Log.e("要设置的Freq","a"+deviceNeedFreq+"b");
             context.serialControl.sendTxt("AT+DMOSETGROUP=1," + deviceNeedFreq + "," + deviceNeedFreq + ",00,4,1\r\n");
-
         } else {
-            ToastUtils.show_always(context, "传入的频率值不合法");
+            ToastUtils.show_always(context, "当前无对讲频率，赶紧设置一个开始聊天吧");
         }
     }
 

@@ -6,7 +6,7 @@
     android:background="@color/app_bg"
     android:orientation="vertical" >
     
-        <com.wotingfm.widget.rollviewpager.RollPagerView
+        <com.youth.banner.Banner
             android:id="@+id/slideshowView"
 	        android:layout_width="match_parent"
 	        android:layout_height="160dp"

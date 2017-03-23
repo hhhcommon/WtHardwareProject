@@ -28,18 +28,18 @@ import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
-import com.wotingfm.ui.music.program.radiolist.adapter.LoopAdapter;
 import com.wotingfm.ui.music.program.radiolist.model.Image;
 import com.wotingfm.ui.music.program.tuijian.adapter.RecommendListAdapter;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.L;
+import com.wotingfm.util.PicassoBannerLoader;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.TipView;
-import com.wotingfm.widget.rollviewpager.RollPagerView;
-import com.wotingfm.widget.rollviewpager.hintview.IconHintView;
 import com.wotingfm.widget.xlistview.XListView;
 import com.wotingfm.widget.xlistview.XListView.IXListViewListener;
+import com.youth.banner.Banner;
+import com.youth.banner.listener.OnBannerListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -72,7 +72,8 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
     private boolean isCancelRequest;
 
     private TipView tipView;// 没有网络、没有数据、加载错误提示
-    private RollPagerView mLoopViewPager;
+    private Banner mLoopViewPager;
+    private List<String> ImageStringList=new ArrayList<>();
 
     @Override
     public void onWhiteViewClick() {
@@ -109,13 +110,21 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
             mListView = (XListView) rootView.findViewById(R.id.listView);
             headView = LayoutInflater.from(context).inflate(R.layout.headview_fragment_recommend, null);
             // 轮播图
-            mLoopViewPager = (RollPagerView) headView.findViewById(R.id.slideshowView);
+            mLoopViewPager = (Banner) headView.findViewById(R.id.slideshowView);
             mListView.addHeaderView(headView);
             mListView.setSelector(new ColorDrawable(Color.TRANSPARENT));
 
             initListView();
-            sendRequest();
-            getImage();
+
+
+            if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {// 发送网络请求
+                dialog = DialogUtils.Dialogph(context, "数据加载中....");
+                sendRequest();
+                getImage();
+            } else {
+                tipView.setVisibility(View.VISIBLE);
+                tipView.setTipView(TipView.TipStatus.NO_NET);
+            }
         }
         return rootView;
     }
@@ -334,8 +343,23 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
                     try {
                         List<Image>  imageList = new Gson().fromJson(result.getString("LoopImgs"), new TypeToken<List<Image>>() {
                         }.getType());
-                        mLoopViewPager.setAdapter(new LoopAdapter(mLoopViewPager, context, imageList));
-                        mLoopViewPager.setHintView(new IconHintView(context, R.mipmap.indicators_now, R.mipmap.indicators_default));
+                   /*     mLoopViewPager.setAdapter(new LoopAdapter(mLoopViewPager, context, imageList));
+                        mLoopViewPager.setHintView(new IconHintView(context, R.mipmap.indicators_now, R.mipmap.indicators_default));*/
+                        mLoopViewPager.setImageLoader(new PicassoBannerLoader());
+
+                        for(int i=0;i<imageList.size();i++){
+                            ImageStringList.add(imageList.get(i).getLoopImg());
+                        }
+                        mLoopViewPager.setImages(ImageStringList);
+
+                        mLoopViewPager.setOnBannerListener(new OnBannerListener() {
+                            @Override
+                            public void OnBannerClick(int position) {
+                                ToastUtils.show_always(context,ImageStringList.get(position-1));
+                            }
+                        });
+                        mLoopViewPager.start();
+
                         tipView.setVisibility(View.GONE);
                     } catch (Exception e) {
                         e.printStackTrace();

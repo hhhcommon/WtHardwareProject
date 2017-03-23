@@ -248,13 +248,13 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
             jsonObject.put("GroupSignature", SIGN);
             jsonObject.put("GroupName", NICK);
             if(!TextUtils.isEmpty(tv1)){
-                Frequence=tv1.substring(5,tv1.length()-3);
+                Frequence=tv1.substring(5,tv1.length());
             }
             if(!TextUtils.isEmpty(tv2)){
                 if(!TextUtils.isEmpty(Frequence)){
-                    Frequence=Frequence+","+tv2.substring(5,tv2.length()-3);
+                    Frequence=Frequence+","+tv2.substring(5,tv2.length());
                 }else{
-                    Frequence=tv2.substring(5,tv2.length()-3);
+                    Frequence=tv2.substring(5,tv2.length());
                 }
             }
 

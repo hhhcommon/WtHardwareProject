@@ -32,7 +32,9 @@ public class FrequencyUtil {
             List<String> frequencyList = new ArrayList<>();
             for (int i = 0; i < GlobalConfig.FreqList.size(); i++) {
                 if (GlobalConfig.FreqList.get(i) != null && !TextUtils.isEmpty(GlobalConfig.FreqList.get(i).getCatalogAliasName())) {
-                    frequencyList.add(GlobalConfig.FreqList.get(i).getCatalogAliasName());
+                   if(!TextUtils.isEmpty(GlobalConfig.FreqList.get(i).getCatalogId())){
+                    frequencyList.add(GlobalConfig.FreqList.get(i).getCatalogId()+"-"+GlobalConfig.FreqList.get(i).getCatalogAliasName());
+                   }
                 }
             }
             return frequencyList;

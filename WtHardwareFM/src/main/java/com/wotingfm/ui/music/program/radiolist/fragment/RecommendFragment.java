@@ -29,17 +29,17 @@ import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.ui.music.program.radiolist.adapter.ForNullAdapter;
-import com.wotingfm.ui.music.program.radiolist.adapter.LoopAdapter;
 import com.wotingfm.ui.music.program.radiolist.adapter.RadioListAdapter;
 import com.wotingfm.ui.music.program.radiolist.main.RadioListFragment;
 import com.wotingfm.ui.music.program.radiolist.model.Image;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.DialogUtils;
+import com.wotingfm.util.PicassoBannerLoader;
 import com.wotingfm.util.ToastUtils;
 import com.wotingfm.widget.TipView;
-import com.wotingfm.widget.rollviewpager.RollPagerView;
-import com.wotingfm.widget.rollviewpager.hintview.IconHintView;
 import com.wotingfm.widget.xlistview.XListView;
+import com.youth.banner.Banner;
+import com.youth.banner.listener.OnBannerListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -69,9 +69,9 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
     //	private int pageSizeNum;
     private int refreshType = 1;            // refreshType 1 为下拉加载  2 为上拉加载更多
     private boolean isFirst = true;
-    private RollPagerView mLoopViewPager;
+    private Banner mLoopViewPager;
     private List<Image> imageList;
-
+    private List<String> ImageStringList=new ArrayList<>();
     @Override
     public void onWhiteViewClick() {
         if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
@@ -105,7 +105,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
             tipView.setWhiteClick(this);
             View headView = LayoutInflater.from(context).inflate(R.layout.headview_acitivity_radiolist, null);
             // 轮播图
-            mLoopViewPager = (RollPagerView) headView.findViewById(R.id.slideshowView);
+            mLoopViewPager = (Banner) headView.findViewById(R.id.slideshowView);
             mListView = (XListView) rootView.findViewById(R.id.listview_fm);
             mListView.addHeaderView(headView);
             setListener();
@@ -365,7 +365,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
         try {
             jsonObject.put("CatalogType", RadioListFragment.catalogType);
             jsonObject.put("CatalogId", RadioListFragment.id);
-            jsonObject.put("Size", "10");// 此处需要改成-1
+            jsonObject.put("Size", "4");// 此处需要改成-1
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -385,8 +385,23 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
                     try {
                         imageList = new Gson().fromJson(result.getString("LoopImgs"), new TypeToken<List<Image>>() {
                         }.getType());
-                        mLoopViewPager.setAdapter(new LoopAdapter(mLoopViewPager, context, imageList));
-                        mLoopViewPager.setHintView(new IconHintView(context, R.mipmap.indicators_now, R.mipmap.indicators_default));
+                     /*   mLoopViewPager.setAdapter(new LoopAdapter(mLoopViewPager, context, imageList));
+                        mLoopViewPager.setHintView(new IconHintView(context, R.mipmap.indicators_now, R.mipmap.indicators_default));*/
+
+                        mLoopViewPager.setImageLoader(new PicassoBannerLoader());
+
+                        for(int i=0;i<imageList.size();i++){
+                            ImageStringList.add(imageList.get(i).getLoopImg());
+                        }
+                        mLoopViewPager.setImages(ImageStringList);
+
+                        mLoopViewPager.setOnBannerListener(new OnBannerListener() {
+                            @Override
+                            public void OnBannerClick(int position) {
+                                ToastUtils.show_always(context,ImageStringList.get(position-1));
+                            }
+                        });
+                        mLoopViewPager.start();
                         tipView.setVisibility(View.GONE);
                     } catch (Exception e) {
                         e.printStackTrace();

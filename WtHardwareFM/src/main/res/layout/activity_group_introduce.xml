@@ -55,28 +55,23 @@
                 android:layout_marginRight="10dp"
                 android:textSize="14sp"/>
 
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="20dp">
-
-            </RelativeLayout>
-
-            <ImageView
-                android:id="@+id/img_zhezhao"
-                android:layout_width="80dip"
-                android:layout_height="80dip"
-                android:layout_centerVertical="true"
-                android:layout_centerHorizontal="true" />
 
             <ImageView
                 android:id="@+id/image"
-                android:layout_width="80dip"
-                android:layout_height="80dip"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:scaleType="centerCrop"
-                android:layout_alignTop="@+id/img_zhezhao"
-                android:layout_alignLeft="@+id/img_zhezhao"
-                android:layout_alignStart="@+id/img_zhezhao" />
+                android:layout_centerVertical="true"
+                android:layout_alignLeft="@+id/head_frame"
+                android:layout_alignStart="@+id/head_frame" />
+
+            <ImageView
+                android:id="@+id/head_frame"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:src="@mipmap/wt_6_b_y_b"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true" />
         </RelativeLayout>
 
         <RelativeLayout
@@ -97,13 +92,13 @@
                 android:textSize="14sp"
                 android:id="@+id/textView8" />
             <EditText
+                android:id="@+id/et_group_name"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:textColor="@color/beijing"
                 android:textSize="14sp"
-                android:text="dadasdadasdasda"
-                android:paddingBottom="15dp"
-                android:paddingTop="15dp"
+                android:text="未设置群名"
+                android:layout_marginLeft="5dp"
                 android:layout_alignParentTop="true"
                 android:layout_toRightOf="@+id/textView8"
                 android:layout_toEndOf="@+id/textView8" />
@@ -130,13 +125,13 @@
                 android:id="@+id/textView7" />
 
            <EditText
+               android:id="@+id/et_group_sign"
                android:layout_width="match_parent"
                android:layout_height="wrap_content"
                android:textColor="@color/beijing"
                android:textSize="14sp"
-               android:text="dadasdadasdasda"
-               android:paddingBottom="15dp"
-               android:paddingTop="15dp"
+               android:text="未设置群签名"
+               android:layout_marginLeft="5dp"
                android:layout_marginRight="15dp"
                android:layout_centerVertical="true"
                android:layout_toRightOf="@+id/textView7"

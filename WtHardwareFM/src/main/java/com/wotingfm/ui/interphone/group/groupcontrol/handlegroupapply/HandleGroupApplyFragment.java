@@ -21,6 +21,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.model.UserInfo;
+import com.wotingfm.ui.interphone.group.groupcontrol.groupmanage.GroupManagerFragment;
 import com.wotingfm.ui.interphone.group.groupcontrol.handlegroupapply.adapter.HandleGroupApplyAdapter;
 import com.wotingfm.ui.interphone.main.DuiJiangActivity;
 import com.wotingfm.util.DialogUtils;
@@ -158,6 +159,9 @@ public class HandleGroupApplyFragment extends Fragment implements OnClickListene
                         adapter = new HandleGroupApplyAdapter(context, userList, HandleGroupApplyFragment.this);
                         listGroupMember.setAdapter(adapter);
                         tipView.setVisibility(View.GONE);
+						Fragment fg=getTargetFragment();
+						((GroupManagerFragment)fg).RefreshFragmentManager();
+						DuiJiangActivity.close();
 					} catch (Exception e1) {
 						e1.printStackTrace();
                         tipView.setVisibility(View.VISIBLE);

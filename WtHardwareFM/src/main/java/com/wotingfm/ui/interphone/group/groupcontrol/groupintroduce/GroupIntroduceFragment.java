@@ -8,14 +8,18 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
+import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
+import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.interphone.main.DuiJiangActivity;
+import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -34,6 +38,11 @@ public class GroupIntroduceFragment extends Fragment implements View.OnClickList
     private ImageView img_EWM;
     private FragmentActivity context;
     private View rootView;
+    private EditText et_group_name;
+    private EditText et_group_sign;
+    private ImageView img_head;
+    private String url;
+    private String headUrl;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,28 +60,41 @@ public class GroupIntroduceFragment extends Fragment implements View.OnClickList
     // 初始化视图
     private void setView() {
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);          // 返回
+        et_group_name=(EditText)rootView.findViewById(R.id.et_group_name);           // 群名
+        et_group_sign=(EditText)rootView.findViewById(R.id.et_group_sign);           // 群签名
+        img_head=(ImageView)rootView.findViewById(R.id.image);                       // 群头像
     }
 
 
     // 处理请求
     private void handleIntent() {
-    /*    GroupInfo groupNews = (GroupInfo) getIntent().getSerializableExtra("group");
-        if(!TextUtils.isEmpty(groupNews.getGroupId())){
-            groupId=groupNews.getGroupId();
+        GroupInfo groupNews = (GroupInfo)getArguments().getSerializable("group");
+        headUrl=getArguments().getString("GroupImg");
+        if(groupNews!=null){
+            if(!TextUtils.isEmpty(groupNews.getGroupName())){
+                et_group_name.setText(groupNews.getGroupName());
+            }
+
+            if(!TextUtils.isEmpty(groupNews.getGroupSignature())){
+                et_group_sign.setText(groupNews.getGroupSignature());
+            }
+
+            if(TextUtils.isEmpty(headUrl)){
+                img_head.setImageResource(R.mipmap.wt_image_tx_hy);
+            }else{
+                if(headUrl.startsWith("http:")){
+                    url=headUrl;
+                }else{
+                    url = GlobalConfig.imageurl+headUrl;
+                }
+                url= AssembleImageUrlUtils.assembleImageUrl150(url);
+                Picasso.with(context).load(url.replace("\\/", "/")).into(img_head);
+            }
+
+        }else{
+            ToastUtils.show_always(context,"传入的数值有问题");
         }
-        try {
 
-            bmp = CreateQRImageHelper.getInstance().createQRImage(2, groupNews, null, 300, 300);
-
-        }catch (Exception e){
-
-        }
-        if (bmp == null) {
-
-            bmp = BitmapUtils.readBitMap(context, R.mipmap.ewm);
-        }
-
-        img_EWM.setImageBitmap(bmp);*/
     }
 
 

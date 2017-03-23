@@ -409,13 +409,13 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
                 @Override
                 protected void requestError(VolleyError error) {
                     if (dialogs != null) dialogs.dismiss();
-                    sortListView.setAdapter(new TalkPersonNoAdapter(context));
+                    //sortListView.setAdapter(new TalkPersonNoAdapter(context));
                     headViewNoFriendTip.setVisibility(View.VISIBLE);
                     headViewNoFriendTip.setTipView(TipView.TipStatus.IS_ERROR);
                 }
             });
         } else {
-            sortListView.setAdapter(new TalkPersonNoAdapter(context));
+            //sortListView.setAdapter(new TalkPersonNoAdapter(context));
             headViewNoFriendTip.setVisibility(View.VISIBLE);
             headViewNoFriendTip.setTipView(TipView.TipStatus.NO_NET);
         }

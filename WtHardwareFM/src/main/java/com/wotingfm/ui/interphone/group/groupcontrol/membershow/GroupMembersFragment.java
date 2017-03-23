@@ -27,6 +27,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.model.UserInfo;
+import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.main.GroupDetailFragment;
 import com.wotingfm.ui.interphone.group.groupcontrol.groupnumdel.GroupMemberDelFragment;
 import com.wotingfm.ui.interphone.group.groupcontrol.grouppersonnews.GroupPersonNewsFragment;
 import com.wotingfm.ui.interphone.group.groupcontrol.memberadd.GroupMemberAddFragment;
@@ -194,6 +195,14 @@ public class GroupMembersFragment extends Fragment implements OnClickListener, T
                 }
                 break;
         }
+    }
+
+    // 更新界面
+    public void RefreshFragmentData(){
+        Fragment targetFragment = getTargetFragment();
+        ((GroupDetailFragment) targetFragment).RefreshFragment();
+      //  ToastUtils.show_always(context,"我回到ｍｅｍｂｅｒ啦" );
+        DuiJiangActivity.close();
     }
 
     // 网络请求主函数
