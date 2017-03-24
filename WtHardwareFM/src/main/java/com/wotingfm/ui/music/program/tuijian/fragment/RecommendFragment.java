@@ -359,16 +359,20 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
                             }
                         });
                         mLoopViewPager.start();
-
+                        mLoopViewPager.setVisibility(View.VISIBLE);
                         tipView.setVisibility(View.GONE);
                     } catch (Exception e) {
                         e.printStackTrace();
+                        mLoopViewPager.setVisibility(View.GONE);
                     }
+                }else{
+                    mLoopViewPager.setVisibility(View.GONE);
                 }
             }
 
             @Override
             protected void requestError(VolleyError error) {
+                mLoopViewPager.setVisibility(View.GONE);
             }
         });
     }
