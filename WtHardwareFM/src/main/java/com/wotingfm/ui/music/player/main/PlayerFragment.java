@@ -562,7 +562,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                             playList.get(i).setType("1");
                         }
                     }
-                    adapter.setList(playList);
+                    if (adapter!=null) adapter.setList(playList);
                     break;
             }
         }

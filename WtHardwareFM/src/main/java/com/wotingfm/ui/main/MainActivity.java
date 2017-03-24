@@ -134,7 +134,7 @@ public class MainActivity extends TabActivity {
             }
         }, 0);
 
-        update();           // 获取版本数据
+//        update();           // 获取版本数据
         InitTextView();     // 设置界面
         InitData();         // 加载数据
         setType();
@@ -171,8 +171,8 @@ public class MainActivity extends TabActivity {
         startService(FloatingWindow);
 //        Simulation=new Intent(this,SimulationService.class);
 //        startService(Simulation);
-        TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
-        startService(TestFloatingWindow);
+//        TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
+//        startService(TestFloatingWindow);
     }
 
     //注册广播  用于接收定时服务发送过来的广播
