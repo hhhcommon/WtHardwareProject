@@ -81,6 +81,7 @@ public class RadioListFragment extends Fragment implements OnClickListener, TipV
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
+            isCancelRequest = false;
             rootView = inflater.inflate(R.layout.activity_radiolist, container, false);
             rootView.setOnClickListener(this);
             context = getActivity();
