@@ -80,15 +80,13 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
                     }
                 }
                 break;
-            case R.id.head_right_btn:// 播放专辑
+            case R.id.head_right_btn://
                 // 专辑列表中的数据一集一集往下播
-                if(GlobalConfig.playerObject!=null&&!TextUtils.isEmpty(GlobalConfig.playerObject.getContentId())){
+                if(GlobalConfig.playerObject!=null&&!TextUtils.isEmpty(albumId)){
                     AccuseFragment fragment = new AccuseFragment();
                     Bundle bundle = new Bundle();
-                    bundle.putString("ContentId", GlobalConfig.playerObject.getContentId());
-                    if(!TextUtils.isEmpty(GlobalConfig.playerObject.getMediaType())) {
-                        bundle.putString("MediaType", "SEQU");
-                    }
+                    bundle.putString("ContentId", albumId);
+                    bundle.putString("MediaType", "SEQU");
                     bundle.putString(StringConstant.JUMP_TYPE,jump_type);
                     fragment.setArguments(bundle);
                     if(jump_type!=null){
