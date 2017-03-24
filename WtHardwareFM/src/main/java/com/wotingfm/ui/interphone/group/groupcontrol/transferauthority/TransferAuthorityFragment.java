@@ -24,6 +24,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.model.UserInfo;
+import com.wotingfm.ui.interphone.group.groupcontrol.groupmanage.GroupManagerFragment;
 import com.wotingfm.ui.interphone.group.groupcontrol.transferauthority.adapter.TransferAuthorityAdapter;
 import com.wotingfm.ui.interphone.linkman.view.CharacterParser;
 import com.wotingfm.ui.interphone.linkman.view.PinyinComparator;
@@ -314,7 +315,8 @@ public class TransferAuthorityFragment extends Fragment implements OnClickListen
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     ToastUtils.show_always(context, "管理员权限移交成功");
-                    context.setResult(1);
+                    Fragment fg=getTargetFragment();
+                    ((GroupManagerFragment)fg).RefreshFragmentManager();
                     DuiJiangActivity.close();
                 } else if (ReturnType != null && ReturnType.equals("1002")) {
                     ToastUtils.show_always(context, "无法获取用户Id");

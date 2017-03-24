@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.ui.common.model.GroupInfo;
+import com.wotingfm.ui.interphone.group.groupcontrol.groupdetail.main.GroupDetailFragment;
 import com.wotingfm.ui.interphone.group.groupcontrol.groupintroduce.GroupIntroduceFragment;
 import com.wotingfm.ui.interphone.group.groupcontrol.handlegroupapply.HandleGroupApplyFragment;
 import com.wotingfm.ui.interphone.group.groupcontrol.joingrouplist.JoinGroupListFragment;
@@ -37,6 +38,8 @@ public class GroupManagerFragment extends Fragment implements View.OnClickListen
     private ArrayList<GroupInfo> list;
     private FragmentActivity context;
     private View rootView;
+    private GroupInfo groupNews;
+    private String headUrl;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -77,8 +80,9 @@ public class GroupManagerFragment extends Fragment implements View.OnClickListen
     // 处理请求
     private void handleIntent() {
 
-        GroupInfo groupNews = (GroupInfo)getArguments().getSerializable("group");
+        groupNews = (GroupInfo)getArguments().getSerializable("group");
         list = (ArrayList<GroupInfo>) getArguments().getSerializable("userlist");
+        headUrl=getArguments().getString("GroupImg");
         if(groupNews!=null){
             if(!TextUtils.isEmpty(groupNews.getGroupId())){
                  groupId=groupNews.getGroupId();
@@ -143,7 +147,7 @@ public class GroupManagerFragment extends Fragment implements View.OnClickListen
                 bundle2.putString("GroupId", groupId);
                 bundle2.putSerializable("userlist", list);
                 fg.setArguments(bundle2);
-//                fg.setTargetFragment(this, 0);
+                fg.setTargetFragment(this, 0);
                 DuiJiangActivity.open(fg);
                 break;
             case R.id.rl_modify_password:
@@ -156,9 +160,22 @@ public class GroupManagerFragment extends Fragment implements View.OnClickListen
                 break;
             case R.id.rl_group_introduce:
                 GroupIntroduceFragment fg1 = new GroupIntroduceFragment();
+                Bundle bundle5=new Bundle();
+                bundle5.putSerializable("group",groupNews);
+                bundle5.putString("GroupImg",headUrl);
+                fg1.setArguments(bundle5);
                 DuiJiangActivity.open(fg1);
                 break;
         }
     }
+
+    // 更新界面
+    public void RefreshFragmentManager(){
+        Fragment targetFragment = getTargetFragment();
+        ((GroupDetailFragment) targetFragment).RefreshFragment();
+        DuiJiangActivity.close();
+    }
+
+
 
 }

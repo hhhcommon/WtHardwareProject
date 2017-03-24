@@ -25,6 +25,7 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.model.UserInfo;
 import com.wotingfm.ui.interphone.group.groupcontrol.groupnumdel.adapter.CreateGroupMembersDelAdapter;
+import com.wotingfm.ui.interphone.group.groupcontrol.membershow.GroupMembersFragment;
 import com.wotingfm.ui.interphone.linkman.view.CharacterParser;
 import com.wotingfm.ui.interphone.linkman.view.PinyinComparator;
 import com.wotingfm.ui.interphone.linkman.view.SideBar;
@@ -318,8 +319,13 @@ public class GroupMemberDelFragment extends Fragment implements OnClickListener,
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     ToastUtils.show_always(context, "群成员已经成功删除");
-                    context.setResult(1);
+                    //context.setResult(1);
+                    Fragment targetFragment = getTargetFragment();
+                    ((GroupMembersFragment) targetFragment).RefreshFragmentData();
                     DuiJiangActivity.close();
+                   // Fragment targetFragment = getTargetFragment();
+                   // ((GroupMembersFragment) targetFragment).RefreshFragmentData();
+
                 } else {
                     if (Message != null && !Message.trim().equals("")) {
                         ToastUtils.show_always(context, Message + "");

@@ -66,7 +66,6 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/text_recommend_gone"
             android:visibility="gone" />
-
         <com.wotingfm.widget.xlistview.XListView
             android:id="@+id/list_view"
             android:layout_width="match_parent"

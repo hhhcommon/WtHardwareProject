@@ -660,6 +660,7 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
                 Bundle bundle1 = new Bundle();
                 bundle1.putString("GroupId", groupId);
                 fg1.setArguments(bundle1);
+                fg1.setTargetFragment(ct,0);
                 DuiJiangActivity.open(fg1);
                 break;
             case R.id.imageView4:// 加入激活状态
@@ -747,7 +748,9 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
                     Bundle bundle3 = new Bundle();
                     bundle3.putSerializable("group", news);
                     bundle3.putSerializable("userlist", lists);
+                    bundle3.putString("GroupImg",headUrl);
                     fg3.setArguments(bundle3);
+                    fg3.setTargetFragment(ct,22);
                     DuiJiangActivity.open(fg3);
                 } else {
                     ToastUtils.show_always(context, "群信息获取失败，请检查网络，并返回上一级重试");
@@ -755,6 +758,14 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
                 break;
         }
     }
+
+
+    // 更新界面
+    public void RefreshFragment(){
+        //刷新通讯录　//刷新界面
+         send();
+    }
+
 
     // 更改群备注及信息
     private void update(String name, String signature) {
@@ -804,13 +815,13 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
             String tv1=textChannelOne.getText().toString().trim();
             String tv2=textChannelTwo.getText().toString().trim();
             if(!TextUtils.isEmpty(tv1)){
-                Frequence=tv1.substring(5,tv1.length()-3);
+                Frequence=tv1.substring(5,tv1.length());
             }
             if(!TextUtils.isEmpty(tv2)){
                 if(!TextUtils.isEmpty(Frequence)){
-                    Frequence=Frequence+","+tv2.substring(5,tv2.length()-3);
+                    Frequence=Frequence+","+tv2.substring(5,tv2.length());
                 }else{
-                    Frequence=tv2.substring(5,tv2.length()-3);
+                    Frequence=tv2.substring(5,tv2.length());
                 }
             }
             if(!TextUtils.isEmpty(Frequence)){
@@ -868,6 +879,9 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
         DuiJiangActivity.close();
     }
 
+
+
+    // GridViewd的回调函数
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
         if (lists.get(position).getType() == 1) {
@@ -910,6 +924,7 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
                 Bundle bundle = new Bundle();
                 bundle.putString("GroupId", groupId);
                 fg.setArguments(bundle);
+                fg.setTargetFragment(fg,0);
                 DuiJiangActivity.open(fg);
             } else if (lists.get(position).getType() == 3) {
                 GroupMemberDelFragment fg = new GroupMemberDelFragment();

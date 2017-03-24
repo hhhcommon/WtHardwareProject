@@ -20,6 +20,7 @@ import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.model.GroupInfo;
+import com.wotingfm.ui.interphone.group.groupcontrol.groupmanage.GroupManagerFragment;
 import com.wotingfm.ui.interphone.group.groupcontrol.joingrouplist.adapter.JoinGroupAdapter;
 import com.wotingfm.ui.interphone.group.groupcontrol.joingrouplist.model.CheckInfo;
 import com.wotingfm.ui.interphone.main.DuiJiangActivity;
@@ -251,6 +252,9 @@ public class JoinGroupListFragment extends Fragment implements OnClickListener, 
                     }
                     adapter.notifyDataSetChanged();
                     dealType = 1;
+                    Fragment fg=getTargetFragment();
+                    ((GroupManagerFragment)fg).RefreshFragmentManager();
+                    DuiJiangActivity.close();
                 } else if (ReturnType != null && ReturnType.equals("1002")) {
                     ToastUtils.show_always(context, "无法获取用户Id");
                 } else if (ReturnType != null && ReturnType.equals("T")) {

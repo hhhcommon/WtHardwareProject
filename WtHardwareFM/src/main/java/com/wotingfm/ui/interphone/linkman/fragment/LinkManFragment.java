@@ -323,7 +323,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
         });
     }
 
-    // 对讲呼叫
+    // 对讲呼叫 //单对单
     protected void call(String id) {
 
         CallAlertFragment fg = new CallAlertFragment();
@@ -409,13 +409,13 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
                 @Override
                 protected void requestError(VolleyError error) {
                     if (dialogs != null) dialogs.dismiss();
-                    sortListView.setAdapter(new TalkPersonNoAdapter(context));
+                    //sortListView.setAdapter(new TalkPersonNoAdapter(context));
                     headViewNoFriendTip.setVisibility(View.VISIBLE);
                     headViewNoFriendTip.setTipView(TipView.TipStatus.IS_ERROR);
                 }
             });
         } else {
-            sortListView.setAdapter(new TalkPersonNoAdapter(context));
+            //sortListView.setAdapter(new TalkPersonNoAdapter(context));
             headViewNoFriendTip.setVisibility(View.VISIBLE);
             headViewNoFriendTip.setTipView(TipView.TipStatus.NO_NET);
         }
