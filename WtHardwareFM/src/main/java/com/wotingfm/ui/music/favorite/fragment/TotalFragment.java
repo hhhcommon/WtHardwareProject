@@ -264,7 +264,7 @@ public class TotalFragment extends Fragment {
                     if (subList != null && subList.size() > 0) {
                         for (int i = 0; i < subList.size(); i++) {
                             if (subList.get(i).getMediaType() != null && !subList.get(i).getMediaType().equals("")) {
-                                if (subList.get(i).getMediaType().equals("AUDIO")) {
+                                if (subList.get(i).getMediaType().equals(StringConstant.TYPE_AUDIO)) {
                                     if (playList == null) {
                                         playList = new ArrayList<>();
                                         playList.add(subList.get(i));
@@ -273,7 +273,7 @@ public class TotalFragment extends Fragment {
                                             playList.add(subList.get(i));
                                         }
                                     }
-                                } else if (subList.get(i).getMediaType().equals("SEQU")) {
+                                } else if (subList.get(i).getMediaType().equals(StringConstant.TYPE_SEQU)) {
                                     if (sequList == null) {
                                         sequList = new ArrayList<>();
                                         sequList.add(subList.get(i));
@@ -282,7 +282,7 @@ public class TotalFragment extends Fragment {
                                             sequList.add(subList.get(i));
                                         }
                                     }
-                                } else if (subList.get(i).getMediaType().equals("TTS")) {
+                                } else if (subList.get(i).getMediaType().equals(StringConstant.TYPE_TTS)) {
                                     if (ttsList == null) {
                                         ttsList = new ArrayList<>();
                                         ttsList.add(subList.get(i));
@@ -291,7 +291,7 @@ public class TotalFragment extends Fragment {
                                             ttsList.add(subList.get(i));
                                         }
                                     }
-                                } else if (subList.get(i).getMediaType().equals("RADIO")) {
+                                } else if (subList.get(i).getMediaType().equals(StringConstant.TYPE_RADIO)) {
                                     if (radioList == null) {
                                         radioList = new ArrayList<>();
                                         radioList.add(subList.get(i));
@@ -371,7 +371,7 @@ public class TotalFragment extends Fragment {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                if (MediaType != null && MediaType.equals("RADIO") || MediaType != null && MediaType.equals("AUDIO")) {
+                if (MediaType != null && MediaType.equals(StringConstant.TYPE_RADIO) || MediaType != null && MediaType.equals(StringConstant.TYPE_AUDIO)) {
                     String playername = list.get(groupPosition).getList().get(childPosition).getContentName();
                     String playerimage = list.get(groupPosition).getList().get(childPosition).getContentImg();
                     String playerurl = list.get(groupPosition).getList().get(childPosition).getContentPlay();
@@ -405,29 +405,25 @@ public class TotalFragment extends Fragment {
                     dbDao.addHistory(history);
                     if (PlayerFragment.context != null) {
                         MainActivity.changeOne();
-
                         Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                         Bundle bundle1 = new Bundle();
-                        bundle1.putString("text", list.get(groupPosition).getList().get(childPosition).getContentName());
+                        bundle1.putString(StringConstant.TEXT_CONTENT, list.get(groupPosition).getList().get(childPosition).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
-                        getActivity().finish();
                     } else {
                         SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
                         et.putString(StringConstant.PLAYHISTORYENTER, "true");
                         et.putString(StringConstant.PLAYHISTORYENTERNEWS, list.get(groupPosition).getList().get(childPosition).getContentName());
                         if (!et.commit()) L.w("数据 commit 失败!");
                         MainActivity.changeOne();
-
-                        getActivity().finish();
                     }
-                } else if (MediaType != null && MediaType.equals("SEQU")) {
+                } else if (MediaType != null && MediaType.equals(StringConstant.TYPE_SEQU)) {
                     Intent intent = new Intent(context, AlbumFragment.class);
                     Bundle bundle = new Bundle();
                     bundle.putString("type", "search");
                     bundle.putSerializable("list", list.get(groupPosition).getList().get(childPosition));
                     intent.putExtras(bundle);
-                    startActivityForResult(intent, 1);
+//                    startActivityForResult(intent, 1);
                 }
                 return true;
             }

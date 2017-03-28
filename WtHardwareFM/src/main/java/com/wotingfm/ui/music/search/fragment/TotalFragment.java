@@ -88,8 +88,8 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
         }
         if (mediaType == null) return true;
         switch (mediaType) {
-            case "RADIO":
-            case "AUDIO":
+            case StringConstant.TYPE_RADIO:
+            case StringConstant.TYPE_AUDIO:
                 String playername = list.get(groupPosition).getList().get(childPosition).getContentName();
                 String playerimage = list.get(groupPosition).getList().get(childPosition).getContentImg();
                 String playerurl = list.get(groupPosition).getList().get(childPosition).getContentPlay();
@@ -123,14 +123,13 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                 dbDao.addHistory(history);
 
                 Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
-                Bundle bundle1=new Bundle();
-                bundle1.putString("text",playername);
+                Bundle bundle1 = new Bundle();
+                bundle1.putString(StringConstant.TEXT_CONTENT,playername);
                 push.putExtras(bundle1);
                 context.sendBroadcast(push);
-
                 MainActivity.changeOne();
                 break;
-            case "SEQU":
+            case StringConstant.TYPE_SEQU:
                 AlbumFragment fg= new AlbumFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("type", "search");
@@ -210,16 +209,16 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                     if (ttsList != null) ttsList.clear();
                     for (int i = 0, size = subList.size(); i < size; i++) {
                         if (subList.get(i).getMediaType() != null && !subList.get(i).getMediaType().equals("")) {
-                            if (subList.get(i).getMediaType().equals("AUDIO")) {
+                            if (subList.get(i).getMediaType().equals(StringConstant.TYPE_AUDIO)) {
                                 if (playList == null) playList = new ArrayList<>();
                                 if (playList.size() < 3) playList.add(subList.get(i));
-                            } else if (subList.get(i).getMediaType().equals("SEQU")) {
+                            } else if (subList.get(i).getMediaType().equals(StringConstant.TYPE_SEQU)) {
                                 if (sequList == null) sequList = new ArrayList<>();
                                 if (sequList.size() < 3) sequList.add(subList.get(i));
-                            } else if (subList.get(i).getMediaType().equals("TTS")) {
+                            } else if (subList.get(i).getMediaType().equals(StringConstant.TYPE_TTS)) {
                                 if (ttsList == null) ttsList = new ArrayList<>();
                                 if (ttsList.size() < 3) ttsList.add(subList.get(i));
-                            } else if (subList.get(i).getMediaType().equals("RADIO")) {
+                            } else if (subList.get(i).getMediaType().equals(StringConstant.TYPE_RADIO)) {
                                 if (radioList == null) radioList = new ArrayList<>();
                                 if (radioList.size() < 3) radioList.add(subList.get(i));
                             }

@@ -178,14 +178,9 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
                 }
                 if (returnType != null && returnType.equals("1001")) {
                     try {
+                        page++;
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
                         subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
-                        if (subList != null && subList.size() >= 10) {
-                            page++;
-                        } else {
-                            mListView.stopLoadMore();
-                            mListView.setPullLoadEnable(false);
-                        }
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -199,6 +194,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
                     setListener();
                     tipView.setVisibility(View.GONE);
                 } else {
+                    mListView.setPullLoadEnable(false);
                     if (refreshType == 1) {
                         tipView.setVisibility(View.VISIBLE);
                         tipView.setTipView(TipView.TipStatus.NO_DATA, "专辑中没有节目\n换个专辑看看吧");
