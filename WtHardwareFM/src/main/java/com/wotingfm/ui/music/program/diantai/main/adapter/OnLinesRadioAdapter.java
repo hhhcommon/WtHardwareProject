@@ -126,7 +126,6 @@ public class OnLinesRadioAdapter extends BaseExpandableListAdapter  {
 			holder.textview_ranktitle = (TextView) convertView.findViewById(R.id.RankTitle);// 台名
 			holder.textview_rankplaying = (TextView) convertView.findViewById(R.id.RankPlaying);// 正在播放的节目
 			holder.imageview_rankimage = (ImageView) convertView.findViewById(R.id.RankImageUrl);// 电台图标
-			holder.mTv_number = (TextView) convertView.findViewById(R.id.tv_num);
 			holder.lin_CurrentPlay = (LinearLayout) convertView.findViewById(R.id.lin_currentplay);
 
 //			holder.image_last = (ImageView) convertView.findViewById(R.id.image_last);//
@@ -205,13 +204,7 @@ public class OnLinesRadioAdapter extends BaseExpandableListAdapter  {
 			}else{
 				ToastUtils.show_short(context, "服务器返回数据MediaType为空");
 			}
-			if (lists.getPlayCount() == null
-					|| lists.getPlayCount().equals("")
-					|| lists.getPlayCount().equals("null")) {
-				holder.mTv_number.setText("0");
-			} else {
-				holder.mTv_number.setText(lists.getPlayCount());
-			}
+
 		}
 
 		return convertView;
@@ -224,7 +217,6 @@ public class OnLinesRadioAdapter extends BaseExpandableListAdapter  {
 		public TextView textview_ranktitle;
 		public TextView tv_name;
 		public LinearLayout lin_more;
-		public TextView mTv_number;
 		public LinearLayout lin_CurrentPlay;
 		public ImageView img_zhezhao;
 //		public ImageView image_num;
