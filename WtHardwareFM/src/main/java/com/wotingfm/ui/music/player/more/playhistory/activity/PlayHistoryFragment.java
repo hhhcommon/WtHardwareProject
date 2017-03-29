@@ -1,6 +1,7 @@
 package com.wotingfm.ui.music.player.more.playhistory.activity;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -12,10 +13,14 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
+import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.main.PlayerActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.ui.music.player.more.playhistory.adapter.PlayHistoryAdapter;
+import com.wotingfm.util.CommonUtils;
 import com.wotingfm.widget.TipView;
 
 import java.util.List;
@@ -24,7 +29,7 @@ import java.util.List;
  * 播放历史
  * @author woting11
  */
-public class PlayHistoryFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemLongClickListener {
+public class PlayHistoryFragment extends Fragment implements View.OnClickListener, AdapterView.OnItemLongClickListener, AdapterView.OnItemClickListener {
     private SearchPlayerHistoryDao dbDao;	// 播放历史数据库
     private List<PlayerHistory> subList;
     private PlayHistoryAdapter adapter;
@@ -33,7 +38,7 @@ public class PlayHistoryFragment extends Fragment implements View.OnClickListene
     private Dialog delDialog;// 长按删除数据确认对话框
     private TextView clearEmpty, openEdit;
 
-    private ListView listView;// 数据列表
+    private ListView subListView;// 数据列表
     private TipView tipView;// 没有数据的提示
 
     private int index;// 记录位置
@@ -60,8 +65,9 @@ public class PlayHistoryFragment extends Fragment implements View.OnClickListene
     private void initViews() {
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);  // 左上返回键
 
-        listView = (ListView) rootView.findViewById(R.id.list_view);
-        listView.setOnItemLongClickListener(this);
+        subListView = (ListView) rootView.findViewById(R.id.list_view);
+        subListView.setOnItemLongClickListener(this);
+        subListView.setOnItemClickListener(this);
 
         tipView = (TipView) rootView.findViewById(R.id.tip_view);
 
@@ -76,7 +82,7 @@ public class PlayHistoryFragment extends Fragment implements View.OnClickListene
     private void initData() {
         subList = dbDao.queryHistory();
         if (subList != null && subList.size() > 0) {
-            listView.setAdapter(adapter = new PlayHistoryAdapter(context, subList));
+            subListView.setAdapter(adapter = new PlayHistoryAdapter(context, subList));
         } else {
             clearEmpty.setVisibility(View.GONE);
             tipView.setVisibility(View.VISIBLE);
@@ -145,13 +151,13 @@ public class PlayHistoryFragment extends Fragment implements View.OnClickListene
                 String playType = subList.get(index).getPlayerMediaType();
 
                 // "TTS" 类型的删除条件为 ContentID, 其他类型为 url
-                if (playType != null && !playType.equals("") && playType.equals("TTS")) {
+                if (playType != null && playType.equals(StringConstant.TYPE_TTS)) {
                     String contentId = subList.get(index).getContentID();
                     dbDao.deleteHistoryById(contentId);
-                } else if (playType != null && !playType.equals("") && playType.equals("RADIO")) {
+                } else if (playType != null && playType.equals(StringConstant.TYPE_RADIO)) {
                     String url = subList.get(index).getPlayerUrl();
                     dbDao.deleteHistory(url);
-                } else if (playType != null && !playType.equals("") && playType.equals("AUDIO")) {
+                } else if (playType != null && playType.equals(StringConstant.TYPE_AUDIO)) {
                     String url = subList.get(index).getPlayerUrl();
                     dbDao.deleteHistory(url);
                 }
@@ -160,6 +166,56 @@ public class PlayHistoryFragment extends Fragment implements View.OnClickListene
                 delDialog.dismiss();
             }
         });
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        String mediaType = subList.get(position).getPlayerMediaType();
+        if (mediaType != null && !mediaType.equals(StringConstant.TYPE_SEQU)) {
+            String playerName = subList.get(position).getPlayerName();
+            String playerImage = subList.get(position).getPlayerImage();
+            String playerUrl = subList.get(position).getPlayerUrl();
+            String playerUri = subList.get(position).getPlayerUrI();
+            String playerMediaType = subList.get(position).getPlayerMediaType();
+            String playerAllTime = subList.get(position).getContentTimes();
+            String playerInTime = "0";
+            String playerContentDesc = subList.get(position).getPlayerContentDescn();
+            String playerNum = subList.get(position).getPlayCount();
+            String playerZanType = "0";
+            String playerFrom = subList.get(position).getContentPub();
+            String playerFromId = "";
+            String playerFromUrl = subList.get(position).getPlayerFromUrl();
+            String playerAddTime = Long.toString(System.currentTimeMillis());
+            String bjUserId = CommonUtils.getUserId(context);
+            String contentFavorite = subList.get(position).getContentFavorite();
+            String playShareUrl = subList.get(position).getPlayContentShareUrl();
+            String contentId = subList.get(position).getContentID();
+            String localUrl = subList.get(position).getLocalurl();
+            String sequname = subList.get(position).getSequName();
+            String sequid = subList.get(position).getSequId();
+            String sequdesc = subList.get(position).getSequDesc();
+            String sequimg = subList.get(position).getSequImg();
+
+            PlayerHistory history = new PlayerHistory(
+                    playerName, playerImage, playerUrl, playerUri, playerMediaType,
+                    playerAllTime, playerInTime, playerContentDesc, playerNum,
+                    playerZanType, playerFrom, playerFromId, playerFromUrl,
+                    playerAddTime, bjUserId, playShareUrl, contentFavorite, contentId, localUrl, sequname, sequid, sequdesc, sequimg);
+
+            // 如果该数据已经存在数据库则删除原有数据，然后添加最新数据
+            if (playerMediaType != null && playerMediaType.equals(StringConstant.TYPE_TTS)) {
+                dbDao.deleteHistoryById(contentId);
+            } else {
+                dbDao.deleteHistory(playerUrl);
+            }
+            dbDao.addHistory(history);
+            MainActivity.changeOne();
+            Intent pushIntent = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+            Bundle bundle = new Bundle();
+            bundle.putString(StringConstant.TEXT_CONTENT, subList.get(position).getPlayerName());
+            pushIntent.putExtras(bundle);
+            context.sendBroadcast(pushIntent);
+        }
     }
 
     @Override
