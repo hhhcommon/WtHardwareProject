@@ -44,13 +44,13 @@ import java.util.ArrayList;
 
 /**
  * 专辑页
- * @author 辛龙
+ * 辛龙
  * 2016年4月1日
  */
 public class AlbumFragment extends Fragment implements OnClickListener, ViewPager.OnPageChangeListener, TipView.WhiteViewClick {
     private DetailsFragment detailsFragment;// 专辑详情
     private ProgramListFragment programFragment;// 专辑列表
-    private static ResultInfo resultInfo=null;// 获取的专辑信息
+    private static ResultInfo resultInfo = null;// 获取的专辑信息
     private ImageView[] imageViews;
 
     private TipView tipView;// 没有网络、没有数据提示
@@ -64,44 +64,50 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
     private View rootView;
     public static String jump_type;
 
+    private View relativeView;
+
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn: // 返回
-               detailsFragment=null;// 专辑详情
-               programFragment=null;// 专辑列表
-                if(jump_type!=null){
-                    if(jump_type.equals("search")){
-                        SearchLikeActivity.close();
-                    }else if(jump_type.equals("program")){
-                        ProgramActivity.close();
-                    }else if(jump_type.equals("play")){
+                if (jump_type == null) return ;
+                switch (jump_type) {
+                    case StringConstant.TAG_PLAY:
                         PlayerActivity.close();
-                    }
+                        break;
+                    case StringConstant.TAG_PROGRAM:
+                        ProgramActivity.close();
+                        break;
+                    case StringConstant.TAG_SEARCH:
+                        SearchLikeActivity.close();
+                        break;
                 }
+                detailsFragment = null;// 专辑详情
+                programFragment = null;// 专辑列表
                 break;
-            case R.id.head_right_btn://
-                // 专辑列表中的数据一集一集往下播
-                if(GlobalConfig.playerObject!=null&&!TextUtils.isEmpty(albumId)){
+            case R.id.head_right_btn:// 举报
+                if (GlobalConfig.playerObject != null && !TextUtils.isEmpty(albumId)) {
+                    if (jump_type == null) return ;
                     AccuseFragment fragment = new AccuseFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("ContentId", albumId);
-                    bundle.putString("MediaType", "SEQU");
-                    bundle.putString(StringConstant.JUMP_TYPE,jump_type);
+                    bundle.putString("MediaType", StringConstant.TYPE_SEQU);
+                    bundle.putString(StringConstant.JUMP_TYPE, jump_type);
                     fragment.setArguments(bundle);
-                    if(jump_type!=null){
-                        if(jump_type.equals("search")){
-                            SearchLikeActivity.open(fragment);
-                        }else if(jump_type.equals("program")){
-                            ProgramActivity.open(fragment);
-                        }else if(jump_type.equals("play")){
+                    switch (jump_type) {
+                        case StringConstant.TAG_PLAY:
                             PlayerActivity.open(fragment);
-                        }
+                            break;
+                        case StringConstant.TAG_PROGRAM:
+                            ProgramActivity.open(fragment);
+                            break;
+                        case StringConstant.TAG_SEARCH:
+                            SearchLikeActivity.open(fragment);
+                            break;
                     }
-                }else{
-                    ToastUtils.show_always(context,"获取本专辑信息有误，请回退回上一级界面重试");
+                } else {
+                    ToastUtils.show_always(context, "获取本专辑信息有误，请回退回上一级界面重试");
                 }
-
                 break;
         }
     }
@@ -111,14 +117,13 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
         return resultInfo;
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.activity_album, container, false);
             rootView.setOnClickListener(this);
             context = getActivity();
-            jump_type=getArguments().getString(StringConstant.JUMP_TYPE);//search
+            jump_type = getArguments().getString(StringConstant.JUMP_TYPE);// search
             initView();
             initEvent();
         }
@@ -129,6 +134,8 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
     private void initView() {
         tipView = (TipView) rootView.findViewById(R.id.tip_view);
         tipView.setWhiteClick(this);
+
+        relativeView = rootView.findViewById(R.id.relative_view);
 
         LinearLayout viewLinear = (LinearLayout) rootView.findViewById(R.id.view_group);// viewGroup 添加小圆点
         imageViews = new ImageView[2];// 设置页面下标小红点
@@ -149,7 +156,7 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
         textAlbumName = (TextView) rootView.findViewById(R.id.head_name_tv);// 专辑名字
         handleIntent();
 
-        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             dialog = DialogUtils.Dialogph(context, "数据加载中...");
             sendRequest();
         } else {
@@ -183,6 +190,7 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
         String albumName;// 专辑名字
         RankInfo list;
         String type = getArguments().getString("type");
+        if (type == null) return ;
         switch (type) {
             case "radiolistactivity":
                 list = (RankInfo) getArguments().getSerializable("list");
@@ -228,7 +236,7 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
     private void sendRequest() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("MediaType", "SEQU");
+            jsonObject.put("MediaType", StringConstant.TYPE_SEQU);
             jsonObject.put("ContentId", albumId);
             jsonObject.put("Page", "1");
         } catch (JSONException e) {
@@ -242,13 +250,15 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
                 try {
                     String ReturnType = result.getString("ReturnType");
                     if (ReturnType != null && ReturnType.equals("1001")) {
-                        resultInfo = new Gson().fromJson(result.getString("ResultInfo"), new TypeToken<ResultInfo>() {}.getType());
+                        resultInfo = new Gson().fromJson(result.getString("ResultInfo"), new TypeToken<ResultInfo>() {
+                        }.getType());
                         L.i("TAG", resultInfo.toString());
 
-                        if(resultInfo != null) {
+                        if (resultInfo != null) {
                             initViewPager();
                             tipView.setVisibility(View.GONE);
-                            if(programFragment != null) {
+                            relativeView.setVisibility(View.VISIBLE);
+                            if (programFragment != null) {
                                 String descn = resultInfo.getContentDescn();
                                 String name = resultInfo.getContentName();
                                 String img = resultInfo.getContentImg();
@@ -258,12 +268,14 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
                                 L.w("TAG", "img -- > " + img);
                             }
                         } else {
+                            relativeView.setVisibility(View.GONE);
                             tipView.setVisibility(View.VISIBLE);
                             tipView.setTipView(TipView.TipStatus.NO_DATA, "数据君不翼而飞了\n点击界面会重新获取数据哟");
                         }
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
+                    relativeView.setVisibility(View.GONE);
                     tipView.setVisibility(View.VISIBLE);
                     tipView.setTipView(TipView.TipStatus.IS_ERROR);
                 }
@@ -273,6 +285,7 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
             protected void requestError(VolleyError error) {
                 if (dialog != null) dialog.dismiss();
                 ToastUtils.showVolleyError(context);
+                relativeView.setVisibility(View.GONE);
                 tipView.setVisibility(View.VISIBLE);
                 tipView.setTipView(TipView.TipStatus.IS_ERROR);
             }
@@ -305,7 +318,7 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
 
     @Override
     public void onWhiteViewClick() {
-        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
             dialog = DialogUtils.Dialogph(context, "数据加载中...");
             sendRequest();
         } else {

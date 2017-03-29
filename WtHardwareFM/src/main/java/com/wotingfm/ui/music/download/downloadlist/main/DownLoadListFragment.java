@@ -2,7 +2,6 @@ package com.wotingfm.ui.music.download.downloadlist.main;
 
 import android.app.Dialog;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
@@ -16,16 +15,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.wotingfm.R;
-import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
-import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.ui.music.download.downloadlist.adapter.DownLoadListAdapter;
 import com.wotingfm.ui.music.download.model.FileInfo;
 import com.wotingfm.ui.music.main.PlayerActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
-import com.wotingfm.ui.music.player.main.PlayerFragment;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.util.CommonUtils;
 import com.wotingfm.util.L;
@@ -228,7 +224,7 @@ public class DownLoadListFragment extends Fragment implements OnClickListener {
                             String playerurl = mFileInfo.getUrl();
                             String playerurI = mFileInfo.getLocalurl();
                             String playlocalrurl = mFileInfo.getLocalurl();
-                            String playermediatype = "AUDIO";
+                            String playermediatype = StringConstant.TYPE_AUDIO;
                             String playercontentshareurl = mFileInfo.getContentShareURL();
                             String plaplayeralltime = mFileInfo.getPlayAllTime();
                             String playerintime = "0";
@@ -255,19 +251,12 @@ public class DownLoadListFragment extends Fragment implements OnClickListener {
                                     ContentId, playlocalrurl, sequName, sequId, sequDesc, sequImg);
                             dbDao.deleteHistory(playerurl);
                             dbDao.addHistory(history);
-                            if (PlayerFragment.context != null) {
-                                Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
-                                Bundle bundle1 = new Bundle();
-                                bundle1.putString("text", mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4));
-                                push.putExtras(bundle1);
-                                context.sendBroadcast(push);
-                            } else {
-                                SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
-                                et.putString(StringConstant.PLAYHISTORYENTER, "true");
-                                et.putString(StringConstant.PLAYHISTORYENTERNEWS, mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4));
-                                if (!et.commit()) L.v("commit", "数据 commit 失败!");
 
-                            }
+                            Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                            Bundle bundle1 = new Bundle();
+                            bundle1.putString(StringConstant.TEXT_CONTENT, mFileInfo.getFileName().substring(0, mFileInfo.getFileName().length() - 4));
+                            push.putExtras(bundle1);
+                            context.sendBroadcast(push);
                             PlayerActivity.close();
 
                             dbDao.closedb();

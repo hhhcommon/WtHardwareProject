@@ -29,7 +29,6 @@
             android:textColor="@color/WHITE_1"
             android:textSize="@dimen/audio_title_size" />
 
-
         <TextView
             android:id="@+id/head_right_btn"
             style="@style/RightMoreStyle"
@@ -48,23 +47,31 @@
         android:layout_below="@id/relative_title"
         android:visibility="gone"/>
 
-    <android.support.v4.view.ViewPager
-        android:id="@+id/viewpager"
+    <RelativeLayout
+        android:id="@+id/relative_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/relative_title"
-        android:background="@color/WHITE"
-        android:persistentDrawingCache="animation" />
+        android:background="@color/WHITE">
 
-    <LinearLayout
-        android:id="@+id/view_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_marginBottom="20dp"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal" >
+        <android.support.v4.view.ViewPager
+            android:id="@+id/viewpager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/WHITE"
+            android:persistentDrawingCache="animation" />
 
-    </LinearLayout>
+        <LinearLayout
+            android:id="@+id/view_group"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="20dp"
+            android:gravity="center_horizontal"
+            android:orientation="horizontal" >
+
+        </LinearLayout>
+
+    </RelativeLayout>
 
 </RelativeLayout>

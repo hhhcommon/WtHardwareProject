@@ -53,7 +53,7 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
 
     private ListView pairBluetoothList;                     // 已经配对过的
     private ListView userBluetoothList;                     // 可用蓝牙设备列表
-    private List<BluetoothInfo> pairList;                   // 已经配对的蓝牙列表
+    private List<BluetoothInfo> pairList = new ArrayList<>();// 已经配对的蓝牙列表
     private List<BluetoothInfo> userList = new ArrayList<>();// 附近可以配对的蓝牙列表
     private Set<BluetoothDevice> device;                    // 搜索到新的蓝牙设备列表
 
@@ -131,6 +131,7 @@ public class BluetoothFragment extends Fragment implements View.OnClickListener 
             viewBack.setVisibility(View.GONE);
             imageBluetoothSet.setImageResource(R.mipmap.wt_person_close);
             userBluetoothList.setDividerHeight(0);
+            pairBluetoothList.setAdapter(pairAdapter = new PairBluetoothAdapter(context, pairList));// 配对过的列表
             userBluetoothList.setAdapter(userAdapter = new UserBluetoothAdapter(context, userList));
         }
         setItemLis();

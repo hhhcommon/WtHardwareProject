@@ -171,4 +171,13 @@ public class StringConstant {
 
     // 保存流量提醒是否打开
     public static final String FLOW_REMIND_SWITCH = "FLOW_REMIND_SWITCH";
+
+    // 搜索
+    public static final String TAG_SEARCH = "search";
+
+    // 节目
+    public static final String TAG_PROGRAM = "program";
+
+    // 播放
+    public static final String TAG_PLAY = "play";
 }
