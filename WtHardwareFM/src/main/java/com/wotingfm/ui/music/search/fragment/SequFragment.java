@@ -174,7 +174,7 @@ public class SequFragment extends Fragment implements TipView.WhiteViewClick {
                         AlbumFragment fg = new AlbumFragment();
                         Bundle bundle=new Bundle();
                         bundle.putString("type", "search");
-                        bundle.putString(StringConstant.JUMP_TYPE, "search");
+                        bundle.putString(StringConstant.FROM_TYPE, "search");
                         bundle.putSerializable("list", newList.get(position - 1));
                         fg.setArguments(bundle);
                         SearchLikeActivity.open(fg);

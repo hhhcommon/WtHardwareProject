@@ -87,7 +87,7 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
                     Bundle bundle = new Bundle();
                     bundle.putString("ContentId", albumId);
                     bundle.putString("MediaType", "SEQU");
-                    bundle.putString(StringConstant.JUMP_TYPE,jump_type);
+                    bundle.putString(StringConstant.FROM_TYPE,jump_type);
                     fragment.setArguments(bundle);
                     if(jump_type!=null){
                         if(jump_type.equals("search")){
@@ -118,7 +118,7 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
             rootView = inflater.inflate(R.layout.activity_album, container, false);
             rootView.setOnClickListener(this);
             context = getActivity();
-            jump_type=getArguments().getString(StringConstant.JUMP_TYPE);//search
+            jump_type=getArguments().getString(StringConstant.FROM_TYPE);//search
             initView();
             initEvent();
         }

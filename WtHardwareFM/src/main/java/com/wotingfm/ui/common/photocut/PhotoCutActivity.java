@@ -62,7 +62,7 @@ public class PhotoCutActivity extends Fragment {
             return;
         }
 
-        jump_type = getArguments().getString(StringConstant.JUMP_TYPE);
+        jump_type = getArguments().getString(StringConstant.FROM_TYPE);
         fragment_type = getArguments().getString(StringConstant.FRAGMENT_TYPE);
         String imageUrl = getArguments().getString(StringConstant.START_PHOTO_ZOOM_URI);
         type = getArguments().getInt(StringConstant.START_PHOTO_ZOOM_TYPE, -1);

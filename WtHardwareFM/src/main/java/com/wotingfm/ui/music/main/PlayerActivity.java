@@ -4,7 +4,6 @@ import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -56,7 +55,6 @@ public class PlayerActivity extends BaseFragmentActivity {
 
     /**
      * 打开一个新的fragment
-     * @param frg
      */
     public static void open(Fragment frg) {
         context.getSupportFragmentManager().beginTransaction()
@@ -69,7 +67,7 @@ public class PlayerActivity extends BaseFragmentActivity {
      * 关闭当前fragment
      */
     public static void close() {
-        context.getSupportFragmentManager().popBackStack();
+        context.getSupportFragmentManager().popBackStackImmediate();
     }
 
     public static void hideShow(Fragment from, Fragment to) {

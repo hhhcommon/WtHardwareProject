@@ -161,7 +161,7 @@ public class StringConstant {
     public static final String TEXT_CONTENT = "text";
 
     // 跳转类型
-    public static final String JUMP_TYPE = "JUMP_TYPE";
+    public static final String FROM_TYPE = "FROM_TYPE";
 
     // Fragment类型
     public static final String FRAGMENT_TYPE = "FRAGMENT_TYPE";

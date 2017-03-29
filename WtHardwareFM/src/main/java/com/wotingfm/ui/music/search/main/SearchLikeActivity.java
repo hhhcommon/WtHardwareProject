@@ -13,7 +13,9 @@ import android.view.View;
 import com.wotingfm.R;
 import com.wotingfm.util.SequenceUUID;
 
-
+/**
+ * 搜索
+ */
 public class SearchLikeActivity extends AppCompatActivity {
     public FragmentManager fm;
     public static SearchLikeActivity context;
@@ -22,11 +24,12 @@ public class SearchLikeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_view_other);
-        context=this;
+        context = this;
 
         setType();
         SearchLikeActivity.open(new SearchLikeFragment());
     }
+
     // 适配顶栏样式
     private void setType() {
         String a = android.os.Build.VERSION.RELEASE;
@@ -49,27 +52,28 @@ public class SearchLikeActivity extends AppCompatActivity {
                 .add(R.id.fragment_content, frg)
                 .addToBackStack(SequenceUUID.getUUID())
                 .commit();
-        int num=context.getSupportFragmentManager().getBackStackEntryCount();
+        int num = context.getSupportFragmentManager().getBackStackEntryCount();
         Log.e("此时返回栈中个数====open====", num + "");
     }
 
     public static void close() {
         context.getSupportFragmentManager().popBackStackImmediate();
-        int num=context.getSupportFragmentManager().getBackStackEntryCount();
+        int num = context.getSupportFragmentManager().getBackStackEntryCount();
         Log.e("此时返回栈中个数====close====", num + "");
     }
 
-    public static void hideShow(Fragment from,Fragment to) {
+    public static void hideShow(Fragment from, Fragment to) {
         context.getSupportFragmentManager().beginTransaction().
                 hide(from).show(to).commit();
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
     }
 
     /*
-	 * 手机实体返回按键的处理,硬件不加入
+     * 手机实体返回按键的处理,硬件不加入
 	 */
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -78,6 +82,7 @@ public class SearchLikeActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
     // 设置android app 的字体大小不受系统字体大小改变的影响
     @Override
     public Resources getResources() {
@@ -87,5 +92,4 @@ public class SearchLikeActivity extends AppCompatActivity {
         res.updateConfiguration(config, res.getDisplayMetrics());
         return res;
     }
-
 }

@@ -101,7 +101,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
     }
 
     private void handleIntent() {
-        jump_type=getArguments().getString(StringConstant.JUMP_TYPE);//search
+        jump_type=getArguments().getString(StringConstant.FROM_TYPE);//search
         contentId = getArguments().getString("contentId");
         mediaType=getArguments().getString("MediaType");
     }
