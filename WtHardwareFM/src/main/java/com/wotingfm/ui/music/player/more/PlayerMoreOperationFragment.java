@@ -164,7 +164,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                 EWMShowFragment fg_evm = new EWMShowFragment();
                 Bundle bundle_evm = new Bundle();
                 bundle_evm.putInt("type", 0);
-                bundle_evm.putString(StringConstant.JUMP_TYPE, StringConstant.TAG_PLAY);
+                bundle_evm.putString(StringConstant.FROM_TYPE, StringConstant.TAG_PLAY);
                 fg_evm.setArguments(bundle_evm);
                 PlayerActivity.open(fg_evm);
                 break;
@@ -176,7 +176,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                         Bundle bundle = new Bundle();
                         bundle.putString("contentId", GlobalConfig.playerObject.getContentId());
                         bundle.putString("MediaType", GlobalConfig.playerObject.getMediaType());
-                        bundle.putString(StringConstant.JUMP_TYPE, StringConstant.TAG_PLAY);
+                        bundle.putString(StringConstant.FROM_TYPE, StringConstant.TAG_PLAY);
                         fg.setArguments(bundle);
                         PlayerActivity.open(fg);
                     } else {
@@ -231,7 +231,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                     bundle.putString("contentName", SequName);
                     bundle.putString("contentDesc", SequDesc);
                     bundle.putString("contentId", SequId);
-                    bundle.putString(StringConstant.JUMP_TYPE, StringConstant.TAG_PLAY);
+                    bundle.putString(StringConstant.FROM_TYPE, StringConstant.TAG_PLAY);
                     bundle.putString("contentImg", SequImage);
                     fg_album.setArguments(bundle);
                     PlayerActivity.open(fg_album);
@@ -248,7 +248,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                     if(!TextUtils.isEmpty(GlobalConfig.playerObject.getMediaType())) {
                         bundle.putString("MediaType", StringConstant.TYPE_SEQU);
                     }
-                    bundle.putString(StringConstant.JUMP_TYPE, StringConstant.TAG_PLAY);
+                    bundle.putString(StringConstant.FROM_TYPE, StringConstant.TAG_PLAY);
                     fragment.setArguments(bundle);
                     PlayerActivity.open(fragment);
                 }else{

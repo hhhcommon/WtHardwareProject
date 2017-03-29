@@ -103,7 +103,7 @@ public class AccuseFragment extends Fragment implements OnClickListener {
         if (bundle == null) return;
         ContentId = bundle.getString("ContentId");
         MediaType = bundle.getString("MediaType");
-        jumpType = getArguments().getString(StringConstant.JUMP_TYPE);// search
+        jumpType = getArguments().getString(StringConstant.FROM_TYPE);// search
     }
 
     //获取举报列表

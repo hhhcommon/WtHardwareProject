@@ -92,7 +92,7 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
                     Bundle bundle = new Bundle();
                     bundle.putString("ContentId", albumId);
                     bundle.putString("MediaType", StringConstant.TYPE_SEQU);
-                    bundle.putString(StringConstant.JUMP_TYPE, jump_type);
+                    bundle.putString(StringConstant.FROM_TYPE, jump_type);
                     fragment.setArguments(bundle);
                     switch (jump_type) {
                         case StringConstant.TAG_PLAY:
@@ -123,7 +123,7 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
             rootView = inflater.inflate(R.layout.activity_album, container, false);
             rootView.setOnClickListener(this);
             context = getActivity();
-            jump_type = getArguments().getString(StringConstant.JUMP_TYPE);// search
+            jump_type = getArguments().getString(StringConstant.FROM_TYPE);// search
             initView();
             initEvent();
         }
@@ -132,10 +132,12 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
 
     // 初始化视图
     private void initView() {
+        relativeView = rootView.findViewById(R.id.relative_view);
         tipView = (TipView) rootView.findViewById(R.id.tip_view);
         tipView.setWhiteClick(this);
-
-        relativeView = rootView.findViewById(R.id.relative_view);
+        relativeView.setVisibility(View.GONE);
+        tipView.setVisibility(View.VISIBLE);
+        tipView.setTipView(TipView.TipStatus.NO_DATA, "数据君不翼而飞了\n点击界面会重新获取数据哟");
 
         LinearLayout viewLinear = (LinearLayout) rootView.findViewById(R.id.view_group);// viewGroup 添加小圆点
         imageViews = new ImageView[2];// 设置页面下标小红点
