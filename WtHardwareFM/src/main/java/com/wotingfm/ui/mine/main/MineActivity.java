@@ -74,7 +74,7 @@ public class MineActivity extends BaseFragmentActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    // 设置android app 的字体大小不受系统字体大小改变的影响
+    // 设置 android app 的字体大小不受系统字体大小改变的影响
     @Override
     public Resources getResources() {
         Resources res = super.getResources();

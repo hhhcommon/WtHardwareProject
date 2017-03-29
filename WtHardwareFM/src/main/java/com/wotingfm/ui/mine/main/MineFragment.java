@@ -47,7 +47,6 @@ import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.photocut.PhotoCutActivity;
 import com.wotingfm.ui.common.qrcode.EWMShowFragment;
 import com.wotingfm.ui.interphone.model.UserInviteMeInside;
-import com.wotingfm.ui.interphone.simulation.SimulationInterphoneFragment;
 import com.wotingfm.ui.mine.FMTestActivity;
 import com.wotingfm.ui.mine.bluetooth.BluetoothFragment;
 import com.wotingfm.ui.mine.flowmanage.FlowManageFragment;
@@ -478,7 +477,7 @@ public class MineFragment extends Fragment implements OnClickListener {
         PhotoCutActivity fg = new PhotoCutActivity();
         Bundle bundle = new Bundle();
         bundle.putString(StringConstant.START_PHOTO_ZOOM_URI, uri.toString());
-        bundle.putString(StringConstant.JUMP_TYPE, "mine");
+        bundle.putString(StringConstant.FROM_TYPE, "mine");
         bundle.putString(StringConstant.FRAGMENT_TYPE, "MineFragment");
         bundle.putInt(StringConstant.START_PHOTO_ZOOM_TYPE, 1);
         fg.setArguments(bundle);

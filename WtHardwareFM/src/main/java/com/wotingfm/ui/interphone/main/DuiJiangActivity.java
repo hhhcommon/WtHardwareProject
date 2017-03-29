@@ -6,13 +6,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 
-import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
 import com.wotingfm.util.SequenceUUID;
-import com.wotingfm.util.ToastUtils;
 
 
 public class DuiJiangActivity extends AppCompatActivity {
@@ -53,7 +50,7 @@ public class DuiJiangActivity extends AppCompatActivity {
     }
 
     public static void close() {
-        context.getSupportFragmentManager().popBackStack();
+        context.getSupportFragmentManager().popBackStackImmediate();
     }
 
     public static void hideShow(Fragment from, Fragment to) {

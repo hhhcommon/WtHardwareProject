@@ -83,7 +83,7 @@ public class EWMShowFragment extends Fragment implements OnClickListener {
         textNews = (TextView) rootView.findViewById(R.id.news);
 
         if (getArguments() != null) {
-            TZ_type = getArguments().getString(StringConstant.JUMP_TYPE);
+            TZ_type = getArguments().getString(StringConstant.FROM_TYPE);
             int type = getArguments().getInt("type", 1);// 0：单体节目分享  1：个人   2：组  3：专辑分享
             if (type == 0) {
                 shapeContent();

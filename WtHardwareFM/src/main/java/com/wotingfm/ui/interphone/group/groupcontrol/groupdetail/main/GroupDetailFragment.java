@@ -1010,7 +1010,7 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
         PhotoCutActivity fg = new PhotoCutActivity();
         Bundle bundle = new Bundle();
         bundle.putString(StringConstant.START_PHOTO_ZOOM_URI, uri.toString());
-        bundle.putString(StringConstant.JUMP_TYPE, "duijiang");
+        bundle.putString(StringConstant.FROM_TYPE, "duijiang");
         bundle.putString(StringConstant.FRAGMENT_TYPE, "GroupDetailFragment");
         bundle.putInt(StringConstant.START_PHOTO_ZOOM_TYPE, 1);
         fg.setArguments(bundle);

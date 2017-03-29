@@ -60,7 +60,7 @@ public class AnchorListFragment extends Fragment implements View.OnClickListener
             rootView = inflater.inflate(R.layout.activity_fmlist, container, false);
             rootView.setOnClickListener(this);
             context = getActivity();
-            jump_type=getArguments().getString(StringConstant.JUMP_TYPE);
+            jump_type=getArguments().getString(StringConstant.FROM_TYPE);
             initView();
             handleIntent();
         }
@@ -256,7 +256,7 @@ public class AnchorListFragment extends Fragment implements View.OnClickListener
                 AlbumFragment fg = new AlbumFragment();
                 Bundle bundle=new Bundle();
                 bundle.putString("type", "main");
-                bundle.putString(StringConstant.JUMP_TYPE,jump_type);
+                bundle.putString(StringConstant.FROM_TYPE,jump_type);
                 bundle.putString("id",MediaInfoList.get(position-1).getContentId());
                 fg.setArguments(bundle);
                 ProgramActivity.open(fg);
