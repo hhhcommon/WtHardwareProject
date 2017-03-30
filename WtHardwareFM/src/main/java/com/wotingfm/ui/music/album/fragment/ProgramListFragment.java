@@ -445,7 +445,6 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
                         bundle1.putString(StringConstant.TEXT_CONTENT,contentList.get(position - 1).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
-
                         MainActivity.changeOne();
                     } else {
                         ToastUtils.show_always(context, "暂不支持播放");
