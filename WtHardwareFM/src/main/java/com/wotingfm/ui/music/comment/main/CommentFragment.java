@@ -57,31 +57,36 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * 评论
+ */
 public class CommentFragment extends Fragment implements View.OnClickListener {
+    private FragmentActivity context;
+    private ArrayList<String> FaceList;
+    private ArrayList<opinion> OM;
+    private List<View> views = new ArrayList<>();
 
-    private ImageView image_face;
+    private Dialog confirmDialog;
+    private View rootView;
     private LinearLayout chat_face_container;
-    private ViewPager mViewPager;
     private LinearLayout mDotsLayout;
+    private LinearLayout lin_back;
+    private ListView lv_comment;
+    private ViewPager mViewPager;
     private MyEditText input;
     private TextView send;
-    private ArrayList<String> FaceList;
-    private List<View> views = new ArrayList<View>();
+    private ImageView image_face;
+
     private int columns = 6;
     private int rows = 4;
-    private ListView lv_comment;
+
+    private long time2 = 0;
+    private String discussId;
+    private String mediaType;
+    private String jumpType;
     private String contentId;
     private String tag = "HOME_COMMENT_TAG";
     private boolean isCancelRequest;
-    private ArrayList<opinion> OM;
-    private LinearLayout lin_back;
-    private Dialog confirmDialog;
-    private String discussId;
-    private long time2 = 0;
-    private String mediaType;
-    private View rootView;
-    private FragmentActivity context;
-    private String jump_type;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -101,9 +106,9 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
     }
 
     private void handleIntent() {
-        jump_type=getArguments().getString(StringConstant.FROM_TYPE);//search
+        jumpType = getArguments().getString(StringConstant.FROM_TYPE);
         contentId = getArguments().getString("contentId");
-        mediaType=getArguments().getString("MediaType");
+        mediaType = getArguments().getString("MediaType");
     }
 
     private void handleFace() {
@@ -126,21 +131,24 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
     }
 
     private void setListener() {
-        //表情按钮
+        // 表情按钮
         image_face.setOnClickListener(this);
         // 发送
         send.setOnClickListener(this);
         lin_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(jump_type!=null){
-                    if(jump_type.equals("search")){
-                        SearchLikeActivity.close();
-                    }else if(jump_type.equals("program")){
-                        ProgramActivity.close();
-                    }else if(jump_type.equals("play")){
+                if (jumpType == null) return ;
+                switch (jumpType) {
+                    case StringConstant.TAG_PLAY:
                         PlayerActivity.close();
-                    }
+                        break;
+                    case StringConstant.TAG_PROGRAM:
+                        ProgramActivity.close();
+                        break;
+                    case StringConstant.TAG_SEARCH:
+                        SearchLikeActivity.close();
+                        break;
                 }
             }
         });
@@ -149,11 +157,10 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
     private void callInternet() {
         if (contentId != null && !contentId.equals("")) {
             if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                send();//获取评论列表
+                send();// 获取评论列表
             } else {
                 ToastUtils.show_always(context, "网络失败，请检查网络");
             }
-
         } else {
             ToastUtils.show_always(context, "网络异常，无法获取到对应的评论列表");
         }
@@ -163,7 +170,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
         final View dialog1 = LayoutInflater.from(context).inflate(R.layout.dialog_exit_confirm, null);
         TextView tv_cancle = (TextView) dialog1.findViewById(R.id.tv_cancle);
         TextView tv_confirm = (TextView) dialog1.findViewById(R.id.tv_confirm);
-        TextView tv_title=(TextView)dialog1.findViewById(R.id.tv_title);
+        TextView tv_title = (TextView) dialog1.findViewById(R.id.tv_title);
         tv_title.setText("确定删除本条评论吗？");
         confirmDialog = new Dialog(context, R.style.MyDialog);
         confirmDialog.setContentView(dialog1);
@@ -187,7 +194,6 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
                 }
             }
         });
-
     }
 
     @Override
@@ -208,7 +214,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.send_sms://发送
                 String s = input.getText().toString().trim();
-                if (s != null && !s.equals("")) {
+                if (!s.equals("")) {
                     if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                         long time1 = System.currentTimeMillis();
                         if (time1 - time2 > 5000) {
@@ -226,7 +232,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    //删除评论
+    // 删除评论
     private void sendDelComment(String id) {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
@@ -251,9 +257,8 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
                             ToastUtils.show_short(context, "网络失败，请检查网络");
                         }
                         ToastUtils.show_always(context, "已经删除本条评论");
-                        context.setResult(1);
                     } else {
-                        ToastUtils.show_always(context, "网络失败，请检查网络");
+                        ToastUtils.show_always(context, "删除失败请重试");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -271,7 +276,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
     private void send() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("MediaType",mediaType);
+            jsonObject.put("MediaType", mediaType);
             jsonObject.put("ContentId", contentId);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -280,9 +285,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
 
             @Override
             protected void requestSuccess(JSONObject result) {
-                if (isCancelRequest) {
-                    return;
-                }
+                if (isCancelRequest) return;
                 Log.e("获取内容信息", "" + result.toString());
                 try {
                     String ReturnType = result.getString("ReturnType");
@@ -296,7 +299,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
                                 lv_comment.setAdapter(adapter);
                                 return;
                             }
-                            //对服务器返回的事件进行sd处理
+                            // 对服务器返回的事件进行sd处理
                             for (int i = 0; i < OM.size(); i++) {
                                 long time = Long.valueOf(OM.get(i).getTime());
                                 SimpleDateFormat sd = new SimpleDateFormat("MM-dd HH:mm");
@@ -308,7 +311,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
                             e.printStackTrace();
                         }
 
-                    } else{
+                    } else {
                         ContentNoAdapter adapter = new ContentNoAdapter(context);
                         lv_comment.setAdapter(adapter);
                         ToastUtils.show_always(context, "暂无评论");
@@ -353,7 +356,7 @@ public class CommentFragment extends Fragment implements View.OnClickListener {
     private void sendComment(String opinion) {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("MediaType",mediaType);
+            jsonObject.put("MediaType", mediaType);
             jsonObject.put("ContentId", contentId);
             jsonObject.put("Discuss", opinion);
         } catch (JSONException e) {
