@@ -21,6 +21,7 @@ import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
+import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
@@ -65,7 +66,6 @@ public class RadioFragment extends Fragment {
 
     private int page = 1;
     private int refreshType = 1;     // refreshType 1为下拉加载 2为上拉加载更多
-    private int pageSizeNum = -1;    // 前端自己算 //先求余 如果等于0 最后结果不加1 如果不等于0 结果加一
 
     private String tag = "RADIO_VOLLEY_REQUEST_CANCEL_TAG";
     private boolean isCancelRequest;
@@ -118,13 +118,8 @@ public class RadioFragment extends Fragment {
 
             @Override
             public void onLoadMore() {
-                if (page <= pageSizeNum) {
-                    refreshType = 2;
-                    send();
-                } else {
-                    mListView.stopLoadMore();
-                    mListView.setPullLoadEnable(false);
-                }
+                refreshType = 2;
+                send();
             }
         });
     }
@@ -167,7 +162,7 @@ public class RadioFragment extends Fragment {
                 } else {
                     if (newList != null && newList.get(position - 1) != null && newList.get(position - 1).getMediaType() != null) {
                         String MediaType = newList.get(position - 1).getMediaType();
-                        if (MediaType.equals("RADIO") || MediaType.equals("AUDIO")) {
+                        if (MediaType.equals(StringConstant.TYPE_RADIO) || MediaType.equals(StringConstant.TYPE_AUDIO)) {
                             String playername = newList.get(position - 1).getContentName();
                             String playerimage = newList.get(position - 1).getContentImg();
                             String playerurl = newList.get(position - 1).getContentPlay();
@@ -202,22 +197,18 @@ public class RadioFragment extends Fragment {
 
                             if (PlayerFragment.context != null) {
                                 MainActivity.changeOne();
-
                                 Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                                 Bundle bundle1 = new Bundle();
-                                bundle1.putString("text", newList.get(position - 1).getContentName());
+                                bundle1.putString(StringConstant.TEXT_CONTENT, newList.get(position - 1).getContentName());
                                 push.putExtras(bundle1);
                                 context.sendBroadcast(push);
-                                getActivity().finish();
                             } else {
-                                SharedPreferences sp = context.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
+                                SharedPreferences sp = BSApplication.SharedPreferences;
                                 SharedPreferences.Editor et = sp.edit();
                                 et.putString(StringConstant.PLAYHISTORYENTER, "true");
                                 et.putString(StringConstant.PLAYHISTORYENTERNEWS, newList.get(position - 1).getContentName());
                                 if (!et.commit()) L.w("数据 commit 失败!");
                                 MainActivity.changeOne();
-
-                                getActivity().finish();
                             }
                         }
                     }
@@ -241,7 +232,7 @@ public class RadioFragment extends Fragment {
         }
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("MediaType", "RADIO");
+            jsonObject.put("MediaType", StringConstant.TYPE_RADIO);
             jsonObject.put("Page", String.valueOf(page));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -254,12 +245,12 @@ public class RadioFragment extends Fragment {
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) dialog.dismiss();
                 if (isCancelRequest) return;
-                page++;
                 try {
                     ReturnType = result.getString("ReturnType");
                     L.w("ReturnType -- > > " + ReturnType);
 
                     if (ReturnType != null && ReturnType.equals("1001")) {
+                        page++;
                         if (isDel) {
                             ToastUtils.show_always(context, "已删除");
                             isDel = false;
@@ -267,27 +258,6 @@ public class RadioFragment extends Fragment {
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
                         subList = new Gson().fromJson(arg1.getString("FavoriteList"), new TypeToken<List<RankInfo>>() {
                         }.getType());
-                        try {
-                            String allCountString = arg1.getString("AllCount");
-                            String pageSizeString = arg1.getString("PageSize");
-                            if (allCountString != null && !allCountString.equals("") && pageSizeString != null && !pageSizeString.equals("")) {
-                                int allCountInt = Integer.valueOf(allCountString);
-                                int pageSizeInt = Integer.valueOf(pageSizeString);
-                                if (pageSizeInt < 10 || allCountInt < 10) {
-                                    mListView.stopLoadMore();
-                                    mListView.setPullLoadEnable(false);
-                                } else {
-                                    mListView.setPullLoadEnable(true);
-                                    if (allCountInt % pageSizeInt == 0) {
-                                        pageSizeNum = allCountInt / pageSizeInt;
-                                    } else {
-                                        pageSizeNum = allCountInt / pageSizeInt + 1;
-                                    }
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
                         if (refreshType == 1) newList.clear();
                         newList.addAll(subList);
                         if (adapter == null) {
@@ -298,6 +268,8 @@ public class RadioFragment extends Fragment {
                         setListener();
                         isData = true;
                     } else {
+                        mListView.setPullLoadEnable(false);
+                        ToastUtils.show_always(context, "没有更多数据了");
                         if (refreshType == 1) {
                             isData = false;
                         }

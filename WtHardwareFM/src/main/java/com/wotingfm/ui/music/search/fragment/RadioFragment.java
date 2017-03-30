@@ -216,14 +216,9 @@ public class RadioFragment extends Fragment implements TipView.WhiteViewClick {
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
+                        page++;
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
                         SubList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
-                        if (SubList != null && SubList.size() >= 10) {
-                            page++;
-                        } else {
-                            mListView.stopLoadMore();
-                            mListView.setPullLoadEnable(false);
-                        }
                         if (refreshType == 1) newList.clear();
                         for(int i=0; i<SubList.size(); i++) {
                             if(SubList.get(i).getMediaType().equals(StringConstant.TYPE_RADIO)) {
@@ -248,9 +243,12 @@ public class RadioFragment extends Fragment implements TipView.WhiteViewClick {
                         }
                     }
                 } else {
+                    mListView.setPullLoadEnable(false);
                     if (refreshType == 1) {
                         tipView.setVisibility(View.VISIBLE);
                         tipView.setTipView(TipView.TipStatus.NO_DATA, "没有找到相关结果\n试试其他词，不要太逆天哟");
+                    } else {
+                        ToastUtils.show_always(context, "没有更多的数据了");
                     }
                 }
                 if (refreshType == 1) {

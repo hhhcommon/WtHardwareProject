@@ -161,7 +161,7 @@ public class StringConstant {
     public static final String TEXT_CONTENT = "text";
 
     // 跳转类型
-    public static final String JUMP_TYPE = "JUMP_TYPE";
+    public static final String FROM_TYPE = "FROM_TYPE";
 
     // Fragment类型
     public static final String FRAGMENT_TYPE = "FRAGMENT_TYPE";
@@ -171,4 +171,13 @@ public class StringConstant {
 
     // 保存流量提醒是否打开
     public static final String FLOW_REMIND_SWITCH = "FLOW_REMIND_SWITCH";
+
+    // 搜索
+    public static final String TAG_SEARCH = "search";
+
+    // 节目
+    public static final String TAG_PROGRAM = "program";
+
+    // 播放
+    public static final String TAG_PLAY = "play";
 }

@@ -215,7 +215,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                 EWMShowFragment fg_evm = new EWMShowFragment();
                 Bundle bundle_evm=new Bundle();
                 bundle_evm.putInt("type", 3);
-                bundle_evm.putString(StringConstant.JUMP_TYPE, AlbumFragment.jump_type);
+                bundle_evm.putString(StringConstant.FROM_TYPE, AlbumFragment.jump_type);
                 fg_evm.setArguments(bundle_evm);
                 ProgramActivity.open(fg_evm);
 
@@ -228,7 +228,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                         Bundle bundle=new Bundle();
                         bundle.putString("contentId", contentId);
                         bundle.putString("MediaType", StringConstant.TYPE_SEQU);
-                        bundle.putString(StringConstant.JUMP_TYPE, AlbumFragment.jump_type);
+                        bundle.putString(StringConstant.FROM_TYPE, AlbumFragment.jump_type);
                         fg.setArguments(bundle);
                      ProgramActivity.open(fg);
                     } else {
@@ -256,7 +256,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                     Bundle bundle=new Bundle();
                     bundle.putString("PersonId", personId);
                     bundle.putString("ContentPub", contentPub);
-                    bundle.putString(StringConstant.JUMP_TYPE, AlbumFragment.jump_type);
+                    bundle.putString(StringConstant.FROM_TYPE, AlbumFragment.jump_type);
                     fg.setArguments(bundle);
 
                     if( AlbumFragment.jump_type!=null){

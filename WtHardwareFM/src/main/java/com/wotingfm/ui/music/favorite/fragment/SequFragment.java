@@ -56,7 +56,6 @@ public class SequFragment extends Fragment {
     private List<RankInfo> subList;
     private ArrayList<RankInfo> newList = new ArrayList<>();
 
-    private int pageSizeNum = -1;// 先求余 如果等于 0 最后结果不加 1 如果不等于 0 结果加 1
     private int page = 1;
     private int refreshType = 1;// refreshType 1 为下拉加载 2 为上拉加载更多
 
@@ -105,13 +104,8 @@ public class SequFragment extends Fragment {
 
             @Override
             public void onLoadMore() {
-                if (page <= pageSizeNum) {
-                    refreshType = 2;
-                    send();
-                } else {
-                    mListView.stopLoadMore();
-                    mListView.setPullLoadEnable(false);
-                }
+                refreshType = 2;
+                send();
             }
         });
     }
@@ -193,12 +187,12 @@ public class SequFragment extends Fragment {
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) dialog.dismiss();
                 if (isCancelRequest) return;
-                page++;
                 try {
                     ReturnType = result.getString("ReturnType");
                     L.w("ReturnType -- > > " + ReturnType);
 
                     if (ReturnType != null && ReturnType.equals("1001")) {
+                        page++;
                         if (isDel) {
                             ToastUtils.show_always(context, "已删除");
                             isDel = false;
@@ -206,27 +200,6 @@ public class SequFragment extends Fragment {
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
                         subList = new Gson().fromJson(arg1.getString("FavoriteList"), new TypeToken<List<RankInfo>>() {
                         }.getType());
-                        try {
-                            String allCountString = arg1.getString("AllCount");
-                            String pageSizeString = arg1.getString("PageSize");
-                            if (allCountString != null && !allCountString.equals("") && pageSizeString != null && !pageSizeString.equals("")) {
-                                int allCountInt = Integer.valueOf(allCountString);
-                                int pageSizeInt = Integer.valueOf(pageSizeString);
-                                if (pageSizeInt < 10 || allCountInt < 10) {
-                                    mListView.stopLoadMore();
-                                    mListView.setPullLoadEnable(false);
-                                } else {
-                                    mListView.setPullLoadEnable(true);
-                                    if (allCountInt % pageSizeInt == 0) {
-                                        pageSizeNum = allCountInt / pageSizeInt;
-                                    } else {
-                                        pageSizeNum = allCountInt / pageSizeInt + 1;
-                                    }
-                                }
-                            }
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                        }
 
                         if (refreshType == 1) newList.clear();
                         newList.addAll(subList);
@@ -239,6 +212,7 @@ public class SequFragment extends Fragment {
                         isData = true;
                         if (subList != null) subList.clear();
                     } else {
+                        mListView.setPullLoadEnable(false);
                         if (refreshType == 1) {
                             isData = false;
                         }

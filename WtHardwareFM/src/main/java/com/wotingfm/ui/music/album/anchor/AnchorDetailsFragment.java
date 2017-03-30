@@ -163,7 +163,7 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
     }
 
     private void handleIntent() {
-        jump_type=getArguments().getString(StringConstant.JUMP_TYPE);
+        jump_type = getArguments().getString(StringConstant.FROM_TYPE);
         PersonId = getArguments().getString("PersonId");
         ContentPub = getArguments().getString("ContentPub");
         if (!TextUtils.isEmpty(PersonId)) {
@@ -230,7 +230,8 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
                         Gson gson = new Gson();
                         try {
                             String SeqList = result.getString("SeqMediaList");
-                            personInfoList = gson.fromJson(SeqList, new TypeToken<List<PersonInfo>>() {}.getType());
+                            personInfoList = gson.fromJson(SeqList, new TypeToken<List<PersonInfo>>() {
+                            }.getType());
                             if (personInfoList != null && personInfoList.size() > 0) {
                                 // 此处要对 lv_sequ 的高度进行适配
                                 adapterSequ = new AnchorSequAdapter(context, personInfoList);
@@ -245,7 +246,8 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
                         }
                         try {
                             String MediaList = result.getString("MediaAssetList");
-                            MediaInfoList = gson.fromJson(MediaList, new TypeToken<List<PersonInfo>>() {}.getType());
+                            MediaInfoList = gson.fromJson(MediaList, new TypeToken<List<PersonInfo>>() {
+                            }.getType());
                             if (MediaInfoList != null && MediaInfoList.size() > 0) {
                                 // listAnchor
                                 adapterMain = new AnchorMainAdapter(context, MediaInfoList);
@@ -295,19 +297,18 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
         lv_sequ.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
                 AlbumFragment fg = new AlbumFragment();
-                Bundle bundle=new Bundle();
+                Bundle bundle = new Bundle();
                 bundle.putString("type", "main");
-                bundle.putString(StringConstant.JUMP_TYPE,jump_type);
+                bundle.putString(StringConstant.FROM_TYPE, jump_type);
                 bundle.putString("id", personInfoList.get(position).getContentId());
                 fg.setArguments(bundle);
-                if(jump_type!=null){
-                    if( jump_type.equals("search")){
+                if (jump_type != null) {
+                    if (jump_type.equals("search")) {
                         SearchLikeActivity.open(fg);
-                    }else if( jump_type.equals("program")){
+                    } else if (jump_type.equals("program")) {
                         ProgramActivity.open(fg);
-                    }else if( jump_type.equals("play")){
+                    } else if (jump_type.equals("play")) {
                         PlayerActivity.open(fg);
                     }
                 }
@@ -381,7 +382,8 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
                     String ReturnType = result.getString("ReturnType");
                     if (ReturnType != null && ReturnType.equals("1001")) {
                         String MediaList = result.getString("ResultList");
-                        List<PersonInfo> ResultList = new Gson().fromJson(MediaList, new TypeToken<List<PersonInfo>>() {}.getType());
+                        List<PersonInfo> ResultList = new Gson().fromJson(MediaList, new TypeToken<List<PersonInfo>>() {
+                        }.getType());
                         if (ResultList != null && ResultList.size() > 0) {
                             MediaInfoList.addAll(ResultList);
                             if (ResultList.size() < 10) {
@@ -429,12 +431,12 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                if(jump_type!=null){
-                    if(jump_type.equals("search")){
+                if (jump_type != null) {
+                    if (jump_type.equals("search")) {
                         SearchLikeActivity.close();
-                    }else if(jump_type.equals("program")){
+                    } else if (jump_type.equals("program")) {
                         ProgramActivity.close();
-                    }else if(jump_type.equals("play")){
+                    } else if (jump_type.equals("play")) {
                         PlayerActivity.close();
                     }
                 }
@@ -444,7 +446,7 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
                     AnchorListFragment fg = new AnchorListFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("PersonId", PersonId);
-                    bundle.putString(StringConstant.JUMP_TYPE, AlbumFragment.jump_type);
+                    bundle.putString(StringConstant.FROM_TYPE, AlbumFragment.jump_type);
                     if (!TextUtils.isEmpty(PersonName)) {
                         bundle.putString("PersonName", PersonName);
                     }
