@@ -32,4 +32,19 @@ public class IntegerConstant {
 
     // 更新列表界面
     public static final int PLAY_UPDATE_LIST_VIEW = 1002;
+
+    // 默认图片
+    public static final int TYPE_DEFAULT = 0x000;
+
+    // 列表默认图片
+    public static final int TYPE_LIST = 0x001;
+
+    // 群组默认头像
+    public static final int TYPE_GROUP = 0x002;
+
+    // 用户默认头像
+    public static final int TYPE_MINE = 0x003;
+
+    // 好友默认头像
+    public static final int TYPE_PERSON = 0x004;
 }
