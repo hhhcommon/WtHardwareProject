@@ -8,10 +8,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
-import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.IntegerConstant;
+import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
@@ -76,8 +76,10 @@ public class RadioListAdapter extends BaseAdapter  {
             }else{
                 url = GlobalConfig.imageurl + contentImage;
             }
-            url = AssembleImageUrlUtils.assembleImageUrl150(url);
-            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageRank);
+            String _url = AssembleImageUrlUtils.assembleImageUrl180(url);
+
+            // 加载图片
+            AssembleImageUrlUtils.loadImage(_url, url, holder.imageRank, IntegerConstant.TYPE_LIST);
         }
 
         // 节目名

@@ -9,15 +9,16 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.ui.music.program.fenlei.model.Attributes;
 import com.wotingfm.ui.music.program.fenlei.model.FenLeiName;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
+
 /**
  * 分类页面适配器2
  * author：辛龙 (xinLong)
@@ -31,7 +32,6 @@ public class CatalogGridAdapter extends BaseAdapter {
     private Bitmap bmp;
 
     public CatalogGridAdapter(Context context, List<FenLeiName> list) {
-        super();
         this.context = context;
         this.list = list;
     }
@@ -72,8 +72,8 @@ public class CatalogGridAdapter extends BaseAdapter {
                 if (!contentImg.startsWith("http")) {
                     contentImg = GlobalConfig.imageurl + contentImg;
                 }
-                contentImg = AssembleImageUrlUtils.assembleImageUrl150(contentImg);
-                Picasso.with(context).load(contentImg.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.image_url);
+                String _url = AssembleImageUrlUtils.assembleImageUrl150(contentImg);
+                AssembleImageUrlUtils.loadImage(_url, contentImg, holder.image_url, IntegerConstant.TYPE_LIST);
             } else {
                 holder.image_url.setImageBitmap(bmp);
             }

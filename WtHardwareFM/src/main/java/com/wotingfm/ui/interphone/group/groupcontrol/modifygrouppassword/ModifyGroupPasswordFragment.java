@@ -25,9 +25,8 @@ import org.json.JSONObject;
 
 /**
  * 更改群密码
- *
- * @author 辛龙
- *         2016年7月19日
+ * 辛龙
+ * 2016年7月19日
  */
 public class ModifyGroupPasswordFragment extends Fragment implements OnClickListener {
     private Dialog dialog;

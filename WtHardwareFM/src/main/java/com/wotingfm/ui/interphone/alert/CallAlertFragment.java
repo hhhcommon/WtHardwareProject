@@ -18,10 +18,10 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.helper.InterPhoneControlHelper;
 import com.wotingfm.ui.interphone.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.ui.interphone.chat.fragment.ChatFragment;
@@ -152,13 +152,13 @@ public class CallAlertFragment extends Fragment implements OnClickListener {
         if (image == null || image.equals("") || image.equals("null") || image.trim().equals("")) {
             imageview.setImageResource(R.mipmap.wt_image_tx_hy);
         } else {
-
             if (!image.startsWith("http:")) {
                 image = GlobalConfig.imageurl + image;
             }
+            String _url = AssembleImageUrlUtils.assembleImageUrl300(image);
 
-            String url = AssembleImageUrlUtils.assembleImageUrl300(image);
-            Picasso.with(instance).load(url.replace("\\/", "/")).into(imageview);
+            // 加载图片
+            AssembleImageUrlUtils.loadImage(_url, image, imageview, IntegerConstant.TYPE_PERSON);
         }
     }
 

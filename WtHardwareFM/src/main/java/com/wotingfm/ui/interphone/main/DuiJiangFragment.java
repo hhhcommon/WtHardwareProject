@@ -47,7 +47,6 @@ public class DuiJiangFragment extends Fragment {
     private View rootView;
     public static DuiJiangFragment ct;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (rootView == null) {
@@ -66,8 +65,6 @@ public class DuiJiangFragment extends Fragment {
         }
         return rootView;
     }
-
-
 
     /*
      * "更多" 对话框

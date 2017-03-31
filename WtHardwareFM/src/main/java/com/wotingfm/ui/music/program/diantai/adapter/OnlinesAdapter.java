@@ -12,9 +12,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.program.diantai.model.RadioPlay;
 import com.wotingfm.ui.music.program.fmlist.main.FMListFragment;
@@ -158,8 +158,10 @@ public class OnlinesAdapter extends BaseExpandableListAdapter {
                     if (!contentImg.startsWith("http")) {
                         contentImg = GlobalConfig.imageurl + contentImg;
                     }
-                    contentImg = AssembleImageUrlUtils.assembleImageUrl150(contentImg);
-                    Picasso.with(context).load(contentImg.replace("\\/", "/")).into(holder.imageview_rankimage);
+                    String url = AssembleImageUrlUtils.assembleImageUrl180(contentImg);
+
+                    // 加载图片
+                    AssembleImageUrlUtils.loadImage(url, contentImg, holder.imageview_rankimage, IntegerConstant.TYPE_LIST);
                 }
             }
         }

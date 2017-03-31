@@ -10,9 +10,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
@@ -21,9 +21,8 @@ import java.util.List;
 
 /**
  * 群组适配器
- *
- * @author 辛龙
- *         2016年3月25日
+ * 辛龙
+ * 2016年3月25日
  */
 public class TalkGroupAdapter extends BaseAdapter {
     private List<GroupInfo> list;
@@ -32,7 +31,6 @@ public class TalkGroupAdapter extends BaseAdapter {
     private GroupInfo lists;
 
     public TalkGroupAdapter(Context context, List<GroupInfo> list) {
-        super();
         this.list = list;
         this.context = context;
     }
@@ -109,9 +107,10 @@ public class TalkGroupAdapter extends BaseAdapter {
             } else {
                 url = GlobalConfig.imageurl + lists.getGroupImg();
             }
-            url = AssembleImageUrlUtils.assembleImageUrl150(url);
-            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageView_touxiang);
+            String _url = AssembleImageUrlUtils.assembleImageUrl150(url);
 
+            // 加载图片
+            AssembleImageUrlUtils.loadImage(_url, url, holder.imageView_touxiang, IntegerConstant.TYPE_GROUP);
         }
 
         holder.lin_add.setOnClickListener(new View.OnClickListener() {

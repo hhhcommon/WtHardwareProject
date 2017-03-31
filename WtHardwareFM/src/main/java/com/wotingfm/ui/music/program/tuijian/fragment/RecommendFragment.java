@@ -50,7 +50,7 @@ import java.util.List;
 
 /**
  * 节目页----推荐页
- * @author 辛龙
+ * 辛龙
  * 2016年3月30日
  */
 public class RecommendFragment extends Fragment implements TipView.WhiteViewClick {

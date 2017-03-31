@@ -34,7 +34,6 @@ import android.widget.TextView;
 import com.android.volley.VolleyError;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
@@ -180,8 +179,6 @@ public class MineFragment extends Fragment implements OnClickListener {
                 startActivity(new Intent(context, FMTestActivity.class));
             }
         });
-
-
     }
 
     @Override
@@ -310,8 +307,10 @@ public class MineFragment extends Fragment implements OnClickListener {
                 } else {
                     url = GlobalConfig.imageurl + imageUrl;
                 }
-                url = AssembleImageUrlUtils.assembleImageUrl150(url);
-                Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(userHead);
+                String _url = AssembleImageUrlUtils.assembleImageUrl150(url);
+
+                // 加载图片
+                AssembleImageUrlUtils.loadImage(_url, url, userHead, IntegerConstant.TYPE_MINE);
             } else {
                 Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_tx_hy);
                 userHead.setImageBitmap(bmp);
@@ -414,7 +413,6 @@ public class MineFragment extends Fragment implements OnClickListener {
         }
     }
 
-
     public void setResult() {
         getLoginStatus();
     }
@@ -465,7 +463,10 @@ public class MineFragment extends Fragment implements OnClickListener {
                 break;
             case IntegerConstant.PHOTO_REQUEST_CUT:
                 if (resultCode == 1) {
-
+//                    imageNum = 1;
+//                    photoCutAfterImagePath = data.getStringExtra("return");
+//                    dialog = DialogUtils.Dialogph(context, "头像上传中");
+//                    dealt();
                 }
                 break;
         }
@@ -473,7 +474,6 @@ public class MineFragment extends Fragment implements OnClickListener {
 
     // 图片裁剪
     private void startPhotoZoom(Uri uri) {
-
         PhotoCutActivity fg = new PhotoCutActivity();
         Bundle bundle = new Bundle();
         bundle.putString(StringConstant.START_PHOTO_ZOOM_URI, uri.toString());
@@ -483,11 +483,10 @@ public class MineFragment extends Fragment implements OnClickListener {
         fg.setArguments(bundle);
         fg.setTargetFragment(ct, IntegerConstant.PHOTO_REQUEST_CUT);
         MineActivity.open(fg);
-
     }
 
     public void setResultForPhotoZoom(int resultCode, Intent data) {
-        if (resultCode == 1&&data!=null) {
+        if (resultCode == 1 && data != null) {
             imageNum = 1;
             PhotoCutAfterImagePath = data.getStringExtra(StringConstant.PHOTO_CUT_RETURN_IMAGE_PATH);
             dialog = DialogUtils.Dialogph(context, "头像上传中");
@@ -496,7 +495,6 @@ public class MineFragment extends Fragment implements OnClickListener {
             ToastUtils.show_always(context, "用户退出上传图片");
         }
     }
-
 
     // 图片处理
     private void dealt() {
@@ -515,7 +513,11 @@ public class MineFragment extends Fragment implements OnClickListener {
                     }
                     et.putString(StringConstant.IMAGEURL, imageUrl);
                     if (et.commit()) L.v("数据 commit 失败!");
-                    Picasso.with(context).load(imageUrl.replace("\\/", "/")).resize(100, 100).centerCrop().into(userHead);
+
+                    String _url = AssembleImageUrlUtils.assembleImageUrl150(imageUrl);
+
+                    // 加载图片
+                    AssembleImageUrlUtils.loadImage(_url, imageUrl, userHead, IntegerConstant.TYPE_MINE);
                 } else {
                     ToastUtils.show_always(context, "头像保存失败，请稍后再试");
                 }
@@ -751,7 +753,7 @@ public class MineFragment extends Fragment implements OnClickListener {
         }
 
         // 个人资料没有修改过则不需要将数据提交服务器
-        if (!isUpdate) return ;
+        if (!isUpdate) return;
         isUpdate = false;
         L.v("数据改动", "数据有改动，将数据提交到服务器!");
         VolleyRequest.RequestPost(GlobalConfig.updateUserUrl, tag, jsonObject, new VolleyCallback() {

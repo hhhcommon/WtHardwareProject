@@ -9,10 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
-import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.IntegerConstant;
+import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
@@ -83,8 +83,10 @@ public class RecommendListAdapter extends BaseAdapter {
             if(!contentImg.startsWith("http")){
                 contentImg = GlobalConfig.imageurl + contentImg;
             }
-            contentImg= AssembleImageUrlUtils.assembleImageUrl150(contentImg);
-            Picasso.with(context).load(contentImg.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageCover);
+            String url = AssembleImageUrlUtils.assembleImageUrl180(contentImg);
+
+            // 加载图片
+            AssembleImageUrlUtils.loadImage(url, contentImg, holder.imageCover, IntegerConstant.TYPE_LIST);
         }
 
         // 来源 -> 专辑、主播

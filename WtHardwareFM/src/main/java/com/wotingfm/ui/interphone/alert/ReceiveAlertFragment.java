@@ -13,9 +13,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.helper.InterPhoneControlHelper;
 import com.wotingfm.common.service.SubclassService;
 import com.wotingfm.ui.interphone.chat.dao.SearchTalkHistoryDao;
@@ -51,8 +51,8 @@ public class ReceiveAlertFragment extends Fragment implements OnClickListener {
             rootView = inflater.inflate(R.layout.dialog_receivecall, container, false);
             rootView.setOnClickListener(this);
             instance = getActivity();
-            context=this;
-            VibratorUtils.Vibrate(instance,Vibrate,true);
+            context = this;
+            VibratorUtils.Vibrate(instance, Vibrate, true);
             if (DuiJiangFragment.ct == null) {
                 //对讲主页界面更新
                 MainActivity.changeTwo();
@@ -65,7 +65,7 @@ public class ReceiveAlertFragment extends Fragment implements OnClickListener {
         return rootView;
     }
 
-    public static void close(){
+    public static void close() {
         DuiJiangActivity.close();
     }
 
@@ -89,8 +89,10 @@ public class ReceiveAlertFragment extends Fragment implements OnClickListener {
             imageview.setImageResource(R.mipmap.wt_image_tx_hy);
         } else {
             String url = GlobalConfig.imageurl + image;
-            url = AssembleImageUrlUtils.assembleImageUrl300(url);
-            Picasso.with(instance).load(url.replace("\\/", "/")).into(imageview);
+            String _url = AssembleImageUrlUtils.assembleImageUrl300(url);
+
+            // 加载图片
+            AssembleImageUrlUtils.loadImage(_url, url, imageview, IntegerConstant.TYPE_PERSON);
         }
     }
 

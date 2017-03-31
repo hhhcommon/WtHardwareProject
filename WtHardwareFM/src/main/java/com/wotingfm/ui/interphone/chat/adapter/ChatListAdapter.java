@@ -10,9 +10,9 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
@@ -20,12 +20,9 @@ import com.wotingfm.util.TimeUtils;
 
 import java.util.List;
 
-
 /**
  *
  */
-
-
 public class ChatListAdapter extends BaseAdapter {
 	private Context context;
 	private OnListener onListener;
@@ -34,7 +31,6 @@ public class ChatListAdapter extends BaseAdapter {
 	private GroupInfo lists;
 
 	public ChatListAdapter(Context context, List<GroupInfo> alllist, String ids) {
-		super();
 		this.list = alllist;
 		this.id = ids;
 		this.context = context;
@@ -114,7 +110,6 @@ public class ChatListAdapter extends BaseAdapter {
 //			}
 //		}
 
-
 		if (lists.getName() == null || lists.getName().equals("")) {
 			holder.tv_name.setText("未知");
 		} else {
@@ -145,8 +140,10 @@ public class ChatListAdapter extends BaseAdapter {
 			}else{
 				url = GlobalConfig.imageurl + lists.getPortrait();
 			}
-			url= AssembleImageUrlUtils.assembleImageUrl150(url);
-			Picasso.with(context).load(url.replace("\\/", "/")).into(holder.imageView_touxiang);
+            String _url = AssembleImageUrlUtils.assembleImageUrl150(url);
+
+            // 加载图片
+            AssembleImageUrlUtils.loadImage(_url, url, holder.imageView_touxiang, IntegerConstant.TYPE_PERSON);
 		}
 		holder.lin_zhiding.setOnClickListener(new View.OnClickListener() {
 			@Override

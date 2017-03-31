@@ -55,7 +55,6 @@ import java.util.List;
  * 2016年4月13日
  */
 public class GroupMembersFragment extends Fragment implements OnClickListener, TextWatcher, OnItemClickListener, SideBar.OnTouchingLetterChangedListener, TipView.WhiteViewClick {
-
     private CharacterParser characterParser = CharacterParser.getInstance();// 实例化汉字转拼音类
     private PinyinComparator pinyinComparator = new PinyinComparator();
     private CreateGroupMembersAdapter adapter;

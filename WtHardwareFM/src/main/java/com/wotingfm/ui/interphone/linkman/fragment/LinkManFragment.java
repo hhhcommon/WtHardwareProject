@@ -66,7 +66,7 @@ import java.util.List;
 
 /**
  * 最新联系人排序
- * @author 辛龙
+ * 辛龙
  * 2016年5月12日
  */
 public class LinkManFragment extends Fragment implements SectionIndexer, OnClickListener, TipView.TipViewClick {
@@ -347,8 +347,9 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
                 protected void requestSuccess(JSONObject result) {
                     if (dialogs != null) dialogs.dismiss();
                     if (isCancelRequest) return;
-                    try{
-                        LinkMan list = new Gson().fromJson(result.toString(), new TypeToken<LinkMan>() {}.getType());
+                    try {
+                        LinkMan list = new Gson().fromJson(result.toString(), new TypeToken<LinkMan>() {
+                        }.getType());
                         try {
                             GlobalConfig.list_group = srclist_g = list.getGroupList().getGroups();
                         } catch (Exception e1) {
@@ -356,7 +357,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
                         }
                         try {
                             GlobalConfig.list_person = srclist_p = list.getFriendList().getFriends();
-                            int b=srclist_p.size();
+                            int b = srclist_p.size();
 
                         } catch (Exception e) {
                             e.printStackTrace();
@@ -368,7 +369,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
                             if (srclist_g != null && srclist_g.size() != 0) {
                                 groupList.clear();
                                 groupList.addAll(srclist_g);
-                                int a =  groupList.size();
+                                int a = groupList.size();
                                 if (adapter_group == null) {
                                     adapter_group = new TalkGroupAdapter(context, groupList);
                                     listView_group.setAdapter(adapter_group);
@@ -392,7 +393,7 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
                                 adapter = new SortGroupMemberAdapter(context, srclist_p);
                                 sortListView.setAdapter(adapter);
                             }
-                            if((srclist_g == null || srclist_g.size() <= 0) && (srclist_p == null || srclist_p.size() <= 0)) {
+                            if ((srclist_g == null || srclist_g.size() <= 0) && (srclist_p == null || srclist_p.size() <= 0)) {
                                 headViewNoFriendTip.setVisibility(View.VISIBLE);
                                 headViewNoFriendTip.setTipView(TipView.TipStatus.NO_DATA, "您还没有聊天对象哟\n快去找好友们聊天吧");
                             } else {
@@ -400,10 +401,10 @@ public class LinkManFragment extends Fragment implements SectionIndexer, OnClick
                             }
                             setListViewListener();
                         }
-                    }catch (Exception e){
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
-                    }
+                }
 
 
                 @Override

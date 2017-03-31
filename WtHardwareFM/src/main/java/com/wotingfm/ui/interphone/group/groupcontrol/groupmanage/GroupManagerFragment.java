@@ -23,9 +23,7 @@ import com.wotingfm.util.ToastUtils;
 
 import java.util.ArrayList;
 
-
-public class GroupManagerFragment extends Fragment implements View.OnClickListener{
-
+public class GroupManagerFragment extends Fragment implements View.OnClickListener {
     private String groupId;
 
     private TextView tv_group_type;
@@ -58,37 +56,35 @@ public class GroupManagerFragment extends Fragment implements View.OnClickListen
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);                                // 返回
         rootView.findViewById(R.id.rl_group_introduce).setOnClickListener(this);                           // 编辑群组资料
 
-        tv_group_type=(TextView)rootView.findViewById(R.id.tv_group_type);                                 // 群类型
+        tv_group_type = (TextView) rootView.findViewById(R.id.tv_group_type);                                 // 群类型
 
-        rl_set_manager=(RelativeLayout)rootView.findViewById(R.id.rl_set_manager);                         // 设置群管理员
+        rl_set_manager = (RelativeLayout) rootView.findViewById(R.id.rl_set_manager);                         // 设置群管理员
         rl_set_manager.setOnClickListener(this);
 
-        rl_transfer_authority=(RelativeLayout)rootView.findViewById(R.id.rl_transfer_authority);           // 变更权限
+        rl_transfer_authority = (RelativeLayout) rootView.findViewById(R.id.rl_transfer_authority);           // 变更权限
         rl_transfer_authority.setOnClickListener(this);
 
-        rl_addGroup=(RelativeLayout)rootView.findViewById(R.id.rl_addGroup);                               // 加群消息
+        rl_addGroup = (RelativeLayout) rootView.findViewById(R.id.rl_addGroup);                               // 加群消息
         rl_addGroup.setOnClickListener(this);
 
-        rl_verify_group=(RelativeLayout)rootView.findViewById(R.id.rl_verify_group);                       // 审核消息消息
+        rl_verify_group = (RelativeLayout) rootView.findViewById(R.id.rl_verify_group);                       // 审核消息消息
         rl_verify_group.setOnClickListener(this);
 
-        rl_modify_password=(RelativeLayout)rootView.findViewById(R.id.rl_modify_password);                 // 修改密码
+        rl_modify_password = (RelativeLayout) rootView.findViewById(R.id.rl_modify_password);                 // 修改密码
         rl_modify_password.setOnClickListener(this);
     }
-  /*  */
 
     // 处理请求
     private void handleIntent() {
-
-        groupNews = (GroupInfo)getArguments().getSerializable("group");
+        groupNews = (GroupInfo) getArguments().getSerializable("group");
         list = (ArrayList<GroupInfo>) getArguments().getSerializable("userlist");
-        headUrl=getArguments().getString("GroupImg");
-        if(groupNews!=null){
-            if(!TextUtils.isEmpty(groupNews.getGroupId())){
-                 groupId=groupNews.getGroupId();
+        headUrl = getArguments().getString("GroupImg");
+        if (groupNews != null) {
+            if (!TextUtils.isEmpty(groupNews.getGroupId())) {
+                groupId = groupNews.getGroupId();
             }
-            if(!TextUtils.isEmpty(groupNews.getGroupType())){
-                 groupType=groupNews.getGroupType();
+            if (!TextUtils.isEmpty(groupNews.getGroupType())) {
+                groupType = groupNews.getGroupType();
             }
             switch (groupType) {
                 case "0":// 审核群
@@ -111,8 +107,6 @@ public class GroupManagerFragment extends Fragment implements View.OnClickListen
                     rl_modify_password.setVisibility(View.VISIBLE);                     // 修改密码
                     break;
             }
-           // if (groupCreator != null && groupCreator.equals(CommonUtils.getUserId(context))) 判断管理员的
-
         }
     }
 
@@ -123,7 +117,7 @@ public class GroupManagerFragment extends Fragment implements View.OnClickListen
                 DuiJiangActivity.close();
                 break;
             case R.id.rl_set_manager:
-                ToastUtils.show_always(context,"设置管理员");
+                ToastUtils.show_always(context, "设置管理员");
                 break;
             case R.id.rl_transfer_authority:
                 TransferAuthorityFragment fg4 = new TransferAuthorityFragment();
@@ -160,9 +154,9 @@ public class GroupManagerFragment extends Fragment implements View.OnClickListen
                 break;
             case R.id.rl_group_introduce:
                 GroupIntroduceFragment fg1 = new GroupIntroduceFragment();
-                Bundle bundle5=new Bundle();
-                bundle5.putSerializable("group",groupNews);
-                bundle5.putString("GroupImg",headUrl);
+                Bundle bundle5 = new Bundle();
+                bundle5.putSerializable("group", groupNews);
+                bundle5.putString("GroupImg", headUrl);
                 fg1.setArguments(bundle5);
                 DuiJiangActivity.open(fg1);
                 break;
@@ -170,12 +164,9 @@ public class GroupManagerFragment extends Fragment implements View.OnClickListen
     }
 
     // 更新界面
-    public void RefreshFragmentManager(){
+    public void RefreshFragmentManager() {
         Fragment targetFragment = getTargetFragment();
         ((GroupDetailFragment) targetFragment).RefreshFragment();
         DuiJiangActivity.close();
     }
-
-
-
 }

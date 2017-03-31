@@ -10,9 +10,9 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.music.player.model.ContentPersons;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
@@ -112,8 +112,10 @@ public class PlayerListAdapter extends BaseAdapter {
                 if (!contentImg.startsWith("http")) {
                     contentImg = GlobalConfig.imageurl + contentImg;
                 }
-                contentImg = AssembleImageUrlUtils.assembleImageUrl180(contentImg);
-                Picasso.with(context).load(contentImg.replace("\\/", "/")).into(holder.imageRankImage);
+                String url = AssembleImageUrlUtils.assembleImageUrl180(contentImg);
+
+                // 加载图片
+                AssembleImageUrlUtils.loadImage(url, contentImg, holder.imageRankImage, IntegerConstant.TYPE_LIST);
             } else {
                 holder.imageRankImage.setImageBitmap(bmp);
             }

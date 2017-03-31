@@ -22,7 +22,6 @@ import com.android.volley.VolleyError;
 import com.baidu.cyberplayer.core.BVideoView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
@@ -452,10 +451,14 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     // 封面图片
                     String coverUrl = GlobalConfig.playerObject.getContentImg();// imagePlayCover
                     if (coverUrl != null) {// 有封面图片
-                        if (!coverUrl.startsWith("http"))
+                        if (!coverUrl.startsWith("http")) {
                             coverUrl = GlobalConfig.imageurl + coverUrl;
-                        coverUrl = AssembleImageUrlUtils.assembleImageUrl180(coverUrl);
-                        Picasso.with(context).load(coverUrl.replace("\\/", "/")).into(imagePlayCover);
+                        }
+                        String url = AssembleImageUrlUtils.assembleImageUrl180(coverUrl);
+
+                        // 加载图片
+                        AssembleImageUrlUtils.loadImage(url, coverUrl, imagePlayCover, IntegerConstant.TYPE_LIST);
+
                     } else {// 没有封面图片设置默认图片
                         imagePlayCover.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx));
                     }

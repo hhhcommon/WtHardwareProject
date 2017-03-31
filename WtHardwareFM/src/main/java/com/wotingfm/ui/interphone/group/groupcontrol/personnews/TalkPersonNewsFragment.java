@@ -18,11 +18,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -214,8 +214,10 @@ public class TalkPersonNewsFragment extends Fragment {
             } else {
                 url = GlobalConfig.imageurl + imageUrl;
             }
-            url = AssembleImageUrlUtils.assembleImageUrl150(url);
-            Picasso.with(context).load(url.replace("\\/", "/")).into(image_touxiang);
+            String _url = AssembleImageUrlUtils.assembleImageUrl150(url);
+
+            // 加载图片
+            AssembleImageUrlUtils.loadImage(_url, url, image_touxiang, IntegerConstant.TYPE_GROUP);
         }
         news = new UserInviteMeInside();
         news.setPortraitMini(imageUrl);

@@ -11,10 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.ui.common.model.UserInfo;
+import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
@@ -26,7 +27,6 @@ public class CreateGroupMembersAdapter extends BaseAdapter implements SectionInd
     private String url;
 
     public CreateGroupMembersAdapter(Context context, List<UserInfo> list) {
-        super();
         this.list = list;
         this.context = context;
     }
@@ -99,7 +99,10 @@ public class CreateGroupMembersAdapter extends BaseAdapter implements SectionInd
             } else {
                 url = GlobalConfig.imageurl + lists.getPortraitMini();
             }
-            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.image);
+            String _url = AssembleImageUrlUtils.assembleImageUrl150(url);
+
+            // 加载图片
+            AssembleImageUrlUtils.loadImage(_url, url, holder.image, IntegerConstant.TYPE_PERSON);
         }
         return convertView;
     }

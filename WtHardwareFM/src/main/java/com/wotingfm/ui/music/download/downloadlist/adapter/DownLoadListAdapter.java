@@ -10,8 +10,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.ui.music.download.model.FileInfo;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
@@ -85,8 +85,10 @@ public class DownLoadListAdapter extends BaseAdapter {
             Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
             holder.imageRankImage.setImageBitmap(bmp);
         } else {
-            imageUrl = AssembleImageUrlUtils.assembleImageUrl150(imageUrl);
-            Picasso.with(context).load(imageUrl.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageRankImage);
+            String _url = AssembleImageUrlUtils.assembleImageUrl180(imageUrl);
+
+            // 加载图片
+            AssembleImageUrlUtils.loadImage(_url, imageUrl, holder.imageRankImage, IntegerConstant.TYPE_LIST);
         }
 
         // 台名

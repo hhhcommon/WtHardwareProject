@@ -51,7 +51,7 @@ import java.util.List;
 
 /**
  * 专辑列表页
- * @author woting11
+ * woting11
  */
 public class ProgramListFragment extends Fragment implements OnClickListener, XListView.IXListViewListener {
     private Context context;
@@ -138,7 +138,7 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
         rootView.findViewById(R.id.tv_download).setOnClickListener(this);         // 开始下载
 
 
-        rootView.findViewById(R.id.imageView5).setOnClickListener(this);          //播放全部专辑内容
+        rootView.findViewById(R.id.imageView5).setOnClickListener(this);          // 播放全部专辑内容
 
         setListener();
 
@@ -167,6 +167,7 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
                 try {
                     String ReturnType = result.getString("ReturnType");
                     if (ReturnType != null && ReturnType.equals("1001")) {
+                        page++;
                         try {
                             JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultInfo")).nextValue();
                             try {
@@ -184,8 +185,6 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
                                 list = new Gson().fromJson(subListString, new TypeToken<List<ContentInfo>>() {}.getType());
                                 if (list != null && list.size() > 0) {
                                     if (page == 1) contentList.clear();
-                                    if (list.size() >= 20) page++;
-                                    else listAlbum.setPullLoadEnable(false);
                                     contentList.addAll(list);
 
                                     listAlbum.setAdapter(albumMainAdapter = new AlbumMainAdapter(context, contentList));
@@ -198,17 +197,19 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
                             tipView.setVisibility(View.GONE);
                         } catch (Exception e) {
                             e.printStackTrace();
+                            listAlbum.setPullLoadEnable(false);
                             tipView.setVisibility(View.VISIBLE);
                             tipView.setTipView(TipView.TipStatus.NO_DATA, "专辑中没有节目\n换个专辑看看吧");
                         }
                     } else {
+                        listAlbum.setPullLoadEnable(false);
                         listAlbum.stopLoadMore();
                         tipView.setVisibility(View.VISIBLE);
                         tipView.setTipView(TipView.TipStatus.NO_DATA, "专辑中没有节目\n换个专辑看看吧");
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
-                    listAlbum.stopLoadMore();
+                    listAlbum.setPullLoadEnable(false);
                     tipView.setVisibility(View.VISIBLE);
                     tipView.setTipView(TipView.TipStatus.IS_ERROR);
                 }
@@ -217,7 +218,7 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
             @Override
             protected void requestError(VolleyError error) {
                 if (dialog != null) dialog.dismiss();
-                listAlbum.stopLoadMore();
+                listAlbum.setPullLoadEnable(false);
                 tipView.setVisibility(View.VISIBLE);
                 tipView.setTipView(TipView.TipStatus.IS_ERROR);
             }
