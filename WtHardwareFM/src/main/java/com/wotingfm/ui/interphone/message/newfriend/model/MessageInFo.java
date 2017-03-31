@@ -1,4 +1,4 @@
-package com.wotingfm.ui.interphone.message.model;
+package com.wotingfm.ui.interphone.message.newfriend.model;
 
 import java.io.Serializable;
 

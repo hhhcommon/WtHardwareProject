@@ -1,4 +1,4 @@
-package com.wotingfm.ui.interphone.group.groupcontrol.handlegroupapply;
+package com.wotingfm.ui.interphone.message.handlegroupapply;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -22,7 +22,7 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.model.UserInfo;
 import com.wotingfm.ui.interphone.group.groupcontrol.groupmanage.GroupManagerFragment;
-import com.wotingfm.ui.interphone.group.groupcontrol.handlegroupapply.adapter.HandleGroupApplyAdapter;
+import com.wotingfm.ui.interphone.message.handlegroupapply.adapter.HandleGroupApplyAdapter;
 import com.wotingfm.ui.interphone.main.DuiJiangActivity;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;

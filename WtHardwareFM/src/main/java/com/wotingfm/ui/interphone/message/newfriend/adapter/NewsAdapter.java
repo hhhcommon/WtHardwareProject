@@ -1,4 +1,4 @@
-package com.wotingfm.ui.interphone.message.adapter;
+package com.wotingfm.ui.interphone.message.newfriend.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -12,7 +12,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.ui.interphone.message.model.MessageInFo;
+import com.wotingfm.ui.interphone.message.newfriend.model.MessageInFo;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 

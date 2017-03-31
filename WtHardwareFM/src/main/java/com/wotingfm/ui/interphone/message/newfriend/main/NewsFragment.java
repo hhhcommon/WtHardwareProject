@@ -1,4 +1,4 @@
-package com.wotingfm.ui.interphone.message.main;
+package com.wotingfm.ui.interphone.message.newfriend.main;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -24,8 +24,8 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.interphone.main.DuiJiangActivity;
-import com.wotingfm.ui.interphone.message.adapter.NewsAdapter;
-import com.wotingfm.ui.interphone.message.model.MessageInFo;
+import com.wotingfm.ui.interphone.message.newfriend.adapter.NewsAdapter;
+import com.wotingfm.ui.interphone.message.newfriend.model.MessageInFo;
 import com.wotingfm.ui.interphone.model.UserInviteMeInside;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;

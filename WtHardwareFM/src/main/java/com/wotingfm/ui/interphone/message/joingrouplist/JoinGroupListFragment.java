@@ -1,4 +1,4 @@
-package com.wotingfm.ui.interphone.group.groupcontrol.joingrouplist;
+package com.wotingfm.ui.interphone.message.joingrouplist;
 
 import android.app.Dialog;
 import android.os.Bundle;
@@ -21,8 +21,8 @@ import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.model.GroupInfo;
 import com.wotingfm.ui.interphone.group.groupcontrol.groupmanage.GroupManagerFragment;
-import com.wotingfm.ui.interphone.group.groupcontrol.joingrouplist.adapter.JoinGroupAdapter;
-import com.wotingfm.ui.interphone.group.groupcontrol.joingrouplist.model.CheckInfo;
+import com.wotingfm.ui.interphone.message.joingrouplist.adapter.JoinGroupAdapter;
+import com.wotingfm.ui.interphone.message.joingrouplist.model.CheckInfo;
 import com.wotingfm.ui.interphone.main.DuiJiangActivity;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.util.ToastUtils;

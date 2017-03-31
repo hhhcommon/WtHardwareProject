@@ -23,15 +23,12 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 		// 搜索历史表
 		db.execSQL("CREATE TABLE IF NOT EXISTS history(_id Integer primary key autoincrement, "
 				+ "userid varchar(50),playname varchar(50))");
+
 		// talkhistory对讲历史，暂缺对讲结束时间
 		//bjuserid用户id    type对讲类型group，person   id对讲id  addtime对讲开始时间
 		db.execSQL("CREATE TABLE IF NOT EXISTS talkhistory(_id Integer primary key autoincrement, "
 				+ "bjuserid varchar(50),type varchar(50),id varchar(50),addtime varchar(50))");
-		//notifyhistory消息通知表
-		db.execSQL("CREATE TABLE IF NOT EXISTS notifyhistory(_id Integer primary key autoincrement, "
-				+ "bjuserid varchar(50),type varchar(50),imageurl varchar(100),content varchar(100),"
-				+ "title varchar(50),dealtime varchar(50),addtime varchar(50)," +
-				"showtype varchar(10),biztype varchar(10),cmdtype varchar(10),command varchar(10),taskid varchar(50))");
+
 		// player播放历史,暂时缺本机userid
 		//		PlayerName播放显示名称PlayerImage播放显示图片PlayerUrl播放路径PlayerMediaType播放类型，radio，audio，seq,PlayerAllTime播放文件总时长
 		//		PlayerInTime此时播放时长PlayerContentDesc播放文件介绍PlayerNum播放次数PlayerZanTypeString类型的true,false
@@ -43,9 +40,11 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 				"playeraddtime varchar(50),bjuserid varchar(50),playshareurl varchar(100),playfavorite varchar(100),contentid varchar(50),localurl varchar(100)," +
 				"sequname varchar(50),sequimg varchar(200),sequdesc varchar(150),sequid varchar(50),playtag varchar(100),contentplaytype varchar(20))");
 		//playtag,contentplaytype
+
 		// 线程表
 		db.execSQL("create table IF NOT EXISTS thread_info(_id integer primary key autoincrement,"
 				+ "thread_id integer, url varchar(100), start integer, end integer, finished integer)");
+
 		// 文件数据
 		db.execSQL("create table IF NOT EXISTS fileinfo(_id integer primary key autoincrement,"
 				+ "start integer,end integer,url varchar(200),imageurl varchar(200), finished varchar(10),"
@@ -57,19 +56,44 @@ public class SQLiteHelper extends SQLiteOpenHelper {
 		// 城市表
 		db.execSQL("create table IF NOT EXISTS cityinfo(_id integer primary key autoincrement,"
 				+ "adcode varchar(20), cityname varchar(50))");
+
 		// 专辑表
 		//		db.execSQL("create table IF NOT EXISTS sequinfo(_id integer primary key autoincrement,"
 		//				+ "sequimgurl varchar(200),sequdesc varchar(150),sequname varchar(50))");
+
 		// 记录的电台
 		//		db.execSQL("CREATE TABLE IF NOT EXISTS fmhistory(_id Integer primary key autoincrement, "
 		//				+ "userid varchar(50),auther varchar(50),name varchar(50),image varchar(50),url varchar(50),"
 		//				+ "content varchar(50),bftype varchar(50),addtime varchar(50))");
+
+		// 通知消息库表
+		db.execSQL("CREATE TABLE IF NOT EXISTS message_notify(_id Integer primary key autoincrement, "
+				+ "user_id varchar(50),image_url varchar(50),person_name varchar(50),person_id varchar(50),"
+				+ "group_name varchar(50),group_id varchar(50),operator_name varchar(50),operator_id varchar(50),"
+				+ "show_type varchar(50),message_type varchar(50),deal_time varchar(50),add_time varchar(50),"
+				+"biz_type varchar(10),cmd_type varchar(10),command varchar(10),message_id varchar(50),message varchar(50))");
+
+		// 系统消息库表
+		db.execSQL("CREATE TABLE IF NOT EXISTS message_system(_id Integer primary key autoincrement, "
+				+ "user_id varchar(50),image_url varchar(50),person_name varchar(50),person_id varchar(50),"
+				+ "group_name varchar(50),group_id varchar(50),operator_name varchar(50),operator_id varchar(50),"
+				+ "show_type varchar(50),message_type varchar(50),deal_time varchar(50),add_time varchar(50),"
+				+"biz_type varchar(10),cmd_type varchar(10),command varchar(10),message_id varchar(50),message varchar(50))");
+
+		// 订阅消息
+		db.execSQL("CREATE TABLE IF NOT EXISTS message_subscriber(_id Integer primary key autoincrement, "
+				+ "user_id varchar(50),image_url varchar(100),seq_name varchar(100),"
+				+ "seq_id varchar(50),content_name varchar(100),content_id varchar(50),"
+				+"deal_time varchar(50),add_time varchar(50)," +
+				"biz_type varchar(10),cmd_type varchar(10),command varchar(10),message_id varchar(50))");
 	}
 
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		db.execSQL("DROP TABLE IF EXISTS history");
 		db.execSQL("DROP TABLE IF EXISTS talkhistory");
-		db.execSQL("DROP TABLE IF EXISTS notifyhistory");
+		db.execSQL("DROP TABLE IF EXISTS message_notify");
+		db.execSQL("DROP TABLE IF EXISTS message_system");
+		db.execSQL("DROP TABLE IF EXISTS message_subscriber");
 		db.execSQL("DROP TABLE IF EXISTS thread_info");
 		db.execSQL("DROP TABLE IF EXISTS fileinfo");
 		db.execSQL("DROP TABLE IF EXISTS playerhistory");

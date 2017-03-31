@@ -101,7 +101,7 @@ public class MainActivity extends TabActivity {
     private String tag = "MAIN_VOLLEY_REQUEST_CANCEL_TAG";
     private String upDataNews;       // 版本更新内容
     private String mPageName = "MainActivity";
-    private int upDataType = 1;      // == 1 不需要强制升级  == 2 需要强制升级
+    private int upDataType = 1;      // 1,不需要强制升级2，需要强制升级
     private boolean isCancelRequest;
 
     private static Intent Socket, VoiceStreamRecord, VoiceStreamPlayer, Location, Subclass, Download, Notification, TestFloatingWindow, FloatingWindow;
@@ -115,7 +115,7 @@ public class MainActivity extends TabActivity {
     public static DBTalkHistorary talkdb;
     private SearchTalkHistoryDao talkDao;
     private Intent Simulation;
-    public static int SearchLikeActivityJumpType = 1;
+    public static int SearchLikeActivityJumpType=1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,7 +134,7 @@ public class MainActivity extends TabActivity {
             }
         }, 0);
 
-        update();           // 获取版本数据
+//        update();           // 获取版本数据
         InitTextView();     // 设置界面
         InitData();         // 加载数据
         setType();
@@ -167,16 +167,17 @@ public class MainActivity extends TabActivity {
         startService(Download);
         Notification = new Intent(this, NotificationService.class);
         startService(Notification);
-        FloatingWindow = new Intent(this, FloatingWindowService.class);// 启动全局弹出框服务
+        FloatingWindow = new Intent(this, FloatingWindowService.class);//启动全局弹出框服务
         startService(FloatingWindow);
-//        Simulation = new Intent(this,SimulationService.class);
+//        Simulation=new Intent(this,SimulationService.class);
 //        startService(Simulation);
-        TestFloatingWindow = new Intent(this, TestWindowService.class);// 启动全局弹出框服务
-        startService(TestFloatingWindow);
+//        TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
+//        startService(TestFloatingWindow);
     }
 
-    // 注册广播  用于接收定时服务发送过来的广播
+    //注册广播  用于接收定时服务发送过来的广播
     private void registerReceiver() {
+
         IntentFilter m = new IntentFilter();
         m.addAction(BroadcastConstants.PUSH_REGISTER);
         m.addAction(BroadcastConstants.PUSH_NOTIFY);
@@ -188,7 +189,9 @@ public class MainActivity extends TabActivity {
         n.addAction(NetWorkChangeReceiver.intentFilter);
         netWorkChangeReceiver = new NetWorkChangeReceiver(this);
         registerReceiver(netWorkChangeReceiver, n);
+
     }
+
 
     private void setType() {
         try {
@@ -200,15 +203,17 @@ public class MainActivity extends TabActivity {
                 v = true;
             }
             if (v) {
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        // 透明状态栏
-                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    // 透明导航栏
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);        //透明状态栏
+                getWindow().addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION);    //透明导航栏
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    // 接收定时服务发送过来的广播  用于结束应用
+
+
+    //接收定时服务发送过来的广播  用于结束应用
     private BroadcastReceiver endApplicationBroadcast = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -259,7 +264,7 @@ public class MainActivity extends TabActivity {
                                                     try {
                                                         MessageForMainGroup gInfo = gList.get(0);   // 本版本（2017元旦前）暂时只获取第一条数据，后续需要修改
                                                         groupInfo = gInfo.getGroupInfo();
-//                                                        userIds = gInfo.getGroupEntryUserIds();
+//                                                    userIds = gInfo.getGroupEntryUserIds();
                                                         String groupName = groupInfo.getGroupName();
                                                         showGroup(groupName); // 展示上次存在的对讲组
                                                     } catch (Exception e) {
@@ -528,9 +533,9 @@ public class MainActivity extends TabActivity {
         });
     }
 
-    // 发送获取城市列表的网络请求
+    //发送获取城市列表的网络请求
     private void sendRequest() {
-        // 设置获取城市列表的请求参数
+        //设置获取城市列表的请求参数
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("CatalogType", "2");
@@ -563,7 +568,7 @@ public class MainActivity extends TabActivity {
                                     if (srcList.size() == 0) {
                                         ToastUtils.show_short(context, "获取城市列表为空");
                                     } else {
-                                        // 组装从后台获取到的数据
+                                        //组装从后台获取到的数据
                                         List<CatalogName> mList = new ArrayList<>();
                                         for (int i = 0; i < srcList.size(); i++) {
                                             CatalogName mFenLeiName = new CatalogName();
@@ -571,13 +576,13 @@ public class MainActivity extends TabActivity {
                                             mFenLeiName.setCatalogName(srcList.get(i).getCatalogName());
                                             mList.add(mFenLeiName);
                                         }
-                                        // 获取数据库中的地理位置数据
+                                        //获取数据库中的地理位置数据
                                         List<CatalogName> list = CID.queryCityInfo();
                                         if (list.size() == 0) {
                                             if (mList.size() != 0)
-                                                CID.InsertCityInfo(mList);  // 将数据写入数据库
+                                                CID.InsertCityInfo(mList);  //将数据写入数据库
                                         } else {
-                                            // 此处要对数据库查询出的list和获取的mList进行去重
+                                            //此处要对数据库查询出的list和获取的mList进行去重
                                             CID.DelCityInfo();
                                             if (mList.size() != 0) CID.InsertCityInfo(mList);
                                         }
@@ -612,7 +617,7 @@ public class MainActivity extends TabActivity {
         });
     }
 
-    // 获取对讲的频率，存储在 Manifest 当中
+    // 获取对讲的频率，存储在Manifest当中
     private void sendFreq() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
@@ -655,6 +660,7 @@ public class MainActivity extends TabActivity {
                 ToastUtils.showVolleyError(context);
             }
         });
+
     }
 
     //检查版本更新
@@ -665,7 +671,11 @@ public class MainActivity extends TabActivity {
             JSONTokener jsonParser = new JSONTokener(ResultList);
             JSONObject arg1 = (JSONObject) jsonParser.nextValue();
             Version = arg1.getString("Version");
+            //String AppName = arg1.getString("AppName");
             Desc = arg1.getString("Descn");
+            //String BugPatch = arg1.getString("BugPatch");
+            //String ApkSize = arg1.getString("ApkSize");
+            //String PubTime = arg1.getString("Version");
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -674,6 +684,10 @@ public class MainActivity extends TabActivity {
         String version = Version;
         String[] strArray;
         strArray = version.split("\\.");
+        //String verson_big = strArray[0].toString();//大版本
+        //String verson_medium = strArray[1].toString();//中版本
+        //String verson_small = strArray[2].toString();//小版本
+        //String verson_x = strArray[3];//X
         String version_build;
         try {
             version_build = strArray[4];
@@ -681,7 +695,7 @@ public class MainActivity extends TabActivity {
             int version_new = Integer.parseInt(version_build);
             if (version_new > version_old) {
                 if (mastUpdate != null && mastUpdate.equals("1")) {
-                    // 强制升级
+                    //强制升级
                     if (Desc != null && !Desc.trim().equals("")) {
                         upDataNews = Desc;
                     } else {
@@ -691,13 +705,13 @@ public class MainActivity extends TabActivity {
                     UpdateDialog();
                     upDataDialog.show();
                 } else {
-                    // 普通升级
+                    //普通升级
                     if (Desc != null && !Desc.trim().equals("")) {
                         upDataNews = Desc;
                     } else {
                         upDataNews = "有新的版本需要升级喽";
                     }
-                    upDataType = 1;// 不需要强制升级
+                    upDataType = 1;//不需要强制升级
                     UpdateDialog();
                     upDataDialog.show();
                 }
@@ -708,7 +722,7 @@ public class MainActivity extends TabActivity {
         }
     }
 
-    // 版本更新对话框
+    //版本更新对话框
     private void UpdateDialog() {
         View dialog = LayoutInflater.from(this).inflate(R.layout.dialog_update, null);
         TextView text_content = (TextView) dialog.findViewById(R.id.text_content);
@@ -720,7 +734,7 @@ public class MainActivity extends TabActivity {
         upDataDialog.setCanceledOnTouchOutside(false);
         upDataDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
 
-        // 开始更新
+        //开始更新
         tv_update.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -729,7 +743,7 @@ public class MainActivity extends TabActivity {
             }
         });
 
-        // 取消更新
+        //取消更新
         tv_qx.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -757,6 +771,7 @@ public class MainActivity extends TabActivity {
         MobclickAgent.onPageStart(mPageName);
         MobclickAgent.onResume(context);
     }
+
 
     /**
      * app退出时执行该操作
@@ -843,9 +858,9 @@ public class MainActivity extends TabActivity {
         }
     }
 
-    // 消息通知对话框
+    //消息通知对话框
     private void pushDialog(String title, String message, final int type) {
-        // type 0 = 默认值, 1 = 被顶替, 2 = 展示个人, 3 = 展示群组
+        //type 0=默认值,1=被顶替,2=展示个人,3=展示群组
 
         View dialog = LayoutInflater.from(this).inflate(R.layout.dialog_push_message, null);
         TextView push_dialog_text_context = (TextView) dialog.findViewById(R.id.text_context);// 展示内容
@@ -923,7 +938,7 @@ public class MainActivity extends TabActivity {
      * 把此时还在对讲状态的组对讲数据设置活跃状态
      */
     public void addGroup() {
-        // 对讲主页界面更新
+        //对讲主页界面更新
         changeTwo();
         DuiJiangFragment.update();
     }
@@ -933,21 +948,21 @@ public class MainActivity extends TabActivity {
      */
     private void addUser() {
         InterPhoneControlHelper.bdcallid = callId;
-        // 获取最新激活状态的数据
+        //获取最新激活状态的数据
         String addTime = Long.toString(System.currentTimeMillis());
         String bjuserid = CommonUtils.getUserId(context);
-        // 如果该数据已经存在数据库则删除原有数据，然后添加最新数据
+        //如果该数据已经存在数据库则删除原有数据，然后添加最新数据
         talkDao.deleteHistory(callerId);
         Log.e("=====callerid======", callerId + "");
         DBTalkHistorary history = new DBTalkHistorary(bjuserid, "user", callerId, addTime);
         talkDao.addTalkHistory(history);
-        talkdb = talkDao.queryHistory().get(0);// 得到数据库里边数据
-        // 对讲主页界面更新
+        talkdb = talkDao.queryHistory().get(0);//得到数据库里边数据
+        //对讲主页界面更新
         MainActivity.changeTwo();
         DuiJiangFragment.update();
     }
 
-    // 设置 android app 的字体大小不受系统字体大小改变的影响
+    // 设置android app 的字体大小不受系统字体大小改变的影响
     @Override
     public Resources getResources() {
         Resources res = super.getResources();

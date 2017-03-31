@@ -25,7 +25,7 @@ import com.wotingfm.ui.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.ui.interphone.find.main.FindFragment;
 import com.wotingfm.ui.interphone.group.creategroup.create.CreateGroupFragment;
 import com.wotingfm.ui.interphone.linkman.fragment.LinkManFragment;
-import com.wotingfm.ui.interphone.notify.main.NotifyNewsFragment;
+import com.wotingfm.ui.interphone.message.messagecenter.fragment.MessageFragment;
 import com.wotingfm.ui.interphone.simulation.SimulationInterphoneFragment;
 import com.wotingfm.ui.mine.person.login.LoginActivity;
 
@@ -224,7 +224,7 @@ public class DuiJiangFragment extends Fragment {
         lin_news.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-                NotifyNewsFragment fg = new NotifyNewsFragment();
+                MessageFragment fg = new MessageFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("type", "group");
                 fg.setArguments(bundle);

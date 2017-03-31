@@ -52,7 +52,7 @@ import com.wotingfm.ui.interphone.linkman.view.PinyinComparator;
 import com.wotingfm.ui.interphone.linkman.view.SideBar;
 import com.wotingfm.ui.interphone.main.DuiJiangActivity;
 import com.wotingfm.ui.interphone.main.DuiJiangFragment;
-import com.wotingfm.ui.interphone.message.main.NewsFragment;
+import com.wotingfm.ui.interphone.message.newfriend.main.NewsFragment;
 import com.wotingfm.ui.mine.person.login.LoginActivity;
 import com.wotingfm.util.DialogUtils;
 import com.wotingfm.widget.HeightListView;

@@ -1,4 +1,4 @@
-package com.wotingfm.ui.interphone.group.groupcontrol.joingrouplist.model;
+package com.wotingfm.ui.interphone.message.joingrouplist.model;
 
 import java.io.Serializable;
 

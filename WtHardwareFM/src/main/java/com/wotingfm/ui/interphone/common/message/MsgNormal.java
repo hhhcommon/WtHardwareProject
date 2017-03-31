@@ -6,7 +6,6 @@ import com.wotingfm.util.StringUtils;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 
-
 /**
  * 一般消息：既控制类消息
  * @author wanghui
@@ -147,7 +146,7 @@ public class MsgNormal extends Message {
                 _tempStr=MessageUtils.parse_String(binaryMsg, _offset, 32, null);
             } catch (UnsupportedEncodingException e) {
             }
-            _sa=_tempStr.split("::");
+            _sa=_tempStr.split("=");
             if (_sa.length!=2) throw new Exception("消息字节数组异常！");
             if (Integer.parseInt(_sa[0])==-1) throw new Exception("消息字节数组异常！");
             _offset=Integer.parseInt(_sa[0]);
@@ -157,7 +156,7 @@ public class MsgNormal extends Message {
                 _tempStr=MessageUtils.parse_String(binaryMsg, _offset, 32, null);
             } catch (UnsupportedEncodingException e) {
             }
-            _sa=_tempStr.split("::");
+            _sa=_tempStr.split("=");
             if (_sa.length!=2) throw new Exception("消息字节数组异常！");
             if (Integer.parseInt(_sa[0])==-1) throw new Exception("消息字节数组异常！");
             _offset=Integer.parseInt(_sa[0]);
@@ -167,7 +166,7 @@ public class MsgNormal extends Message {
                 _tempStr=MessageUtils.parse_String(binaryMsg, _offset, 32, null);
             } catch (UnsupportedEncodingException e) {
             }
-            _sa=_tempStr.split("::");
+            _sa=_tempStr.split("=");
             if (_sa.length!=2) throw new Exception("消息字节数组异常！");
             if (Integer.parseInt(_sa[0])==-1) throw new Exception("消息字节数组异常！");
             _offset=Integer.parseInt(_sa[0]);
@@ -176,7 +175,7 @@ public class MsgNormal extends Message {
                 _tempStr=MessageUtils.parse_String(binaryMsg, _offset, 32, null);
             } catch (UnsupportedEncodingException e) {
             }
-            _sa=_tempStr.split("::");
+            _sa=_tempStr.split("=");
             if (_sa.length!=2) throw new Exception("消息字节数组异常！");
             if (Integer.parseInt(_sa[0])==-1) throw new Exception("消息字节数组异常！");
             _offset=Integer.parseInt(_sa[0]);
@@ -199,7 +198,7 @@ public class MsgNormal extends Message {
                 _tempStr=MessageUtils.parse_String(binaryMsg, _offset, 12, null);
             } catch (UnsupportedEncodingException e) {
             }
-            _sa=_tempStr.split("::");
+            _sa=_tempStr.split("=");
             if (_sa.length!=2) throw new Exception("消息字节串异常！");
             if (Integer.parseInt(_sa[0])==-1) throw new Exception("消息字节串异常！");
             _offset=Integer.parseInt(_sa[0]);
@@ -210,7 +209,7 @@ public class MsgNormal extends Message {
             _tempStr=MessageUtils.parse_String(binaryMsg, _offset, 32, null);
         } catch (UnsupportedEncodingException e) {
         }
-        _sa=_tempStr.split("::");
+        _sa=_tempStr.split("=");
         if (_sa.length!=2) throw new Exception("消息字节串异常！");
         if (Integer.parseInt(_sa[0])==-1) throw new Exception("消息字节串异常！");
         _offset=Integer.parseInt(_sa[0]);
