@@ -31,7 +31,7 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.interphone.notify.main.NotifyNewsFragment;
+import com.wotingfm.ui.interphone.message.messagecenter.fragment.MessageFragment;
 import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.main.PlayerActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
@@ -205,7 +205,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                 MainActivity.changeFive();
                 break;
             case R.id.lin_news:                                                                     // 跳转到通知界面
-                NotifyNewsFragment fg = new NotifyNewsFragment();
+                MessageFragment fg = new MessageFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("type", "music");
                 fg.setArguments(bundle);
