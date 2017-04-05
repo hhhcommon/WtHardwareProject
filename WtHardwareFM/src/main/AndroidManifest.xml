@@ -127,6 +127,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
+
         <activity
             android:name="com.wotingfm.ui.common.scanning.activity.CaptureActivity"
             android:screenOrientation="portrait"
@@ -161,12 +162,12 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+
         <activity
             android:name=".ui.common.favoritetype.FavoriteProgramTypeActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-
 
         <!-- 对讲主页 -->
         <activity
@@ -205,6 +206,13 @@
         <!--播放节目详情-->
         <activity
             android:name="com.wotingfm.ui.music.main.PlayerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
+
+        <!--查看大图-->
+        <activity
+            android:name=".ui.mine.picture.ViewBigPictureActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>

@@ -54,6 +54,7 @@ import com.wotingfm.ui.mine.model.UserPortaitInside;
 import com.wotingfm.ui.mine.person.login.LoginActivity;
 import com.wotingfm.ui.mine.person.updatepersonnews.UpdatePersonActivity;
 import com.wotingfm.ui.mine.person.updatepersonnews.model.UpdatePerson;
+import com.wotingfm.ui.mine.picture.ViewBigPictureActivity;
 import com.wotingfm.ui.mine.set.SetFragment;
 import com.wotingfm.ui.mine.wifi.WIFIFragment;
 import com.wotingfm.util.AssembleImageUrlUtils;
@@ -69,6 +70,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -242,6 +244,17 @@ public class MineFragment extends Fragment implements OnClickListener {
                 fg1.setTargetFragment(ct, 0);
                 MineActivity.open(fg1);
                 break;
+            case R.id.view_picture:// 查看大图
+                String _url = sharedPreferences.getString(StringConstant.IMAGEURL, "");     // 用户头像
+                ArrayList<String> listUrl = new ArrayList<>();
+//                listUrl.add(_url);
+                listUrl.add("https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1490690384432&di=7d4dddbf5ec3a415a2abfda9b0c771e3&imgtype=0&src=http%3A%2F%2Fd.hiphotos.baidu.com%2Fzhidao%2Fwh%253D600%252C800%2Fsign%3Df8ab0485a964034f0f98ca009ff35509%2Fa71ea8d3fd1f4134245acf26271f95cad1c85e7d.jpg");
+                Intent intentPicture = new Intent(context, ViewBigPictureActivity.class);
+                intentPicture.putExtra(StringConstant.PICTURE_INDEX, 0);
+                intentPicture.putStringArrayListExtra(StringConstant.PICTURE_URL, listUrl);
+                context.startActivity(intentPicture);
+                imageDialog.dismiss();
+                break;
         }
     }
 
@@ -259,6 +272,10 @@ public class MineFragment extends Fragment implements OnClickListener {
         final View dialog = LayoutInflater.from(context).inflate(R.layout.dialog_imageupload, null);
         dialog.findViewById(R.id.tv_gallery).setOnClickListener(this);
         dialog.findViewById(R.id.tv_camera).setOnClickListener(this);
+        View viewPicture = dialog.findViewById(R.id.view_picture);          // 查看大图
+        viewPicture.setVisibility(View.VISIBLE);
+        viewPicture.setOnClickListener(this);
+
         imageDialog = new Dialog(context, R.style.MyDialog);
         imageDialog.setContentView(dialog);
         imageDialog.setCanceledOnTouchOutside(true);
