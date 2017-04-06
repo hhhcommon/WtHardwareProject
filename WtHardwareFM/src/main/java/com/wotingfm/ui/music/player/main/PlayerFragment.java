@@ -61,7 +61,7 @@ import java.util.Locale;
 /**
  * 播放主页
  * 2016年2月4日
- * @author 辛龙
+ * 辛龙
  */
 public class PlayerFragment extends Fragment implements View.OnClickListener,
         XListView.IXListViewListener, TipView.WhiteViewClick, SeekBar.OnSeekBarChangeListener, AdapterView.OnItemClickListener {
@@ -200,7 +200,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                 last();
                 break;
             case R.id.lin_find:
-                MainActivity.SearchLikeActivityJumpType=1;
+                MainActivity.SearchLikeActivityJumpType = 1;
                 MainActivity.changeFive();
                 break;
             case R.id.lin_news:                                                                     // 跳转到通知界面
@@ -442,11 +442,11 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     if (title == null || title.trim().equals("")) title = "未知";
                     mPlayAudioTitle.setText(title);
                     mPlayAudioTitle.init(windowManager);
-                    if(title.length()>8){
+                    if (title.length() > 8) {
                         mPlayAudioTitle.startScroll();
-                    }else{
-                        mPlayAudioTitle.startScroll();
-//                        mPlayAudioTitle.stopScroll();
+                    } else {
+//                        mPlayAudioTitle.startScroll();
+                        mPlayAudioTitle.stopScroll();
                     }
                     // 封面图片
                     String coverUrl = GlobalConfig.playerObject.getContentImg();// imagePlayCover
@@ -489,7 +489,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                         isResetData = false;
 
                         if (subList != null && subList.size() != 0) {
-                            if (mediaType != null && !mediaType.equals("TTS")) {
+                            if (mediaType != null && !mediaType.equals(StringConstant.TYPE_TTS)) {
                                 String contentPlay;
                                 for (int i = 0, size = subList.size(); i < size; i++) {
                                     contentPlay = subList.get(i).getContentPlay();
@@ -513,7 +513,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
 
                                 for (int a = 0, s = playList.size(); a < s; a++) {
                                     media = playList.get(a).getMediaType();
-                                    if (media != null && !media.equals("TTS")) {
+                                    if (media != null && !media.equals(StringConstant.TYPE_TTS)) {
                                         contentPlay = playList.get(a).getContentPlay();
                                         if (contentPlay != null && !contentPlay.trim().equals("") && !contentPlay.toUpperCase().equals("NULL")) {
                                             contentPlayList.add(contentPlay);
@@ -521,7 +521,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                                     }
                                 }
                                 for (int i = 0, size = subList.size(); i < size; i++) {
-                                    if (subList.get(i).getMediaType() != null && subList.get(i).getMediaType().equals("TTS"))
+                                    if (subList.get(i).getMediaType() != null && subList.get(i).getMediaType().equals(StringConstant.TYPE_TTS))
                                         continue;
                                     if (!contentPlayList.contains(subList.get(i).getContentPlay())) {
                                         if (refreshType == -1) {
@@ -565,7 +565,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                             playList.get(i).setType("1");
                         }
                     }
-                    if (adapter!=null) adapter.setList(playList);
+                    if (adapter != null) adapter.setList(playList);
                     break;
             }
         }

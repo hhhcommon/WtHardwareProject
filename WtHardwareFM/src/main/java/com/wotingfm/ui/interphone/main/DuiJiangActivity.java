@@ -58,6 +58,12 @@ public class DuiJiangActivity extends AppCompatActivity {
                 hide(from).show(to).commit();
     }
 
+    // 手机实体返回按键的处理,硬件不加入
+    @Override
+    public void onBackPressed() {
+        Log.v("TAG", "已经是最上面界面了！");
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
