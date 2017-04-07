@@ -23,13 +23,13 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
-import com.wotingfm.ui.music.album.main.AlbumFragment;
 import com.wotingfm.ui.music.program.diantai.main.adapter.OnLinesRadioAdapter;
 import com.wotingfm.ui.music.program.diantai.model.RadioPlay;
 import com.wotingfm.ui.music.program.fmlist.adapter.RankInfoAdapter;
@@ -43,7 +43,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -232,7 +231,7 @@ public class CityRadioFragment extends Fragment implements View.OnClickListener,
                 if (SubList != null && SubList.get(groupPosition).getList().get(childPosition) != null
                         && SubList.get(groupPosition).getList().get(childPosition).getMediaType() != null) {
                     String MediaType = SubList.get(groupPosition).getList().get(childPosition).getMediaType();
-                    if (MediaType.equals("RADIO") || MediaType.equals("AUDIO")) {
+                    if (MediaType.equals(StringConstant.TYPE_RADIO) || MediaType.equals(StringConstant.TYPE_AUDIO)) {
                         String playName = SubList.get(groupPosition).getList().get(childPosition).getContentName();
                         String playImage = SubList.get(groupPosition).getList().get(childPosition).getContentImg();
                         String playUrl = SubList.get(groupPosition).getList().get(childPosition).getContentPlay();
@@ -267,23 +266,12 @@ public class CityRadioFragment extends Fragment implements View.OnClickListener,
                         dbDao.deleteHistory(playUrl);
                         dbDao.addHistory(history);
 
-
                         Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                         Bundle bundle1 = new Bundle();
-                        bundle1.putString("text", SubList.get(groupPosition).getList().get(childPosition).getContentName());
+                        bundle1.putString(StringConstant.TEXT_CONTENT, SubList.get(groupPosition).getList().get(childPosition).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
-
                         MainActivity.changeOne();
-                    } else if (MediaType.equals("SEQU")) {
-
-                        AlbumFragment fg_album = new AlbumFragment();
-                        Bundle bundle = new Bundle();
-                        bundle.putString("type", "recommend");
-                        bundle.putSerializable("list", (Serializable) SubList.get(groupPosition).getList());
-                        fg_album.setArguments(bundle);
-
-                        ProgramActivity.open(fg_album);
                     } else {
                         ToastUtils.show_short(context, "暂不支持的Type类型");
                     }

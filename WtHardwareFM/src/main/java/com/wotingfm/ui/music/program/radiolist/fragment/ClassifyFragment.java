@@ -52,8 +52,7 @@ import java.util.List;
 
 /**
  * 分类列表
- *
- * @author woting11
+ * woting11
  */
 public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick {
     private Context context;
@@ -252,7 +251,7 @@ public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick
                 position = position - 2;
                 if (position < 0) {
                     L.w("TAG", "position error -- > " + position);
-                    return ;
+                    return;
                 }
                 if (newList != null && newList.get(position) != null && newList.get(position).getMediaType() != null) {
                     String MediaType = newList.get(position).getMediaType();
@@ -296,16 +295,15 @@ public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick
                         bundle1.putString(StringConstant.TEXT_CONTENT, newList.get(position).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
-
                         MainActivity.changeOne();
                     } else if (MediaType.equals(StringConstant.TYPE_SEQU)) {
-                        AlbumFragment fg_album = new AlbumFragment();
+                        AlbumFragment albumFragment = new AlbumFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "radiolistactivity");
                         bundle.putSerializable("list", newList.get(position));
-                        bundle.putString(StringConstant.FROM_TYPE, "program");
-                        fg_album.setArguments(bundle);
-                        ProgramActivity.open(fg_album);
+                        bundle.putString(StringConstant.FROM_TYPE, StringConstant.TAG_PROGRAM);
+                        albumFragment.setArguments(bundle);
+                        ProgramActivity.open(albumFragment);
                     }
                 }
             }

@@ -216,7 +216,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                 EWMShowFragment fg_evm = new EWMShowFragment();
                 Bundle bundle_evm = new Bundle();
                 bundle_evm.putInt("type", 3);
-                bundle_evm.putString(StringConstant.FROM_TYPE, AlbumFragment.jump_type);
+                bundle_evm.putString(StringConstant.FROM_TYPE, AlbumFragment.fromType);
                 fg_evm.setArguments(bundle_evm);
                 ProgramActivity.open(fg_evm);
 
@@ -225,14 +225,14 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                 if (!CommonHelper.checkNetwork(context)) return;
                 if (!TextUtils.isEmpty(contentId)) {
                     if (CommonUtils.getUserIdNoImei(context) != null && !CommonUtils.getUserIdNoImei(context).equals("")) {
-                        if (AlbumFragment.jump_type == null) return ;
+                        if (AlbumFragment.fromType == null) return ;
                         CommentFragment fg = new CommentFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("contentId", contentId);
                         bundle.putString("MediaType", StringConstant.TYPE_SEQU);
-                        bundle.putString(StringConstant.FROM_TYPE, AlbumFragment.jump_type);
+                        bundle.putString(StringConstant.FROM_TYPE, AlbumFragment.fromType);
                         fg.setArguments(bundle);
-                        switch (AlbumFragment.jump_type) {
+                        switch (AlbumFragment.fromType) {
                             case StringConstant.TAG_PLAY:
                                 PlayerActivity.open(fg);
                                 break;
@@ -264,14 +264,14 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                 break;
             case R.id.text_anchor_name:// 到主播详情界面
                 if (!TextUtils.isEmpty(personId)) {
-                    if (AlbumFragment.jump_type == null) return ;
+                    if (AlbumFragment.fromType == null) return ;
                     AnchorDetailsFragment fg = new AnchorDetailsFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("PersonId", personId);
                     bundle.putString("ContentPub", contentPub);
-                    bundle.putString(StringConstant.FROM_TYPE, AlbumFragment.jump_type);
+                    bundle.putString(StringConstant.FROM_TYPE, AlbumFragment.fromType);
                     fg.setArguments(bundle);
-                    switch (AlbumFragment.jump_type) {
+                    switch (AlbumFragment.fromType) {
                         case StringConstant.TAG_PLAY:
                             PlayerActivity.open(fg);
                             break;

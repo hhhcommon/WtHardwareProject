@@ -109,7 +109,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     private boolean isResetData;                                                                    // 重新获取了数据  searchByText
     public static PlayerFragment ct;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -206,7 +205,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
             case R.id.lin_news:                                                                     // 跳转到通知界面
                 MessageFragment fg = new MessageFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("type", "music");
+                bundle.putString(StringConstant.FROM_TYPE, StringConstant.TAG_PLAY);
                 fg.setArguments(bundle);
                 PlayerActivity.open(fg);
                 break;

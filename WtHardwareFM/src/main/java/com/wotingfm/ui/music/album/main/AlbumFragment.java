@@ -62,7 +62,7 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
     private boolean isCancelRequest;
     private FragmentActivity context;
     private View rootView;
-    public static String jump_type;
+    public static String fromType;
 
     private View relativeView;
 
@@ -70,8 +70,8 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn: // 返回
-                if (jump_type == null) return ;
-                switch (jump_type) {
+                if (fromType == null || fromType.equals("")) return ;
+                switch (fromType) {
                     case StringConstant.TAG_PLAY:
                         PlayerActivity.close();
                         break;
@@ -87,14 +87,14 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
                 break;
             case R.id.head_right_btn:// 举报
                 if (GlobalConfig.playerObject != null && !TextUtils.isEmpty(albumId)) {
-                    if (jump_type == null) return ;
+                    if (fromType == null) return ;
                     AccuseFragment fragment = new AccuseFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("ContentId", albumId);
                     bundle.putString("MediaType", StringConstant.TYPE_SEQU);
-                    bundle.putString(StringConstant.FROM_TYPE, jump_type);
+                    bundle.putString(StringConstant.FROM_TYPE, fromType);
                     fragment.setArguments(bundle);
-                    switch (jump_type) {
+                    switch (fromType) {
                         case StringConstant.TAG_PLAY:
                             PlayerActivity.open(fragment);
                             break;
@@ -123,7 +123,7 @@ public class AlbumFragment extends Fragment implements OnClickListener, ViewPage
             rootView = inflater.inflate(R.layout.activity_album, container, false);
             rootView.setOnClickListener(this);
             context = getActivity();
-            jump_type = getArguments().getString(StringConstant.FROM_TYPE);// search
+            fromType = getArguments().getString(StringConstant.FROM_TYPE);// search
             initView();
             initEvent();
         }

@@ -46,6 +46,9 @@ import org.json.JSONTokener;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 搜索全部界面
+ */
 public class TotalFragment extends Fragment implements OnGroupClickListener, OnChildClickListener, TipView.WhiteViewClick {
     private FragmentActivity context;
     private SearchPlayerHistoryDao dbDao;
@@ -133,7 +136,7 @@ public class TotalFragment extends Fragment implements OnGroupClickListener, OnC
                 AlbumFragment fg= new AlbumFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("type", "search");
-                bundle.putString(StringConstant.FROM_TYPE, "search");
+                bundle.putString(StringConstant.FROM_TYPE, StringConstant.TAG_SEARCH);
                 bundle.putSerializable("list", list.get(groupPosition).getList().get(childPosition));
                 fg.setArguments(bundle);
                 SearchLikeActivity.open(fg);

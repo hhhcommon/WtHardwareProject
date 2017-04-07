@@ -202,7 +202,7 @@ public class MineFragment extends Fragment implements OnClickListener {
 
                 EWMShowFragment fg_evm = new EWMShowFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("TZ_type", "mine");
+                bundle.putString(StringConstant.FROM_TYPE, StringConstant.TAG_MINE);
                 bundle.putString("type", "3");
                 bundle.putString("news", userSign);// 签名
                 bundle.putSerializable("person", news);

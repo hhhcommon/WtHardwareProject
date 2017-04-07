@@ -26,7 +26,7 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.main.MainActivity;
-import com.wotingfm.ui.music.favorite.adapter.FavorListAdapter;
+import com.wotingfm.ui.music.search.adapter.SearchListAdapter;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
@@ -49,7 +49,7 @@ import java.util.List;
  */
 public class TTSFragment extends Fragment implements TipView.WhiteViewClick {
     private FragmentActivity context;
-    private FavorListAdapter adapter;
+    private SearchListAdapter adapter;
     private SearchPlayerHistoryDao dbDao;
 
     private List<RankInfo> SubList;
@@ -124,7 +124,7 @@ public class TTSFragment extends Fragment implements TipView.WhiteViewClick {
     }
 
     private void setListener() {
-        adapter.setOnListener(new FavorListAdapter.FavoriteCheck() {
+        adapter.setOnListener(new SearchListAdapter.FavoriteCheck() {
             @Override
             public void checkPosition(int position) {
                 if (newList.get(position).getChecktype() == 0) {
@@ -295,7 +295,7 @@ public class TTSFragment extends Fragment implements TipView.WhiteViewClick {
                     mListView.setPullLoadEnable(false);
                     newList.clear();
                     if (adapter == null) {
-                        mListView.setAdapter(adapter = new FavorListAdapter(context, newList));
+                        mListView.setAdapter(adapter = new SearchListAdapter(context, newList));
                     } else {
                         adapter.notifyDataSetChanged();
                     }
