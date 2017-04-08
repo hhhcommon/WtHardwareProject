@@ -85,7 +85,7 @@
                 android:background="@drawable/linkman_bt"
                 android:gravity="center"
                 android:text="A"
-                android:textColor="@color/WHITE"
+                android:textColor="@color/wt_login_third"
                 android:textSize="30sp"
                 android:visibility="invisible"/>
 
