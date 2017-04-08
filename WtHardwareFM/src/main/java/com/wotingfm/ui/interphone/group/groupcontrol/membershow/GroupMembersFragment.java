@@ -247,6 +247,9 @@ public class GroupMembersFragment extends Fragment implements OnClickListener, T
                         textHeadName.setText("全部成员(" + sum + ")");
                         userList.clear();
                         userList.addAll(srcList);
+
+                        Log.v("TAG", "userList.size -- > > " + userList.size());
+
                         filledData(userList);
                         Collections.sort(userList, pinyinComparator);
                         listView.setAdapter(adapter = new CreateGroupMembersAdapter(context, userList));
@@ -349,9 +352,7 @@ public class GroupMembersFragment extends Fragment implements OnClickListener, T
                 bundle.putSerializable("data", tp);
                 fg4.setArguments(bundle);
                 DuiJiangActivity.open(fg4);
-
             } else {
-
                 GroupPersonNewsFragment fg4 = new GroupPersonNewsFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("type", "GroupMemers");

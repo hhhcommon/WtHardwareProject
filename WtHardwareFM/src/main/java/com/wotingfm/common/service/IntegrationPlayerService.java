@@ -267,9 +267,9 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     // 暂停播放
     public void pausePlay() {
-        if(isVlcPlaying && mVlc.isPlaying()) mVlc.pause();
-        else if(isBVVPlaying && mVV.isPlaying()) mVV.pause();
-        else if(isTtsPlaying && mTts.isSpeaking()) mTts.stopSpeaking();
+        if(isVlcPlaying) mVlc.pause();
+        else if(isBVVPlaying) mVV.pause();
+        else if(isTtsPlaying) mTts.stopSpeaking();
         if(mediaType.equals(StringConstant.TYPE_AUDIO)) {
             if(mUpdatePlayTimeRunnable != null) mHandler.removeCallbacks(mUpdatePlayTimeRunnable);
         }
@@ -324,8 +324,8 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     // 播放节目
     private void playAudio(String contentPlay, final String localUrl) {
-        if(mTts != null && mTts.isSpeaking() && isTtsPlaying) stopTts();
-        if(mVV != null && mVV.isPlaying() && isBVVPlaying) stopRadio();
+        if(mTts != null && isTtsPlaying) stopTts();
+        if(mVV != null && isBVVPlaying) stopRadio();
         if(mVlc == null) initVlc();
         else if(mVlc.isPlaying() && isVlcPlaying) mVlc.stop();
 
@@ -372,14 +372,15 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     // 播放 mVV  用于播放电台
     private void playRadio(final String contentPlay) {
+        if(mTts != null && isTtsPlaying) stopTts();
+        if(mVlc != null && isVlcPlaying) stopVlc();
+
         if(mVV == null) {// 如果播放器初始化失败 则用 VLC 播放电台
             playAudio(contentPlay, null);
             return ;
-        } else if(mVV.isPlaying() && isBVVPlaying) {
+        } else if(isBVVPlaying) {
             mVV.stopPlayback();
         }
-        if(mTts != null && mTts.isSpeaking() && isTtsPlaying) stopTts();
-        if(mVlc != null && mVlc.isPlaying() && isVlcPlaying) stopVlc();
 
         mHandler.postDelayed(new Runnable() {
             @Override
@@ -407,10 +408,10 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     // 播放 TTS
     private void playTts(String contentPlay) {
-        if(mVlc != null && mVlc.isPlaying() && isVlcPlaying) stopVlc();
-        if(mVV != null && mVV.isPlaying() && isBVVPlaying) stopRadio();
+        if(mVlc != null && isVlcPlaying) stopVlc();
+        if(mVV != null && isBVVPlaying) stopRadio();
         if(mTts == null) initTts();
-        else if(mTts.isSpeaking() && isTtsPlaying) mTts.stopSpeaking();
+        else if(isTtsPlaying) mTts.stopSpeaking();
         mTts.startSpeaking(contentPlay, mTtsListener);
         mHandler.postDelayed(mTotalTimeRunnable, 1000);
 
@@ -618,13 +619,6 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     @Override
     public boolean onError(int what, int extra) {
         mVV.stopPlayback();
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mVV.setVideoPath(httpUrl);
-                mVV.start();
-            }
-        }, 1000);
         return true;
     }
 
