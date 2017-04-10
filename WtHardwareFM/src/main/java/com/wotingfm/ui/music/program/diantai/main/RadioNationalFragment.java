@@ -20,6 +20,7 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.main.MainActivity;
@@ -160,7 +161,7 @@ public class RadioNationalFragment extends Fragment implements View.OnClickListe
     private JSONObject setParam() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("MediaType", "RADIO");
+            jsonObject.put("MediaType", StringConstant.TYPE_RADIO);
             jsonObject.put("CatalogId", "dtfl2001");
             jsonObject.put("CatalogType", "9");
             jsonObject.put("PerSize", "20");
@@ -185,7 +186,7 @@ public class RadioNationalFragment extends Fragment implements View.OnClickListe
                 if (SubList != null && SubList.get(groupPosition).getList().get(childPosition) != null
                         && SubList.get(groupPosition).getList().get(childPosition).getMediaType() != null) {
                     String MediaType = SubList.get(groupPosition).getList().get(childPosition).getMediaType();
-                    if (MediaType.equals("RADIO") || MediaType.equals("AUDIO")) {
+                    if (MediaType.equals(StringConstant.TYPE_RADIO) || MediaType.equals(StringConstant.TYPE_AUDIO)) {
                         String playName = SubList.get(groupPosition).getList().get(childPosition).getContentName();
                         String playImage = SubList.get(groupPosition).getList().get(childPosition).getContentImg();
                         String playUrl = SubList.get(groupPosition).getList().get(childPosition).getContentPlay();
@@ -220,22 +221,19 @@ public class RadioNationalFragment extends Fragment implements View.OnClickListe
                         dbDao.deleteHistory(playUrl);
                         dbDao.addHistory(history);
 
-
                         Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                         Bundle bundle1 = new Bundle();
-                        bundle1.putString("text", SubList.get(groupPosition).getList().get(childPosition).getContentName());
+                        bundle1.putString(StringConstant.TEXT_CONTENT, SubList.get(groupPosition).getList().get(childPosition).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
-
                         MainActivity.changeOne();
-                    } else if (MediaType.equals("SEQU")) {
-
+                    } else if (MediaType.equals(StringConstant.TYPE_SEQU)) {
                         AlbumFragment fg_album = new AlbumFragment();
                         Bundle bundle = new Bundle();
+                        bundle.putString(StringConstant.FROM_TYPE, StringConstant.TAG_PROGRAM);
                         bundle.putString("type", "recommend");
                         bundle.putSerializable("list", (Serializable) SubList.get(groupPosition).getList());
                         fg_album.setArguments(bundle);
-
                         ProgramActivity.open(fg_album);
                     } else {
                         ToastUtils.show_short(context, "暂不支持的Type类型");

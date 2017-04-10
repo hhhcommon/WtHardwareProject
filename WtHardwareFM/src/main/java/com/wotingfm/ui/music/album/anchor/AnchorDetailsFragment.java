@@ -77,7 +77,7 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
     private boolean isCancelRequest;
     private FragmentActivity context;
     private View rootView;
-    private String jump_type;
+    private String fromType;
 
     @Override
     public void onWhiteViewClick() {
@@ -163,7 +163,7 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
     }
 
     private void handleIntent() {
-        jump_type = getArguments().getString(StringConstant.FROM_TYPE);
+        fromType = getArguments().getString(StringConstant.FROM_TYPE);
         PersonId = getArguments().getString("PersonId");
         ContentPub = getArguments().getString("ContentPub");
         if (!TextUtils.isEmpty(PersonId)) {
@@ -297,20 +297,23 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
         lv_sequ.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if (fromType == null || fromType.equals("")) return ;
                 AlbumFragment fg = new AlbumFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("type", "main");
-                bundle.putString(StringConstant.FROM_TYPE, jump_type);
+                bundle.putString(StringConstant.FROM_TYPE, fromType);
                 bundle.putString("id", personInfoList.get(position).getContentId());
                 fg.setArguments(bundle);
-                if (jump_type != null) {
-                    if (jump_type.equals("search")) {
-                        SearchLikeActivity.open(fg);
-                    } else if (jump_type.equals("program")) {
-                        ProgramActivity.open(fg);
-                    } else if (jump_type.equals("play")) {
+                switch (fromType) {
+                    case StringConstant.TAG_PLAY:
                         PlayerActivity.open(fg);
-                    }
+                        break;
+                    case StringConstant.TAG_SEARCH:
+                        SearchLikeActivity.open(fg);
+                        break;
+                    case StringConstant.TAG_PROGRAM:
+                        ProgramActivity.open(fg);
+                        break;
                 }
             }
         });
@@ -369,7 +372,7 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
         try {
             jsonObject.put("PersonId", PersonId);
             jsonObject.put("Page", String.valueOf(page));
-            jsonObject.put("MediaType", "AUDIO");
+            jsonObject.put("MediaType", StringConstant.TYPE_AUDIO);
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -431,14 +434,17 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                if (jump_type != null) {
-                    if (jump_type.equals("search")) {
-                        SearchLikeActivity.close();
-                    } else if (jump_type.equals("program")) {
-                        ProgramActivity.close();
-                    } else if (jump_type.equals("play")) {
+                if (fromType == null || fromType.equals("")) return ;
+                switch (fromType) {
+                    case StringConstant.TAG_PLAY:
                         PlayerActivity.close();
-                    }
+                        break;
+                    case StringConstant.TAG_PROGRAM:
+                        ProgramActivity.close();
+                        break;
+                    case StringConstant.TAG_SEARCH:
+                        SearchLikeActivity.close();
+                        break;
                 }
                 break;
             case R.id.tv_more:
@@ -446,7 +452,7 @@ public class AnchorDetailsFragment extends Fragment implements View.OnClickListe
                     AnchorListFragment fg = new AnchorListFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("PersonId", PersonId);
-                    bundle.putString(StringConstant.FROM_TYPE, AlbumFragment.jump_type);
+                    bundle.putString(StringConstant.FROM_TYPE, AlbumFragment.fromType);
                     if (!TextUtils.isEmpty(PersonName)) {
                         bundle.putString("PersonName", PersonName);
                     }

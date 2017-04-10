@@ -38,20 +38,23 @@ public class EWMShowFragment extends Fragment implements OnClickListener {
     private Bitmap bmp;
     private FragmentActivity context;
     private View rootView;
-    private String TZ_type;
+    private String fromType;
 
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:// 返回
-                if (TZ_type != null) {
-                    if (TZ_type.equals("mine")) {
+                if (fromType == null || fromType.equals("")) return ;
+                switch (fromType) {
+                    case StringConstant.TAG_MINE:
                         MineActivity.close();
-                    }else if(TZ_type.equals("program")){
+                        break;
+                    case StringConstant.TAG_PROGRAM:
                         ProgramActivity.close();
-                    }else if(TZ_type.equals("player")){
+                        break;
+                    case StringConstant.TAG_PLAY:
                         PlayerActivity.close();
-                    }
+                        break;
                 }
                 break;
         }
@@ -83,7 +86,7 @@ public class EWMShowFragment extends Fragment implements OnClickListener {
         textNews = (TextView) rootView.findViewById(R.id.news);
 
         if (getArguments() != null) {
-            TZ_type = getArguments().getString(StringConstant.FROM_TYPE);
+            fromType = getArguments().getString(StringConstant.FROM_TYPE);
             int type = getArguments().getInt("type", 1);// 0：单体节目分享  1：个人   2：组  3：专辑分享
             if (type == 0) {
                 shapeContent();

@@ -1,4 +1,4 @@
-package com.wotingfm.ui.music.favorite.adapter;
+package com.wotingfm.ui.music.search.adapter;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -13,18 +13,19 @@ import android.widget.TextView;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.IntegerConstant;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
 
-public class FavorListAdapter extends BaseAdapter {
+public class SearchListAdapter extends BaseAdapter {
     private List<RankInfo> list;
     private Context context;
     private FavoriteCheck favoriteCheck;
 
-    public FavorListAdapter(Context context, List<RankInfo> list) {
+    public SearchListAdapter(Context context, List<RankInfo> list) {
         this.context = context;
         this.list = list;
     }
@@ -94,7 +95,7 @@ public class FavorListAdapter extends BaseAdapter {
         }
 
         // 来源 -> 专辑
-        if (mediaType.equals("RADIO")) {
+        if (mediaType.equals(StringConstant.TYPE_RADIO)) {
             String currentContent = lists.getCurrentContent();
             if (currentContent == null || currentContent.equals("")) {
                 currentContent = "未知";
@@ -126,12 +127,12 @@ public class FavorListAdapter extends BaseAdapter {
         holder.textNumber.setText(watchNum);
 
         switch (mediaType) {
-            case "RADIO":// 电台
+            case StringConstant.TYPE_RADIO:// 电台
                 holder.textLast.setVisibility(View.GONE);
                 holder.imageLast.setVisibility(View.GONE);
                 holder.imageNum.setVisibility(View.GONE);
                 break;
-            case "SEQU":// 专辑
+            case StringConstant.TYPE_SEQU:// 专辑
                 holder.imageLast.setVisibility(View.GONE);
                 holder.imageNum.setVisibility(View.VISIBLE);
                 holder.textLast.setVisibility(View.VISIBLE);
@@ -144,8 +145,8 @@ public class FavorListAdapter extends BaseAdapter {
                     holder.textLast.setText(contentSubCount + "集");
                 }
                 break;
-            case "AUDIO":// 声音
-            case "TTS":// TTS
+            case StringConstant.TYPE_AUDIO:// 声音
+            case StringConstant.TYPE_TTS:// TTS
                 holder.imageNum.setVisibility(View.GONE);
                 holder.imageLast.setVisibility(View.VISIBLE);
                 holder.textLast.setVisibility(View.VISIBLE);

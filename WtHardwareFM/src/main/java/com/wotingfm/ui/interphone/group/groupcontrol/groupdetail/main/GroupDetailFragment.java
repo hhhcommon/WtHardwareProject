@@ -115,6 +115,7 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
     private TextView textGroupId;// 群 ID
     private TextView textGroupNumber;// 群成员人数
     private TipView tipView;// 数据加载出错提示
+    private TextView textMore;// "更多"
 
     private String groupId;// ID
     private String groupName;// NAME
@@ -205,12 +206,14 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
         if (getArguments() == null) {
             tipView.setVisibility(View.VISIBLE);
             tipView.setTipView(TipView.TipStatus.IS_ERROR);
+            textMore.setVisibility(View.GONE);
             return;
         }
         String type = getArguments().getString("type");
         if (type == null || type.equals("")) {
             tipView.setVisibility(View.VISIBLE);
             tipView.setTipView(TipView.TipStatus.IS_ERROR);
+            textMore.setVisibility(View.GONE);
             return;
         }
         switch (type) {
@@ -300,6 +303,7 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
             groupId = "00";// 待定 此处为没有获取到 groupId
             tipView.setVisibility(View.VISIBLE);
             tipView.setTipView(TipView.TipStatus.IS_ERROR);
+            textMore.setVisibility(View.GONE);
         }
 
         setData();
@@ -311,16 +315,17 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
         rootView.findViewById(R.id.imageView4).setOnClickListener(this);                 // 群聊天
         rootView.findViewById(R.id.rl_allperson).setOnClickListener(this);               // 查看所有群成员
         rootView.findViewById(R.id.linear_channel).setOnClickListener(this);             // 频率选择
-        rootView.findViewById(R.id.lin_head_right).setOnClickListener(this);             // 顶栏更多
 
+        textMore = (TextView) rootView.findViewById(R.id.lin_head_right);                // 顶栏更多
+        textMore.setOnClickListener(this);
 
-        rl_group_manager = (RelativeLayout) rootView.findViewById(R.id.rl_group_manager);   // 群管理
+        rl_group_manager = (RelativeLayout) rootView.findViewById(R.id.rl_group_manager);// 群管理
         rl_group_manager.setOnClickListener(this);
 
         textChannelOne = (TextView) rootView.findViewById(R.id.text_channel_one);        // 频道记录TextView1
         textChannelTwo = (TextView) rootView.findViewById(R.id.text_channel_two);        // 频道记录TextView2
 
-        tv_pinlvxuanze = (TextView) rootView.findViewById(R.id.tv_pinlvxuanze);           // 频率选择TextView
+        tv_pinlvxuanze = (TextView) rootView.findViewById(R.id.tv_pinlvxuanze);          // 频率选择TextView
 
         tipView = (TipView) rootView.findViewById(R.id.tip_view);
         tipView.setWhiteClick(this);
@@ -424,6 +429,7 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
         } else {
             tipView.setVisibility(View.VISIBLE);
             tipView.setTipView(TipView.TipStatus.NO_NET);
+            textMore.setVisibility(View.GONE);
         }
     }
 
@@ -578,13 +584,16 @@ public class GroupDetailFragment extends Fragment implements OnClickListener, On
                         if (list.size() <= 0) {
                             tipView.setVisibility(View.VISIBLE);
                             tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                            textMore.setVisibility(View.GONE);
                         } else {
                             tipView.setVisibility(View.GONE);
+                            textMore.setVisibility(View.VISIBLE);
                         }
                     } catch (JSONException e) {
                         e.printStackTrace();
                         tipView.setVisibility(View.VISIBLE);
                         tipView.setTipView(TipView.TipStatus.IS_ERROR);
+                        textMore.setVisibility(View.GONE);
                     }
                 }
             }

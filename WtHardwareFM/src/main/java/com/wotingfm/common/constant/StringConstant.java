@@ -180,4 +180,16 @@ public class StringConstant {
 
     // 播放
     public static final String TAG_PLAY = "play";
+
+    // 我的
+    public static final String TAG_MINE = "mine";
+
+    // 通讯录
+    public static final String TAG_CHAT = "chat";
+
+    // 数据传递 图片所在的位置
+    public static final String PICTURE_INDEX = "PICTURE_INDEX";
+
+    // 数据传递 图片地址
+    public static final String PICTURE_URL = "PICTURE_URL";
 }

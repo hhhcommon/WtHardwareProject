@@ -54,21 +54,19 @@ public class DuiJiangFragment extends Fragment {
             rootView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
                 }
             });
-            ct=this;
+
+            ct = this;
             context = getActivity();
-            InitTextView();        // 初始化视图
-            InitViewPager();       // 初始化ViewPager
+            initTextView();        // 初始化视图
+            initViewPager();       // 初始化 ViewPager
             dialog();              // 初始化功能弹出框
         }
         return rootView;
     }
 
-    /*
-     * "更多" 对话框
-     */
+    // "更多" 对话框
     private void dialog() {
         View dialog = LayoutInflater.from(context).inflate(R.layout.dialoga, null);
         View lin_news = dialog.findViewById(R.id.lin_news);    // 新消息
@@ -78,9 +76,7 @@ public class DuiJiangFragment extends Fragment {
         LinearLayout lin_d = (LinearLayout) dialog.findViewById(R.id.lin_d);        // 扫一扫
         LinearLayout lin_e = (LinearLayout) dialog.findViewById(R.id.lin_e);        // 模拟对讲
 
-        /**
-         * 跳转到新消息
-         */
+        // 跳转到新消息
         lin_news.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,14 +86,11 @@ public class DuiJiangFragment extends Fragment {
                 } else {
 
                 }
-                //				startActivity(new Intent(context, ContactAddInformationActivity.class));
                 addDialog.dismiss();
             }
         });
 
-		/*
-         * 跳转到添加好友
-		 */
+		// 跳转到添加好友
         lin_a.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,21 +110,17 @@ public class DuiJiangFragment extends Fragment {
             }
         });
 
-		/*
-         * 跳转到加入群组
-		 */
+		// 跳转到加入群组
         lin_b.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 String login = sharedPreferences.getString(StringConstant.ISLOGIN, "false");// 是否登录
                 if (!login.trim().equals("") && login.equals("true")) {
-
                     FindFragment fg = new FindFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString(StringConstant.FIND_TYPE, StringConstant.FIND_TYPE_GROUP);
                     fg.setArguments(bundle);
                     DuiJiangActivity.open(fg);
-
                 } else {
                     startActivity(new Intent(context, LoginActivity.class));
                 }
@@ -139,9 +128,7 @@ public class DuiJiangFragment extends Fragment {
             }
         });
 
-		/*
-		 * 跳转到创建讨论组
-		 */
+		// 跳转到创建讨论组
         lin_c.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -156,15 +143,13 @@ public class DuiJiangFragment extends Fragment {
             }
         });
 
-		/*
-		 * 跳转到扫描界面
-		 */
+		// 跳转到扫描界面
         lin_d.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 String login = sharedPreferences.getString(StringConstant.ISLOGIN, "false");// 是否登录
                 if (!login.trim().equals("") && login.equals("true")) {
-                    startActivity(new Intent(context,CaptureActivity.class));
+                    startActivity(new Intent(context, CaptureActivity.class));
                 } else {
                     startActivity(new Intent(context, LoginActivity.class));
                 }
@@ -172,86 +157,65 @@ public class DuiJiangFragment extends Fragment {
             }
         });
 
-        /*
-		 * 跳转模拟对讲
-		 */
+        // 跳转模拟对讲
         lin_e.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 SimulationInterphoneFragment fg = new SimulationInterphoneFragment();
                 DuiJiangActivity.open(fg);
-
                 addDialog.dismiss();
             }
         });
 
-
         addDialog = new PopupWindow(dialog);
-//		addDialog = new PopupWindow(dialog, LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT, true);
         // 使其聚集
         addDialog.setFocusable(true);
-        // 在android4.0/5.0系统上点击内容外部区域无法关闭问题
-//		addDialog.setBackgroundDrawable(new BitmapDrawable());
+        // 在 android 4.0 / 5.0 系统上点击内容外部区域无法关闭问题
         addDialog.setBackgroundDrawable(new ColorDrawable(0x00000000));
         // 设置允许在外点击消失
         addDialog.setOutsideTouchable(true);
-        // 控制popupwindow的宽度和高度自适应
+        // 控制 popupWindow 的宽度和高度自适应
         dialog.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
         addDialog.setWidth(dialog.getMeasuredWidth());
         addDialog.setHeight(dialog.getMeasuredHeight());
-
-
-        //		addDialog = new Dialog(context, R.style.MyDialog_duijiang);
-        //		addDialog.setContentView(dialog);
-        //		addDialog.setCanceledOnTouchOutside(true);
-        //		addDialog.getWindow().setGravity(Gravity.TOP | Gravity.RIGHT);
-        //		addDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
     }
 
-    /*
-     * 初始化视图
-     */
-    private void InitTextView() {
+    // 初始化视图
+    private void initTextView() {
         lin_more = rootView.findViewById(R.id.lin_more);
         View lin_news = rootView.findViewById(R.id.lin_news);
-		/*
-		 * 跳转到新消息界面
-		 */
+
+		// 跳转到新消息界面
         lin_news.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 MessageFragment fg = new MessageFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("type", "group");
+                bundle.putString(StringConstant.FROM_TYPE, StringConstant.TAG_CHAT);
                 fg.setArguments(bundle);
                 DuiJiangActivity.open(fg);
             }
         });
+
         view1 = (TextView) rootView.findViewById(R.id.tv_guid1);
         view2 = (TextView) rootView.findViewById(R.id.tv_guid2);
         view1.setOnClickListener(new txListener(0));
         view2.setOnClickListener(new txListener(1));
 
-		/*
-		 * 弹出功能弹出框
-		 */
+		// 弹出功能弹出框
         lin_more.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (addDialog != null && addDialog.isShowing()) {
                     addDialog.dismiss();
                 } else {
-                    //					addDialog.show();
                     addDialog.showAsDropDown(lin_more);
                 }
             }
         });
     }
 
-    /*
-     * TextView 点击事件监听
-     */
+    // TextView 点击事件监听
     public class txListener implements OnClickListener {
         private int index = 0;
 
@@ -263,19 +227,11 @@ public class DuiJiangFragment extends Fragment {
         public void onClick(View v) {
             mPager.setCurrentItem(index);
             if (index == 0) {
-             /*   view1.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-                view2.setTextColor(context.getResources().getColor(R.color.white));
-                view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
-                view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));*/
                 view1.setTextColor(context.getResources().getColor(R.color.white));
                 view2.setTextColor(context.getResources().getColor(R.color.gray));
                 view1.setTextSize(25);
                 view2.setTextSize(17);
             } else if (index == 1) {
-               /* view1.setTextColor(context.getResources().getColor(R.color.white));
-                view2.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-                view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
-                view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));*/
                 view1.setTextColor(context.getResources().getColor(R.color.gray));
                 view2.setTextColor(context.getResources().getColor(R.color.white));
                 view1.setTextSize(17);
@@ -286,20 +242,14 @@ public class DuiJiangFragment extends Fragment {
 
     public static void update() {
         mPager.setCurrentItem(0);
-      /*  view1.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-        view2.setTextColor(context.getResources().getColor(R.color.white));
-        view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
-        view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));*/
         view1.setTextColor(context.getResources().getColor(R.color.white));
         view1.setTextSize(25);
         view2.setTextColor(context.getResources().getColor(R.color.gray));
         view2.setTextSize(17);
     }
 
-    /*
-     * 初始化ViewPager
-     */
-    public void InitViewPager() {
+    // 初始化 ViewPager
+    public void initViewPager() {
         mPager = (ViewPager) rootView.findViewById(R.id.viewpager);
         mPager.setOffscreenPageLimit(1);
         ArrayList<Fragment> fragmentList = new ArrayList<>();
@@ -309,12 +259,10 @@ public class DuiJiangFragment extends Fragment {
         fragmentList.add(btFragment1);
         mPager.setAdapter(new MyFragmentPagerAdapter(getChildFragmentManager(), fragmentList));
         mPager.setOnPageChangeListener(new MyOnPageChangeListener());// 页面变化时的监听器
-        mPager.setCurrentItem(0);                                     // 设置当前显示标签页为第一页
+        mPager.setCurrentItem(0);                                    // 设置当前显示标签页为第一页
     }
 
-    /*
-     * ViewPager 监听事件
-     */
+    // ViewPager 监听事件
     public class MyOnPageChangeListener implements OnPageChangeListener {
 
         @Override
@@ -328,19 +276,11 @@ public class DuiJiangFragment extends Fragment {
         @Override
         public void onPageSelected(int arg0) {
             if (arg0 == 0) {
-             /*   view1.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-                view2.setTextColor(context.getResources().getColor(R.color.white));
-                view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));
-                view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));*/
                 view1.setTextColor(context.getResources().getColor(R.color.white));
                 view2.setTextColor(context.getResources().getColor(R.color.gray));
                 view1.setTextSize(25);
                 view2.setTextSize(17);
             } else if (arg0 == 1) {
-          /*      view1.setTextColor(context.getResources().getColor(R.color.white));
-                view2.setTextColor(context.getResources().getColor(R.color.dinglan_orange));
-                view1.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_orange));
-                view2.setBackgroundDrawable(context.getResources().getDrawable(R.drawable.color_wt_circle_home_white));*/
                 view1.setTextColor(context.getResources().getColor(R.color.gray));
                 view2.setTextColor(context.getResources().getColor(R.color.white));
                 view1.setTextSize(17);
@@ -348,29 +288,4 @@ public class DuiJiangFragment extends Fragment {
             }
         }
     }
-
-
-//    // 手机实体返回按键的处理 与 onBackPress 同理
-//    long waitTime = 2000;
-//    long touchTime = 0;
-//
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (event.getAction() == KeyEvent.ACTION_DOWN && KeyEvent.KEYCODE_BACK == keyCode) {
-//            long currentTime = System.currentTimeMillis();
-//            if ((currentTime - touchTime) >= waitTime) {
-//                ToastUtils.show_always(this, "再按一次退出");
-//                touchTime = currentTime;
-//            } else {
-////                MainActivity.onStop();
-//                MobclickAgent.onKillProcess(this);
-//                finish();
-//                android.os.Process.killProcess(android.os.Process.myPid());
-//            }
-//            return true;
-//        }
-//        return super.onKeyDown(keyCode, event);
-//    }
-
-
 }

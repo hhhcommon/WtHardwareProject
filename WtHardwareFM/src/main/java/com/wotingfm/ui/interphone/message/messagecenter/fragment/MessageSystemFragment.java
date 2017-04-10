@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.ui.interphone.linkman.model.DBNotifyHistory;
 import com.wotingfm.ui.interphone.main.DuiJiangActivity;
 import com.wotingfm.ui.interphone.message.messagecenter.adapter.NotifyNewsAdapter;
@@ -48,7 +49,7 @@ public class MessageSystemFragment extends Fragment implements OnClickListener {
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.activity_notifynews, container, false);
             context = getActivity();
-            type=getArguments().getString("type");
+            type = getArguments().getString(StringConstant.FROM_TYPE);
             setView();                             // 设置界面
             initDao();                             // 初始化数据库命令执行对象
             getData();                             // 获取数据                        // 获取数据
@@ -109,16 +110,18 @@ public class MessageSystemFragment extends Fragment implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
-                if(type!=null){
-                    if(type.equals("music")){
+                if (type == null || type.equals("")) return ;
+                switch (type) {
+                    case StringConstant.TAG_PLAY:
                         PlayerActivity.close();
-                    }else{
+                        break;
+                    case StringConstant.TAG_CHAT:
                         DuiJiangActivity.close();
-                    }
+                        break;
                 }
                 break;
             case R.id.tv_delete:
-                ToastUtils.show_short(context,"删除按钮");
+                ToastUtils.show_short(context, "删除按钮");
                 break;
         }
     }

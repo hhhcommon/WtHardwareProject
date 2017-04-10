@@ -69,8 +69,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
     private TextView textDown;// 下载
     private TextView textSequ;// 专辑
 
-    private TextView textAccuse1;// 举报
-    private TextView textAccuse2;// 举报
+    private TextView textAccuse;// 举报
 
     private String contentFavorite;// 是否喜欢  == "1" 喜欢  == null or "0" 还没喜欢
     private String SequId;
@@ -116,10 +115,9 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
         textSequ = (TextView) rootView.findViewById(R.id.text_sequ);                // 专辑
 
         // 举报
-        textAccuse1 = (TextView) rootView.findViewById(R.id.tv_accuse1);
-        textAccuse1.setOnClickListener(this);
-        textAccuse2 = (TextView) rootView.findViewById(R.id.tv_accuse2);
-        textAccuse2.setOnClickListener(this);
+        textAccuse = (TextView) rootView.findViewById(R.id.tv_accuse1);
+        textAccuse.setOnClickListener(this);
+        rootView.findViewById(R.id.tv_accuse2).setOnClickListener(this);
 
         resetDate();// 设置 View
     }
@@ -286,7 +284,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
             textDetails.setVisibility(View.GONE);// 详情
             textProgram.setVisibility(View.VISIBLE);// 播单
             textSequ.setVisibility(View.GONE);// 专辑
-            textAccuse1.setVisibility(View.VISIBLE);// 举报
+            textAccuse.setVisibility(View.VISIBLE);// 举报
             viewLinearFour.setVisibility(View.GONE);
 
             textDown.setVisibility(View.INVISIBLE);// 下载
@@ -295,7 +293,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
             textDetails.setVisibility(View.VISIBLE);// 详情
             textSequ.setVisibility(View.VISIBLE);// 专辑
             textDown.setVisibility(View.VISIBLE);// 下载
-            textAccuse1.setVisibility(View.GONE);// 举报
+            textAccuse.setVisibility(View.GONE);// 举报
             viewLinearFour.setVisibility(View.VISIBLE);
 
             if (mediaType.equals(StringConstant.TYPE_TTS)) {

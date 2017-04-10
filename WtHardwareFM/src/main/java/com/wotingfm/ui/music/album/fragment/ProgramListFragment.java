@@ -160,6 +160,7 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
 
         VolleyRequest.RequestPost(GlobalConfig.getSmSubMedias, tag, jsonObject, new VolleyCallback() {
             private String subListString;
+
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) dialog.dismiss();
@@ -182,7 +183,8 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
                                 e.printStackTrace();
                             }
                             try {
-                                list = new Gson().fromJson(subListString, new TypeToken<List<ContentInfo>>() {}.getType());
+                                list = new Gson().fromJson(subListString, new TypeToken<List<ContentInfo>>() {
+                                }.getType());
                                 if (list != null && list.size() > 0) {
                                     if (page == 1) contentList.clear();
                                     contentList.addAll(list);
@@ -234,7 +236,8 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
                 downLoadList.addAll(contentList);
                 getData();
                 if (albumAdapter != null) albumAdapter.notifyDataSetChanged();
-                else listDownload.setAdapter(albumAdapter = new AlbumAdapter(context, downLoadList));
+                else
+                    listDownload.setAdapter(albumAdapter = new AlbumAdapter(context, downLoadList));
                 setInterface();
                 listDownload.setSelection(0);
                 viewStatus.setVisibility(View.VISIBLE);
@@ -305,7 +308,7 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
                 }
                 break;
             case R.id.imageView5: //专辑播放
-                ToastUtils.show_always(context,"播放本专辑内容");
+                ToastUtils.show_always(context, "播放本专辑内容");
                 break;
         }
     }
@@ -387,8 +390,8 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
             tempList.get(0).setDownloadtype(1);
             FID.updataDownloadStatus(tempList.get(0).getUrl(), "1");
             DownloadService.workStart(tempList.get(0));
-            if(DownloadFragment.isVisible){
-                DownLoadUnCompletedFragment.dwType=true;
+            if (DownloadFragment.isVisible) {
+                DownLoadUnCompletedFragment.dwType = true;
             }
 
             // 发送更新界面数据广播
@@ -434,16 +437,16 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
                         String sequImg1 = contentImg;
 
                         PlayerHistory history = new PlayerHistory(
-                                playerName,  playerImage, playUrl, playUrI,playMediaType,
+                                playerName, playerImage, playUrl, playUrI, playMediaType,
                                 playAllTime, playInTime, playContentDesc, playNum,
-                                playZanType, playFrom , playFromId,playFromUrl,playAddTime,bjUserId,playContentShareUrl,
-                                ContentFavorite,ContentId,localUrl,sequName1,sequId1,sequDesc1,sequImg1);
+                                playZanType, playFrom, playFromId, playFromUrl, playAddTime, bjUserId, playContentShareUrl,
+                                ContentFavorite, ContentId, localUrl, sequName1, sequId1, sequDesc1, sequImg1);
                         dbDao.deleteHistory(playUrl);
                         dbDao.addHistory(history);
 
                         Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
                         Bundle bundle1 = new Bundle();
-                        bundle1.putString(StringConstant.TEXT_CONTENT,contentList.get(position - 1).getContentName());
+                        bundle1.putString(StringConstant.TEXT_CONTENT, contentList.get(position - 1).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
                         MainActivity.changeOne();
@@ -474,7 +477,7 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
                         for (int i = 0; i < downLoadList.size(); i++) {
                             if (downLoadList.get(i).getCheckType() == 2) {
                                 sum++;
-                            } else if(downLoadList.get(i).getCheckType() == 3) {
+                            } else if (downLoadList.get(i).getCheckType() == 3) {
                                 downLoadSum++;
                             }
                             setSum();
@@ -482,10 +485,10 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
                         }
 
                         // 更新全选图标
-                        if(sum == (downLoadList.size() - downLoadSum)){
+                        if (sum == (downLoadList.size() - downLoadSum)) {
                             flag = true;
                             imageAllCheck.setImageResource(R.mipmap.wt_group_checked);
-                        }else{
+                        } else {
                             flag = false;
                             imageAllCheck.setImageResource(R.mipmap.wt_group_nochecked);
                         }
@@ -523,23 +526,23 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
         isCancelRequest = VolleyRequest.cancelRequest(tag);
         rootView = null;
         context = null;
-        if(dbDao != null) {
+        if (dbDao != null) {
             dbDao.closedb();
             dbDao = null;
         }
-        if(FID != null) {
+        if (FID != null) {
             FID.closeDB();
             FID = null;
         }
-        if(contentList != null) {
+        if (contentList != null) {
             contentList.clear();
             contentList = null;
         }
-        if(downLoadList != null) {
+        if (downLoadList != null) {
             downLoadList.clear();
             downLoadList = null;
         }
-        if(subList != null) {
+        if (subList != null) {
             subList.clear();
             subList = null;
         }

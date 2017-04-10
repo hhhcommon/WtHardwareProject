@@ -46,10 +46,10 @@ public class MessageSubscriberFragment extends Fragment implements OnClickListen
         if (rootView == null) {
             rootView = inflater.inflate(R.layout.activity_notifynews, container, false);
             context = getActivity();
-            type=getArguments().getString("type");
+            type = getArguments().getString(StringConstant.FROM_TYPE);
             setView();                             // 设置界面
             initDao();                             // 初始化数据库命令执行对象
-            getData();                             // 获取数据                        // 获取数据
+            getData();                             // 获取数据
         }
         return rootView;
     }
@@ -112,35 +112,33 @@ public class MessageSubscriberFragment extends Fragment implements OnClickListen
 //        }
 
         // 组装专辑显示数据
-        ArrayList<DBSubscriberMessage> _list = new ArrayList<DBSubscriberMessage>();
+        ArrayList<DBSubscriberMessage> _list = new ArrayList<>();
         if (_list.size() <= 0) {
             _list.add(list.get(0));
         }
         for (int i = 0; i < list.size(); i++) {
             String _id = list.get(i).getSeqId().trim();
-            boolean type=false;
+            boolean type = false;
             for (int j = 0; j < _list.size(); j++) {
                 // 如果数据出错则该条数据不要
                 String id = _list.get(j).getSeqId().trim();
                 try {
                     if (_id.equals(id)) {
-                        type=false;
+                        type = false;
                         break;
-                    }else{
-                        type=true;
+                    } else {
+                        type = true;
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
-            if(type){
+            if (type) {
                 _list.add(list.get(i));
             }
         }
-
         // 组装更新数目
         getList(list, _list);
-
     }
 
     private void getList(List<DBSubscriberMessage> list, ArrayList<DBSubscriberMessage> _list) {
@@ -165,7 +163,6 @@ public class MessageSubscriberFragment extends Fragment implements OnClickListen
         setOnItemClickListener(_list);
     }
 
-
     // listView的点击事件
     private void setOnItemClickListener(final ArrayList<DBSubscriberMessage> _list) {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -184,14 +181,13 @@ public class MessageSubscriberFragment extends Fragment implements OnClickListen
                 bundle.putString("type", "radiolistactivity");
                 bundle.putSerializable("list", listInfo);
                 fragment.setArguments(bundle);
-                if(type!=null){
-                    if(type.equals("music")){
+                if (type != null) {
+                    if (type.equals(StringConstant.TAG_PLAY)) {
                         PlayerActivity.open(fragment);
-                    }else{
+                    } else {
                         DuiJiangActivity.open(fragment);
                     }
                 }
-
             }
         });
     }
@@ -214,10 +210,10 @@ public class MessageSubscriberFragment extends Fragment implements OnClickListen
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.head_left_btn:
-                if(type!=null){
-                    if(type.equals("music")){
+                if (type != null) {
+                    if (type.equals(StringConstant.TAG_PLAY)) {
                         PlayerActivity.close();
-                    }else{
+                    } else {
                         DuiJiangActivity.close();
                     }
                 }
