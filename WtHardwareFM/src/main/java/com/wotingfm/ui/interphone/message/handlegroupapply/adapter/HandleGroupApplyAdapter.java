@@ -79,10 +79,10 @@ public class HandleGroupApplyAdapter extends BaseAdapter implements OnClickListe
 		}
 		Inviter = list.get(position);
 
-		if (Inviter.getUserName() == null || Inviter.getUserName().equals("")) {
+		if (Inviter.getNickName() == null || Inviter.getNickName().equals("")) {
 			holder.textview_invitename.setText("未知");
 		} else {
-			holder.textview_invitename.setText(Inviter.getUserName());
+			holder.textview_invitename.setText(Inviter.getNickName());
 		}
 		if (Inviter.getApplyTime() == null || Inviter.getApplyTime().equals("")) {
 			holder.textview_invitemessage.setText("申请进入该群");

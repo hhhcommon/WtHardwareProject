@@ -87,17 +87,11 @@ public class CreateGroupMembersAdapter extends BaseAdapter implements SectionInd
         if (lists.getUserAliasName() != null) {
             holder.tv_name.setText(lists.getUserAliasName());
         } else {
-            if (lists.getUserName() == null || lists.getUserName().equals("")) {
-                holder.tv_name.setText("未知");//名
-            } else {
-
-                if (lists.getUserName() == null || lists.getUserName().equals("")) {
+                if (lists.getNickName() == null || lists.getNickName().equals("")) {
                     holder.tv_name.setText("未知");//名
                 } else {
-                    holder.tv_name.setText(lists.getUserName());//名
+                    holder.tv_name.setText(lists.getNickName());//名
                 }
-            }
-            holder.tv_name.setText(lists.getUserName());//名
         }
 
         if (lists.getPortraitMini() == null || lists.getPortraitMini().equals("") || lists.getPortraitMini().equals("null") || lists.getPortraitMini().trim().equals("")) {

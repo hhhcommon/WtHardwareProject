@@ -393,7 +393,7 @@ public class MainActivity extends TabActivity {
 //                                                                 }.getType());
 
                                                                 CallerInfo caller = userInfo.getCallerInfo();
-                                                                String name = caller.getUserName();
+                                                                String name = caller.getNickName();
                                                                 showPerson(name); // 展示上次存在的单对单对讲
 
                                                             } catch (Exception e) {
@@ -407,7 +407,7 @@ public class MainActivity extends TabActivity {
 //                                                                CallerInfo calleder = new Gson().fromJson(callederInfo, new TypeToken<CallerInfo>() {
 //                                                                }.getType());
                                                                 CallerInfo calleder = userInfo.getCallederInfo();
-                                                                String name = calleder.getUserName();
+                                                                String name = calleder.getNickName();
                                                                 showPerson(name); // 展示上次存在的单对单对讲
                                                             } catch (Exception e) {
                                                                 e.printStackTrace();
@@ -931,7 +931,7 @@ public class MainActivity extends TabActivity {
         et.putString(StringConstant.USERID, "");
         et.putString(StringConstant.USER_NUM, "");
         et.putString(StringConstant.IMAGEURL, "");
-        et.putString(StringConstant.PHONENUMBER, "");
+        et.putString(StringConstant.USER_PHONE_NUMBER, "");
         et.putString(StringConstant.USER_NUM, "");
         et.putString(StringConstant.GENDERUSR, "");
         et.putString(StringConstant.EMAIL, "");

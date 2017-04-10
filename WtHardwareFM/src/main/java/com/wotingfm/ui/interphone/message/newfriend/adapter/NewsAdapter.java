@@ -80,10 +80,10 @@ public class NewsAdapter extends BaseAdapter {
 		lists = list.get(position);
 		if(lists!=null&&lists.getMSType()!=null&&!lists.getMSType().equals("")){
 			if(lists.getMSType().equals("person")){
-				if (lists.getUserName() == null || lists.getUserName().equals("")) {
+				if (lists.getNickName() == null || lists.getNickName().equals("")) {
 					holder.tv_news.setText("未知");
 				} else {
-					holder.tv_news.setText(lists.getUserName()+"添加您为好友");
+					holder.tv_news.setText(lists.getNickName()+"添加您为好友");
 				}
 
 				if (lists.getInviteMesage() == null|| lists.getInviteMesage().equals("")) {
@@ -118,10 +118,10 @@ public class NewsAdapter extends BaseAdapter {
 				} else {
 					holder.tv_news.setText("组名: "+lists.getGroupName());
 				}
-				if (lists.getUserName() == null || lists.getUserName().equals("")) {
+				if (lists.getNickName() == null || lists.getNickName().equals("")) {
 					holder.tv_jieshao.setText("无邀请信息");
 				} else {
-					holder.tv_jieshao.setText("" + lists.getUserName()+ "邀请您加入该群");
+					holder.tv_jieshao.setText("" + lists.getNickName()+ "邀请您加入该群");
 				}
 				if(lists.getInviteTime()== null || lists.getInviteTime().equals("")|| lists.getInviteTime().equals("null")){
 					holder.time.setText("0000-00-00  00:00");

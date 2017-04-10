@@ -78,7 +78,7 @@ public class GroupPersonNewsFragment extends Fragment {
             });
             context = getActivity();
             update = false;    // 此时修改的状态
-            username = sharedPreferences.getString(StringConstant.USERNAME, "");            //当前登录账号的姓名
+            username = sharedPreferences.getString(StringConstant.NICK_NAME, "");            //当前登录账号的姓名
             setView();
             handleIntent();
             setData();
@@ -91,7 +91,7 @@ public class GroupPersonNewsFragment extends Fragment {
     private void createEWM() {
         UserInviteMeInside meInside = new UserInviteMeInside();
         meInside.setUserId(num);
-        meInside.setUserName(name);
+        meInside.setNickName(name);
         meInside.setDescn(descN);
         meInside.setPortraitMini(imageUrl);
      /*   bmp = CreateQRImageHelper.getInstance().createQRImage(1, null, meInside, 220, 220);
@@ -121,7 +121,7 @@ public class GroupPersonNewsFragment extends Fragment {
         }
         if (type.equals("talkoldlistfragment_p")) {
             UserInfo data = (UserInfo) getArguments().getSerializable("data");
-            name = data.getUserName();
+            name = data.getNickName();
             imageUrl = data.getPortraitBig();
             id = data.getUserId();
             descN = data.getDescn();
@@ -129,7 +129,7 @@ public class GroupPersonNewsFragment extends Fragment {
             b_name = data.getUserAliasName();
         } else if (type.equals("TalkGroupNewsActivity_p")) {
             GroupInfo data = (GroupInfo) getArguments().getSerializable("data");
-            name = data.getUserName();
+            name = data.getNickName();
             imageUrl = data.getPortraitBig();
             id = data.getUserId();
             descN = data.getDescn();
@@ -137,7 +137,7 @@ public class GroupPersonNewsFragment extends Fragment {
             b_name = data.getUserAliasName();
         } else if (type.equals("GroupMemers")) {
             UserInfo data = (UserInfo) getArguments().getSerializable("data");
-            name = data.getUserName();
+            name = data.getNickName();
             imageUrl = data.getPortraitBig();
             id = data.getUserId();
             descN = data.getDescn();

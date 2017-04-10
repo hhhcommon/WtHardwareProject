@@ -179,7 +179,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
 
     private void setOnResumeView() {
         //此处在splashActivity中refreshB设置成true
-        UserName = shared.getString(StringConstant.USERNAME, "");
+        UserName = shared.getString(StringConstant.NICK_NAME, "");
         String p = shared.getString(StringConstant.PERSONREFRESHB, "false");
         String l = shared.getString(StringConstant.ISLOGIN, "false");
         if (l.equals("true")) {
@@ -1133,7 +1133,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                                     GroupInfo ListGP = new GroupInfo();
                                     ListGP.setTruename(GlobalConfig.list_person.get(j).getTruename());
                                     ListGP.setId(GlobalConfig.list_person.get(j).getUserId());
-                                    ListGP.setName(GlobalConfig.list_person.get(j).getUserName());
+                                    ListGP.setName(GlobalConfig.list_person.get(j).getNickName());
                                     ListGP.setUserAliasName(GlobalConfig.list_person.get(j).getUserAliasName());
                                     ListGP.setPortrait(GlobalConfig.list_person.get(j).getPortraitBig());
                                     ListGP.setAddTime(historyDataBaseList.get(i).getAddTime());
@@ -1415,7 +1415,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                                     if (groupPersonList != null && groupPersonList.size() != 0) {
                                         for (int i = 0; i < groupPersonList.size(); i++) {
                                             if (groupPersonList.get(i).getUserId().equals(talkUserId)) {
-                                                setImageView(1, groupPersonList.get(i).getUserName(), groupPersonList.get(i).getPortraitMini());
+                                                setImageView(1, groupPersonList.get(i).getNickName(), groupPersonList.get(i).getPortraitMini());
                                             }
                                         }
                                     }

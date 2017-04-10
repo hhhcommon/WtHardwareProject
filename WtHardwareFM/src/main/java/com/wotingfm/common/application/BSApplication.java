@@ -35,7 +35,7 @@ public class BSApplication extends Application {
         SharedPreferences = this.getSharedPreferences("wotingfm", Context.MODE_PRIVATE);
         CollocationHelper.setCollocation();  //设置配置文件
 
-        queues = Volley.newRequestQueue(this);    // 初始化网络请求
+        queues = Volley.newRequestQueue(getApplicationContext());    // 初始化网络请求
         PhoneMessage.getPhoneInfo(instance);      // 获取手机信息
         CommonHelper.checkNetworkStatus(instance);// 网络设置获取
 
