@@ -23,7 +23,9 @@ public class GlobalConfig {
     public static String longitude;
     public static String latitude;
     public static String CityName;
+    public static String District;
     public static String AdCode;
+    public static String Region;
     
     // 缓存路径
     public static String playCacheDirI = Environment.getRootDirectory() + "";                  // 获取手机根目录
@@ -267,4 +269,7 @@ public class GlobalConfig {
     public static final String getImage ="wt/content/getLoopImgs.do";
     // 添加举报/wt/content/accuse.do
     public static final String presentAccuseUrl= "wt/content/accuse.do";
+
+    // 用户数据收集接口
+    public static final String gatherData = "http://345.67.8.9:708/sendGatherData.do";
 }

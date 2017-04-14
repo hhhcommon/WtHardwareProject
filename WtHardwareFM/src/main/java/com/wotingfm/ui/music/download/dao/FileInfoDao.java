@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.wotingfm.common.database.SQLiteHelper;
-import com.wotingfm.ui.music.download.service.DownloadService;
+import com.wotingfm.ui.music.download.service.DownloadClient;
 import com.wotingfm.ui.music.download.model.FileInfo;
 import com.wotingfm.ui.music.album.model.ContentInfo;
 import com.wotingfm.util.SequenceUUID;
@@ -231,7 +231,7 @@ public class FileInfoDao {
 	// 改
 	public void updataFileInfo(String filename) {
 		SQLiteDatabase db = helper.getWritableDatabase();
-		String localUrl= DownloadService.DOWNLOAD_PATH+filename;
+		String localUrl= DownloadClient.DOWNLOAD_PATH+filename;
 		db.execSQL("update fileinfo set finished=?,localurl=? where filename=?",
 				new Object[] {"true",localUrl,filename});
 		db.close();

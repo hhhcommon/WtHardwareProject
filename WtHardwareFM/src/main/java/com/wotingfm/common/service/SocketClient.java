@@ -2,7 +2,6 @@ package com.wotingfm.common.service;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,7 +9,6 @@ import android.content.IntentFilter;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
-import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
@@ -45,7 +43,7 @@ import java.util.concurrent.ArrayBlockingQueue;
  * 2016/12/28 11:21
  * 邮箱：645700751@qq.com
  */
-public class SocketService extends Service {
+public class SocketClient {
     private static SocketClientConfig scc = BSApplication.scc;        // 客户端配置
     private Context context;                                          // android 上下文，这个要自己恢复
     private int nextReConnIndex = 0;                                  // 重连策略下一个执行序列;
@@ -79,10 +77,8 @@ public class SocketService extends Service {
 
     private PowerManager.WakeLock mWakelock;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        context = this;
+    public SocketClient(Context context) {
+        this.context = context;
         setForeground();
         // 广播接收器
         if (Receiver == null) {
@@ -90,7 +86,7 @@ public class SocketService extends Service {
             // 接收网络状态
             IntentFilter filter = new IntentFilter();
             filter.addAction(BroadcastConstants.PUSH_NetWorkPush);
-            getApplicationContext().registerReceiver(Receiver, filter);
+            this.context.registerReceiver(Receiver, filter);
         }
 
         ScreenObServer sb = new ScreenObServer(context);
@@ -150,11 +146,11 @@ public class SocketService extends Service {
     }
 
     private void setForeground() {
-        startForeground(4, showNotification());
+//        startForeground(4, showNotification());
     }
 
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    private Notification showNotification() {
+    public Notification showNotification() {
         NotificationCompat.Builder mBuilder = new NotificationCompat.Builder(context);
         mBuilder.setContentTitle("Socket测试")// 设置通知栏标题
                 .setContentText("该服务为前台服务")// 设置通知栏显示内容
@@ -169,7 +165,7 @@ public class SocketService extends Service {
 
     private void acquireWakeLock() {
         if (mWakelock == null) {
-            PowerManager powerManager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+            PowerManager powerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
             mWakelock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "so");
         }
         mWakelock.acquire();
@@ -797,10 +793,10 @@ public class SocketService extends Service {
                         String id = msg.getTalkId();
                         try {
                             byte[] Audiodata = msg.getMediaData();
-                            VoiceStreamPlayerService.dealVedioPack(Audiodata, SeqNum, id);
+                            VoiceStreamPlayer.dealVedioPack(Audiodata, SeqNum, id);
                         } catch (Exception e) {
                             e.printStackTrace();
-                            VoiceStreamPlayerService.dealVedioPack(null, SeqNum, id);
+                            VoiceStreamPlayer.dealVedioPack(null, SeqNum, id);
                         }
                         //	tpm.dealVedioPack(Audiodata, SeqNum, id);
                         //	String message="TalkId=="+id+"::Rtime=="+System.currentTimeMillis()+"::SeqNum=="+SeqNum;
@@ -950,16 +946,8 @@ public class SocketService extends Service {
         return socket != null && socket.isBound() && socket.isConnected() && !socket.isClosed();
     }
 
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
     public void onDestroy() {
-        super.onDestroy();
-        stopForeground(true);// 停止前台服务--参数：表示是否移除之前的通知
+//        stopForeground(true);// 停止前台服务--参数：表示是否移除之前的通知
         this.healthWatch = null;
         this.reConn.destroy();
         this.reConn = null;

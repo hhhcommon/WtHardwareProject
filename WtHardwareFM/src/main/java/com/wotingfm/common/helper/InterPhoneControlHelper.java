@@ -3,7 +3,7 @@ package com.wotingfm.common.helper;
 import android.content.Context;
 
 import com.wotingfm.common.config.GlobalConfig;
-import com.wotingfm.common.service.SocketService;
+import com.wotingfm.common.service.SocketClient;
 import com.wotingfm.ui.interphone.common.message.Message;
 import com.wotingfm.ui.interphone.common.message.MsgMedia;
 import com.wotingfm.ui.interphone.common.message.MsgNormal;
@@ -710,6 +710,6 @@ public class InterPhoneControlHelper{
 	 * @param message
 	 */
 	public static void pullToSocket(Message message) {
-		SocketService.addSendMsg(message);
+		SocketClient.addSendMsg(message);
 	}
 }

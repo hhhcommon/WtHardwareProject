@@ -242,17 +242,9 @@
         </receiver>
 
 
-
-
-        <service android:name=".common.service.SubclassService"/>
-        <service android:name=".common.service.NotificationService"/>
-        <service android:name=".common.service.SocketService"/>
-        <service android:name=".common.service.VoiceStreamRecordService"/>
-        <service android:name=".common.service.VoiceStreamPlayerService"/>
-        <service android:name=".ui.music.download.service.DownloadService"/>
+        <service android:name=".common.service.CoreService"/>
         <service android:name=".common.service.FloatingWindowService"/>
         <service android:name=".common.service.TestWindowService"/>
-        <service android:name=".common.service.LocationService"/>
         <service android:name="com.amap.api.location.APSService"/>
         <!-- 模拟对讲服务 -->
         <service android:name=".common.service.SimulationService"/>

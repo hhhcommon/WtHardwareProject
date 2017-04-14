@@ -1,16 +1,10 @@
 package com.wotingfm.common.service;
 
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.gson.Gson;
@@ -45,27 +39,24 @@ import java.util.Map;
 
 /**
  * Notification
- *
- * @author 辛龙
- *         2016年4月27日
+ * 辛龙
+ * 2016年4月27日
  */
-public class NotificationService extends Service {
+public class NotificationClient {
     private MessageReceiver Receiver;
-    private NotificationService context;
+    private Context context;
     private MessageNotifyDao dbDaoNotify;
     private MessageSubscriberDao dbDaoSubscriber;
     private MessageSystemDao dbDaoSystem;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        context = this;
+    public NotificationClient(Context context) {
+        this.context = context;
         initDao();
         if (Receiver == null) {
             Receiver = new MessageReceiver();
             IntentFilter filter = new IntentFilter();
             filter.addAction(BroadcastConstants.PUSH_NOTIFY);
-            registerReceiver(Receiver, filter);
+            context.registerReceiver(Receiver, filter);
         }
     }
 
@@ -995,17 +986,10 @@ public class NotificationService extends Service {
         if (MainActivity.MsgQueue != null) MainActivity.MsgQueue.add(new Message(src, url, type));
     }
 
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void unregister() {
         // 注销广播接收器
         if (Receiver != null) {
-            unregisterReceiver(Receiver);
+            context.unregisterReceiver(Receiver);
             Receiver = null;
         }
     }

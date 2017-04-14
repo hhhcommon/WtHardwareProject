@@ -24,7 +24,7 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.main.MainActivity;
-import com.wotingfm.ui.music.download.service.DownloadService;
+import com.wotingfm.ui.music.download.service.DownloadClient;
 import com.wotingfm.ui.music.download.main.DownloadFragment;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.ui.music.download.fragment.DownLoadUnCompletedFragment;
@@ -382,14 +382,14 @@ public class ProgramListFragment extends Fragment implements OnClickListener, XL
             // 未下载列表
             for (int kk = 0; kk < tempList.size(); kk++) {
                 if (tempList.get(kk).getDownloadtype() == 1) {
-                    DownloadService.workStop(tempList.get(kk));
+                    DownloadClient.workStop(tempList.get(kk));
                     FID.updataDownloadStatus(tempList.get(kk).getUrl(), "2");
                 }
             }
             ToastUtils.show_always(context, "已将选中条目加载下载列表");
             tempList.get(0).setDownloadtype(1);
             FID.updataDownloadStatus(tempList.get(0).getUrl(), "1");
-            DownloadService.workStart(tempList.get(0));
+            DownloadClient.workStart(tempList.get(0));
             if (DownloadFragment.isVisible) {
                 DownLoadUnCompletedFragment.dwType = true;
             }

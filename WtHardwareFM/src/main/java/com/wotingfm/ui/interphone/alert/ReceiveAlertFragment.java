@@ -17,7 +17,7 @@ import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.helper.InterPhoneControlHelper;
-import com.wotingfm.common.service.SubclassService;
+import com.wotingfm.common.service.SubclassControl;
 import com.wotingfm.ui.interphone.chat.dao.SearchTalkHistoryDao;
 import com.wotingfm.ui.interphone.chat.fragment.ChatFragment;
 import com.wotingfm.ui.interphone.chat.model.DBTalkHistorary;
@@ -98,7 +98,7 @@ public class ReceiveAlertFragment extends Fragment implements OnClickListener {
 
     private void getSource() {
         //查找当前好友的展示信息
-        id = SubclassService.callerId;
+        id = SubclassControl.callerId;
         try {
             if (GlobalConfig.list_person != null && GlobalConfig.list_person.size() > 0) {
                 for (int i = 0; i < GlobalConfig.list_person.size(); i++) {
@@ -130,21 +130,21 @@ public class ReceiveAlertFragment extends Fragment implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.lin_call:
-                SubclassService.isallow = true;
-                InterPhoneControlHelper.PersonTalkAllow(instance, SubclassService.callid, SubclassService.callerId);//接收应答
-                if (SubclassService.musicPlayer != null) {
-                    SubclassService.musicPlayer.stop();
-                    SubclassService.musicPlayer = null;
+                SubclassControl.isallow = true;
+                InterPhoneControlHelper.PersonTalkAllow(instance, SubclassControl.callid, SubclassControl.callerId);//接收应答
+                if (SubclassControl.musicPlayer != null) {
+                    SubclassControl.musicPlayer.stop();
+                    SubclassControl.musicPlayer = null;
                 }
                 ChatFragment.isCalling = true;
                 addUser();
                 break;
             case R.id.lin_guaduan:
-                SubclassService.isallow = true;
-                InterPhoneControlHelper.PersonTalkOver(instance, SubclassService.callid, SubclassService.callerId);//拒绝应答
-                if (SubclassService.musicPlayer != null) {
-                    SubclassService.musicPlayer.stop();
-                    SubclassService.musicPlayer = null;
+                SubclassControl.isallow = true;
+                InterPhoneControlHelper.PersonTalkOver(instance, SubclassControl.callid, SubclassControl.callerId);//拒绝应答
+                if (SubclassControl.musicPlayer != null) {
+                    SubclassControl.musicPlayer.stop();
+                    SubclassControl.musicPlayer = null;
                 }
                 DuiJiangActivity.close();
                 break;

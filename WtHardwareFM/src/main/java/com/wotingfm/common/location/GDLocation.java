@@ -171,4 +171,10 @@ public class GDLocation {
          */
         void locationFail(AMapLocation amapLocation);
     }
+
+    // 停止定位
+    public void stopLocation() {
+        mGDLocation.stopLocation();
+        mLocationClient.stopLocation();
+    }
 }

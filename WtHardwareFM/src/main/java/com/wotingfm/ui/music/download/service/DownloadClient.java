@@ -1,13 +1,11 @@
 package com.wotingfm.ui.music.download.service;
 
-import android.app.Service;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Environment;
 import android.os.Handler;
-import android.os.IBinder;
 import android.util.Log;
 
 import com.wotingfm.common.constant.BroadcastConstants;
@@ -28,27 +26,25 @@ import java.util.List;
 /**
  * 类注释
  */
-public class DownloadService extends Service {
+public class DownloadClient {
     public static final String DOWNLOAD_PATH = Environment.getExternalStorageDirectory() + "/woting/download/";
 
     public static final int MSG_INIT = 0;
-    private static DownloadService context;
+    private static Context context;
     private static DownloadTask mTask;
     private static FileInfo fileTemp = null;
     private static FileInfoDao FID;
     private static int downloadStatus = -1;
 
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        context = this;
+    public DownloadClient(Context context) {
+        DownloadClient.context = context;
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW);
+        context.registerReceiver(mReceiver, filter);
     }
 
     public static void workStart(FileInfo fileInfo) {
         new InitThread(fileInfo).start();// http://audio.xmcdn.com/group13/M05/02/9E/wKgDXVbBJY3QZQkmABblyjUSkbI912.m4a
-        IntentFilter filter = new IntentFilter();
-        filter.addAction(BroadcastConstants.ACTION_FINISHED_NO_DOWNLOADVIEW);
-        context.registerReceiver(mReceiver, filter);
         downloadStatus = 1;
         if (FID == null) {
             FID = new FileInfoDao(context);
@@ -162,16 +158,9 @@ public class DownloadService extends Service {
         }
     };
 
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
+    public void unregister() {
         if (downloadStatus == 1) {
             context.unregisterReceiver(mReceiver);
         }
-    }
-
-    @Override
-    public IBinder onBind(Intent intent) {
-        return null;
     }
 }

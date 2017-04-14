@@ -24,7 +24,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TextView;
 
@@ -42,14 +41,8 @@ import com.wotingfm.common.devicecontrol.WtDeviceControl;
 import com.wotingfm.common.helper.InterPhoneControlHelper;
 import com.wotingfm.common.manager.UpdateManager;
 import com.wotingfm.common.receiver.NetWorkChangeReceiver;
+import com.wotingfm.common.service.CoreService;
 import com.wotingfm.common.service.FloatingWindowService;
-import com.wotingfm.common.service.LocationService;
-import com.wotingfm.common.service.NotificationService;
-import com.wotingfm.common.service.SocketService;
-import com.wotingfm.common.service.SubclassService;
-import com.wotingfm.common.service.TestWindowService;
-import com.wotingfm.common.service.VoiceStreamPlayerService;
-import com.wotingfm.common.service.VoiceStreamRecordService;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.favoritetype.FavoriteProgramTypeActivity;
@@ -67,7 +60,6 @@ import com.wotingfm.ui.interphone.main.DuiJiangActivity;
 import com.wotingfm.ui.interphone.main.DuiJiangFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.person.login.LoginActivity;
-import com.wotingfm.ui.music.download.service.DownloadService;
 import com.wotingfm.ui.music.main.PlayerActivity;
 import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.program.citylist.dao.CityInfoDao;
@@ -108,7 +100,7 @@ public class MainActivity extends TabActivity {
     private int upDataType = 1;      // 1,不需要强制升级2，需要强制升级
     private boolean isCancelRequest;
 
-    private static Intent Socket, VoiceStreamRecord, VoiceStreamPlayer, Location, Subclass, Download, Notification, TestFloatingWindow, FloatingWindow;
+    private static Intent coreService, TestFloatingWindow, FloatingWindow;
 
     private NetWorkChangeReceiver netWorkChangeReceiver = null;
 
@@ -123,7 +115,7 @@ public class MainActivity extends TabActivity {
     private WindowManager windowManager;
     private AutoScrollTextView tv_notify;
     private ImageView image_delete;
-    private LinearLayout lin_notify;
+    private View lin_notify;
     public static ArrayBlockingQueue<com.wotingfm.ui.interphone.model.Message> MsgQueue = new ArrayBlockingQueue<com.wotingfm.ui.interphone.model.Message>(100);             // 消息队列
 
     @Override
@@ -165,22 +157,12 @@ public class MainActivity extends TabActivity {
     }
 
     private void createService() {
-        Socket = new Intent(this, SocketService.class);  //socket服务
-        startService(Socket);
-        VoiceStreamRecord = new Intent(this, VoiceStreamRecordService.class);  //录音服务
-        startService(VoiceStreamRecord);
-        VoiceStreamPlayer = new Intent(this, VoiceStreamPlayerService.class);//播放服务
-        startService(VoiceStreamPlayer);
-        Location = new Intent(this, LocationService.class);//定位服务
-        startService(Location);
-        Subclass = new Intent(this, SubclassService.class);
-        startService(Subclass);
-        Download = new Intent(this, DownloadService.class);
-        startService(Download);
-        Notification = new Intent(this, NotificationService.class);
-        startService(Notification);
+        coreService = new Intent(this, CoreService.class);  //socket服务
+        startService(coreService);
+
         FloatingWindow = new Intent(this, FloatingWindowService.class);//启动全局弹出框服务
         startService(FloatingWindow);
+
 //        Simulation=new Intent(this,SimulationService.class);
 //        startService(Simulation);
 //        TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
@@ -539,7 +521,7 @@ public class MainActivity extends TabActivity {
         windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
         tv_notify = (AutoScrollTextView) findViewById(R.id.tv_notify);   //
         image_delete = (ImageView) findViewById(R.id.image_delete);      //
-        lin_notify = (LinearLayout) findViewById(R.id.lin_notify);       //
+        lin_notify = findViewById(R.id.lin_notify);       //
         image_delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -865,13 +847,7 @@ public class MainActivity extends TabActivity {
      * app退出时执行该操作
      */
     public void stop() {
-        context.stopService(Socket);
-        context.stopService(VoiceStreamRecord);
-        context.stopService(VoiceStreamPlayer);
-        context.stopService(Location);
-        context.stopService(Subclass);
-        context.stopService(Download);
-        context.stopService(Notification);
+        context.stopService(coreService);
         context.stopService(Simulation);
         context.stopService(FloatingWindow);
         context.stopService(TestFloatingWindow);
