@@ -187,7 +187,7 @@ public class SetFragment extends Fragment implements OnClickListener {
                 clearCacheDialog.dismiss();
                 break;
             case R.id.lin_bindPhone:        // 绑定手机号
-                String phoneNumber = BSApplication.SharedPreferences.getString(StringConstant.PHONENUMBER, ""); // 用户手机号
+                String phoneNumber = BSApplication.SharedPreferences.getString(StringConstant.USER_PHONE_NUMBER, ""); // 用户手机号
 
                 PhoneCheckFragment fg = new PhoneCheckFragment();
                 Bundle bundle = new Bundle();
@@ -268,7 +268,7 @@ public class SetFragment extends Fragment implements OnClickListener {
                 et.putString(StringConstant.USERID, "");
                 et.putString(StringConstant.USER_NUM, "");
                 et.putString(StringConstant.IMAGEURL, "");
-                et.putString(StringConstant.PHONENUMBER, "");
+                et.putString(StringConstant.USER_PHONE_NUMBER, "");
                 et.putString(StringConstant.USER_NUM, "");
                 et.putString(StringConstant.GENDERUSR, "");
                 et.putString(StringConstant.EMAIL, "");

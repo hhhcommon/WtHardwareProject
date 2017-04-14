@@ -6,7 +6,7 @@ public class GroupMemberBean {
 	private String truename;
 	private String pinYinName;
 	private String UserId;
-	private String UserName;
+	private String NickName;
 	private String UserAliasName;
 	private String InnerPhoneNum;
 	private String check="1";		//1未选中2选中
@@ -36,12 +36,15 @@ public class GroupMemberBean {
 	public void setUserId(String userId) {
 		UserId = userId;
 	}
-	public String getUserName() {
-		return UserName;
+
+	public String getNickName() {
+		return NickName;
 	}
-	public void setUserName(String userName) {
-		UserName = userName;
+
+	public void setNickName(String nickName) {
+		NickName = nickName;
 	}
+
 	public String getUserAliasName() {
 		return UserAliasName;
 	}

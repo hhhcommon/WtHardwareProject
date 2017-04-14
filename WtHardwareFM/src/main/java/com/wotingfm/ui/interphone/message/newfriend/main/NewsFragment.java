@@ -253,7 +253,7 @@ public class NewsFragment extends Fragment implements OnClickListener {
                     msInfo.setMSType("person");
                     msInfo.setInviteMesage(UserList.get(i).getInviteMesage());
                     msInfo.setUserId(UserList.get(i).getUserId());
-                    msInfo.setUserName(UserList.get(i).getUserName());
+                    msInfo.setNickName(UserList.get(i).getNickName());
                     msInfo.setType(UserList.get(i).getType());
                     msInfo.setInviteTime(UserList.get(i).getInviteTime());
                     //				msInfo.setUserAliasName(UserList.get(i).getUserAliasName());
@@ -275,7 +275,7 @@ public class NewsFragment extends Fragment implements OnClickListener {
                     msInfo.setType(GroupList.get(i).getType());
                     msInfo.setGroupName(GroupList.get(i).getGroupName());
                     msInfo.setGroupId(GroupList.get(i).getGroupId());
-                    msInfo.setUserName(GroupList.get(i).getUserName());
+                    msInfo.setNickName(GroupList.get(i).getNickName());
                     msInfo.setPortraitMini(GroupList.get(i).getPortraitMini());
                     msInfo.setUserId(GroupList.get(i).getUserId());
                     msInfo.setInviteTime(GroupList.get(i).getInviteTime());

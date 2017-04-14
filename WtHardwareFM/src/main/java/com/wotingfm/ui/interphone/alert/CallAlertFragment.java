@@ -186,7 +186,7 @@ public class CallAlertFragment extends Fragment implements OnClickListener {
                 for (int i = 0; i < GlobalConfig.list_person.size(); i++) {
                     if (id.equals(GlobalConfig.list_person.get(i).getUserId())) {
                         image = GlobalConfig.list_person.get(i).getPortraitBig();
-                        name = GlobalConfig.list_person.get(i).getUserName();
+                        name = GlobalConfig.list_person.get(i).getNickName();
                         break;
                     }
                 }

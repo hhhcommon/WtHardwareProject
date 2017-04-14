@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class CheckInfo implements Serializable {
 	private String InviteTime;
 	private String InviteCount;
-	private String UserName;		//邀请对象名
+	private String NickName;		//邀请对象名
 	private String InvitedUserName;	//邀请人名
 	private String BeInviteUserId;	//邀请对象UserId
 	private String InviteUserId;	//邀请人ID
@@ -36,12 +36,15 @@ public class CheckInfo implements Serializable {
 	public void setInviteCount(String inviteCount) {
 		InviteCount = inviteCount;
 	}
-	public String getUserName() {
-		return UserName;
+
+	public String getNickName() {
+		return NickName;
 	}
-	public void setUserName(String userName) {
-		UserName = userName;
+
+	public void setNickName(String nickName) {
+		NickName = nickName;
 	}
+
 	public String getBeInviteUserId() {
 		return BeInviteUserId;
 	}

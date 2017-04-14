@@ -273,8 +273,8 @@ public class GroupMembersFragment extends Fragment implements OnClickListener, T
 
     private void filledData(List<UserInfo> person) {
         for (int i = 0; i < person.size(); i++) {
-            person.get(i).setName(person.get(i).getUserName());
-            String pinyin = characterParser.getSelling(person.get(i).getUserName());
+            person.get(i).setName(person.get(i).getNickName());
+            String pinyin = characterParser.getSelling(person.get(i).getNickName());
             String sortString = pinyin.substring(0, 1).toUpperCase();
             if (sortString.matches("[A-Z]")) {// 判断首字母是否是英文字母
                 person.get(i).setSortLetters(sortString.toUpperCase());
@@ -341,7 +341,7 @@ public class GroupMembersFragment extends Fragment implements OnClickListener, T
                 UserInfo tp = new UserInfo();
                 tp.setPortraitBig(userList.get(position).getPortraitBig());
                 tp.setPortraitMini(userList.get(position).getPortraitMini());
-                tp.setUserName(userList.get(position).getUserName());
+                tp.setNickName(userList.get(position).getNickName());
                 tp.setUserId(userList.get(position).getUserId());
                 tp.setUserAliasName(userList.get(position).getUserAliasName());
 

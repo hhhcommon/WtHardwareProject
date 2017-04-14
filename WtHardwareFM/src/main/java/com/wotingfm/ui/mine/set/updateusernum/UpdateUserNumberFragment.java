@@ -7,6 +7,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -90,13 +91,13 @@ public class UpdateUserNumberFragment extends Fragment implements View.OnClickLi
         confirmDialog = new Dialog(context, R.style.MyDialog);
         confirmDialog.setContentView(dialog);
         confirmDialog.setCanceledOnTouchOutside(true);
-        confirmDialog.getWindow().setBackgroundDrawableResource(R.color.dialog);
+        confirmDialog.getWindow().setBackgroundDrawableResource(R.color.white);
     }
 
     // 判断数据是否填写完整
     private boolean isComplete() {
         userNum = editUserNum.getText().toString().trim();
-        return !"".equalsIgnoreCase(userNum) && userNum.length() >= 6;
+        return !"".equalsIgnoreCase(userNum)&&userNum.length()>5&&userNum.length()<21;
     }
 
     @Override
@@ -104,19 +105,29 @@ public class UpdateUserNumberFragment extends Fragment implements View.OnClickLi
         switch (v.getId()) {
             case R.id.btn_confirm:      // 确定修改
                 if (isComplete()) {
-                    textDesc.setText("用户号是账号的唯一凭证，只能修改一次。\n\n请再次确认，用户号：" + userNum);
-                    confirmDialog.show();
+                    String fName=userNum.substring(0,1);
+                    String regex = "^[a-zA-Z]*$"; //以字母开头
+                    if(fName.matches(regex)){
+                        textDesc.setText("用户号是账号的唯一凭证,只能修改一次.\n\n请再次确认,用户号:" + userNum);
+                        confirmDialog.show();
+                    }else{
+                        ToastUtils.show_always(context, "用户号必须以字母开头！");
+                    }
+                }else{
+                    ToastUtils.show_always(context, "用户号不能为空！");
                 }
                 break;
             case R.id.tv_cancel:
-                confirmDialog.dismiss();
+                if (confirmDialog.isShowing()) {
+                    confirmDialog.dismiss();
+                }
                 break;
             case R.id.tv_confirm:
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    dialog = DialogUtils.Dialogph(context, "正在提交...");
+                    dialog = DialogUtils.Dialogph(context, "正在获取数据");
                     send();
                 } else {
-                    ToastUtils.show_always(context, "网络连接失败，请检查网络!");
+                    ToastUtils.show_always(context, "网络失败，请检查网络");
                 }
                 break;
         }
@@ -141,8 +152,7 @@ public class UpdateUserNumberFragment extends Fragment implements View.OnClickLi
                         ToastUtils.show_always(context, "用户号修改成功!");
                         SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
                         et.putString(StringConstant.USER_NUM, userNum);
-                        if (!et.commit()) L.w("commit", " 数据 commit 失败!");
-
+                        if (!et.commit()) Log.w("commit", " 数据 commit 失败!");
                         Fragment targetFragment = getTargetFragment();
                         ((SetFragment) targetFragment).setAddCardResult();
                         MineActivity.close();
@@ -151,6 +161,7 @@ public class UpdateUserNumberFragment extends Fragment implements View.OnClickLi
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
+                    ToastUtils.show_always(context, "用户号修改失败!");
                 }
             }
 

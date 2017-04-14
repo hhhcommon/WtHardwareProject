@@ -6,11 +6,10 @@ package com.wotingfm.common.constant;
  */
 public class StringConstant {
     public static final String USERID = "userid";
-    public static final String USERNAME = "username";
     public static final String ISLOGIN = "islogin";
     public static final String FIRST = "first";//引导页
     public static final String PREFERENCE = "preference";//偏好设置页
-    public static final String PHONENUMBER = "phonenumber";// 用户注册手机号码
+    public static final String USER_PHONE_NUMBER = "phonenumber";// 用户注册手机号码
     public static final String IMAGEURL = "imageurl";//头像Image地址
     public static final String IMAGEURBIG = "imageurlbig";//头像Image地址
 

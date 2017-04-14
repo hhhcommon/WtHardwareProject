@@ -4,16 +4,10 @@ import java.io.Serializable;
 
 public class ApplyUserInfo implements Serializable{
 	
-    public String UserName;
+    public String NickName;
     public String UserId;
     public String PortraitMini;
     public String PortraitBig;
-	public String getUserName() {
-		return UserName;
-	}
-	public void setUserName(String userName) {
-		UserName = userName;
-	}
 	public String getUserId() {
 		return UserId;
 	}
@@ -32,7 +26,12 @@ public class ApplyUserInfo implements Serializable{
 	public void setPortraitBig(String portraitBig) {
 		PortraitBig = portraitBig;
 	}
-    
-    
-    
+
+	public String getNickName() {
+		return NickName;
+	}
+
+	public void setNickName(String nickName) {
+		NickName = nickName;
+	}
 }

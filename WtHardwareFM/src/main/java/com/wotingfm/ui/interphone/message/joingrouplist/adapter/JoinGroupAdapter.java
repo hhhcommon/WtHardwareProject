@@ -76,12 +76,12 @@ public class JoinGroupAdapter extends BaseAdapter implements OnClickListener{
 		CheckInfo Inviter = list.get(position);
 		holder.textview_invitestauswait.setText("同意");
 		holder.textview_invitestausyes.setText("已同意");
-		if (Inviter.getUserName() == null || Inviter.getUserName().equals("")) {
+		if (Inviter.getNickName() == null || Inviter.getNickName().equals("")) {
 			holder.textview_invitename.setText("未知");
 		} else {
-			holder.textview_invitename.setText(Inviter.getUserName());
+			holder.textview_invitename.setText(Inviter.getNickName());
 		}
-		holder.textview_invitemessage.setText(Inviter.getInvitedUserName()+"邀请了"+Inviter.getUserName()+"进入群组");
+		holder.textview_invitemessage.setText(Inviter.getInvitedUserName()+"邀请了"+Inviter.getNickName()+"进入群组");
 		if (Inviter.getPortraitMini() == null || Inviter.getPortraitMini().equals("")
 				|| Inviter.getPortraitMini().equals("null") || Inviter.getPortraitMini().trim().equals("")) {
 			holder.imageview_inviteimage.setImageResource(R.mipmap.wt_image_tx_hy);

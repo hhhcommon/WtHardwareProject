@@ -24,6 +24,7 @@ import android.provider.DocumentsContract;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -68,6 +69,7 @@ import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.json.JSONTokener;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -83,7 +85,6 @@ public class MineFragment extends Fragment implements OnClickListener {
     private WifiManager wifiManager;
     private UserPortaitInside UserPortait;
     private SharedPreferences sharedPreferences;
-    private UpdatePerson pModel;
 
     private Dialog dialog;// 加载数据对话框
     private Dialog imageDialog;// 修改头像对话框
@@ -109,7 +110,6 @@ public class MineFragment extends Fragment implements OnClickListener {
     private String userNum;// 用户号
     private String userSign;// 用户签名
     private String region;// 城市
-    private String regionId;
     private String tag = "MINE_UPDATE_PERSON_NEWS_VOLLEY_REQUEST_CANCEL_TAG";
 
     private final int UPDATE_USER = 3;// 标识 跳转到修改个人信息界面
@@ -198,7 +198,7 @@ public class MineFragment extends Fragment implements OnClickListener {
                 UserInviteMeInside news = new UserInviteMeInside();
                 news.setPortraitMini(url);
                 news.setUserId(userId);
-                news.setUserName(userName);
+                news.setNickName(userName);
 
                 EWMShowFragment fg_evm = new EWMShowFragment();
                 Bundle bundle = new Bundle();
@@ -295,12 +295,12 @@ public class MineFragment extends Fragment implements OnClickListener {
             relativeStatusUnLogin.setVisibility(View.GONE);
             relativeStatusLogin.setVisibility(View.VISIBLE);
 
-            String imageUrl = sharedPreferences.getString(StringConstant.IMAGEURL, "");// 头像
-            userName = sharedPreferences.getString(StringConstant.USERNAME, "");// 用户名
-            userId = sharedPreferences.getString(StringConstant.USERID, "");// 用户 ID
-            userNum = sharedPreferences.getString(StringConstant.USER_NUM, "");// 用户号
-            userSign = sharedPreferences.getString(StringConstant.USER_SIGN, "");// 签名
-            region = sharedPreferences.getString(StringConstant.REGION, "");// 区域
+            String imageUrl = sharedPreferences.getString(StringConstant.IMAGEURL, "");             // 头像
+            userName = sharedPreferences.getString(StringConstant.NICK_NAME, "");                   // 昵称
+            userId = sharedPreferences.getString(StringConstant.USERID, "");                        // 用户 ID
+            userNum = sharedPreferences.getString(StringConstant.USER_NUM, "");                     // 用户号
+            userSign = sharedPreferences.getString(StringConstant.USER_SIGN, "");                   // 签名
+            region = sharedPreferences.getString(StringConstant.REGION, "");                        // 区域
 
             if (region.equals("")) {
                 region = "您还没有填写地址";
@@ -436,13 +436,8 @@ public class MineFragment extends Fragment implements OnClickListener {
 
     public void setAddCardResult(int i, UpdatePerson pM, String regionIds) {
         if (i == 1) {// 修改个人资料界面返回
-            pModel = pM;
-            regionId = regionIds;
-            if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
-                ToastUtils.show_always(context, "网络失败，请检查网络");
-                return;
-            }
-            sendUpdate(pM);
+            if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) return;
+            sendUpdate(pM,regionIds);
         } else if (i == 2) {
             // 处理接收结果的逻辑
             userNum = sharedPreferences.getString(StringConstant.USER_NUM, "");// 用户号
@@ -693,86 +688,120 @@ public class MineFragment extends Fragment implements OnClickListener {
         return "com.google.android.apps.photos.content".equals(uri.getAuthority());
     }
 
-    String nickName;
-    String sign;
-    String gender;
-    String birthday;
-    String starSign;
-    String email;
-    String area;
-
     // 判断个人资料是否有修改过  有则将数据提交服务器
-    private void sendUpdate(UpdatePerson pM) {
+    private void sendUpdate(UpdatePerson pM,String id) {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            nickName = pM.getNickName();
-            if (!nickName.equals(sharedPreferences.getString(StringConstant.NICK_NAME, ""))) {
-                if (nickName.trim().equals("")) {
-                    jsonObject.put("NickName", "&null");
-                } else {
-                    jsonObject.put("NickName", nickName);
-                }
-                isUpdate = true;
-            }
+            String regionId = id;
 
-            sign = pM.getUserSign();
-            if (!sign.equals(sharedPreferences.getString(StringConstant.USER_SIGN, ""))) {
-                if (sign.trim().equals("")) {
-                    jsonObject.put("UserSign", "&null");
-                } else {
-                    jsonObject.put("UserSign", sign);
-                }
-                isUpdate = true;
-            }
-
-            gender = pM.getGender();
-            L.v("gender", "gender -- > > " + gender);
-            if (!gender.equals(sharedPreferences.getString(StringConstant.GENDERUSR, "xb001"))) {
-                jsonObject.put("SexDictId", gender);
-                isUpdate = true;
-            }
-
-            birthday = pM.getBirthday();
-            if (!birthday.equals(sharedPreferences.getString(StringConstant.BIRTHDAY, ""))) {
-                jsonObject.put("Birthday", Long.valueOf(birthday));
-                isUpdate = true;
-            }
-
-            starSign = pM.getStarSign();
-            if (!starSign.equals(sharedPreferences.getString(StringConstant.STAR_SIGN, ""))) {
-                jsonObject.put("StarSign", starSign);
-                isUpdate = true;
-            }
-
-            email = pM.getEmail();
-            if (!email.equals(sharedPreferences.getString(StringConstant.EMAIL, ""))) {
-                if (!email.trim().equals("")) {
-                    if (isEmail(email)) {
-                        jsonObject.put("MailAddr", email);
+            try {
+                String nickName = pM.getNickName();
+                if (nickName != null && !nickName.trim().equals("")) {
+                    // 昵称不能为空，所以为空的时候不提交修改
+                    if (!nickName.equals(sharedPreferences.getString(StringConstant.NICK_NAME, ""))) {
+                        jsonObject.put("NickName", nickName);
                         isUpdate = true;
-                    } else {
-                        ToastUtils.show_always(context, "邮箱格式不正确，请重新修改!");
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                String sign = pM.getUserSign();
+                if (sign != null && !sign.trim().equals("")) {
+                    if (!sign.equals(sharedPreferences.getString(StringConstant.USER_SIGN, ""))) {
+                        jsonObject.put("UserSign", sign);
+                        isUpdate = true;
                     }
                 } else {
-                    jsonObject.put("MailAddr", "&null");
+                    jsonObject.put("UserSign", " ");
                     isUpdate = true;
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
 
-            area = pM.getRegion();
-            if (!area.equals(sharedPreferences.getString(StringConstant.REGION, ""))) {
-                jsonObject.put("RegionDictId", regionId);
-                isUpdate = true;
+            try {
+                String gender = pM.getGender();
+                if (gender != null && !gender.trim().equals("")) {
+                    Log.v("gender", "gender -- > > " + gender);
+                    if (!gender.equals(sharedPreferences.getString(StringConstant.GENDERUSR, "xb001"))) {
+                        jsonObject.put("SexDictId", gender);
+                        isUpdate = true;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        } catch (JSONException e) {
+
+            try {
+                String birthday = pM.getBirthday();
+                if (birthday != null && !birthday.trim().equals("")) {
+                    if (!birthday.equals(sharedPreferences.getString(StringConstant.BIRTHDAY, " "))) {
+                        jsonObject.put("Birthday", Long.valueOf(birthday));
+                        isUpdate = true;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            try {
+                String starSign = pM.getStarSign();
+                if (starSign != null && !starSign.trim().equals("")) {
+                    if (!starSign.equals(sharedPreferences.getString(StringConstant.STAR_SIGN, " "))) {
+                        jsonObject.put("StarSign", starSign);
+                        isUpdate = true;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            try {
+                String email = pM.getEmail();
+                if (email != null && !email.trim().equals("")) {
+                    if (!email.equals(sharedPreferences.getString(StringConstant.EMAIL, " "))) {
+                        if (isEmail(email)) {
+                            // 邮箱格式正确之后再提交，格式不正确不修改
+                            jsonObject.put("MailAddr", email);
+                            isUpdate = true;
+                        }
+                    }
+                } else {
+                    jsonObject.put("MailAddr", " ");
+                    isUpdate = true;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+            try {
+                String area = pM.getRegion();
+                if (area != null && !area.trim().equals("")) {
+                    if (!area.equals(sharedPreferences.getString(StringConstant.REGION, " "))) {
+                        jsonObject.put("RegionDictId", regionId);
+                        isUpdate = true;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        } catch (Exception e) {
             e.printStackTrace();
             isUpdate = false;
         }
 
         // 个人资料没有修改过则不需要将数据提交服务器
-        if (!isUpdate) return;
+        if (!isUpdate) {
+            return;
+        }
         isUpdate = false;
-        L.v("数据改动", "数据有改动，将数据提交到服务器!");
+        Log.v("数据改动", "数据有改动，将数据提交到服务器!");
         VolleyRequest.RequestPost(GlobalConfig.updateUserUrl, tag, jsonObject, new VolleyCallback() {
             @Override
             protected void requestSuccess(JSONObject result) {
@@ -780,53 +809,166 @@ public class MineFragment extends Fragment implements OnClickListener {
                 if (isCancelRequest) return;
                 try {
                     String returnType = result.getString("ReturnType");
-                    L.v("returnType", "returnType -- > > " + returnType);
+                    Log.v("returnType", "returnType -- > > " + returnType);
 
                     if (returnType != null && returnType.equals("1001")) {
-                        SharedPreferences.Editor et = sharedPreferences.edit();
-                        if (!nickName.equals(sharedPreferences.getString(StringConstant.NICK_NAME, ""))) {
-                            et.putString(StringConstant.NICK_NAME, nickName);
-                        }
-                        if (!sign.equals(sharedPreferences.getString(StringConstant.USER_SIGN, ""))) {
-                            et.putString(StringConstant.USER_SIGN, sign);
-                        }
-                        if (!gender.equals(sharedPreferences.getString(StringConstant.GENDERUSR, ""))) {
-                            et.putString(StringConstant.GENDERUSR, gender);
-                        }
-                        if (!birthday.equals(sharedPreferences.getString(StringConstant.BIRTHDAY, ""))) {
-                            et.putString(StringConstant.BIRTHDAY, birthday);
-                        }
-                        if (!starSign.equals(sharedPreferences.getString(StringConstant.STAR_SIGN, ""))) {
-                            et.putString(StringConstant.STAR_SIGN, starSign);
-                        }
-                        if (!email.equals(sharedPreferences.getString(StringConstant.EMAIL, ""))) {
-                            if (!email.equals("")) {
-                                if (isEmail(email)) {
-                                    et.putString(StringConstant.EMAIL, email);
-                                }
-                            } else {
-                                et.putString(StringConstant.EMAIL, "");
+
+                        try {
+                            JSONObject ui = (JSONObject) new JSONTokener(result.getString("UserInfo")).nextValue();
+                            SharedPreferences.Editor et = BSApplication.SharedPreferences.edit();
+                            try {
+                                String imageUrl = ui.getString("PortraitMini");
+                                et.putString(StringConstant.IMAGEURL, imageUrl);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                et.putString(StringConstant.IMAGEURL, "");
                             }
+//                            try {
+//                                String returnUserName = ui.getString("UserName");
+//                                et.putString(StringConstant.USERNAME, returnUserName);
+//                            } catch (Exception e) {
+//                                e.printStackTrace();
+//                                et.putString(StringConstant.USERNAME, "");
+//                            }
+                            try {
+                                String UserNum = ui.getString("UserNum");
+                                et.putString(StringConstant.USER_NUM, UserNum);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                et.putString(StringConstant.USER_NUM, "");
+                            }
+                            try {
+                                String imageUrlBig = ui.getString("PortraitBig");
+                                et.putString(StringConstant.IMAGEURBIG, imageUrlBig);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                et.putString(StringConstant.IMAGEURBIG, "");
+                            }
+                            try {
+                                String userId = ui.getString("UserId");
+                                et.putString(StringConstant.USERID, userId);
+                                textUserId.setText(userNum);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                et.putString(StringConstant.USERID, "");
+                            }
+                            try {
+                                String phoneNumber = ui.getString("PhoneNum");
+                                et.putString(StringConstant.USER_PHONE_NUMBER, phoneNumber);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                et.putString(StringConstant.USER_PHONE_NUMBER, "");
+                            }
+                            try {
+                                String gender = ui.getString("Sex");
+                                if (gender.equals("男")) {
+                                    et.putString(StringConstant.GENDERUSR, "xb001");
+                                } else if (gender.equals("女")) {
+                                    et.putString(StringConstant.GENDERUSR, "xb002");
+                                } else {
+                                    et.putString(StringConstant.GENDERUSR, "");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                et.putString(StringConstant.GENDERUSR, "");
+                            }
+                            try {
+                                String region = ui.getString("Region");
+                                /**
+                                 * 地区的三种格式
+                                 * 1、行政区划\/**市\/市辖区\/**区
+                                 * 2、行政区划\/**特别行政区  港澳台三地区
+                                 * 3、行政区划\/**自治区\/通辽市  自治区地区
+                                 */
+                                if (region != null && !region.equals("")) {
+                                    String[] subRegion = region.split("/");
+                                    if (subRegion.length > 3) {
+                                        region = subRegion[1] + " " + subRegion[3];
+                                    } else if (subRegion.length == 3) {
+                                        region = subRegion[1] + " " + subRegion[2];
+                                    } else {
+                                        region = subRegion[1].substring(0, 2);
+                                    }
+                                    et.putString(StringConstant.REGION, region);
+                                    textUserArea.setText(region);
+                                } else {
+                                    et.putString(StringConstant.REGION, "");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                et.putString(StringConstant.REGION, "");
+                            }
+                            try {
+                                String birthday = ui.getString("Birthday");
+                                et.putString(StringConstant.BIRTHDAY, birthday);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                et.putString(StringConstant.BIRTHDAY, "");
+                            }
+                            try {
+                                String age = ui.getString("Age");
+                                et.putString(StringConstant.AGE, age);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                et.putString(StringConstant.AGE, "");
+                            }
+                            try {
+                                String starSign = ui.getString("StarSign");
+                                et.putString(StringConstant.STAR_SIGN, starSign);
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                                et.putString(StringConstant.STAR_SIGN, "");
+                            }
+                            try {
+                                String email = ui.getString("Email");
+                                if (email != null && !email.equals("")) {
+                                    if (email.equals("&null")) {
+                                        et.putString(StringConstant.EMAIL, "");
+                                    } else {
+                                        et.putString(StringConstant.EMAIL, email);
+                                    }
+                                } else {
+                                    et.putString(StringConstant.EMAIL, "");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                String userSign = ui.getString("UserSign");
+                                if (userSign != null && !userSign.equals("")) {
+                                    if (userSign.equals("&null")) {
+                                        et.putString(StringConstant.USER_SIGN, "");
+                                    } else {
+                                        et.putString(StringConstant.USER_SIGN, userSign);
+                                        textUserAutograph.setText(userSign);
+                                    }
+                                } else {
+                                    et.putString(StringConstant.USER_SIGN, "");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            try {
+                                String nickName = ui.getString("NickName");
+                                if (nickName != null && !nickName.equals("")) {
+                                    if (nickName.equals("&null")) {
+                                        et.putString(StringConstant.NICK_NAME, "");
+                                    } else {
+                                        et.putString(StringConstant.NICK_NAME, nickName);
+                                    }
+                                } else {
+                                    et.putString(StringConstant.NICK_NAME, "");
+                                }
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                            if (!et.commit()) {
+                                Log.v("commit", "数据 commit 失败!");
+                            }
+                        } catch (Exception e) {
+                            e.printStackTrace();
                         }
 
-                        if (!area.equals(sharedPreferences.getString(StringConstant.REGION, ""))) {
-                            et.putString(StringConstant.REGION, pModel.getRegion());
-                        }
-                        if (!et.commit()) L.w("commit", " 数据 commit 失败!");
-                        if (!userSign.equals(pModel.getUserSign())) {// 签名
-                            userSign = pModel.getUserSign();
-                            textUserAutograph.setText(userSign);
-                        }
-                        if (!region.equals(area)) {// 区域
-                            region = area;
-                            if (region.equals("")) {
-                                region = "您还没有填写地址";
-                            }
-                            textUserArea.setText(region);
-                        }
-                    } else {
-                        L.w("信息修改失败!");
-//                        ToastUtils.show_always(context, "信息修改失败!");
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
