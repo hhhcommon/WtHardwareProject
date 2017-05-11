@@ -125,6 +125,13 @@ public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick
             mListView = (XListView) rootView.findViewById(R.id.listview_fm);
             mListView.addHeaderView(headView);
             setListener();
+            if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                sendRequest();
+                getImage();
+            } else {
+                tipView.setVisibility(View.VISIBLE);
+                tipView.setTipView(TipView.TipStatus.NO_NET);
+            }
         }
         if (dialog != null) dialog.dismiss();
         return rootView;
@@ -133,11 +140,11 @@ public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick
     // 与onActivityCreated()方法 解决预加载问题
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        if (isVisibleToUser && adapter == null && getActivity() != null) {
+      /*  if (isVisibleToUser && adapter == null && getActivity() != null) {
             dialog = DialogUtils.Dialogph(context, "正在获取数据");
             sendRequest();
             getImage();
-        }
+        }*/
         super.setUserVisibleHint(isVisibleToUser);
     }
 
@@ -371,9 +378,13 @@ public class ClassifyFragment extends Fragment implements TipView.WhiteViewClick
     private void getImage() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("CatalogType", CatalogType);
+         /*   jsonObject.put("CatalogType", CatalogType);
             jsonObject.put("CatalogId", CatalogId);
-            jsonObject.put("Size", "4");// 此处需要改成-1
+            jsonObject.put("Size", "4");// 此处需要改成-1*/
+            jsonObject.put("CatalogType", CatalogType);
+            jsonObject.put("CatalogId","cn17");
+            jsonObject.put("Size", "4");
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
