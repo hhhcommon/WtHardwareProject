@@ -127,6 +127,7 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
+
         <activity
             android:name="com.wotingfm.ui.common.scanning.activity.CaptureActivity"
             android:screenOrientation="portrait"
@@ -161,12 +162,12 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="stateAlwaysHidden|adjustResize"/>
+
         <activity
             android:name=".ui.common.favoritetype.FavoriteProgramTypeActivity"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan"/>
-
 
         <!-- 对讲主页 -->
         <activity
@@ -209,6 +210,13 @@
             android:theme="@android:style/Theme.Light.NoTitleBar"
             android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
 
+        <!--查看大图-->
+        <activity
+            android:name=".ui.mine.picture.ViewBigPictureActivity"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Light.NoTitleBar"
+            android:windowSoftInputMode="adjustPan|stateAlwaysHidden"/>
+
         <!-- 友盟activity -->
         <activity
             android:name="com.umeng.socialize.editorpage.ShareActivity"
@@ -234,17 +242,9 @@
         </receiver>
 
 
-
-
-        <service android:name=".common.service.SubclassService"/>
-        <service android:name=".common.service.NotificationService"/>
-        <service android:name=".common.service.SocketService"/>
-        <service android:name=".common.service.VoiceStreamRecordService"/>
-        <service android:name=".common.service.VoiceStreamPlayerService"/>
-        <service android:name=".ui.music.download.service.DownloadService"/>
+        <service android:name=".common.service.CoreService"/>
         <service android:name=".common.service.FloatingWindowService"/>
         <service android:name=".common.service.TestWindowService"/>
-        <service android:name=".common.service.LocationService"/>
         <service android:name="com.amap.api.location.APSService"/>
         <!-- 模拟对讲服务 -->
         <service android:name=".common.service.SimulationService"/>

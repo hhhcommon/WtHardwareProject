@@ -9,7 +9,6 @@ import android.telephony.TelephonyManager;
 
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.PreferenceConstant;
-import com.wotingfm.common.manager.SharePreferenceManager;
 import com.wotingfm.util.ToastUtils;
 
 import java.security.MessageDigest;
@@ -136,30 +135,6 @@ public class CommonHelper {
 		// hex string to uppercase
 		m_szUniqueID = m_szUniqueID.toUpperCase();
 		return m_szUniqueID;
-	}
-
-	/**
-	 * Android唯一标识（唯一序列号）
-	 * @return MD5校验值（32位字符串）
-	 */
-	public static String getUniqueID(Context mContext) {
-		String deviceid = (String) SharePreferenceManager.getSharePreferenceValue(
-				mContext, PreferenceConstant.DEVICE,PreferenceConstant.DEVICE_ID, null);
-		if (deviceid_ != null) {
-			if (deviceid == null) {
-				SharePreferenceManager.saveBatchSharedPreference(mContext,
-						PreferenceConstant.DEVICE, PreferenceConstant.DEVICE_ID, deviceid_);
-			}
-			return deviceid_;
-		}
-		if (deviceid != null && deviceid.length() > 0) {
-			deviceid_ = deviceid;
-			return deviceid_;
-		}
-		deviceid_ = getDeviceId(mContext);
-		SharePreferenceManager.saveBatchSharedPreference(mContext,
-					PreferenceConstant.DEVICE, PreferenceConstant.DEVICE_ID, deviceid_);
-		return deviceid_;
 	}
 
 	/**

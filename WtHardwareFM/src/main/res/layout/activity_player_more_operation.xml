@@ -124,6 +124,19 @@
                 android:drawablePadding="10dp"/>
 
             <TextView
+                android:id="@+id/tv_accuse1"
+                android:layout_weight="1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="举报"
+                android:textSize="18sp"
+                android:visibility="gone"
+                android:textColor="@color/wt_login_third"
+                android:drawableTop="@mipmap/wt_image_play_more_down"
+                android:gravity="center"
+                android:drawablePadding="10dp"/>
+
+            <TextView
                 android:id="@+id/text_down"
                 android:layout_weight="1"
                 android:layout_width="0dp"
@@ -148,16 +161,18 @@
                 android:drawablePadding="10dp"/>
 
         </LinearLayout>
+
         <LinearLayout
             android:id="@+id/view_linear_4"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
+            android:visibility="gone"
             android:background="@color/WHITE"
             android:gravity="center">
 
             <TextView
-                android:id="@+id/tv_accuse"
+                android:id="@+id/tv_accuse2"
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -167,10 +182,12 @@
                 android:drawableTop="@mipmap/wt_image_play_more_down"
                 android:gravity="center"
                 android:drawablePadding="10dp"/>
+
             <TextView
                 android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"/>
+
             <TextView
                 android:layout_weight="1"
                 android:layout_width="0dp"
@@ -183,19 +200,24 @@
             android:layout_height="wrap_content"
             android:background="@color/white"
             android:orientation="vertical">
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/text_line_1"/>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="18dp"
                 android:background="@color/app_bg"/>
+
             <View
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/text_line_1"/>
+
         </LinearLayout>
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="0dp"
@@ -226,6 +248,7 @@
                 <!--android:drawablePadding="10dp"-->
                 <!--android:drawableTop="@mipmap/wt_image_my_liked"-->
                 <!--android:gravity="center"/>-->
+
             <TextView
                 android:id="@+id/text_liked"
                 android:layout_width="0dp"
@@ -237,6 +260,7 @@
                 android:drawablePadding="10dp"
                 android:drawableTop="@mipmap/wt_image_my_order"
                 android:gravity="center"/>
+
             <TextView
                 android:id="@+id/text_local"
                 android:layout_width="0dp"

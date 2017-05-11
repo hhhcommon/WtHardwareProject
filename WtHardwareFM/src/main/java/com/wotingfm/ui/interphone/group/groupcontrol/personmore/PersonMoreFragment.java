@@ -30,10 +30,10 @@ import org.json.JSONObject;
 
 /**
  * 群组详情页面
- * 辛龙 2016年1月21日
+ * 辛龙
+ * 2016年1月21日
  */
 public class PersonMoreFragment extends Fragment implements View.OnClickListener {
-
     private Dialog confirmDialog;// 退出群组确认对话框
     private String groupId;
     private String tag = "TALK_GROUP_MORE_VOLLEY_REQUEST_CANCEL_TAG";
@@ -66,9 +66,7 @@ public class PersonMoreFragment extends Fragment implements View.OnClickListener
 
         img_EWM = (ImageView) rootView.findViewById(R.id.img_EWM);                      // 二维码图片
         tv_sign = (TextView) rootView.findViewById(R.id.tv_sign);
-
     }
-
 
     // 处理请求
     private void handleIntent() {
@@ -93,17 +91,13 @@ public class PersonMoreFragment extends Fragment implements View.OnClickListener
         }
 
         try {
-
             bmp = CreateQRImageHelper.getInstance().createQRImage(1, null, groupNews, 300, 300);
-
         } catch (Exception e) {
-
+            e.printStackTrace();
         }
         if (bmp == null) {
-
             bmp = BitmapUtils.readBitMap(context, R.mipmap.ewm);
         }
-
         img_EWM.setImageBitmap(bmp);
     }
 

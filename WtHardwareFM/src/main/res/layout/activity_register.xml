@@ -95,7 +95,7 @@
                     android:ems="10"
                     android:gravity="center_vertical"
                     android:hint="昵称"
-                    android:maxLength="100"
+                    android:maxLength="20"
                     android:singleLine="true"
                     android:textColor="@color/wt_login_third"
                     android:textColorHint="@color/gray"

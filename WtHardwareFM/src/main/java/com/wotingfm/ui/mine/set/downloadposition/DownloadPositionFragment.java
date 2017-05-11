@@ -9,7 +9,7 @@ import android.widget.TextView;
 
 import com.wotingfm.R;
 import com.wotingfm.ui.mine.main.MineActivity;
-import com.wotingfm.ui.music.download.service.DownloadService;
+import com.wotingfm.ui.music.download.service.DownloadClient;
 
 /**
  * 下载位置
@@ -35,8 +35,8 @@ public class DownloadPositionFragment extends Fragment implements View.OnClickLi
 		rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
 
 		TextView textDownloadPosition = (TextView) rootView.findViewById(R.id.tv_downloadposition);
-		if (!DownloadService.DOWNLOAD_PATH.equals("") && DownloadService.DOWNLOAD_PATH != null) {
-            textDownloadPosition.setText(DownloadService.DOWNLOAD_PATH);
+		if (!DownloadClient.DOWNLOAD_PATH.equals("") && DownloadClient.DOWNLOAD_PATH != null) {
+            textDownloadPosition.setText(DownloadClient.DOWNLOAD_PATH);
 		}
 	}
 

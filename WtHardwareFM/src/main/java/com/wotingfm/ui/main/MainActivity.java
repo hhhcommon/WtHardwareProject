@@ -14,6 +14,7 @@ import android.graphics.Bitmap;
 import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.text.Html;
 import android.text.TextUtils;
 import android.util.Log;
@@ -40,15 +41,8 @@ import com.wotingfm.common.devicecontrol.WtDeviceControl;
 import com.wotingfm.common.helper.InterPhoneControlHelper;
 import com.wotingfm.common.manager.UpdateManager;
 import com.wotingfm.common.receiver.NetWorkChangeReceiver;
+import com.wotingfm.common.service.CoreService;
 import com.wotingfm.common.service.FloatingWindowService;
-import com.wotingfm.common.service.LocationService;
-import com.wotingfm.common.service.NotificationService;
-import com.wotingfm.common.service.SimulationService;
-import com.wotingfm.common.service.SocketService;
-import com.wotingfm.common.service.SubclassService;
-import com.wotingfm.common.service.TestWindowService;
-import com.wotingfm.common.service.VoiceStreamPlayerService;
-import com.wotingfm.common.service.VoiceStreamRecordService;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.favoritetype.FavoriteProgramTypeActivity;
@@ -66,7 +60,6 @@ import com.wotingfm.ui.interphone.main.DuiJiangActivity;
 import com.wotingfm.ui.interphone.main.DuiJiangFragment;
 import com.wotingfm.ui.mine.main.MineActivity;
 import com.wotingfm.ui.mine.person.login.LoginActivity;
-import com.wotingfm.ui.music.download.service.DownloadService;
 import com.wotingfm.ui.music.main.PlayerActivity;
 import com.wotingfm.ui.music.main.ProgramActivity;
 import com.wotingfm.ui.music.program.citylist.dao.CityInfoDao;
@@ -79,6 +72,7 @@ import com.wotingfm.util.JsonEncloseUtils;
 import com.wotingfm.util.PhoneMessage;
 import com.wotingfm.util.ScreenUtils;
 import com.wotingfm.util.ToastUtils;
+import com.wotingfm.widget.AutoScrollTextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -88,6 +82,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ArrayBlockingQueue;
 
 /**
  * 主页
@@ -105,7 +100,7 @@ public class MainActivity extends TabActivity {
     private int upDataType = 1;      // 1,不需要强制升级2，需要强制升级
     private boolean isCancelRequest;
 
-    private static Intent Socket, VoiceStreamRecord, VoiceStreamPlayer, Location, Subclass, Download, Notification, TestFloatingWindow, FloatingWindow;
+    private static Intent coreService, TestFloatingWindow, FloatingWindow;
 
     private NetWorkChangeReceiver netWorkChangeReceiver = null;
 
@@ -116,7 +111,12 @@ public class MainActivity extends TabActivity {
     public static DBTalkHistorary talkdb;
     private SearchTalkHistoryDao talkDao;
     private Intent Simulation;
-    public static int SearchLikeActivityJumpType=1;
+    public static int SearchLikeActivityJumpType = 1;
+    private WindowManager windowManager;
+    private AutoScrollTextView tv_notify;
+    private ImageView image_delete;
+    private View lin_notify;
+    public static ArrayBlockingQueue<com.wotingfm.ui.interphone.model.Message> MsgQueue = new ArrayBlockingQueue<com.wotingfm.ui.interphone.model.Message>(100);             // 消息队列
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -135,7 +135,7 @@ public class MainActivity extends TabActivity {
             }
         }, 0);
 
-        update();           // 获取版本数据
+//        update();           // 获取版本数据
         InitTextView();     // 设置界面
         InitData();         // 加载数据
         setType();
@@ -151,29 +151,22 @@ public class MainActivity extends TabActivity {
         if (!BSApplication.SharedPreferences.getBoolean(StringConstant.FAVORITE_PROGRAM_TYPE, false)) {
             startActivity(new Intent(context, FavoriteProgramTypeActivity.class));
         }
+        // 处理通知消息的线程
+        messageDeal mDeal = new messageDeal();
+        mDeal.start();
     }
 
     private void createService() {
-        Socket = new Intent(this, SocketService.class);  //socket服务
-        startService(Socket);
-        VoiceStreamRecord = new Intent(this, VoiceStreamRecordService.class);  //录音服务
-        startService(VoiceStreamRecord);
-        VoiceStreamPlayer = new Intent(this, VoiceStreamPlayerService.class);//播放服务
-        startService(VoiceStreamPlayer);
-        Location = new Intent(this, LocationService.class);//定位服务
-        startService(Location);
-        Subclass = new Intent(this, SubclassService.class);
-        startService(Subclass);
-        Download = new Intent(this, DownloadService.class);
-        startService(Download);
-        Notification = new Intent(this, NotificationService.class);
-        startService(Notification);
+        coreService = new Intent(this, CoreService.class);  //socket服务
+        startService(coreService);
+
         FloatingWindow = new Intent(this, FloatingWindowService.class);//启动全局弹出框服务
         startService(FloatingWindow);
-        Simulation=new Intent(this,SimulationService.class);
-        startService(Simulation);
-        TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
-        startService(TestFloatingWindow);
+
+//        Simulation=new Intent(this,SimulationService.class);
+//        startService(Simulation);
+//        TestFloatingWindow = new Intent(this, TestWindowService.class);//启动全局弹出框服务
+//        startService(TestFloatingWindow);
     }
 
     //注册广播  用于接收定时服务发送过来的广播
@@ -212,7 +205,66 @@ public class MainActivity extends TabActivity {
         }
     }
 
+    // 处理通知消息的线程
+    private class messageDeal extends Thread {
+        public void run() {
+            while (true) {
+                try {
+                    com.wotingfm.ui.interphone.model.Message _msg = MsgQueue.take();
+                    if (_msg != null) {
+                        Message msg = new Message();
+                        msg.what = 1;
+                        msg.obj = _msg;
+                        mUIHandler.sendMessage(msg);
+                        sleep(15000);
+                        mUIHandler.sendEmptyMessage(2);
+//                        if (mCountDownTimer != null) mCountDownTimer.cancel();
+//                        mCountDownTimer = new CountDownTimer(15000, 1000) {
+//                            @Override
+//                            public void onTick(long millisUntilFinished) {
+//                                // 此处不需要处理
+//                            }
+//
+//                            @Override
+//                            public void onFinish() {
+//                                mUIHandler.sendEmptyMessage(2);
+//                                Log.e("定时器","定时器结束");
+//                            }
+//                        }.start();
+                    }
+                } catch (Exception e) {
+                    Log.e("messageDeal线程:::", e.toString());
+                }
+            }
+        }
+    }
 
+    // 通知消息更新界面展示
+    private Handler mUIHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case 1:// 更新界面-展示
+                    com.wotingfm.ui.interphone.model.Message _msg = (com.wotingfm.ui.interphone.model.Message) msg.obj;
+                    setMessage(_msg.getSrc(), _msg.getUrl(), _msg.getType());
+                    break;
+                case 2:// 更新界面-关闭
+                    lin_notify.setVisibility(View.GONE);
+                    break;
+            }
+        }
+    };
+
+    //设置界面数据
+    private void setMessage(String src, String url, String type) {
+        if (src != null && !src.trim().equals("")) {
+            lin_notify.setVisibility(View.VISIBLE);
+            tv_notify.setText(src);
+            tv_notify.init(windowManager);
+            tv_notify.startScroll();
+            // 此处处理关闭逻辑
+            // 如果是语音播报开启，则语音播报完毕则关闭界面提醒
+        }
+    }
 
     //接收定时服务发送过来的广播  用于结束应用
     private BroadcastReceiver endApplicationBroadcast = new BroadcastReceiver() {
@@ -323,7 +375,7 @@ public class MainActivity extends TabActivity {
 //                                                                 }.getType());
 
                                                                 CallerInfo caller = userInfo.getCallerInfo();
-                                                                String name = caller.getUserName();
+                                                                String name = caller.getNickName();
                                                                 showPerson(name); // 展示上次存在的单对单对讲
 
                                                             } catch (Exception e) {
@@ -337,7 +389,7 @@ public class MainActivity extends TabActivity {
 //                                                                CallerInfo calleder = new Gson().fromJson(callederInfo, new TypeToken<CallerInfo>() {
 //                                                                }.getType());
                                                                 CallerInfo calleder = userInfo.getCallederInfo();
-                                                                String name = calleder.getUserName();
+                                                                String name = calleder.getNickName();
                                                                 showPerson(name); // 展示上次存在的单对单对讲
                                                             } catch (Exception e) {
                                                                 e.printStackTrace();
@@ -466,6 +518,23 @@ public class MainActivity extends TabActivity {
 
     // 初始化视图,主页跳转的3个界面
     private void InitTextView() {
+        windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+        tv_notify = (AutoScrollTextView) findViewById(R.id.tv_notify);   //
+        image_delete = (ImageView) findViewById(R.id.image_delete);      //
+        lin_notify = findViewById(R.id.lin_notify);       //
+        image_delete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lin_notify.setVisibility(View.GONE);
+            }
+        });
+        lin_notify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ToastUtils.show_short(context, "进入消息界面");
+            }
+        });
+
         tabHost.addTab(tabHost.newTabSpec("one").setIndicator("one")
                 .setContent(new Intent(this, PlayerActivity.class)));
         tabHost.addTab(tabHost.newTabSpec("two").setIndicator("two")
@@ -778,13 +847,7 @@ public class MainActivity extends TabActivity {
      * app退出时执行该操作
      */
     public void stop() {
-        context.stopService(Socket);
-        context.stopService(VoiceStreamRecord);
-        context.stopService(VoiceStreamPlayer);
-        context.stopService(Location);
-        context.stopService(Subclass);
-        context.stopService(Download);
-        context.stopService(Notification);
+        context.stopService(coreService);
         context.stopService(Simulation);
         context.stopService(FloatingWindow);
         context.stopService(TestFloatingWindow);
@@ -844,7 +907,7 @@ public class MainActivity extends TabActivity {
         et.putString(StringConstant.USERID, "");
         et.putString(StringConstant.USER_NUM, "");
         et.putString(StringConstant.IMAGEURL, "");
-        et.putString(StringConstant.PHONENUMBER, "");
+        et.putString(StringConstant.USER_PHONE_NUMBER, "");
         et.putString(StringConstant.USER_NUM, "");
         et.putString(StringConstant.GENDERUSR, "");
         et.putString(StringConstant.EMAIL, "");

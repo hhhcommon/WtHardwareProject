@@ -6,11 +6,10 @@ package com.wotingfm.common.constant;
  */
 public class StringConstant {
     public static final String USERID = "userid";
-    public static final String USERNAME = "username";
     public static final String ISLOGIN = "islogin";
     public static final String FIRST = "first";//引导页
     public static final String PREFERENCE = "preference";//偏好设置页
-    public static final String PHONENUMBER = "phonenumber";// 用户注册手机号码
+    public static final String USER_PHONE_NUMBER = "phonenumber";// 用户注册手机号码
     public static final String IMAGEURL = "imageurl";//头像Image地址
     public static final String IMAGEURBIG = "imageurlbig";//头像Image地址
 
@@ -161,7 +160,7 @@ public class StringConstant {
     public static final String TEXT_CONTENT = "text";
 
     // 跳转类型
-    public static final String JUMP_TYPE = "JUMP_TYPE";
+    public static final String FROM_TYPE = "FROM_TYPE";
 
     // Fragment类型
     public static final String FRAGMENT_TYPE = "FRAGMENT_TYPE";
@@ -171,4 +170,25 @@ public class StringConstant {
 
     // 保存流量提醒是否打开
     public static final String FLOW_REMIND_SWITCH = "FLOW_REMIND_SWITCH";
+
+    // 搜索
+    public static final String TAG_SEARCH = "search";
+
+    // 节目
+    public static final String TAG_PROGRAM = "program";
+
+    // 播放
+    public static final String TAG_PLAY = "play";
+
+    // 我的
+    public static final String TAG_MINE = "mine";
+
+    // 通讯录
+    public static final String TAG_CHAT = "chat";
+
+    // 数据传递 图片所在的位置
+    public static final String PICTURE_INDEX = "PICTURE_INDEX";
+
+    // 数据传递 图片地址
+    public static final String PICTURE_URL = "PICTURE_URL";
 }

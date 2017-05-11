@@ -89,10 +89,10 @@ public class FriendAddFragment extends Fragment implements OnClickListener {
 
 	private void setValue() {
 		// 数据适配
-		if(contact.getUserName()==null||contact.getUserName().equals("")){
+		if(contact.getNickName()==null||contact.getNickName().equals("")){
 			tv_name.setText("未知");
 		}else{
-			tv_name.setText(contact.getUserName());
+			tv_name.setText(contact.getNickName());
 		}
 		if(contact.getUserNum()==null||contact.getUserNum().equals("")){
 			tv_id.setVisibility(View.GONE);

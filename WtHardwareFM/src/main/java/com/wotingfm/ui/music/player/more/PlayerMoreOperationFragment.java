@@ -29,7 +29,7 @@ import com.wotingfm.ui.music.comment.main.CommentFragment;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.ui.music.download.main.DownloadFragment;
 import com.wotingfm.ui.music.download.model.FileInfo;
-import com.wotingfm.ui.music.download.service.DownloadService;
+import com.wotingfm.ui.music.download.service.DownloadClient;
 import com.wotingfm.ui.music.main.PlayerActivity;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
 import com.wotingfm.ui.music.player.more.playhistory.activity.PlayHistoryFragment;
@@ -51,22 +51,25 @@ import java.util.List;
  * 播放界面  ->  更多操作
  */
 public class PlayerMoreOperationFragment extends Fragment implements View.OnClickListener {
-    private TextView textPlayName;// 當前正在播放的節目名
+    private TextView textPlayName;// 当前正在播放的节目名
 
-    private MessageReceiver mReceiver;// 廣播
+    private MessageReceiver mReceiver;// 广播
     private FileInfoDao mFileDao;// 文件相关数据库
 
     private View viewLinearOne;
     private View viewLinearTwo;
+    private View viewLinearFour;
 
     private Dialog dialog;
-    private TextView textLike;// 喜歡
+    private TextView textLike;// 喜欢
     private TextView textShape;// 分享
-    private TextView textComment;// 評論
-    private TextView textDetails;// 詳情
-    private TextView textProgram;// 播單
-    private TextView textDown;// 下載
-    private TextView textSequ;// 專輯
+    private TextView textComment;// 评论
+    private TextView textDetails;// 详情
+    private TextView textProgram;// 播单
+    private TextView textDown;// 下载
+    private TextView textSequ;// 专辑
+
+    private TextView textAccuse;// 举报
 
     private String contentFavorite;// 是否喜欢  == "1" 喜欢  == null or "0" 还没喜欢
     private String SequId;
@@ -100,36 +103,40 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
     private void initView() {
         viewLinearOne = rootView.findViewById(R.id.view_linear_1);
         viewLinearTwo = rootView.findViewById(R.id.view_linear_2);
+        viewLinearFour = rootView.findViewById(R.id.view_linear_4);
 
-        textPlayName = (TextView) rootView.findViewById(R.id.text_play_name);       // 當前正在播放的節目名
-        textLike = (TextView) rootView.findViewById(R.id.text_like);                // 喜歡
+        textPlayName = (TextView) rootView.findViewById(R.id.text_play_name);       // 当前正在播放的节目名
+        textLike = (TextView) rootView.findViewById(R.id.text_like);                // 喜欢
         textShape = (TextView) rootView.findViewById(R.id.text_shape);              // 分享
-        textComment = (TextView) rootView.findViewById(R.id.text_comment);          // 評論
-        textDetails = (TextView) rootView.findViewById(R.id.text_details);          // 詳情
-        textProgram = (TextView) rootView.findViewById(R.id.text_program);          // 播單
-        textDown = (TextView) rootView.findViewById(R.id.text_down);                // 下載
-        textSequ = (TextView) rootView.findViewById(R.id.text_sequ);                // 專輯
-        rootView.findViewById(R.id.tv_accuse).setOnClickListener(this);             // 举报
+        textComment = (TextView) rootView.findViewById(R.id.text_comment);          // 评论
+        textDetails = (TextView) rootView.findViewById(R.id.text_details);          // 详情
+        textProgram = (TextView) rootView.findViewById(R.id.text_program);          // 播单
+        textDown = (TextView) rootView.findViewById(R.id.text_down);                // 下载
+        textSequ = (TextView) rootView.findViewById(R.id.text_sequ);                // 专辑
 
+        // 举报
+        textAccuse = (TextView) rootView.findViewById(R.id.tv_accuse1);
+        textAccuse.setOnClickListener(this);
+        rootView.findViewById(R.id.tv_accuse2).setOnClickListener(this);
 
-        resetDate();// 設置 View
+        resetDate();// 设置 View
     }
 
     // 初始化点击事件
     private void initEvent() {
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);// 返回
 
-        rootView.findViewById(R.id.text_history).setOnClickListener(this);// 播放歷史
-        rootView.findViewById(R.id.text_liked).setOnClickListener(this);// 我喜歡的
-        rootView.findViewById(R.id.text_local).setOnClickListener(this);// 本地節目
+        rootView.findViewById(R.id.text_history).setOnClickListener(this);// 播放历史
+        rootView.findViewById(R.id.text_liked).setOnClickListener(this);// 我喜欢的
+        rootView.findViewById(R.id.text_local).setOnClickListener(this);// 本地节目
 
-        textLike.setOnClickListener(this);// 喜歡
+        textLike.setOnClickListener(this);// 喜欢
         textShape.setOnClickListener(this);// 分享
-        textComment.setOnClickListener(this);// 評論
-        textDetails.setOnClickListener(this);// 詳情
-        textProgram.setOnClickListener(this);// 播單
-        textDown.setOnClickListener(this);// 下載
-        textSequ.setOnClickListener(this);// 專輯
+        textComment.setOnClickListener(this);// 评论
+        textDetails.setOnClickListener(this);// 详情
+        textProgram.setOnClickListener(this);// 播单
+        textDown.setOnClickListener(this);// 下载
+        textSequ.setOnClickListener(this);// 专辑
     }
 
     @Override
@@ -138,18 +145,16 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
             case R.id.head_left_btn:// 返回
                 PlayerActivity.close();
                 break;
-            case R.id.text_history:// 播放歷史
+            case R.id.text_history:// 播放历史
                 PlayerActivity.open(new PlayHistoryFragment());
                 break;
-            case R.id.text_liked:// 我喜歡的
-                ToastUtils.show_always(context, "更换订阅图标");
-//                PlayerActivity.open(new FavoriteFragment());
+            case R.id.text_liked:// 我喜欢的
                 PlayerActivity.open(new SubscriberListFragment());
                 break;
-            case R.id.text_local:// 本地節目
+            case R.id.text_local:// 本地节目
                 PlayerActivity.open(new DownloadFragment());
                 break;
-            case R.id.text_like:// 喜歡
+            case R.id.text_like:// 喜欢
                 sendFavorite();
                 break;
             case R.id.text_shape:// 分享
@@ -157,11 +162,11 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                 EWMShowFragment fg_evm = new EWMShowFragment();
                 Bundle bundle_evm = new Bundle();
                 bundle_evm.putInt("type", 0);
-                bundle_evm.putString(StringConstant.JUMP_TYPE,"player");
+                bundle_evm.putString(StringConstant.FROM_TYPE, StringConstant.TAG_PLAY);
                 fg_evm.setArguments(bundle_evm);
                 PlayerActivity.open(fg_evm);
                 break;
-            case R.id.text_comment:// 評論
+            case R.id.text_comment:// 评论
                 if (!CommonHelper.checkNetwork(context)) return;
                 if (!TextUtils.isEmpty(GlobalConfig.playerObject.getContentId()) && !TextUtils.isEmpty(GlobalConfig.playerObject.getMediaType())) {
                     if (CommonUtils.getUserIdNoImei(context) != null && !CommonUtils.getUserIdNoImei(context).equals("")) {
@@ -169,7 +174,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                         Bundle bundle = new Bundle();
                         bundle.putString("contentId", GlobalConfig.playerObject.getContentId());
                         bundle.putString("MediaType", GlobalConfig.playerObject.getMediaType());
-                        bundle.putString(StringConstant.JUMP_TYPE, "play");
+                        bundle.putString(StringConstant.FROM_TYPE, StringConstant.TAG_PLAY);
                         fg.setArguments(bundle);
                         PlayerActivity.open(fg);
                     } else {
@@ -179,10 +184,10 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                     ToastUtils.show_always(context, "当前播放的节目的信息有误，无法获取评论列表");
                 }
                 break;
-            case R.id.text_details:// 詳情
+            case R.id.text_details:// 详情
                 PlayerActivity.open(new PlayDetailsFragment());
                 break;
-            case R.id.text_program:// 播單
+            case R.id.text_program:// 播单
                 if (!CommonHelper.checkNetwork(context)) return;
 
                 ProgrammeFragment fg_programme = new ProgrammeFragment();
@@ -191,10 +196,10 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                 fg_programme.setArguments(b);
                 PlayerActivity.open(fg_programme);
                 break;
-            case R.id.text_down:// 下載
+            case R.id.text_down:// 下载
                 download();
                 break;
-            case R.id.text_sequ:// 專輯
+            case R.id.text_sequ:// 专辑
                 if (GlobalConfig.playerObject != null) {
                     try {
                         if (GlobalConfig.playerObject.getSequId() != null) {
@@ -224,7 +229,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                     bundle.putString("contentName", SequName);
                     bundle.putString("contentDesc", SequDesc);
                     bundle.putString("contentId", SequId);
-                    bundle.putString(StringConstant.JUMP_TYPE, "play");
+                    bundle.putString(StringConstant.FROM_TYPE, StringConstant.TAG_PLAY);
                     bundle.putString("contentImg", SequImage);
                     fg_album.setArguments(bundle);
                     PlayerActivity.open(fg_album);
@@ -232,15 +237,16 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                     ToastUtils.show_always(context, "此节目目前没有所属专辑");
                 }
                 break;
-            case R.id.tv_accuse:
+            case R.id.tv_accuse1:// 举报
+            case R.id.tv_accuse2:
                 if(GlobalConfig.playerObject!=null&&!TextUtils.isEmpty(GlobalConfig.playerObject.getContentId())){
                     AccuseFragment fragment = new AccuseFragment();
                     Bundle bundle = new Bundle();
                     bundle.putString("ContentId", GlobalConfig.playerObject.getContentId());
                     if(!TextUtils.isEmpty(GlobalConfig.playerObject.getMediaType())) {
-                        bundle.putString("MediaType", "SEQU");
+                        bundle.putString("MediaType", StringConstant.TYPE_SEQU);
                     }
-                    bundle.putString(StringConstant.JUMP_TYPE, "play");
+                    bundle.putString(StringConstant.FROM_TYPE, StringConstant.TAG_PLAY);
                     fragment.setArguments(bundle);
                     PlayerActivity.open(fragment);
                 }else{
@@ -250,7 +256,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
         }
     }
 
-    // 重置數據
+    // 重置数据
     private void resetDate() {
         if (GlobalConfig.playerObject == null || GlobalConfig.playerObject.getMediaType() == null) {
             textPlayName.setVisibility(View.GONE);
@@ -263,7 +269,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
         viewLinearOne.setVisibility(View.VISIBLE);
         viewLinearTwo.setVisibility(View.VISIBLE);
 
-        // 標題
+        // 标题
         String contentName;
         if (GlobalConfig.playerObject.getContentName() != null) {
             contentName = GlobalConfig.playerObject.getContentName();
@@ -272,18 +278,23 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
         }
         textPlayName.setText(contentName);
 
-        // 播放類型
+        // 播放媒体类型
         String mediaType = GlobalConfig.playerObject.getMediaType();
         if (mediaType.equals(StringConstant.TYPE_RADIO)) {
-            textDetails.setVisibility(View.GONE);// 詳情
+            textDetails.setVisibility(View.GONE);// 详情
             textProgram.setVisibility(View.VISIBLE);// 播单
-            textSequ.setVisibility(View.INVISIBLE);// 專輯
+            textSequ.setVisibility(View.GONE);// 专辑
+            textAccuse.setVisibility(View.VISIBLE);// 举报
+            viewLinearFour.setVisibility(View.GONE);
+
             textDown.setVisibility(View.INVISIBLE);// 下载
         } else {
             textProgram.setVisibility(View.GONE);// 播单
-            textDetails.setVisibility(View.VISIBLE);// 詳情
-            textSequ.setVisibility(View.VISIBLE);// 專輯
+            textDetails.setVisibility(View.VISIBLE);// 详情
+            textSequ.setVisibility(View.VISIBLE);// 专辑
             textDown.setVisibility(View.VISIBLE);// 下载
+            textAccuse.setVisibility(View.GONE);// 举报
+            viewLinearFour.setVisibility(View.VISIBLE);
 
             if (mediaType.equals(StringConstant.TYPE_TTS)) {
                 textComment.setClickable(false);
@@ -321,7 +332,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
             }
         }
 
-        // 下載狀態
+        // 下载状态
         if (mediaType.equals(StringConstant.TYPE_AUDIO)) {// 可以下载
             if (!TextUtils.isEmpty(GlobalConfig.playerObject.getLocalurl())) {// 已下载
                 textDown.setClickable(false);
@@ -452,7 +463,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                 List<FileInfo> fileUnDownLoadList = mFileDao.queryFileInfo("false", CommonUtils.getUserId(context));// 未下载列表
                 for (int kk = 0; kk < fileUnDownLoadList.size(); kk++) {
                     if (fileUnDownLoadList.get(kk).getDownloadtype() == 1) {
-                        DownloadService.workStop(fileUnDownLoadList.get(kk));
+                        DownloadClient.workStop(fileUnDownLoadList.get(kk));
                         mFileDao.updataDownloadStatus(fileUnDownLoadList.get(kk).getUrl(), "2");
                     }
                 }
@@ -460,7 +471,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                     if (fileUnDownLoadList.get(k).getUrl().equals(m.getContentPlay())) {
                         FileInfo file = fileUnDownLoadList.get(k);
                         mFileDao.updataDownloadStatus(m.getContentPlay(), "1");
-                        DownloadService.workStart(file);
+                        DownloadClient.workStart(file);
                         context.sendBroadcast(new Intent(BroadcastConstants.PUSH_DOWN_UNCOMPLETED));
                         break;
                     }
@@ -474,7 +485,7 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
                 if (fileUnDownloadList.get(k).getUrl().equals(m.getContentPlay())) {
                     FileInfo file = fileUnDownloadList.get(k);
                     mFileDao.updataDownloadStatus(m.getContentPlay(), "1");
-                    DownloadService.workStart(file);
+                    DownloadClient.workStart(file);
                     context.sendBroadcast(new Intent(BroadcastConstants.PUSH_DOWN_UNCOMPLETED));
                     break;
                 }
@@ -499,11 +510,11 @@ public class PlayerMoreOperationFragment extends Fragment implements View.OnClic
         public void onReceive(Context context, Intent intent) {
             switch (intent.getAction()) {
                 case BroadcastConstants.UPDATE_PLAY_VIEW:
-                    resetDate();// 設置 View
+                    resetDate();// 设置 View
                     break;
                 case BroadcastConstants.UPDATE_MORE_OPERATION_VIEW:// 更新界面
                     L.w("TAG", "updateLocalList -- > " + GlobalConfig.playerObject.getLocalurl());
-                    resetDate();// 設置 View
+                    resetDate();// 设置 View
                     break;
             }
         }

@@ -23,7 +23,9 @@ public class GlobalConfig {
     public static String longitude;
     public static String latitude;
     public static String CityName;
+    public static String District;
     public static String AdCode;
+    public static String Region;
     
     // 缓存路径
     public static String playCacheDirI = Environment.getRootDirectory() + "";                  // 获取手机根目录
@@ -47,7 +49,7 @@ public class GlobalConfig {
     public static int CURRENT_NETWORK_STATE_TYPE = NETWORK_STATE_IDLE;
     public static final int HTTP_CONNECTION_TIMEOUT = 10 * 1000;                                // volley请求超时 时间
     
-    public static final int dbVersionCode = 7;    // 数据库版本号
+    public static final int dbVersionCode = 8;    // 数据库版本号
     public static int activityType =1;            // 此时的界面
     public static WtDeviceControl device;         // 硬件设备控制器
     public static String voiceRecognizer;         // 此时的语音搜索界面
@@ -267,4 +269,7 @@ public class GlobalConfig {
     public static final String getImage ="wt/content/getLoopImgs.do";
     // 添加举报/wt/content/accuse.do
     public static final String presentAccuseUrl= "wt/content/accuse.do";
+
+    // 用户数据收集接口
+    public static final String gatherData = "http://345.67.8.9:708/sendGatherData.do";
 }

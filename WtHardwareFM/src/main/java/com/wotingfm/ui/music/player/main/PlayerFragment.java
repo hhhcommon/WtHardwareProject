@@ -22,7 +22,6 @@ import com.android.volley.VolleyError;
 import com.baidu.cyberplayer.core.BVideoView;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
@@ -31,7 +30,7 @@ import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.helper.CommonHelper;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.ui.interphone.notify.main.NotifyNewsFragment;
+import com.wotingfm.ui.interphone.message.messagecenter.fragment.MessageFragment;
 import com.wotingfm.ui.main.MainActivity;
 import com.wotingfm.ui.music.main.PlayerActivity;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
@@ -62,7 +61,7 @@ import java.util.Locale;
 /**
  * 播放主页
  * 2016年2月4日
- * @author 辛龙
+ * 辛龙
  */
 public class PlayerFragment extends Fragment implements View.OnClickListener,
         XListView.IXListViewListener, TipView.WhiteViewClick, SeekBar.OnSeekBarChangeListener, AdapterView.OnItemClickListener {
@@ -109,7 +108,6 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
     private boolean isInitData;                                                                     // 第一次进入应用加载数据
     private boolean isResetData;                                                                    // 重新获取了数据  searchByText
     public static PlayerFragment ct;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -201,13 +199,13 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                 last();
                 break;
             case R.id.lin_find:
-                MainActivity.SearchLikeActivityJumpType=1;
+                MainActivity.SearchLikeActivityJumpType = 1;
                 MainActivity.changeFive();
                 break;
             case R.id.lin_news:                                                                     // 跳转到通知界面
-                NotifyNewsFragment fg = new NotifyNewsFragment();
+                MessageFragment fg = new MessageFragment();
                 Bundle bundle = new Bundle();
-                bundle.putString("type", "music");
+                bundle.putString(StringConstant.FROM_TYPE, StringConstant.TAG_PLAY);
                 fg.setArguments(bundle);
                 PlayerActivity.open(fg);
                 break;
@@ -443,19 +441,23 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                     if (title == null || title.trim().equals("")) title = "未知";
                     mPlayAudioTitle.setText(title);
                     mPlayAudioTitle.init(windowManager);
-                    if(title.length()>8){
+                    if (title.length() > 8) {
                         mPlayAudioTitle.startScroll();
-                    }else{
-                        mPlayAudioTitle.startScroll();
-//                        mPlayAudioTitle.stopScroll();
+                    } else {
+//                        mPlayAudioTitle.startScroll();
+                        mPlayAudioTitle.stopScroll();
                     }
                     // 封面图片
                     String coverUrl = GlobalConfig.playerObject.getContentImg();// imagePlayCover
                     if (coverUrl != null) {// 有封面图片
-                        if (!coverUrl.startsWith("http"))
+                        if (!coverUrl.startsWith("http")) {
                             coverUrl = GlobalConfig.imageurl + coverUrl;
-                        coverUrl = AssembleImageUrlUtils.assembleImageUrl180(coverUrl);
-                        Picasso.with(context).load(coverUrl.replace("\\/", "/")).into(imagePlayCover);
+                        }
+                        String url = AssembleImageUrlUtils.assembleImageUrl180(coverUrl);
+
+                        // 加载图片
+                        AssembleImageUrlUtils.loadImage(url, coverUrl, imagePlayCover, IntegerConstant.TYPE_LIST);
+
                     } else {// 没有封面图片设置默认图片
                         imagePlayCover.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx));
                     }
@@ -486,7 +488,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                         isResetData = false;
 
                         if (subList != null && subList.size() != 0) {
-                            if (mediaType != null && !mediaType.equals("TTS")) {
+                            if (mediaType != null && !mediaType.equals(StringConstant.TYPE_TTS)) {
                                 String contentPlay;
                                 for (int i = 0, size = subList.size(); i < size; i++) {
                                     contentPlay = subList.get(i).getContentPlay();
@@ -510,7 +512,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
 
                                 for (int a = 0, s = playList.size(); a < s; a++) {
                                     media = playList.get(a).getMediaType();
-                                    if (media != null && !media.equals("TTS")) {
+                                    if (media != null && !media.equals(StringConstant.TYPE_TTS)) {
                                         contentPlay = playList.get(a).getContentPlay();
                                         if (contentPlay != null && !contentPlay.trim().equals("") && !contentPlay.toUpperCase().equals("NULL")) {
                                             contentPlayList.add(contentPlay);
@@ -518,7 +520,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                                     }
                                 }
                                 for (int i = 0, size = subList.size(); i < size; i++) {
-                                    if (subList.get(i).getMediaType() != null && subList.get(i).getMediaType().equals("TTS"))
+                                    if (subList.get(i).getMediaType() != null && subList.get(i).getMediaType().equals(StringConstant.TYPE_TTS))
                                         continue;
                                     if (!contentPlayList.contains(subList.get(i).getContentPlay())) {
                                         if (refreshType == -1) {
@@ -562,7 +564,7 @@ public class PlayerFragment extends Fragment implements View.OnClickListener,
                             playList.get(i).setType("1");
                         }
                     }
-                    adapter.setList(playList);
+                    if (adapter != null) adapter.setList(playList);
                     break;
             }
         }

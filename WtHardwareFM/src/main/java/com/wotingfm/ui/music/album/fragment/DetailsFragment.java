@@ -46,6 +46,7 @@ import java.util.List;
 
 /**
  * 专辑详情页
+ *
  * @author woting11 2016/06/14
  */
 public class DetailsFragment extends Fragment implements OnClickListener {
@@ -124,15 +125,15 @@ public class DetailsFragment extends Fragment implements OnClickListener {
 
     // 初始化数据
     private void initData(ResultInfo resultInfo) {
-        if(isInitData || !isInitView || resultInfo == null) return ;
+        if (isInitData || !isInitView || resultInfo == null) return;
         isInitData = true;
 
         // 专辑封面图片
         String contentImage = resultInfo.getContentImg();
-        if(contentImage == null || contentImage.trim().equals("")) {// 设置默认专辑图片
+        if (contentImage == null || contentImage.trim().equals("")) {// 设置默认专辑图片
             imageAlbum.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx));
         } else {
-            if(!contentImage.startsWith("http")) {
+            if (!contentImage.startsWith("http")) {
                 contentImage = GlobalConfig.imageurl + contentImage;
             }
             contentImage = AssembleImageUrlUtils.assembleImageUrl150(contentImage);
@@ -142,14 +143,14 @@ public class DetailsFragment extends Fragment implements OnClickListener {
 
         // 喜欢状态
         contentFavorite = resultInfo.getContentFavorite();
-        if(contentFavorite != null && contentFavorite.equals("1")) {// 喜欢
+        if (contentFavorite != null && contentFavorite.equals("1")) {// 喜欢
             textFavorite.setText("已喜欢");
             textFavorite.setCompoundDrawablesWithIntrinsicBounds(null, null, null, context.getResources().getDrawable(R.mipmap.wt_img_liked));
         }
 
         // 订阅状态
         contentSubscribe = resultInfo.getContentSubscribe();
-        if(contentSubscribe != null && contentSubscribe.equals("1")) {
+        if (contentSubscribe != null && contentSubscribe.equals("1")) {
             textSubscriber.setText("已订阅");
             // 差图
 //            textSubscriber.setCompoundDrawablesWithIntrinsicBounds(null, null, null, context.getResources().getDrawable(R.mipmap.wt_img_liked));
@@ -157,14 +158,14 @@ public class DetailsFragment extends Fragment implements OnClickListener {
 
         // 主播名字 OR 节目名
         String anchorName = resultInfo.getContentName();
-        if(anchorName == null || anchorName.trim().equals("")) {
+        if (anchorName == null || anchorName.trim().equals("")) {
             anchorName = "未知";
         }
         textAnchor.setText(anchorName);
 
         // 内容介绍
         String content = resultInfo.getContentDescn();
-        if(content == null || content.trim().equals("")) {
+        if (content == null || content.trim().equals("")) {
             content = "暂无介绍";
         }
         textContent.setText(Html.fromHtml("<font size='28'>" + content + "</font>"));
@@ -196,41 +197,52 @@ public class DetailsFragment extends Fragment implements OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_favorite:// 喜欢
-                if(CommonHelper.checkNetwork(context)) {
+                if (CommonHelper.checkNetwork(context)) {
                     dialog = DialogUtils.Dialogph(context, "加载中...");
                     sendFavorite();
                 }
                 break;
             case R.id.tv_subscriber:// 订阅
-                if(BSApplication.SharedPreferences.getString(StringConstant.ISLOGIN, "false").equals("false")) {
+                if (BSApplication.SharedPreferences.getString(StringConstant.ISLOGIN, "false").equals("false")) {
                     ToastUtils.show_always(context, "请先登录~");
-                    return ;
+                    return;
                 }
-                if(CommonHelper.checkNetwork(context)) {
+                if (CommonHelper.checkNetwork(context)) {
                     dialog = DialogUtils.Dialogph(context, "加载中...");
                     sendSubscribe();
                 }
                 break;
             case R.id.text_shape:// 分享
                 EWMShowFragment fg_evm = new EWMShowFragment();
-                Bundle bundle_evm=new Bundle();
+                Bundle bundle_evm = new Bundle();
                 bundle_evm.putInt("type", 3);
-                bundle_evm.putString(StringConstant.JUMP_TYPE, AlbumFragment.jump_type);
+                bundle_evm.putString(StringConstant.FROM_TYPE, AlbumFragment.fromType);
                 fg_evm.setArguments(bundle_evm);
                 ProgramActivity.open(fg_evm);
 
                 break;
             case R.id.lin_pinglun:// 评论
-                if(!CommonHelper.checkNetwork(context)) return ;
+                if (!CommonHelper.checkNetwork(context)) return;
                 if (!TextUtils.isEmpty(contentId)) {
                     if (CommonUtils.getUserIdNoImei(context) != null && !CommonUtils.getUserIdNoImei(context).equals("")) {
+                        if (AlbumFragment.fromType == null) return ;
                         CommentFragment fg = new CommentFragment();
-                        Bundle bundle=new Bundle();
+                        Bundle bundle = new Bundle();
                         bundle.putString("contentId", contentId);
                         bundle.putString("MediaType", StringConstant.TYPE_SEQU);
-                        bundle.putString(StringConstant.JUMP_TYPE, AlbumFragment.jump_type);
+                        bundle.putString(StringConstant.FROM_TYPE, AlbumFragment.fromType);
                         fg.setArguments(bundle);
-                     ProgramActivity.open(fg);
+                        switch (AlbumFragment.fromType) {
+                            case StringConstant.TAG_PLAY:
+                                PlayerActivity.open(fg);
+                                break;
+                            case StringConstant.TAG_PROGRAM:
+                                ProgramActivity.open(fg);
+                                break;
+                            case StringConstant.TAG_SEARCH:
+                                SearchLikeActivity.open(fg);
+                                break;
+                        }
                     } else {
                         ToastUtils.show_always(context, "请先登录~~");
                     }
@@ -252,21 +264,23 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                 break;
             case R.id.text_anchor_name:// 到主播详情界面
                 if (!TextUtils.isEmpty(personId)) {
+                    if (AlbumFragment.fromType == null) return ;
                     AnchorDetailsFragment fg = new AnchorDetailsFragment();
-                    Bundle bundle=new Bundle();
+                    Bundle bundle = new Bundle();
                     bundle.putString("PersonId", personId);
                     bundle.putString("ContentPub", contentPub);
-                    bundle.putString(StringConstant.JUMP_TYPE, AlbumFragment.jump_type);
+                    bundle.putString(StringConstant.FROM_TYPE, AlbumFragment.fromType);
                     fg.setArguments(bundle);
-
-                    if( AlbumFragment.jump_type!=null){
-                        if( AlbumFragment.jump_type.equals("search")){
-                            SearchLikeActivity.open(fg);
-                        }else if( AlbumFragment.jump_type.equals("program")){
-                            ProgramActivity.open(fg);
-                        }else if( AlbumFragment.jump_type.equals("play")){
+                    switch (AlbumFragment.fromType) {
+                        case StringConstant.TAG_PLAY:
                             PlayerActivity.open(fg);
-                        }
+                            break;
+                        case StringConstant.TAG_PROGRAM:
+                            ProgramActivity.open(fg);
+                            break;
+                        case StringConstant.TAG_SEARCH:
+                            SearchLikeActivity.open(fg);
+                            break;
                     }
                 } else {
                     ToastUtils.show_always(context, "此专辑还没有主播哦");
@@ -279,7 +293,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
     private void sendFavorite() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("MediaType", "SEQU");
+            jsonObject.put("MediaType", StringConstant.TYPE_SEQU);
             jsonObject.put("ContentId", contentId);
             if (contentFavorite.equals("0")) {
                 jsonObject.put("Flag", "1");
@@ -304,15 +318,18 @@ public class DetailsFragment extends Fragment implements OnClickListener {
                             contentFavorite = "1";
                             textFavorite.setText("已喜欢");
                             textFavorite.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.mipmap.wt_img_liked));
+                            GlobalConfig.playerObject.setContentFavorite("1");
                         } else {
                             contentFavorite = "0";
                             textFavorite.setText("喜欢");
                             textFavorite.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.mipmap.wt_img_like));
+                            GlobalConfig.playerObject.setContentFavorite("0");
                         }
-                    } else if(returnType != null && returnType.equals("1005")) {// 返回结果是已经喜欢了此内容
+                    } else if (returnType != null && returnType.equals("1005")) {// 返回结果是已经喜欢了此内容
                         contentFavorite = "1";
                         textFavorite.setText("已喜欢");
                         textFavorite.setCompoundDrawablesWithIntrinsicBounds(null, null, null, getResources().getDrawable(R.mipmap.wt_img_liked));
+                        GlobalConfig.playerObject.setContentFavorite("1");
                     } else {
                         ToastUtils.show_always(context, "获取数据失败，请稍后再试!");
                     }
@@ -333,7 +350,7 @@ public class DetailsFragment extends Fragment implements OnClickListener {
     private void sendSubscribe() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("MediaType", "SEQU");
+            jsonObject.put("MediaType", StringConstant.TYPE_SEQU);
             jsonObject.put("ContentId", contentId);
             if (contentSubscribe.equals("0")) {
                 jsonObject.put("Flag", "1");

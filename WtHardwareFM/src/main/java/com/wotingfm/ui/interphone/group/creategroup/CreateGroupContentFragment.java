@@ -566,7 +566,7 @@ public class CreateGroupContentFragment extends Fragment implements OnClickListe
         PhotoCutActivity fg = new PhotoCutActivity();
         Bundle bundle = new Bundle();
         bundle.putString(StringConstant.START_PHOTO_ZOOM_URI, uri.toString());
-        bundle.putString(StringConstant.JUMP_TYPE, "duijiang");
+        bundle.putString(StringConstant.FROM_TYPE, "duijiang");
         bundle.putString(StringConstant.FRAGMENT_TYPE, "CreateGroupContentFragment");
         bundle.putInt(StringConstant.START_PHOTO_ZOOM_TYPE, 1);
         fg.setArguments(bundle);

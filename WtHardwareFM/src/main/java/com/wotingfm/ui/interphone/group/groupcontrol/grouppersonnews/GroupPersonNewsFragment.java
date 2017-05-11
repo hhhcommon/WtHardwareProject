@@ -15,10 +15,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -36,8 +36,8 @@ import org.json.JSONObject;
 
 /**
  * 组内联系人详情页(非好友)
- *
- * @author 辛龙 2016年1月19日
+ * 辛龙
+ * 2016年1月19日
  */
 public class GroupPersonNewsFragment extends Fragment {
     private String name;
@@ -78,7 +78,7 @@ public class GroupPersonNewsFragment extends Fragment {
             });
             context = getActivity();
             update = false;    // 此时修改的状态
-            username = sharedPreferences.getString(StringConstant.USERNAME, "");            //当前登录账号的姓名
+            username = sharedPreferences.getString(StringConstant.NICK_NAME, "");            //当前登录账号的姓名
             setView();
             handleIntent();
             setData();
@@ -91,7 +91,7 @@ public class GroupPersonNewsFragment extends Fragment {
     private void createEWM() {
         UserInviteMeInside meInside = new UserInviteMeInside();
         meInside.setUserId(num);
-        meInside.setUserName(name);
+        meInside.setNickName(name);
         meInside.setDescn(descN);
         meInside.setPortraitMini(imageUrl);
      /*   bmp = CreateQRImageHelper.getInstance().createQRImage(1, null, meInside, 220, 220);
@@ -102,16 +102,15 @@ public class GroupPersonNewsFragment extends Fragment {
     }
 
     private void setView() {
-        lin_delete = (LinearLayout) rootView.findViewById(R.id.lin_delete);    //验证信息清空
-        et_news = (EditText) rootView.findViewById(R.id.et_news);                //验证信息输入框
-        tv_add = (TextView) rootView.findViewById(R.id.tv_add);                //添加好友
+        lin_delete = (LinearLayout) rootView.findViewById(R.id.lin_delete);    // 验证信息清空
+        et_news = (EditText) rootView.findViewById(R.id.et_news);              // 验证信息输入框
+        tv_add = (TextView) rootView.findViewById(R.id.tv_add);                // 添加好友
         image_touxiang = (ImageView) rootView.findViewById(R.id.image_portrait);
         tv_name = (TextView) rootView.findViewById(R.id.tv_name);
         et_b_name = (EditText) rootView.findViewById(R.id.et_b_name);
         et_groupSignature = (TextView) rootView.findViewById(R.id.et_groupSignature);
         tv_id = (TextView) rootView.findViewById(R.id.tv_id);
         image_xiugai = (ImageView) rootView.findViewById(R.id.imageView3);
-
     }
 
     private void handleIntent() {
@@ -122,7 +121,7 @@ public class GroupPersonNewsFragment extends Fragment {
         }
         if (type.equals("talkoldlistfragment_p")) {
             UserInfo data = (UserInfo) getArguments().getSerializable("data");
-            name = data.getUserName();
+            name = data.getNickName();
             imageUrl = data.getPortraitBig();
             id = data.getUserId();
             descN = data.getDescn();
@@ -130,7 +129,7 @@ public class GroupPersonNewsFragment extends Fragment {
             b_name = data.getUserAliasName();
         } else if (type.equals("TalkGroupNewsActivity_p")) {
             GroupInfo data = (GroupInfo) getArguments().getSerializable("data");
-            name = data.getUserName();
+            name = data.getNickName();
             imageUrl = data.getPortraitBig();
             id = data.getUserId();
             descN = data.getDescn();
@@ -138,7 +137,7 @@ public class GroupPersonNewsFragment extends Fragment {
             b_name = data.getUserAliasName();
         } else if (type.equals("GroupMemers")) {
             UserInfo data = (UserInfo) getArguments().getSerializable("data");
-            name = data.getUserName();
+            name = data.getNickName();
             imageUrl = data.getPortraitBig();
             id = data.getUserId();
             descN = data.getDescn();
@@ -178,8 +177,10 @@ public class GroupPersonNewsFragment extends Fragment {
             } else {
                 url = GlobalConfig.imageurl + imageUrl;
             }
-            url = AssembleImageUrlUtils.assembleImageUrl150(url);
-            Picasso.with(context).load(url.replace("\\/", "/")).into(image_touxiang);
+            String _url = AssembleImageUrlUtils.assembleImageUrl150(url);
+
+            // 加载图片
+            AssembleImageUrlUtils.loadImage(_url, url, image_touxiang, IntegerConstant.TYPE_GROUP);
         }
         if (username == null || username.equals("")) {
             et_news.setText("");
@@ -204,12 +205,6 @@ public class GroupPersonNewsFragment extends Fragment {
                         } else {
                             biename = et_b_name.getText().toString();
                         }
-                  /*      if (et_groupSignature.getText().toString().trim().equals("")
-                                || et_groupSignature.getText().toString().trim().equals("这家伙很懒，什么都没写")) {
-                            groupSignature = " ";
-                        } else {
-                       *//*     groupSignature = et_groupSignature.getText().toString();*//*
-                        }*/
                     } else {
                         if (et_b_name.getText().toString().trim().equals("")
                                 || et_b_name.getText().toString().trim().equals("暂无备注名")) {

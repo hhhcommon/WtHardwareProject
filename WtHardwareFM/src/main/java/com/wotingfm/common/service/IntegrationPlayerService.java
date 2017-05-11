@@ -25,7 +25,10 @@ import com.kingsoft.media.httpcache.KSYProxyService;
 import com.kingsoft.media.httpcache.OnCacheStatusListener;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
+import com.wotingfm.common.gatherdata.GatherData;
+import com.wotingfm.common.gatherdata.model.DataModel;
 import com.wotingfm.ui.music.download.dao.FileInfoDao;
 import com.wotingfm.ui.music.download.model.FileInfo;
 import com.wotingfm.ui.music.player.model.LanguageSearchInside;
@@ -267,12 +270,21 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     // 暂停播放
     public void pausePlay() {
-        if(isVlcPlaying && mVlc.isPlaying()) mVlc.pause();
-        else if(isBVVPlaying && mVV.isPlaying()) mVV.pause();
-        else if(isTtsPlaying && mTts.isSpeaking()) mTts.stopSpeaking();
+        if(isVlcPlaying) mVlc.pause();
+        else if(isBVVPlaying) mVV.pause();
+        else if(isTtsPlaying) mTts.stopSpeaking();
         if(mediaType.equals(StringConstant.TYPE_AUDIO)) {
             if(mUpdatePlayTimeRunnable != null) mHandler.removeCallbacks(mUpdatePlayTimeRunnable);
         }
+
+        // 暂停播放需要收集数据
+        String beginTime = String.valueOf(System.currentTimeMillis() / 1000);// 事件开始时间  单位 s
+        String endTime = String.valueOf(getCurrentTime() / 1000);// 节目播放时间  单位 s
+        String apiName = "E-pause";
+        String objType = mediaType;
+        String objId = GlobalConfig.playerObject.getContentId();// ID
+        DataModel data = new DataModel(beginTime, endTime, apiName, objType, objId);
+        GatherData.collectData(IntegerConstant.DATA_UPLOAD_TYPE_GIVEN, data);
     }
 
     // 继续播放
@@ -287,6 +299,15 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
                 mHandler.postDelayed(mUpdatePlayTimeRunnable, 1000);
             }
         }
+
+        // 继续播放需要收集数据
+        String beginTime = String.valueOf(System.currentTimeMillis() / 1000);// 事件开始时间  单位 s
+        String endTime = String.valueOf(getCurrentTime() / 1000);// 节目播放时间  单位 s
+        String apiName = "E-play";
+        String objType = mediaType;
+        String objId = GlobalConfig.playerObject.getContentId();// ID
+        DataModel data = new DataModel(beginTime, endTime, apiName, objType, objId);
+        GatherData.collectData(IntegerConstant.DATA_UPLOAD_TYPE_GIVEN, data);
     }
 
     // 指定播放位置
@@ -319,13 +340,23 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
         mediaType = GlobalConfig.playerObject.getMediaType();
         httpUrl = GlobalConfig.playerObject.getContentPlay();
         localUrl = GlobalConfig.playerObject.getLocalurl();
+
+        // 开始播放时需要收集数据
+        String beginTime = String.valueOf(System.currentTimeMillis() / 1000);// 事件开始时间  单位 s
+        String endTime = String.valueOf(getCurrentTime() / 1000);// 节目播放时间  单位 s
+        String apiName = "E-play";
+        String objType = mediaType;
+        String objId = GlobalConfig.playerObject.getContentId();// ID
+        DataModel data = new DataModel(beginTime, endTime, apiName, objType, objId);
+        GatherData.collectData(IntegerConstant.DATA_UPLOAD_TYPE_GIVEN, data);
+
         return mediaType != null && (httpUrl != null || localUrl != null);
     }
 
     // 播放节目
     private void playAudio(String contentPlay, final String localUrl) {
-        if(mTts != null && mTts.isSpeaking() && isTtsPlaying) stopTts();
-        if(mVV != null && mVV.isPlaying() && isBVVPlaying) stopRadio();
+        if(mTts != null && isTtsPlaying) stopTts();
+        if(mVV != null && isBVVPlaying) stopRadio();
         if(mVlc == null) initVlc();
         else if(mVlc.isPlaying() && isVlcPlaying) mVlc.stop();
 
@@ -372,14 +403,15 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     // 播放 mVV  用于播放电台
     private void playRadio(final String contentPlay) {
+        if(mTts != null && isTtsPlaying) stopTts();
+        if(mVlc != null && isVlcPlaying) stopVlc();
+
         if(mVV == null) {// 如果播放器初始化失败 则用 VLC 播放电台
             playAudio(contentPlay, null);
             return ;
-        } else if(mVV.isPlaying() && isBVVPlaying) {
+        } else if(isBVVPlaying) {
             mVV.stopPlayback();
         }
-        if(mTts != null && mTts.isSpeaking() && isTtsPlaying) stopTts();
-        if(mVlc != null && mVlc.isPlaying() && isVlcPlaying) stopVlc();
 
         mHandler.postDelayed(new Runnable() {
             @Override
@@ -407,10 +439,10 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
 
     // 播放 TTS
     private void playTts(String contentPlay) {
-        if(mVlc != null && mVlc.isPlaying() && isVlcPlaying) stopVlc();
-        if(mVV != null && mVV.isPlaying() && isBVVPlaying) stopRadio();
+        if(mVlc != null && isVlcPlaying) stopVlc();
+        if(mVV != null && isBVVPlaying) stopRadio();
         if(mTts == null) initTts();
-        else if(mTts.isSpeaking() && isTtsPlaying) mTts.stopSpeaking();
+        else if(isTtsPlaying) mTts.stopSpeaking();
         mTts.startSpeaking(contentPlay, mTtsListener);
         mHandler.postDelayed(mTotalTimeRunnable, 1000);
 
@@ -550,6 +582,16 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
                     if(mUpdatePlayTimeRunnable != null) {
                         mHandler.removeCallbacks(mUpdatePlayTimeRunnable);
                     }
+
+                    // 播放完成需要收集数据
+                    String beginTime = String.valueOf(System.currentTimeMillis() / 1000);// 事件开始时间  单位 s
+                    String endTime = String.valueOf(getCurrentTime() / 1000);// 节目播放时间  单位 s
+                    String apiName = "E-close";
+                    String objType = mediaType;
+                    String objId = GlobalConfig.playerObject.getContentId();// ID
+                    DataModel data = new DataModel(beginTime, endTime, apiName, objType, objId);
+                    GatherData.collectData(IntegerConstant.DATA_UPLOAD_TYPE_GIVEN, data);
+
                     position++;
                     if(position > playList.size() - 1) {
                         position = 0;
@@ -618,13 +660,6 @@ public class IntegrationPlayerService extends Service implements OnCacheStatusLi
     @Override
     public boolean onError(int what, int extra) {
         mVV.stopPlayback();
-        mHandler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                mVV.setVideoPath(httpUrl);
-                mVV.start();
-            }
-        }, 1000);
         return true;
     }
 

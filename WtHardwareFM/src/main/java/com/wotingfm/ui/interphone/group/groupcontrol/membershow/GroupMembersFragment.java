@@ -55,7 +55,6 @@ import java.util.List;
  * 2016年4月13日
  */
 public class GroupMembersFragment extends Fragment implements OnClickListener, TextWatcher, OnItemClickListener, SideBar.OnTouchingLetterChangedListener, TipView.WhiteViewClick {
-
     private CharacterParser characterParser = CharacterParser.getInstance();// 实例化汉字转拼音类
     private PinyinComparator pinyinComparator = new PinyinComparator();
     private CreateGroupMembersAdapter adapter;
@@ -248,6 +247,9 @@ public class GroupMembersFragment extends Fragment implements OnClickListener, T
                         textHeadName.setText("全部成员(" + sum + ")");
                         userList.clear();
                         userList.addAll(srcList);
+
+                        Log.v("TAG", "userList.size -- > > " + userList.size());
+
                         filledData(userList);
                         Collections.sort(userList, pinyinComparator);
                         listView.setAdapter(adapter = new CreateGroupMembersAdapter(context, userList));
@@ -271,8 +273,8 @@ public class GroupMembersFragment extends Fragment implements OnClickListener, T
 
     private void filledData(List<UserInfo> person) {
         for (int i = 0; i < person.size(); i++) {
-            person.get(i).setName(person.get(i).getUserName());
-            String pinyin = characterParser.getSelling(person.get(i).getUserName());
+            person.get(i).setName(person.get(i).getNickName());
+            String pinyin = characterParser.getSelling(person.get(i).getNickName());
             String sortString = pinyin.substring(0, 1).toUpperCase();
             if (sortString.matches("[A-Z]")) {// 判断首字母是否是英文字母
                 person.get(i).setSortLetters(sortString.toUpperCase());
@@ -339,7 +341,7 @@ public class GroupMembersFragment extends Fragment implements OnClickListener, T
                 UserInfo tp = new UserInfo();
                 tp.setPortraitBig(userList.get(position).getPortraitBig());
                 tp.setPortraitMini(userList.get(position).getPortraitMini());
-                tp.setUserName(userList.get(position).getUserName());
+                tp.setNickName(userList.get(position).getNickName());
                 tp.setUserId(userList.get(position).getUserId());
                 tp.setUserAliasName(userList.get(position).getUserAliasName());
 
@@ -350,9 +352,7 @@ public class GroupMembersFragment extends Fragment implements OnClickListener, T
                 bundle.putSerializable("data", tp);
                 fg4.setArguments(bundle);
                 DuiJiangActivity.open(fg4);
-
             } else {
-
                 GroupPersonNewsFragment fg4 = new GroupPersonNewsFragment();
                 Bundle bundle = new Bundle();
                 bundle.putString("type", "GroupMemers");

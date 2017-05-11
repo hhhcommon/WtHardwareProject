@@ -12,9 +12,9 @@ import android.widget.EditText;
 import android.widget.ImageView;
 
 import com.android.volley.VolleyError;
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.model.GroupInfo;
@@ -29,7 +29,7 @@ import org.json.JSONObject;
  * 群组详情页面
  * 辛龙 2016年1月21日
  */
-public class GroupIntroduceFragment extends Fragment implements View.OnClickListener{
+public class GroupIntroduceFragment extends Fragment implements View.OnClickListener {
 
     private String groupId;
     private String tag = "TALK_GROUP_INTRODUCE_VOLLEY_REQUEST_CANCEL_TAG";
@@ -56,47 +56,44 @@ public class GroupIntroduceFragment extends Fragment implements View.OnClickList
         return rootView;
     }
 
-
     // 初始化视图
     private void setView() {
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);          // 返回
-        et_group_name=(EditText)rootView.findViewById(R.id.et_group_name);           // 群名
-        et_group_sign=(EditText)rootView.findViewById(R.id.et_group_sign);           // 群签名
-        img_head=(ImageView)rootView.findViewById(R.id.image);                       // 群头像
+        et_group_name = (EditText) rootView.findViewById(R.id.et_group_name);           // 群名
+        et_group_sign = (EditText) rootView.findViewById(R.id.et_group_sign);           // 群签名
+        img_head = (ImageView) rootView.findViewById(R.id.image);                       // 群头像
     }
-
 
     // 处理请求
     private void handleIntent() {
-        GroupInfo groupNews = (GroupInfo)getArguments().getSerializable("group");
-        headUrl=getArguments().getString("GroupImg");
-        if(groupNews!=null){
-            if(!TextUtils.isEmpty(groupNews.getGroupName())){
+        GroupInfo groupNews = (GroupInfo) getArguments().getSerializable("group");
+        headUrl = getArguments().getString("GroupImg");
+        if (groupNews != null) {
+            if (!TextUtils.isEmpty(groupNews.getGroupName())) {
                 et_group_name.setText(groupNews.getGroupName());
             }
 
-            if(!TextUtils.isEmpty(groupNews.getGroupSignature())){
+            if (!TextUtils.isEmpty(groupNews.getGroupSignature())) {
                 et_group_sign.setText(groupNews.getGroupSignature());
             }
 
-            if(TextUtils.isEmpty(headUrl)){
+            if (TextUtils.isEmpty(headUrl)) {
                 img_head.setImageResource(R.mipmap.wt_image_tx_hy);
-            }else{
-                if(headUrl.startsWith("http:")){
-                    url=headUrl;
-                }else{
-                    url = GlobalConfig.imageurl+headUrl;
+            } else {
+                if (headUrl.startsWith("http:")) {
+                    url = headUrl;
+                } else {
+                    url = GlobalConfig.imageurl + headUrl;
                 }
-                url= AssembleImageUrlUtils.assembleImageUrl150(url);
-                Picasso.with(context).load(url.replace("\\/", "/")).into(img_head);
+                String _url = AssembleImageUrlUtils.assembleImageUrl150(url);
+
+                // 加载图片
+                AssembleImageUrlUtils.loadImage(_url, url, img_head, IntegerConstant.TYPE_GROUP);
             }
-
-        }else{
-            ToastUtils.show_always(context,"传入的数值有问题");
+        } else {
+            ToastUtils.show_always(context, "传入的数值有问题");
         }
-
     }
-
 
     @Override
     public void onClick(View v) {
@@ -144,18 +141,16 @@ public class GroupIntroduceFragment extends Fragment implements View.OnClickList
                 if (isCancelRequest) return;
                 try {
                     String ReturnType = result.getString("ReturnType");
-                    //Log.v("ReturnType", "ReturnType -- > > " + ReturnType);
-                   if(!TextUtils.isEmpty(ReturnType)){
-                    if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
-                        ToastUtils.show_always(context, "已经成功退出该组");
-                        context.setResult(1);
-                        DuiJiangActivity.close();
+                    if (!TextUtils.isEmpty(ReturnType)) {
+                        if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
+                            ToastUtils.show_always(context, "已经成功退出该组");
+                            DuiJiangActivity.close();
+                        } else {
+                            ToastUtils.show_always(context, "退出群组失败，请稍后重试!");
+                        }
                     } else {
                         ToastUtils.show_always(context, "退出群组失败，请稍后重试!");
                     }
-                   }else{
-                       ToastUtils.show_always(context, "退出群组失败，请稍后重试!");
-                   }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

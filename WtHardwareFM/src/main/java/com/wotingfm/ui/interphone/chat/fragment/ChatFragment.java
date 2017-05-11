@@ -42,7 +42,7 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.helper.InterPhoneControlHelper;
 import com.wotingfm.common.service.SimulationService;
-import com.wotingfm.common.service.VoiceStreamRecordService;
+import com.wotingfm.common.service.VoiceStreamRecord;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.common.model.GroupInfo;
@@ -179,7 +179,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
 
     private void setOnResumeView() {
         //此处在splashActivity中refreshB设置成true
-        UserName = shared.getString(StringConstant.USERNAME, "");
+        UserName = shared.getString(StringConstant.NICK_NAME, "");
         String p = shared.getString(StringConstant.PERSONREFRESHB, "false");
         String l = shared.getString(StringConstant.ISLOGIN, "false");
         if (l.equals("true")) {
@@ -1133,7 +1133,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                                     GroupInfo ListGP = new GroupInfo();
                                     ListGP.setTruename(GlobalConfig.list_person.get(j).getTruename());
                                     ListGP.setId(GlobalConfig.list_person.get(j).getUserId());
-                                    ListGP.setName(GlobalConfig.list_person.get(j).getUserName());
+                                    ListGP.setName(GlobalConfig.list_person.get(j).getNickName());
                                     ListGP.setUserAliasName(GlobalConfig.list_person.get(j).getUserAliasName());
                                     ListGP.setPortrait(GlobalConfig.list_person.get(j).getPortraitBig());
                                     ListGP.setAddTime(historyDataBaseList.get(i).getAddTime());
@@ -1312,18 +1312,18 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                                         case 0xff://TTT
                                             //请求通话出异常了
                                             VibratorUtils.Vibrate(ChatFragment.context, Vibrate);
-                                            VoiceStreamRecordService.stop();
+                                            VoiceStreamRecord.stop();
                                             ToastUtils.show_always(context, "请求通话—出异常了");
                                             break;
                                         case 0x00:
                                             //没有有效登录用户
                                             VibratorUtils.Vibrate(ChatFragment.context, Vibrate);
-                                            VoiceStreamRecordService.stop();
+                                            VoiceStreamRecord.stop();
                                             ToastUtils.show_always(context, "没有有效登录用户");
                                             break;
                                         case 0x02:                                            //无法获取用户组
                                             VibratorUtils.Vibrate(ChatFragment.context, Vibrate);
-                                            VoiceStreamRecordService.stop();
+                                            VoiceStreamRecord.stop();
                                             ToastUtils.show_always(context, "无法获取用户组");
                                             break;
                                         case 0x01:
@@ -1333,30 +1333,30 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                                             // headview中展示自己的头像
                                             String url = BSApplication.SharedPreferences.getString(StringConstant.IMAGEURL, "");
                                             setImageView(1, UserName, url);
-                                            VoiceStreamRecordService.send();
+                                            VoiceStreamRecord.send();
                                             break;
                                         case 0x04:
                                             //用户不在所指定的组
                                             VibratorUtils.Vibrate(ChatFragment.context, Vibrate);
-                                            VoiceStreamRecordService.stop();
+                                            VoiceStreamRecord.stop();
                                             ToastUtils.show_always(context, "用户不在所指定的组");
                                             break;
                                         case 0x05:
                                             //进入组的人员不足两人
                                             VibratorUtils.Vibrate(ChatFragment.context, Vibrate);
-                                            VoiceStreamRecordService.stop();
+                                            VoiceStreamRecord.stop();
                                             ToastUtils.show_always(context, "进入组的人员不足两人");
                                             break;
                                         case 0x08:
                                             //有人在说话，无权通话
                                             VibratorUtils.Vibrate(ChatFragment.context, Vibrate);
-                                            VoiceStreamRecordService.stop();
+                                            VoiceStreamRecord.stop();
                                             ToastUtils.show_always(context, "有人在说话");
                                             break;
                                         case 0x90:
                                             //用户在电话通话
                                             VibratorUtils.Vibrate(ChatFragment.context, Vibrate);
-                                            VoiceStreamRecordService.stop();
+                                            VoiceStreamRecord.stop();
                                             ToastUtils.show_always(context, "用户在电话通话");
                                             break;
                                         default:
@@ -1415,7 +1415,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                                     if (groupPersonList != null && groupPersonList.size() != 0) {
                                         for (int i = 0; i < groupPersonList.size(); i++) {
                                             if (groupPersonList.get(i).getUserId().equals(talkUserId)) {
-                                                setImageView(1, groupPersonList.get(i).getUserName(), groupPersonList.get(i).getPortraitMini());
+                                                setImageView(1, groupPersonList.get(i).getNickName(), groupPersonList.get(i).getPortraitMini());
                                             }
                                         }
                                     }
@@ -1568,13 +1568,13 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                                         case 0xff://TT
                                             //请求通话出异常了
                                             VibratorUtils.Vibrate(ChatFragment.context, Vibrate);
-                                            VoiceStreamRecordService.stop();
+                                            VoiceStreamRecord.stop();
                                             ToastUtils.show_always(context, "请求通话—出异常了");
                                             break;
                                         case 0x02:
                                             //无权通话
                                             VibratorUtils.Vibrate(ChatFragment.context, Vibrate);
-                                            VoiceStreamRecordService.stop();
+                                            VoiceStreamRecord.stop();
                                             ToastUtils.show_always(context, "当前有人在说话");
                                             break;
                                         case 0x01:
@@ -1586,18 +1586,18 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                                             } else {
                                                 draw.start();
                                             }
-                                            VoiceStreamRecordService.send();
+                                            VoiceStreamRecord.send();
                                             break;
                                         case 0x04:
                                             //用户无权通话
                                             VibratorUtils.Vibrate(ChatFragment.context, Vibrate);
-                                            VoiceStreamRecordService.stop();
+                                            VoiceStreamRecord.stop();
                                             ToastUtils.show_always(context, "不能对讲，有人在说话");
                                             break;
                                         case 0x05:
                                             //无权通话
                                             VibratorUtils.Vibrate(ChatFragment.context, Vibrate);
-                                            VoiceStreamRecordService.stop();
+                                            VoiceStreamRecord.stop();
                                             ToastUtils.show_always(context, "不能对讲，状态错误");
                                             break;
                                         default:
@@ -1834,7 +1834,7 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        VoiceStreamRecordService.stop();
+                        VoiceStreamRecord.stop();
                         InterPhoneControlHelper.Loosen(context, interPhoneId);//发送取消说话控制
                         if (draw_group.isRunning()) {
                             draw_group.stop();
@@ -1843,14 +1843,14 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
                     }
                 }, 300);
             } else {//此处处理个人对讲的逻辑
-                VoiceStreamRecordService.stop();
+                VoiceStreamRecord.stop();
                 InterPhoneControlHelper.PersonTalkPressStop(context);//发送取消说话控制
                 if (draw.isRunning()) {
                     draw.stop();
                 }
             }
         } else {
-            VoiceStreamRecordService.stop();
+            VoiceStreamRecord.stop();
         }
     }
 
@@ -1858,13 +1858,13 @@ public class ChatFragment extends Fragment implements OnClickListener, TipView.T
         // 按下的动作
         if (interPhoneType.equals("group")) {
             InterPhoneControlHelper.Press(context, interPhoneId);
-            VoiceStreamRecordService.stop();
-            VoiceStreamRecordService.start(context, interPhoneId, "group");
+            VoiceStreamRecord.stop();
+            VoiceStreamRecord.start(context, interPhoneId, "group");
         } else {
             //此处处理个人对讲的逻辑
             InterPhoneControlHelper.PersonTalkPressStart(context);
-            VoiceStreamRecordService.stop();
-            VoiceStreamRecordService.start(context, interPhoneId, "person");
+            VoiceStreamRecord.stop();
+            VoiceStreamRecord.start(context, interPhoneId, "person");
         }
     }
 

@@ -6,13 +6,10 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 
-import com.umeng.analytics.MobclickAgent;
 import com.wotingfm.R;
 import com.wotingfm.util.SequenceUUID;
-import com.wotingfm.util.ToastUtils;
 
 
 public class DuiJiangActivity extends AppCompatActivity {
@@ -53,12 +50,18 @@ public class DuiJiangActivity extends AppCompatActivity {
     }
 
     public static void close() {
-        context.getSupportFragmentManager().popBackStack();
+        context.getSupportFragmentManager().popBackStackImmediate();
     }
 
     public static void hideShow(Fragment from, Fragment to) {
         context.getSupportFragmentManager().beginTransaction().
                 hide(from).show(to).commit();
+    }
+
+    // 手机实体返回按键的处理,硬件不加入
+    @Override
+    public void onBackPressed() {
+        Log.v("TAG", "已经是最上面界面了！");
     }
 
     @Override

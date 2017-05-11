@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.EditText;
@@ -14,6 +15,7 @@ import android.widget.TextView;
 
 import com.android.volley.VolleyError;
 import com.wotingfm.R;
+import com.wotingfm.common.helper.InterPhoneControlHelper;
 import com.wotingfm.ui.baseactivity.BaseActivity;
 import com.wotingfm.ui.mine.person.agreement.AgreementActivity;
 import com.wotingfm.common.application.BSApplication;
@@ -22,9 +24,7 @@ import com.wotingfm.common.constant.BroadcastConstants;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
-import com.wotingfm.common.helper.InterPhoneControlHelper;
 import com.wotingfm.util.DialogUtils;
-import com.wotingfm.util.L;
 import com.wotingfm.util.ToastUtils;
 
 import org.json.JSONException;
@@ -39,27 +39,28 @@ import java.util.regex.Pattern;
  * 邮箱：645700751@qq.com
  */
 public class RegisterActivity extends BaseActivity implements OnClickListener, TextWatcher {
-    private CountDownTimer mCountDownTimer;// 再次获取验证码时间
+    private CountDownTimer mCountDownTimer;                  // 再次获取验证码时间
 
-    private Dialog dialog;// 加载数据对话框
-    private EditText mEditTextName;// 输入 用户名
-    private EditText mEditTextPassWord;// 输入 密码
-    private EditText mEditTextUserPhone;// 输入 手机号
-    private EditText editVerify;// 输入 验证码
-    private TextView textGetYzm;// 获取验证码
-    private TextView textRegister;// 注册
-    private TextView textCxFaSong;// 重新获取验证码
-    private TextView textNext;// 注册
+    private Dialog dialog;                                   // 加载数据对话框
+    private EditText mEditTextName;                          // 输入 用户名
+    private EditText mEditTextPassWord;                      // 输入 密码
+    private EditText mEditTextUserPhone;                     // 输入 手机号
+    private EditText editVerify;                             // 输入 验证码
+    private TextView textGetYzm;                             // 获取验证码
+    private TextView textRegister;                           // 注册
+    private TextView textCxFaSong;                           // 重新获取验证码
+    private TextView textNext;                               // 注册
 
-    private String password;// 密码
-    private String userName;// 用户名
-    private String phoneNum;// 手机号
-    private String verifyCode;// 验证码
+    private String password;                                 // 密码
+    private String userName;                                 // 用户名
+    private String phoneNum;                                 // 手机号
+    private String verifyCode;                               // 验证码
     private String phoneNumber;
     private String tempVerify;
     private String tag = "REGISTER_VOLLEY_REQUEST_CANCEL_TAG";
-    private int sendType = -1;// == -1 首次获取验证码 == 其他 再次发送验证码
-    private int verifyStatus = -1;// == -1 没有发送过验证码  == 1 成功
+    private String viewTag = "RegisterActivity";
+    private int sendType = -1;                               // == -1 首次获取验证码 == 其他 再次发送验证码
+    private int verifyStatus = -1;                           // == -1 没有发送过验证码  == 1 成功
     private boolean isCancelRequest;
 
     @Override
@@ -74,7 +75,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, T
         findViewById(R.id.head_left_btn).setOnClickListener(this);// 返回
         findViewById(R.id.lin_agreement).setOnClickListener(this);// 注册协议
 
-        mEditTextName = (EditText) findViewById(R.id.edittext_username);// 输入 用户名
+        mEditTextName = (EditText) findViewById(R.id.edittext_username);// 输入 昵称
         mEditTextPassWord = (EditText) findViewById(R.id.edittext_password);// 输入 密码
         mEditTextUserPhone = (EditText) findViewById(R.id.edittext_userphone);// 输入 手机号
 
@@ -101,9 +102,13 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, T
                 checkValue();
                 break;
             case R.id.tv_getyzm:// 检查手机号是否为空，或者是否是一个正常手机号
+                if (mCountDownTimer != null) {
+                    mCountDownTimer.cancel();
+                    mCountDownTimer = null;
+                }
                 checkYzm();
                 break;
-            case R.id.lin_agreement:// 注册协议
+            case R.id.lin_agreement:        // 注册协议
                 startActivity(new Intent(context, AgreementActivity.class));
                 break;
         }
@@ -124,8 +129,8 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, T
             ToastUtils.show_always(context, "请输入您之前获取验证的手机号码");
             return;
         }
-        if (userName == null || userName.trim().equals("") || userName.length() < 3) {
-            ToastUtils.show_always(context, "用户名格式不正确!");
+        if (userName == null || userName.trim().equals("") || userName.length()>20) {
+            ToastUtils.show_always(context, "昵称不能为空或长度不能超过20字");
             return;
         }
         if (password == null || password.trim().equals("") || password.length() < 6) {
@@ -155,34 +160,36 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, T
         }
 
         VolleyRequest.RequestPost(GlobalConfig.checkPhoneCheckCodeUrl, tag, jsonObject, new VolleyCallback() {
-            private String ReturnType;
-            private String Message;
-
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) dialog.dismiss();
                 if (isCancelRequest) return;
                 try {
-                    ReturnType = result.getString("ReturnType");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    Message = result.getString("Message");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if (ReturnType != null && ReturnType.equals("1001")) {
-                    dialog = DialogUtils.Dialogph(context, "注册中");
-                    send();
-                } else if (ReturnType != null && ReturnType.equals("T")) {
-                    ToastUtils.show_always(context, "出错了，请您稍后再试!");
-                } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_always(context, "您输入的验证码不匹配!");
-                } else {
-                    if (Message != null && !Message.trim().equals("")) {
-                        ToastUtils.show_always(context, Message + "");
+                    String ReturnType = result.getString("ReturnType");
+                    if (ReturnType != null && ReturnType.equals("1001")) {
+                        Log.i(viewTag,"1001");
+                        dialog = DialogUtils.Dialogph(context, "注册中");
+                        send();
+                    } else if (ReturnType != null && ReturnType.equals("T")) {
+                        Log.i(viewTag,"T");
+                        ToastUtils.show_always(context, "出错了，请您稍后再试!");
+                    } else if (ReturnType != null && ReturnType.equals("1002")) {
+                        Log.i(viewTag,"1002");
+                        ToastUtils.show_always(context, "您输入的验证码不匹配!");
+                    } else {
+                        Log.i(viewTag,"Message");
+                        try {
+                            String Message = result.getString("Message");
+                            if (Message != null && !Message.trim().equals("")) {
+                                ToastUtils.show_always(context, Message + "");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            ToastUtils.show_always(context, "出错了，请您稍后再试!");
+                        }
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
                 }
             }
 
@@ -194,63 +201,74 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, T
         });
     }
 
+    // 注册
     private void send() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("NickName",userName);
+            jsonObject.put("NickName", userName);
+            jsonObject.put("MainPhoneNum", phoneNum);
+            jsonObject.put("UsePhone", "1");
             jsonObject.put("Password", password);
-            jsonObject.put("MainPhoneNum",phoneNum);
-            jsonObject.put("UsePhone","1");
         } catch (JSONException e) {
             e.printStackTrace();
         }
 
         VolleyRequest.RequestPost(GlobalConfig.registerUrl, tag, jsonObject, new VolleyCallback() {
-            private String ReturnType;
-            private String Message;
-            private String userId;
-
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) dialog.dismiss();
                 if (isCancelRequest) return;
                 try {
-                    ReturnType = result.getString("ReturnType");
+                    String ReturnType = result.getString("ReturnType");
+                    if (ReturnType != null && ReturnType.equals("1001")) {
+                        Editor et = BSApplication.SharedPreferences.edit();
+                        try {
+                            String userId = result.getString("UserId");
+                            et.putString(StringConstant.USERID, userId);
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            et.putString(StringConstant.USERID, "");
+                        }
+                        et.putString(StringConstant.NICK_NAME, userName);
+                        et.putString(StringConstant.USER_PHONE_NUMBER, phoneNum);
+                        et.putString(StringConstant.ISLOGIN, "true");
+                        et.putString(StringConstant.PERSONREFRESHB, "true");
+                        if (!et.commit()) {
+                            Log.v("commit", "数据 commit 失败!");
+                        }
+                        // 更新通讯录
+                        context.sendBroadcast(new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN));
+                        // 更改所有界面的登录状态
+                        context.sendBroadcast(new Intent(BroadcastConstants.PUSH_ALLURL_CHANGE));
+                        // socket重新连接
+                        InterPhoneControlHelper.sendEntryMessage(context);
+                        setResult(1);
+                        finish();
+                    } else if (ReturnType != null && ReturnType.equals("1002")) {
+                        Log.i(viewTag,"1002");
+                        ToastUtils.show_always(context, "当前用户暂未注册!");
+                    } else if (ReturnType != null && ReturnType.equals("1003")) {
+                        Log.i(viewTag,"1003");
+                        ToastUtils.show_always(context, "您输入的用户名重复了!");
+                    } else if (ReturnType != null && ReturnType.equals("0000")) {
+                        Log.i(viewTag,"0000");
+                        ToastUtils.show_always(context, "注册失败，请稍后重试");
+                    } else if (ReturnType != null && ReturnType.equals("T")) {
+                        Log.i(viewTag,"T");
+                        ToastUtils.show_always(context, "注册失败，请稍后重试");
+                    } else {
+                        Log.i(viewTag,"Message");
+                        try {
+                            String  Message = result.getString("Message");
+                            ToastUtils.show_always(context, Message + "");
+                        } catch (JSONException e1) {
+                            e1.printStackTrace();
+                            ToastUtils.show_always(context, "注册失败，请稍后重试");
+                        }
+                    }
                 } catch (Exception e2) {
                     e2.printStackTrace();
-                }
-                try {
-                    Message = result.getString("Message");
-                } catch (JSONException e1) {
-                    e1.printStackTrace();
-                }
-                try {
-                    userId = result.getString("UserId");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if (ReturnType != null && ReturnType.equals("1001")) {
-                    Editor et = BSApplication.SharedPreferences.edit();
-                    et.putString(StringConstant.USERID, userId);
-                    et.putString(StringConstant.USERNAME, userName);
-                    et.putString(StringConstant.PHONENUMBER, phoneNum);
-                    et.putString(StringConstant.ISLOGIN, "true");
-                    et.putString(StringConstant.PERSONREFRESHB, "true");
-                    if (!et.commit()) L.v("数据 commit 失败!");
-                    context.sendBroadcast(new Intent(BroadcastConstants.PUSH_REFRESH_LINKMAN));
-                    InterPhoneControlHelper.sendEntryMessage(context);// 登录后socket发送进入的请求
-                    setResult(1);
-                    finish();
-                } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_always(context, "当前用户暂未注册!");
-                } else if (ReturnType != null && ReturnType.equals("1003")) {
-                    ToastUtils.show_always(context, "您输入的用户名重复了!");
-                } else if (ReturnType != null && ReturnType.equals("0000")) {
-                    ToastUtils.show_always(context, "发生未知错误，请稍后重试");
-                } else if (ReturnType != null && ReturnType.equals("T")) {
-                    ToastUtils.show_always(context, "发生未知错误，请稍后重试");
-                } else {
-                    ToastUtils.show_always(context, Message + "");
+                    ToastUtils.show_always(context, "注册失败，请稍后重试");
                 }
             }
 
@@ -281,14 +299,14 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, T
             dialog = DialogUtils.Dialogph(context, "正在验证手机号");
             getVerifyCode();
         } else {
-            ToastUtils.show_short(context, "网络失败，请检查网络");
+            ToastUtils.show_always(context, "网络失败，请检查网络");
         }
     }
 
     // 发送获取验证码请求
     private void getVerifyCode() {
         String url;
-        if (sendType == -1) {
+        if(sendType == -1) {
             url = GlobalConfig.registerByPhoneNumUrl;// 第一次获取验证码
         } else {
             url = GlobalConfig.reSendPhoneCheckCodeNumUrl;// 再次获取验证码
@@ -296,7 +314,7 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, T
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
             jsonObject.put("PhoneNum", phoneNumber);
-            if (sendType != -1) {
+            if(sendType != -1) {
                 jsonObject.put("OperType", 1);
             }
         } catch (JSONException e) {
@@ -304,38 +322,41 @@ public class RegisterActivity extends BaseActivity implements OnClickListener, T
         }
 
         VolleyRequest.RequestPost(url, tag, jsonObject, new VolleyCallback() {
-            private String ReturnType;
-            private String Message;
 
             @Override
             protected void requestSuccess(JSONObject result) {
                 if (dialog != null) dialog.dismiss();
                 if (isCancelRequest) return;
                 try {
-                    ReturnType = result.getString("ReturnType");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    Message = result.getString("Message");
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                if (ReturnType != null && ReturnType.equals("1001")) {
-                    ToastUtils.show_always(context, "验证码已经发送!");
-                    timerDown();
-                    sendType = 2;
-                    verifyStatus = 1;
-                    textGetYzm.setVisibility(View.GONE);
-                    textCxFaSong.setVisibility(View.VISIBLE);
-                } else if (ReturnType != null && ReturnType.equals("T")) {
-                    ToastUtils.show_always(context, "数据出错了,请您稍后再试!");
-                } else if (ReturnType != null && ReturnType.equals("1002")) {
-                    ToastUtils.show_always(context, "此号码已经注册!");
-                } else {
-                    if (Message != null && !Message.trim().equals("")) {
-                        ToastUtils.show_always(context, Message + "");
+                    String ReturnType = result.getString("ReturnType");
+                    if (ReturnType != null && ReturnType.equals("1001")) {
+                        Log.i(viewTag,"1001");
+                        ToastUtils.show_always(context, "验证码已经发送!");
+                        timerDown();
+                        sendType = 2;
+                        verifyStatus = 1;
+                        textGetYzm.setVisibility(View.GONE);
+                        textCxFaSong.setVisibility(View.VISIBLE);
+                    } else if (ReturnType != null && ReturnType.equals("T")) {
+                        Log.i(viewTag,"T");
+                        ToastUtils.show_always(context, "数据出错了,请您稍后再试!");
+                    } else if (ReturnType != null && ReturnType.equals("1002")) {
+                        ToastUtils.show_always(context, "数据出错了,请您稍后再试!");
+                    } else {
+                        Log.i(viewTag,"Message");
+                        try {
+                            String Message = result.getString("Message");
+                            if (Message != null && !Message.trim().equals("")) {
+                                ToastUtils.show_always(context, Message + "");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                            ToastUtils.show_always(context, "数据出错了,请您稍后再试!");
+                        }
                     }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                    ToastUtils.show_always(context, "数据出错了,请您稍后再试!");
                 }
             }
 

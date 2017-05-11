@@ -32,4 +32,33 @@ public class IntegerConstant {
 
     // 更新列表界面
     public static final int PLAY_UPDATE_LIST_VIEW = 1002;
+
+    // 默认图片
+    public static final int TYPE_DEFAULT = 0x000;
+
+    // 列表默认图片
+    public static final int TYPE_LIST = 0x001;
+
+    // 群组默认头像
+    public static final int TYPE_GROUP = 0x002;
+
+    // 用户默认头像
+    public static final int TYPE_MINE = 0x003;
+
+    // 好友默认头像
+    public static final int TYPE_PERSON = 0x004;
+
+    // 数据收集类型 播放事件
+    public static final int DATA_TYPE_PLAY = 0x006;
+
+    // 数据收集类型 打开界面
+    public static final int DATA_TYPE_OPEN = 0x007;
+
+    // 数据上传方式 即时上传
+    public static final int DATA_UPLOAD_TYPE_IMM = 0;
+
+    // 数据上传方式 定制时间上传
+    public static final int DATA_UPLOAD_TYPE_GIVEN = -1;
+
+    public static final int DATA_UPLOAD_COUNT = 10;
 }

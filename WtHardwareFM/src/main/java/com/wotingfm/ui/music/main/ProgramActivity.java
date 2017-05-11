@@ -39,7 +39,7 @@ public class ProgramActivity extends FragmentActivity {
 	}
 
 	public static void close() {
-		context.getSupportFragmentManager().popBackStack();
+		context.getSupportFragmentManager().popBackStackImmediate();
 	}
 
 	public static void hideShow(Fragment from,Fragment to) {

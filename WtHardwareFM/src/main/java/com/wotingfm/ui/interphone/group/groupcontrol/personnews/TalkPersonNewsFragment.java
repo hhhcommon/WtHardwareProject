@@ -18,11 +18,11 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.android.volley.VolleyError;
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.application.BSApplication;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
@@ -132,7 +132,7 @@ public class TalkPersonNewsFragment extends Fragment {
             b_name = data.getUserAliasName();
         } else if (type.equals("talkoldlistfragment_p")) {
             UserInfo data = (UserInfo) getArguments().getSerializable("data");
-            name = data.getUserName();
+            name = data.getNickName();
             imageUrl = data.getPortraitMini();
             id = data.getUserId();
             descN = data.getUserSign();
@@ -141,7 +141,7 @@ public class TalkPersonNewsFragment extends Fragment {
         } else if (type.equals("TalkGroupNewsActivity_p")) {
             GroupInfo data = (GroupInfo) getArguments().getSerializable("data");
             groupId = getArguments().getString("id");
-            name = data.getUserName();
+            name = data.getNickName();
             imageUrl = data.getPortraitBig();
             id = data.getUserId();
             descN = data.getGroupSignature();
@@ -151,7 +151,7 @@ public class TalkPersonNewsFragment extends Fragment {
         } else if (type.equals("findActivity")) {
             // 处理组邀请时进入
             UserInviteMeInside data = (UserInviteMeInside) getArguments().getSerializable("data");
-            name = data.getUserName();
+            name = data.getNickName();
             imageUrl = data.getPortrait();
             id = data.getUserId();
             descN = data.getUserSign();
@@ -160,7 +160,7 @@ public class TalkPersonNewsFragment extends Fragment {
         } else if (type.equals("GroupMemers")) {
             UserInfo data = (UserInfo) getArguments().getSerializable("data");
             groupId = getArguments().getString("id");
-            name = data.getUserName();
+            name = data.getNickName();
             imageUrl = data.getPortraitMini();
             id = data.getUserId();
             descN = data.getUserSign();
@@ -169,7 +169,7 @@ public class TalkPersonNewsFragment extends Fragment {
             viewType = 1;
         } else {
             UserInfo data = (UserInfo) getArguments().getSerializable("data");
-            name = data.getUserName();
+            name = data.getNickName();
             imageUrl = data.getPortraitMini();
             id = data.getUserId();
             descN = data.getUserSign();
@@ -214,13 +214,15 @@ public class TalkPersonNewsFragment extends Fragment {
             } else {
                 url = GlobalConfig.imageurl + imageUrl;
             }
-            url = AssembleImageUrlUtils.assembleImageUrl150(url);
-            Picasso.with(context).load(url.replace("\\/", "/")).into(image_touxiang);
+            String _url = AssembleImageUrlUtils.assembleImageUrl150(url);
+
+            // 加载图片
+            AssembleImageUrlUtils.loadImage(_url, url, image_touxiang, IntegerConstant.TYPE_GROUP);
         }
         news = new UserInviteMeInside();
         news.setPortraitMini(imageUrl);
         news.setUserId(id);
-        news.setUserName(name);
+        news.setNickName(name);
         news.setUserSign(descN);
 
     }

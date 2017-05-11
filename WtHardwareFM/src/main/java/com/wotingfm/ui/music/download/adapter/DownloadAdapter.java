@@ -11,8 +11,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.ui.music.download.model.FileInfo;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
@@ -86,8 +86,10 @@ public class DownloadAdapter extends BaseAdapter {
         if (imageUrl == null || imageUrl.equals("null") || imageUrl.trim().equals("")) {
             holder.imageCover.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx));
         } else {
-            imageUrl = AssembleImageUrlUtils.assembleImageUrl150(imageUrl);
-            Picasso.with(context).load(imageUrl.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageCover);
+            String _url = AssembleImageUrlUtils.assembleImageUrl180(imageUrl);
+
+            // 加载图片
+            AssembleImageUrlUtils.loadImage(_url, imageUrl, holder.imageCover, IntegerConstant.TYPE_LIST);
         }
 
         // 节目标题

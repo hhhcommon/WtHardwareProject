@@ -11,10 +11,11 @@ import android.widget.LinearLayout;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.ui.common.model.UserInfo;
+import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
@@ -26,7 +27,6 @@ public class CreateGroupMembersAdapter extends BaseAdapter implements SectionInd
     private String url;
 
     public CreateGroupMembersAdapter(Context context, List<UserInfo> list) {
-        super();
         this.list = list;
         this.context = context;
     }
@@ -50,7 +50,7 @@ public class CreateGroupMembersAdapter extends BaseAdapter implements SectionInd
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ViewHolder holder ;
+        ViewHolder holder;
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_group_members, null);
             holder = new ViewHolder();
@@ -78,16 +78,11 @@ public class CreateGroupMembersAdapter extends BaseAdapter implements SectionInd
         if (lists.getUserAliasName() != null) {
             holder.tv_name.setText(lists.getUserAliasName());
         } else {
-            if (lists.getUserName() == null || lists.getUserName().equals("")) {
+            if (lists.getNickName() == null || lists.getNickName().equals("")) {
                 holder.tv_name.setText("未知");//名
             } else {
-                if (lists.getUserName() == null || lists.getUserName().equals("")) {
-                    holder.tv_name.setText("未知");//名
-                } else {
-                    holder.tv_name.setText(lists.getUserName());//名
-                }
+                holder.tv_name.setText(lists.getNickName());//名
             }
-            holder.tv_name.setText(lists.getUserName());//名
         }
 
         if (lists.getPortraitMini() == null || lists.getPortraitMini().equals("") || lists.getPortraitMini().equals("null") || lists.getPortraitMini().trim().equals("")) {
@@ -99,7 +94,10 @@ public class CreateGroupMembersAdapter extends BaseAdapter implements SectionInd
             } else {
                 url = GlobalConfig.imageurl + lists.getPortraitMini();
             }
-            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.image);
+            String _url = AssembleImageUrlUtils.assembleImageUrl150(url);
+
+            // 加载图片
+            AssembleImageUrlUtils.loadImage(_url, url, holder.image, IntegerConstant.TYPE_PERSON);
         }
         return convertView;
     }

@@ -9,22 +9,24 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.ui.interphone.model.UserInviteMeInside;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
 import java.util.List;
 
+/**
+ * 添加好友搜索结果数据展示
+ */
 public class FindFriendResultAdapter extends BaseAdapter {
     private List<UserInviteMeInside> list;
     private Context context;
     private String url;
 
     public FindFriendResultAdapter(Context context, List<UserInviteMeInside> list) {
-        super();
         this.list = list;
         this.context = context;
     }
@@ -67,10 +69,10 @@ public class FindFriendResultAdapter extends BaseAdapter {
             holder = (ViewHolder) convertView.getTag();
         }
         UserInviteMeInside Inviter = list.get(position);
-        if (Inviter.getUserName() == null || Inviter.getUserName().equals("")) {
+        if (Inviter.getNickName() == null || Inviter.getNickName().equals("")) {
             holder.textview_invitename.setText("未知");
         } else {
-            holder.textview_invitename.setText(Inviter.getUserName());
+            holder.textview_invitename.setText(Inviter.getNickName());
         }
 
         if (Inviter.getUserNum() == null || Inviter.getUserNum().equals("")) {
@@ -98,8 +100,10 @@ public class FindFriendResultAdapter extends BaseAdapter {
             } else {
                 url = GlobalConfig.imageurl + Inviter.getPortraitMini();
             }
-            url = AssembleImageUrlUtils.assembleImageUrl150(url);
-            Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageview_inviteimage);
+            String _url = AssembleImageUrlUtils.assembleImageUrl150(url);
+
+            // 加载图片
+            AssembleImageUrlUtils.loadImage(_url, url, holder.imageview_inviteimage, IntegerConstant.TYPE_PERSON);
         }
         return convertView;
     }

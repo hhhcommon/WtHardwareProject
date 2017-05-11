@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.ui.music.download.model.FileInfo;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
@@ -82,8 +83,13 @@ public class DownLoadSequAdapter extends BaseAdapter {
             Bitmap bmp = BitmapUtils.readBitMap(context, R.mipmap.wt_image_playertx);
             holder.imageview_rankimage.setImageBitmap(bmp);
         } else {
-            String url = AssembleImageUrlUtils.assembleImageUrl150(lists.getSequimgurl());
+            String url = lists.getSequimgurl();
             Picasso.with(context).load(url.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageview_rankimage);
+
+            String _url = AssembleImageUrlUtils.assembleImageUrl180(url);
+
+            // 加载图片
+            AssembleImageUrlUtils.loadImage(_url, url, holder.imageview_rankimage, IntegerConstant.TYPE_LIST);
         }
         if (lists.getPlayFrom() == null || lists.getPlayFrom() .equals("")) {
             holder.tv_RankContent.setText("我听科技");

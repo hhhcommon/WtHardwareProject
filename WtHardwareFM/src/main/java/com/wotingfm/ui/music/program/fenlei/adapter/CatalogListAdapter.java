@@ -31,9 +31,7 @@ public class CatalogListAdapter extends BaseAdapter {
     private ViewHolder holder;
     private CatalogGridAdapter adapters;
 
-
     public CatalogListAdapter(Context context, List<FenLei> list) {
-        super();
         this.list = list;
         this.context = context;
     }

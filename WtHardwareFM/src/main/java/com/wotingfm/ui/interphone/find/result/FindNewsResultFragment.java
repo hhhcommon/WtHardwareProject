@@ -245,7 +245,7 @@ public class FindNewsResultFragment extends Fragment implements OnClickListener,
 
     // 获取好友数据
     protected void getFriend() {
-        JSONObject jsonObject = VolleyRequest.getJsonObject(context);
+        JSONObject jsonObject = VolleyRequest.getJsonObject(context.getApplicationContext());
         try {
             jsonObject.put("Page", PageNum);
             jsonObject.put("SearchStr", searchstr);

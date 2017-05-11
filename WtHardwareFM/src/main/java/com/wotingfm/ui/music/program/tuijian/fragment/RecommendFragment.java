@@ -50,7 +50,7 @@ import java.util.List;
 
 /**
  * 节目页----推荐页
- * @author 辛龙
+ * 辛龙
  * 2016年3月30日
  */
 public class RecommendFragment extends Fragment implements TipView.WhiteViewClick {
@@ -62,7 +62,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
     private View rootView;
     private View headView;
     private XListView mListView;
-    
+
     private List<RankInfo> subList;
     private List<RankInfo> newList = new ArrayList<>();
 
@@ -73,7 +73,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
 
     private TipView tipView;// 没有网络、没有数据、加载错误提示
     private Banner mLoopViewPager;
-    private List<String> ImageStringList=new ArrayList<>();
+    private List<String> ImageStringList = new ArrayList<>();
 
     @Override
     public void onWhiteViewClick() {
@@ -152,7 +152,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
     // 获取推荐列表
     private void sendRequest() {
         // 以下操作需要网络支持 所以没有网络则直接提示用户设置网络
-        if(GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
+        if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE == -1) {
             if (dialog != null) dialog.dismiss();
             if (refreshType == 1) {
                 tipView.setVisibility(View.VISIBLE);
@@ -160,7 +160,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
             }
             mListView.stopRefresh();
             mListView.stopLoadMore();
-            return ;
+            return;
         }
 
         VolleyRequest.RequestPost(GlobalConfig.getContentUrl, tag, setParam(), new VolleyCallback() {
@@ -178,14 +178,10 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
                 }
                 if (returnType != null && returnType.equals("1001")) {
                     try {
+                        page++;
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
-                        subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
-                        if (subList != null && subList.size() >= 10) {
-                            page++;
-                        } else {
-                            mListView.stopLoadMore();
-                            mListView.setPullLoadEnable(false);
-                        }
+                        subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {
+                        }.getType());
                     } catch (Exception e) {
                         e.printStackTrace();
                     }
@@ -199,6 +195,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
                     setListener();
                     tipView.setVisibility(View.GONE);
                 } else {
+                    mListView.setPullLoadEnable(false);
                     if (refreshType == 1) {
                         tipView.setVisibility(View.VISIBLE);
                         tipView.setTipView(TipView.TipStatus.NO_DATA, "专辑中没有节目\n换个专辑看看吧");
@@ -248,58 +245,59 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
         mListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (newList != null && newList.get(position - 2) != null && newList.get(position - 2).getMediaType() != null) {
-                    String MediaType = newList.get(position - 2).getMediaType();
-                    if (MediaType.equals("RADIO") || MediaType.equals("AUDIO")) {
-                        String playername = newList.get(position - 2).getContentName();
-                        String playerimage = newList.get(position - 2).getContentImg();
-                        String playerurl = newList.get(position - 2).getContentPlay();
-                        String playerurI = newList.get(position - 2).getContentURI();
-                        String playermediatype = newList.get(position - 2).getMediaType();
-                        String playercontentshareurl = newList.get(position - 2).getContentShareURL();
-                        String plaplayeralltime = newList.get(position - 2).getContentTimes();
+                position = position - 2;
+                if (position < 0) {
+                    L.w("TAG", "position error -- > " + position);
+                    return;
+                }
+                if (newList != null && newList.get(position) != null && newList.get(position).getMediaType() != null) {
+                    String MediaType = newList.get(position).getMediaType();
+                    if (MediaType.equals(StringConstant.TYPE_RADIO) || MediaType.equals(StringConstant.TYPE_AUDIO)) {
+                        String playername = newList.get(position).getContentName();
+                        String playerimage = newList.get(position).getContentImg();
+                        String playerurl = newList.get(position).getContentPlay();
+                        String playerurI = newList.get(position).getContentURI();
+                        String playermediatype = newList.get(position).getMediaType();
+                        String playercontentshareurl = newList.get(position).getContentShareURL();
+                        String plaplayeralltime = newList.get(position).getContentTimes();
                         String playerintime = "0";
-                        String playercontentdescn = newList.get(position - 2).getContentDescn();
-                        String playernum = newList.get(position - 2).getPlayCount();
+                        String playercontentdescn = newList.get(position).getContentDescn();
+                        String playernum = newList.get(position).getPlayCount();
                         String playerzantype = "0";
-                        String playerfrom =newList.get(position - 2).getContentPub();
+                        String playerfrom = newList.get(position).getContentPub();
                         String playerfromid = "";
                         String playerfromurl = "";
                         String playeraddtime = Long.toString(System.currentTimeMillis());
                         String bjuserid = CommonUtils.getUserId(context);
-                        String ContentFavorite = newList.get(position - 2).getContentFavorite();
-                        String ContentId = newList.get(position - 2).getContentId();
-                        String localurl = newList.get(position - 2).getLocalurl();
-                        String sequname = newList.get(position - 2).getSequName();
-                        String sequid = newList.get(position - 2).getSequId();
-                        String sequdesc =newList.get(position - 2).getSequDesc();
-                        String sequimg =newList.get(position - 2).getSequImg();
-
+                        String ContentFavorite = newList.get(position).getContentFavorite();
+                        String ContentId = newList.get(position).getContentId();
+                        String localurl = newList.get(position).getLocalurl();
+                        String sequname = newList.get(position).getSequName();
+                        String sequid = newList.get(position).getSequId();
+                        String sequdesc = newList.get(position).getSequDesc();
+                        String sequimg = newList.get(position).getSequImg();
 
                         // 如果该数据已经存在数据库则删除原有数据，然后添加最新数据
                         PlayerHistory history = new PlayerHistory(
                                 playername, playerimage, playerurl, playerurI, playermediatype,
                                 plaplayeralltime, playerintime, playercontentdescn, playernum,
-                                playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid, playercontentshareurl, ContentFavorite, ContentId, localurl,sequname,sequid,sequdesc,sequimg);
+                                playerzantype, playerfrom, playerfromid, playerfromurl, playeraddtime, bjuserid, playercontentshareurl, ContentFavorite, ContentId, localurl, sequname, sequid, sequdesc, sequimg);
                         dbDao.deleteHistory(playerurl);
                         dbDao.addHistory(history);
 
-
-                        Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
-                        Bundle bundle1=new Bundle();
-                        bundle1.putString("text",newList.get(position - 2).getContentName());
+                        Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                        Bundle bundle1 = new Bundle();
+                        bundle1.putString(StringConstant.TEXT_CONTENT, newList.get(position).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
-
                         MainActivity.changeOne();
-                    } else if (MediaType.equals("SEQU")) {
-                        AlbumFragment fg= new AlbumFragment();
+                    } else if (MediaType.equals(StringConstant.TYPE_SEQU)) {
+                        AlbumFragment fg = new AlbumFragment();
                         Bundle bundle = new Bundle();
                         bundle.putString("type", "recommend");
-                        bundle.putSerializable("list", newList.get(position - 2));
-                        bundle.putString(StringConstant.JUMP_TYPE, "program");
+                        bundle.putSerializable("list", newList.get(position));
+                        bundle.putString(StringConstant.FROM_TYPE, StringConstant.TAG_PROGRAM);
                         fg.setArguments(bundle);
-
                         ProgramActivity.open(fg);
                     } else {
                         ToastUtils.show_short(context, "暂不支持的Type类型");
@@ -321,9 +319,9 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
     private void getImage() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("CatalogType","-1");
-            jsonObject.put("CatalogId", "cn17");
-            jsonObject.put("Size", "4");// 此处需要改成-1
+            jsonObject.put("CatalogType", "-1");
+            jsonObject.put("CatalogId", "cn10");
+            jsonObject.put("Size", "10");// 此处需要改成-1
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -341,13 +339,13 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
-                        List<Image>  imageList = new Gson().fromJson(result.getString("LoopImgs"), new TypeToken<List<Image>>() {
+                        List<Image> imageList = new Gson().fromJson(result.getString("LoopImgs"), new TypeToken<List<Image>>() {
                         }.getType());
                    /*     mLoopViewPager.setAdapter(new LoopAdapter(mLoopViewPager, context, imageList));
                         mLoopViewPager.setHintView(new IconHintView(context, R.mipmap.indicators_now, R.mipmap.indicators_default));*/
                         mLoopViewPager.setImageLoader(new PicassoBannerLoader());
 
-                        for(int i=0;i<imageList.size();i++){
+                        for (int i = 0; i < imageList.size(); i++) {
                             ImageStringList.add(imageList.get(i).getLoopImg());
                         }
                         mLoopViewPager.setImages(ImageStringList);
@@ -355,7 +353,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
                         mLoopViewPager.setOnBannerListener(new OnBannerListener() {
                             @Override
                             public void OnBannerClick(int position) {
-                                ToastUtils.show_always(context,ImageStringList.get(position-1));
+                                ToastUtils.show_always(context, ImageStringList.get(position - 1));
                             }
                         });
                         mLoopViewPager.start();
@@ -365,7 +363,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
                         e.printStackTrace();
                         mLoopViewPager.setVisibility(View.GONE);
                     }
-                }else{
+                } else {
                     mLoopViewPager.setVisibility(View.GONE);
                 }
             }

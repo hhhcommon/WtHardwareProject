@@ -28,10 +28,10 @@ import org.json.JSONObject;
 
 /**
  * 群组详情页面
- * 辛龙 2016年1月21日
+ * 辛龙
+ * 2016年1月21日
  */
-public class GroupMoreFragment extends Fragment implements View.OnClickListener{
-
+public class GroupMoreFragment extends Fragment implements View.OnClickListener {
     private Dialog confirmDialog;// 退出群组确认对话框
     private String groupId;
     private String tag = "TALK_GROUP_MORE_VOLLEY_REQUEST_CANCEL_TAG";
@@ -60,40 +60,33 @@ public class GroupMoreFragment extends Fragment implements View.OnClickListener{
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);          // 返回
         rootView.findViewById(R.id.tv_exit).setOnClickListener(this);                // 退出
 
-        img_EWM=(ImageView)rootView.findViewById(R.id.img_EWM);                      // 二维码图片
-        tv_group_sign=(TextView)rootView.findViewById(R.id.tv_group_sign);
-
+        img_EWM = (ImageView) rootView.findViewById(R.id.img_EWM);                      // 二维码图片
+        tv_group_sign = (TextView) rootView.findViewById(R.id.tv_group_sign);
     }
-
 
     // 处理请求
     private void handleIntent() {
         GroupInfo groupNews = (GroupInfo) getArguments().getSerializable("group");
-        if(!TextUtils.isEmpty(groupNews.getGroupId())){
-            groupId=groupNews.getGroupId();
-        }else{
+        if (!TextUtils.isEmpty(groupNews.getGroupId())) {
+            groupId = groupNews.getGroupId();
+        } else {
             return;
         }
 
-        if(!TextUtils.isEmpty(groupNews.getGroupSignature())){
+        if (!TextUtils.isEmpty(groupNews.getGroupSignature())) {
             tv_group_sign.setText(groupNews.getGroupSignature());
         }
 
         try {
-
             bmp = CreateQRImageHelper.getInstance().createQRImage(2, groupNews, null, 300, 300);
-
-        }catch (Exception e){
-
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         if (bmp == null) {
-
             bmp = BitmapUtils.readBitMap(context, R.mipmap.ewm);
         }
-
         img_EWM.setImageBitmap(bmp);
     }
-
 
     @Override
     public void onClick(View v) {
@@ -102,20 +95,20 @@ public class GroupMoreFragment extends Fragment implements View.OnClickListener{
                 DuiJiangActivity.close();
                 break;
             case R.id.tv_exit:
-                 if(confirmDialog!=null&&!confirmDialog.isShowing()&&!TextUtils.isEmpty(groupId)){
-                     confirmDialog.show();
-                 }else{
-                     ToastUtils.show_always(context,"网络异常，请稍后重试");
-                 }
+                if (confirmDialog != null && !confirmDialog.isShowing() && !TextUtils.isEmpty(groupId)) {
+                    confirmDialog.show();
+                } else {
+                    ToastUtils.show_always(context, "网络异常，请稍后重试");
+                }
                 break;
             case R.id.tv_cancle:
-                if(confirmDialog!=null&&confirmDialog.isShowing()){
-                confirmDialog.dismiss();
+                if (confirmDialog != null && confirmDialog.isShowing()) {
+                    confirmDialog.dismiss();
                 }
                 break;
             case R.id.tv_confirm:
                 if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
-                    if(confirmDialog!=null&&confirmDialog.isShowing()){
+                    if (confirmDialog != null && confirmDialog.isShowing()) {
                         confirmDialog.dismiss();
                     }
                     SendExitRequest();
@@ -141,18 +134,16 @@ public class GroupMoreFragment extends Fragment implements View.OnClickListener{
                 if (isCancelRequest) return;
                 try {
                     String ReturnType = result.getString("ReturnType");
-                    //Log.v("ReturnType", "ReturnType -- > > " + ReturnType);
-                   if(!TextUtils.isEmpty(ReturnType)){
-                    if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
-                        ToastUtils.show_always(context, "已经成功退出该组");
-                        context.setResult(1);
-                        DuiJiangActivity.close();
+                    if (!TextUtils.isEmpty(ReturnType)) {
+                        if (ReturnType.equals("1001") || ReturnType.equals("10011")) {
+                            ToastUtils.show_always(context, "已经成功退出该组");
+                            DuiJiangActivity.close();
+                        } else {
+                            ToastUtils.show_always(context, "退出群组失败，请稍后重试!");
+                        }
                     } else {
                         ToastUtils.show_always(context, "退出群组失败，请稍后重试!");
                     }
-                   }else{
-                       ToastUtils.show_always(context, "退出群组失败，请稍后重试!");
-                   }
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

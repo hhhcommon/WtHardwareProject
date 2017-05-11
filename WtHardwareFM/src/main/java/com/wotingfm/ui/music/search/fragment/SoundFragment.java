@@ -22,10 +22,11 @@ import com.google.gson.reflect.TypeToken;
 import com.wotingfm.R;
 import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.common.constant.BroadcastConstants;
+import com.wotingfm.common.constant.StringConstant;
 import com.wotingfm.common.volley.VolleyCallback;
 import com.wotingfm.common.volley.VolleyRequest;
 import com.wotingfm.ui.main.MainActivity;
-import com.wotingfm.ui.music.favorite.adapter.FavorListAdapter;
+import com.wotingfm.ui.music.search.adapter.SearchListAdapter;
 import com.wotingfm.ui.music.main.dao.SearchPlayerHistoryDao;
 import com.wotingfm.ui.music.player.model.PlayerHistory;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
@@ -48,7 +49,7 @@ import java.util.List;
  */
 public class SoundFragment extends Fragment implements TipView.WhiteViewClick {
     private FragmentActivity context;
-    private FavorListAdapter adapter;
+    private SearchListAdapter adapter;
     private SearchPlayerHistoryDao dbDao;
     private List<RankInfo> subList;
     private ArrayList<RankInfo> newList = new ArrayList<>();
@@ -122,7 +123,7 @@ public class SoundFragment extends Fragment implements TipView.WhiteViewClick {
     }
 
     private void setListener() {
-        adapter.setOnListener(new FavorListAdapter.FavoriteCheck() {
+        adapter.setOnListener(new SearchListAdapter.FavoriteCheck() {
             @Override
             public void checkPosition(int position) {
                 if (newList.get(position).getChecktype() == 0) {
@@ -139,7 +140,7 @@ public class SoundFragment extends Fragment implements TipView.WhiteViewClick {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (newList != null && newList.get(position - 1) != null && newList.get(position - 1).getMediaType() != null) {
                     String MediaType = newList.get(position - 1).getMediaType();
-                    if (MediaType.equals("RADIO") || MediaType.equals("AUDIO")) {
+                    if (MediaType.equals(StringConstant.TYPE_RADIO) || MediaType.equals(StringConstant.TYPE_AUDIO)) {
                         String playername = newList.get(position - 1).getContentName();
                         String playerimage = newList.get(position - 1).getContentImg();
                         String playerurl = newList.get(position - 1).getContentPlay();
@@ -174,12 +175,11 @@ public class SoundFragment extends Fragment implements TipView.WhiteViewClick {
                         dbDao.deleteHistory(playerurl);
                         dbDao.addHistory(history);
 
-                        Intent push=new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
-                        Bundle bundle1=new Bundle();
-                        bundle1.putString("text",newList.get(position - 1).getContentName());
+                        Intent push = new Intent(BroadcastConstants.PLAY_TEXT_VOICE_SEARCH);
+                        Bundle bundle1 = new Bundle();
+                        bundle1.putString(StringConstant.TEXT_CONTENT,newList.get(position - 1).getContentName());
                         push.putExtras(bundle1);
                         context.sendBroadcast(push);
-
                         MainActivity.changeOne();
                     }
                 }
@@ -216,17 +216,12 @@ public class SoundFragment extends Fragment implements TipView.WhiteViewClick {
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
+                        page++;
                         JSONObject arg1 = (JSONObject) new JSONTokener(result.getString("ResultList")).nextValue();
                         subList = new Gson().fromJson(arg1.getString("List"), new TypeToken<List<RankInfo>>() {}.getType());
-                        if (subList != null && subList.size() >= 10) {
-                            page++;
-                        } else {
-                            mListView.stopLoadMore();
-                            mListView.setPullLoadEnable(false);
-                        }
                         if (refreshType == 1) newList.clear();
                         for (int i = 0; i < subList.size(); i++) {
-                            if (subList.get(i).getMediaType().equals("AUDIO")) newList.add(subList.get(i));
+                            if (subList.get(i).getMediaType().equals(StringConstant.TYPE_AUDIO)) newList.add(subList.get(i));
                         }
                         if (newList.size() > 0) {
                             tipView.setVisibility(View.GONE);
@@ -246,9 +241,12 @@ public class SoundFragment extends Fragment implements TipView.WhiteViewClick {
                         }
                     }
                 } else {
+                    mListView.setPullLoadEnable(false);
                     if (refreshType == 1) {
                         tipView.setVisibility(View.VISIBLE);
                         tipView.setTipView(TipView.TipStatus.NO_DATA, "没有找到相关结果\n试试其他词，不要太逆天哟");
+                    } else {
+                        ToastUtils.show_always(context, "没有更多的数据了");
                     }
                 }
 
@@ -277,7 +275,7 @@ public class SoundFragment extends Fragment implements TipView.WhiteViewClick {
         try {
             if (searchStr != null && !searchStr.equals("")) {
                 jsonObject.put("SearchStr", searchStr);
-                jsonObject.put("MediaType", "AUDIO");
+                jsonObject.put("MediaType", StringConstant.TYPE_AUDIO);
                 jsonObject.put("PageSize", "10");
                 jsonObject.put("Page", String.valueOf(page));
             }
@@ -300,7 +298,7 @@ public class SoundFragment extends Fragment implements TipView.WhiteViewClick {
                     mListView.setPullLoadEnable(false);
                     newList.clear();
                     if (adapter == null) {
-                        mListView.setAdapter(adapter = new FavorListAdapter(context, newList));
+                        mListView.setAdapter(adapter = new SearchListAdapter(context, newList));
                     } else {
                         adapter.notifyDataSetChanged();
                     }

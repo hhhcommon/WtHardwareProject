@@ -8,11 +8,11 @@ import android.widget.BaseExpandableListAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
 import com.wotingfm.R;
+import com.wotingfm.common.config.GlobalConfig;
+import com.wotingfm.common.constant.IntegerConstant;
 import com.wotingfm.ui.music.program.fmlist.model.RankInfo;
 import com.wotingfm.ui.music.search.model.SuperRankInfo;
-import com.wotingfm.common.config.GlobalConfig;
 import com.wotingfm.util.AssembleImageUrlUtils;
 import com.wotingfm.util.BitmapUtils;
 
@@ -149,8 +149,10 @@ public class SearchContentAdapter extends BaseExpandableListAdapter {
             } else {
                 url1 = GlobalConfig.imageurl + lists.getContentImg();
             }
-            url1 = AssembleImageUrlUtils.assembleImageUrl150(url1);
-            Picasso.with(context).load(url1.replace("\\/", "/")).resize(100, 100).centerCrop().into(holder.imageRankImage);
+            String url = AssembleImageUrlUtils.assembleImageUrl180(url1);
+
+            // 加载图片
+            AssembleImageUrlUtils.loadImage(url, url1, holder.imageRankImage, IntegerConstant.TYPE_LIST);
         }
 
         // 来源 -> 专辑

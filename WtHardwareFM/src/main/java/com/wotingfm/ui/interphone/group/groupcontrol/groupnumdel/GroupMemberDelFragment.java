@@ -44,7 +44,7 @@ import java.util.List;
 
 /**
  * 管理员删除群成员界面
- * @author 辛龙
+ * 辛龙
  * 2016年3月25日
  */
 public class GroupMemberDelFragment extends Fragment implements OnClickListener, TextWatcher, TipView.WhiteViewClick {
@@ -105,7 +105,7 @@ public class GroupMemberDelFragment extends Fragment implements OnClickListener,
         rootView.findViewById(R.id.head_left_btn).setOnClickListener(this);
         rootView.findViewById(R.id.head_right_btn).setOnClickListener(this);// 添加按钮
 
-        tipSearchNull = (TipView)rootView. findViewById(R.id.tip_search_null);
+        tipSearchNull = (TipView) rootView.findViewById(R.id.tip_search_null);
         tipView = (TipView) rootView.findViewById(R.id.tip_view);
         tipView.setWhiteClick(this);
 
@@ -121,7 +121,7 @@ public class GroupMemberDelFragment extends Fragment implements OnClickListener,
 
         listView = (ListView) rootView.findViewById(R.id.country_lvcountry);
         textHeadRight = (TextView) rootView.findViewById(R.id.tv_head);
-        textHeadName = (TextView)rootView. findViewById(R.id.head_name_tv);
+        textHeadName = (TextView) rootView.findViewById(R.id.head_name_tv);
         textHeadName.setText("删除群成员");
 
         groupId = getArguments().getString("GroupId");
@@ -161,11 +161,12 @@ public class GroupMemberDelFragment extends Fragment implements OnClickListener,
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     try {
-                        userList = new Gson().fromJson(result.getString("UserList"), new TypeToken<List<UserInfo>>() {}.getType());
-                        if(userList == null || userList.size() == 0) {
+                        userList = new Gson().fromJson(result.getString("UserList"), new TypeToken<List<UserInfo>>() {
+                        }.getType());
+                        if (userList == null || userList.size() == 0) {
                             tipView.setVisibility(View.VISIBLE);
                             tipView.setTipView(TipView.TipStatus.NO_DATA, "群内没有其他成员了\n赶紧去邀请好友加入群组吧");
-                            return ;
+                            return;
                         }
                         String userId = CommonUtils.getUserId(context);// 从返回的 list 当中去掉用户自己
                         for (int i = 0; i < userList.size(); i++) {
@@ -202,8 +203,8 @@ public class GroupMemberDelFragment extends Fragment implements OnClickListener,
 
     private void filledData(List<UserInfo> person) {
         for (int i = 0; i < person.size(); i++) {
-            person.get(i).setName(person.get(i).getUserName());
-            String pinyin = characterParser.getSelling(person.get(i).getUserName());
+            person.get(i).setName(person.get(i).getNickName());
+            String pinyin = characterParser.getSelling(person.get(i).getNickName());
             String sortString = pinyin.substring(0, 1).toUpperCase();
             if (sortString.matches("[A-Z]")) {// 判断首字母是否是英文字母
                 person.get(i).setSortLetters(sortString.toUpperCase());
@@ -243,7 +244,7 @@ public class GroupMemberDelFragment extends Fragment implements OnClickListener,
             filterDateList.clear();
             for (UserInfo sortModel : userList2) {
                 String name = sortModel.getName();
-                if (name.contains(search_name)|| characterParser.getSelling(name).startsWith(search_name)) {
+                if (name.contains(search_name) || characterParser.getSelling(name).startsWith(search_name)) {
                     filterDateList.add(sortModel);
                 }
             }
@@ -319,13 +320,9 @@ public class GroupMemberDelFragment extends Fragment implements OnClickListener,
                 }
                 if (ReturnType != null && ReturnType.equals("1001")) {
                     ToastUtils.show_always(context, "群成员已经成功删除");
-                    //context.setResult(1);
                     Fragment targetFragment = getTargetFragment();
                     ((GroupMembersFragment) targetFragment).RefreshFragmentData();
                     DuiJiangActivity.close();
-                   // Fragment targetFragment = getTargetFragment();
-                   // ((GroupMembersFragment) targetFragment).RefreshFragmentData();
-
                 } else {
                     if (Message != null && !Message.trim().equals("")) {
                         ToastUtils.show_always(context, Message + "");
