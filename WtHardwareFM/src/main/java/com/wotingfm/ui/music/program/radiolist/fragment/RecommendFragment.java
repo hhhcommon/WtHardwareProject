@@ -110,6 +110,13 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
             mListView = (XListView) rootView.findViewById(R.id.listview_fm);
             mListView.addHeaderView(headView);
             setListener();
+            if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
+                sendRequest();
+                getImage();
+            } else {
+                tipView.setVisibility(View.VISIBLE);
+                tipView.setTipView(TipView.TipStatus.NO_NET);
+            }
         }
         return rootView;
     }
@@ -117,7 +124,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
     // 与onActivityCreated()方法 解决预加载问题
     @Override
     public void setUserVisibleHint(boolean isVisibleToUser) {
-        if (isVisibleToUser && adapter == null && getActivity() != null) {
+       /* if (isVisibleToUser && adapter == null && getActivity() != null) {
             if (GlobalConfig.CURRENT_NETWORK_STATE_TYPE != -1) {
                 if (!isFirst) {
                     dialog = DialogUtils.Dialogph(context, "正在获取数据");
@@ -129,7 +136,7 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
                 tipView.setVisibility(View.VISIBLE);
                 tipView.setTipView(TipView.TipStatus.NO_NET);
             }
-        }
+        }*/
         super.setUserVisibleHint(isVisibleToUser);
     }
 
@@ -346,9 +353,12 @@ public class RecommendFragment extends Fragment implements TipView.WhiteViewClic
     private void getImage() {
         JSONObject jsonObject = VolleyRequest.getJsonObject(context);
         try {
-            jsonObject.put("CatalogType", RadioListFragment.catalogType);
+          /*  jsonObject.put("CatalogType", RadioListFragment.catalogType);
             jsonObject.put("CatalogId", RadioListFragment.id);
-            jsonObject.put("Size", "4");// 此处需要改成-1
+            jsonObject.put("Size", "4");// 此处需要改成-1*/
+            jsonObject.put("CatalogType", RadioListFragment.catalogType);
+            jsonObject.put("CatalogId","cn17");
+            jsonObject.put("Size", "4");
         } catch (JSONException e) {
             e.printStackTrace();
         }
