@@ -22,7 +22,7 @@ public class FMListAdapter extends BaseAdapter {
     private Context context;
     private List<FMInfo> list;
 
-    public FMListAdapter(Context context, List<FMInfo> list){
+    public FMListAdapter(Context context, List<FMInfo> list) {
         this.context = context;
         this.list = list;
     }
@@ -45,7 +45,7 @@ public class FMListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-        if(convertView == null) {
+        if (convertView == null) {
             holder = new ViewHolder();
             convertView = LayoutInflater.from(context).inflate(R.layout.adapter_fm_list, parent, false);
             holder.imageSignal = (ImageView) convertView.findViewById(R.id.image_signal);
@@ -57,7 +57,7 @@ public class FMListAdapter extends BaseAdapter {
         }
         FMInfo fmInfo = list.get(position);
         holder.textFmFrequency.setText(fmInfo.getFmName());// 频率
-        if(fmInfo.getType() == 0) {
+        if (fmInfo.getType() == 0) {
             holder.imageSignal.setImageBitmap(BitmapUtils.readBitMap(context, R.mipmap.wt_image_fm_signal));
             holder.textFmFrequency.setTextColor(context.getResources().getColor(R.color.wt_login_third));
             holder.imageCheck.setVisibility(View.GONE);
